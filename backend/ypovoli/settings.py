@@ -37,9 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third party packages.
     'rest_framework_swagger',       # Swagger 
     'rest_framework',               # Django rest framework
-    'drf_yasg'                      # Yet Another Swagger generator
+    'drf_yasg',                     # Yet Another Swagger generator
+
+    # First party packages.
+    'logic',                        # Base business logic
+    'checks',                       # Submission checks using Docker
+    'authentication',               # Authentication using CAS
+    'notifications'                 # Notifications on events
 ]
 
 MIDDLEWARE = [
