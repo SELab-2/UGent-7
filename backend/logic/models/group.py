@@ -21,3 +21,9 @@ class Group(models.Model):
         blank=False,
         null=False
     )
+
+    # Score of the group
+    score = models.FloatField(
+        blank=True,
+        null=True
+    )
