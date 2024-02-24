@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 from cas_client import CASClient
-from authentication.serializers import ValidateSerializer
+from authentication.serializers import CASTicketSerializer, CASUserSerializer
 from ypovoli import settings
 
 client = CASClient(
@@ -27,13 +27,16 @@ def validate(request: Request) -> Response:
     """Validate a Service Ticket obtained from the CAS endpoint.
     Returns a user token for further API authentication.
     """
-    serializer = ValidateSerializer(data=request.query_params)
+    ticket = CASTicketSerializer(data=request.query_params)
 
-    if serializer.is_valid():
-        response = client.perform_service_validate(ticket=serializer.data['ticket'])
+    if ticket.is_valid(raise_exception=True):
+        response = client.perform_service_validate(
+            ticket=ticket.validated_data['ticket']
+        )
 
         if response.success:
-            # Fetch or create user, generate token
+            # Fetch or create user, generate token.
+            cas_user = CASUserSerializer(data=response.data)
             return Response(response.data)
         else:
             return Response({
@@ -41,12 +44,16 @@ def validate(request: Request) -> Response:
             })
 
     return Response({
-        'errors': serializer.errors
+        'errors': ticket.errors
     })
 
-@api_view(['GET'])
+@api_view(['POST'])
 def logout(request: Request) -> Response:
     """Attempt to log out.
     Redirect to our single CAS endpoint.
     """
-    raise NotImplementedError()
+    return redirect(
+        client.get_logout_url(
+            service_url=settings.API_ENDPOINT
+        )
+    )
