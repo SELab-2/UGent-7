@@ -1,4 +1,5 @@
 from authentication.models.user import User
+from django.db import models
 
 
 class Assistant(User):
@@ -7,5 +8,9 @@ class Assistant(User):
     assistant-specific attributes.
     """
 
-    # At the moment, there are no additional attributes for the
-    # Assistant model.
+    # All the courses the assistant is assisting in
+    courses = models.ManyToManyField(
+        'Course',
+        related_name='assistants',  # Allows us to access the assistants from the course
+        blank=True
+    )

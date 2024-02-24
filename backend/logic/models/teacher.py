@@ -1,4 +1,5 @@
 from authentication.models.user import User
+from django.db import models
 
 
 class Teacher(User):
@@ -7,4 +8,9 @@ class Teacher(User):
     teacher-specific attributes.
     """
 
-    # At the moment, there are no additional attributes for the Teacher model.
+    # All the courses the teacher is teaching
+    courses = models.ManyToManyField(
+        'Course',
+        related_name='teachers',  # Allows us to access the teachers from the course
+        blank=True
+    )
