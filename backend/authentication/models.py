@@ -10,7 +10,6 @@ class User(AbstractBaseUser):
 
     """Model fields"""
     password = None # We don't use passwords for our user model.
-    username = None # We don't work with usernames.
 
     id = CharField(
         max_length=12,
