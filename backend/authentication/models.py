@@ -1,52 +1,52 @@
 import datetime
 
 from django.db.models import CharField, EmailField, IntegerField, DateTimeField
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
 
-class User(AbstractUser):
+class User(AbstractBaseUser):
     """This model represents a single authenticatable user.
     It extends the built-in Django user model with CAS-specific attributes.
     """
+
+    """Model fields"""
+    password = None # We don't use passwords for our user model.
+    username = None # We don't work with usernames.
+
     id = CharField(
+        max_length=12,
         primary_key=True
     )
 
     first_name = CharField(
-        blank=False,
+        max_length=50,
         null=False
     )
 
     last_name = CharField(
-        blank=False,
+        max_length=50,
         null=False
     )
 
     email = EmailField(
-        blank=False,
         null=False,
         unique=True
     )
 
     faculty = CharField(
-        blank=True
+        max_length=50,
+        null = True
     )
 
     last_enrolled = IntegerField(
         default = datetime.MINYEAR,
-        blank = True,
         null = True
     )
 
-    last_login_at = DateTimeField(
-        null=True,
-        blank=True
+    create_time = DateTimeField(
+        auto_created=True
     )
 
-    created_at = DateTimeField(
-        auto_now_add=True
-    )
-
-    @property
-    def full_name(self) -> str:
-        """The full name of the user."""
-        return f"{self.first_name} {self.last_name}"
+    """Model settings"""
+    USERNAME_FIELD = "email"
+    EMAIL_FIELD = "email"
+    REQUIRED_FIELDS = []
