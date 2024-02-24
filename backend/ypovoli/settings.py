@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'sslserver',                    # Used for local SSL support (needed by CAS)
     
     # First party
-    'authentication'                # Ypovoli authentication
+    'authentication',               # Ypovoli authentication
+    'logic'                         # Ypovoli logic of the base application
 ]
 
 MIDDLEWARE = [
