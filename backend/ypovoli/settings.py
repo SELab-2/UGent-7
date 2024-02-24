@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     # First party
     'authentication',               # Ypovoli authentication
-    'logic'                         # Ypovoli logic of the base application
+    'api'                         # Ypovoli logic of the base application
 ]
 
 MIDDLEWARE = [
