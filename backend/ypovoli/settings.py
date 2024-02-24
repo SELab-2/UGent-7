@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'drf_yasg',                     # Yet Another Swagger generator
 
     # First party
-    'authentication'                # Ypovoli authentication
+    'authentication',               # Ypovoli authentication
+    'logic'                         # Ypovoli logic of the base application
 ]
 
 MIDDLEWARE = [
