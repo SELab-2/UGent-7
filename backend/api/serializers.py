@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models.teacher import Teacher
 from .models.admin import Admin
 from .models.assistant import Assistant
+from .models.student import Student
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -18,4 +19,9 @@ class AdminSerializer(serializers.ModelSerializer):
 class AssistantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assistant
+        fields = ['id', 'first_name', 'last_name', 'email', 'faculty','last_enrolled','create_time','courses']
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
         fields = ['id', 'first_name', 'last_name', 'email', 'faculty','last_enrolled','create_time','courses']
