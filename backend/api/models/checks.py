@@ -4,6 +4,8 @@ from django.db import models
 class FileExtension(models.Model):
     """Model that represents a file extension."""
 
+    # ID check should be generated automatically
+
     extension = models.CharField(max_length=10, unique=True)
 
     def __str__(self) -> str:

@@ -7,6 +7,7 @@ from .models.project import Project
 from .models.group import Group
 from .models.course import Course
 from .models.submission import Submission, SubmissionFile
+from .models.checks import Checks, FileExtension
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -55,3 +56,13 @@ class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
         fields = ['id', 'group', 'submission_number','submission_time']
+
+class ChecksSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Checks
+        fields = ['id', 'dockerfile']
+
+class FileExtensionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FileExtension
+        fields = ['id', 'extension', 'allowed_file_extensions', 'forbidden_file_extensions']
