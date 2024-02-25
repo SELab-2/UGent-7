@@ -7,5 +7,5 @@ router = DefaultRouter()
 router.register(r'teachers', Teacher_view.TeacherViewSet, basename='teacher')
 
 urlpatterns = [
-	# path('api/', include((router.urls, 'api'), namespace='api')),
+	path('', include(router.urls)),
 ]
