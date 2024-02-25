@@ -6,6 +6,7 @@ from .models.student import Student
 from .models.project import Project
 from .models.group import Group
 from .models.course import Course
+from .models.submission import Submission, SubmissionFile
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -44,3 +45,13 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['id', 'project', 'students','score']
+
+class SubmissionFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubmissionFile
+        fields = ['id', 'submission', 'file']
+
+class SubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Submission
+        fields = ['id', 'group', 'submission_number','submission_time']
