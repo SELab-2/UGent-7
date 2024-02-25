@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models.teacher import Teacher
 
+
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher

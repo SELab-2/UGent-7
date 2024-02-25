@@ -18,7 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     # Base API endpoints.
-    path('/', include('api.urls')),
+    path('api/', include('api.urls')),
     # Authentication endpoints.
     path('auth/', include('authentication.urls'))
 ]
