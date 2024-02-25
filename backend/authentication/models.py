@@ -1,6 +1,5 @@
-import datetime
-
-from django.db.models import CharField, EmailField, IntegerField, DateTimeField
+from __future__ import annotations
+from django.db.models import CharField, EmailField, DateTimeField
 from django.contrib.auth.models import AbstractBaseUser
 
 class User(AbstractBaseUser):
@@ -14,6 +13,18 @@ class User(AbstractBaseUser):
     id = CharField(
         max_length=12,
         primary_key=True
+    )
+
+    student_id = CharField(
+        max_length=16,
+        unique=True,
+        null=True
+    )
+
+    username = CharField(
+        max_length=10,
+        null=False,
+        unique=True
     )
 
     first_name = CharField(
@@ -33,19 +44,21 @@ class User(AbstractBaseUser):
 
     faculty = CharField(
         max_length=50,
-        null = True
+        null = True,
+        blank = True
     )
 
-    last_enrolled = IntegerField(
-        default = datetime.MINYEAR,
-        null = True
+    last_enrolled = CharField(
+        max_length=11,
+        null = True,
+        blank = True
     )
 
     create_time = DateTimeField(
-        auto_created=True
+        auto_now_add=True
     )
 
     """Model settings"""
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []

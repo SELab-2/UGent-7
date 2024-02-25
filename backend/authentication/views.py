@@ -1,16 +1,15 @@
-from django.shortcuts import redirect, reverse
+from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
-from cas_client import CASClient
-from authentication.serializers import CASTicketSerializer, CASUserSerializer
+from authentication.serializers import CASTicketSerializer, UserSerializer
+from authentication.services import users
+from authentication.cas.client import client
 from ypovoli import settings
 
-client = CASClient(
-    server_url=settings.CAS_ENDPOINT,
-    service_url=settings.API_VALIDATE_ENDPOINT,
-    auth_prefix=''
-)
+@api_view(['GET'])
+def whoami(_: Request) -> Response:
+    pass
 
 @api_view(['GET'])
 def login(_: Request) -> Response:
@@ -21,7 +20,6 @@ def login(_: Request) -> Response:
         client.get_login_url()
     )
 
-
 @api_view(['GET'])
 def validate(request: Request) -> Response:
     """Validate a Service Ticket obtained from the CAS endpoint.
@@ -29,19 +27,12 @@ def validate(request: Request) -> Response:
     """
     ticket = CASTicketSerializer(data=request.query_params)
 
-    if ticket.is_valid(raise_exception=True):
-        response = client.perform_service_validate(
-            ticket=ticket.validated_data['ticket']
+    if ticket.is_valid():
+        user = UserSerializer(
+            users.get_or_create(**ticket.validated_data['user'])
         )
 
-        if response.success:
-            # Fetch or create user, generate token.
-            cas_user = CASUserSerializer(data=response.data)
-            return Response(response.data)
-        else:
-            return Response({
-                'errors': response.error
-            })
+        return Response(user.data)
 
     return Response({
         'errors': ticket.errors
