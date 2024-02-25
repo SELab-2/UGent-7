@@ -8,13 +8,12 @@ from api.views import group_view
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-#router.register(r'teachers', Teacher_view)
 router.register(r'teachers', teacher_view.TeacherViewSet, basename='teacher')
 router.register(r'admins', admin_view.AdminViewSet, basename='admin')
 router.register(r'assistants', assistant_view.AssistantViewSet, basename='assistant')
 router.register(r'students', student_view.StudentViewSet, basename='student')
 router.register(r'projects', project_view.ProjectViewSet, basename='project')
-router.register(r'groups', group_view.GroupSerializer, basename='group')
+router.register(r'groups', group_view.GroupViewSet, basename='group')
 
 urlpatterns = [
 	path('', include(router.urls)),

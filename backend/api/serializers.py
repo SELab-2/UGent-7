@@ -5,6 +5,7 @@ from .models.assistant import Assistant
 from .models.student import Student
 from .models.project import Project
 from .models.group import Group
+from .models.course import Course
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -33,6 +34,11 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ['id', 'name', 'description', 'visible', 'archived', 'start_date', 'deadline', 'checks', 'course']
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['id', 'name', 'academic_startyear','description','parent_course']
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
