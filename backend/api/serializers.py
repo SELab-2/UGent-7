@@ -4,6 +4,7 @@ from .models.admin import Admin
 from .models.assistant import Assistant
 from .models.student import Student
 from .models.project import Project
+from .models.group import Group
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -32,3 +33,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ['id', 'name', 'description', 'visible', 'archived', 'start_date', 'deadline', 'checks', 'course']
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'project', 'students','score']
