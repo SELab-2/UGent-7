@@ -7,12 +7,31 @@ def populate_teacher_student_courses(apps, schema_editor):
         Teacher = apps.get_model("api", "Teacher")
         Student = apps.get_model("api", "Student")
         Course = apps.get_model("api", "Course")
+        Assistant = apps.get_model("api","Assistant")
 
         teacher1 = Teacher.objects.create(
             id=123,
             first_name="Tom",
             last_name="Boonen",
             email="Tom.Boonen@gmail.be",
+            faculty="Science",
+            create_time="2023-01-01T00:00:00Z",
+        )
+
+        assistant1 = Assistant.objects.create(
+            id=235,
+            first_name="Bart",
+            last_name="Simpson",
+            email="Bart.Simpson@gmail.be",
+            faculty="Science",
+            create_time="2023-01-01T00:00:00Z",
+        )
+
+        assistant2 = Assistant.objects.create(
+            id=236,
+            first_name="Kim",
+            last_name="Clijsters",
+            email="Kim.Clijsters@gmail.be",
             faculty="Science",
             create_time="2023-01-01T00:00:00Z",
         )
@@ -44,6 +63,9 @@ def populate_teacher_student_courses(apps, schema_editor):
         teacher1.courses.add(course)
         teacher2.courses.add(course)
         student1.courses.add(course)
+        #course.assistants.add(assistant1)
+        #course.assistants.add(assistant2)
+
 
 
 class Migration(migrations.Migration):
