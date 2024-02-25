@@ -3,6 +3,6 @@ from ypovoli import settings
 
 client = CASClient(
     server_url=settings.CAS_ENDPOINT,
-    service_url=settings.API_VALIDATE_ENDPOINT,
+    service_url=settings.CAS_RESPONSE,
     auth_prefix=''
 )

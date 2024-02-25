@@ -1,50 +1,32 @@
 from django.shortcuts import redirect
-from rest_framework.decorators import api_view
-from rest_framework.request import Request
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from authentication.serializers import CASTicketSerializer, UserSerializer
-from authentication.services import users
+from rest_framework.request import Request
+from rest_framework.permissions import IsAuthenticated
+from authentication.serializers import UserSerializer
 from authentication.cas.client import client
 from ypovoli import settings
 
-@api_view(['GET'])
-def whoami(_: Request) -> Response:
-    pass
 
-@api_view(['GET'])
-def login(_: Request) -> Response:
-    """Attempt to log in.
-    Redirect to our single CAS endpoint.
-    """
-    return redirect(
-        client.get_login_url()
-    )
+class WhoAmIView(APIView):
+    permission_classes = [IsAuthenticated]
 
-@api_view(['GET'])
-def validate(request: Request) -> Response:
-    """Validate a Service Ticket obtained from the CAS endpoint.
-    Returns a user token for further API authentication.
-    """
-    ticket = CASTicketSerializer(data=request.query_params)
+    def get(self, request: Request) -> Response:
+        """Get the user account data for the current user"""
+        return Response(UserSerializer(request.user).data)
 
-    if ticket.is_valid():
-        user = UserSerializer(
-            users.get_or_create(**ticket.validated_data['user'])
-        )
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
 
-        return Response(user.data)
+    def post(self, request: Request) -> Response:
+        """Attempt to log out. Redirect to our single CAS endpoint."""
+        return redirect(client.get_logout_url(service_url=settings.API_ENDPOINT))
 
-    return Response({
-        'errors': ticket.errors
-    })
+class LoginView(APIView):
+    def get(self, request: Request):
+        """Attempt to log in. Redirect to our single CAS endpoint."""
+        return redirect(client.get_login_url())
 
-@api_view(['POST'])
-def logout(request: Request) -> Response:
-    """Attempt to log out.
-    Redirect to our single CAS endpoint.
-    """
-    return redirect(
-        client.get_logout_url(
-            service_url=settings.API_ENDPOINT
-        )
-    )
+class TokenEchoView(APIView):
+    def get(self, request: Request) -> Response:
+        return Response(request.query_params.get('ticket'))

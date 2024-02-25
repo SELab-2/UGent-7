@@ -1,5 +1,9 @@
 from authentication.models import User
 
+def exists(user_id: str) -> bool:
+    """Check if a user exists"""
+    return User.objects.filter(id = user_id).exists()
+
 def get_by_id(user_id: str) -> User|None:
     """Get a user by its user id"""
     return User.objects.filter(id=user_id).first()
@@ -31,18 +35,18 @@ def create(
     )
 
 def get_or_create(
-    id: str, username: str, email: str,
+    user_id: str, username: str, email: str,
     first_name: str, last_name: str,
     faculty: str = None,
     last_enrolled: str = None,
     student_id: str = None
 ) -> User:
     """Get a user by ID, or create if it doesn't exist"""
-    user = get_by_id(id)
+    user = get_by_id(user_id)
 
     if user is None:
         return create(
-            id, username, email,
+            user_id, username, email,
             first_name, last_name,
             faculty, last_enrolled, student_id
         )
