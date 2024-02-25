@@ -19,7 +19,6 @@ class Group(models.Model):
         'Student',
         related_name='groups',  # This is how we can access groups from a student
         blank=False,
-        null=False
     )
 
     # Score of the group
