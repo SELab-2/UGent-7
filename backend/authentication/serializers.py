@@ -44,16 +44,6 @@ class UserSerializer(ModelSerializer):
     """Serializer for the user model
     This serializer validates the user fields for creation and updating.
     """
-    id = CharField()
-    username = CharField()
-    student_id = CharField(allow_null=True)
-    faculty = CharField(allow_null=True)
-    email = EmailField()
-    first_name = CharField()
-    last_name = CharField()
-    create_time = DateTimeField(required=False)
-    last_enrolled = CharField()
-
     class Meta:
         model = User
         fields = [
