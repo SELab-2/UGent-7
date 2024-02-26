@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from ..models.admin import Admin
-from ..serializers import AdminSerializer
+from ..serializers.admin_serializer import AdminSerializer
 
 
 class AdminViewSet(viewsets.ModelViewSet):

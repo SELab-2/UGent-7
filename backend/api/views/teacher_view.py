@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from ..models.teacher import Teacher
-from ..serializers import TeacherSerializer
+from ..serializers.teacher_serializer import TeacherSerializer
 
 
 class TeacherViewSet(viewsets.ModelViewSet):
