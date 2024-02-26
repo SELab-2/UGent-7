@@ -1,8 +1,15 @@
 from django.urls import path
-from authentication.views import login, logout, validate
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from authentication.views import WhoAmIView, LoginView, LogoutView, TokenEchoView
 
 urlpatterns = [
-    path('login', login, name='auth.login'),
-    path('validate', validate, name='auth.validate'),
-    path('logout', logout, name='auth.logout')
+    # CAS endpoints.
+    path('login', LoginView.as_view(), name='auth.login'),
+    path('logout', LogoutView.as_view(), name='auth.logout'),
+    path('whoami', WhoAmIView.as_view(), name='auth.whoami'),
+    path('echo', TokenEchoView.as_view(), name='auth.echo'),
+    # TOKEN endpoints.
+    path('token', TokenObtainPairView.as_view(), name='auth.token'),
+    path('token/refresh', TokenRefreshView.as_view(), name='auth.token.refresh'),
+    path('token/verify', TokenVerifyView.as_view(), name='auth.token.verify')
 ]

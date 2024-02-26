@@ -40,12 +40,12 @@ INSTALLED_APPS = [
     # Third party
     'rest_framework_swagger',       # Swagger 
     'rest_framework',               # Django rest framework
-    'knox',                         # Token based authentication
     'drf_yasg',                     # Yet Another Swagger generator
     'sslserver',                    # Used for local SSL support (needed by CAS)
     
     # First party
-    'authentication'                # Ypovoli authentication
+    'authentication',               # Ypovoli authentication
+    'api'                           # Ypovoli logic of the base application
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,18 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
     ]
+}
+
+SIMPLE_JWT = {
+    # Token settings
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    # Serializers
+    'TOKEN_OBTAIN_SERIALIZER': 'authentication.serializers.CASTokenObtainSerializer'
 }
 
 AUTH_USER_MODEL = 'authentication.User'
@@ -73,8 +84,8 @@ WSGI_APPLICATION = 'ypovoli.wsgi.application'
 # Application endpoints
 
 CAS_ENDPOINT = 'https://login.ugent.be'
+CAS_RESPONSE = 'https://localhost:8080/auth/echo'
 API_ENDPOINT = 'https://localhost:8080'
-API_VALIDATE_ENDPOINT = 'https://localhost:8080/auth/validate'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
