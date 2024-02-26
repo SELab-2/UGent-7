@@ -1,5 +1,6 @@
 from rest_framework.serializers import CharField, EmailField, ModelSerializer, ValidationError, Serializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from authentication.signals import user_created_signal
 from authentication.models import User
 from authentication.cas.client import client
 
@@ -64,8 +65,10 @@ class UserSerializer(ModelSerializer):
         """Create or fetch the user based on the validated data."""
         user, created = User.objects.get_or_create(**validated_data)
 
-        if created:
-            # Todo: send USER_CREATED signal
-            pass
+        if True:
+            user_created_signal.send(
+                sender=User,
+                attributes=validated_data
+            )
 
         return user
