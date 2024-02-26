@@ -1,5 +1,7 @@
+from django.contrib.auth.models import update_last_login
 from rest_framework.serializers import CharField, EmailField, ModelSerializer, ValidationError, Serializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework_simplejwt.settings import api_settings
 from authentication.signals import user_created_signal
 from authentication.models import User
 from authentication.cas.client import client
@@ -39,6 +41,9 @@ class CASTokenObtainSerializer(Serializer):
 
         user = user.create(user.validated_data)
 
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(self, user)
+
         return {
             'access': str(AccessToken.for_user(user)),
             'refresh': str(RefreshToken.for_user(user))
@@ -67,7 +72,7 @@ class UserSerializer(ModelSerializer):
 
         if created:
             user_created_signal.send(
-                sender=User,
+                sender=self,
                 attributes=validated_data
             )
 

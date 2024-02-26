@@ -68,10 +68,9 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    # Token settings
     'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    # Serializers
+    'UPDATE_LAST_LOGIN': True,
     'TOKEN_OBTAIN_SERIALIZER': 'authentication.serializers.CASTokenObtainSerializer'
 }
 
