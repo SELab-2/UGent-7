@@ -15,12 +15,6 @@ class User(AbstractBaseUser):
         primary_key=True
     )
 
-    student_id = CharField(
-        max_length=16,
-        unique=True,
-        null=True
-    )
-
     username = CharField(
         max_length=10,
         null=False,
