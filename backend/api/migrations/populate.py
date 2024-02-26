@@ -1,4 +1,5 @@
 from django.db import migrations, transaction
+from datetime import date
 
 
 def populate_teacher_student_courses(apps, schema_editor):
@@ -8,6 +9,7 @@ def populate_teacher_student_courses(apps, schema_editor):
         Student = apps.get_model("api", "Student")
         Course = apps.get_model("api", "Course")
         Assistant = apps.get_model("api","Assistant")
+        Project = apps.get_model("api","Project")
 
         teacher1 = Teacher.objects.create(
             id=123,
@@ -18,7 +20,7 @@ def populate_teacher_student_courses(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        assistant1 = Assistant.objects.create(
+        assistant1 = Assistant.objects.create( #dont work
             id=235,
             first_name="Bart",
             last_name="Simpson",
@@ -27,7 +29,7 @@ def populate_teacher_student_courses(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        assistant2 = Assistant.objects.create(
+        assistant2 = Assistant.objects.create( #dont work
             id=236,
             first_name="Kim",
             last_name="Clijsters",
@@ -60,11 +62,32 @@ def populate_teacher_student_courses(apps, schema_editor):
             description="Math course",
         )
 
+        course2 = Course.objects.create(
+            name="Sel2",
+            academic_startyear=2023,
+            description="Software course",
+        )
+
+        project = Project.objects.create( #dont work
+            id=123456,
+            name="sel2",
+            description="make a project",
+            visible=True,
+            archived=False,
+            start_date=date(2024, 2, 26),  # Set the start date as 26th February 2024
+            deadline=date(2024, 2, 27)    # Set the deadline as 27th February 2024
+        )
+
         teacher1.courses.add(course)
         teacher2.courses.add(course)
         student1.courses.add(course)
-        #course.assistants.add(assistant1)
-        #course.assistants.add(assistant2)
+
+        teacher1.courses.add(course2)
+        teacher2.courses.add(course2)
+        student1.courses.add(course2)
+        course.assistants.add(assistant1)
+        course.assistants.add(assistant2)
+        project.course = course2 #dont work
 
 
 

@@ -11,6 +11,11 @@ from .models.checks import Checks, FileExtension
 
 
 class TeacherSerializer(serializers.ModelSerializer):
+    courses = serializers.HyperlinkedRelatedField(
+      many=True,
+      read_only=True,
+      view_name='course-detail'
+  )
     class Meta:
         model = Teacher
         fields = ['id', 'first_name', 'last_name', 'email', 'faculty','last_enrolled','create_time','courses']
@@ -22,17 +27,32 @@ class AdminSerializer(serializers.ModelSerializer):
 
 
 class AssistantSerializer(serializers.ModelSerializer):
+    courses = serializers.HyperlinkedRelatedField(
+      many=True,
+      read_only=True,
+      view_name='course-detail'
+  )
     class Meta:
         model = Assistant
         fields = ['id', 'first_name', 'last_name', 'email', 'faculty','last_enrolled','create_time','courses']
 
 class StudentSerializer(serializers.ModelSerializer):
+    courses = serializers.HyperlinkedRelatedField(
+      many=True,
+      read_only=True,
+      view_name='course-detail'
+  )
     class Meta:
         model = Student
         fields = ['id', 'first_name', 'last_name', 'email', 'faculty','last_enrolled','create_time','courses']
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    course = serializers.HyperlinkedRelatedField(
+      many=False,
+      read_only=True,
+      view_name='course-detail'
+  )
     class Meta:
         model = Project
         fields = ['id', 'name', 'description', 'visible', 'archived', 'start_date', 'deadline', 'checks', 'course']

@@ -5,6 +5,7 @@ from api.views import assistant_view
 from api.views import student_view
 from api.views import project_view
 from api.views import group_view
+from api.views import course_view
 from api.views import submision_view
 from api.views import checks_view
 from rest_framework.routers import DefaultRouter
@@ -16,6 +17,7 @@ router.register(r'assistants', assistant_view.AssistantViewSet, basename='assist
 router.register(r'students', student_view.StudentViewSet, basename='student')
 router.register(r'projects', project_view.ProjectViewSet, basename='project')
 router.register(r'groups', group_view.GroupViewSet, basename='group')
+router.register(r'courses', course_view.CourseViewSet, basename='course')
 router.register(r'submissions', submision_view.SubmissionViewSet, basename='submission')
 router.register(r'checks', checks_view.ChecksViewSet, basename='check')
 router.register(r'fileExtensions', checks_view.FileExtensionViewSet, basename='fileExtension')
