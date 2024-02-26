@@ -65,7 +65,7 @@ class UserSerializer(ModelSerializer):
         """Create or fetch the user based on the validated data."""
         user, created = User.objects.get_or_create(**validated_data)
 
-        if True:
+        if created:
             user_created_signal.send(
                 sender=User,
                 attributes=validated_data
