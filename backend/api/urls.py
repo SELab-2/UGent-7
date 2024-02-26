@@ -54,4 +54,7 @@ router.register(
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('courses/<int:course_id>/teachers/',
+         course_view.CourseTeachersViewSet.as_view({'get': 'list'}),
+         name='course-teachers'),
 ]

@@ -9,10 +9,10 @@ class CourseSerializer(serializers.ModelSerializer):
       view_name='assistant-detail'
     )
 
-    teachers = serializers.HyperlinkedRelatedField(
-      many=True,
-      read_only=True,
-      view_name='teacher-detail'
+    teachers = serializers.HyperlinkedIdentityField(
+      view_name='course-teachers',  # View that handles the hyperlink
+      lookup_field='id',            # Field to use for the lookup
+      lookup_url_kwarg='course_id'  # URL keyword argument to use
     )
 
     students = serializers.HyperlinkedRelatedField(
