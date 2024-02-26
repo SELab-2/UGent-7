@@ -9,6 +9,7 @@ from api.views import course_view
 from api.views import submision_view
 from api.views import checks_view
 from rest_framework.routers import DefaultRouter
+#from rest_framework.urlpatterns import format_suffix_patterns
 
 router = DefaultRouter()
 router.register(r'teachers', teacher_view.TeacherViewSet, basename='teacher')
@@ -25,3 +26,5 @@ router.register(r'fileExtensions', checks_view.FileExtensionViewSet, basename='f
 urlpatterns = [
 	path('', include(router.urls)),
 ]
+
+#urlpatterns = format_suffix_patterns(urlpatterns)

@@ -82,6 +82,7 @@ def populate_db(apps, schema_editor):
         teacher1.courses.add(course)
         teacher2.courses.add(course)
         student1.courses.add(course)
+        teacher2.courses.add(course2)
 
         course.assistants.add(assistant1)
         course2.assistants.add(assistant2)
