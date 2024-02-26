@@ -2,7 +2,7 @@ from django.db import migrations, transaction
 from datetime import date
 
 
-def populate_teacher_student_courses(apps, schema_editor):
+def populate_db(apps, schema_editor):
     with transaction.atomic():
 
         Teacher = apps.get_model("api", "Teacher")
@@ -20,7 +20,7 @@ def populate_teacher_student_courses(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        assistant1 = Assistant.objects.create( #dont work
+        assistant1 = Assistant.objects.create(
             id=235,
             first_name="Bart",
             last_name="Simpson",
@@ -29,7 +29,7 @@ def populate_teacher_student_courses(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        assistant2 = Assistant.objects.create( #dont work
+        assistant2 = Assistant.objects.create(
             id=236,
             first_name="Kim",
             last_name="Clijsters",
@@ -68,27 +68,23 @@ def populate_teacher_student_courses(apps, schema_editor):
             description="Software course",
         )
 
-        project = Project.objects.create( #dont work
+        project = Project.objects.create( 
             id=123456,
             name="sel2",
             description="make a project",
             visible=True,
             archived=False,
             start_date=date(2024, 2, 26),  # Set the start date as 26th February 2024
-            deadline=date(2024, 2, 27)    # Set the deadline as 27th February 2024
+            deadline=date(2024, 2, 27),    # Set the deadline as 27th February 2024
+            course=course2
         )
 
         teacher1.courses.add(course)
         teacher2.courses.add(course)
         student1.courses.add(course)
 
-        teacher1.courses.add(course2)
-        teacher2.courses.add(course2)
-        student1.courses.add(course2)
         course.assistants.add(assistant1)
-        course.assistants.add(assistant2)
-        project.course = course2 #dont work
-
+        course2.assistants.add(assistant2)
 
 
 class Migration(migrations.Migration):
@@ -97,5 +93,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(populate_teacher_student_courses),
+        migrations.RunPython(populate_db),
     ]
