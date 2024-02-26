@@ -8,8 +8,8 @@ def populate_db(apps, schema_editor):
         Teacher = apps.get_model("api", "Teacher")
         Student = apps.get_model("api", "Student")
         Course = apps.get_model("api", "Course")
-        Assistant = apps.get_model("api","Assistant")
-        Project = apps.get_model("api","Project")
+        Assistant = apps.get_model("api", "Assistant")
+        Project = apps.get_model("api", "Project")
 
         teacher1 = Teacher.objects.create(
             id=123,
@@ -55,7 +55,7 @@ def populate_db(apps, schema_editor):
             faculty="Science",
             create_time="2023-01-01T00:00:00Z",
         )
-    
+
         course = Course.objects.create(
             name="Math",
             academic_startyear=2023,
@@ -68,14 +68,16 @@ def populate_db(apps, schema_editor):
             description="Software course",
         )
 
-        project = Project.objects.create( 
+        Project.objects.create(
             id=123456,
             name="sel2",
             description="make a project",
             visible=True,
             archived=False,
-            start_date=date(2024, 2, 26),  # Set the start date as 26th February 2024
-            deadline=date(2024, 2, 27),    # Set the deadline as 27th February 2024
+            # Set the start date as 26th February 2024
+            start_date=date(2024, 2, 26),
+            # Set the deadline as 27th February 2024
+            deadline=date(2024, 2, 27),
             course=course2
         )
 

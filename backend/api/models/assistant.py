@@ -11,6 +11,7 @@ class Assistant(User):
     # All the courses the assistant is assisting in
     courses = models.ManyToManyField(
         'Course',
-        related_name='assistants',  # Allows us to access the assistants from the course
+        # Allows us to access the assistants from the course
+        related_name='assistants',
         blank=True
     )
