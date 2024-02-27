@@ -11,7 +11,7 @@ class NotificationTemplate(models.Model):
 class Notification(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True)
     user = models.ForeignKey(User, required=True, on_delete=models.CASCADE)
-    template = models.ForeignKey(NotificationTemplate, required=True, on_delete=models.CASCADE, db_column='template_id')
+    template_id = models.ForeignKey(NotificationTemplate, required=True, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     arguments = models.JSONField(required=False, default=dict)
     is_read = models.BooleanField(default=False)

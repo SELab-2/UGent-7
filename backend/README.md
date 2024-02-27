@@ -12,4 +12,5 @@ __Django doesn't support python 3.12__
 
 - Install all requirements `pip install -r requirements.txt`
 
+- Migrate the database `python manage.py migrate`
 - Run the server `python manage.py runsslserver localhost:8080`
