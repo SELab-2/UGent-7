@@ -5,7 +5,7 @@ from django.db import models
 class NotificationTemplate(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True)
     title_key = models.CharField(required=True, max_length=255)
-    description_key = models.CharField(required=True, max_length=255)
+    description_key = models.CharField(required=True, max_length=511)
 
 
 class Notification(models.Model):
