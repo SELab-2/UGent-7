@@ -16,3 +16,11 @@ class Notification(models.Model):
     arguments = models.JSONField(required=False, default=dict)
     is_read = models.BooleanField(default=False)
     is_sent = models.BooleanField(default=False)
+
+    def read(self):
+        self.is_read = True
+        self.save()
+
+    def send(self):
+        self.is_sent = True
+        self.save()
