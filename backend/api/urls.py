@@ -76,5 +76,8 @@ urlpatterns = [
          student_view.StudentCoursesViewSet.as_view({'get': 'list'}),
          name='student-courses'),
 
+    path('teachers/<int:teacher_id>/courses/',
+         teacher_view.TeacherCoursesViewSet.as_view({'get': 'list'}),
+         name='teacher-courses'),
     
 ]

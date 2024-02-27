@@ -3,10 +3,10 @@ from ..models.teacher import Teacher
 
 
 class TeacherSerializer(serializers.ModelSerializer):
-    courses = serializers.HyperlinkedRelatedField(
-      many=True,
-      read_only=True,
-      view_name='course-detail'
+    courses = serializers.HyperlinkedIdentityField(
+      view_name='teacher-courses',
+      lookup_field='id',
+      lookup_url_kwarg='teacher_id'
     )
 
     class Meta:
