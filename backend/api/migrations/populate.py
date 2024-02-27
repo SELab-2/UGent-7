@@ -10,6 +10,7 @@ def populate_db(apps, schema_editor):
         Course = apps.get_model("api", "Course")
         Assistant = apps.get_model("api", "Assistant")
         Project = apps.get_model("api", "Project")
+        Group = apps.get_model("api", "Group")
 
         teacher1 = Teacher.objects.create(
             id=123,
@@ -56,6 +57,15 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
+        student2 = Student.objects.create(
+            id=2,
+            first_name="Bartje",
+            last_name="Verhaege",
+            email="Bartje.Verhaege@gmail.com",
+            faculty="Science",
+            create_time="2023-01-01T00:00:00Z",
+        )
+
         course = Course.objects.create(
             name="Math",
             academic_startyear=2023,
@@ -68,7 +78,7 @@ def populate_db(apps, schema_editor):
             description="Software course",
         )
 
-        Project.objects.create(
+        project1 = Project.objects.create(
             id=123456,
             name="sel2",
             description="make a project",
@@ -80,6 +90,13 @@ def populate_db(apps, schema_editor):
             deadline=date(2024, 2, 27),
             course=course2
         )
+
+        group1 = Group.objects.create(
+            project=project1,
+        )
+
+        group1.students.add(student1)
+        group1.students.add(student2)
 
         teacher1.courses.add(course)
         teacher2.courses.add(course)
