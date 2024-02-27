@@ -1,11 +1,11 @@
 from rest_framework import viewsets, status
+from rest_framework.response import Response
 from ..models.course import Course
 from ..serializers.course_serializer import CourseSerializer
 from ..serializers.teacher_serializer import TeacherSerializer
 from ..serializers.assistant_serializer import AssistantSerializer
 from ..serializers.student_serializer import StudentSerializer
 from ..serializers.project_serializer import ProjectSerializer
-from rest_framework.response import Response
 
 
 class CourseViewSet(viewsets.ModelViewSet):

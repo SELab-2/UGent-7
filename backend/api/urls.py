@@ -54,6 +54,7 @@ router.register(
 
 urlpatterns = [
     path('', include(router.urls)),
+
     path('courses/<int:course_id>/teachers/',
          course_view.CourseTeachersViewSet.as_view({'get': 'list'}),
          name='course-teachers'),
@@ -66,4 +67,8 @@ urlpatterns = [
     path('courses/<int:course_id>/projects/',
          course_view.CourseProjectsViewSet.as_view({'get': 'list'}),
          name='course-projects'),
+
+    path('assistants/<int:assistant_id>/courses/',
+         assistant_view.AssistantCoursesViewSet.as_view({'get': 'list'}),
+         name='assistant-courses'),
 ]
