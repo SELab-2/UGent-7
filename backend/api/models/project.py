@@ -53,6 +53,7 @@ class Project(models.Model):
         'Course',
         # If the course is deleted, the project should be deleted as well
         on_delete=models.CASCADE,
+        related_name='projects',
         blank=False,
         null=False
     )
