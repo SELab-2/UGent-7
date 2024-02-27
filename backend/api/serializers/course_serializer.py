@@ -3,10 +3,10 @@ from ..models.course import Course
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    assistants = serializers.HyperlinkedRelatedField(
-      many=True,
-      read_only=True,
-      view_name='assistant-detail'
+    assistants = serializers.HyperlinkedIdentityField(
+      view_name='course-assistants',
+      lookup_field='id',
+      lookup_url_kwarg='course_id',
     )
 
     teachers = serializers.HyperlinkedIdentityField(
@@ -15,10 +15,10 @@ class CourseSerializer(serializers.ModelSerializer):
       lookup_url_kwarg='course_id'  # URL keyword argument to use
     )
 
-    students = serializers.HyperlinkedRelatedField(
-      many=True,
-      read_only=True,
-      view_name='student-detail'
+    students = serializers.HyperlinkedIdentityField(
+      view_name='course-students',
+      lookup_field='id',
+      lookup_url_kwarg='course_id',
     )
 
     class Meta:
