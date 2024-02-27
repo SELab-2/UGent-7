@@ -4,6 +4,7 @@ from ..serializers.course_serializer import CourseSerializer
 from ..serializers.teacher_serializer import TeacherSerializer
 from ..serializers.assistant_serializer import AssistantSerializer
 from ..serializers.student_serializer import StudentSerializer
+from ..serializers.project_serializer import ProjectSerializer
 from rest_framework.response import Response
 
 
@@ -69,6 +70,28 @@ class CourseStudentsViewSet(viewsets.ModelViewSet):
             # Serialize the student objects
             serializer = StudentSerializer(
                 students, many=True, context={'request': request}
+            )
+            return Response(serializer.data)
+
+        except Course.DoesNotExist:
+            # Invalid course ID
+            return Response(status=status.HTTP_404_NOT_FOUND,
+                            data={"message": "Course not found"})
+
+
+class CourseProjectsViewSet(viewsets.ModelViewSet):
+
+    def list(self, request, *args, **kwargs):
+        """Returns a list of projects for the given course"""
+        course_id = kwargs.get('course_id')
+
+        try:
+            queryset = Course.objects.get(id=course_id)
+            projects = queryset.projects.all()
+
+            # Serialize the project objects
+            serializer = ProjectSerializer(
+                projects, many=True, context={'request': request}
             )
             return Response(serializer.data)
 

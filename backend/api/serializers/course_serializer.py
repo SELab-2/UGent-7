@@ -21,9 +21,15 @@ class CourseSerializer(serializers.ModelSerializer):
       lookup_url_kwarg='course_id',
     )
 
+    projects = serializers.HyperlinkedIdentityField(
+      view_name='course-projects',
+      lookup_field='id',
+      lookup_url_kwarg='course_id',
+    )
+
     class Meta:
         model = Course
         fields = [
             'id', 'name', 'academic_startyear', 'description',
-            'parent_course', 'teachers', 'assistants', 'students'
+            'parent_course', 'teachers', 'assistants', 'students', 'projects'
           ]
