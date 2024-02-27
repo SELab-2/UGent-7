@@ -9,6 +9,12 @@ class StudentSerializer(serializers.ModelSerializer):
       lookup_url_kwarg='student_id'
     )
 
+    groups = serializers.HyperlinkedIdentityField(
+      view_name='student-groups',
+      lookup_field='id',
+      lookup_url_kwarg='student_id'
+    )
+
     class Meta:
         model = Student
         fields = [
