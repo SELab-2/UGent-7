@@ -32,9 +32,10 @@ class User(AbstractBaseUser):
         unique=True
     )
 
-    faculty = CharField(
-        max_length=50,
-        null = True
+    faculty = models.ManyToManyField(
+        'Faculty',
+        related_name='faculties',
+        blank=True
     )
 
     last_enrolled = IntegerField(
@@ -58,12 +59,4 @@ class Faculty(models.Model):
     name = CharField(
         max_length=50,
         primary_key=True
-    )
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        # This is how we can access groups from a project
-        related_name='faculties',
-        null=True
     )
