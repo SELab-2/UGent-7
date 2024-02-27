@@ -14,8 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import include, path
+from django.urls import path, include
 
 urlpatterns = [
-    path('auth', include('authentication.urls'))
+    # Base API endpoints.
+    path('/', include('api.urls')),
+    # Authentication endpoints.
+    path('auth/', include('authentication.urls'))
 ]

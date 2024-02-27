@@ -12,4 +12,4 @@ __Django doesn't support python 3.12__
 
 - Install all requirements `pip install -r requirements.txt`
 
-- Run the server `python manage.py runserver`
+- Run the server `python manage.py runsslserver localhost:8080`
