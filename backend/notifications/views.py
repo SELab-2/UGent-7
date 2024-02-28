@@ -1,3 +1,8 @@
-# from django.shortcuts import render
+from notifications.models import Notification
+from notifications.serializers import NotificationSerializer
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+
+class NotificationViewSet(ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer

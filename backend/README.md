@@ -10,6 +10,6 @@ __Django doesn't support python 3.12__
 
 - Activate the virtual environment `source .venv/bin/activate`
 
-- Install all requirements `pip install -r requirements.txt`
+- Run `setup.sh`
 
 - Run the server `python manage.py runsslserver localhost:8080`

@@ -18,7 +18,8 @@ from django.urls import path, include
 
 urlpatterns = [
     # Base API endpoints.
-    path('api/', include('api.urls')),
+    path("/", include("api.urls")),
     # Authentication endpoints.
-    path('auth/', include('authentication.urls'))
+    path("auth/", include("authentication.urls")),
+    path("notifications/", include("notifications.urls")),
 ]

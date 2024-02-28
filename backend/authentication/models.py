@@ -1,9 +1,6 @@
-import datetime
-
-from django.db import models
-from django.db.models import CharField, EmailField, IntegerField, DateTimeField
+from __future__ import annotations
+from django.db.models import CharField, EmailField, DateTimeField
 from django.contrib.auth.models import AbstractBaseUser
-
 
 class User(AbstractBaseUser):
     """This model represents a single authenticatable user.
@@ -11,11 +8,17 @@ class User(AbstractBaseUser):
     """
 
     """Model fields"""
-    password = None  # We don't use passwords for our user model.
+    password = None # We don't use passwords for our user model.
 
     id = CharField(
         max_length=12,
         primary_key=True
+    )
+
+    username = CharField(
+        max_length=10,
+        null=False,
+        unique=True
     )
 
     first_name = CharField(
@@ -33,32 +36,23 @@ class User(AbstractBaseUser):
         unique=True
     )
 
-    faculty = models.ManyToManyField(
-        'Faculty',
-        related_name='faculties',
-        blank=True
+    faculty = CharField(
+        max_length=50,
+        null = True,
+        blank = True
     )
 
-    last_enrolled = IntegerField(
-        default=datetime.MINYEAR,
-        null=True
+    last_enrolled = CharField(
+        max_length=11,
+        null = True,
+        blank = True
     )
 
     create_time = DateTimeField(
-        auto_created=True
+        auto_now_add=True
     )
 
     """Model settings"""
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
-
-
-class Faculty(models.Model):
-    """This model represents a faculty."""
-
-    """Model fields"""
-    name = CharField(
-        max_length=50,
-        primary_key=True
-    )
