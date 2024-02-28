@@ -44,6 +44,7 @@ def populate_db(apps, schema_editor):
             first_name="Tom",
             last_name="Boonen",
             email="Tom.Boonen@gmail.be",
+            username="tboonen",
             create_time="2023-01-01T00:00:00Z",
         )
 
@@ -53,6 +54,7 @@ def populate_db(apps, schema_editor):
             id=235,
             first_name="Bart",
             last_name="Simpson",
+            username="bsimpson",
             email="Bart.Simpson@gmail.be",
             create_time="2023-01-01T00:00:00Z",
         )
@@ -63,6 +65,7 @@ def populate_db(apps, schema_editor):
             id=236,
             first_name="Kim",
             last_name="Clijsters",
+            username="kclijster",
             email="Kim.Clijsters@gmail.be",
             create_time="2023-01-01T00:00:00Z",
         )
@@ -73,6 +76,7 @@ def populate_db(apps, schema_editor):
             id=124,
             first_name="Peter",
             last_name="Sagan",
+            username="psagan",
             email="Peter.Sagan@gmail.com",
             create_time="2023-01-01T00:00:00Z",
         )
@@ -83,6 +87,7 @@ def populate_db(apps, schema_editor):
             id=1,
             first_name="John",
             last_name="Doe",
+            username="jdoe",
             email="John.Doe@hotmail.com",
             create_time="2023-01-01T00:00:00Z",
         )
@@ -93,6 +98,7 @@ def populate_db(apps, schema_editor):
             id=2,
             first_name="Bartje",
             last_name="Verhaege",
+            username="bverhae",
             email="Bartje.Verhaege@gmail.com",
             create_time="2023-01-01T00:00:00Z",
         )
