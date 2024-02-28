@@ -56,7 +56,7 @@ class UserSerializer(ModelSerializer):
     id = CharField()
     username = CharField()
     email = EmailField()
-
+  
     class Meta:
         model = User
         fields = [
@@ -71,8 +71,7 @@ class UserSerializer(ModelSerializer):
         user, created = User.objects.get_or_create(**validated_data)
 
         if created:
-            user_created_signal.send(
-                sender=self,
+            user_created_signal.send(sender=self,
                 attributes=validated_data
             )
 
