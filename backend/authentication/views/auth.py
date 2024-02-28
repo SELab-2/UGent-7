@@ -7,7 +7,6 @@ from authentication.serializers import UserSerializer
 from authentication.cas.client import client
 from ypovoli import settings
 
-
 class WhoAmIView(APIView):
     permission_classes = [IsAuthenticated]
 

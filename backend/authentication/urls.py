@@ -1,9 +1,16 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-from authentication.views import WhoAmIView, LoginView, LogoutView, TokenEchoView
+from authentication.views.auth import WhoAmIView, LoginView, LogoutView, TokenEchoView
+from authentication.views.users import UsersView
+
+router = DefaultRouter()
+router.register('users', UsersView, basename='user')
 
 urlpatterns = [
-    # CAS endpoints.
+    # USER endpoints.
+    path('', include(router.urls)),
+    # AUTH endpoints.
     path('login', LoginView.as_view(), name='auth.login'),
     path('logout', LogoutView.as_view(), name='auth.logout'),
     path('whoami', WhoAmIView.as_view(), name='auth.whoami'),
