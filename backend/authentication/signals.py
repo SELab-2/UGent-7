@@ -1,5 +1,5 @@
 from django.dispatch import Signal
 
-user_created_signal = Signal()
-user_login_signal = Signal()
-user_logout_signal = Signal()
+user_created = Signal()
+user_login = Signal()
+user_logout = Signal()

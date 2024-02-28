@@ -36,11 +36,13 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+
     # Third party
     "rest_framework_swagger",  # Swagger
     "rest_framework",  # Django rest framework
     "drf_yasg",  # Yet Another Swagger generator
     "sslserver",  # Used for local SSL support (needed by CAS)
+
     # First party
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application

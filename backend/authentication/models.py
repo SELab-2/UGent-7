@@ -17,6 +17,16 @@ class User(AbstractBaseUser):
         primary_key=True
     )
 
+    username = CharField(
+        max_length=12,
+        unique=True
+    )
+
+    email = EmailField(
+        null=False,
+        unique=True
+    )
+
     first_name = CharField(
         max_length=50,
         null=False
@@ -27,14 +37,10 @@ class User(AbstractBaseUser):
         null=False
     )
 
-    email = EmailField(
-        null=False,
-        unique=True
-    )
-
-    faculty = CharField(
-        max_length=50,
-        null = True
+    faculty = models.ManyToManyField(
+        'Faculty',
+        related_name='faculties',
+        blank=True
     )
 
     last_enrolled = IntegerField(
@@ -43,11 +49,11 @@ class User(AbstractBaseUser):
     )
 
     create_time = DateTimeField(
-        auto_created=True
+        auto_now=True
     )
 
     """Model settings"""
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
 
@@ -60,10 +66,8 @@ class Faculty(models.Model):
         primary_key=True
     )
 
-    user = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        # This is how we can access groups from a project
-        related_name='faculties',
-        null=True
+    user = models.ManyToManyField(
+        'User',
+        related_name='users',
+        blank=True
     )
