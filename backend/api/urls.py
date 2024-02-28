@@ -8,6 +8,7 @@ from api.views import group_view
 from api.views import course_view
 from api.views import submision_view
 from api.views import checks_view
+from api.views import faculty_view
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -51,6 +52,10 @@ router.register(
     r'fileExtensions',
     checks_view.FileExtensionViewSet,
     basename='fileExtension')
+router.register(
+    r'facultys',
+    faculty_view.facultyViewSet,
+    basename='faculty')
 
 urlpatterns = [
     path('', include(router.urls)),

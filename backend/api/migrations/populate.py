@@ -4,13 +4,17 @@ from datetime import date
 
 def populate_db(apps, schema_editor):
     with transaction.atomic():
-
+        #Faculty = apps.get_model("api", "Faculty")
         Teacher = apps.get_model("api", "Teacher")
         Student = apps.get_model("api", "Student")
         Course = apps.get_model("api", "Course")
         Assistant = apps.get_model("api", "Assistant")
         Project = apps.get_model("api", "Project")
         Group = apps.get_model("api", "Group")
+
+        #faculty = Faculty.objects.create(
+        #    name = "science"
+        #)
 
         teacher1 = Teacher.objects.create(
             id=123,
