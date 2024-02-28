@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from ..models.assistant import Assistant
 from ..serializers.assistant_serializer import AssistantSerializer
@@ -9,15 +10,12 @@ class AssistantViewSet(viewsets.ModelViewSet):
     queryset = Assistant.objects.all()
     serializer_class = AssistantSerializer
 
-
-class AssistantCoursesViewSet(viewsets.ModelViewSet):
-
-    def list(self, request, *args, **kwargs):
+    @action(detail=True, methods=['get'])
+    def courses(self, request, pk=None):
         """Returns a list of courses for the given assistant"""
-        assistant_id = kwargs.get('assistant_id')
 
         try:
-            queryset = Assistant.objects.get(id=assistant_id)
+            queryset = Assistant.objects.get(id=pk)
             courses = queryset.courses.all()
 
             # Serialize the course objects

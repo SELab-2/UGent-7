@@ -3,10 +3,10 @@ from ..models.assistant import Assistant
 
 
 class AssistantSerializer(serializers.ModelSerializer):
+
     courses = serializers.HyperlinkedIdentityField(
         view_name='assistant-courses',
-        lookup_field='id',
-        lookup_url_kwarg='assistant_id'
+        read_only=True,
     )
 
     class Meta:

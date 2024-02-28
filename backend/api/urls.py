@@ -60,10 +60,6 @@ router.register(
 urlpatterns = [
     path('', include(router.urls)),
 
-    path('assistants/<int:assistant_id>/courses/',
-         assistant_view.AssistantCoursesViewSet.as_view({'get': 'list'}),
-         name='assistant-courses'),
-
     path('students/<int:student_id>/courses/',
          student_view.StudentCoursesViewSet.as_view({'get': 'list'}),
          name='student-courses'),
