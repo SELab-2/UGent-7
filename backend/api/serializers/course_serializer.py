@@ -24,6 +24,12 @@ class CourseSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    parent_course = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=True,
+        view_name='course-detail'
+    )
+
     class Meta:
         model = Course
         fields = [
