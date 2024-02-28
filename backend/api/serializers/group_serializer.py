@@ -9,6 +9,11 @@ class GroupSerializer(serializers.ModelSerializer):
       view_name='project-detail'
     )
 
+    students = serializers.HyperlinkedIdentityField(
+      view_name='group-students',
+      read_only=True,
+    )
+
     class Meta:
         model = Group
         fields = ['id', 'project', 'students', 'score']
