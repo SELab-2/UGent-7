@@ -8,7 +8,8 @@ class SubmissionFile(models.Model):
 
     submission = models.ForeignKey(
         'Submission',
-        on_delete=models.CASCADE,  # If the submission is deleted, the file should be deleted as well
+        # If the submission is deleted, the file should be deleted as well
+        on_delete=models.CASCADE,
         related_name='files',
         blank=False,
         null=False
@@ -28,7 +29,8 @@ class Submission(models.Model):
 
     group = models.ForeignKey(
         'Group',
-        on_delete=models.CASCADE,  # If the group is deleted, the submission should be deleted as well
+        # If the group is deleted, the submission should be deleted as well
+        on_delete=models.CASCADE,
         related_name='submissions',
         blank=False,
         null=False

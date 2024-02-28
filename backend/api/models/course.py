@@ -28,8 +28,10 @@ class Course(models.Model):
     # with the course of the previous academic year
     parent_course = models.OneToOneField(
         'self',
-        on_delete=models.SET_NULL,  # If the old course is deleted, the child course should remain
-        related_name='child_course',  # Allows us to access the child course from the parent course
+        # If the old course is deleted, the child course should remain
+        on_delete=models.SET_NULL,
+        # Allows us to access the child course from the parent course
+        related_name='child_course',
         blank=True,
         null=True
     )

@@ -8,8 +8,10 @@ class Group(models.Model):
 
     project = models.ForeignKey(
         'Project',
-        on_delete=models.CASCADE,  # If the project is deleted, the group should be deleted as well
-        related_name='groups',     # This is how we can access groups from a project
+        # If the project is deleted, the group should be deleted as well
+        on_delete=models.CASCADE,
+        # This is how we can access groups from a project
+        related_name='groups',
         blank=False,
         null=False
     )
@@ -17,9 +19,9 @@ class Group(models.Model):
     # Students that are part of the group
     students = models.ManyToManyField(
         'Student',
-        related_name='groups',  # This is how we can access groups from a student
+        # This is how we can access groups from a student
+        related_name='groups',
         blank=False,
-        null=False
     )
 
     # Score of the group
