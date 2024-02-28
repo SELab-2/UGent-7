@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from ..models.student import Student
 from ..serializers.student_serializer import StudentSerializer
@@ -10,15 +11,12 @@ class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-
-class StudentCoursesViewSet(viewsets.ModelViewSet):
-
-    def list(self, request, *args, **kwargs):
+    @action(detail=True, methods=['get'])
+    def courses(self, request, pk=None):
         """Returns a list of courses for the given student"""
-        student_id = kwargs.get('student_id')
 
         try:
-            queryset = Student.objects.get(id=student_id)
+            queryset = Student.objects.get(id=pk)
             courses = queryset.courses.all()
 
             # Serialize the course objects
@@ -32,15 +30,12 @@ class StudentCoursesViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND,
                             data={"message": "Student not found"})
 
-
-class StudentGroupsViewSet(viewsets.ModelViewSet):
-
-    def list(self, request, *args, **kwargs):
+    @action(detail=True, methods=['get'])
+    def groups(self, request, pk=None):
         """Returns a list of groups for the given student"""
-        student_id = kwargs.get('student_id')
 
         try:
-            queryset = Student.objects.get(id=student_id)
+            queryset = Student.objects.get(id=pk)
             groups = queryset.groups.all()
 
             # Serialize the group objects

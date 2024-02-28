@@ -3,16 +3,15 @@ from ..models.student import Student
 
 
 class StudentSerializer(serializers.ModelSerializer):
+
     courses = serializers.HyperlinkedIdentityField(
-      view_name='student-courses',
-      lookup_field='id',
-      lookup_url_kwarg='student_id'
+        view_name='student-courses',
+        read_only=True,
     )
 
     groups = serializers.HyperlinkedIdentityField(
-      view_name='student-groups',
-      lookup_field='id',
-      lookup_url_kwarg='student_id'
+        view_name='student-groups',
+        read_only=True,
     )
 
     class Meta:

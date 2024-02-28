@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from ..models.teacher import Teacher
 from ..serializers.teacher_serializer import TeacherSerializer
@@ -9,15 +10,12 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
 
-
-class TeacherCoursesViewSet(viewsets.ModelViewSet):
-
-    def list(self, request, *args, **kwargs):
+    @action(detail=True, methods=['get'])
+    def courses(self, request, pk=None):
         """Returns a list of courses for the given teacher"""
-        teacher_id = kwargs.get('teacher_id')
 
         try:
-            queryset = Teacher.objects.get(id=teacher_id)
+            queryset = Teacher.objects.get(id=pk)
             courses = queryset.courses.all()
 
             # Serialize the course objects
