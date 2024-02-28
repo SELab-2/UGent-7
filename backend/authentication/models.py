@@ -52,6 +52,7 @@ class User(AbstractBaseUser):
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
 
+
 class Faculty(models.Model):
     """This model represents a faculty."""
 
