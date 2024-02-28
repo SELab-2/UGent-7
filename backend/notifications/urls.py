@@ -1,10 +1,8 @@
-from django.urls import path
-from notifications import views
-from rest_framework.urlpatterns import format_suffix_patterns
+from notifications.views import NotificationViewSet
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path("", views.NotificationList.as_view()),
-    path("<int:pk>/", views.NotificationDetail.as_view()),
-]
+router = DefaultRouter()
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+router.register(r"", NotificationViewSet, basename="notification")
+
+urlpatterns = router.urls
