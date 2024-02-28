@@ -4,13 +4,14 @@ from django.db import models
 from django.db.models import CharField, EmailField, IntegerField, DateTimeField
 from django.contrib.auth.models import AbstractBaseUser
 
+
 class User(AbstractBaseUser):
     """This model represents a single authenticatable user.
     It extends the built-in Django user model with CAS-specific attributes.
     """
 
     """Model fields"""
-    password = None # We don't use passwords for our user model.
+    password = None  # We don't use passwords for our user model.
 
     id = CharField(
         max_length=12,
@@ -39,8 +40,8 @@ class User(AbstractBaseUser):
     )
 
     last_enrolled = IntegerField(
-        default = datetime.MINYEAR,
-        null = True
+        default=datetime.MINYEAR,
+        null=True
     )
 
     create_time = DateTimeField(

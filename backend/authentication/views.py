@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, reverse
+from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -11,6 +11,7 @@ client = CASClient(
     service_url=settings.API_VALIDATE_ENDPOINT,
     auth_prefix=''
 )
+
 
 @api_view(['GET'])
 def login(_: Request) -> Response:
@@ -46,6 +47,7 @@ def validate(request: Request) -> Response:
     return Response({
         'errors': ticket.errors
     })
+
 
 @api_view(['POST'])
 def logout(request: Request) -> Response:

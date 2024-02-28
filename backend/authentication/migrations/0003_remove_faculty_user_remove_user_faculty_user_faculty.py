@@ -21,6 +21,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='faculty',
-            field=models.ManyToManyField(null=True, related_name='faculties', to='authentication.faculty'),
+            field=models.ManyToManyField(null=True, related_name='faculties',
+                                         to='authentication.faculty'),
         ),
     ]

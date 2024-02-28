@@ -15,8 +15,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Faculty',
             fields=[
-                ('name', models.CharField(max_length=50, primary_key=True, serialize=False)),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='faculties', to=settings.AUTH_USER_MODEL)),
+                ('name', models.CharField(max_length=50, primary_key=True,
+                 serialize=False)),
+                ('user', models.ForeignKey(null=True,
+                 on_delete=django.db.models.deletion.DO_NOTHING,
+                 related_name='faculties',
+                 to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

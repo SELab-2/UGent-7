@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authentication', '0003_remove_faculty_user_remove_user_faculty_user_faculty'),
+        ('authentication',
+         '0003_remove_faculty_user_remove_user_faculty_user_faculty'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='user',
             name='faculty',
-            field=models.ManyToManyField(related_name='faculties', to='authentication.faculty'),
+            field=models.ManyToManyField(related_name='faculties',
+                                         to='authentication.faculty'),
         ),
     ]

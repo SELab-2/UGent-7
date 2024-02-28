@@ -6,5 +6,5 @@ class facultySerializer(serializers.ModelSerializer):
     class Meta:
         model = Faculty
         fields = [
-            'id', 'name'
+            'name'
           ]

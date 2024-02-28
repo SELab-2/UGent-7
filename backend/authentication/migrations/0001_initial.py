@@ -15,8 +15,10 @@ class Migration(migrations.Migration):
             name='User',
             fields=[
                 ('create_time', models.DateTimeField(auto_created=True)),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('id', models.CharField(max_length=12, primary_key=True, serialize=False)),
+                ('last_login', models.DateTimeField(blank=True, null=True,
+                 verbose_name='last login')),
+                ('id', models.CharField(max_length=12, primary_key=True,
+                 serialize=False)),
                 ('first_name', models.CharField(max_length=50)),
                 ('last_name', models.CharField(max_length=50)),
                 ('email', models.EmailField(max_length=254, unique=True)),

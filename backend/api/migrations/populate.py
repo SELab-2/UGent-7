@@ -1,5 +1,5 @@
 from django.db import migrations, transaction
-from datetime import date
+# from datetime import date
 
 
 def populate_db(apps, schema_editor):
@@ -12,9 +12,32 @@ def populate_db(apps, schema_editor):
         Group = apps.get_model("api", "Group")
         Faculty = apps.get_model("authentication", "Faculty")
 
-        f = Faculty.objects.create(
-           name="science"
+        # Faculteit Letteren en Wijsbegeerte
+        Faculty.objects.create(name="Letteren_Wijsbegeerte")
+        # Faculteit Recht en Criminologie
+        Faculty.objects.create(name="Recht_Criminologie")
+        # Faculteit Wetenschappen
+        f_wet = Faculty.objects.create(name="Wetenschappen")
+        # Faculteit Geneeskunde en Gezondheidswetenschappen
+        f_genGez = Faculty.objects.create(
+            name="Geneeskunde_Gezondheidswetenschappen"
+            )
+        # Faculteit Ingenieurswetenschappen en Architectuur
+        Faculty.objects.create(name="Ingenieurswetenschappen_Architectuur")
+        # Faculteit Economie en Bedrijfskunde
+        Faculty.objects.create(name="Economie_Bedrijfskunde")
+        # Faculteit Diergeneeskunde
+        Faculty.objects.create(name="Diergeneeskunde")
+        # Faculteit Psychologie en Pedagogische Wetenschappen
+        f_psyPeda = Faculty.objects.create(
+            name="Psychologie_PedagogischeWetenschappen"
         )
+        # Faculteit Bio-ingenieurswetenschappen
+        Faculty.objects.create(name="Bio-ingenieurswetenschappen")
+        # Faculteit Farmaceutische Wetenschappen
+        Faculty.objects.create(name="Farmaceutische_Wetenschappen")
+        # Faculteit Politieke en Sociale Wetenschappen
+        Faculty.objects.create(name="Politieke_Sociale_Wetenschappen")
 
         teacher1 = Teacher.objects.create(
             id=123,
@@ -24,7 +47,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        teacher1.faculty.add(f)
+        teacher1.faculty.add(f_psyPeda)
 
         assistant1 = Assistant.objects.create(
             id=235,
@@ -34,7 +57,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        assistant1.faculty.add(f)
+        assistant1.faculty.add(f_wet)
 
         assistant2 = Assistant.objects.create(
             id=236,
@@ -44,7 +67,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        assistant2.faculty.add(f)
+        assistant2.faculty.add(f_psyPeda)
 
         teacher2 = Teacher.objects.create(
             id=124,
@@ -54,7 +77,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        teacher2.faculty.add(f)
+        teacher2.faculty.add(f_psyPeda)
 
         student1 = Student.objects.create(
             id=1,
@@ -64,7 +87,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        student1.faculty.add(f)
+        student1.faculty.add(f_wet)
 
         student2 = Student.objects.create(
             id=2,
@@ -74,7 +97,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        student2.faculty.add(f)
+        student2.faculty.add(f_genGez)
 
         course = Course.objects.create(
             name="Math",

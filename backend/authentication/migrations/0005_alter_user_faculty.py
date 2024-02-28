@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='faculty',
-            field=models.ManyToManyField(blank=True, related_name='faculties', to='authentication.faculty'),
+            field=models.ManyToManyField(blank=True, related_name='faculties',
+                                         to='authentication.faculty'),
         ),
     ]
