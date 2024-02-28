@@ -95,9 +95,9 @@ def populate_db(apps, schema_editor):
             visible=True,
             archived=False,
             # Set the start date as 26th February 2024
-            start_date=date(2024, 2, 26),
+            start_date="2024-02-26T00:00:00+00:00",
             # Set the deadline as 27th February 2024
-            deadline=date(2024, 2, 27),
+            deadline="2024-02-27T00:00:00+00:00",
             course=course2
         )
 
