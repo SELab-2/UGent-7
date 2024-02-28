@@ -10,39 +10,32 @@ class NotificationTemplateSerializer(serializers.ModelSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    user = serializers.HyperlinkedRelatedField(
-        view_name="user-detail", read_only=True, lookup_field="pk"
-    )
-    title = serializers.SerializerMethodField()
-    description = serializers.SerializerMethodField()
+    message = serializers.SerializerMethodField()
 
     class Meta:
         model = Notification
-        exclude = ["template_id"]
+        fields = [
+            "id",
+            "user",
+            "template_id",
+            "arguments",
+            "message",
+            "created_at",
+            "is_read",
+            "is_sent",
+        ]
 
-    def get_title(self, obj):
-        return _(NotificationTemplate.objects.get(pk=obj.template_id).title_key)
-
-    def get_description(self, obj):
-        description_key = NotificationTemplate.objects.get(
-            pk=obj.template_id
-        ).description_key
-
-        return _(description_key).format(**obj.arguments)
-
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     data["template_id"] = {
-    #         "title_key": NotificationTemplate.objects.get(
-    #             pk=instance.template_id
-    #         ).title_key,
-    #         "description_key": NotificationTemplate.objects.get(
-    #             pk=instance.template_id
-    #         ).description_key,
-    #     }
-
-    #     return data
+    def get_message(self, obj):
+        if obj.arguments != {}:
+            return {
+                "title": _(obj.template_id.title_key),
+                "description": _(obj.template_id.description_key) % obj.arguments,
+            }
+        else:
+            return {"title": "test", "description": "test2"}
 
 
 # TODO: NotificationSerializer exclude = ['user'] and use depth = 1
 # TODO: HyperlinkedModelSerializer?
+# TODO: serializer method field as class?
+# TODO: Error checking

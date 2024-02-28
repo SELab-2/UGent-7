@@ -17,8 +17,8 @@ class Migration(migrations.Migration):
                         primary_key=True,
                     ),
                 ),
-                ("title", models.CharField(max_length=255)),
-                ("description", models.CharField(max_length=511)),
+                ("title_key", models.CharField(max_length=255)),
+                ("description_key", models.CharField(max_length=511)),
             ],
         ),
         migrations.CreateModel(
@@ -34,7 +34,8 @@ class Migration(migrations.Migration):
                 (
                     "user",
                     models.ForeignKey(
-                        to="authentication.User", on_delete=models.deletion.CASCADE
+                        to="authentication.User",
+                        on_delete=models.deletion.CASCADE,
                     ),
                 ),
                 (
