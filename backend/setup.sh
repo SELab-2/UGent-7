@@ -5,7 +5,7 @@ echo "Migrating database..."
 python manage.py migrate > /dev/null
 
 echo "Populating database..."
-python manage.py loaddata fixtures/* > /dev/null
+python manage.py loaddata notifications/fixtures/* > /dev/null
 
 echo "Compiling translations..."
 django-admin compilemessages > /dev/null

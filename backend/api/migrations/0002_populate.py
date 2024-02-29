@@ -1,17 +1,16 @@
 from django.db import migrations, transaction
+from api.models.teacher import Teacher
+from api.models.student import Student
+from api.models.course import Course
+from api.models.assistant import Assistant
+from api.models.project import Project
+from api.models.group import Group
+from authentication.models import Faculty
 # from datetime import date
 
 
 def populate_db(apps, schema_editor):
     with transaction.atomic():
-        Teacher = apps.get_model("api", "Teacher")
-        Student = apps.get_model("api", "Student")
-        Course = apps.get_model("api", "Course")
-        Assistant = apps.get_model("api", "Assistant")
-        Project = apps.get_model("api", "Project")
-        Group = apps.get_model("api", "Group")
-        Faculty = apps.get_model("authentication", "Faculty")
-
         # Faculteit Letteren en Wijsbegeerte
         Faculty.objects.create(name="Letteren_Wijsbegeerte")
         # Faculteit Recht en Criminologie
@@ -149,7 +148,7 @@ def populate_db(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ("api", "0001_initial"),
-        ("authentication", "0005_alter_user_faculty"),
+        ("authentication", "0001_initial"),
     ]
 
     operations = [

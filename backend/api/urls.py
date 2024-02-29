@@ -53,7 +53,7 @@ router.register(
     checks_view.FileExtensionViewSet,
     basename='fileExtension')
 router.register(
-    r'facultys',
+    r'faculties',
     faculty_view.facultyViewSet,
     basename='faculty')
 
