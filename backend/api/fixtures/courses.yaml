@@ -1,0 +1,14 @@
+- model: api.course
+  pk: 1
+  fields:
+    name: Math
+    academic_startyear: 2023
+    description: Math course
+    parent_course: null
+- model: api.course
+  pk: 2
+  fields:
+    name: Sel2
+    academic_startyear: 2023
+    description: Software course
+    parent_course: null

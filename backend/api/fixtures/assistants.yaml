@@ -1,0 +1,10 @@
+- model: api.assistant
+  pk: '235'
+  fields:
+    courses:
+    - 1
+- model: api.assistant
+  pk: '236'
+  fields:
+    courses:
+    - 2

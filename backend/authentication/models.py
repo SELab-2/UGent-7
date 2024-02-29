@@ -37,15 +37,15 @@ class User(AbstractBaseUser):
         null=False
     )
 
-    faculty = models.ManyToManyField(
+    faculties = models.ManyToManyField(
         'Faculty',
-        related_name='faculties',
+        related_name='users',
         blank=True
     )
 
     last_enrolled = IntegerField(
-        default = datetime.MINYEAR,
-        null = True
+        default=datetime.MINYEAR,
+        null=True
     )
 
     create_time = DateTimeField(
@@ -57,6 +57,7 @@ class User(AbstractBaseUser):
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
 
+
 class Faculty(models.Model):
     """This model represents a faculty."""
 
@@ -64,10 +65,4 @@ class Faculty(models.Model):
     name = CharField(
         max_length=50,
         primary_key=True
-    )
-
-    user = models.ManyToManyField(
-        'User',
-        related_name='users',
-        blank=True
     )
