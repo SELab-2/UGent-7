@@ -47,7 +47,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        teacher1.faculty.add(f_psyPeda)
+        teacher1.faculties.add(f_psyPeda)
 
         assistant1 = Assistant.objects.create(
             id=235,
@@ -58,7 +58,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        assistant1.faculty.add(f_wet)
+        assistant1.faculties.add(f_wet)
 
         assistant2 = Assistant.objects.create(
             id=236,
@@ -69,7 +69,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        assistant2.faculty.add(f_psyPeda)
+        assistant2.faculties.add(f_psyPeda)
 
         teacher2 = Teacher.objects.create(
             id=124,
@@ -80,7 +80,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        teacher2.faculty.add(f_psyPeda)
+        teacher2.faculties.add(f_psyPeda)
 
         student1 = Student.objects.create(
             id=1,
@@ -91,7 +91,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        student1.faculty.add(f_wet)
+        student1.faculties.add(f_wet)
 
         student2 = Student.objects.create(
             id=2,
@@ -102,7 +102,7 @@ def populate_db(apps, schema_editor):
             create_time="2023-01-01T00:00:00Z",
         )
 
-        student2.faculty.add(f_genGez)
+        student2.faculties.add(f_genGez)
 
         course = Course.objects.create(
             name="Math",
@@ -149,6 +149,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("api", "0001_initial"),
         ("authentication", "0001_initial"),
+        ("authentication", "0002_remove_faculty_user_remove_user_faculty_and_more")
     ]
 
     operations = [

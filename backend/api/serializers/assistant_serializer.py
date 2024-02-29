@@ -13,5 +13,5 @@ class AssistantSerializer(serializers.ModelSerializer):
         model = Assistant
         fields = [
             'id', 'first_name', 'last_name', 'email',
-            'faculty', 'last_enrolled', 'create_time', 'courses'
+            'faculties', 'last_enrolled', 'create_time', 'courses'
           ]
