@@ -47,7 +47,7 @@ class UserSerializerModelTests(TestCase):
         self.assertFalse(user2.is_valid())
         self.assertFalse(user3.is_valid())
 
-    def test_valid_id_and_username_and_email_makes_valid_serializer(self):
+    def test_valid_email_makes_valid_serializer(self):
         user = UserSerializer(data={
             'id': ID,
             'username': USERNAME,
