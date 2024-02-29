@@ -5,4 +5,8 @@ class ApiConfig(AppConfig):
     name = 'api'
 
     def ready(self):
-        from . import signals
+        # Only here we can import from apps.
+        from authentication.signals import user_created
+        from api.signals import user_creation
+
+        user_created.connect(user_creation)
