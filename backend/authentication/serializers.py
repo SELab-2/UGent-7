@@ -10,6 +10,8 @@ class CASTokenObtainSerializer(Serializer):
     """Serializer for CAS ticket validation
     This serializer takes the CAS ticket and tries to validate it.
     Upon successful validation, create a new user if it doesn't exist.
+
+    /auth/token
     """
     token = RefreshToken
     ticket = CharField(required=True, min_length=49, max_length=49)
@@ -75,12 +77,7 @@ class UserSerializer(ModelSerializer):
   
     class Meta:
         model = User
-        fields = [
-            'id', 'username', 'email',
-            'first_name', 'last_name',
-            'faculty',
-            'last_enrolled', 'last_login', 'create_time'
-        ]
+        fields = '__all__'
 
     def get_or_create(self, validated_data: dict) -> User:
         """Create or fetch the user based on the validated data."""
