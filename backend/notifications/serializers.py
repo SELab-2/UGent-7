@@ -1,6 +1,8 @@
 import re
+from os import read
 from typing import Dict, List
 
+from authentication.models import User
 from django.utils.translation import gettext as _
 from notifications.models import Notification, NotificationTemplate
 from rest_framework import serializers
@@ -12,7 +14,20 @@ class NotificationTemplateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class UserHyperLinkedRelatedField(serializers.HyperlinkedRelatedField):
+    view_name = "user-detail"
+    queryset = User.objects.all()
+
+    def to_internal_value(self, data):
+        try:
+            return self.queryset.get(pk=data)
+        except User.DoesNotExist:
+            self.fail("no_match")
+
+
 class NotificationSerializer(serializers.ModelSerializer):
+    user = UserHyperLinkedRelatedField()
+
     message = serializers.SerializerMethodField()
 
     class Meta:
@@ -64,6 +79,3 @@ class NotificationSerializer(serializers.ModelSerializer):
             "title": _(obj.template_id.title_key),
             "description": _(obj.template_id.description_key) % obj.arguments,
         }
-
-
-# TODO: HyperlinkedModelSerializer
