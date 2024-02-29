@@ -4,11 +4,6 @@ from ..models.admin import Admin
 
 class AdminSerializer(serializers.ModelSerializer):
 
-    faculties = serializers.HyperlinkedRelatedField(
-      many=True,
-      read_only=True,
-      view_name='faculty-detail'
-    )
 
     class Meta:
         model = Admin
