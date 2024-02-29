@@ -35,10 +35,42 @@ def customize_data(ugent_id, uid, mail):
 
 class UserSerializerModelTests(TestCase):
     def test_non_string_id_makes_user_serializer_invalid(self):
+        """
+        The is_valid() method of a UserSerializer whose supplied User's ID is not a string
+        should return False.
+        """
         user = UserSerializer(data={
             "id": 1234
         })
         self.assertFalse(user.is_valid())
+
+    def test_non_string_username_makes_user_serializer_invalid(self):
+        """
+        The is_valid() method of a UserSerializer whose supplied User's username is not a string
+        should return False.
+        """
+        user = UserSerializer(data={
+            "username": 10
+        })
+        self.assertFalse(user.is_valid())
+
+    def test_invalid_email_makes_user_serializer_invalid(self):
+        """
+        The is_valid() method of a UserSerializer whose supplied User's email is not
+        formatted as an email address should return False.
+        """
+        user = UserSerializer(data={
+            "email": "dummy"
+        })
+        user2 = UserSerializer(data={
+            "email": "dummy@dummy"
+        })
+        user3 = UserSerializer(data={
+            "email": 21
+        })
+        self.assertFalse(user.is_valid())
+        self.assertFalse(user2.is_valid())
+        self.assertFalse(user3.is_valid())
 
 
 class SerializersTests(TestCase):
