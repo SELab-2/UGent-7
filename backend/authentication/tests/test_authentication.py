@@ -1,9 +1,7 @@
-import cas_client
 from django.test import TestCase
-from rest_framework.serializers import ValidationError
 from unittest.mock import patch
-
-from ..serializers import CASTokenObtainSerializer, UserSerializer
+from authentication.cas.client import client
+from authentication.serializers import CASTokenObtainSerializer, UserSerializer
 
 
 def customize_data(ugent_id, uid, mail):
@@ -14,7 +12,7 @@ def customize_data(ugent_id, uid, mail):
             service_url=None,
             headers=None,):
         response = {}
-        if ticket != "1":
+        if ticket != "ST-da8e1747f248a54a5f078e3905b88a9767f11d7aedcas6":
             response.error = "This is an error"
         else:
             response.data = {
@@ -74,17 +72,13 @@ class UserSerializerModelTests(TestCase):
 
 
 class SerializersTests(TestCase):
-    class CASTokenObtain:
-        def __init__(self, ticket):
-            self.token = "ABCD"
-            self.ticket = ticket
-
-    @patch.object(cas_client.CASClient,
+    @patch.object(client,
                   'perform_service_validate',
                   customize_data("1234", "ddickwd", "dummy@dummy.be"))
     def test_invalid_ticket_generates_error(self):
         """When the wrong ticket is provided, a ValidationError should be raised."""
-        # I have set "1" as the correct ticket here
-        obtain = self.CASTokenObtain("2")
-        serializer = CASTokenObtainSerializer(obtain)
-        self.assertRaises(ValidationError, lambda: serializer.validate(serializer.ticket))
+        # I have set "1" as the correct ticket hereµ
+        serializer = CASTokenObtainSerializer(data={
+            'token': 'qslmdfjklmqsdfjklmqsjdkf'
+        })
+        self.assertFalse(serializer.is_valid())
