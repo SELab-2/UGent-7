@@ -1,44 +1,33 @@
 - model: authentication.faculty
   pk: Bio-ingenieurswetenschappen
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Diergeneeskunde
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Economie_Bedrijfskunde
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Farmaceutische_Wetenschappen
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Geneeskunde_Gezondheidswetenschappen
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Ingenieurswetenschappen_Architectuur
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Letteren_Wijsbegeerte
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Politieke_Sociale_Wetenschappen
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Psychologie_PedagogischeWetenschappen
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Recht_Criminologie
-  fields:
-    user: []
+  fields: {}
 - model: authentication.faculty
   pk: Wetenschappen
-  fields:
-    user: []
+  fields: {}
