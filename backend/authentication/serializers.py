@@ -1,5 +1,8 @@
 from django.contrib.auth.models import update_last_login
-from rest_framework.serializers import CharField, EmailField, ModelSerializer, ValidationError, Serializer
+from rest_framework.serializers import (
+    CharField, EmailField, ModelSerializer, ValidationError,
+    Serializer, HyperlinkedIdentityField, HyperlinkedRelatedField
+)
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.settings import api_settings
 from authentication.signals import user_created, user_login
@@ -10,8 +13,6 @@ class CASTokenObtainSerializer(Serializer):
     """Serializer for CAS ticket validation
     This serializer takes the CAS ticket and tries to validate it.
     Upon successful validation, create a new user if it doesn't exist.
-
-    /auth/token
     """
     token = RefreshToken
     ticket = CharField(required=True, min_length=49, max_length=49)
@@ -74,7 +75,18 @@ class UserSerializer(ModelSerializer):
     id = CharField()
     username = CharField()
     email = EmailField()
-  
+
+    faculties = HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='faculty-detail'
+    )
+
+    notifications = HyperlinkedIdentityField(
+        view_name='notification-detail',
+        read_only=True,
+    )
+
     class Meta:
         model = User
         fields = '__all__'
