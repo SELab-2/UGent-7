@@ -26,6 +26,7 @@ class TestWhomAmIView(APITestCase):
         exists in database and token is supplied.
         """
         self.client.credentials(HTTP_AUTHORIZATION=self.token)
+
         response = self.client.get(reverse('auth.whoami'))
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content.decode('utf-8'))
@@ -38,6 +39,7 @@ class TestWhomAmIView(APITestCase):
         """
         self.user.delete()
         self.client.credentials(HTTP_AUTHORIZATION=self.token)
+
         response = self.client.get(reverse('auth.whoami'))
         self.assertTrue(response.status_code, 200)
         content = json.loads(response.content.decode('utf-8'))
@@ -62,6 +64,7 @@ class TestLogoutView(APITestCase):
 
     def test_logout_view_authenticated_logout_url(self):
         """LogoutView should return a logout url redirect if authenticated user sends a post request."""
+        self.user = User.objects.create(**USER_DATA)
         access_token = AccessToken().for_user(self.user)
         self.token = f'Bearer {access_token}'
         self.client.credentials(HTTP_AUTHORIZATION=self.token)
