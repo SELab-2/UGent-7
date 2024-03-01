@@ -1,5 +1,7 @@
-import datetime
+from datetime import datetime
 from django.db import models
+from api.models.checks import Checks
+from api.models.course import Course
 
 
 class Project(models.Model):
@@ -30,7 +32,7 @@ class Project(models.Model):
 
     start_date = models.DateTimeField(
         # The default value is the current date and time
-        default=datetime.datetime.now,
+        default=datetime.now,
         blank=True,
     )
 
@@ -41,7 +43,7 @@ class Project(models.Model):
 
     # Check entity that is linked to the project
     checks = models.ForeignKey(
-        'Checks',
+        Checks,
         # If the checks are deleted, the project should remain
         on_delete=models.SET_NULL,
         blank=True,
@@ -50,7 +52,7 @@ class Project(models.Model):
 
     # Course that the project belongs to
     course = models.ForeignKey(
-        'Course',
+        Course,
         # If the course is deleted, the project should be deleted as well
         on_delete=models.CASCADE,
         related_name='projects',
