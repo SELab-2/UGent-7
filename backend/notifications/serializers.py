@@ -1,5 +1,4 @@
 import re
-from os import read
 from typing import Dict, List
 
 from authentication.models import User
