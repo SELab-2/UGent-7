@@ -100,11 +100,29 @@ class GroupModelTests(TestCase):
             academic_startyear=2023
         )
 
-        project1 = create_project(name="Project 1", description="Description 1", days=7, course=course)
-        project2 = create_project(name="Project 2", description="Description 2", days=7, course=course)
+        project1 = create_project(
+            name="Project 1",
+            description="Description 1",
+            days=7, course=course
+            )
+        project2 = create_project(
+            name="Project 2",
+            description="Description 2",
+            days=7, course=course
+            )
 
-        student1 = create_student(id=2, first_name="Bart", last_name="Rex", email="bart.rex@example.com")
-        student2 = create_student(id=3, first_name="Jane", last_name="Doe", email="jane.doe@example.com")
+        student1 = create_student(
+            id=2,
+            first_name="Bart",
+            last_name="Rex",
+            email="bart.rex@example.com"
+            )
+        student2 = create_student(
+            id=3,
+            first_name="Jane",
+            last_name="Doe",
+            email="jane.doe@example.com"
+            )
 
         group1 = Group.objects.create(project=project1, score=80)
         group1.students.add(student1)
@@ -119,8 +137,10 @@ class GroupModelTests(TestCase):
         self.assertEqual(len(content_json), 2)
 
         retrieved_group1, retrieved_group2 = content_json
-        expected_project_url1 = "http://testserver" + reverse("project-detail", args=[str(project1.id)])
-        expected_project_url2 = "http://testserver" + reverse("project-detail", args=[str(project2.id)])
+        expected_project_url1 = "http://testserver" + reverse(
+            "project-detail", args=[str(project1.id)])
+        expected_project_url2 = "http://testserver" + reverse(
+            "project-detail", args=[str(project2.id)])
 
         self.assertEqual(retrieved_group1["project"], expected_project_url1)
         self.assertEqual(int(retrieved_group1["id"]), group1.id)
@@ -137,19 +157,30 @@ class GroupModelTests(TestCase):
             academic_startyear=2023
         )
 
-        project = create_project(name="Project 1", description="Description 1", days=7, course=course)
-        student = create_student(id=5, first_name="John", last_name="Doe", email="john.doe@example.com")
+        project = create_project(
+            name="Project 1",
+            description="Description 1",
+            days=7, course=course
+            )
+        student = create_student(
+            id=5,
+            first_name="John",
+            last_name="Doe",
+
+            email="john.doe@example.com")
 
         group = Group.objects.create(project=project, score=80)
         group.students.add(student)
 
-        response = self.client.get(reverse("group-detail", args=[str(group.id)]), follow=True)
+        response = self.client.get(
+            reverse("group-detail", args=[str(group.id)]), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.accepted_media_type, "application/json")
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        expected_project_url = "http://testserver" + reverse("project-detail", args=[str(project.id)])
+        expected_project_url = "http://testserver" + reverse(
+            "project-detail", args=[str(project.id)])
 
         self.assertEqual(int(content_json["id"]), group.id)
         self.assertEqual(content_json["project"], expected_project_url)
