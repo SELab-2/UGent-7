@@ -102,7 +102,7 @@ class StudentModelTests(TestCase):
         # Assert that the parsed JSON is a list with multiple students
         self.assertEqual(len(content_json), 2)
 
-        # Assert the details of the retrieved admins match the created students
+        # Assert the details of the retrieved students match the created students
         retrieved_student1, retrieved_student2 = content_json
         self.assertEqual(int(retrieved_student1["id"]), student1.id)
         self.assertEqual(
@@ -111,12 +111,12 @@ class StudentModelTests(TestCase):
             retrieved_student1["last_name"], student1.last_name)
         self.assertEqual(retrieved_student1["email"], student1.email)
 
-        self.assertEqual(int(retrieved_student1["id"]), student1.id)
+        self.assertEqual(int(retrieved_student2["id"]), student2.id)
         self.assertEqual(
-            retrieved_student1["first_name"], student1.first_name)
+            retrieved_student2["first_name"], student2.first_name)
         self.assertEqual(
-            retrieved_student1["last_name"], student1.last_name)
-        self.assertEqual(retrieved_student1["email"], student1.email)
+            retrieved_student2["last_name"], student2.last_name)
+        self.assertEqual(retrieved_student2["email"], student2.email)
 
     def test_student_detail_view(self):
         """

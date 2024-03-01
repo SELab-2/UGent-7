@@ -164,7 +164,8 @@ class ProjectModelTests(TestCase):
                                       )
 
         self.assertEqual(retrieved_project["name"], project2.name)
-        self.assertEqual(retrieved_project["description"], project2.description)
+        self.assertEqual(
+            retrieved_project["description"], project2.description)
         self.assertEqual(retrieved_project["visible"], project2.visible)
         self.assertEqual(retrieved_project["archived"], project2.archived)
         # TODO
