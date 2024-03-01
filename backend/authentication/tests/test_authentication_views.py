@@ -1,29 +1,27 @@
-from django.core.serializers import serialize
 import json
-from rest_framework.request import Request
+
+from rest_framework.test import APIRequestFactory
+
 from rest_framework.reverse import reverse
-from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
-from unittest.mock import patch
+
 from authentication.models import User
 from authentication.serializers import UserSerializer
 from ypovoli import settings
 
-USER_DATA = {
-    'id': '1234',
-    'username': 'ddickwd',
-    'email': 'dummy@dummy.com',
-    'first_name': 'dummy',
-    'last_name': 'McDickwad',
-}
-
-
 class TestWhomAmIView(APITestCase):
     def setUp(self):
         """Create a user and generate a token for that user"""
-        self.user = User.objects.create(**USER_DATA)
-        access_token = AccessToken().for_user(self.user)
-        self.token = f'Bearer {access_token}'
+        self.user = User.objects.create(**{
+            'id': '1234',
+            'username': 'ddickwd',
+            'email': 'dummy@dummy.com',
+            'first_name': 'dummy',
+            'last_name': 'McDickwad',
+        })
+        self.serialized_user = UserSerializer(self.user).data
+        self.token = f'Bearer {AccessToken().for_user(self.user)}'
 
     def test_who_am_i_view_get_returns_user_if_existing_and_authenticated(self):
         """
@@ -31,8 +29,9 @@ class TestWhomAmIView(APITestCase):
         exists in database and token is supplied.
         """
         self.client.credentials(HTTP_AUTHORIZATION=self.token)
+
         response = self.client.get(reverse('auth.whoami'))
-        self.assertJSONEqual(response.content.decode('utf-8'), UserSerializer(self.user).data)
+        self.assertJSONEqual(response.content.decode('utf-8'), self.serialized_user)
 
     def test_who_am_i_view_get_does_not_return_viewer_if_deleted_but_authenticated(self):
         """
@@ -41,8 +40,11 @@ class TestWhomAmIView(APITestCase):
         """
         self.user.delete()
         self.client.credentials(HTTP_AUTHORIZATION=self.token)
+
         response = self.client.get(reverse('auth.whoami'))
-        self.assertJSONNotEqual(response.content, UserSerializer(self.user).data)
+        serializer = UserSerializer(self.user, context={'request': self.request})
+        self.assertJSONNotEqual(response.content, serializer.initial_data)
+
         content = json.loads(response.content.decode('utf-8'))
         self.assertEqual(content['detail'], 'User not found')
 

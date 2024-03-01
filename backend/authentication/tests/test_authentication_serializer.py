@@ -1,6 +1,10 @@
 from django.test import TestCase
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.test.client import RequestFactory
+
 from unittest.mock import patch, Mock
+
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from authentication.cas.client import client
 from authentication.serializers import CASTokenObtainSerializer, UserSerializer
 from authentication.signals import user_created, user_login
@@ -18,6 +22,9 @@ LAST_NAME = 'McDickwad'
 
 class UserSerializerModelTests(TestCase):
 
+    def setUp(self) -> None:
+        self.request = RequestFactory()
+
     def test_invalid_email_makes_user_serializer_invalid(self):
         """
         The is_valid() method of a UserSerializer whose supplied User's email is not
@@ -29,21 +36,21 @@ class UserSerializerModelTests(TestCase):
             'email': 'dummy',
             'first_name': FIRST_NAME,
             'last_name': LAST_NAME,
-        })
+        }, context={'context': self.request})
         user2 = UserSerializer(data={
             'id': ID,
             'username': USERNAME,
             'email': 'dummy@dummy',
             'first_name': FIRST_NAME,
             'last_name': LAST_NAME,
-        })
+        }, context={'context': self.request})
         user3 = UserSerializer(data={
             'id': ID,
             'username': USERNAME,
             'email': 21,
             'first_name': FIRST_NAME,
             'last_name': LAST_NAME,
-        })
+        }, context={'context': self.request})
         self.assertFalse(user.is_valid())
         self.assertFalse(user2.is_valid())
         self.assertFalse(user3.is_valid())
@@ -55,7 +62,7 @@ class UserSerializerModelTests(TestCase):
             'email': EMAIL,
             'first_name': FIRST_NAME,
             'last_name': LAST_NAME,
-        })
+        }, context={'context': self.request})
         self.assertTrue(user.is_valid())
 
 

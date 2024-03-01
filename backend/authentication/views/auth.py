@@ -12,7 +12,7 @@ class WhoAmIView(APIView):
 
     def get(self, request: Request) -> Response:
         """Get the user account data for the current user"""
-        return Response(UserSerializer(request.user).data)
+        return Response(UserSerializer(request.user, context={'request': request}).data)
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
