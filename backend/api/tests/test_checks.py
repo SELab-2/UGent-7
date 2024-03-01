@@ -3,7 +3,7 @@ import json
 from django.test import TestCase
 from django.urls import reverse
 
-from ..models.checks import FileExtension
+from ..models.checks import FileExtension, Checks
 
 
 def create_fileExtension(id, extension):
@@ -15,17 +15,22 @@ def create_fileExtension(id, extension):
         extension=extension
     )
 
-"""
+
 def create_checks(id, allowed_file_extensions, forbidden_file_extensions):
 
     # Create a Checks with the given arguments.
 
-    return Checks.objects.create(
+    check = Checks.objects.create(
         id=id,
-        allowed_file_extensions=allowed_file_extensions,
-        forbidden_file_extensions=forbidden_file_extensions
     )
-"""
+
+    for ext in allowed_file_extensions:
+        check.allowed_file_extensions.add(ext)
+
+    for ext in forbidden_file_extensions:
+        check.forbidden_file_extensions.add(ext)
+
+    return check
 
 
 class FileExtensionModelTests(TestCase):
@@ -34,7 +39,8 @@ class FileExtensionModelTests(TestCase):
         able to retrieve no FileExtension before publishing it.
         """
 
-        response_root = self.client.get(reverse("fileExtension-list"), follow=True)
+        response_root = self.client.get(
+            reverse("fileExtension-list"), follow=True)
         # print(response.content)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
@@ -50,7 +56,7 @@ class FileExtensionModelTests(TestCase):
         """
         fileExtension = create_fileExtension(
             id=5,
-            extension=".pdf"
+            extension="pdf"
         )
 
         # Make a GET request to retrieve the fileExtension
@@ -82,11 +88,11 @@ class FileExtensionModelTests(TestCase):
         # Create multiple fileExtension
         fileExtension1 = create_fileExtension(
             id=1,
-            extension=".jpg"
+            extension="jpg"
             )
         fileExtension2 = create_fileExtension(
             id=2,
-            extension=".png"
+            extension="png"
             )
 
         # Make a GET request to retrieve the fileExtension
@@ -123,7 +129,7 @@ class FileExtensionModelTests(TestCase):
         # Create an fileExtension for testing with the name "Bob Peeters"
         fileExtension = create_fileExtension(
             id=3,
-            extension=".zip"
+            extension="zip"
             )
 
         # Make a GET request to retrieve the fileExtension details

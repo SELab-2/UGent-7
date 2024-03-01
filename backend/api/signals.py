@@ -1,5 +1,6 @@
 from authentication.models import User
 
+
 def user_creation(user: User, attributes: dict, **kwargs):
     # With Python 3.11, we need to import Student here.
     from api.models.student import Student
