@@ -3,6 +3,9 @@ from ..models.checks import Checks, FileExtension
 
 
 class ChecksSerializer(serializers.ModelSerializer):
+    allowed_file_extensions = serializers.StringRelatedField(many=True)
+    forbidden_file_extensions = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Checks
         fields = ['id', 'dockerfile',
