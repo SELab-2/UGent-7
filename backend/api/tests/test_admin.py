@@ -1,4 +1,3 @@
-import datetime
 import json
 
 from django.test import TestCase
@@ -29,7 +28,7 @@ class AdminModelTests(TestCase):
         able to retrieve no admin before publishing it.
         """
 
-        response_root = self.client.get("/admins", follow=True)
+        response_root = self.client.get(reverse("admin-list"), follow=True)
         # print(response.content)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
@@ -51,17 +50,17 @@ class AdminModelTests(TestCase):
         )
 
         # Make a GET request to retrieve the admin
-        response = self.client.get("/admins", follow=True)
+        response = self.client.get(reverse("admin-list"), follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
         self.assertEqual(response.accepted_media_type, "application/json")
-        
+
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
-        
+
         # Assert that the parsed JSON is a list with one admin
         self.assertEqual(len(content_json), 1)
 
@@ -77,11 +76,21 @@ class AdminModelTests(TestCase):
         Able to retrieve multiple admins after creating them.
         """
         # Create multiple admins
-        admin1 = create_admin(id=1, first_name="Johny", last_name="Doeg", email="john.doe@example.com")
-        admin2 = create_admin(id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com")
+        admin1 = create_admin(
+            id=1,
+            first_name="Johny",
+            last_name="Doeg",
+            email="john.doe@example.com"
+            )
+        admin2 = create_admin(
+            id=2,
+            first_name="Jane",
+            last_name="Doe",
+            email="jane.doe@example.com"
+            )
 
         # Make a GET request to retrieve the admins
-        response = self.client.get("/admins", follow=True)
+        response = self.client.get(reverse("admin-list"), follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -107,16 +116,21 @@ class AdminModelTests(TestCase):
         self.assertEqual(retrieved_admin2["last_name"], admin2.last_name)
         self.assertEqual(retrieved_admin2["email"], admin2.email)
 
-"""
     def test_admin_detail_view(self):
-
-        # Able to retrieve details of a single admin.
-
+        """
+        Able to retrieve details of a single admin.
+        """
         # Create an admin for testing with the name "Bob Peeters"
-        admin = create_admin(id=5, first_name="Bob", last_name="Peeters", email="bob.peeters@example.com")
+        admin = create_admin(
+            id=5,
+            first_name="Bob",
+            last_name="Peeters",
+            email="bob.peeters@example.com"
+            )
 
         # Make a GET request to retrieve the admin details
-        response = self.client.get(reverse("/admins/"+str(admin.id), args=[admin.id]), follow=True)
+        response = self.client.get(
+            reverse("admin-detail", args=[str(admin.id)]), follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -132,5 +146,3 @@ class AdminModelTests(TestCase):
         self.assertEqual(content_json["first_name"], admin.first_name)
         self.assertEqual(content_json["last_name"], admin.last_name)
         self.assertEqual(content_json["email"], admin.email)
-        self.assertEqual(content_json["username"], admin.username)
-"""
