@@ -1,5 +1,8 @@
 from django.contrib.auth.models import update_last_login
-from rest_framework.serializers import CharField, EmailField, ModelSerializer, ValidationError, Serializer
+from rest_framework.serializers import (
+    CharField, EmailField, ModelSerializer, ValidationError,
+    Serializer, HyperlinkedIdentityField, HyperlinkedRelatedField
+)
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.settings import api_settings
 from authentication.signals import user_created, user_login
@@ -65,21 +68,34 @@ class CASTokenObtainSerializer(Serializer):
             'refresh': str(RefreshToken.for_user(user))
         }
 
+
 class UserSerializer(ModelSerializer):
     """Serializer for the user model
     This serializer validates the user fields for creation and updating.
     """
     id = CharField()
     username = CharField()
-    email = EmailField()
-  
+    email = EmailField() 
+
+    faculties = HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='faculty-detail'
+    )
+
+    notifications = HyperlinkedIdentityField(
+        view_name='notification-detail',
+        read_only=True,
+    )
+
     class Meta:
         model = User
         fields = [
             'id', 'username', 'email',
             'first_name', 'last_name',
-            'faculty',
-            'last_enrolled', 'last_login', 'create_time'
+            'faculties',
+            'last_enrolled', 'last_login', 'create_time',
+            'notifications'
         ]
 
     def get_or_create(self, validated_data: dict) -> User:
