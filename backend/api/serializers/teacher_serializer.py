@@ -9,6 +9,12 @@ class TeacherSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    faculties = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='faculty-detail'
+    )
+
     class Meta:
         model = Teacher
         fields = [
