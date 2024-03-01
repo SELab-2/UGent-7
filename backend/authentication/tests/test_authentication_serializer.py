@@ -1,7 +1,7 @@
-from cas_client import CASClient
 from django.test import TestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 from unittest.mock import patch, Mock
+from authentication.cas.client import client
 from authentication.serializers import CASTokenObtainSerializer, UserSerializer
 from authentication.signals import user_created, user_login
 
@@ -69,7 +69,6 @@ def customize_data(ugent_id, uid, mail):
             self.data = {}
 
     def service_validate(
-            self,
             ticket=None,
             service_url=None,
             headers=None,):
@@ -105,7 +104,7 @@ class SerializersTests(TestCase):
         })
         self.assertFalse(serializer.is_valid())
 
-    @patch.object(CASClient,
+    @patch.object(client,
                   'perform_service_validate',
                   customize_data(ID, USERNAME, EMAIL))
     def test_wrong_ticket_generates_error(self):
@@ -119,7 +118,7 @@ class SerializersTests(TestCase):
         })
         self.assertFalse(serializer.is_valid())
 
-    @patch.object(CASClient,
+    @patch.object(client,
                   'perform_service_validate',
                   customize_data(ID, USERNAME, "dummy@dummy"))
     def test_wrong_user_arguments_generate_error(self):
@@ -133,7 +132,7 @@ class SerializersTests(TestCase):
         })
         self.assertFalse(serializer.is_valid())
 
-    @patch.object(CASClient,
+    @patch.object(client,
                   'perform_service_validate',
                   customize_data(ID, USERNAME, EMAIL))
     def test_new_user_activates_user_created_signal(self):
@@ -151,7 +150,7 @@ class SerializersTests(TestCase):
         serializer.is_valid()
         self.assertEquals(mock.call_count, 1)
 
-    @patch.object(CASClient,
+    @patch.object(client,
                   'perform_service_validate',
                   customize_data(ID, USERNAME, EMAIL))
     def test_old_user_does_not_activate_user_created_signal(self):
@@ -169,7 +168,7 @@ class SerializersTests(TestCase):
         serializer.is_valid()
         self.assertEquals(mock.call_count, 0)
 
-    @patch.object(CASClient,
+    @patch.object(client,
                   'perform_service_validate',
                   customize_data(ID, USERNAME, EMAIL))
     def test_login_signal(self):
