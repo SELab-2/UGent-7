@@ -3,10 +3,17 @@ from ..models.project import Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+
     course = serializers.HyperlinkedRelatedField(
       many=False,
       read_only=True,
       view_name='course-detail'
+    )
+
+    checks = serializers.HyperlinkedRelatedField(
+      many=False,
+      read_only=True,
+      view_name='check-detail'
     )
 
     class Meta:
