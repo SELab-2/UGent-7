@@ -69,3 +69,11 @@ class Project(models.Model):
     def deadline_passed(self):
         now = timezone.now()
         return now > self.deadline
+
+    def toggle_visible(self):
+        self.visible = not (self.visible)
+        self.save()
+
+    def toggle_archived(self):
+        self.archived = not (self.archived)
+        self.save()

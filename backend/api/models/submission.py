@@ -1,6 +1,7 @@
 from django.db import models
 from api.models.group import Group
 
+
 class Submission(models.Model):
     """Model for submission of a project by a group of students."""
 

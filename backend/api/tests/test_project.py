@@ -40,6 +40,42 @@ def create_project(
 
 
 class ProjectModelTests(TestCase):
+    def test_toggle_visible(self):
+        """
+        toggle the visible state of a project.
+        """
+        course = create_course(
+            id=3, name="test course", academic_startyear=2024)
+        checks = create_checks()
+        past_project = create_project(
+            name="test", description="descr", visible=True, archived=False,
+            days=-10, checks=checks, course=course
+        )
+        self.assertIs(past_project.visible, True)
+        past_project.toggle_visible()
+        self.assertIs(past_project.visible, False)
+        past_project.toggle_visible()
+        self.assertIs(past_project.visible, True)
+
+    def test_toggle_archived(self):
+        """
+        toggle the archived state of a project.
+        """
+        course = create_course(
+            id=3, name="test course", academic_startyear=2024)
+        checks = create_checks()
+        past_project = create_project(
+            name="test", description="descr", visible=True, archived=True,
+            days=-10, checks=checks, course=course
+        )
+
+        self.assertIs(past_project.archived, True)
+        past_project.toggle_archived()
+        self.assertIs(past_project.archived, False)
+        past_project.toggle_archived()
+        self.assertIs(past_project.archived, True)
+
+
     def test_deadline_approaching_in_with_past_Project(self):
         """
         deadline_approaching_in() returns False for Projects whose Deadline
