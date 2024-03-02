@@ -41,7 +41,7 @@ class TestWhomAmIView(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=self.token)
 
         response = self.client.get(reverse('auth.whoami'))
-        self.assertTrue(response.status_code, 404)
+        self.assertEqual(response.status_code, 405)
 
     def test_who_am_i_view_returns_401_when_not_authenticated(self):
         """WhoAmIView should return a 401 status code when the user is not authenticated"""
