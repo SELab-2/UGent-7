@@ -2,7 +2,7 @@ name: backend-tests
 
 on:
   push:
-    branches: [main, development]
+    branches: [main, development, automated-testing]
   pull_request:
     branches: [main, development]
 
