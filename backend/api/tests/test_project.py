@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
@@ -74,7 +73,6 @@ class ProjectModelTests(TestCase):
         self.assertIs(past_project.archived, False)
         past_project.toggle_archived()
         self.assertIs(past_project.archived, True)
-
 
     def test_deadline_approaching_in_with_past_Project(self):
         """
@@ -198,7 +196,7 @@ class ProjectModelTests(TestCase):
         self.assertEqual(retrieved_project["description"], project.description)
         self.assertEqual(retrieved_project["visible"], project.visible)
         self.assertEqual(retrieved_project["archived"], project.archived)
-        # self.assertEqual(retrieved_project["checks"], expected_checks_url)
+        self.assertEqual(retrieved_project["checks"], expected_checks_url)
         self.assertEqual(retrieved_project["course"], expected_course_url)
 
     def test_multiple_project(self):
@@ -254,8 +252,7 @@ class ProjectModelTests(TestCase):
         self.assertEqual(retrieved_project["description"], project.description)
         self.assertEqual(retrieved_project["visible"], project.visible)
         self.assertEqual(retrieved_project["archived"], project.archived)
-        # TODO
-        # self.assertEqual(retrieved_project["checks"], expected_checks_url)
+        self.assertEqual(retrieved_project["checks"], expected_checks_url)
         self.assertEqual(retrieved_project["course"], expected_course_url)
 
         retrieved_project = content_json[1]
@@ -273,6 +270,5 @@ class ProjectModelTests(TestCase):
             retrieved_project["description"], project2.description)
         self.assertEqual(retrieved_project["visible"], project2.visible)
         self.assertEqual(retrieved_project["archived"], project2.archived)
-        # TODO
-        # self.assertEqual(retrieved_project["checks"], expected_checks_url)
+        self.assertEqual(retrieved_project["checks"], expected_checks_url)
         self.assertEqual(retrieved_project["course"], expected_course_url)

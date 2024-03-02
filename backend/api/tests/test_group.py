@@ -45,6 +45,10 @@ def create_student(id, first_name, last_name, email):
     )
 
 
+def create_group(project, score):
+    return Group.objects.create(project=project, score=score)
+
+
 class GroupModelTests(TestCase):
     def test_no_groups(self):
         """Able to retrieve no groups before creating any."""
@@ -75,7 +79,7 @@ class GroupModelTests(TestCase):
             email="john.doe@example.com"
         )
 
-        group = Group.objects.create(project=project, score=80)
+        group = create_group(project=project, score=10)
         group.students.add(student)
 
         response = self.client.get(reverse("group-list"), follow=True)
@@ -124,10 +128,10 @@ class GroupModelTests(TestCase):
             email="jane.doe@example.com"
             )
 
-        group1 = Group.objects.create(project=project1, score=80)
+        group1 = create_group(project=project1, score=10)
         group1.students.add(student1)
 
-        group2 = Group.objects.create(project=project2, score=90)
+        group2 = create_group(project=project2, score=10)
         group2.students.add(student1, student2)
 
         response = self.client.get(reverse("group-list"), follow=True)
@@ -169,7 +173,7 @@ class GroupModelTests(TestCase):
 
             email="john.doe@example.com")
 
-        group = Group.objects.create(project=project, score=80)
+        group = create_group(project=project, score=10)
         group.students.add(student)
 
         response = self.client.get(
