@@ -67,7 +67,6 @@ class AssistantModelTests(TestCase):
         """
 
         response_root = self.client.get(reverse("assistant-list"), follow=True)
-        # print(response.content)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
         self.assertEqual(response_root.accepted_media_type, "application/json")
@@ -226,7 +225,6 @@ class AssistantModelTests(TestCase):
         self.assertEqual(content_json["first_name"], assistant.first_name)
         self.assertEqual(content_json["last_name"], assistant.last_name)
         self.assertEqual(content_json["email"], assistant.email)
-        print(content_json["faculties"])
 
         response = self.client.get(content_json["faculties"][0], follow=True)
 
@@ -283,7 +281,6 @@ class AssistantModelTests(TestCase):
         self.assertEqual(content_json["first_name"], assistant.first_name)
         self.assertEqual(content_json["last_name"], assistant.last_name)
         self.assertEqual(content_json["email"], assistant.email)
-        print(content_json["faculties"])
 
         response = self.client.get(content_json["courses"], follow=True)
 
