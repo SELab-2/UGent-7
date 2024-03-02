@@ -190,3 +190,118 @@ class GroupModelTests(TestCase):
         self.assertEqual(int(content_json["id"]), group.id)
         self.assertEqual(content_json["project"], expected_project_url)
         self.assertEqual(content_json["score"], group.score)
+
+    def test_group_project(self):
+        """Able to retrieve details of a single group."""
+        course = create_course(
+            name="sel2",
+            academic_startyear=2023
+        )
+
+        project = create_project(
+            name="Project 1",
+            description="Description 1",
+            days=7, course=course
+            )
+        student = create_student(
+            id=5,
+            first_name="John",
+            last_name="Doe",
+
+            email="john.doe@example.com")
+
+        group = create_group(project=project, score=10)
+        group.students.add(student)
+
+        response = self.client.get(
+            reverse("group-detail", args=[str(group.id)]), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(int(content_json["id"]), group.id)
+        self.assertEqual(content_json["score"], group.score)
+
+        response = self.client.get(content_json["project"], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        expected_course_url = "http://testserver" + reverse(
+                                    "course-detail", args=[str(course.id)]
+                                      )
+
+        self.assertEqual(content_json["name"], project.name)
+        self.assertEqual(content_json["description"], project.description)
+        self.assertEqual(content_json["visible"], project.visible)
+        self.assertEqual(content_json["archived"], project.archived)
+        self.assertEqual(content_json["course"], expected_course_url)
+
+    def test_group_students(self):
+        """Able to retrieve students details of a group."""
+        course = create_course(
+            name="sel2",
+            academic_startyear=2023
+        )
+
+        project = create_project(
+            name="Project 1",
+            description="Description 1",
+            days=7, course=course
+            )
+        student1 = create_student(
+            id=5,
+            first_name="John",
+            last_name="Doe",
+            email="john.doe@example.com")
+
+        student2 = create_student(
+            id=6,
+            first_name="kom",
+            last_name="mor_up",
+            email="kom.mor_up@example.com")
+
+        group = create_group(project=project, score=10)
+        group.students.add(student1)
+        group.students.add(student2)
+
+        response = self.client.get(
+            reverse("group-detail", args=[str(group.id)]), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(int(content_json["id"]), group.id)
+        self.assertEqual(content_json["score"], group.score)
+
+        response = self.client.get(content_json["students"], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content_json), 2)
+
+        content = content_json[0]
+        self.assertEqual(int(content["id"]), student1.id)
+        self.assertEqual(content["first_name"], student1.first_name)
+        self.assertEqual(content["last_name"], student1.last_name)
+        self.assertEqual(content["email"], student1.email)
+
+        content = content_json[1]
+        self.assertEqual(int(content["id"]), student2.id)
+        self.assertEqual(content["first_name"], student2.first_name)
+        self.assertEqual(content["last_name"], student2.last_name)
+        self.assertEqual(content["email"], student2.email)
