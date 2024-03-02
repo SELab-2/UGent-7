@@ -226,3 +226,63 @@ class SubmissionModelTests(TestCase):
             submission.submission_number
             )
         self.assertEqual(retrieved_submission["group"], expected_group_url)
+
+    def test_submission_group(self):
+        """
+        Able to retrieve group of a single submission.
+        """
+        course = create_course(
+            name="sel2",
+            academic_startyear=2023
+            )
+        project = create_project(
+            name="Project 1",
+            description="Description 1",
+            days=7,
+            course=course
+            )
+        group = create_group(project=project, score=10)
+        submission = create_submission(
+            group=group, submission_number=1
+        )
+
+        # Make a GET request to retrieve the submission
+        response = self.client.get(
+            reverse("submission-detail", args=[str(submission.id)]),
+            follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Assert the details of the retrieved submission
+        # match the created submission
+        retrieved_submission = content_json
+        self.assertEqual(int(retrieved_submission["id"]), submission.id)
+        self.assertEqual(
+            int(retrieved_submission["submission_number"]),
+            submission.submission_number
+            )
+
+        response = self.client.get(content_json["group"], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        expected_project_url = "http://testserver" + reverse(
+            "project-detail", args=[str(project.id)])
+
+        self.assertEqual(int(content_json["id"]), group.id)
+        self.assertEqual(content_json["project"], expected_project_url)
+        self.assertEqual(content_json["score"], group.score)
