@@ -2,7 +2,7 @@
   pk: 1
   fields:
     project: 123456
-    score: null
+    score: 7
     students:
     - '1'
     - '2'
