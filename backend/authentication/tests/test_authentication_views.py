@@ -100,5 +100,3 @@ class TestTokenEchoView(APITestCase):
         response = self.client.get(reverse('auth.echo'), data={'ticket': ticket})
         content = response.rendered_content.decode('utf-8').strip('"')
         self.assertEqual(content, ticket)
-
-

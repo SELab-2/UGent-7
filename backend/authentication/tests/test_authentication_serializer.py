@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.test.client import RequestFactory
 
 from unittest.mock import patch, Mock
 
@@ -22,9 +21,6 @@ LAST_NAME = 'McDickwad'
 
 class UserSerializerModelTests(TestCase):
 
-    def setUp(self) -> None:
-        self.request = RequestFactory()
-
     def test_invalid_email_makes_user_serializer_invalid(self):
         """
         The is_valid() method of a UserSerializer whose supplied User's email is not
@@ -36,33 +32,37 @@ class UserSerializerModelTests(TestCase):
             'email': 'dummy',
             'first_name': FIRST_NAME,
             'last_name': LAST_NAME,
-        }, context={'context': self.request})
+        })
         user2 = UserSerializer(data={
             'id': ID,
             'username': USERNAME,
             'email': 'dummy@dummy',
             'first_name': FIRST_NAME,
             'last_name': LAST_NAME,
-        }, context={'context': self.request})
+        })
         user3 = UserSerializer(data={
             'id': ID,
             'username': USERNAME,
             'email': 21,
             'first_name': FIRST_NAME,
             'last_name': LAST_NAME,
-        }, context={'context': self.request})
+        })
         self.assertFalse(user.is_valid())
         self.assertFalse(user2.is_valid())
         self.assertFalse(user3.is_valid())
 
     def test_valid_email_makes_valid_serializer(self):
+        """
+        When the serializer is provided with a valid email, the serializer becomes valid,
+        thus the is_valid() method returns True.
+        """
         user = UserSerializer(data={
             'id': ID,
             'username': USERNAME,
             'email': EMAIL,
             'first_name': FIRST_NAME,
             'last_name': LAST_NAME,
-        }, context={'context': self.request})
+        })
         self.assertTrue(user.is_valid())
 
 
