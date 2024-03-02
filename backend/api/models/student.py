@@ -1,5 +1,6 @@
-from authentication.models import User
 from django.db import models
+from authentication.models import User
+from api.models.course import Course
 
 
 class Student(User):
@@ -16,7 +17,7 @@ class Student(User):
 
     # All the courses the student is enrolled in
     courses = models.ManyToManyField(
-        'Course',
+        Course,
         # Allows us to access the students from the course
         related_name='students',
         blank=True

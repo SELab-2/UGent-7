@@ -1,5 +1,6 @@
-from authentication.models import User
 from django.db import models
+from api.models.course import Course
+from authentication.models import User
 
 
 class Teacher(User):
@@ -10,7 +11,7 @@ class Teacher(User):
 
     # All the courses the teacher is teaching
     courses = models.ManyToManyField(
-        'Course',
+        Course,
         # Allows us to access the teachers from the course
         related_name='teachers',
         blank=True
