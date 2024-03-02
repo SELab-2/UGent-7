@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
@@ -39,6 +40,76 @@ def create_project(
 
 
 class ProjectModelTests(TestCase):
+    def test_deadline_approaching_in_with_past_Project(self):
+        """
+        deadline_approaching_in() returns False for Projects whose Deadline
+        is in the past.
+        """
+        course = create_course(
+            id=3, name="test course", academic_startyear=2024)
+        checks = create_checks()
+        past_project = create_project(
+            name="test", description="descr", visible=True, archived=False,
+            days=-10, checks=checks, course=course
+        )
+        self.assertIs(past_project.deadline_approaching_in(), False)
+
+    def test_deadline_approaching_in_with_future_Project_within_time(self):
+        """
+        deadline_approaching_in() returns True for Projects whose Deadline
+        is in the timerange given.
+        """
+        course = create_course(
+            id=3, name="test course", academic_startyear=2024)
+        checks = create_checks()
+        future_project = create_project(
+            name="test", description="descr", visible=True, archived=False,
+            days=6, checks=checks, course=course
+        )
+        self.assertIs(future_project.deadline_approaching_in(days=7), True)
+
+    def test_deadline_approaching_in_with_future_Project_not_within_time(self):
+        """
+        deadline_approaching_in() returns False for Projects whose Deadline
+        is out of the timerange given.
+        """
+        course = create_course(
+            id=3, name="test course", academic_startyear=2024)
+        checks = create_checks()
+        future_project = create_project(
+            name="test", description="descr", visible=True, archived=False,
+            days=8, checks=checks, course=course
+        )
+        self.assertIs(future_project.deadline_approaching_in(days=7), False)
+
+    def test_deadline_passed_with_future_Project(self):
+        """
+        deadline_passed() returns False for Projects whose Deadline
+        is not passed.
+        """
+        course = create_course(
+            id=3, name="test course", academic_startyear=2024)
+        checks = create_checks()
+        future_project = create_project(
+            name="test", description="descr", visible=True, archived=False,
+            days=1, checks=checks, course=course
+        )
+        self.assertIs(future_project.deadline_passed(), False)
+
+    def test_deadline_passed_with_past_Project(self):
+        """
+        deadline_passed() returns True for Projects whose Deadline
+        is passed.
+        """
+        course = create_course(
+            id=3, name="test course", academic_startyear=2024)
+        checks = create_checks()
+        past_project = create_project(
+            name="test", description="descr", visible=True, archived=False,
+            days=-1, checks=checks, course=course
+        )
+        self.assertIs(past_project.deadline_passed(), True)
+
     def test_no_projects(self):
         """Able to retrieve no projects before creating any."""
         response = self.client.get(reverse("group-list"), follow=True)
@@ -51,13 +122,13 @@ class ProjectModelTests(TestCase):
         """
         Able to retrieve a single project after creating it.
         """
+
         course = create_course(
-            id=1,
+            id=3,
             name="test course",
             academic_startyear=2024
-            )
+        )
         checks = create_checks()
-
         project = create_project(
             name="test project",
             description="test description",
@@ -99,13 +170,11 @@ class ProjectModelTests(TestCase):
         Able to retrieve multiple projects after creating it.
         """
         course = create_course(
-            id=1,
+            id=3,
             name="test course",
             academic_startyear=2024
-            )
-
+        )
         checks = create_checks()
-
         project = create_project(
             name="test project",
             description="test description",

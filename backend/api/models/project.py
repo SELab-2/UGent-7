@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import timedelta, datetime
 from django.db import models
+from django.utils import timezone
 from api.models.checks import Checks
 from api.models.course import Course
 
@@ -59,3 +60,12 @@ class Project(models.Model):
         blank=False,
         null=False
     )
+
+    def deadline_approaching_in(self, days=7):
+        now = timezone.now()
+        approaching_date = now + timezone.timedelta(days=days)
+        return now <= self.deadline <= approaching_date
+
+    def deadline_passed(self):
+        now = timezone.now()
+        return now > self.deadline
