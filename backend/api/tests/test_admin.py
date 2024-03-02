@@ -7,12 +7,14 @@ from django.urls import reverse
 from ..models.admin import Admin
 from authentication.models import Faculty
 
+
 def create_faculty(name):
     """
     Create a Faculty with the given arguments."""
     return Faculty.objects.create(
         name=name
     )
+
 
 def create_admin(id, first_name, last_name, email, faculty=None):
     """
