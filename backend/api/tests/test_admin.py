@@ -200,7 +200,6 @@ class AdminModelTests(TestCase):
         self.assertEqual(content_json["first_name"], admin.first_name)
         self.assertEqual(content_json["last_name"], admin.last_name)
         self.assertEqual(content_json["email"], admin.email)
-        print(content_json["faculties"])
 
         response = self.client.get(content_json["faculties"][0], follow=True)
 

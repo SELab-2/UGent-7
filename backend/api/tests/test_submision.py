@@ -63,7 +63,6 @@ class SubmissionModelTests(TestCase):
 
         response_root = self.client.get(
             reverse("submission-list"), follow=True)
-        # print(response.content)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
         self.assertEqual(response_root.accepted_media_type, "application/json")
