@@ -5,21 +5,43 @@ from django.utils import timezone
 from django.urls import reverse
 
 from ..models.admin import Admin
+from authentication.models import Faculty
 
 
-def create_admin(id, first_name, last_name, email):
+def create_faculty(name):
+    """
+    Create a Faculty with the given arguments."""
+    return Faculty.objects.create(
+        name=name
+    )
+
+
+def create_admin(id, first_name, last_name, email, faculty=None):
     """
     Create a Admin with the given arguments.
     """
     username = f"{first_name}_{last_name}"
-    return Admin.objects.create(
-        id=id,
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        create_time=timezone.now(),
-    )
+    if faculty is None:
+        return Admin.objects.create(
+            id=id,
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            create_time=timezone.now()
+        )
+    else:
+        admin = Admin.objects.create(
+            id=id,
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            create_time=timezone.now(),
+        )
+        for fac in faculty:
+            admin.faculties.add(fac)
+        return admin
 
 
 class AdminModelTests(TestCase):
@@ -145,3 +167,48 @@ class AdminModelTests(TestCase):
         self.assertEqual(content_json["first_name"], admin.first_name)
         self.assertEqual(content_json["last_name"], admin.last_name)
         self.assertEqual(content_json["email"], admin.email)
+
+    def test_admin_faculty(self):
+        """
+        Able to retrieve faculty details of a single admin.
+        """
+        # Create an admin for testing with the name "Bob Peeters"
+        faculty = create_faculty(name="testing faculty")
+        admin = create_admin(
+            id=5,
+            first_name="Bob",
+            last_name="Peeters",
+            email="bob.peeters@example.com",
+            faculty=[faculty]
+            )
+
+        # Make a GET request to retrieve the admin details
+        response = self.client.get(
+            reverse("admin-detail", args=[str(admin.id)]), follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Assert the details of the retrieved admin match the created admin
+        self.assertEqual(int(content_json["id"]), admin.id)
+        self.assertEqual(content_json["first_name"], admin.first_name)
+        self.assertEqual(content_json["last_name"], admin.last_name)
+        self.assertEqual(content_json["email"], admin.email)
+
+        response = self.client.get(content_json["faculties"][0], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(content_json["name"], faculty.name)

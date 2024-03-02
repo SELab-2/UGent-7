@@ -1,8 +1,97 @@
 import json
 
 from django.test import TestCase
+from django.utils import timezone
 from django.urls import reverse
 from ..models.course import Course
+from ..models.teacher import Teacher
+from ..models.assistant import Assistant
+from ..models.student import Student
+from ..models.project import Project
+
+
+def create_project(
+    name,
+    description,
+    visible,
+    archived,
+    days,
+    course
+):
+    """Create a Project with the given arguments."""
+    deadline = timezone.now() + timezone.timedelta(days=days)
+
+    return Project.objects.create(
+        name=name,
+        description=description,
+        visible=visible,
+        archived=archived,
+        deadline=deadline,
+        course=course
+    )
+
+
+def create_student(
+        id,
+        first_name,
+        last_name,
+        email
+        ):
+    """
+    Create a student with the given arguments.
+    """
+    username = f"{first_name}_{last_name}"
+    student = Student.objects.create(
+            id=id,
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            create_time=timezone.now()
+        )
+    return student
+
+
+def create_assistant(
+        id,
+        first_name,
+        last_name,
+        email
+        ):
+    """
+    Create a assistant with the given arguments.
+    """
+    username = f"{first_name}_{last_name}"
+    assistant = Assistant.objects.create(
+            id=id,
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            create_time=timezone.now()
+        )
+    return assistant
+
+
+def create_teacher(
+        id,
+        first_name,
+        last_name,
+        email
+        ):
+    """
+    Create a teacher with the given arguments.
+    """
+    username = f"{first_name}_{last_name}"
+    teacher = Teacher.objects.create(
+            id=id,
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            create_time=timezone.now()
+        )
+    return teacher
 
 
 def create_course(name, academic_startyear, description=None,
@@ -113,3 +202,267 @@ class CourseModelTests(TestCase):
         self.assertEqual(
             content_json["academic_startyear"], course.academic_startyear)
         self.assertEqual(content_json["description"], course.description)
+
+    def test_course_teachers(self):
+        """
+        Able to retrieve teachers details of a single course.
+        """
+        teacher1 = create_teacher(
+            id=5,
+            first_name="Simon",
+            last_name="Mignolet",
+            email="simon.mignolet@ugent.be"
+        )
+
+        teacher2 = create_teacher(
+            id=6,
+            first_name="Ronny",
+            last_name="Deila",
+            email="ronny.deila@brugge.be"
+        )
+
+        course = create_course(
+            name="Chemistry 101",
+            academic_startyear=2022,
+            description="An introductory chemistry course."
+        )
+        course.teachers.add(teacher1)
+        course.teachers.add(teacher2)
+
+        response = self.client.get(
+            reverse("course-detail", args=[str(course.id)]), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(content_json["name"], course.name)
+        self.assertEqual(
+            content_json["academic_startyear"], course.academic_startyear)
+        self.assertEqual(content_json["description"], course.description)
+
+        response = self.client.get(content_json["teachers"], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Assert that the parsed JSON is a list with multiple teachers
+        self.assertEqual(len(content_json), 2)
+
+        content = content_json[0]
+        self.assertEqual(int(content["id"]), teacher1.id)
+        self.assertEqual(content["first_name"], teacher1.first_name)
+        self.assertEqual(content["last_name"], teacher1.last_name)
+        self.assertEqual(content["email"], teacher1.email)
+
+        content = content_json[1]
+        self.assertEqual(int(content["id"]), teacher2.id)
+        self.assertEqual(content["first_name"], teacher2.first_name)
+        self.assertEqual(content["last_name"], teacher2.last_name)
+        self.assertEqual(content["email"], teacher2.email)
+
+    def test_course_assistant(self):
+        """
+        Able to retrieve assistant details of a single course.
+        """
+        assistant1 = create_assistant(
+            id=5,
+            first_name="Simon",
+            last_name="Mignolet",
+            email="simon.mignolet@ugent.be"
+        )
+
+        assistant2 = create_assistant(
+            id=6,
+            first_name="Ronny",
+            last_name="Deila",
+            email="ronny.deila@brugge.be"
+        )
+
+        course = create_course(
+            name="Chemistry 101",
+            academic_startyear=2022,
+            description="An introductory chemistry course."
+        )
+        course.assistants.add(assistant1)
+        course.assistants.add(assistant2)
+
+        response = self.client.get(
+            reverse("course-detail", args=[str(course.id)]), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(content_json["name"], course.name)
+        self.assertEqual(
+            content_json["academic_startyear"], course.academic_startyear)
+        self.assertEqual(content_json["description"], course.description)
+
+        response = self.client.get(content_json["assistants"], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Assert that the parsed JSON is a list with multiple teachers
+        self.assertEqual(len(content_json), 2)
+
+        content = content_json[0]
+        self.assertEqual(int(content["id"]), assistant1.id)
+        self.assertEqual(content["first_name"], assistant1.first_name)
+        self.assertEqual(content["last_name"], assistant1.last_name)
+        self.assertEqual(content["email"], assistant1.email)
+
+        content = content_json[1]
+        self.assertEqual(int(content["id"]), assistant2.id)
+        self.assertEqual(content["first_name"], assistant2.first_name)
+        self.assertEqual(content["last_name"], assistant2.last_name)
+        self.assertEqual(content["email"], assistant2.email)
+
+    def test_course_student(self):
+        """
+        Able to retrieve student details of a single course.
+        """
+        student1 = create_student(
+            id=5,
+            first_name="Simon",
+            last_name="Mignolet",
+            email="simon.mignolet@ugent.be"
+        )
+
+        student2 = create_student(
+            id=6,
+            first_name="Ronny",
+            last_name="Deila",
+            email="ronny.deila@brugge.be"
+        )
+
+        course = create_course(
+            name="Chemistry 101",
+            academic_startyear=2022,
+            description="An introductory chemistry course."
+        )
+        course.students.add(student1)
+        course.students.add(student2)
+
+        response = self.client.get(
+            reverse("course-detail", args=[str(course.id)]), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(content_json["name"], course.name)
+        self.assertEqual(
+            content_json["academic_startyear"], course.academic_startyear)
+        self.assertEqual(content_json["description"], course.description)
+
+        response = self.client.get(content_json["students"], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Assert that the parsed JSON is a list with multiple student
+        self.assertEqual(len(content_json), 2)
+
+        content = content_json[0]
+        self.assertEqual(int(content["id"]), student1.id)
+        self.assertEqual(content["first_name"], student1.first_name)
+        self.assertEqual(content["last_name"], student1.last_name)
+        self.assertEqual(content["email"], student1.email)
+
+        content = content_json[1]
+        self.assertEqual(int(content["id"]), student2.id)
+        self.assertEqual(content["first_name"], student2.first_name)
+        self.assertEqual(content["last_name"], student2.last_name)
+        self.assertEqual(content["email"], student2.email)
+
+    def test_course_project(self):
+        """
+        Able to retrieve project details of a single course.
+        """
+        course = create_course(
+            name="Chemistry 101",
+            academic_startyear=2022,
+            description="An introductory chemistry course."
+        )
+
+        project1 = create_project(
+            name="become champions",
+            description="win the jpl",
+            visible=True,
+            archived=False,
+            days=50,
+            course=course
+        )
+
+        project2 = create_project(
+            name="become european champion",
+            description="win the cfl",
+            visible=True,
+            archived=False,
+            days=50,
+            course=course
+        )
+
+        response = self.client.get(
+            reverse("course-detail", args=[str(course.id)]), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(content_json["name"], course.name)
+        self.assertEqual(
+            content_json["academic_startyear"], course.academic_startyear)
+        self.assertEqual(content_json["description"], course.description)
+
+        response = self.client.get(content_json["projects"], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Assert that the parsed JSON is a list with multiple projects
+        self.assertEqual(len(content_json), 2)
+
+        content = content_json[0]
+        self.assertEqual(int(content["id"]), project1.id)
+        self.assertEqual(content["name"], project1.name)
+        self.assertEqual(content["description"], project1.description)
+        self.assertEqual(content["visible"], project1.visible)
+        self.assertEqual(content["archived"], project1.archived)
+
+        content = content_json[1]
+        self.assertEqual(int(content["id"]), project2.id)
+        self.assertEqual(content["name"], project2.name)
+        self.assertEqual(content["description"], project2.description)
+        self.assertEqual(content["visible"], project2.visible)
+        self.assertEqual(content["archived"], project2.archived)
