@@ -46,6 +46,7 @@ def create_student(id, first_name, last_name, email):
 
 
 def create_group(project, score):
+    """Create a Group with the given arguments."""
     return Group.objects.create(project=project, score=score)
 
 

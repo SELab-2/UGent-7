@@ -17,19 +17,15 @@ def create_fileExtension(id, extension):
 
 
 def create_checks(id, allowed_file_extensions, forbidden_file_extensions):
-
-    # Create a Checks with the given arguments.
-
+    """Create a Checks with the given arguments."""
     check = Checks.objects.create(
         id=id,
     )
 
     for ext in allowed_file_extensions:
         check.allowed_file_extensions.add(ext)
-
     for ext in forbidden_file_extensions:
         check.forbidden_file_extensions.add(ext)
-
     return check
 
 
@@ -38,7 +34,6 @@ class FileExtensionModelTests(TestCase):
         """
         able to retrieve no FileExtension before publishing it.
         """
-
         response_root = self.client.get(
             reverse("fileExtension-list"), follow=True)
         # print(response.content)
@@ -71,13 +66,12 @@ class FileExtensionModelTests(TestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with one admin
+        # Assert that the parsed JSON is a list with one fileExtension
         self.assertEqual(len(content_json), 1)
 
-        # Assert the details of the retrieved admin match the created admin
+        # Assert the details of the retrieved fileExtension
+        # match the created fileExtension
         retrieved_fileExtension = content_json[0]
-        # self.assertEqual(
-        #     int(retrieved_fileExtension["id"]), fileExtension.id)
         self.assertEqual(
             retrieved_fileExtension["extension"], fileExtension.extension)
 
@@ -107,18 +101,15 @@ class FileExtensionModelTests(TestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with multiple admins
+        # Assert that the parsed JSON is a list with multiple fileExtension
         self.assertEqual(len(content_json), 2)
 
-        # Assert the details of the retrieved admins match the created admins
+        # Assert the details of the retrieved fileExtension
+        # match the created fileExtension
         retrieved_fileExtension1, retrieved_fileExtension2 = content_json
-        # self.assertEqual(
-        #     int(retrieved_fileExtension1["id"]), fileExtension1.id)
         self.assertEqual(
             retrieved_fileExtension1["extension"], fileExtension1.extension)
 
-        # self.assertEqual(
-        #     int(retrieved_fileExtension2["id"]), fileExtension2.id)
         self.assertEqual(
             retrieved_fileExtension2["extension"], fileExtension2.extension)
 
@@ -126,7 +117,7 @@ class FileExtensionModelTests(TestCase):
         """
         Able to retrieve details of a single fileExtension.
         """
-        # Create an fileExtension for testing with the name "Bob Peeters"
+        # Create an fileExtension for testing.
         fileExtension = create_fileExtension(
             id=3,
             extension="zip"
@@ -150,7 +141,6 @@ class FileExtensionModelTests(TestCase):
 
         # Assert the details of the retrieved fileExtension
         # match the created fileExtension
-        # self.assertEqual(int(content_json["id"]), fileExtension.id)
         self.assertEqual(content_json["extension"], fileExtension.extension)
 
 

@@ -7,7 +7,7 @@ from ..models.student import Student
 
 
 def create_student(id, first_name, last_name, email):
-    # Create an Assistant with the given arguments.
+    # Create an student with the given arguments.
     username = f"{first_name}_{last_name}"
     return Student.objects.create(
         id=id,

@@ -7,7 +7,7 @@ from api.models.assistant import Assistant
 
 
 def create_assistant(id, first_name, last_name, email):
-    # Create an Assistant with the given arguments.
+    # Create an assistant with the given arguments.
     username = f"{first_name}_{last_name}"
     return Assistant.objects.create(
         id=id,
@@ -58,10 +58,11 @@ class AssistantModelTests(TestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with one student
+        # Assert that the parsed JSON is a list with one assistant
         self.assertEqual(len(content_json), 1)
 
-        # Assert the details of the retrieved student match the created student
+        # Assert the details of the retrieved assistant
+        # match the created assistant
         retrieved_assistant = content_json[0]
         self.assertEqual(int(retrieved_assistant["id"]), assistant.id)
         self.assertEqual(
@@ -99,11 +100,11 @@ class AssistantModelTests(TestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with multiple students
+        # Assert that the parsed JSON is a list with multiple assistant
         self.assertEqual(len(content_json), 2)
 
         # Assert the details of the retrieved
-        # students match the created students
+        # assistant match the created assistant
         retrieved_assistant1, retrieved_assistant2 = content_json
         self.assertEqual(int(retrieved_assistant1["id"]), assistant1.id)
         self.assertEqual(
@@ -123,7 +124,7 @@ class AssistantModelTests(TestCase):
         """
         Able to retrieve details of a single assistant.
         """
-        # Create an student for testing with the name "Bob Peeters"
+        # Create an assistant for testing with the name "Bob Peeters"
         assistant = create_assistant(
             id=5,
             first_name="Bob",
@@ -144,7 +145,8 @@ class AssistantModelTests(TestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert the details of the retrieved student match the created student
+        # Assert the details of the retrieved assistant
+        # match the created assistant
         self.assertEqual(int(content_json["id"]), assistant.id)
         self.assertEqual(content_json["first_name"], assistant.first_name)
         self.assertEqual(content_json["last_name"], assistant.last_name)

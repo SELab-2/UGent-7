@@ -8,11 +8,15 @@ from ..models.checks import Checks
 
 
 def create_course(id, name, academic_startyear):
+    """
+    Create a Course with the given arguments.
+    """
     return Course.objects.create(
         id=id, name=name, academic_startyear=academic_startyear)
 
 
 def create_checks():
+    """Create a Checks with the given arguments."""
     return Checks.objects.create()
 
 
@@ -25,6 +29,7 @@ def create_project(
     checks,
     course
 ):
+    """Create a Project with the given arguments."""
     deadline = timezone.now() + timezone.timedelta(days=days)
 
     return Project.objects.create(

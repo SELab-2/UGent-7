@@ -34,11 +34,12 @@ def create_project(name, description, days, course):
 
 
 def create_group(project, score):
+    """Create a Group with the given arguments."""
     return Group.objects.create(project=project, score=score)
 
 
 def create_submission(group, submission_number):
-    # Create an Submission with the given arguments.
+    """Create an Submission with the given arguments."""
     return Submission.objects.create(
         group=group,
         submission_number=submission_number,
@@ -47,7 +48,7 @@ def create_submission(group, submission_number):
 
 
 def create_submissionFile(submission, file):
-    # Create an SubmissionFile with the given arguments.
+    """Create an SubmissionFile with the given arguments."""
     return SubmissionFile.objects.create(
         submission=submission,
         file=file
