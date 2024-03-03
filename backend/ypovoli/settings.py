@@ -73,7 +73,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=365),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "UPDATE_LAST_LOGIN": True,
-    "TOKEN_OBTAIN_SERIALIZER": "authentication.serializers.CASTokenObtainSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "authentication.serializers.CASTokenObtainSerializer"
 }
 
 AUTH_USER_MODEL = "authentication.User"

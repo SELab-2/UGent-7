@@ -68,14 +68,13 @@ class CASTokenObtainSerializer(Serializer):
             'refresh': str(RefreshToken.for_user(user))
         }
 
-
 class UserSerializer(ModelSerializer):
     """Serializer for the user model
     This serializer validates the user fields for creation and updating.
     """
     id = CharField()
     username = CharField()
-    email = EmailField() 
+    email = EmailField()
 
     faculties = HyperlinkedRelatedField(
         many=True,
@@ -90,13 +89,7 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            'id', 'username', 'email',
-            'first_name', 'last_name',
-            'faculties',
-            'last_enrolled', 'last_login', 'create_time',
-            'notifications'
-        ]
+        fields = '__all__'
 
     def get_or_create(self, validated_data: dict) -> User:
         """Create or fetch the user based on the validated data."""

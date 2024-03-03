@@ -49,13 +49,12 @@ class User(AbstractBaseUser):
     )
 
     create_time = DateTimeField(
-        auto_now=True
+        auto_now_add=True
     )
 
     """Model settings"""
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = []
 
 
 class Faculty(models.Model):
