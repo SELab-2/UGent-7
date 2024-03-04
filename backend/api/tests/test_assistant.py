@@ -8,8 +8,7 @@ from api.models.course import Course
 from authentication.models import Faculty
 
 
-def create_course(name, academic_startyear, description=None,
-                  parent_course=None):
+def create_course(name, academic_startyear, description=None, parent_course=None):
     """
     Create a Course with the given arguments.
     """
@@ -17,37 +16,28 @@ def create_course(name, academic_startyear, description=None,
         name=name,
         academic_startyear=academic_startyear,
         description=description,
-        parent_course=parent_course
+        parent_course=parent_course,
     )
 
 
 def create_faculty(name):
     """Create a Faculty with the given arguments."""
-    return Faculty.objects.create(
-        name=name
-    )
+    return Faculty.objects.create(name=name)
 
 
-def create_assistant(
-        id,
-        first_name,
-        last_name,
-        email,
-        faculty=None,
-        courses=None
-        ):
+def create_assistant(id, first_name, last_name, email, faculty=None, courses=None):
     """
     Create a assistant with the given arguments.
     """
     username = f"{first_name}_{last_name}"
     assistant = Assistant.objects.create(
-            id=id,
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            email=email,
-            create_time=timezone.now()
-        )
+        id=id,
+        first_name=first_name,
+        last_name=last_name,
+        username=username,
+        email=email,
+        create_time=timezone.now(),
+    )
 
     if faculty is not None:
         for fac in faculty:
@@ -80,10 +70,7 @@ class AssistantModelTests(TestCase):
         Able to retrieve a single assistant after creating it.
         """
         assistant = create_assistant(
-            id=3,
-            first_name="John",
-            last_name="Doe",
-            email="john.doe@example.com"
+            id=3, first_name="John", last_name="Doe", email="john.doe@example.com"
         )
 
         # Make a GET request to retrieve the assistant
@@ -105,8 +92,7 @@ class AssistantModelTests(TestCase):
         # match the created assistant
         retrieved_assistant = content_json[0]
         self.assertEqual(int(retrieved_assistant["id"]), assistant.id)
-        self.assertEqual(
-            retrieved_assistant["first_name"], assistant.first_name)
+        self.assertEqual(retrieved_assistant["first_name"], assistant.first_name)
         self.assertEqual(retrieved_assistant["last_name"], assistant.last_name)
         self.assertEqual(retrieved_assistant["email"], assistant.email)
 
@@ -116,17 +102,11 @@ class AssistantModelTests(TestCase):
         """
         # Create multiple assistant
         assistant1 = create_assistant(
-            id=1,
-            first_name="Johny",
-            last_name="Doeg",
-            email="john.doe@example.com"
-            )
+            id=1, first_name="Johny", last_name="Doeg", email="john.doe@example.com"
+        )
         assistant2 = create_assistant(
-            id=2,
-            first_name="Jane",
-            last_name="Doe",
-            email="jane.doe@example.com"
-            )
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com"
+        )
 
         # Make a GET request to retrieve the assistant
         response = self.client.get(reverse("assistant-list"), follow=True)
@@ -147,17 +127,13 @@ class AssistantModelTests(TestCase):
         # assistant match the created assistant
         retrieved_assistant1, retrieved_assistant2 = content_json
         self.assertEqual(int(retrieved_assistant1["id"]), assistant1.id)
-        self.assertEqual(
-            retrieved_assistant1["first_name"], assistant1.first_name)
-        self.assertEqual(
-            retrieved_assistant1["last_name"], assistant1.last_name)
+        self.assertEqual(retrieved_assistant1["first_name"], assistant1.first_name)
+        self.assertEqual(retrieved_assistant1["last_name"], assistant1.last_name)
         self.assertEqual(retrieved_assistant1["email"], assistant1.email)
 
         self.assertEqual(int(retrieved_assistant2["id"]), assistant2.id)
-        self.assertEqual(
-            retrieved_assistant2["first_name"], assistant2.first_name)
-        self.assertEqual(
-            retrieved_assistant2["last_name"], assistant2.last_name)
+        self.assertEqual(retrieved_assistant2["first_name"], assistant2.first_name)
+        self.assertEqual(retrieved_assistant2["last_name"], assistant2.last_name)
         self.assertEqual(retrieved_assistant2["email"], assistant2.email)
 
     def test_assistant_detail_view(self):
@@ -166,15 +142,13 @@ class AssistantModelTests(TestCase):
         """
         # Create an assistant for testing with the name "Bob Peeters"
         assistant = create_assistant(
-            id=5,
-            first_name="Bob",
-            last_name="Peeters",
-            email="bob.peeters@example.com"
-            )
+            id=5, first_name="Bob", last_name="Peeters", email="bob.peeters@example.com"
+        )
 
         # Make a GET request to retrieve the assistant details
         response = self.client.get(
-            reverse("assistant-detail", args=[str(assistant.id)]), follow=True)
+            reverse("assistant-detail", args=[str(assistant.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -203,12 +177,13 @@ class AssistantModelTests(TestCase):
             first_name="Bob",
             last_name="Peeters",
             email="bob.peeters@example.com",
-            faculty=[faculty]
-            )
+            faculty=[faculty],
+        )
 
         # Make a GET request to retrieve the assistant details
         response = self.client.get(
-            reverse("assistant-detail", args=[str(assistant.id)]), follow=True)
+            reverse("assistant-detail", args=[str(assistant.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -246,12 +221,12 @@ class AssistantModelTests(TestCase):
         course1 = create_course(
             name="Introduction to Computer Science",
             academic_startyear=2022,
-            description="An introductory course on computer science."
+            description="An introductory course on computer science.",
         )
         course2 = create_course(
             name="Intermediate to Computer Science",
             academic_startyear=2023,
-            description="An second course on computer science."
+            description="An second course on computer science.",
         )
 
         assistant = create_assistant(
@@ -259,12 +234,13 @@ class AssistantModelTests(TestCase):
             first_name="Bob",
             last_name="Peeters",
             email="bob.peeters@example.com",
-            courses=[course1, course2]
-            )
+            courses=[course1, course2],
+        )
 
         # Make a GET request to retrieve the assistant details
         response = self.client.get(
-            reverse("assistant-detail", args=[str(assistant.id)]), follow=True)
+            reverse("assistant-detail", args=[str(assistant.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -299,13 +275,11 @@ class AssistantModelTests(TestCase):
         content = content_json[0]
         self.assertEqual(int(content["id"]), course1.id)
         self.assertEqual(content["name"], course1.name)
-        self.assertEqual(
-            int(content["academic_startyear"]), course1.academic_startyear)
+        self.assertEqual(int(content["academic_startyear"]), course1.academic_startyear)
         self.assertEqual(content["description"], course1.description)
 
         content = content_json[1]
         self.assertEqual(int(content["id"]), course2.id)
         self.assertEqual(content["name"], course2.name)
-        self.assertEqual(
-            int(content["academic_startyear"]), course2.academic_startyear)
+        self.assertEqual(int(content["academic_startyear"]), course2.academic_startyear)
         self.assertEqual(content["description"], course2.description)

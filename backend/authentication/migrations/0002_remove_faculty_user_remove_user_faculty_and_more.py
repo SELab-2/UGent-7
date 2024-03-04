@@ -4,23 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('authentication', '0001_initial'),
+        ("authentication", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='faculty',
-            name='user',
+            model_name="faculty",
+            name="user",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='faculty',
+            model_name="user",
+            name="faculty",
         ),
         migrations.AddField(
-            model_name='user',
-            name='faculties',
-            field=models.ManyToManyField(blank=True, related_name='users', to='authentication.faculty'),
+            model_name="user",
+            name="faculties",
+            field=models.ManyToManyField(
+                blank=True, related_name="users", to="authentication.faculty"
+            ),
         ),
     ]

@@ -3,7 +3,6 @@ from api.models.student import Student
 
 
 def user_creation(user: User, attributes: dict, **kwargs):
-
     """Upon user creation, auto-populate additional properties"""
     student_id = attributes.get("ugentStudentID")
 

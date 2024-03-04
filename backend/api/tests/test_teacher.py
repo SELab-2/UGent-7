@@ -8,8 +8,7 @@ from ..models.course import Course
 from authentication.models import Faculty
 
 
-def create_course(name, academic_startyear, description=None,
-                  parent_course=None):
+def create_course(name, academic_startyear, description=None, parent_course=None):
     """
     Create a Course with the given arguments.
     """
@@ -17,37 +16,28 @@ def create_course(name, academic_startyear, description=None,
         name=name,
         academic_startyear=academic_startyear,
         description=description,
-        parent_course=parent_course
+        parent_course=parent_course,
     )
 
 
 def create_faculty(name):
     """Create a Faculty with the given arguments."""
-    return Faculty.objects.create(
-        name=name
-    )
+    return Faculty.objects.create(name=name)
 
 
-def create_teacher(
-        id,
-        first_name,
-        last_name,
-        email,
-        faculty=None,
-        courses=None
-        ):
+def create_teacher(id, first_name, last_name, email, faculty=None, courses=None):
     """
     Create a teacher with the given arguments.
     """
     username = f"{first_name}_{last_name}"
     teacher = Teacher.objects.create(
-            id=id,
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            email=email,
-            create_time=timezone.now()
-        )
+        id=id,
+        first_name=first_name,
+        last_name=last_name,
+        username=username,
+        email=email,
+        create_time=timezone.now(),
+    )
 
     if faculty is not None:
         for fac in faculty:
@@ -80,10 +70,7 @@ class TeacherModelTests(TestCase):
         Able to retrieve a single teacher after creating it.
         """
         teacher = create_teacher(
-            id=3,
-            first_name="John",
-            last_name="Doe",
-            email="john.doe@example.com"
+            id=3, first_name="John", last_name="Doe", email="john.doe@example.com"
         )
 
         # Make a GET request to retrieve the teacher
@@ -104,8 +91,7 @@ class TeacherModelTests(TestCase):
         # Assert the details of the retrieved teacher match the created teacher
         retrieved_teacher = content_json[0]
         self.assertEqual(int(retrieved_teacher["id"]), teacher.id)
-        self.assertEqual(
-            retrieved_teacher["first_name"], teacher.first_name)
+        self.assertEqual(retrieved_teacher["first_name"], teacher.first_name)
         self.assertEqual(retrieved_teacher["last_name"], teacher.last_name)
         self.assertEqual(retrieved_teacher["email"], teacher.email)
 
@@ -115,17 +101,11 @@ class TeacherModelTests(TestCase):
         """
         # Create multiple assistant
         teacher1 = create_teacher(
-            id=1,
-            first_name="Johny",
-            last_name="Doeg",
-            email="john.doe@example.com"
-            )
+            id=1, first_name="Johny", last_name="Doeg", email="john.doe@example.com"
+        )
         teacher2 = create_teacher(
-            id=2,
-            first_name="Jane",
-            last_name="Doe",
-            email="jane.doe@example.com"
-            )
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com"
+        )
 
         # Make a GET request to retrieve the teacher
         response = self.client.get(reverse("teacher-list"), follow=True)
@@ -145,17 +125,13 @@ class TeacherModelTests(TestCase):
         # Assert the details of the retrieved teacher match the created teacher
         retrieved_teacher1, retrieved_teacher2 = content_json
         self.assertEqual(int(retrieved_teacher1["id"]), teacher1.id)
-        self.assertEqual(
-            retrieved_teacher1["first_name"], teacher1.first_name)
-        self.assertEqual(
-            retrieved_teacher1["last_name"], teacher1.last_name)
+        self.assertEqual(retrieved_teacher1["first_name"], teacher1.first_name)
+        self.assertEqual(retrieved_teacher1["last_name"], teacher1.last_name)
         self.assertEqual(retrieved_teacher1["email"], teacher1.email)
 
         self.assertEqual(int(retrieved_teacher2["id"]), teacher2.id)
-        self.assertEqual(
-            retrieved_teacher2["first_name"], teacher2.first_name)
-        self.assertEqual(
-            retrieved_teacher2["last_name"], teacher2.last_name)
+        self.assertEqual(retrieved_teacher2["first_name"], teacher2.first_name)
+        self.assertEqual(retrieved_teacher2["last_name"], teacher2.last_name)
         self.assertEqual(retrieved_teacher2["email"], teacher2.email)
 
     def test_teacher_detail_view(self):
@@ -164,15 +140,13 @@ class TeacherModelTests(TestCase):
         """
         # Create an teacher for testing with the name "Bob Peeters"
         teacher = create_teacher(
-            id=5,
-            first_name="Bob",
-            last_name="Peeters",
-            email="bob.peeters@example.com"
-            )
+            id=5, first_name="Bob", last_name="Peeters", email="bob.peeters@example.com"
+        )
 
         # Make a GET request to retrieve the teacher details
         response = self.client.get(
-            reverse("teacher-detail", args=[str(teacher.id)]), follow=True)
+            reverse("teacher-detail", args=[str(teacher.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -200,12 +174,13 @@ class TeacherModelTests(TestCase):
             first_name="Bob",
             last_name="Peeters",
             email="bob.peeters@example.com",
-            faculty=[faculty]
-            )
+            faculty=[faculty],
+        )
 
         # Make a GET request to retrieve the teacher details
         response = self.client.get(
-            reverse("teacher-detail", args=[str(teacher.id)]), follow=True)
+            reverse("teacher-detail", args=[str(teacher.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -243,12 +218,12 @@ class TeacherModelTests(TestCase):
         course1 = create_course(
             name="Introduction to Computer Science",
             academic_startyear=2022,
-            description="An introductory course on computer science."
+            description="An introductory course on computer science.",
         )
         course2 = create_course(
             name="Intermediate to Computer Science",
             academic_startyear=2023,
-            description="An second course on computer science."
+            description="An second course on computer science.",
         )
 
         teacher = create_teacher(
@@ -256,12 +231,13 @@ class TeacherModelTests(TestCase):
             first_name="Bob",
             last_name="Peeters",
             email="bob.peeters@example.com",
-            courses=[course1, course2]
-            )
+            courses=[course1, course2],
+        )
 
         # Make a GET request to retrieve the teacher details
         response = self.client.get(
-            reverse("teacher-detail", args=[str(teacher.id)]), follow=True)
+            reverse("teacher-detail", args=[str(teacher.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -296,13 +272,11 @@ class TeacherModelTests(TestCase):
         content = content_json[0]
         self.assertEqual(int(content["id"]), course1.id)
         self.assertEqual(content["name"], course1.name)
-        self.assertEqual(
-            int(content["academic_startyear"]), course1.academic_startyear)
+        self.assertEqual(int(content["academic_startyear"]), course1.academic_startyear)
         self.assertEqual(content["description"], course1.description)
 
         content = content_json[1]
         self.assertEqual(int(content["id"]), course2.id)
         self.assertEqual(content["name"], course2.name)
-        self.assertEqual(
-            int(content["academic_startyear"]), course2.academic_startyear)
+        self.assertEqual(int(content["academic_startyear"]), course2.academic_startyear)
         self.assertEqual(content["description"], course2.description)

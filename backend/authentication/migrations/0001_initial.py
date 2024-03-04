@@ -5,39 +5,55 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('id', models.CharField(max_length=12, primary_key=True, serialize=False)),
-                ('username', models.CharField(max_length=12, unique=True)),
-                ('email', models.EmailField(max_length=254, unique=True)),
-                ('first_name', models.CharField(max_length=50)),
-                ('last_name', models.CharField(max_length=50)),
-                ('last_enrolled', models.IntegerField(default=1, null=True)),
-                ('create_time', models.DateTimeField(auto_now=True)),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "id",
+                    models.CharField(max_length=12, primary_key=True, serialize=False),
+                ),
+                ("username", models.CharField(max_length=12, unique=True)),
+                ("email", models.EmailField(max_length=254, unique=True)),
+                ("first_name", models.CharField(max_length=50)),
+                ("last_name", models.CharField(max_length=50)),
+                ("last_enrolled", models.IntegerField(default=1, null=True)),
+                ("create_time", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Faculty',
+            name="Faculty",
             fields=[
-                ('name', models.CharField(max_length=50, primary_key=True, serialize=False)),
-                ('user', models.ManyToManyField(blank=True, related_name='users', to=settings.AUTH_USER_MODEL)),
+                (
+                    "name",
+                    models.CharField(max_length=50, primary_key=True, serialize=False),
+                ),
+                (
+                    "user",
+                    models.ManyToManyField(
+                        blank=True, related_name="users", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='user',
-            name='faculty',
-            field=models.ManyToManyField(blank=True, related_name='faculties', to='authentication.faculty'),
+            model_name="user",
+            name="faculty",
+            field=models.ManyToManyField(
+                blank=True, related_name="faculties", to="authentication.faculty"
+            ),
         ),
     ]
