@@ -11,9 +11,7 @@ from authentication.models import Faculty
 def create_faculty(name):
     """
     Create a Faculty with the given arguments."""
-    return Faculty.objects.create(
-        name=name
-    )
+    return Faculty.objects.create(name=name)
 
 
 def create_admin(id, first_name, last_name, email, faculty=None):
@@ -28,7 +26,7 @@ def create_admin(id, first_name, last_name, email, faculty=None):
             last_name=last_name,
             username=username,
             email=email,
-            create_time=timezone.now()
+            create_time=timezone.now(),
         )
     else:
         admin = Admin.objects.create(
@@ -64,10 +62,7 @@ class AdminModelTests(TestCase):
         Able to retrieve a single admin after creating it.
         """
         admin = create_admin(
-            id=3,
-            first_name="John",
-            last_name="Doe",
-            email="john.doe@example.com"
+            id=3, first_name="John", last_name="Doe", email="john.doe@example.com"
         )
 
         # Make a GET request to retrieve the admin
@@ -98,17 +93,11 @@ class AdminModelTests(TestCase):
         """
         # Create multiple admins
         admin1 = create_admin(
-            id=1,
-            first_name="Johny",
-            last_name="Doeg",
-            email="john.doe@example.com"
-            )
+            id=1, first_name="Johny", last_name="Doeg", email="john.doe@example.com"
+        )
         admin2 = create_admin(
-            id=2,
-            first_name="Jane",
-            last_name="Doe",
-            email="jane.doe@example.com"
-            )
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com"
+        )
 
         # Make a GET request to retrieve the admins
         response = self.client.get(reverse("admin-list"), follow=True)
@@ -143,15 +132,13 @@ class AdminModelTests(TestCase):
         """
         # Create an admin for testing with the name "Bob Peeters"
         admin = create_admin(
-            id=5,
-            first_name="Bob",
-            last_name="Peeters",
-            email="bob.peeters@example.com"
-            )
+            id=5, first_name="Bob", last_name="Peeters", email="bob.peeters@example.com"
+        )
 
         # Make a GET request to retrieve the admin details
         response = self.client.get(
-            reverse("admin-detail", args=[str(admin.id)]), follow=True)
+            reverse("admin-detail", args=[str(admin.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -179,12 +166,13 @@ class AdminModelTests(TestCase):
             first_name="Bob",
             last_name="Peeters",
             email="bob.peeters@example.com",
-            faculty=[faculty]
-            )
+            faculty=[faculty],
+        )
 
         # Make a GET request to retrieve the admin details
         response = self.client.get(
-            reverse("admin-detail", args=[str(admin.id)]), follow=True)
+            reverse("admin-detail", args=[str(admin.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)

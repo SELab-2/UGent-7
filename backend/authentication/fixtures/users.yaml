@@ -6,7 +6,7 @@
     email: John.Doe@hotmail.com
     first_name: John
     last_name: Doe
-    last_enrolled: 1
+    last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.690556+00:00
     faculties:
     - Wetenschappen
@@ -18,7 +18,7 @@
     email: Tom.Boonen@gmail.be
     first_name: Tom
     last_name: Boonen
-    last_enrolled: 1
+    last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.686541+00:00
     faculties:
     - Psychologie_PedagogischeWetenschappen
@@ -30,7 +30,7 @@
     email: Peter.Sagan@gmail.com
     first_name: Peter
     last_name: Sagan
-    last_enrolled: 1
+    last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.689543+00:00
     faculties:
     - Psychologie_PedagogischeWetenschappen
@@ -42,7 +42,7 @@
     email: Bartje.Verhaege@gmail.com
     first_name: Bartje
     last_name: Verhaege
-    last_enrolled: 1
+    last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.691565+00:00
     faculties:
     - Geneeskunde_Gezondheidswetenschappen
@@ -54,7 +54,7 @@
     email: Bart.Simpson@gmail.be
     first_name: Bart
     last_name: Simpson
-    last_enrolled: 1
+    last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.687541+00:00
     faculties:
     - Wetenschappen
@@ -66,7 +66,7 @@
     email: Kim.Clijsters@gmail.be
     first_name: Kim
     last_name: Clijsters
-    last_enrolled: 1
+    last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.688545+00:00
     faculties:
     - Psychologie_PedagogischeWetenschappen

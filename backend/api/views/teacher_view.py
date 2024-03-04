@@ -10,7 +10,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def courses(self, request, pk=None):
         """Returns a list of courses for the given teacher"""
 
@@ -20,11 +20,12 @@ class TeacherViewSet(viewsets.ModelViewSet):
 
             # Serialize the course objects
             serializer = CourseSerializer(
-                courses, many=True, context={'request': request}
+                courses, many=True, context={"request": request}
             )
             return Response(serializer.data)
 
         except Teacher.DoesNotExist:
             # Invalid teacher ID
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data={"message": "Teacher not found"})
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data={"message": "Teacher not found"}
+            )

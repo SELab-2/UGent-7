@@ -10,26 +10,15 @@ class Project(models.Model):
 
     # ID should be generated automatically
 
-    name = models.CharField(
-        max_length=100,
-        blank=False,
-        null=False
-    )
+    name = models.CharField(max_length=100, blank=False, null=False)
 
-    description = models.TextField(
-        blank=True,
-        null=True
-    )
+    description = models.TextField(blank=True, null=True)
 
     # Project already visible to students
-    visible = models.BooleanField(
-        default=True
-    )
+    visible = models.BooleanField(default=True)
 
     # Project archived
-    archived = models.BooleanField(
-        default=False
-    )
+    archived = models.BooleanField(default=False)
 
     start_date = models.DateTimeField(
         # The default value is the current date and time
@@ -37,10 +26,7 @@ class Project(models.Model):
         blank=True,
     )
 
-    deadline = models.DateTimeField(
-        blank=False,
-        null=False
-    )
+    deadline = models.DateTimeField(blank=False, null=False)
 
     # Check entity that is linked to the project
     checks = models.ForeignKey(
@@ -48,7 +34,7 @@ class Project(models.Model):
         # If the checks are deleted, the project should remain
         on_delete=models.SET_NULL,
         blank=True,
-        null=True
+        null=True,
     )
 
     # Course that the project belongs to
@@ -56,9 +42,9 @@ class Project(models.Model):
         Course,
         # If the course is deleted, the project should be deleted as well
         on_delete=models.CASCADE,
-        related_name='projects',
+        related_name="projects",
         blank=False,
-        null=False
+        null=False,
     )
 
     def deadline_approaching_in(self, days=7):

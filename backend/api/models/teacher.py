@@ -13,6 +13,6 @@ class Teacher(User):
     courses = models.ManyToManyField(
         Course,
         # Allows us to access the teachers from the course
-        related_name='teachers',
-        blank=True
+        related_name="teachers",
+        blank=True,
     )
