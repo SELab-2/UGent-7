@@ -1,8 +1,8 @@
-import datetime
-
+from datetime import MINYEAR
+from typing import Self, Type
 from django.db import models
-from django.db.models import CharField, EmailField, IntegerField, DateTimeField, BooleanField
-from django.contrib.auth.models import AbstractBaseUser, AbstractUser
+from django.db.models import CharField, EmailField, IntegerField, DateTimeField, BooleanField, Model
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
 
 
 class User(AbstractBaseUser):
@@ -34,6 +34,12 @@ class User(AbstractBaseUser):
     """Model settings"""
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
+
+    def has_role(self, model: Type[Self]):
+        """Simple generic implementation of roles.
+        This function looks if there exists a model (inheriting from User) with the same ID.
+        """
+        model.objects.exists(self.id)
 
 
 class Faculty(models.Model):

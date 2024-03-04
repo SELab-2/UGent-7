@@ -4,8 +4,7 @@ from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 
-from ..models.admin import Admin
-from authentication.models import Faculty
+from authentication.models import Faculty, User
 
 
 def create_faculty(name):
@@ -20,29 +19,38 @@ def create_admin(id, first_name, last_name, email, faculty=None):
     """
     username = f"{first_name}_{last_name}"
     if faculty is None:
-        return Admin.objects.create(
+        return User.objects.create(
             id=id,
             first_name=first_name,
             last_name=last_name,
             username=username,
             email=email,
+            is_staff=True,
             create_time=timezone.now(),
         )
     else:
-        admin = Admin.objects.create(
+        admin = User.objects.create(
             id=id,
             first_name=first_name,
             last_name=last_name,
             username=username,
             email=email,
+            is_staff=True,
             create_time=timezone.now(),
         )
+
         for fac in faculty:
             admin.faculties.add(fac)
+
         return admin
 
 
 class AdminModelTests(TestCase):
+    def setUp(self):
+        self.client.force_login(
+            create_admin('admin', 'admin', 'admin', 'admin@admin.com')
+        )
+
     def test_no_admins(self):
         """
         able to retrieve no admin before publishing it.
