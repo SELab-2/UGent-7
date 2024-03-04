@@ -12,23 +12,20 @@ def create_course(id, name, academic_startyear):
     Create a Course with the given arguments.
     """
     return Course.objects.create(
-        id=id, name=name, academic_startyear=academic_startyear)
+        id=id, name=name, academic_startyear=academic_startyear
+    )
 
 
 def create_fileExtension(id, extension):
     """
     Create a FileExtension with the given arguments.
     """
-    return FileExtension.objects.create(
-        id=id,
-        extension=extension
-    )
+    return FileExtension.objects.create(id=id, extension=extension)
 
 
 def create_checks(
-        id=None,
-        allowed_file_extensions=None,
-        forbidden_file_extensions=None):
+    id=None, allowed_file_extensions=None, forbidden_file_extensions=None
+):
     """Create a Checks with the given arguments."""
     if id is None and allowed_file_extensions is None:
         # extra if to make line shorter
@@ -46,15 +43,7 @@ def create_checks(
     return check
 
 
-def create_project(
-    name,
-    description,
-    visible,
-    archived,
-    days,
-    checks,
-    course
-):
+def create_project(name, description, visible, archived, days, checks, course):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timezone.timedelta(days=days)
 
@@ -65,7 +54,7 @@ def create_project(
         archived=archived,
         deadline=deadline,
         checks=checks,
-        course=course
+        course=course,
     )
 
 
@@ -74,12 +63,16 @@ class ProjectModelTests(TestCase):
         """
         toggle the visible state of a project.
         """
-        course = create_course(
-            id=3, name="test course", academic_startyear=2024)
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         past_project = create_project(
-            name="test", description="descr", visible=True, archived=False,
-            days=-10, checks=checks, course=course
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=-10,
+            checks=checks,
+            course=course,
         )
         self.assertIs(past_project.visible, True)
         past_project.toggle_visible()
@@ -91,12 +84,16 @@ class ProjectModelTests(TestCase):
         """
         toggle the archived state of a project.
         """
-        course = create_course(
-            id=3, name="test course", academic_startyear=2024)
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         past_project = create_project(
-            name="test", description="descr", visible=True, archived=True,
-            days=-10, checks=checks, course=course
+            name="test",
+            description="descr",
+            visible=True,
+            archived=True,
+            days=-10,
+            checks=checks,
+            course=course,
         )
 
         self.assertIs(past_project.archived, True)
@@ -110,12 +107,16 @@ class ProjectModelTests(TestCase):
         deadline_approaching_in() returns False for Projects whose Deadline
         is in the past.
         """
-        course = create_course(
-            id=3, name="test course", academic_startyear=2024)
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         past_project = create_project(
-            name="test", description="descr", visible=True, archived=False,
-            days=-10, checks=checks, course=course
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=-10,
+            checks=checks,
+            course=course,
         )
         self.assertIs(past_project.deadline_approaching_in(), False)
 
@@ -124,12 +125,16 @@ class ProjectModelTests(TestCase):
         deadline_approaching_in() returns True for Projects whose Deadline
         is in the timerange given.
         """
-        course = create_course(
-            id=3, name="test course", academic_startyear=2024)
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         future_project = create_project(
-            name="test", description="descr", visible=True, archived=False,
-            days=6, checks=checks, course=course
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=6,
+            checks=checks,
+            course=course,
         )
         self.assertIs(future_project.deadline_approaching_in(days=7), True)
 
@@ -138,12 +143,16 @@ class ProjectModelTests(TestCase):
         deadline_approaching_in() returns False for Projects whose Deadline
         is out of the timerange given.
         """
-        course = create_course(
-            id=3, name="test course", academic_startyear=2024)
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         future_project = create_project(
-            name="test", description="descr", visible=True, archived=False,
-            days=8, checks=checks, course=course
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=8,
+            checks=checks,
+            course=course,
         )
         self.assertIs(future_project.deadline_approaching_in(days=7), False)
 
@@ -152,12 +161,16 @@ class ProjectModelTests(TestCase):
         deadline_passed() returns False for Projects whose Deadline
         is not passed.
         """
-        course = create_course(
-            id=3, name="test course", academic_startyear=2024)
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         future_project = create_project(
-            name="test", description="descr", visible=True, archived=False,
-            days=1, checks=checks, course=course
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=1,
+            checks=checks,
+            course=course,
         )
         self.assertIs(future_project.deadline_passed(), False)
 
@@ -166,12 +179,16 @@ class ProjectModelTests(TestCase):
         deadline_passed() returns True for Projects whose Deadline
         is passed.
         """
-        course = create_course(
-            id=3, name="test course", academic_startyear=2024)
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         past_project = create_project(
-            name="test", description="descr", visible=True, archived=False,
-            days=-1, checks=checks, course=course
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=-1,
+            checks=checks,
+            course=course,
         )
         self.assertIs(past_project.deadline_passed(), True)
 
@@ -188,11 +205,7 @@ class ProjectModelTests(TestCase):
         Able to retrieve a single project after creating it.
         """
 
-        course = create_course(
-            id=3,
-            name="test course",
-            academic_startyear=2024
-        )
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         project = create_project(
             name="test project",
@@ -201,8 +214,8 @@ class ProjectModelTests(TestCase):
             archived=False,
             days=7,
             checks=checks,
-            course=course
-            )
+            course=course,
+        )
 
         response = self.client.get(reverse("project-list"), follow=True)
 
@@ -216,12 +229,12 @@ class ProjectModelTests(TestCase):
         retrieved_project = content_json[0]
 
         expected_checks_url = "http://testserver" + reverse(
-                                    "check-detail", args=[str(checks.id)]
-                                      )
+            "check-detail", args=[str(checks.id)]
+        )
 
         expected_course_url = "http://testserver" + reverse(
-                                    "course-detail", args=[str(course.id)]
-                                      )
+            "course-detail", args=[str(course.id)]
+        )
 
         self.assertEqual(retrieved_project["name"], project.name)
         self.assertEqual(retrieved_project["description"], project.description)
@@ -234,11 +247,7 @@ class ProjectModelTests(TestCase):
         """
         Able to retrieve multiple projects after creating it.
         """
-        course = create_course(
-            id=3,
-            name="test course",
-            academic_startyear=2024
-        )
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         project = create_project(
             name="test project",
@@ -247,8 +256,8 @@ class ProjectModelTests(TestCase):
             archived=False,
             days=7,
             checks=checks,
-            course=course
-            )
+            course=course,
+        )
 
         project2 = create_project(
             name="test project2",
@@ -257,8 +266,8 @@ class ProjectModelTests(TestCase):
             archived=False,
             days=7,
             checks=checks,
-            course=course
-            )
+            course=course,
+        )
 
         response = self.client.get(reverse("project-list"), follow=True)
 
@@ -272,12 +281,12 @@ class ProjectModelTests(TestCase):
         retrieved_project = content_json[0]
 
         expected_checks_url = "http://testserver" + reverse(
-                                    "check-detail", args=[str(checks.id)]
-                                      )
+            "check-detail", args=[str(checks.id)]
+        )
 
         expected_course_url = "http://testserver" + reverse(
-                                    "course-detail", args=[str(course.id)]
-                                      )
+            "course-detail", args=[str(course.id)]
+        )
 
         self.assertEqual(retrieved_project["name"], project.name)
         self.assertEqual(retrieved_project["description"], project.description)
@@ -289,16 +298,15 @@ class ProjectModelTests(TestCase):
         retrieved_project = content_json[1]
 
         expected_checks_url = "http://testserver" + reverse(
-                                    "check-detail", args=[str(checks.id)]
-                                      )
+            "check-detail", args=[str(checks.id)]
+        )
 
         expected_course_url = "http://testserver" + reverse(
-                                    "course-detail", args=[str(course.id)]
-                                      )
+            "course-detail", args=[str(course.id)]
+        )
 
         self.assertEqual(retrieved_project["name"], project2.name)
-        self.assertEqual(
-            retrieved_project["description"], project2.description)
+        self.assertEqual(retrieved_project["description"], project2.description)
         self.assertEqual(retrieved_project["visible"], project2.visible)
         self.assertEqual(retrieved_project["archived"], project2.archived)
         self.assertEqual(retrieved_project["checks"], expected_checks_url)
@@ -309,11 +317,7 @@ class ProjectModelTests(TestCase):
         Able to retrieve a course of a project after creating it.
         """
 
-        course = create_course(
-            id=3,
-            name="test course",
-            academic_startyear=2024
-        )
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         checks = create_checks()
         project = create_project(
             name="test project",
@@ -322,8 +326,8 @@ class ProjectModelTests(TestCase):
             archived=False,
             days=7,
             checks=checks,
-            course=course
-            )
+            course=course,
+        )
 
         response = self.client.get(reverse("project-list"), follow=True)
 
@@ -337,8 +341,8 @@ class ProjectModelTests(TestCase):
         retrieved_project = content_json[0]
 
         expected_checks_url = "http://testserver" + reverse(
-                                    "check-detail", args=[str(checks.id)]
-                                      )
+            "check-detail", args=[str(checks.id)]
+        )
 
         self.assertEqual(retrieved_project["name"], project.name)
         self.assertEqual(retrieved_project["description"], project.description)
@@ -358,8 +362,7 @@ class ProjectModelTests(TestCase):
         content_json = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(content_json["name"], course.name)
-        self.assertEqual(
-            content_json["academic_startyear"], course.academic_startyear)
+        self.assertEqual(content_json["academic_startyear"], course.academic_startyear)
         self.assertEqual(content_json["description"], course.description)
 
     def test_project_checks(self):
@@ -367,11 +370,7 @@ class ProjectModelTests(TestCase):
         Able to retrieve a check of a project after creating it.
         """
 
-        course = create_course(
-            id=3,
-            name="test course",
-            academic_startyear=2024
-        )
+        course = create_course(id=3, name="test course", academic_startyear=2024)
         fileExtension1 = create_fileExtension(id=1, extension="jpg")
         fileExtension2 = create_fileExtension(id=2, extension="png")
         fileExtension3 = create_fileExtension(id=3, extension="tar")
@@ -379,8 +378,8 @@ class ProjectModelTests(TestCase):
         checks = create_checks(
             id=5,
             allowed_file_extensions=[fileExtension1, fileExtension4],
-            forbidden_file_extensions=[fileExtension2, fileExtension3]
-            )
+            forbidden_file_extensions=[fileExtension2, fileExtension3],
+        )
         project = create_project(
             name="test project",
             description="test description",
@@ -388,8 +387,8 @@ class ProjectModelTests(TestCase):
             archived=False,
             days=7,
             checks=checks,
-            course=course
-            )
+            course=course,
+        )
 
         response = self.client.get(reverse("project-list"), follow=True)
 
@@ -403,8 +402,8 @@ class ProjectModelTests(TestCase):
         retrieved_project = content_json[0]
 
         expected_course_url = "http://testserver" + reverse(
-                                    "course-detail", args=[str(course.id)]
-                                      )
+            "course-detail", args=[str(course.id)]
+        )
 
         self.assertEqual(retrieved_project["name"], project.name)
         self.assertEqual(retrieved_project["description"], project.description)
@@ -427,23 +426,23 @@ class ProjectModelTests(TestCase):
 
         # Assert the file extensions of the retrieved
         # Checks match the created file extensions
-        retrieved_allowed_file_extensions = content_json[
-                                                "allowed_file_extensions"]
+        retrieved_allowed_file_extensions = content_json["allowed_file_extensions"]
 
         self.assertEqual(len(retrieved_allowed_file_extensions), 2)
         self.assertEqual(
-            retrieved_allowed_file_extensions[0]["extension"],
-            fileExtension1.extension)
+            retrieved_allowed_file_extensions[0]["extension"], fileExtension1.extension
+        )
         self.assertEqual(
-            retrieved_allowed_file_extensions[1]["extension"],
-            fileExtension4.extension)
+            retrieved_allowed_file_extensions[1]["extension"], fileExtension4.extension
+        )
 
-        retrieved_forbidden_file_extensions = content_json[
-                                                "forbidden_file_extensions"]
+        retrieved_forbidden_file_extensions = content_json["forbidden_file_extensions"]
         self.assertEqual(len(retrieved_forbidden_file_extensions), 2)
         self.assertEqual(
             retrieved_forbidden_file_extensions[0]["extension"],
-            fileExtension2.extension)
+            fileExtension2.extension,
+        )
         self.assertEqual(
             retrieved_forbidden_file_extensions[1]["extension"],
-            fileExtension3.extension)
+            fileExtension3.extension,
+        )

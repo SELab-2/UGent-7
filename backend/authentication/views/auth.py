@@ -7,12 +7,14 @@ from authentication.serializers import UserSerializer
 from authentication.cas.client import client
 from ypovoli import settings
 
+
 class WhoAmIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
         """Get the user account data for the current user"""
-        return Response(UserSerializer(request.user, context={'request': request}).data)
+        return Response(UserSerializer(request.user, context={"request": request}).data)
+
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
@@ -21,11 +23,13 @@ class LogoutView(APIView):
         """Attempt to log out. Redirect to our single CAS endpoint."""
         return redirect(client.get_logout_url(service_url=settings.API_ENDPOINT))
 
+
 class LoginView(APIView):
     def get(self, request: Request):
         """Attempt to log in. Redirect to our single CAS endpoint."""
         return redirect(client.get_login_url())
 
+
 class TokenEchoView(APIView):
     def get(self, request: Request) -> Response:
-        return Response(request.query_params.get('ticket'))
+        return Response(request.query_params.get("ticket"))

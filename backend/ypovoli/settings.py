@@ -36,14 +36,12 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    'django.contrib.staticfiles',
-
+    "django.contrib.staticfiles",
     # Third party
     "rest_framework_swagger",  # Swagger
     "rest_framework",  # Django rest framework
     "drf_yasg",  # Yet Another Swagger generator
     "sslserver",  # Used for local SSL support (needed by CAS)
-
     # First party
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application
@@ -74,7 +72,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=365),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "UPDATE_LAST_LOGIN": True,
-    "TOKEN_OBTAIN_SERIALIZER": "authentication.serializers.CASTokenObtainSerializer"
+    "TOKEN_OBTAIN_SERIALIZER": "authentication.serializers.CASTokenObtainSerializer",
 }
 
 AUTH_USER_MODEL = "authentication.User"
@@ -113,19 +111,19 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },

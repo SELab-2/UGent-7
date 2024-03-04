@@ -10,10 +10,7 @@ def create_fileExtension(id, extension):
     """
     Create a FileExtension with the given arguments.
     """
-    return FileExtension.objects.create(
-        id=id,
-        extension=extension
-    )
+    return FileExtension.objects.create(id=id, extension=extension)
 
 
 def create_checks(id, allowed_file_extensions, forbidden_file_extensions):
@@ -34,8 +31,7 @@ class FileExtensionModelTests(TestCase):
         """
         able to retrieve no FileExtension before publishing it.
         """
-        response_root = self.client.get(
-            reverse("fileExtension-list"), follow=True)
+        response_root = self.client.get(reverse("fileExtension-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
         self.assertEqual(response_root.accepted_media_type, "application/json")
@@ -48,10 +44,7 @@ class FileExtensionModelTests(TestCase):
         """
         Able to retrieve a single fileExtension after creating it.
         """
-        fileExtension = create_fileExtension(
-            id=5,
-            extension="pdf"
-        )
+        fileExtension = create_fileExtension(id=5, extension="pdf")
 
         # Make a GET request to retrieve the fileExtension
         response = self.client.get(reverse("fileExtension-list"), follow=True)
@@ -71,22 +64,15 @@ class FileExtensionModelTests(TestCase):
         # Assert the details of the retrieved fileExtension
         # match the created fileExtension
         retrieved_fileExtension = content_json[0]
-        self.assertEqual(
-            retrieved_fileExtension["extension"], fileExtension.extension)
+        self.assertEqual(retrieved_fileExtension["extension"], fileExtension.extension)
 
     def test_multiple_fileExtension(self):
         """
         Able to retrieve multiple fileExtension after creating them.
         """
         # Create multiple fileExtension
-        fileExtension1 = create_fileExtension(
-            id=1,
-            extension="jpg"
-            )
-        fileExtension2 = create_fileExtension(
-            id=2,
-            extension="png"
-            )
+        fileExtension1 = create_fileExtension(id=1, extension="jpg")
+        fileExtension2 = create_fileExtension(id=2, extension="png")
 
         # Make a GET request to retrieve the fileExtension
         response = self.client.get(reverse("fileExtension-list"), follow=True)
@@ -107,27 +93,24 @@ class FileExtensionModelTests(TestCase):
         # match the created fileExtension
         retrieved_fileExtension1, retrieved_fileExtension2 = content_json
         self.assertEqual(
-            retrieved_fileExtension1["extension"], fileExtension1.extension)
+            retrieved_fileExtension1["extension"], fileExtension1.extension
+        )
 
         self.assertEqual(
-            retrieved_fileExtension2["extension"], fileExtension2.extension)
+            retrieved_fileExtension2["extension"], fileExtension2.extension
+        )
 
     def test_fileExtension_detail_view(self):
         """
         Able to retrieve details of a single fileExtension.
         """
         # Create an fileExtension for testing.
-        fileExtension = create_fileExtension(
-            id=3,
-            extension="zip"
-            )
+        fileExtension = create_fileExtension(id=3, extension="zip")
 
         # Make a GET request to retrieve the fileExtension details
         response = self.client.get(
-            reverse(
-                "fileExtension-detail",
-                args=[str(fileExtension.id)]),
-            follow=True)
+            reverse("fileExtension-detail", args=[str(fileExtension.id)]), follow=True
+        )
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -148,8 +131,7 @@ class ChecksModelTests(TestCase):
         """
         Able to retrieve no Checks before publishing it.
         """
-        response_root = self.client.get(
-            reverse("check-list"), follow=True)
+        response_root = self.client.get(reverse("check-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
         self.assertEqual(response_root.accepted_media_type, "application/json")
         content_json = json.loads(response_root.content.decode("utf-8"))
@@ -167,8 +149,8 @@ class ChecksModelTests(TestCase):
         checks = create_checks(
             id=5,
             allowed_file_extensions=[fileExtension1, fileExtension4],
-            forbidden_file_extensions=[fileExtension2, fileExtension3]
-            )
+            forbidden_file_extensions=[fileExtension2, fileExtension3],
+        )
 
         # Make a GET request to retrieve the Checks
         response = self.client.get(reverse("check-list"), follow=True)
@@ -189,23 +171,25 @@ class ChecksModelTests(TestCase):
 
         # Assert the file extensions of the retrieved
         # Checks match the created file extensions
-        retrieved_allowed_file_extensions = retrieved_checks[
-                                                "allowed_file_extensions"]
+        retrieved_allowed_file_extensions = retrieved_checks["allowed_file_extensions"]
 
         self.assertEqual(len(retrieved_allowed_file_extensions), 2)
         self.assertEqual(
-            retrieved_allowed_file_extensions[0]["extension"],
-            fileExtension1.extension)
+            retrieved_allowed_file_extensions[0]["extension"], fileExtension1.extension
+        )
         self.assertEqual(
-            retrieved_allowed_file_extensions[1]["extension"],
-            fileExtension4.extension)
+            retrieved_allowed_file_extensions[1]["extension"], fileExtension4.extension
+        )
 
         retrieved_forbidden_file_extensions = retrieved_checks[
-                                                "forbidden_file_extensions"]
+            "forbidden_file_extensions"
+        ]
         self.assertEqual(len(retrieved_forbidden_file_extensions), 2)
         self.assertEqual(
             retrieved_forbidden_file_extensions[0]["extension"],
-            fileExtension2.extension)
+            fileExtension2.extension,
+        )
         self.assertEqual(
             retrieved_forbidden_file_extensions[1]["extension"],
-            fileExtension3.extension)
+            fileExtension3.extension,
+        )

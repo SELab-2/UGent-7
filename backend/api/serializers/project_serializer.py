@@ -3,22 +3,24 @@ from ..models.project import Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-
     course = serializers.HyperlinkedRelatedField(
-      many=False,
-      read_only=True,
-      view_name='course-detail'
+        many=False, read_only=True, view_name="course-detail"
     )
 
     checks = serializers.HyperlinkedRelatedField(
-      many=False,
-      read_only=True,
-      view_name='check-detail'
+        many=False, read_only=True, view_name="check-detail"
     )
 
     class Meta:
         model = Project
         fields = [
-            'id', 'name', 'description', 'visible', 'archived',
-            'start_date', 'deadline', 'checks', 'course'
-            ]
+            "id",
+            "name",
+            "description",
+            "visible",
+            "archived",
+            "start_date",
+            "deadline",
+            "checks",
+            "course",
+        ]

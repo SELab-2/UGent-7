@@ -7,33 +7,23 @@ class Course(models.Model):
 
     # ID of the course should automatically be generated
 
-    name = models.CharField(
-        max_length=100,
-        blank=False,
-        null=False
-    )
+    name = models.CharField(max_length=100, blank=False, null=False)
 
     # Begin year of the academic year
-    academic_startyear = models.IntegerField(
-        blank=False,
-        null=False
-    )
+    academic_startyear = models.IntegerField(blank=False, null=False)
 
-    description = models.TextField(
-        blank=True,
-        null=True
-    )
+    description = models.TextField(blank=True, null=True)
 
     # OneToOneField is used to represent a one-to-one relationship
     # with the course of the previous academic year
     parent_course = models.OneToOneField(
-        'self',
+        "self",
         # If the old course is deleted, the child course should remain
         on_delete=models.SET_NULL,
         # Allows us to access the child course from the parent course
-        related_name='child_course',
+        related_name="child_course",
         blank=True,
-        null=True
+        null=True,
     )
 
     def __str__(self) -> str:

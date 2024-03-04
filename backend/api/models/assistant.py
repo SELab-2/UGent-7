@@ -13,6 +13,6 @@ class Assistant(User):
     courses = models.ManyToManyField(
         Course,
         # Allows us to access the assistants from the course
-        related_name='assistants',
-        blank=True
+        related_name="assistants",
+        blank=True,
     )
