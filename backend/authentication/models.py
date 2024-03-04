@@ -1,8 +1,8 @@
 import datetime
 
 from django.db import models
-from django.db.models import CharField, EmailField, IntegerField, DateTimeField
-from django.contrib.auth.models import AbstractBaseUser
+from django.db.models import CharField, EmailField, IntegerField, DateTimeField, BooleanField
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 
 
 class User(AbstractBaseUser):
@@ -16,6 +16,8 @@ class User(AbstractBaseUser):
     id = CharField(max_length=12, primary_key=True)
 
     username = CharField(max_length=12, unique=True)
+
+    is_staff = BooleanField(default=False, null=False)
 
     email = EmailField(null=False, unique=True)
 
