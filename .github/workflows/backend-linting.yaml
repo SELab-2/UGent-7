@@ -22,4 +22,4 @@ jobs:
           pip install flake8
           pip install -r ./backend/requirements.txt
       - name: Execute linting checks
-        run: flake8 ./backend
+        run: flake8 --config ./backend/.flake8 ./backend
