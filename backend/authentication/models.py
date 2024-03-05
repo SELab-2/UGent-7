@@ -27,7 +27,7 @@ class User(AbstractBaseUser):
 
     faculties = models.ManyToManyField("Faculty", related_name="users", blank=True)
 
-    last_enrolled = IntegerField(default=datetime.MINYEAR, null=True)
+    last_enrolled = IntegerField(default=MINYEAR, null=True)
 
     create_time = DateTimeField(auto_now_add=True)
 

@@ -9,7 +9,7 @@ from ypovoli import settings
 class TestWhomAmIView(APITestCase):
     def setUp(self):
         """Create a user and generate a token for that user"""
-        user_data = User.objects.create(**{
+        self.user = User.objects.create(**{
             "id": "1234",
             "username": "ddickwd",
             "email": "dummy@dummy.com",
@@ -66,7 +66,7 @@ class TestLogoutView(APITestCase):
         access_token = AccessToken().for_user(self.user)
         self.token = f"Bearer {access_token}"
         self.client.credentials(HTTP_AUTHORIZATION=self.token)
-        response = self.client.post(reverse("cas-logout"))
+        response = self.client.get(reverse("cas-logout"))
         self.assertEqual(response.status_code, 302)
         url = "{server_url}/logout?service={service_url}".format(
             server_url=settings.CAS_ENDPOINT, service_url=settings.API_ENDPOINT
@@ -75,7 +75,7 @@ class TestLogoutView(APITestCase):
 
     def test_logout_view_not_authenticated_logout_url(self):
         """LogoutView should return a 401 error when trying to access it while not authenticated."""
-        response = self.client.post(reverse("cas-logout"))
+        response = self.client.get(reverse("cas-logout"))
         self.assertEqual(response.status_code, 401)
 
 
