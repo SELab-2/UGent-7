@@ -7,5 +7,7 @@
     archived: false
     start_date: 2024-02-26 00:00:00+00:00
     deadline: 2024-02-27 00:00:00+00:00
+    group_size: 3
+    max_score: 20
     checks: 1
     course: 2

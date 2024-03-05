@@ -21,6 +21,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             "archived",
             "start_date",
             "deadline",
+            "max_score",
+            "group_size",
             "checks",
             "course",
         ]
