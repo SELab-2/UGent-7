@@ -11,6 +11,11 @@ class ProjectSerializer(serializers.ModelSerializer):
         many=False, read_only=True, view_name="check-detail"
     )
 
+    groups = serializers.HyperlinkedIdentityField(
+        view_name="project-groups",
+        read_only=True
+    )
+
     class Meta:
         model = Project
         fields = [
@@ -25,4 +30,5 @@ class ProjectSerializer(serializers.ModelSerializer):
             "group_size",
             "checks",
             "course",
+            "groups"
         ]
