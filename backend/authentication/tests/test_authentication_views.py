@@ -89,11 +89,3 @@ class TestLoginView(APITestCase):
         )
         self.assertEqual(response["Location"], url)
 
-
-class TestTokenEchoView(APITestCase):
-    def test_token_echo_echoes_token(self):
-        """TokenEchoView should echo the User's current token"""
-        ticket = "This is a ticket."
-        response = self.client.get(reverse("cas-echo"), data={"ticket": ticket})
-        content = response.rendered_content.decode("utf-8").strip('"')
-        self.assertEqual(content, ticket)

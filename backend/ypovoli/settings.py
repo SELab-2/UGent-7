@@ -64,7 +64,8 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication"
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication"
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
@@ -79,9 +80,7 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "authentication.User"
-
 ROOT_URLCONF = "ypovoli.urls"
-
 WSGI_APPLICATION = "ypovoli.wsgi.application"
 
 # Application endpoints
