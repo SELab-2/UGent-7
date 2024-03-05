@@ -88,4 +88,3 @@ class TestLoginView(APITestCase):
             server_url=settings.CAS_ENDPOINT, service_url=settings.CAS_RESPONSE
         )
         self.assertEqual(response["Location"], url)
-

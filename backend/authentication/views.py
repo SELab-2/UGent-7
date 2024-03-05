@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.contrib.auth import login, logout
+from django.contrib.auth import logout
 from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
 from rest_framework.request import Request
@@ -59,4 +59,3 @@ class CASViewSet(ViewSet):
             return Response(token_serializer.validated_data)
 
         raise AuthenticationFailed(token_serializer.errors)
-
