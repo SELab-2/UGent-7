@@ -66,6 +66,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication"
     ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
 }
 
 SIMPLE_JWT = {
@@ -84,7 +87,7 @@ WSGI_APPLICATION = "ypovoli.wsgi.application"
 # Application endpoints
 
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = "https://localhost:8080/auth/echo"
+CAS_RESPONSE = "https://localhost:8080/auth/cas/echo"
 API_ENDPOINT = "https://localhost:8080"
 
 # Database
@@ -107,7 +110,7 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = False
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

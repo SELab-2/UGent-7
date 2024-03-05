@@ -1,11 +1,10 @@
 import json
-
-from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-from ..models.teacher import Teacher
-from ..models.course import Course
-from authentication.models import Faculty
+from rest_framework.test import APITestCase
+from api.models.teacher import Teacher
+from api.models.course import Course
+from authentication.models import Faculty, User
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -50,7 +49,12 @@ def create_teacher(id, first_name, last_name, email, faculty=None, courses=None)
     return teacher
 
 
-class TeacherModelTests(TestCase):
+class TeacherModelTests(APITestCase):
+    def setUp(self) -> None:
+        self.client.force_authenticate(
+            User.get_dummy_admin()
+        )
+
     def test_no_teacher(self):
         """
         able to retrieve no teacher before publishing it.

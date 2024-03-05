@@ -1,10 +1,11 @@
 import json
-from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-from ..models.project import Project
-from ..models.course import Course
-from ..models.checks import Checks, FileExtension
+from rest_framework.test import APITestCase
+from authentication.models import User
+from api.models.project import Project
+from api.models.course import Course
+from api.models.checks import Checks, FileExtension
 
 
 def create_course(id, name, academic_startyear):
@@ -58,7 +59,12 @@ def create_project(name, description, visible, archived, days, checks, course):
     )
 
 
-class ProjectModelTests(TestCase):
+class ProjectModelTests(APITestCase):
+    def setUp(self) -> None:
+        self.client.force_authenticate(
+            User.get_dummy_admin()
+        )
+
     def test_toggle_visible(self):
         """
         toggle the visible state of a project.
