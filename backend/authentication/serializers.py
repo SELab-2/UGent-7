@@ -13,7 +13,7 @@ from rest_framework.serializers import (
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.settings import api_settings
 from authentication.signals import user_created, user_login
-from authentication.models import User
+from authentication.models import User, Faculty
 from authentication.cas.client import client
 
 
@@ -114,3 +114,9 @@ class UserSerializer(ModelSerializer):
     def get_or_create(self, validated_data: dict) -> Tuple[User, bool]:
         """Create or fetch the user based on the validated data."""
         return User.objects.get_or_create(**validated_data)
+
+
+class FacultySerializer(ModelSerializer):
+    class Meta:
+        model = Faculty
+        fields = "__all__"

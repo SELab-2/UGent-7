@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.student import Student
+from api.models.student import Student
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -11,10 +11,6 @@ class StudentSerializer(serializers.ModelSerializer):
     groups = serializers.HyperlinkedIdentityField(
         view_name="student-groups",
         read_only=True,
-    )
-
-    faculties = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="faculty-detail"
     )
 
     class Meta:
