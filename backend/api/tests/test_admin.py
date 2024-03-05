@@ -1,9 +1,7 @@
 import json
-
-from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-
+from rest_framework.test import APITestCase
 from authentication.models import Faculty, User
 
 
@@ -45,10 +43,10 @@ def create_admin(id, first_name, last_name, email, faculty=None):
         return admin
 
 
-class AdminModelTests(TestCase):
+class AdminModelTests(APITestCase):
     def setUp(self):
-        self.client.force_login(
-            create_admin('admin', 'admin', 'admin', 'admin@admin.com')
+        self.client.force_authenticate(
+            User.get_dummy_admin()
         )
 
     def test_no_admins(self):

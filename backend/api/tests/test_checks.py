@@ -1,9 +1,8 @@
 import json
-
-from django.test import TestCase
 from django.urls import reverse
-
-from ..models.checks import FileExtension, Checks
+from rest_framework.test import APITestCase
+from authentication.models import User
+from api.models.checks import FileExtension, Checks
 
 
 def create_fileExtension(id, extension):
@@ -26,7 +25,12 @@ def create_checks(id, allowed_file_extensions, forbidden_file_extensions):
     return check
 
 
-class FileExtensionModelTests(TestCase):
+class FileExtensionModelTests(APITestCase):
+    def setUp(self) -> None:
+        self.client.force_authenticate(
+            User.get_dummy_admin()
+        )
+
     def test_no_fileExtension(self):
         """
         able to retrieve no FileExtension before publishing it.
@@ -126,7 +130,12 @@ class FileExtensionModelTests(TestCase):
         self.assertEqual(content_json["extension"], fileExtension.extension)
 
 
-class ChecksModelTests(TestCase):
+class ChecksModelTests(APITestCase):
+    def setUp(self) -> None:
+        self.client.force_authenticate(
+            User.get_dummy_admin()
+        )
+
     def test_no_checks(self):
         """
         Able to retrieve no Checks before publishing it.

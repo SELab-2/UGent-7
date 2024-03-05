@@ -1,11 +1,10 @@
 import json
-
-from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
+from rest_framework.test import APITestCase
 from api.models.assistant import Assistant
 from api.models.course import Course
-from authentication.models import Faculty
+from authentication.models import Faculty, User
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -50,7 +49,12 @@ def create_assistant(id, first_name, last_name, email, faculty=None, courses=Non
     return assistant
 
 
-class AssistantModelTests(TestCase):
+class AssistantModelTests(APITestCase):
+    def setUp(self) -> None:
+        self.client.force_authenticate(
+            User.get_dummy_admin()
+        )
+
     def test_no_assistant(self):
         """
         able to retrieve no assistant before publishing it.

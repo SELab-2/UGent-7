@@ -41,6 +41,17 @@ class User(AbstractBaseUser):
         """
         model.objects.exists(self.id)
 
+    @staticmethod
+    def get_dummy_admin():
+        return User(
+            id="admin",
+            first_name="Nikkus",
+            last_name="Derdinus",
+            username="nderdinus",
+            email="nikkus@ypovoli.be",
+            is_staff=True
+        )
+
 
 class Faculty(models.Model):
     """This model represents a faculty."""
