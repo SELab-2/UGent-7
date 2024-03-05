@@ -22,4 +22,4 @@ jobs:
           pip install flake8
           pip install -r ./backend/requirements.txt
       - name: Execute tests
-        run: python ./backend/manage.py test
+        run: cd backend; python manage.py test
