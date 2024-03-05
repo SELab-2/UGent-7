@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from authentication.views import CASViewSet
 
 router = DefaultRouter()
-router.register(f"cas", CASViewSet,"cas")
+router.register("cas", CASViewSet, "cas")
 
 urlpatterns = [
     # AUTH endpoints.

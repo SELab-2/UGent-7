@@ -18,6 +18,7 @@ EMAIL = "dummy@dummy.be"
 FIRST_NAME = "Dummy"
 LAST_NAME = "McDickwad"
 
+
 class UserSerializerModelTests(TestCase):
     def test_invalid_email_makes_user_serializer_invalid(self):
         """

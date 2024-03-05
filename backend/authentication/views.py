@@ -8,6 +8,7 @@ from authentication.serializers import UserSerializer
 from authentication.cas.client import client
 from ypovoli import settings
 
+
 class CASViewSet(ViewSet):
     # The IsAuthenticated class is applied by default,
     # but it's good to be verbose when it comes to security.
