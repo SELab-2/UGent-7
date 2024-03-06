@@ -9,7 +9,7 @@ from api.views.project_view import ProjectViewSet
 from api.views.group_view import GroupViewSet
 from api.views.course_view import CourseViewSet
 from api.views.submission_view import SubmissionViewSet
-from api.views.faculty_view import facultyViewSet
+from api.views.faculty_view import FacultyViewSet
 from api.views.checks_view import (
     ExtraCheckViewSet, FileExtensionViewSet, StructureCheckViewSet
 )
@@ -28,7 +28,7 @@ router.register(r"submissions", SubmissionViewSet, basename="submission")
 router.register(r"structure_checks", StructureCheckViewSet, basename="structure_check")
 router.register(r"extra_checks", ExtraCheckViewSet, basename="extra_check")
 router.register(r"fileExtensions", FileExtensionViewSet, basename="fileExtension")
-router.register(r"faculties", facultyViewSet, basename="faculty")
+router.register(r"faculties", FacultyViewSet, basename="faculty")
 
 urlpatterns = [
     path("", include(router.urls)),
