@@ -1,20 +1,20 @@
 from typing import Tuple
-from django.contrib.auth.models import update_last_login
+
+from authentication.cas.client import client
+from authentication.models import User
+from authentication.signals import user_created, user_login
 from django.contrib.auth import login
+from django.contrib.auth.models import update_last_login
 from rest_framework.serializers import (
     CharField,
     EmailField,
-    ModelSerializer,
-    ValidationError,
-    Serializer,
-    HyperlinkedIdentityField,
     HyperlinkedRelatedField,
+    ModelSerializer,
+    Serializer,
+    ValidationError,
 )
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.settings import api_settings
-from authentication.signals import user_created, user_login
-from authentication.models import User, Faculty
-from authentication.cas.client import client
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 
 class CASTokenObtainSerializer(Serializer):
@@ -22,6 +22,7 @@ class CASTokenObtainSerializer(Serializer):
     This serializer takes the CAS ticket and tries to validate it.
     Upon successful validation, create a new user if it doesn't exist.
     """
+
     ticket = CharField(required=True, min_length=49, max_length=49)
 
     def validate(self, data):
@@ -40,23 +41,15 @@ class CASTokenObtainSerializer(Serializer):
         if "request" in self.context:
             login(self.context["request"], user)
 
-        user_login.send(
-            sender=self, user=user
-        )
+        user_login.send(sender=self, user=user)
 
         if created:
-            user_created.send(
-                sender=self, attributes=attributes, user=user
-            )
+            user_created.send(sender=self, attributes=attributes, user=user)
 
         # Return access tokens for the now logged-in user.
         return {
-            "access": str(
-                AccessToken.for_user(user)
-            ),
-            "refresh": str(
-                RefreshToken.for_user(user)
-            ),
+            "access": str(AccessToken.for_user(user)),
+            "refresh": str(RefreshToken.for_user(user)),
         }
 
     def _validate_ticket(self, ticket: str) -> dict:
@@ -102,7 +95,7 @@ class UserSerializer(ModelSerializer):
         many=True, read_only=True, view_name="faculty-detail"
     )
 
-    notifications = HyperlinkedIdentityField(
+    notifications = HyperlinkedRelatedField(
         view_name="notification-detail",
         read_only=True,
     )

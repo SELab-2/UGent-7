@@ -1,5 +1,4 @@
 import re
-from os import read
 from typing import Dict, List
 
 from authentication.models import User
@@ -14,44 +13,26 @@ class NotificationTemplateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class UserHyperLinkedRelatedField(serializers.HyperlinkedRelatedField):
-    view_name = "user-detail"
-    queryset = User.objects.all()
-
-    def to_internal_value(self, data):
-        try:
-            return self.queryset.get(pk=data)
-        except User.DoesNotExist:
-            self.fail("no_match")
-
-
 class NotificationSerializer(serializers.ModelSerializer):
-    user = UserHyperLinkedRelatedField()
+    # Hyper linked user field
+    user = serializers.HyperlinkedRelatedField(
+        view_name="user-detail", queryset=User.objects.all()
+    )
 
+    # Translate template and arguments into a message
     message = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Notification
-        fields = [
-            "id",
-            "user",
-            "template_id",
-            "arguments",
-            "message",
-            "created_at",
-            "is_read",
-            "is_sent",
-        ]
-
-    def _get_missing_keys(self, s: str, d: Dict[str, str]) -> List[str]:
-        required_keys = re.findall(r"%\((\w+)\)", s)
-        missing_keys = [key for key in required_keys if key not in d]
+    # Check if the required arguments are present
+    def _get_missing_keys(self, string: str, arguments: Dict[str, str]) -> List[str]:
+        required_keys: List[str] = re.findall(r"%\((\w+)\)", string)
+        missing_keys = [key for key in required_keys if key not in arguments]
 
         return missing_keys
 
-    def validate(self, data):
-        data = super().validate(data)
+    def validate(self, data: Dict[str, str]) -> Dict[str, str]:
+        data: Dict[str, str] = super().validate(data)
 
+        # Validate the arguments
         if "arguments" not in data:
             data["arguments"] = {}
 
@@ -74,8 +55,22 @@ class NotificationSerializer(serializers.ModelSerializer):
 
         return data
 
-    def get_message(self, obj):
+    # Get the message from the template and arguments
+    def get_message(self, obj: Notification) -> Dict[str, str]:
         return {
             "title": _(obj.template_id.title_key),
             "description": _(obj.template_id.description_key) % obj.arguments,
         }
+
+    class Meta:
+        model = Notification
+        fields = [
+            "id",
+            "user",
+            "template_id",
+            "arguments",
+            "message",
+            "created_at",
+            "is_read",
+            "is_sent",
+        ]

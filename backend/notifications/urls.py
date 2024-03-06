@@ -1,8 +1,6 @@
-from notifications.views import NotificationViewSet
-from rest_framework.routers import DefaultRouter
+from django.urls import path
+from notifications.views import NotificationView
 
-router = DefaultRouter()
-
-router.register(r"", NotificationViewSet, basename="notification")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("<str:user_id>/", NotificationView.as_view(), name="notification-detail"),
+]
