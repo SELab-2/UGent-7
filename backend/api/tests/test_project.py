@@ -5,7 +5,8 @@ from rest_framework.test import APITestCase
 from authentication.models import User
 from api.models.project import Project
 from api.models.course import Course
-from api.models.checks import Checks, FileExtension
+from api.models.checks import StructureCheck, ExtraCheck
+from api.models.extension import FileExtension
 
 
 def create_course(id, name, academic_startyear):
@@ -24,27 +25,7 @@ def create_fileExtension(id, extension):
     return FileExtension.objects.create(id=id, extension=extension)
 
 
-def create_checks(
-    id=None, allowed_file_extensions=None, forbidden_file_extensions=None
-):
-    """Create a Checks with the given arguments."""
-    if id is None and allowed_file_extensions is None:
-        # extra if to make line shorter
-        if forbidden_file_extensions is None:
-            return Checks.objects.create()
-
-    check = Checks.objects.create(
-        id=id,
-    )
-
-    for ext in allowed_file_extensions:
-        check.allowed_file_extensions.add(ext)
-    for ext in forbidden_file_extensions:
-        check.forbidden_file_extensions.add(ext)
-    return check
-
-
-def create_project(name, description, visible, archived, days, checks, course):
+def create_project(name, description, visible, archived, days, course):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timezone.timedelta(days=days)
 
@@ -54,9 +35,22 @@ def create_project(name, description, visible, archived, days, checks, course):
         visible=visible,
         archived=archived,
         deadline=deadline,
-        checks=checks,
         course=course,
     )
+
+
+def create_structure_check(id, name, project, obligated_extensions, blocked_extensions):
+    """
+    Create a StructureCheck with the given arguments.
+    """
+    check = StructureCheck.objects.create(id=id, name=name, project=project)
+
+    for ext in obligated_extensions:
+        check.obligated_extensions.add(ext)
+    for ext in blocked_extensions:
+        check.blocked_extensions.add(ext)
+
+    return check
 
 
 class ProjectModelTests(APITestCase):
@@ -70,14 +64,12 @@ class ProjectModelTests(APITestCase):
         toggle the visible state of a project.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         past_project = create_project(
             name="test",
             description="descr",
             visible=True,
             archived=False,
             days=-10,
-            checks=checks,
             course=course,
         )
         self.assertIs(past_project.visible, True)
@@ -91,14 +83,12 @@ class ProjectModelTests(APITestCase):
         toggle the archived state of a project.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         past_project = create_project(
             name="test",
             description="descr",
             visible=True,
             archived=True,
             days=-10,
-            checks=checks,
             course=course,
         )
 
@@ -114,14 +104,12 @@ class ProjectModelTests(APITestCase):
         is in the past.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         past_project = create_project(
             name="test",
             description="descr",
             visible=True,
             archived=False,
             days=-10,
-            checks=checks,
             course=course,
         )
         self.assertIs(past_project.deadline_approaching_in(), False)
@@ -132,14 +120,12 @@ class ProjectModelTests(APITestCase):
         is in the timerange given.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         future_project = create_project(
             name="test",
             description="descr",
             visible=True,
             archived=False,
             days=6,
-            checks=checks,
             course=course,
         )
         self.assertIs(future_project.deadline_approaching_in(days=7), True)
@@ -150,14 +136,12 @@ class ProjectModelTests(APITestCase):
         is out of the timerange given.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         future_project = create_project(
             name="test",
             description="descr",
             visible=True,
             archived=False,
             days=8,
-            checks=checks,
             course=course,
         )
         self.assertIs(future_project.deadline_approaching_in(days=7), False)
@@ -168,14 +152,12 @@ class ProjectModelTests(APITestCase):
         is not passed.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         future_project = create_project(
             name="test",
             description="descr",
             visible=True,
             archived=False,
             days=1,
-            checks=checks,
             course=course,
         )
         self.assertIs(future_project.deadline_passed(), False)
@@ -186,14 +168,12 @@ class ProjectModelTests(APITestCase):
         is passed.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         past_project = create_project(
             name="test",
             description="descr",
             visible=True,
             archived=False,
             days=-1,
-            checks=checks,
             course=course,
         )
         self.assertIs(past_project.deadline_passed(), True)
@@ -212,14 +192,12 @@ class ProjectModelTests(APITestCase):
         """
 
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         project = create_project(
             name="test project",
             description="test description",
             visible=True,
             archived=False,
             days=7,
-            checks=checks,
             course=course,
         )
 
@@ -234,10 +212,6 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_checks_url = "http://testserver" + reverse(
-            "check-detail", args=[str(checks.id)]
-        )
-
         expected_course_url = "http://testserver" + reverse(
             "course-detail", args=[str(course.id)]
         )
@@ -246,7 +220,6 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(retrieved_project["description"], project.description)
         self.assertEqual(retrieved_project["visible"], project.visible)
         self.assertEqual(retrieved_project["archived"], project.archived)
-        self.assertEqual(retrieved_project["checks"], expected_checks_url)
         self.assertEqual(retrieved_project["course"], expected_course_url)
 
     def test_multiple_project(self):
@@ -254,14 +227,12 @@ class ProjectModelTests(APITestCase):
         Able to retrieve multiple projects after creating it.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         project = create_project(
             name="test project",
             description="test description",
             visible=True,
             archived=False,
             days=7,
-            checks=checks,
             course=course,
         )
 
@@ -271,7 +242,6 @@ class ProjectModelTests(APITestCase):
             visible=True,
             archived=False,
             days=7,
-            checks=checks,
             course=course,
         )
 
@@ -286,10 +256,6 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_checks_url = "http://testserver" + reverse(
-            "check-detail", args=[str(checks.id)]
-        )
-
         expected_course_url = "http://testserver" + reverse(
             "course-detail", args=[str(course.id)]
         )
@@ -298,14 +264,9 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(retrieved_project["description"], project.description)
         self.assertEqual(retrieved_project["visible"], project.visible)
         self.assertEqual(retrieved_project["archived"], project.archived)
-        self.assertEqual(retrieved_project["checks"], expected_checks_url)
         self.assertEqual(retrieved_project["course"], expected_course_url)
 
         retrieved_project = content_json[1]
-
-        expected_checks_url = "http://testserver" + reverse(
-            "check-detail", args=[str(checks.id)]
-        )
 
         expected_course_url = "http://testserver" + reverse(
             "course-detail", args=[str(course.id)]
@@ -315,7 +276,6 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(retrieved_project["description"], project2.description)
         self.assertEqual(retrieved_project["visible"], project2.visible)
         self.assertEqual(retrieved_project["archived"], project2.archived)
-        self.assertEqual(retrieved_project["checks"], expected_checks_url)
         self.assertEqual(retrieved_project["course"], expected_course_url)
 
     def test_project_course(self):
@@ -324,14 +284,12 @@ class ProjectModelTests(APITestCase):
         """
 
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        checks = create_checks()
         project = create_project(
             name="test project",
             description="test description",
             visible=True,
             archived=False,
             days=7,
-            checks=checks,
             course=course,
         )
 
@@ -346,15 +304,10 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_checks_url = "http://testserver" + reverse(
-            "check-detail", args=[str(checks.id)]
-        )
-
         self.assertEqual(retrieved_project["name"], project.name)
         self.assertEqual(retrieved_project["description"], project.description)
         self.assertEqual(retrieved_project["visible"], project.visible)
         self.assertEqual(retrieved_project["archived"], project.archived)
-        self.assertEqual(retrieved_project["checks"], expected_checks_url)
 
         response = self.client.get(retrieved_project["course"], follow=True)
 
@@ -371,9 +324,9 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(content_json["academic_startyear"], course.academic_startyear)
         self.assertEqual(content_json["description"], course.description)
 
-    def test_project_checks(self):
+    def test_project_structure_checks(self):
         """
-        Able to retrieve a check of a project after creating it.
+        Able to retrieve a structure check of a project after creating it.
         """
 
         course = create_course(id=3, name="test course", academic_startyear=2024)
@@ -381,19 +334,20 @@ class ProjectModelTests(APITestCase):
         fileExtension2 = create_fileExtension(id=2, extension="png")
         fileExtension3 = create_fileExtension(id=3, extension="tar")
         fileExtension4 = create_fileExtension(id=4, extension="wfp")
-        checks = create_checks(
-            id=5,
-            allowed_file_extensions=[fileExtension1, fileExtension4],
-            forbidden_file_extensions=[fileExtension2, fileExtension3],
-        )
         project = create_project(
             name="test project",
             description="test description",
             visible=True,
             archived=False,
             days=7,
-            checks=checks,
             course=course,
+        )
+        checks = create_structure_check(
+            id=5,
+            name=".",
+            project=project,
+            obligated_extensions=[fileExtension1, fileExtension4],
+            blocked_extensions=[fileExtension2, fileExtension3],
         )
 
         response = self.client.get(reverse("project-list"), follow=True)
@@ -417,7 +371,7 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(retrieved_project["archived"], project.archived)
         self.assertEqual(retrieved_project["course"], expected_course_url)
 
-        response = self.client.get(retrieved_project["checks"], follow=True)
+        response = self.client.get(retrieved_project["structure_checks"][0], follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -432,23 +386,70 @@ class ProjectModelTests(APITestCase):
 
         # Assert the file extensions of the retrieved
         # Checks match the created file extensions
-        retrieved_allowed_file_extensions = content_json["allowed_file_extensions"]
+        retrieved_obligated_extensions = content_json["obligated_extensions"]
 
-        self.assertEqual(len(retrieved_allowed_file_extensions), 2)
+        self.assertEqual(len(retrieved_obligated_extensions), 2)
         self.assertEqual(
-            retrieved_allowed_file_extensions[0]["extension"], fileExtension1.extension
+            retrieved_obligated_extensions[0]["extension"], fileExtension1.extension
         )
         self.assertEqual(
-            retrieved_allowed_file_extensions[1]["extension"], fileExtension4.extension
+            retrieved_obligated_extensions[1]["extension"], fileExtension4.extension
         )
 
-        retrieved_forbidden_file_extensions = content_json["forbidden_file_extensions"]
-        self.assertEqual(len(retrieved_forbidden_file_extensions), 2)
+        retrieved_blocked_file_extensions = content_json["blocked_extensions"]
+        self.assertEqual(len(retrieved_blocked_file_extensions), 2)
         self.assertEqual(
-            retrieved_forbidden_file_extensions[0]["extension"],
+            retrieved_blocked_file_extensions[0]["extension"],
             fileExtension2.extension,
         )
         self.assertEqual(
-            retrieved_forbidden_file_extensions[1]["extension"],
+            retrieved_blocked_file_extensions[1]["extension"],
             fileExtension3.extension,
         )
+
+    def test_project_extra_checks(self):
+        """
+        Able to retrieve a extra check of a project after creating it.
+        """  
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+        checks = ExtraCheck.objects.create(
+            id=5,
+            project=project,
+            run_script="testscript.sh",
+        )
+
+        response = self.client.get(reverse("project-list"), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 1)
+
+        retrieved_project = content_json[0]
+
+        response = self.client.get(retrieved_project["extra_checks"][0], follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(int(content_json["id"]), checks.id)
+        self.assertEqual(content_json["project"], "http://testserver" + reverse(
+            "project-detail", args=[str(project.id)]
+        ))
+        self.assertEqual(content_json["run_script"], "http://testserver" + checks.run_script.url)
