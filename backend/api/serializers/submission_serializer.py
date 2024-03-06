@@ -15,6 +15,20 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     files = SubmissionFileSerializer(many=True, read_only=True)
 
+    extra_checks_results = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name="extra_checks-detail"
+    )
+
     class Meta:
         model = Submission
-        fields = ["id", "group", "submission_number", "submission_time", "files"]
+        fields = [
+            "id",
+            "group",
+            "submission_number",
+            "submission_time",
+            "files",
+            "structure_checks_passed",
+            "extra_checks_results"
+        ]
