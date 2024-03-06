@@ -30,5 +30,5 @@ def notification_creation(
 
 
 class NotificationType(Enum):
-    SCORE_ADDED = 1
-    SCORE_UPDATED = 2
+    SCORE_ADDED = 1     # Arguments: {"score": int}
+    SCORE_UPDATED = 2   # Arguments: {"score": int}
