@@ -1,5 +1,6 @@
-from authentication.models import User
 from django.db import models
+from authentication.models import User
+from api.models.course import Course
 
 
 class Assistant(User):
@@ -10,8 +11,8 @@ class Assistant(User):
 
     # All the courses the assistant is assisting in
     courses = models.ManyToManyField(
-        'Course',
+        Course,
         # Allows us to access the assistants from the course
-        related_name='assistants',
-        blank=True
+        related_name="assistants",
+        blank=True,
     )

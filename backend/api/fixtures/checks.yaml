@@ -1,0 +1,26 @@
+- model: api.checks
+  pk: 1
+  fields:
+    dockerfile: 'path/to/Dockerfile'
+    allowed_file_extensions:
+      - 1
+      - 2
+    forbidden_file_extensions:
+      - 3
+      - 4
+- model: api.fileextension
+  pk: 1
+  fields:
+    extension: 'py'
+- model: api.fileextension
+  pk: 2
+  fields:
+    extension: 'js'
+- model: api.fileextension
+  pk: 3
+  fields:
+    extension: 'html'
+- model: api.fileextension
+  pk: 4
+  fields:
+    extension: 'php'

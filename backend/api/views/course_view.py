@@ -13,7 +13,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def teachers(self, request, pk=None):
         """Returns a list of teachers for the given course"""
 
@@ -23,16 +23,17 @@ class CourseViewSet(viewsets.ModelViewSet):
 
             # Serialize the teacher objects
             serializer = TeacherSerializer(
-                teachers, many=True, context={'request': request}
+                teachers, many=True, context={"request": request}
             )
             return Response(serializer.data)
 
         except Course.DoesNotExist:
             # Invalid course ID
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data={"message": "Course not found"})
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data={"message": "Course not found"}
+            )
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def assistants(self, request, pk=None):
         """Returns a list of assistants for the given course"""
 
@@ -42,16 +43,17 @@ class CourseViewSet(viewsets.ModelViewSet):
 
             # Serialize the assistant objects
             serializer = AssistantSerializer(
-                assistants, many=True, context={'request': request}
+                assistants, many=True, context={"request": request}
             )
             return Response(serializer.data)
 
         except Course.DoesNotExist:
             # Invalid course ID
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data={"message": "Course not found"})
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data={"message": "Course not found"}
+            )
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def students(self, request, pk=None):
         """Returns a list of students for the given course"""
 
@@ -61,16 +63,17 @@ class CourseViewSet(viewsets.ModelViewSet):
 
             # Serialize the student objects
             serializer = StudentSerializer(
-                students, many=True, context={'request': request}
+                students, many=True, context={"request": request}
             )
             return Response(serializer.data)
 
         except Course.DoesNotExist:
             # Invalid course ID
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data={"message": "Course not found"})
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data={"message": "Course not found"}
+            )
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def projects(self, request, pk=None):
         """Returns a list of projects for the given course"""
 
@@ -80,11 +83,12 @@ class CourseViewSet(viewsets.ModelViewSet):
 
             # Serialize the project objects
             serializer = ProjectSerializer(
-                projects, many=True, context={'request': request}
+                projects, many=True, context={"request": request}
             )
             return Response(serializer.data)
 
         except Course.DoesNotExist:
             # Invalid course ID
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data={"message": "Course not found"})
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data={"message": "Course not found"}
+            )

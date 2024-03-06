@@ -11,7 +11,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def courses(self, request, pk=None):
         """Returns a list of courses for the given student"""
 
@@ -21,16 +21,17 @@ class StudentViewSet(viewsets.ModelViewSet):
 
             # Serialize the course objects
             serializer = CourseSerializer(
-                courses, many=True, context={'request': request}
+                courses, many=True, context={"request": request}
             )
             return Response(serializer.data)
 
         except Student.DoesNotExist:
             # Invalid student ID
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data={"message": "Student not found"})
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data={"message": "Student not found"}
+            )
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def groups(self, request, pk=None):
         """Returns a list of groups for the given student"""
 
@@ -40,11 +41,12 @@ class StudentViewSet(viewsets.ModelViewSet):
 
             # Serialize the group objects
             serializer = GroupSerializer(
-                groups, many=True, context={'request': request}
+                groups, many=True, context={"request": request}
             )
             return Response(serializer.data)
 
         except Student.DoesNotExist:
             # Invalid student ID
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data={"message": "Student not found"})
+            return Response(
+                status=status.HTTP_404_NOT_FOUND, data={"message": "Student not found"}
+            )
