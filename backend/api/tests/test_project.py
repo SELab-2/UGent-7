@@ -410,7 +410,7 @@ class ProjectModelTests(APITestCase):
     def test_project_extra_checks(self):
         """
         Able to retrieve a extra check of a project after creating it.
-        """  
+        """
         course = create_course(id=3, name="test course", academic_startyear=2024)
         project = create_project(
             name="test project",
