@@ -4,10 +4,11 @@ from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from authentication.models import User
-from api.models.submission import Submission, SubmissionFile
+from api.models.submission import Submission, SubmissionFile, ExtraChecksResult
 from api.models.project import Project
 from api.models.group import Group
 from api.models.course import Course
+from api.models.checks import ExtraCheck
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -38,7 +39,7 @@ def create_group(project, score):
 def create_submission(group, submission_number):
     """Create an Submission with the given arguments."""
     return Submission.objects.create(
-        group=group, submission_number=submission_number, submission_time=timezone.now()
+        group=group, submission_number=submission_number, submission_time=timezone.now(), structure_checks_passed=True
     )
 
 
@@ -105,6 +106,7 @@ class SubmissionModelTests(APITestCase):
             int(retrieved_submission["submission_number"]), submission.submission_number
         )
         self.assertEqual(retrieved_submission["group"], expected_group_url)
+        self.assertEqual(retrieved_submission["structure_checks_passed"], submission.structure_checks_passed)
 
     def test_multiple_submission_exists(self):
         """
@@ -246,3 +248,46 @@ class SubmissionModelTests(APITestCase):
         self.assertEqual(int(content_json["id"]), group.id)
         self.assertEqual(content_json["project"], expected_project_url)
         self.assertEqual(content_json["score"], group.score)
+
+    def test_submission_extra_checks(self):
+        """
+        Able to retrieve extra checks of a single submission.
+        """
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        group = create_group(project=project, score=10)
+        submission = create_submission(group=group, submission_number=1)
+        extra_check = ExtraCheck.objects.create(
+            project=project, run_script="test.py"
+        )
+        extra_check_result = ExtraChecksResult.objects.create(
+            submission=submission, extra_check=extra_check, passed=True
+        )
+
+        # Make a GET request to retrieve the submission
+        response = self.client.get(
+            reverse("submission-detail", args=[str(submission.id)]), follow=True
+        )
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Assert the details of the retrieved submission
+        # match the created submission
+        retrieved_submission = content_json
+        self.assertEqual(int(retrieved_submission["id"]), submission.id)
+
+        # Extra check that is part of the project
+        retrieved_extra_check = content_json["extra_checks_results"][0]
+
+        self.assertEqual(
+            retrieved_extra_check["passed"], extra_check_result.passed
+        )
