@@ -1,8 +1,8 @@
 from rest_framework import viewsets
-from ..models.admin import Admin
-from ..serializers.admin_serializer import AdminSerializer
+from authentication.serializers import UserSerializer
+from authentication.models import User
 
 
 class AdminViewSet(viewsets.ModelViewSet):
-    queryset = Admin.objects.all()
-    serializer_class = AdminSerializer
+    queryset = User.objects.filter(is_staff=True)
+    serializer_class = UserSerializer

@@ -36,13 +36,12 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-
+    "django.contrib.staticfiles",
     # Third party
     "rest_framework_swagger",  # Swagger
     "rest_framework",  # Django rest framework
     "drf_yasg",  # Yet Another Swagger generator
     "sslserver",  # Used for local SSL support (needed by CAS)
-
     # First party
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application
@@ -65,8 +64,12 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication"
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication"
     ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
 }
 
 SIMPLE_JWT = {
@@ -77,15 +80,13 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "authentication.User"
-
 ROOT_URLCONF = "ypovoli.urls"
-
 WSGI_APPLICATION = "ypovoli.wsgi.application"
 
 # Application endpoints
 
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = "https://localhost:8080/auth/echo"
+CAS_RESPONSE = "https://localhost:8080/auth/cas/echo"
 API_ENDPOINT = "https://localhost:8080"
 
 # Database
@@ -109,3 +110,23 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = False
 USE_TZ = True
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.0/howto/static-files/
+STATIC_URL = "static/"
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]

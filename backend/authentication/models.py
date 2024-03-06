@@ -1,8 +1,9 @@
-import datetime
-
+from datetime import MINYEAR
+from typing import Self, Type
 from django.db import models
-from django.db.models import CharField, EmailField, IntegerField, DateTimeField
-from django.contrib.auth.models import AbstractBaseUser
+from django.db.models import CharField, EmailField, IntegerField, DateTimeField, BooleanField, Model
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
+
 
 class User(AbstractBaseUser):
     """This model represents a single authenticatable user.
@@ -10,64 +11,50 @@ class User(AbstractBaseUser):
     """
 
     """Model fields"""
-    password = None # We don't use passwords for our user model.
+    password = None  # We don't use passwords for our user model.
 
-    id = CharField(
-        max_length=12,
-        primary_key=True
-    )
+    id = CharField(max_length=12, primary_key=True)
 
-    username = CharField(
-        max_length=12,
-        unique=True
-    )
+    username = CharField(max_length=12, unique=True)
 
-    email = EmailField(
-        null=False,
-        unique=True
-    )
+    is_staff = BooleanField(default=False, null=False)
 
-    first_name = CharField(
-        max_length=50,
-        null=False
-    )
+    email = EmailField(null=False, unique=True)
 
-    last_name = CharField(
-        max_length=50,
-        null=False
-    )
+    first_name = CharField(max_length=50, null=False)
 
-    faculty = models.ManyToManyField(
-        'Faculty',
-        related_name='faculties',
-        blank=True
-    )
+    last_name = CharField(max_length=50, null=False)
 
-    last_enrolled = IntegerField(
-        default = datetime.MINYEAR,
-        null = True
-    )
+    faculties = models.ManyToManyField("Faculty", related_name="users", blank=True)
 
-    create_time = DateTimeField(
-        auto_now=True
-    )
+    last_enrolled = IntegerField(default=MINYEAR, null=True)
+
+    create_time = DateTimeField(auto_now_add=True)
 
     """Model settings"""
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = []
+
+    def has_role(self, model: Type[Self]):
+        """Simple generic implementation of roles.
+        This function looks if there exists a model (inheriting from User) with the same ID.
+        """
+        model.objects.exists(self.id)
+
+    @staticmethod
+    def get_dummy_admin():
+        return User(
+            id="admin",
+            first_name="Nikkus",
+            last_name="Derdinus",
+            username="nderdinus",
+            email="nikkus@ypovoli.be",
+            is_staff=True
+        )
+
 
 class Faculty(models.Model):
     """This model represents a faculty."""
 
     """Model fields"""
-    name = CharField(
-        max_length=50,
-        primary_key=True
-    )
-
-    user = models.ManyToManyField(
-        'User',
-        related_name='users',
-        blank=True
-    )
+    name = CharField(max_length=50, primary_key=True)

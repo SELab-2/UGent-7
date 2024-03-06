@@ -3,36 +3,40 @@ from ..models.course import Course
 
 
 class CourseSerializer(serializers.ModelSerializer):
-
     teachers = serializers.HyperlinkedIdentityField(
-        view_name='course-teachers',
+        view_name="course-teachers",
         read_only=True,
     )
 
     assistants = serializers.HyperlinkedIdentityField(
-        view_name='course-assistants',
+        view_name="course-assistants",
         read_only=True,
     )
 
     students = serializers.HyperlinkedIdentityField(
-        view_name='course-students',
+        view_name="course-students",
         read_only=True,
     )
 
     projects = serializers.HyperlinkedIdentityField(
-        view_name='course-projects',
+        view_name="course-projects",
         read_only=True,
     )
 
     parent_course = serializers.HyperlinkedRelatedField(
-        many=False,
-        read_only=True,
-        view_name='course-detail'
+        many=False, read_only=True, view_name="course-detail"
     )
 
     class Meta:
         model = Course
         fields = [
-            'id', 'name', 'academic_startyear', 'description',
-            'parent_course', 'teachers', 'assistants', 'students', 'projects'
-          ]
+            "id",
+            "name",
+            "academic_startyear",
+            "description",
+            "parent_course",
+            "teachers",
+            "assistants",
+            "students",
+            "projects",
+        ]
