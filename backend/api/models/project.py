@@ -31,7 +31,7 @@ class Project(models.Model):
     max_score = models.PositiveSmallIntegerField(
         blank=False,
         null=False,
-        default=100
+        default=20
     )
 
     # Size of the groups than can be formed
