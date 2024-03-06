@@ -16,7 +16,7 @@ class NotificationPermission(BasePermission):
     # The user can only access their own notifications
     # An admin can access all notifications
     def has_permission(self, request: Request, view: NotificationView) -> bool:
-        return view.kwargs.get("user_id") == request.user.id
+        return view.kwargs.get("user_id") == request.user.id or request.user.is_staff
 
 
 class NotificationView(APIView):
