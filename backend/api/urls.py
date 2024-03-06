@@ -8,7 +8,7 @@ from api.views.student_view import StudentViewSet
 from api.views.project_view import ProjectViewSet
 from api.views.group_view import GroupViewSet
 from api.views.course_view import CourseViewSet
-from api.views.submision_view import SubmissionViewSet
+from api.views.submission_view import SubmissionViewSet
 from api.views.faculty_view import facultyViewSet
 from api.views.checks_view import (
     ExtraCheckViewSet, FileExtensionViewSet, StructureCheckViewSet

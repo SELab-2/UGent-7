@@ -4,13 +4,14 @@
     group: 1
     submission_number: 1
     submission_time: '2021-01-01T00:00:00Z'
+    structure_checks_passed: True
 - model: api.submission
   pk: 2
   fields:
     group: 1
     submission_number: 2
     submission_time: '2021-01-02T00:00:00Z'
-
+    structure_checks_passed: True
 
 - model: api.submissionfile
   pk: 1
@@ -22,3 +23,16 @@
   fields:
     submission: 2
     file: 'submissions/1/2/1.txt'
+
+- model: api.extrachecksresult
+  pk: 1
+  fields:
+    submission: 1
+    extra_check: 1
+    passed: False
+- model: api.extrachecksresult
+  pk: 2
+  fields:
+    submission: 2
+    extra_check: 1
+    passed: True
