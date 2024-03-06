@@ -1,12 +1,13 @@
 import json
 from datetime import timedelta
-from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from ..models.project import Project
-from ..models.student import Student
-from ..models.group import Group
-from ..models.course import Course
+from rest_framework.test import APITestCase
+from authentication.models import User
+from api.models.project import Project
+from api.models.student import Student
+from api.models.group import Group
+from api.models.course import Course
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -46,7 +47,12 @@ def create_group(project, score):
     return Group.objects.create(project=project, score=score)
 
 
-class GroupModelTests(TestCase):
+class GroupModelTests(APITestCase):
+    def setUp(self) -> None:
+        self.client.force_authenticate(
+            User.get_dummy_admin()
+        )
+
     def test_no_groups(self):
         """Able to retrieve no groups before creating any."""
         response = self.client.get(reverse("group-list"), follow=True)

@@ -64,8 +64,12 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication"
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication"
     ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
 }
 
 SIMPLE_JWT = {
@@ -76,15 +80,13 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "authentication.User"
-
 ROOT_URLCONF = "ypovoli.urls"
-
 WSGI_APPLICATION = "ypovoli.wsgi.application"
 
 # Application endpoints
 
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = "https://localhost:8080/auth/echo"
+CAS_RESPONSE = "https://localhost:8080/auth/cas/echo"
 API_ENDPOINT = "https://localhost:8080"
 
 # Database

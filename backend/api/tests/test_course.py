@@ -1,13 +1,13 @@
 import json
-
-from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-from ..models.course import Course
-from ..models.teacher import Teacher
-from ..models.assistant import Assistant
-from ..models.student import Student
-from ..models.project import Project
+from rest_framework.test import APITestCase
+from authentication.models import User
+from api.models.course import Course
+from api.models.teacher import Teacher
+from api.models.assistant import Assistant
+from api.models.student import Student
+from api.models.project import Project
 
 
 def create_project(name, description, visible, archived, days, course):
@@ -84,7 +84,12 @@ def create_course(name, academic_startyear, description=None, parent_course=None
     )
 
 
-class CourseModelTests(TestCase):
+class CourseModelTests(APITestCase):
+    def setUp(self) -> None:
+        self.client.force_authenticate(
+            User.get_dummy_admin()
+        )
+
     def test_no_courses(self):
         """
         Able to retrieve no courses before publishing any.

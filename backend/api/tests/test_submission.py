@@ -1,12 +1,13 @@
 import json
 from datetime import timedelta
-from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-from ..models.submission import Submission, SubmissionFile
-from ..models.project import Project
-from ..models.group import Group
-from ..models.course import Course
+from rest_framework.test import APITestCase
+from authentication.models import User
+from api.models.submission import Submission, SubmissionFile
+from api.models.project import Project
+from api.models.group import Group
+from api.models.course import Course
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -46,7 +47,13 @@ def create_submissionFile(submission, file):
     return SubmissionFile.objects.create(submission=submission, file=file)
 
 
-class SubmissionModelTests(TestCase):
+class SubmissionModelTests(APITestCase):
+
+    def setUp(self) -> None:
+        self.client.force_authenticate(
+            User.get_dummy_admin()
+        )
+
     def test_no_submission(self):
         """
         able to retrieve no submission before publishing it.
