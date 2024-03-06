@@ -1,30 +1,34 @@
 from django.urls import include, path
-from api.views import user_view
-from api.views import teacher_view
-from api.views import admin_view
-from api.views import assistant_view
-from api.views import student_view
-from api.views import project_view
-from api.views import group_view
-from api.views import course_view
-from api.views import submision_view
-from api.views import checks_view
-from api.views import faculty_view
 from rest_framework.routers import DefaultRouter
+from api.views.user_view import UserViewSet
+from api.views.teacher_view import TeacherViewSet
+from api.views.admin_view import AdminViewSet
+from api.views.assistant_view import AssistantViewSet
+from api.views.student_view import StudentViewSet
+from api.views.project_view import ProjectViewSet
+from api.views.group_view import GroupViewSet
+from api.views.course_view import CourseViewSet
+from api.views.submision_view import SubmissionViewSet
+from api.views.faculty_view import facultyViewSet
+from api.views.checks_view import (
+    ExtraCheckViewSet, FileExtensionViewSet, StructureCheckViewSet
+)
+
 
 router = DefaultRouter()
-router.register(r"users", user_view.UserViewSet, basename="user")
-router.register(r"teachers", teacher_view.TeacherViewSet, basename="teacher")
-router.register(r"admins", admin_view.AdminViewSet, basename="admin")
-router.register(r"assistants", assistant_view.AssistantViewSet, basename="assistant")
-router.register(r"students", student_view.StudentViewSet, basename="student")
-router.register(r"projects", project_view.ProjectViewSet, basename="project")
-router.register(r"groups", group_view.GroupViewSet, basename="group")
-router.register(r"courses", course_view.CourseViewSet, basename="course")
-router.register(r"submissions", submision_view.SubmissionViewSet, basename="submission")
-router.register(r"checks", checks_view.ChecksViewSet, basename="check")
-router.register(r"fileExtensions", checks_view.FileExtensionViewSet, basename="fileExtension")
-router.register(r"faculties", faculty_view.facultyViewSet, basename="faculty")
+router.register(r"users", UserViewSet, basename="user")
+router.register(r"teachers", TeacherViewSet, basename="teacher")
+router.register(r"admins", AdminViewSet, basename="admin")
+router.register(r"assistants", AssistantViewSet, basename="assistant")
+router.register(r"students", StudentViewSet, basename="student")
+router.register(r"projects", ProjectViewSet, basename="project")
+router.register(r"groups", GroupViewSet, basename="group")
+router.register(r"courses", CourseViewSet, basename="course")
+router.register(r"submissions", SubmissionViewSet, basename="submission")
+router.register(r"structure_checks", StructureCheckViewSet, basename="structure_check")
+router.register(r"extra_checks", ExtraCheckViewSet, basename="extra_check")
+router.register(r"fileExtensions", FileExtensionViewSet, basename="fileExtension")
+router.register(r"faculties", facultyViewSet, basename="faculty")
 
 urlpatterns = [
     path("", include(router.urls)),

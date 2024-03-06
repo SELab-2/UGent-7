@@ -27,12 +27,14 @@ class StructureCheck(models.Model):
     # Obligated extensions
     obligated_extensions = models.ManyToManyField(
         FileExtension,
+        related_name="obligated_extensions",
         blank=True
     )
 
     # Blocked extensions
     blocked_extensions = models.ManyToManyField(
         FileExtension,
+        related_name="blocked_extensions",
         blank=True
     )
 

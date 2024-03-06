@@ -7,8 +7,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         many=False, read_only=True, view_name="course-detail"
     )
 
-    checks = serializers.HyperlinkedRelatedField(
-        many=False, read_only=True, view_name="check-detail"
+    structure_checks = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="structure_check-detail"
+    )
+
+    extra_checks = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="extra_check-detail"
     )
 
     groups = serializers.HyperlinkedIdentityField(
@@ -28,7 +32,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             "deadline",
             "max_score",
             "group_size",
-            "checks",
+            "structure_checks",
+            "extra_checks",
             "course",
             "groups"
         ]
