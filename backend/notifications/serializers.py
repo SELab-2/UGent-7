@@ -13,11 +13,21 @@ class NotificationTemplateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# Hyper linked user field that returns a hyper link but expects an id
+class UserHyperLinkedRelatedField(serializers.HyperlinkedRelatedField):
+    view_name = "user-detail"
+    queryset = User.objects.all()
+
+    def to_internal_value(self, data):
+        try:
+            return self.queryset.get(pk=data)
+        except User.DoesNotExist:
+            self.fail("no_match")
+
+
 class NotificationSerializer(serializers.ModelSerializer):
     # Hyper linked user field
-    user = serializers.HyperlinkedRelatedField(
-        view_name="user-detail", queryset=User.objects.all()
-    )
+    user = UserHyperLinkedRelatedField()
 
     # Translate template and arguments into a message
     message = serializers.SerializerMethodField()
