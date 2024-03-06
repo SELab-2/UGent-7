@@ -1,6 +1,6 @@
 from django.db import models
 from api.models.project import Project
-from api.models.extensions import ObligatedExtension, BlockedExtension
+from api.models.extension import FileExtension
 
 
 class StructureCheck(models.Model):
@@ -26,13 +26,13 @@ class StructureCheck(models.Model):
 
     # Obligated extensions
     obligated_extensions = models.ManyToManyField(
-        ObligatedExtension,
+        FileExtension,
         blank=True
     )
 
     # Blocked extensions
     blocked_extensions = models.ManyToManyField(
-        BlockedExtension,
+        FileExtension,
         blank=True
     )
 

@@ -1,7 +1,6 @@
 from datetime import datetime
 from django.db import models
 from django.utils import timezone
-from api.models.checks import Checks
 from api.models.course import Course
 
 
@@ -40,15 +39,6 @@ class Project(models.Model):
         blank=False,
         null=False,
         default=1
-    )
-
-    # Check entity that is linked to the project
-    checks = models.ForeignKey(
-        Checks,
-        # If the checks are deleted, the project should remain
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
     )
 
     # Course that the project belongs to

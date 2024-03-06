@@ -1,26 +1,34 @@
-- model: api.checks
+- model: api.structurecheck
   pk: 1
   fields:
-    dockerfile: 'path/to/Dockerfile'
-    allowed_file_extensions:
-      - 1
-      - 2
-    forbidden_file_extensions:
-      - 3
-      - 4
+    name: '.'
+    project: 123456
+    obligated_extensions:
+    - 3
+    - 4
+    blocked_extensions:
+    - 1
+    - 2
+  
+- model: api.extracheck
+  pk: 1
+  fields:
+    project: 123456
+    run_script: 'scripts/run.sh'
+
 - model: api.fileextension
   pk: 1
   fields:
-    extension: 'py'
+    extension: 'class'
 - model: api.fileextension
   pk: 2
   fields:
-    extension: 'js'
+    extension: 'png'
 - model: api.fileextension
   pk: 3
   fields:
-    extension: 'html'
+    extension: 'java'
 - model: api.fileextension
   pk: 4
   fields:
-    extension: 'php'
+    extension: 'py'
