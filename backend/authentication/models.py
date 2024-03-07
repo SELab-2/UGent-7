@@ -35,12 +35,6 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
 
-    def has_role(self, model: Type[Self]):
-        """Simple generic implementation of roles.
-        This function looks if there exists a model (inheriting from User) with the same ID.
-        """
-        model.objects.exists(self.id)
-
     @staticmethod
     def get_dummy_admin():
         return User(
