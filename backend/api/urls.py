@@ -25,9 +25,9 @@ router.register(r"projects", ProjectViewSet, basename="project")
 router.register(r"groups", GroupViewSet, basename="group")
 router.register(r"courses", CourseViewSet, basename="course")
 router.register(r"submissions", SubmissionViewSet, basename="submission")
-router.register(r"structure_checks", StructureCheckViewSet, basename="structure_check")
-router.register(r"extra_checks", ExtraCheckViewSet, basename="extra_check")
-router.register(r"fileExtensions", FileExtensionViewSet, basename="fileExtension")
+router.register(r"structure-checks", StructureCheckViewSet, basename="structure-check")
+router.register(r"extra-checks", ExtraCheckViewSet, basename="extra-check")
+router.register(r"file-extensions", FileExtensionViewSet, basename="file-extension")
 router.register(r"faculties", FacultyViewSet, basename="faculty")
 
 urlpatterns = [

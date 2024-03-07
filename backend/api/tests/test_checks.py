@@ -89,7 +89,7 @@ class FileExtensionModelTests(APITestCase):
         """
         Able to retrieve no FileExtension before publishing it.
         """
-        response_root = self.client.get(reverse("fileExtension-list"), follow=True)
+        response_root = self.client.get(reverse("file-extension-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
         self.assertEqual(response_root.accepted_media_type, "application/json")
@@ -105,7 +105,7 @@ class FileExtensionModelTests(APITestCase):
         fileExtension = create_fileExtension(id=5, extension="pdf")
 
         # Make a GET request to retrieve the fileExtension
-        response = self.client.get(reverse("fileExtension-list"), follow=True)
+        response = self.client.get(reverse("file-extension-list"), follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -133,7 +133,7 @@ class FileExtensionModelTests(APITestCase):
         fileExtension2 = create_fileExtension(id=2, extension="png")
 
         # Make a GET request to retrieve the fileExtension
-        response = self.client.get(reverse("fileExtension-list"), follow=True)
+        response = self.client.get(reverse("file-extension-list"), follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -167,7 +167,7 @@ class FileExtensionModelTests(APITestCase):
 
         # Make a GET request to retrieve the fileExtension details
         response = self.client.get(
-            reverse("fileExtension-detail", args=[str(fileExtension.id)]), follow=True
+            reverse("file-extension-detail", args=[str(fileExtension.id)]), follow=True
         )
 
         # Check if the response was successful
@@ -194,7 +194,7 @@ class StructureCheckModelTests(APITestCase):
         """
         Able to retrieve no Checks before publishing it.
         """
-        response_root = self.client.get(reverse("structure_check-list"), follow=True)
+        response_root = self.client.get(reverse("structure-check-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
         self.assertEqual(response_root.accepted_media_type, "application/json")
         content_json = json.loads(response_root.content.decode("utf-8"))
@@ -218,7 +218,7 @@ class StructureCheckModelTests(APITestCase):
         )
 
         # Make a GET request to retrieve the Checks
-        response = self.client.get(reverse("structure_check-list"), follow=True)
+        response = self.client.get(reverse("structure-check-list"), follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -270,7 +270,7 @@ class ExtraCheckModelTests(APITestCase):
         """
         Able to retrieve no Checks before publishing it.
         """
-        response_root = self.client.get(reverse("extra_check-list"), follow=True)
+        response_root = self.client.get(reverse("extra-check-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
         self.assertEqual(response_root.accepted_media_type, "application/json")
         content_json = json.loads(response_root.content.decode("utf-8"))
@@ -285,7 +285,7 @@ class ExtraCheckModelTests(APITestCase):
         )
 
         # Make a GET request to retrieve the Checks
-        response = self.client.get(reverse("extra_check-list"), follow=True)
+        response = self.client.get(reverse("extra-check-list"), follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)

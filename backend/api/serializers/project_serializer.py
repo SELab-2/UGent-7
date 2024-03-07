@@ -8,11 +8,11 @@ class ProjectSerializer(serializers.ModelSerializer):
     )
 
     structure_checks = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="structure_check-detail"
+        many=True, read_only=True, view_name="structure-check-detail"
     )
 
     extra_checks = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="extra_check-detail"
+        many=True, read_only=True, view_name="extra-check-detail"
     )
 
     groups = serializers.HyperlinkedIdentityField(

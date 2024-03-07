@@ -13,7 +13,7 @@ class ExtraChecksResultSerializer(serializers.ModelSerializer):
     extra_check = serializers.HyperlinkedRelatedField(
         many=False,
         read_only=True,
-        view_name="extra_check-detail"
+        view_name="extra-check-detail"
     )
 
     class Meta:
