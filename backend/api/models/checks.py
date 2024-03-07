@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class FileExtension(models.Model):
@@ -21,10 +22,10 @@ class Checks(models.Model):
 
     # Link to the file extensions that are allowed
     allowed_file_extensions = models.ManyToManyField(
-        FileExtension, related_name="checks_allowed", blank=True
+        FileExtension, related_name="checks_allowed", blank=True, verbose_name=_('Allowed extensions')
     )
 
     # Link to the file extensions that are forbidden
     forbidden_file_extensions = models.ManyToManyField(
-        FileExtension, related_name="checks_forbidden", blank=True
+        FileExtension, related_name="checks_forbidden", blank=True, verbose_name=_('Forbidden extensions')
     )
