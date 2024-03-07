@@ -1,7 +1,6 @@
-from datetime import timedelta, datetime
+from datetime import datetime
 from django.db import models
 from django.utils import timezone
-from api.models.checks import Checks
 from api.models.course import Course
 
 
@@ -28,13 +27,18 @@ class Project(models.Model):
 
     deadline = models.DateTimeField(blank=False, null=False)
 
-    # Check entity that is linked to the project
-    checks = models.ForeignKey(
-        Checks,
-        # If the checks are deleted, the project should remain
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
+    # Max score that can be achieved in the project
+    max_score = models.PositiveSmallIntegerField(
+        blank=False,
+        null=False,
+        default=20
+    )
+
+    # Size of the groups than can be formed
+    group_size = models.PositiveSmallIntegerField(
+        blank=False,
+        null=False,
+        default=1
     )
 
     # Course that the project belongs to
@@ -48,18 +52,22 @@ class Project(models.Model):
     )
 
     def deadline_approaching_in(self, days=7):
+        """Returns True if the deadline is approaching in the next days."""
         now = timezone.now()
         approaching_date = now + timezone.timedelta(days=days)
         return now <= self.deadline <= approaching_date
 
     def deadline_passed(self):
+        """Returns True if the deadline has passed."""
         now = timezone.now()
         return now > self.deadline
 
     def toggle_visible(self):
-        self.visible = not (self.visible)
+        """Toggles the visibility of the project."""
+        self.visible = not self.visible
         self.save()
 
     def toggle_archived(self):
-        self.archived = not (self.archived)
+        """Toggles the archived status of the project."""
+        self.archived = not self.archived
         self.save()

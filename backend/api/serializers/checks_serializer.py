@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from ..models.checks import Checks, FileExtension
+from ..models.extension import FileExtension
+from ..models.checks import StructureCheck, ExtraCheck
 
 
 class FileExtensionSerializer(serializers.ModelSerializer):
@@ -8,16 +9,39 @@ class FileExtensionSerializer(serializers.ModelSerializer):
         fields = ["extension"]
 
 
-class ChecksSerializer(serializers.ModelSerializer):
-    allowed_file_extensions = FileExtensionSerializer(many=True)
+class StructureCheckSerializer(serializers.ModelSerializer):
 
-    forbidden_file_extensions = FileExtensionSerializer(many=True)
+    project = serializers.HyperlinkedRelatedField(
+        view_name="project-detail",
+        read_only=True
+    )
+
+    obligated_extensions = FileExtensionSerializer(many=True)
+
+    blocked_extensions = FileExtensionSerializer(many=True)
 
     class Meta:
-        model = Checks
+        model = StructureCheck
         fields = [
             "id",
-            "dockerfile",
-            "allowed_file_extensions",
-            "forbidden_file_extensions",
+            "name",
+            "project",
+            "obligated_extensions",
+            "blocked_extensions"
+        ]
+
+
+class ExtraCheckSerializer(serializers.ModelSerializer):
+
+    project = serializers.HyperlinkedRelatedField(
+        view_name="project-detail",
+        read_only=True
+    )
+
+    class Meta:
+        model = ExtraCheck
+        fields = [
+            "id",
+            "project",
+            "run_script"
         ]
