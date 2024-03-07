@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from django.utils.translation import gettext_lazy as _
 from datetime import timedelta
 from pathlib import Path
 
@@ -69,7 +70,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
-    ]
+    ],
+    'EXCEPTION_HANDLERE': 'ypovoli'
 }
 
 SIMPLE_JWT = {
@@ -108,6 +110,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
+LANGUAGES = [('en', _('English')), ('nl', _('Dutch'))]
 USE_L10N = False
 USE_TZ = True
 
