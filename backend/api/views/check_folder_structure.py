@@ -18,7 +18,6 @@ def parseZipFile(project, dir_path):
             extensie, _ = FileExtension.objects.get_or_create(
                 extension=ext
             )
-            print(extensie)
             check.obligated_extensions.add(extensie.id)
         project.structure_checks.add(check)
         print(key, value)

@@ -1,15 +1,3 @@
-- model: api.structurecheck
-  pk: 1
-  fields:
-    name: '.'
-    project: 123456
-    obligated_extensions:
-    - 3
-    - 4
-    blocked_extensions:
-    - 1
-    - 2
-  
 - model: api.extracheck
   pk: 1
   fields:
