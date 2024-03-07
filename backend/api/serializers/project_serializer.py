@@ -7,12 +7,14 @@ class ProjectSerializer(serializers.ModelSerializer):
         many=False, read_only=True, view_name="course-detail"
     )
 
-    structure_checks = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="structure-check-detail"
+    structure_checks = serializers.HyperlinkedIdentityField(
+        view_name="project-structure-checks",
+        read_only=True
     )
 
-    extra_checks = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="extra-check-detail"
+    extra_checks = serializers.HyperlinkedIdentityField(
+        view_name="project-extra-checks",
+        read_only=True
     )
 
     groups = serializers.HyperlinkedIdentityField(
