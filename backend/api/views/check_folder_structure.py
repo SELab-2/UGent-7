@@ -20,8 +20,21 @@ def parseZipFile(project, dir_path):
             )
             check.obligated_extensions.add(extensie.id)
         project.structure_checks.add(check)
-        print(key, value)
+        # print(key, value)
 
+
+def checkZipFile(project, dir_path):
+    project_structure_checks = StructureCheck.objects.filter(project=project.id)
+    for struct in project_structure_checks:
+        print(struct.id)
+        print(struct.name)
+        print("obligated_extensions")
+        for ext in struct.obligated_extensions.all():
+            print("     ", ext.extension)
+        print("blocked_extensions")
+        for ext in struct.blocked_extensions.all():
+            print("     ", ext.extension)
+        print("=========================")
 
 
 def get_parent_directories(dir_path):
