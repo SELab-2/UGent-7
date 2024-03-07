@@ -1,7 +1,28 @@
 import zipfile
 import os
+from api.models.checks import StructureCheck
+from api.models.project import Project
+from api.models.extension import FileExtension
 
-data_directory = "../../../data"
+data_directory = "../../../data"  # ../data\structures\zip_struct1.zip
+
+
+def parseZipFile(project, dir_path):
+    struct = get_zip_structure(dir_path)
+    for key, value in struct.items():
+        check = StructureCheck.objects.create(
+            name=key,
+            project=project
+        )
+        for ext in value["obligated_extensions"]:
+            extensie, _ = FileExtension.objects.get_or_create(
+                extension=ext
+            )
+            print(extensie)
+            check.obligated_extensions.add(extensie.id)
+        project.structure_checks.add(check)
+        print(key, value)
+
 
 
 def get_parent_directories(dir_path):
@@ -39,8 +60,6 @@ def get_zip_structure(root_path):
     base, _ = os.path.splitext(root_path)
     inhoud = list_zip_directories(root_path)
     inhoud.add(".")
-    # print("inhoud")
-    # print(inhoud)
     for inh in inhoud:
         directory_structure[inh] = {
             'obligated_extensions': set(),
