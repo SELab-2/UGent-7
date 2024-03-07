@@ -1,11 +1,10 @@
 import zipfile
 import os
 from api.models.checks import StructureCheck
-from api.models.project import Project
 from api.models.extension import FileExtension
 from django.utils.translation import gettext
 
-data_directory = "../../../data"  # ../data\structures\zip_struct1.zip
+data_directory = "../data"  # ../data\structures\zip_struct1.zip
 
 
 def parseZipFile(project, dir_path):
@@ -24,7 +23,8 @@ def parseZipFile(project, dir_path):
 
 
 def checkZipFile(project, dir_path, restrict_extra_folders=False):
-    project_structure_checks = StructureCheck.objects.filter(project=project.id)
+    project_structure_checks = StructureCheck.objects.filter(
+                                                project=project.id)
     structuur = {}
     for struct in project_structure_checks:
         structuur[struct.name] = {
@@ -35,7 +35,8 @@ def checkZipFile(project, dir_path, restrict_extra_folders=False):
             structuur[struct.name]["obligated_extensions"].add(ext.extension)
         for ext in struct.blocked_extensions.all():
             structuur[struct.name]["blocked_extensions"].add(ext.extension)
-    return check_zip_structure(structuur, dir_path, restrict_extra_folders=restrict_extra_folders)
+    return check_zip_structure(
+        structuur, dir_path, restrict_extra_folders=restrict_extra_folders)
 
 
 def get_parent_directories(dir_path):
@@ -88,53 +89,75 @@ def get_zip_structure(root_path):
                 _, file_extension = os.path.splitext(file)
                 file_extension = file_extension[1:]
                 if not file_extension == "":
-                    directory_structure[map]["obligated_extensions"].add(file_extension)
+                    directory_structure[map]["obligated_extensions"].add(
+                                                                file_extension)
             else:
                 _, file_extension = os.path.splitext(file_name)
                 file_extension = file_extension[1:]
-                directory_structure["."]["obligated_extensions"].add(file_extension)
+                directory_structure["."]["obligated_extensions"].add(
+                                                                file_extension)
     return directory_structure
 
 
-def check_zip_content(root_path, dir_path, obligated_extensions, blocked_extensions):
+def check_zip_content(
+        root_path,
+        dir_path,
+        obligated_extensions,
+        blocked_extensions):
     """
-        Check the content of a directory without traversing subdirectories.
-        :param dir_path: The path of the zip we need to check.
-        :param obligated_extensions: The file extensions that are obligated to be present.
-        :param blocked_extensions: The file extensions that are forbidden to be present.
-        :return:
-            True: All checks pass.
-            False: At least 1 blocked extension is found or 1 obligated extension is not found.
+    Check the content of a directory without traversing subdirectories.
+    parameters:
+    dir_path: The path of the zip we need to check.
+    obligated_extensions: The file extensions that are obligated to be present.
+    blocked_extensions: The file extensions that are forbidden to be present.
+    :return:
+        True: All checks pass.
+        False: At least 1 blocked extension is found
+                or 1 obligated extension is not found.
         """
     dir_path = dir_path.replace('\\', '/')
     with zipfile.ZipFile(root_path, 'r') as zip_file:
         zip_contents = set(zip_file.namelist())
         found_obligated = set()  # To track found obligated extensions
         if dir_path == ".":
-            files_in_subdirectory = [file for file in zip_contents if "/" not in file]
+            files_in_subdirectory = [
+                file for file in zip_contents if "/" not in file
+                ]
         else:
-            files_in_subdirectory = [file[len(dir_path)+1:] for file in zip_contents if (file.startswith(dir_path) and '/' not in file[len(dir_path)+1:] and file[len(dir_path)+1:] != "")]
+            files_in_subdirectory = [
+                file[len(dir_path)+1:] for file in zip_contents
+                if (file.startswith(dir_path) and
+                    '/' not in file[len(dir_path)+1:] and
+                    file[len(dir_path)+1:] != "")]
 
         for file in files_in_subdirectory:
             _, file_extension = os.path.splitext(file)
-            file_extension = file_extension[1:]  # file_extension[1:] to remove the .
+            # file_extension[1:] to remove the .
+            file_extension = file_extension[1:]
 
             if file_extension in blocked_extensions:
                 # print(f"Error: {file_extension} found in '{dir_path}' is not allowed.") TODO
-                return False, gettext('zip.errors.invalid_structure.blocked_extension_found')
+                return False, gettext(
+                    'zip.errors.invalid_structure.blocked_extension_found')
             elif file_extension in obligated_extensions:
                 found_obligated.add(file_extension)
         if set(obligated_extensions) <= found_obligated:
             return True, gettext('zip.success')
         else:
-            return False, gettext('zip.errors.invalid_structure.obligated_extension_not_found')
+            return False, gettext(
+                'zip.errors.invalid_structure.obligated_extension_not_found')
 
 
-def check_zip_structure(folder_structure, zip_file_path, restrict_extra_folders=False):
+def check_zip_structure(
+        folder_structure,
+        zip_file_path,
+        restrict_extra_folders=False):
     """
     Check the structure of a zip file.
-    :param zip_file_path: Path to the zip file.
-    :param folder_structure: Dictionary representing the expected folder structure.
+
+    parameters:
+    zip_file_path: Path to the zip file.
+    folder_structure: Dictionary representing the expected folder structure.
     :return:
         True: Zip file structure matches the expected structure.
         False: Zip file structure does not match the expected structure.
@@ -146,7 +169,8 @@ def check_zip_structure(folder_structure, zip_file_path, restrict_extra_folders=
     for dir in struc:
         if dir not in dirs:
             # print(f"Error: Directory '{dir}' not defined.") TODO
-            return False, gettext('zip.errors.invalid_structure.directory_not_defined')
+            return False, gettext(
+                'zip.errors.invalid_structure.directory_not_defined')
 
     with zipfile.ZipFile(zip_file_path, 'r') as zip_file:
         # zip_contents = set(zip_file.namelist())
@@ -156,7 +180,11 @@ def check_zip_structure(folder_structure, zip_file_path, restrict_extra_folders=
             obligated_extensions = info.get('obligated_extensions', set())
             blocked_extensions = info.get('blocked_extensions', set())
 
-            result, message = check_zip_content(zip_file_path, directory, obligated_extensions, blocked_extensions)
+            result, message = check_zip_content(
+                zip_file_path,
+                directory,
+                obligated_extensions,
+                blocked_extensions)
             if not result:
                 return result, message
     # Check for any directories not present in the folder structure dictionary
@@ -164,5 +192,6 @@ def check_zip_structure(folder_structure, zip_file_path, restrict_extra_folders=
         for actual_directory in dirs:
             if actual_directory not in struc:
                 # print(f"Error: Directory '{actual_directory}' not defined in the folder structure dictionary.") TODO
-                return False, gettext('zip.errors.invalid_structure.directory_not_found_in_template')
+                return False, gettext(
+                    'zip.errors.invalid_structure.directory_not_found_in_template')
     return True, gettext('zip.success')
