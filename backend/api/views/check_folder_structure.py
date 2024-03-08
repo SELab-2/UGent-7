@@ -3,11 +3,11 @@ import os
 from api.models.checks import StructureCheck
 from api.models.extension import FileExtension
 from django.utils.translation import gettext
+from django.conf import settings
 
-data_directory = "../data"  # ../data\structures\zip_struct1.zip
 
-
-def parseZipFile(project, dir_path):
+def parseZipFile(project, dir_path):  # TODO block paths that start with ..
+    dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
     struct = get_zip_structure(dir_path)
     for key, value in struct.items():
         check = StructureCheck.objects.create(
@@ -22,7 +22,8 @@ def parseZipFile(project, dir_path):
         project.structure_checks.add(check)
 
 
-def checkZipFile(project, dir_path, restrict_extra_folders=False):
+def checkZipFile(project, dir_path, restrict_extra_folders=False):  # TODO block paths that start with ..
+    dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
     project_structure_checks = StructureCheck.objects.filter(
                                                 project=project.id)
     structuur = {}

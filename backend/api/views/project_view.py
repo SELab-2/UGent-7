@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from django.utils.translation import gettext_lazy as _
-from api.views.check_folder_structure import get_zip_structure, check_zip_structure, data_directory, parseZipFile
+from api.views.check_folder_structure import get_zip_structure, check_zip_structure, parseZipFile
 from ..models.project import Project
 from ..serializers.project_serializer import ProjectSerializer
 from ..serializers.group_serializer import GroupSerializer
