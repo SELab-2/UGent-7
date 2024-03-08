@@ -1,5 +1,6 @@
 import json
 from datetime import timedelta
+from django.utils.translation import gettext
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework.test import APITestCase
@@ -9,6 +10,7 @@ from api.models.student import Student
 from api.models.group import Group
 from api.models.course import Course
 from django.conf import settings
+from api.models.teacher import Teacher
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -23,11 +25,11 @@ def create_course(name, academic_startyear, description=None, parent_course=None
     )
 
 
-def create_project(name, description, days, course):
+def create_project(name, description, days, course, group_size=2):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timedelta(days=days)
     return Project.objects.create(
-        name=name, description=description, deadline=deadline, course=course
+        name=name, description=description, deadline=deadline, course=course, group_size=group_size
     )
 
 
@@ -267,3 +269,157 @@ class GroupModelTests(APITestCase):
         self.assertEqual(content["first_name"], student2.first_name)
         self.assertEqual(content["last_name"], student2.last_name)
         self.assertEqual(content["email"], student2.email)
+
+
+class GroupModelTestsAsTeacher(APITestCase):
+    def setUp(self) -> None:
+        self.user = Teacher.objects.create(
+            id="teacher",
+            first_name="Bobke",
+            last_name="Peeters",
+            username="bpeeters",
+            email="Test@gmail.com"
+        )
+
+        self.client.force_authenticate(
+            self.user
+        )
+
+    def test_assign_student_to_group(self):
+        """Able to assign a student to a group."""
+        course = create_course(name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        student = create_student(
+            id=5, first_name="John", last_name="Doe", email="John.Doe@gmail.com"
+        )
+
+        # Add this teacher to the course
+        course.teachers.add(self.user)
+
+        group = create_group(project=project, score=10)
+
+        response = self.client.post(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": student.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Make sure the student is in the group now
+        self.assertTrue(group.students.filter(id=student.id).exists())
+
+    def test_remove_student_from_group(self):
+        """Able to remove a student from a group."""
+        course = create_course(name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        student = create_student(
+            id=5, first_name="John", last_name="Doe", email="John.Doe@gmail.com"
+        )
+
+        # Add this teacher to the course
+        course.teachers.add(self.user)
+
+        group = create_group(project=project, score=10)
+        group.students.add(student)
+
+        response = self.client.delete(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": student.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Make sure the student is not in the group anymore
+        self.assertFalse(group.students.filter(id=student.id).exists())
+
+
+class GroupModelTestsAsStudent(APITestCase):
+    def setUp(self) -> None:
+        self.user = Student.objects.create(
+            id="student",
+            first_name="Bobke",
+            last_name="Peeters",
+            username="bpeeters",
+            email="Bobke.Peeters@gmail.com"
+        )
+
+        self.client.force_authenticate(
+            self.user
+        )
+
+    def test_join_group(self):
+        """Able to join a group as a student."""
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        group = create_group(project=project, score=10)
+
+        # Try to join a group that is part of a course the student is not enrolled in
+        response = self.client.post(
+            reverse("group-join", args=[str(group.id)]),
+            follow=True,
+        )
+
+        # Make sure that you can not join a group if you are not enrolled in the course
+        self.assertEqual(response.status_code, 403)
+
+        # Add the student to the course
+        course.students.add(self.user)
+
+        # Join the group now that the student is enrolled in the course
+        response = self.client.post(
+            reverse("group-join", args=[str(group.id)]),
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Make sure the student is in the group now
+        self.assertTrue(group.students.filter(id=self.user.id).exists())
+
+        # Try to join a second group
+        group2 = create_group(project=project, score=10)
+
+        response = self.client.post(
+            reverse("group-join", args=[str(group2.id)]),
+            follow=True,
+        )
+
+        # Make sure you can only be in one group at a time
+        self.assertEqual(response.status_code, 400)
+        # self.assertEqual(content_json, gettext("group.errors.already_in_group"))
+
+    def test_join_full_group(self):
+        """Able to join a group as a student."""
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course, group_size=1
+        )
+        group = create_group(project=project, score=10)
+        student = create_student(
+            id=5, first_name="Bernard", last_name="Doe", email="Bernard.Doe@gmail.com"
+        )
+        group.students.add(student)
+
+        # Add the student to the course
+        course.students.add(self.user)
+
+        # Join the group
+        response = self.client.post(
+            reverse("group-join", args=[str(group.id)]),
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        # self.assertEqual(response.data['detail'], gettext("group.errors.full"))

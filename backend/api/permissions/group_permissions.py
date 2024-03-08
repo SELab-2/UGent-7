@@ -20,14 +20,15 @@ class GroupPermission(BasePermission):
             return True
 
         # We only allow teachers and assistants to create new groups.
-        return hasattr(user, "teacher") and user.teacher.exists() or hasattr(user, "assistant") and user.assistant.exists()
+        return hasattr(user, "teacher") and user.teacher or \
+            hasattr(user, "assistant") and user.assistant
 
     def has_object_permission(self, request: Request, view: ViewSet, group) -> bool:
         """Check if user has permission to view a detailed group endpoint"""
         user: User = request.user
         course = group.project.course
         teacher_assistant_role: Teacher | Assistant = hasattr(user, "teacher") and user.teacher or \
-             hasattr(user, "assistant") and user.assistant
+            hasattr(user, "assistant") and user.assistant
 
         if request.method in SAFE_METHODS:
             role: Teacher | Assistant | Student = teacher_assistant_role or hasattr(user, "student") and user.student
@@ -52,3 +53,17 @@ class GroupStudentPermission(BasePermission):
         # We only allow students to join groups.
         return student is not None and \
             student.courses.filter(id=course.id).exists()
+
+
+class GroupInstructorPermission(BasePermission):
+    """Permission class for teacher/assistant-only group endpoints"""
+
+    def has_object_permission(self, request: Request, view: ViewSet, group) -> bool:
+        user: User = request.user
+        course = group.project.course
+        role: Teacher | Assistant = hasattr(user, "teacher") and user.teacher or \
+            hasattr(user, "assistant") and user.assistant
+
+        # We only allow teachers and assistants to modify specified groups.
+        return role is not None and \
+            role.courses.filter(id=course.id).exists()
