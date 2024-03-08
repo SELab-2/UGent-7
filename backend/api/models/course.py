@@ -1,3 +1,4 @@
+from typing import Self
 from django.db import models
 
 
@@ -29,6 +30,15 @@ class Course(models.Model):
     def __str__(self) -> str:
         """The string representation of the course."""
         return str(self.name)
+
+    def clone(self, year=None) -> Self:
+        # To-do: add more control over the cloning process.
+        return Course(
+            name=self.name,
+            description=self.description,
+            academic_startyear=year or self.academic_startyear + 1,
+            parent_course=self
+        )
 
     @property
     def academic_year(self) -> str:

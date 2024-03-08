@@ -18,7 +18,7 @@ class CoursePermission(BasePermission):
             return request.user.is_authenticated
 
         # We only allow teachers to create new courses.
-        return user.teacher.exists()
+        return hasattr(user, "teacher") and user.teacher.exists()
 
     def has_object_permission(self, request: Request, view: ViewSet, course: Course) -> bool:
         """Check if user has permission to view a detailed course endpoint"""
@@ -26,12 +26,13 @@ class CoursePermission(BasePermission):
 
         if request.method in SAFE_METHODS:
             # Logged-in users can fetch course details.
-            return request.user.is_authenticated
+            return user.is_authenticated
 
         # We only allow teachers and assistants to modify specified courses.
-        role: Teacher | Assistant = user.teacher or user.assistant
+        role: Teacher | Assistant = hasattr(user, "teacher") and user.teacher or \
+            hasattr(user, "assistant") and user.assistant
 
-        return role is not None and \
+        return role and \
             role.courses.filter(id=course.id).exists()
 
 
@@ -42,7 +43,7 @@ class CourseTeacherPermission(CoursePermission):
 
         if request.method in SAFE_METHODS:
             # Logged-in users can still fetch course details.
-            return request.user.is_authenticated
+            return user.is_authenticated
 
-        return user.teacher.exists() and \
+        return hasattr(user, "teacher") and \
             user.teacher.courses.filter(id=course.id).exists()
