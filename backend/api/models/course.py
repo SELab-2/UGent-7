@@ -31,14 +31,19 @@ class Course(models.Model):
         """The string representation of the course."""
         return str(self.name)
 
-    def clone(self, year=None) -> Self:
-        # To-do: add more control over the cloning process.
-        return Course(
+    def clone(self, clone_assistants=True) -> Self:
+        """Clone the course to the next academic start year"""
+        course = Course(
             name=self.name,
             description=self.description,
-            academic_startyear=year or self.academic_startyear + 1,
+            academic_startyear=self.academic_startyear + 1,
             parent_course=self
         )
+
+        if clone_assistants:
+            course.assistants.add(self.assistants)
+
+        return course
 
     @property
     def academic_year(self) -> str:

@@ -1,14 +1,15 @@
 from django.utils.translation import gettext
 from rest_framework import viewsets
 from rest_framework.exceptions import NotFound
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
 from api.models.course import Course
 from api.models.assistant import Assistant
-from api.permissions.course_permissions import CoursePermission, CourseTeacherPermission
-from api.permissions.role_permissions import IsStudent
+from api.models.student import Student
+from api.permissions.course_permissions import CoursePermission, CourseAssistantPermission, CourseStudentPermission
+from api.permissions.role_permissions import IsTeacher
 from api.serializers.course_serializer import CourseSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
 from api.serializers.assistant_serializer import AssistantSerializer
@@ -22,7 +23,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     permission_classes = [IsAdminUser | CoursePermission]
 
-    @action(detail=True, permission_classes=[IsAdminUser | CourseTeacherPermission])
+    @action(detail=True, permission_classes=[IsAdminUser | CourseAssistantPermission])
     def assistants(self, request: Request, **_):
         """Returns a list of assistants for the given course"""
         course = self.get_object()
@@ -76,22 +77,8 @@ class CourseViewSet(viewsets.ModelViewSet):
             # Not found
             raise NotFound(gettext("assistants.error.404"))
 
-    @action(detail=True, methods=["get"])
-    def teachers(self, request, **_):
-        """Returns a list of teachers for the given course"""
-        # This automatically fetches the course from the URL.
-        # It automatically gives back a 404 HTTP response in case of not found.
-        course = self.get_object()
-        teachers = course.teachers.all()
 
-        # Serialize the teacher objects
-        serializer = TeacherSerializer(
-            teachers, many=True, context={"request": request}
-        )
-
-        return Response(serializer.data)
-
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | CourseStudentPermission])
     def students(self, request, **_):
         """Returns a list of students for the given course"""
         course = self.get_object()
@@ -100,6 +87,58 @@ class CourseViewSet(viewsets.ModelViewSet):
         # Serialize the student objects
         serializer = StudentSerializer(
             students, many=True, context={"request": request}
+        )
+
+        return Response(serializer.data)
+
+    @students.mapping.post
+    @students.mapping.put
+    def _add_student(self, request: Request, **_):
+        """Add a student to the course"""
+        course = self.get_object()
+
+        try:
+            # Add student to course
+            student = Student.objects.get(
+                id=request.data.get("id")
+            )
+
+            course.students.add(student)
+
+            return Response({
+                "message": gettext("courses.success.students.add")
+            })
+        except Student.DoesNotExist:
+            raise NotFound(gettext("students.error.404"))
+
+    @students.mapping.delete
+    def _remove_student(self, request: Request, **_):
+        """Remove a student from the course"""
+        course = self.get_object()
+
+        try:
+            # Add student to course
+            student = Student.objects.get(
+                id=request.data.get("id")
+            )
+
+            course.students.remove(student)
+
+            return Response({
+                "message": gettext("courses.success.students.remove")
+            })
+        except Student.DoesNotExist:
+            raise NotFound(gettext("students.error.404"))
+
+    @action(detail=True, methods=["get"])
+    def teachers(self, request, **_):
+        """Returns a list of teachers for the given course"""
+        course = self.get_object()
+        teachers = course.teachers.all()
+
+        # Serialize the teacher objects
+        serializer = TeacherSerializer(
+            teachers, many=True, context={"request": request}
         )
 
         return Response(serializer.data)
@@ -117,35 +156,21 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    @action(detail=True, methods=["post"], permission_classes=[IsStudent])
-    def join(self, request, **_):
-        """Enrolls the authenticated student in the project"""
-        # Add the course to the student's enrollment list.
-        self.get_object().students.add(
-            request.user.student
-        )
-
-        return Response({
-            "message": gettext("courses.success.join")
-        })
-
-    @action(detail=True, methods=["post"], permission_classes=[IsAdminUser | CourseTeacherPermission])
+    @action(detail=True, methods=["post"], permission_classes=[IsAdminUser | IsTeacher])
     def clone(self, request: Request, **__):
         """Copy the course to a new course with the same fields"""
         course: Course = self.get_object()
 
         try:
-            course_serializer = CourseSerializer(
-                course.child_course, context={"request": request}
-            )
+            course = course.child_course
         except Course.DoesNotExist:
-            course_serializer = CourseSerializer(
-                course.clone(
-                    year=request.data.get("academic_startyear")
-                ),
-                context={"request": request}
+            course = course.clone(
+                clone_assistants=request.data.get("clone_assistants")
             )
 
-            course_serializer.save()
+            course.save()
+
+        # Return serialized cloned course
+        course_serializer = CourseSerializer(course, context={"request": request})
 
         return Response(course_serializer.data)
