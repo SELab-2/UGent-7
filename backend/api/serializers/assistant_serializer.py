@@ -24,3 +24,9 @@ class AssistantSerializer(serializers.ModelSerializer):
             "create_time",
             "courses",
         ]
+
+
+class AssistantIDSerializer(serializers.Serializer):
+    assistant_id = serializers.PrimaryKeyRelatedField(
+        queryset=Assistant.objects.all()
+    )
