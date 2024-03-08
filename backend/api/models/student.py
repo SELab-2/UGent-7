@@ -19,3 +19,7 @@ class Student(User):
         related_name="students",
         blank=True,
     )
+
+    def is_enrolled_in_group(self, project):
+        """Check if the student is enrolled in a group for the given project."""
+        return self.groups.filter(project=project).exists()

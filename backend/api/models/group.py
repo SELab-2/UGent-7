@@ -28,3 +28,7 @@ class Group(models.Model):
 
     # Score of the group
     score = models.FloatField(blank=True, null=True)
+
+    def is_full(self) -> bool:
+        """Check if the group is full."""
+        return self.students.count() >= self.project.group_size
