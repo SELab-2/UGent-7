@@ -14,6 +14,8 @@ class GroupPermission(BasePermission):
         user: User = request.user
 
         # The general group endpoint is not accessible for any role.
+        if request.method in SAFE_METHODS:
+            return False
 
         # We only allow teachers and assistants to create new groups.
         return user.teacher.exists() or user.assistant.exists()
@@ -30,7 +32,7 @@ class GroupPermission(BasePermission):
                 role.courses.filter(id=course.id).exists()
 
         # We only allow teachers and assistants to modify specified groups.
-        role = user.teacher or user.assistant
+        teacher_assistant_role: Teacher | Assistant = user.teacher or user.assistant
 
-        return role is not None and \
-            role.courses.filter(id=course.id).exists()
+        return teacher_assistant_role is not None and \
+            teacher_assistant_role.courses.filter(id=course.id).exists()
