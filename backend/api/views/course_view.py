@@ -1,12 +1,13 @@
 from django.utils.translation import gettext
-from rest_framework import viewsets, status
+from rest_framework import viewsets
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
-from api.models.student import Student
+from rest_framework.request import Request
 from api.models.course import Course
-from api.permissions.course_permissions import CoursePermission
+from api.models.assistant import Assistant
+from api.permissions.course_permissions import CoursePermission, CourseTeacherPermission
 from api.permissions.role_permissions import IsStudent
 from api.serializers.course_serializer import CourseSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
@@ -35,82 +36,81 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    @action(detail=True, methods=["get", "post"])
-    def assistants(self, request, **_):
-        """Returns a list of assistants for the given course"""
+    @action(detail=True, methods=["get", "post", "delete"], permission_classes=[IsAdminUser | CourseTeacherPermission])
+    def assistants(self, request: Request, **_) -> Response:
+        """Action for managing assistants associated to a course"""
         # This automatically fetches the course from the URL.
         # It automatically gives back a 404 HTTP response in case of not found.
         course = self.get_object()
-        assistants = course.assistants.all()
 
         if request.method == "GET":
-            # Serialize the assistant objects
+            # Return assistants of a course.
+            assistants = course.assistants.all()
+
             serializer = AssistantSerializer(
                 assistants, many=True, context={"request": request}
             )
 
             return Response(serializer.data)
 
-        # Add a new assistant to the course, assistant ID in request.get("assistant_id")
+        try:
+            assistant = Assistant.objects.get(
+                id=request.query_params.get("id")
+            )
 
+            if request.method == "POST":
+                # Add a new assistant to the course.
+                course.assistants.add(assistant)
 
+                return Response({
+                    "message": gettext("courses.success.assistants.add")
+                })
+            elif request.method == "DELETE":
+                # Remove an assistant from the course.
+                course.assistants.remove(assistant)
+
+                return Response({
+                    "message": gettext("courses.success.assistants.remove")
+                })
+        except Assistant.DoesNotExist:
+            # Not found
+            raise NotFound(gettext("assistants.error.404"))
 
 
     @action(detail=True, methods=["get"])
-    def students(self, request, pk=None):
+    def students(self, request, **_):
         """Returns a list of students for the given course"""
         course = self.get_object()
+        students = course.students.all()
 
-        try:
-            queryset = Course.objects.get(id=pk)
-            students = queryset.students.all()
+        # Serialize the student objects
+        serializer = StudentSerializer(
+            students, many=True, context={"request": request}
+        )
 
-            # Serialize the student objects
-            serializer = StudentSerializer(
-                students, many=True, context={"request": request}
-            )
-            return Response(serializer.data)
-
-        except Course.DoesNotExist:
-            # Invalid course ID
-            raise NotFound(gettext("courses.errors.not_found"))
+        return Response(serializer.data)
 
     @action(detail=True, methods=["get"])
-    def projects(self, request, pk=None):
+    def projects(self, request, **_):
         """Returns a list of projects for the given course"""
+        course = self.get_object()
+        projects = course.projects.all()
 
-        try:
-            queryset = Course.objects.get(id=pk)
-            projects = queryset.projects.all()
+        # Serialize the project objects
+        serializer = ProjectSerializer(
+            projects, many=True, context={"request": request}
+        )
 
-            # Serialize the project objects
-            serializer = ProjectSerializer(
-                projects, many=True, context={"request": request}
-            )
-            return Response(serializer.data)
-
-        except Course.DoesNotExist:
-            # Invalid course ID
-            raise NotFound(gettext("courses.errors.not_found"))
+        return Response(serializer.data)
 
     @action(detail=True, methods=["post"], permission_classes=[IsStudent])
-    def join(self, request, pk=None):
+    def join(self, request, **_):
         """Enrolls the authenticated student in the project"""
+        # Add the course to the student's enrollment list.
+        self.get_object().students.add(
+            request.user.student
+        )
 
-        try:
-            # Add the course to the student's enrollment list.
-            Student.objects.get(id=request.user.id).courses.add(
-                Course.objects.get(id=pk)
-            )
-
-            return Response({
-                "message": gettext("courses.messages.successful_join")
-            })
-
-        except Course.DoesNotExist:
-            # Invalid course ID
-            raise NotFound(gettext("courses.errors.not_found"))
-        except Student.DoesNotExist:
-            # Invalid student user, this should not happen,
-            # since the IsStudent permission class already checks this.
-            raise NotFound(gettext("students.errors.not_found"))
+        return Response({
+            "message": gettext("courses.success.join")
+        })

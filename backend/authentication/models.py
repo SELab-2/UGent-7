@@ -1,5 +1,4 @@
 from datetime import MINYEAR
-from typing import Self, Type
 from django.db import models
 from django.db.models import CharField, EmailField, IntegerField, DateTimeField, BooleanField, Model
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
