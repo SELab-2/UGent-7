@@ -76,7 +76,6 @@ class CourseViewSet(viewsets.ModelViewSet):
             # Not found
             raise NotFound(gettext("assistants.error.404"))
 
-
     @action(detail=True, methods=["get"])
     def students(self, request, **_):
         """Returns a list of students for the given course"""

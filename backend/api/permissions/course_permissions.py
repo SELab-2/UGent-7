@@ -29,10 +29,11 @@ class CoursePermission(BasePermission):
             return request.user.is_authenticated
 
         # We only allow teachers and assistants to modify specified courses.
-        role: Teacher|Assistant = user.teacher or user.assistant
+        role: Teacher | Assistant = user.teacher or user.assistant
 
         return role is not None and \
             role.courses.filter(id=course.id).exists()
+
 
 class CourseTeacherPermission(CoursePermission):
     """Permission class for teacher-only course endpoints."""
