@@ -77,7 +77,6 @@ class CourseViewSet(viewsets.ModelViewSet):
             # Not found
             raise NotFound(gettext("assistants.error.404"))
 
-
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | CourseStudentPermission])
     def students(self, request, **_):
         """Returns a list of students for the given course"""

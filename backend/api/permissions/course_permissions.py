@@ -8,6 +8,7 @@ from api.models.course import Course
 
 class CoursePermission(BasePermission):
     """Permission class used as default policy for course endpoints."""
+
     def has_permission(self, request: Request, view: ViewSet) -> bool:
         """Check if user has permission to view a general course endpoint."""
         user: User = request.user
@@ -34,6 +35,7 @@ class CoursePermission(BasePermission):
 
 class CourseAssistantPermission(CoursePermission):
     """Permission class for assistant related endpoints."""
+
     def has_object_permission(self, request: Request, view: ViewSet, course: Course) -> bool:
         user: User = request.user
 
@@ -47,6 +49,7 @@ class CourseAssistantPermission(CoursePermission):
 
 class CourseStudentPermission(CoursePermission):
     """Permission class for student related endpoints."""
+
     def has_object_permission(self, request: Request, view: ViewSet, course: Course):
         user: User = request.user
 
@@ -64,6 +67,7 @@ class CourseStudentPermission(CoursePermission):
 
 class CourseProjectPermission(CoursePermission):
     """Permission class for project related endpoints."""
+
     def has_object_permission(self, request: Request, view: ViewSet, course: Course):
         user: User = request.user
 

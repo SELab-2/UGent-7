@@ -9,11 +9,14 @@ from api.models.teacher import Teacher
 def is_student(user: User):
     return Student.objects.filter(id=user.id).exists()
 
+
 def is_assistant(user: User):
     return Assistant.objects.filter(id=user.id).exists()
 
+
 def is_teacher(user: User):
     return Teacher.objects.filter(id=user.id).exists()
+
 
 class IsStudent(IsAuthenticated):
     def has_permission(self, request: Request, view):
