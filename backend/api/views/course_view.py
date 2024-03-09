@@ -1,7 +1,7 @@
 from django.utils.translation import gettext
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
 from api.models.course import Course
