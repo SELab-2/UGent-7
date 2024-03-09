@@ -29,8 +29,7 @@ def parseZipFile(project, dir_path):  # TODO block paths that start with ..
 # TODO block paths that start with ..
 def checkZipFile(project, dir_path, restrict_extra_folders=False):
     dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
-    project_structure_checks = StructureCheck.objects.filter(
-                                                project=project.id)
+    project_structure_checks = StructureCheck.objects.filter(project=project.id)
     structuur = {}
     for struct in project_structure_checks:
         structuur[struct.name] = {
@@ -94,13 +93,11 @@ def get_zip_structure(root_path):
                 _, file_extension = os.path.splitext(file)
                 file_extension = file_extension[1:]
                 if not file_extension == "":
-                    directory_structure[map]["obligated_extensions"].add(
-                                                                file_extension)
+                    directory_structure[map]["obligated_extensions"].add(file_extension)
             else:
                 _, file_extension = os.path.splitext(file_name)
                 file_extension = file_extension[1:]
-                directory_structure["."]["obligated_extensions"].add(
-                                                                file_extension)
+                directory_structure["."]["obligated_extensions"].add(file_extension)
     return directory_structure
 
 
@@ -125,15 +122,11 @@ def check_zip_content(
         zip_contents = set(zip_file.namelist())
         found_obligated = set()  # To track found obligated extensions
         if dir_path == ".":
-            files_in_subdirectory = [
-                file for file in zip_contents if "/" not in file
-                ]
+            files_in_subdirectory = [file for file in zip_contents if "/" not in file]
         else:
             files_in_subdirectory = [
-                file[len(dir_path)+1:] for file in zip_contents
-                if (file.startswith(dir_path) and
-                    '/' not in file[len(dir_path)+1:] and
-                    file[len(dir_path)+1:] != "")]
+                file[len(dir_path) + 1:] for file in zip_contents
+                if file.startswith(dir_path) and '/' not in file[len(dir_path) + 1:] and bool(file[len(dir_path) + 1:])]
 
         for file in files_in_subdirectory:
             _, file_extension = os.path.splitext(file)
