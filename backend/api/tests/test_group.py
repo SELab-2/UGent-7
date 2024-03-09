@@ -343,6 +343,32 @@ class GroupModelTestsAsTeacher(APITestCase):
         # Make sure the student is not in the group anymore
         self.assertFalse(group.students.filter(id=student.id).exists())
 
+    def test_update_score_of_group(self):
+        """Able to update the score of a group."""
+        course = create_course(name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+
+        # Add this teacher to the course
+        course.teachers.add(self.user)
+
+        group = create_group(project=project, score=10)
+
+        response = self.client.patch(
+            reverse("group-detail", args=[str(group.id)]),
+            {"score": 20},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Make sure the score of the group is updated
+        group.refresh_from_db()
+        self.assertEqual(group.score, 20)
+
 
 class GroupModelTestsAsStudent(APITestCase):
     def setUp(self) -> None:
@@ -462,7 +488,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Make sure the student is not in the group anymore
         self.assertFalse(group.students.filter(id=self.user.id).exists())
 
-    def try_to_assign_other_student_to_group(self):
+    def test_try_to_assign_other_student_to_group(self):
         """Not able to assign another student to a group."""
         course = create_course(name="sel2", academic_startyear=2023)
 
@@ -488,7 +514,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Make sure that you are not able to assign another student to a group
         self.assertEqual(response.status_code, 403)
 
-    def try_to_delete_other_student_from_group(self):
+    def test_try_to_delete_other_student_from_group(self):
         """Not able to remove another student from a group."""
         course = create_course(name="sel2", academic_startyear=2023)
 
@@ -515,3 +541,29 @@ class GroupModelTestsAsStudent(APITestCase):
 
         # Make sure that you are not able to remove another student from a group
         self.assertEqual(response.status_code, 403)
+
+    def test_try_to_update_score_of_group(self):
+        """Not able to update the score of a group."""
+        course = create_course(name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+
+        # Add this student to the course
+        course.students.add(self.user)
+
+        group = create_group(project=project, score=10)
+        group.students.add(self.user)
+
+        response = self.client.patch(
+            reverse("group-detail", args=[str(group.id)]),
+            {"score": 20},
+            follow=True,
+        )
+
+        # Make sure that you are not able to update the score of a group
+        self.assertEqual(response.status_code, 403)
+
+        group.refresh_from_db()
+        self.assertEqual(group.score, 10)
