@@ -1,3 +1,5 @@
+from datetime import datetime
+from typing import Self
 from django.db import models
 
 
@@ -29,6 +31,24 @@ class Course(models.Model):
     def __str__(self) -> str:
         """The string representation of the course."""
         return str(self.name)
+
+    def is_past(self) -> bool:
+        """Returns whether the course is from a past academic year"""
+        return datetime(self.academic_startyear + 1, 10, 1) < datetime.now()
+
+    def clone(self, clone_assistants=True) -> Self:
+        """Clone the course to the next academic start year"""
+        course = Course(
+            name=self.name,
+            description=self.description,
+            academic_startyear=self.academic_startyear + 1,
+            parent_course=self
+        )
+
+        if clone_assistants:
+            course.assistants.add(self.assistants)
+
+        return course
 
     @property
     def academic_year(self) -> str:
