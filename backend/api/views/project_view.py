@@ -9,6 +9,8 @@ from ..models.project import Project
 from ..serializers.project_serializer import ProjectSerializer
 from ..serializers.group_serializer import GroupSerializer
 from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
+from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer
+from api.serializers.group_serializer import GroupSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -36,14 +38,21 @@ class ProjectViewSet(viewsets.ModelViewSet):
         """Create a number of groups for the project"""
         project = self.get_object()
 
-        # Get the number of groups to create
-        num_groups = int(request.data.get("number_groups", 0))
+        serializer = TeacherCreateGroupSerializer(
+            data=request.data, context={"project": project}
+        )
 
-        # Create the groups
-        for _ in range(max(0, num_groups)):
-            Group.objects.create(
-                project=project
-            )
+        # Validate the serializer
+        if serializer.is_valid(raise_exception=True):
+            # Get the number of groups to create
+            num_groups = serializer.validated_data["number_groups"]
+
+            # Create the groups
+            for _ in range(num_groups):
+                Group.objects.create(
+                    project=project
+                )
+
         return Response({
             "message": gettext("project.success.groups.created"),
         })
