@@ -1,4 +1,5 @@
 from django.utils.translation import gettext
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAdminUser
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -13,7 +14,12 @@ from api.serializers.project_serializer import ProjectSerializer, TeacherCreateG
 from api.serializers.group_serializer import GroupSerializer
 
 
-class ProjectViewSet(viewsets.ModelViewSet):
+class ProjectViewSet(CreateModelMixin,
+                     RetrieveModelMixin,
+                     UpdateModelMixin,
+                     DestroyModelMixin,
+                     viewsets.GenericViewSet):
+
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAdminUser | ProjectPermission]  # GroupPermission has exact the same logic as for a project

@@ -1,5 +1,6 @@
 from django.utils.translation import gettext
-from rest_framework import viewsets
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -11,7 +12,12 @@ from api.serializers.student_serializer import StudentSerializer
 from api.serializers.group_serializer import StudentJoinGroupSerializer, StudentLeaveGroupSerializer
 
 
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupViewSet(CreateModelMixin,
+                   RetrieveModelMixin,
+                   UpdateModelMixin,
+                   DestroyModelMixin,
+                   GenericViewSet):
+
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsAdminUser | GroupPermission]

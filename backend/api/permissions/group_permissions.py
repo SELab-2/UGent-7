@@ -12,9 +12,7 @@ class GroupPermission(BasePermission):
         user: User = request.user
 
         # The general group endpoint that lists all groups is not accessible for any role.
-        if view.action == "list":
-            return False
-        elif request.method in SAFE_METHODS:
+        if request.method in SAFE_METHODS:
             return True
 
         # We only allow teachers and assistants to create new groups.

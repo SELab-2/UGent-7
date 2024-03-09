@@ -181,14 +181,6 @@ class ProjectModelTests(APITestCase):
         )
         self.assertIs(past_project.deadline_passed(), True)
 
-    def test_no_projects(self):
-        """Able to retrieve no projects before creating any."""
-        response = self.client.get(reverse("group-list"), follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
-        content_json = json.loads(response.content.decode("utf-8"))
-        self.assertEqual(content_json, [])
-
     def test_project_exists(self):
         """
         Able to retrieve a single project after creating it.
@@ -204,60 +196,17 @@ class ProjectModelTests(APITestCase):
             course=course,
         )
 
-        response = self.client.get(reverse("project-list"), follow=True)
+        response = self.client.get(
+            reverse("project-detail", args=[str(project.id)]),
+            follow=True
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.accepted_media_type, "application/json")
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        self.assertEqual(len(content_json), 1)
-
-        retrieved_project = content_json[0]
-
-        expected_course_url = settings.TESTING_BASE_LINK + reverse(
-            "course-detail", args=[str(course.id)]
-        )
-
-        self.assertEqual(retrieved_project["name"], project.name)
-        self.assertEqual(retrieved_project["description"], project.description)
-        self.assertEqual(retrieved_project["visible"], project.visible)
-        self.assertEqual(retrieved_project["archived"], project.archived)
-        self.assertEqual(retrieved_project["course"], expected_course_url)
-
-    def test_multiple_project(self):
-        """
-        Able to retrieve multiple projects after creating it.
-        """
-        course = create_course(id=3, name="test course", academic_startyear=2024)
-        project = create_project(
-            name="test project",
-            description="test description",
-            visible=True,
-            archived=False,
-            days=7,
-            course=course,
-        )
-
-        project2 = create_project(
-            name="test project2",
-            description="test description2",
-            visible=True,
-            archived=False,
-            days=7,
-            course=course,
-        )
-
-        response = self.client.get(reverse("project-list"), follow=True)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
-
-        content_json = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(len(content_json), 2)
-
-        retrieved_project = content_json[0]
+        retrieved_project = content_json
 
         expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
@@ -296,16 +245,17 @@ class ProjectModelTests(APITestCase):
             course=course,
         )
 
-        response = self.client.get(reverse("project-list"), follow=True)
+        response = self.client.get(
+            reverse("project-detail", args=[str(project.id)]),
+            follow=True
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.accepted_media_type, "application/json")
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        self.assertEqual(len(content_json), 1)
-
-        retrieved_project = content_json[0]
+        retrieved_project = content_json
 
         self.assertEqual(retrieved_project["name"], project.name)
         self.assertEqual(retrieved_project["description"], project.description)
@@ -353,16 +303,17 @@ class ProjectModelTests(APITestCase):
             blocked_extensions=[fileExtension2, fileExtension3],
         )
 
-        response = self.client.get(reverse("project-list"), follow=True)
+        response = self.client.get(
+            reverse("project-detail", args=[str(project.id)]),
+            follow=True
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.accepted_media_type, "application/json")
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        self.assertEqual(len(content_json), 1)
-
-        retrieved_project = content_json[0]
+        retrieved_project = content_json
 
         expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
@@ -429,16 +380,17 @@ class ProjectModelTests(APITestCase):
             run_script="testscript.sh",
         )
 
-        response = self.client.get(reverse("project-list"), follow=True)
+        response = self.client.get(
+            reverse("project-detail", args=[str(project.id)]),
+            follow=True
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.accepted_media_type, "application/json")
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        self.assertEqual(len(content_json), 1)
-
-        retrieved_project = content_json[0]
+        retrieved_project = content_json
 
         response = self.client.get(retrieved_project["extra_checks"], follow=True)
 

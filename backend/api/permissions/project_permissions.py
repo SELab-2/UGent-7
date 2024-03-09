@@ -13,9 +13,7 @@ class ProjectPermission(BasePermission):
         user: User = request.user
 
         # The general project endpoint that lists all projects is not accessible for any role.
-        if view.action == "list":
-            return False
-        elif request.method in SAFE_METHODS:
+        if request.method in SAFE_METHODS:
             return True
 
         # We only allow teachers and assistants to create new projects.
