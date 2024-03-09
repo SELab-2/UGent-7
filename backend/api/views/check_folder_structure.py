@@ -6,7 +6,7 @@ from django.utils.translation import gettext
 from django.conf import settings
 
 
-def parseZipFile(project, dir_path):  # TODO block paths that start with ..
+def parse_zip_file(project, dir_path):  # TODO block paths that start with ..
     dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
     struct = get_zip_structure(dir_path)
 
@@ -27,7 +27,7 @@ def parseZipFile(project, dir_path):  # TODO block paths that start with ..
 
 
 # TODO block paths that start with ..
-def checkZipFile(project, dir_path, restrict_extra_folders=False):
+def check_zip_file(project, dir_path, restrict_extra_folders=False):
     dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
     project_structure_checks = StructureCheck.objects.filter(project=project.id)
     structuur = {}

@@ -3,7 +3,7 @@ import json
 from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
-from api.views.check_folder_structure import checkZipFile, parseZipFile
+from api.views.check_folder_structure import check_zip_file, parse_zip_file
 from api.models.checks import StructureCheck
 from api.models.extension import FileExtension
 from api.models.course import Course
@@ -81,7 +81,7 @@ class FileTestsTests(APITestCase):
             days=100,
             course=course,
         )
-        parseZipFile(project=project, dir_path="structures/zip_struct1.zip")
+        parse_zip_file(project=project, dir_path="structures/zip_struct1.zip")
 
         response = self.client.get(
             reverse("project-detail", args=[str(project.id)]), follow=True
@@ -213,4 +213,4 @@ class FileTestsTests(APITestCase):
             blocked=[])
 
         succes = (True, 'zip.success')
-        self.assertEqual(checkZipFile(project=project, dir_path="structures/zip_struct1.zip"), succes)
+        self.assertEqual(check_zip_file(project=project, dir_path="structures/zip_struct1.zip"), succes)
