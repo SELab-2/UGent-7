@@ -7,8 +7,6 @@ from rest_framework.response import Response
 from api.permissions.project_permissions import ProjectGroupPermission, ProjectPermission
 from api.models.group import Group
 from ..models.project import Project
-from ..serializers.project_serializer import ProjectSerializer
-from ..serializers.group_serializer import GroupSerializer
 from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
 from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer
 from api.serializers.group_serializer import GroupSerializer
