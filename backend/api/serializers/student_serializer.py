@@ -20,3 +20,9 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
+
+
+class StudentIDSerializer(serializers.Serializer):
+    student_id = serializers.PrimaryKeyRelatedField(
+        queryset=Student.objects.all()
+    )

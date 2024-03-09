@@ -1,18 +1,19 @@
 from django.utils.translation import gettext
 from rest_framework import viewsets
-from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
 from api.models.course import Course
-from api.models.assistant import Assistant
-from api.models.student import Student
-from api.permissions.course_permissions import CoursePermission, CourseAssistantPermission, CourseStudentPermission
+from api.permissions.course_permissions import (
+    CoursePermission,
+    CourseAssistantPermission,
+    CourseStudentPermission
+)
 from api.permissions.role_permissions import IsTeacher
-from api.serializers.course_serializer import CourseSerializer
+from api.serializers.course_serializer import CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
-from api.serializers.assistant_serializer import AssistantSerializer
+from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
 from api.serializers.student_serializer import StudentSerializer
 from api.serializers.project_serializer import ProjectSerializer
 
@@ -42,40 +43,38 @@ class CourseViewSet(viewsets.ModelViewSet):
         """Add an assistant to the course"""
         course = self.get_object()
 
-        try:
-            # Add assistant to course
-            assistant = Assistant.objects.get(
-                id=request.data.get("id")
+        # Add assistant to course
+        serializer = AssistantIDSerializer(
+            data=request.data
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            course.assistants.add(
+                serializer.validated_data["assistant_id"]
             )
 
-            course.assistants.add(assistant)
-
-            return Response({
-                "message": gettext("courses.success.assistants.add")
-            })
-        except Assistant.DoesNotExist:
-            # Not found
-            raise NotFound(gettext("assistants.error.404"))
+        return Response({
+            "message": gettext("courses.success.assistants.add")
+        })
 
     @assistants.mapping.delete
     def _remove_assistant(self, request: Request, **_):
         """Remove an assistant from the course"""
         course = self.get_object()
 
-        try:
-            # Add assistant to course
-            assistant = Assistant.objects.get(
-                id=request.data.get("id")
+        # Remove assistant from course
+        serializer = AssistantIDSerializer(
+            data=request.data
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            course.assistants.remove(
+                serializer.validated_data["assistant_id"]
             )
 
-            course.assistants.remove(assistant)
-
-            return Response({
-                "message": gettext("courses.success.assistants.delete")
-            })
-        except Assistant.DoesNotExist:
-            # Not found
-            raise NotFound(gettext("assistants.error.404"))
+        return Response({
+            "message": gettext("courses.success.assistants.add")
+        })
 
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | CourseStudentPermission])
     def students(self, request, **_):
@@ -94,40 +93,42 @@ class CourseViewSet(viewsets.ModelViewSet):
     @students.mapping.put
     def _add_student(self, request: Request, **_):
         """Add a student to the course"""
+        # Get the course
         course = self.get_object()
 
-        try:
-            # Add student to course
-            student = Student.objects.get(
-                id=request.data.get("id")
+        # Add student to course
+        serializer = StudentJoinSerializer(data=request.data, context={
+            "course": course
+        })
+
+        if serializer.is_valid(raise_exception=True):
+            course.students.add(
+                serializer.validated_data["student_id"]
             )
 
-            course.students.add(student)
-
-            return Response({
-                "message": gettext("courses.success.students.add")
-            })
-        except Student.DoesNotExist:
-            raise NotFound(gettext("students.error.404"))
+        return Response({
+            "message": gettext("courses.success.students.add")
+        })
 
     @students.mapping.delete
     def _remove_student(self, request: Request, **_):
         """Remove a student from the course"""
+        # Get the course
         course = self.get_object()
 
-        try:
-            # Add student to course
-            student = Student.objects.get(
-                id=request.data.get("id")
+        # Add student to course
+        serializer = StudentLeaveSerializer(data=request.data, context={
+            "course": course
+        })
+
+        if serializer.is_valid(raise_exception=True):
+            course.students.remove(
+                serializer.validated_data["student_id"]
             )
 
-            course.students.remove(student)
-
-            return Response({
-                "message": gettext("courses.success.students.remove")
-            })
-        except Student.DoesNotExist:
-            raise NotFound(gettext("students.error.404"))
+        return Response({
+            "message": gettext("courses.success.students.add")
+        })
 
     @action(detail=True, methods=["get"])
     def teachers(self, request, **_):
@@ -161,8 +162,10 @@ class CourseViewSet(viewsets.ModelViewSet):
         course: Course = self.get_object()
 
         try:
+            # We should return the already cloned course, if present
             course = course.child_course
         except Course.DoesNotExist:
+            # Else, we clone the course
             course = course.clone(
                 clone_assistants=request.data.get("clone_assistants")
             )
