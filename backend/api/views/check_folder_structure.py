@@ -26,7 +26,8 @@ def parseZipFile(project, dir_path):  # TODO block paths that start with ..
         project.structure_checks.add(check)
 
 
-def checkZipFile(project, dir_path, restrict_extra_folders=False):  # TODO block paths that start with ..
+# TODO block paths that start with ..
+def checkZipFile(project, dir_path, restrict_extra_folders=False):
     dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
     project_structure_checks = StructureCheck.objects.filter(
                                                 project=project.id)
@@ -140,7 +141,9 @@ def check_zip_content(
             file_extension = file_extension[1:]
 
             if file_extension in blocked_extensions:
-                # print(f"Error: {file_extension} found in '{dir_path}' is not allowed.") TODO
+                # print(
+                # f"Error: {file_extension} found in
+                # '{dir_path}' is not allowed.") TODO
                 return False, gettext(
                     'zip.errors.invalid_structure.blocked_extension_found')
             elif file_extension in obligated_extensions:
@@ -191,7 +194,8 @@ def check_zip_structure(
     if restrict_extra_folders:
         for actual_directory in dirs:
             if actual_directory not in struc:
-                # print(f"Error: Directory '{actual_directory}' not defined in the folder structure dictionary.") TODO
+                # print(f"Error: Directory '{actual_directory}'
+                # not defined in the folder structure dictionary.") TODO
                 return False, gettext(
                     'zip.errors.invalid_structure.directory_not_found_in_template')
     return True, gettext('zip.success')
