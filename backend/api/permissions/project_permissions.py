@@ -25,16 +25,15 @@ class ProjectPermission(BasePermission):
         """Check if user has permission to view a detailed project endpoint"""
         user: User = request.user
         course = project.course
+        teacher_or_assistant = is_teacher(user) and user.teacher.courses.filter(id=course.id).exists() or \
+            is_assistant(user) and user.assistant.courses.filter(id=course.id).exists()
 
         if request.method in SAFE_METHODS:
             # Users that are linked to the course can view the project.
-            return is_teacher(user) and user.teacher.courses.filter(id=course.id).exists() or \
-                is_assistant(user) and user.assistant.courses.filter(id=course.id).exists() or \
-                is_student(user) and user.student.courses.filter(id=course.id).exists()
+            return teacher_or_assistant or (is_student(user) and user.student.courses.filter(id=course.id).exists())
 
         # We only allow teachers and assistants to modify specified projects.
-        return is_teacher(user) and user.teacher.courses.filter(id=course.id).exists() or \
-            is_assistant(user) and user.assistant.courses.filter(id=course.id).exists()
+        return teacher_or_assistant
 
 
 class ProjectGroupPermission(BasePermission):
@@ -43,13 +42,12 @@ class ProjectGroupPermission(BasePermission):
     def has_object_permission(self, request: Request, view: ViewSet, project) -> bool:
         user: User = request.user
         course = project.course
+        teacher_or_assistant = is_teacher(user) and user.teacher.courses.filter(id=course.id).exists() or \
+            is_assistant(user) and user.assistant.courses.filter(id=course.id).exists()
 
         if request.method in SAFE_METHODS:
             # Users that are linked to the course can view the group.
-            return is_teacher(user) and user.teacher.courses.filter(id=course.id).exists() or \
-                is_assistant(user) and user.assistant.courses.filter(id=course.id).exists() or \
-                is_student(user) and user.student.courses.filter(id=course.id).exists()
+            return teacher_or_assistant or (is_student(user) and user.student.courses.filter(id=course.id).exists())
 
         # We only allow teachers and assistants to create new groups.
-        return is_teacher(user) and user.teacher.courses.filter(id=course.id).exists() or \
-            is_assistant(user) and user.assistant.courses.filter(id=course.id).exists()
+        return teacher_or_assistant
