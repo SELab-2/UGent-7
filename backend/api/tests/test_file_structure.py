@@ -3,7 +3,7 @@ import json
 from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
-from api.views.check_folder_structure import check_zip_file, parse_zip_file
+from api.helpers.check_folder_structure import check_zip_file, parse_zip_file
 from api.models.checks import StructureCheck
 from api.models.extension import FileExtension
 from api.models.course import Course
@@ -21,7 +21,7 @@ def create_course(id, name, academic_startyear):
     )
 
 
-def create_fileExtension(extension):
+def create_file_extension(extension):
     """
     Create a FileExtension with the given arguments.
     """
@@ -42,20 +42,20 @@ def create_project(name, description, visible, archived, days, course):
     )
 
 
-def create_structureCheck(name, project, obligated, blocked):
+def create_structure_check(name, project, obligated, blocked):
     """
     Create a StructureCheck with the given arguments.
     """
-    structureCheck = StructureCheck.objects.create(
+    structure_check = StructureCheck.objects.create(
         name=name,
         project=project,
     )
     for ch in obligated:
-        structureCheck.obligated_extensions.add(ch)
+        structure_check.obligated_extensions.add(ch)
     for ch in blocked:
-        structureCheck.blocked_extensions.add(ch)
+        structure_check.blocked_extensions.add(ch)
 
-    return structureCheck
+    return structure_check
 
 
 class FileTestsTests(APITestCase):
@@ -159,54 +159,54 @@ class FileTestsTests(APITestCase):
             course=course,
         )
 
-        fileExtensionHS = create_fileExtension(extension="hs")
-        fileExtensionPDF = create_fileExtension(extension="pdf")
-        fileExtensionDOCX = create_fileExtension(extension="docx")
-        fileExtensionLATEX = create_fileExtension(extension="latex")
-        fileExtensionMD = create_fileExtension(extension="md")
-        fileExtensionPY = create_fileExtension(extension="py")
-        fileExtensionHPP = create_fileExtension(extension="hpp")
-        fileExtensionCPP = create_fileExtension(extension="cpp")
-        fileExtensionTS = create_fileExtension(extension="ts")
-        fileExtensionTSX = create_fileExtension(extension="tsx")
+        fileExtensionHS = create_file_extension(extension="hs")
+        fileExtensionPDF = create_file_extension(extension="pdf")
+        fileExtensionDOCX = create_file_extension(extension="docx")
+        fileExtensionLATEX = create_file_extension(extension="latex")
+        fileExtensionMD = create_file_extension(extension="md")
+        fileExtensionPY = create_file_extension(extension="py")
+        fileExtensionHPP = create_file_extension(extension="hpp")
+        fileExtensionCPP = create_file_extension(extension="cpp")
+        fileExtensionTS = create_file_extension(extension="ts")
+        fileExtensionTSX = create_file_extension(extension="tsx")
 
-        create_structureCheck(
+        create_structure_check(
             name=".",
             project=project,
             obligated=[],
             blocked=[])
 
-        create_structureCheck(
+        create_structure_check(
             name="folder_struct1",
             project=project,
             obligated=[fileExtensionHS],
             blocked=[])
 
-        create_structureCheck(
+        create_structure_check(
             name="folder_struct1/submap1",
             project=project,
             obligated=[fileExtensionPDF, fileExtensionDOCX],
             blocked=[])
 
-        create_structureCheck(
+        create_structure_check(
             name="folder_struct1/submap1/templates",
             project=project,
             obligated=[fileExtensionLATEX],
             blocked=[])
 
-        create_structureCheck(
+        create_structure_check(
             name="folder_struct1/submap2",
             project=project,
             obligated=[fileExtensionMD],
             blocked=[])
 
-        create_structureCheck(
+        create_structure_check(
             name="folder_struct1/submap2/src",
             project=project,
             obligated=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
             blocked=[])
 
-        create_structureCheck(
+        create_structure_check(
             name="folder_struct1/submap3",
             project=project,
             obligated=[fileExtensionTS, fileExtensionTSX],
