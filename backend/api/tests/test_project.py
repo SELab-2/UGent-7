@@ -5,6 +5,8 @@ from rest_framework.test import APITestCase
 from authentication.models import User
 from api.models.project import Project
 from api.models.course import Course
+from api.models.teacher import Teacher
+from api.models.student import Student
 from api.models.checks import StructureCheck, ExtraCheck
 from api.models.extension import FileExtension
 from django.conf import settings
@@ -454,3 +456,90 @@ class ProjectModelTests(APITestCase):
             "project-detail", args=[str(project.id)]
         ))
         self.assertEqual(content_json["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)
+
+
+class ProjectModelTestsAsTeacher(APITestCase):
+    def setUp(self) -> None:
+        self.user = Teacher.objects.create(
+            id="teacher",
+            first_name="Bobke",
+            last_name="Peeters",
+            username="bpeeters",
+            email="Test@gmail.com"
+        )
+
+        self.client.force_authenticate(
+            self.user
+        )
+
+    def test_create_groups(self):
+        """Able to create groups for a project."""
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        response = self.client.post(
+            reverse("project-groups", args=[str(project.id)]),
+            data={"number_groups": 3},
+            follow=True,
+        )
+
+        # Make sure you can not make groups for a project that is not yours
+        self.assertEqual(response.status_code, 403)
+
+        # Add the teacher to the course
+        course.teachers.add(self.user)
+
+        response = self.client.post(
+            reverse("project-groups", args=[str(project.id)]),
+            data={"number_groups": 3},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the groups were created
+        self.assertEqual(project.groups.count(), 3)
+
+
+class ProjectModelTestsAsStudent(APITestCase):
+    def setUp(self) -> None:
+        self.user = Student.objects.create(
+            id="student",
+            first_name="Bobke",
+            last_name="Peeters",
+            username="bpeeters",
+            email="Bobke.Peeters@gmail.com"
+        )
+
+        self.client.force_authenticate(
+            self.user
+        )
+
+    def test_try_to_create_groups(self):
+        """Not able to create groups for a project."""
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+        course.students.add(self.user)
+
+        response = self.client.post(
+            reverse("project-groups", args=[str(project.id)]),
+            data={"number_groups": 3},
+            follow=True,
+        )
+
+        # Make sure you can not make groups as a student
+        self.assertEqual(response.status_code, 403)
