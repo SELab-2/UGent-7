@@ -296,8 +296,9 @@ class GroupModelTestsAsTeacher(APITestCase):
             id=5, first_name="John", last_name="Doe", email="John.Doe@gmail.com"
         )
 
-        # Add this teacher to the course
+        # Add this teacher and student to the course
         course.teachers.add(self.user)
+        course.students.add(student)
 
         group = create_group(project=project, score=10)
 
@@ -367,7 +368,8 @@ class GroupModelTestsAsStudent(APITestCase):
 
         # Try to join a group that is part of a course the student is not enrolled in
         response = self.client.post(
-            reverse("group-join", args=[str(group.id)]),
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": self.user.id},
             follow=True,
         )
 
@@ -379,7 +381,8 @@ class GroupModelTestsAsStudent(APITestCase):
 
         # Join the group now that the student is enrolled in the course
         response = self.client.post(
-            reverse("group-join", args=[str(group.id)]),
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": self.user.id},
             follow=True,
         )
 
@@ -392,16 +395,16 @@ class GroupModelTestsAsStudent(APITestCase):
         group2 = create_group(project=project, score=10)
 
         response = self.client.post(
-            reverse("group-join", args=[str(group2.id)]),
+            reverse("group-students", args=[str(group2.id)]),
+            {"student_id": self.user.id},
             follow=True,
         )
 
         # Make sure you can only be in one group at a time
         self.assertEqual(response.status_code, 400)
-        # self.assertEqual(content_json, gettext("group.errors.already_in_group"))
 
     def test_join_full_group(self):
-        """Able to join a group as a student."""
+        """Not able to join a full group as a student."""
         course = create_course(name="sel2", academic_startyear=2023)
         project = create_project(
             name="Project 1", description="Description 1", days=7, course=course, group_size=1
@@ -417,9 +420,98 @@ class GroupModelTestsAsStudent(APITestCase):
 
         # Join the group
         response = self.client.post(
-            reverse("group-join", args=[str(group.id)]),
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": self.user.id},
             follow=True,
         )
 
         self.assertEqual(response.status_code, 400)
-        # self.assertEqual(response.data['detail'], gettext("group.errors.full"))
+
+    def test_leave_group(self):
+        """Able to leave a group as a student."""
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        group = create_group(project=project, score=10)
+
+        # Add the student to the course
+        course.students.add(self.user)
+
+        # Join the group
+        response = self.client.post(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Make sure the student is in the group now
+        self.assertTrue(group.students.filter(id=self.user.id).exists())
+
+        # Leave the group
+        response = self.client.delete(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Make sure the student is not in the group anymore
+        self.assertFalse(group.students.filter(id=self.user.id).exists())
+
+    def try_to_assign_other_student_to_group(self):
+        """Not able to assign another student to a group."""
+        course = create_course(name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        student = create_student(
+            id=5, first_name="John", last_name="Doe", email="John.Doe@gmail.com"
+        )
+
+        # Add this student to the course
+        course.students.add(student)
+        course.students.add(self.user)
+
+        group = create_group(project=project, score=10)
+
+        response = self.client.post(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": student.id},
+            follow=True,
+        )
+
+        # Make sure that you are not able to assign another student to a group
+        self.assertEqual(response.status_code, 403)
+
+    def try_to_delete_other_student_from_group(self):
+        """Not able to remove another student from a group."""
+        course = create_course(name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        student = create_student(
+            id=5, first_name="John", last_name="Doe", email="John.Doe@gmail.com"
+        )
+
+        # Add this student to the course
+        course.students.add(student)
+        course.students.add(self.user)
+
+        group = create_group(project=project, score=10)
+        group.students.add(student)
+        group.students.add(self.user)
+
+        response = self.client.delete(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": student.id},
+            follow=True,
+        )
+
+        # Make sure that you are not able to remove another student from a group
+        self.assertEqual(response.status_code, 403)
