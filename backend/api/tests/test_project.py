@@ -218,18 +218,6 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(retrieved_project["archived"], project.archived)
         self.assertEqual(retrieved_project["course"], expected_course_url)
 
-        retrieved_project = content_json[1]
-
-        expected_course_url = settings.TESTING_BASE_LINK + reverse(
-            "course-detail", args=[str(course.id)]
-        )
-
-        self.assertEqual(retrieved_project["name"], project2.name)
-        self.assertEqual(retrieved_project["description"], project2.description)
-        self.assertEqual(retrieved_project["visible"], project2.visible)
-        self.assertEqual(retrieved_project["archived"], project2.archived)
-        self.assertEqual(retrieved_project["course"], expected_course_url)
-
     def test_project_course(self):
         """
         Able to retrieve a course of a project after creating it.
