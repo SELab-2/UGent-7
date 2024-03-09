@@ -29,7 +29,8 @@ def create_project(name, description, days, course, group_size=2, max_score=20):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timedelta(days=days)
     return Project.objects.create(
-        name=name, description=description, deadline=deadline, course=course, group_size=group_size, max_score=max_score
+        name=name, description=description, deadline=deadline, course=course, 
+        group_size=group_size, max_score=max_score
     )
 
 
