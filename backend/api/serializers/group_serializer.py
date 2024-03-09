@@ -20,6 +20,15 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ["id", "project", "students", "score"]
 
+    def validate(self, data):
+        # Make sure the score of the group is lower or equal to the maximum score
+        group: Group = self.instance
+
+        if "score" in data and data["score"] > group.project.max_score:
+            raise ValidationError(gettext("group.errors.score_exceeds_max"))
+
+        return data
+
 
 class StudentJoinGroupSerializer(StudentIDSerializer):
 
@@ -34,7 +43,7 @@ class StudentJoinGroupSerializer(StudentIDSerializer):
 
         # Make sure the group is not already full
         if group.is_full():
-            raise serializers.ValidationError(gettext("group.errors.full"))
+            raise ValidationError(gettext("group.errors.full"))
 
         # Make sure the student is part of the course
         if not group.project.course.students.filter(id=student.id).exists():
@@ -42,7 +51,7 @@ class StudentJoinGroupSerializer(StudentIDSerializer):
 
         # Make sure the student is not already in a group
         if student.is_enrolled_in_group(group.project):
-            raise serializers.ValidationError(gettext("group.errors.already_in_group"))
+            raise ValidationError(gettext("group.errors.already_in_group"))
 
         return data
 

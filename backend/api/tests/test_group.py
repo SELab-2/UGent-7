@@ -25,11 +25,11 @@ def create_course(name, academic_startyear, description=None, parent_course=None
     )
 
 
-def create_project(name, description, days, course, group_size=2):
+def create_project(name, description, days, course, group_size=2, max_score=20):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timedelta(days=days)
     return Project.objects.create(
-        name=name, description=description, deadline=deadline, course=course, group_size=group_size
+        name=name, description=description, deadline=deadline, course=course, group_size=group_size, max_score=max_score
     )
 
 
@@ -348,7 +348,7 @@ class GroupModelTestsAsTeacher(APITestCase):
         course = create_course(name="sel2", academic_startyear=2023)
 
         project = create_project(
-            name="Project 1", description="Description 1", days=7, course=course
+            name="Project 1", description="Description 1", days=7, course=course, max_score=20
         )
 
         # Add this teacher to the course
@@ -366,6 +366,19 @@ class GroupModelTestsAsTeacher(APITestCase):
         self.assertEqual(response.accepted_media_type, "application/json")
 
         # Make sure the score of the group is updated
+        group.refresh_from_db()
+        self.assertEqual(group.score, 20)
+
+        # Try to update the score of a group to a score higher than the maximum score
+        response = self.client.patch(
+            reverse("group-detail", args=[str(group.id)]),
+            {"score": 30},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        # Make sure the score of the group is not updated
         group.refresh_from_db()
         self.assertEqual(group.score, 20)
 
