@@ -1,68 +1,86 @@
+from django.utils.translation import gettext
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.permissions import IsAdminUser
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
-from django.utils.translation import gettext_lazy as _
+from api.permissions.project_permissions import ProjectGroupPermission, ProjectPermission
+from api.models.group import Group
 from ..models.project import Project
-from ..serializers.project_serializer import ProjectSerializer
-from ..serializers.group_serializer import GroupSerializer
 from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
+from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer
+from api.serializers.group_serializer import GroupSerializer
 
 
-class ProjectViewSet(viewsets.ModelViewSet):
+class ProjectViewSet(CreateModelMixin,
+                     RetrieveModelMixin,
+                     UpdateModelMixin,
+                     DestroyModelMixin,
+                     viewsets.GenericViewSet):
+
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = [IsAdminUser | ProjectPermission]  # GroupPermission has exact the same logic as for a project
 
-    @action(detail=True, methods=["get"])
-    def groups(self, request, pk=None):
+    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | ProjectGroupPermission])
+    def groups(self, request, **_):
         """Returns a list of groups for the given project"""
+        # This automatically fetches the group from the URL.
+        # It automatically gives back a 404 HTTP response in case of not found.
+        project = self.get_object()
+        groups = project.groups.all()
 
-        try:
-            queryset = Project.objects.get(id=pk)
-            groups = queryset.groups.all()
+        # Serialize the group objects
+        serializer = GroupSerializer(
+            groups, many=True, context={"request": request}
+        )
 
-            # Serialize the group objects
-            serializer = GroupSerializer(
-                groups, many=True, context={"request": request}
-            )
-            return Response(serializer.data)
+        return Response(serializer.data)
 
-        except Project.DoesNotExist:
-            # Invalid project ID
-            raise NotFound(_('project.status.not_found'))
+    @groups.mapping.post
+    def _create_groups(self, request, **_):
+        """Create a number of groups for the project"""
+        project = self.get_object()
+
+        serializer = TeacherCreateGroupSerializer(
+            data=request.data, context={"project": project}
+        )
+
+        # Validate the serializer
+        if serializer.is_valid(raise_exception=True):
+            # Get the number of groups to create
+            num_groups = serializer.validated_data["number_groups"]
+
+            # Create the groups
+            for _ in range(num_groups):
+                Group.objects.create(
+                    project=project
+                )
+
+        return Response({
+            "message": gettext("project.success.groups.created"),
+        })
 
     @action(detail=True, methods=["get"])
-    def structure_checks(self, request, pk=None):
+    def structure_checks(self, request, **_):
         """Returns the structure checks for the given project"""
+        project = self.get_object()
+        checks = project.structure_checks.all()
 
-        try:
-            queryset = Project.objects.get(id=pk)
-            checks = queryset.structure_checks.all()
-
-            # Serialize the check objects
-            serializer = StructureCheckSerializer(
-                checks, many=True, context={"request": request}
-            )
-            return Response(serializer.data)
-
-        except Project.DoesNotExist:
-            # Invalid project ID
-            raise NotFound(_('project.status.not_found'))
+        # Serialize the check objects
+        serializer = StructureCheckSerializer(
+            checks, many=True, context={"request": request}
+        )
+        return Response(serializer.data)
 
     @action(detail=True, methods=["get"])
-    def extra_checks(self, request, pk=None):
+    def extra_checks(self, request, **_):
         """Returns the extra checks for the given project"""
+        project = self.get_object()
+        checks = project.extra_checks.all()
 
-        try:
-            queryset = Project.objects.get(id=pk)
-            checks = queryset.extra_checks.all()
-
-            # Serialize the check objects
-            serializer = ExtraCheckSerializer(
-                checks, many=True, context={"request": request}
-            )
-            return Response(serializer.data)
-
-        except Project.DoesNotExist:
-            # Invalid project ID
-            raise NotFound(_('project.status.not_found'))
+        # Serialize the check objects
+        serializer = ExtraCheckSerializer(
+            checks, many=True, context={"request": request}
+        )
+        return Response(serializer.data)

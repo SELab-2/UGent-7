@@ -39,3 +39,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "course",
             "groups"
         ]
+
+
+class TeacherCreateGroupSerializer(serializers.Serializer):
+    number_groups = serializers.IntegerField(min_value=1)
