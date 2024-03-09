@@ -164,6 +164,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         try:
             # We should return the already cloned course, if present
             course = course.child_course
+
         except Course.DoesNotExist:
             # Else, we clone the course
             course = course.clone(
