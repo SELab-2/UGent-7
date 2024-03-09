@@ -8,6 +8,7 @@ from api.models.project import Project
 from api.models.student import Student
 from api.models.group import Group
 from api.models.course import Course
+from django.conf import settings
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -83,7 +84,7 @@ class GroupModelTests(APITestCase):
         self.assertEqual(len(content_json), 1)
 
         retrieved_group = content_json[0]
-        expected_project_url = "http://testserver" + reverse(
+        expected_project_url = settings.TESTING_BASE_LINK + reverse(
             "project-detail", args=[str(project.id)]
         )
 
@@ -122,10 +123,10 @@ class GroupModelTests(APITestCase):
         self.assertEqual(len(content_json), 2)
 
         retrieved_group1, retrieved_group2 = content_json
-        expected_project_url1 = "http://testserver" + reverse(
+        expected_project_url1 = settings.TESTING_BASE_LINK + reverse(
             "project-detail", args=[str(project1.id)]
         )
-        expected_project_url2 = "http://testserver" + reverse(
+        expected_project_url2 = settings.TESTING_BASE_LINK + reverse(
             "project-detail", args=[str(project2.id)]
         )
 
@@ -159,7 +160,7 @@ class GroupModelTests(APITestCase):
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        expected_project_url = "http://testserver" + reverse(
+        expected_project_url = settings.TESTING_BASE_LINK + reverse(
             "project-detail", args=[str(project.id)]
         )
 
@@ -203,7 +204,7 @@ class GroupModelTests(APITestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 

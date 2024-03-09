@@ -7,6 +7,7 @@ from api.models.project import Project
 from api.models.course import Course
 from api.models.checks import StructureCheck, ExtraCheck
 from api.models.extension import FileExtension
+from django.conf import settings
 
 
 def create_course(id, name, academic_startyear):
@@ -212,7 +213,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 
@@ -256,7 +257,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 
@@ -268,7 +269,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[1]
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 
@@ -361,7 +362,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 
@@ -449,7 +450,7 @@ class ProjectModelTests(APITestCase):
         content_json = json.loads(response.content.decode("utf-8"))[0]
 
         self.assertEqual(int(content_json["id"]), checks.id)
-        self.assertEqual(content_json["project"], "http://testserver" + reverse(
+        self.assertEqual(content_json["project"], settings.TESTING_BASE_LINK + reverse(
             "project-detail", args=[str(project.id)]
         ))
-        self.assertEqual(content_json["run_script"], "http://testserver" + checks.run_script.url)
+        self.assertEqual(content_json["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)

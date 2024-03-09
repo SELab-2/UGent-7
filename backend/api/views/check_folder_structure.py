@@ -9,7 +9,11 @@ from django.conf import settings
 def parseZipFile(project, dir_path):  # TODO block paths that start with ..
     dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
     struct = get_zip_structure(dir_path)
-    for key, value in struct.items():
+
+    sorted_keys = sorted(struct.keys())
+
+    for key in sorted_keys:
+        value = struct[key]
         check = StructureCheck.objects.create(
             name=key,
             project=project

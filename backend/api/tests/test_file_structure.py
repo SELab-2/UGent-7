@@ -92,8 +92,59 @@ class FileTestsTests(APITestCase):
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # print("strucCheck:", content_json["structure_checks"])
-        # TODO get the structure checks from this now its following
-        # strucCheck: http://testserver/projects/1/structure_checks/
+        response = self.client.get(
+            content_json["structure_checks"], follow=True
+        )
 
-        self.assertEqual(True, True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 7)
+
+        expected_project_url = settings.TESTING_BASE_LINK + reverse(
+            "project-detail", args=[str(project.id)]
+        )
+
+        content = content_json[0]
+        self.assertEqual(content["name"], ".")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 0)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
+
+        content = content_json[1]
+        self.assertEqual(content["name"], "folder_struct1")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 1)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
+
+        content = content_json[2]
+        self.assertEqual(content["name"], "folder_struct1/submap1")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 2)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
+
+        content = content_json[3]
+        self.assertEqual(content["name"], "folder_struct1/submap1/templates")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 1)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
+
+        content = content_json[4]
+        self.assertEqual(content["name"], "folder_struct1/submap2")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 1)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
+
+        content = content_json[5]
+        self.assertEqual(content["name"], "folder_struct1/submap2/src")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 3)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
+
+        content = content_json[6]
+        self.assertEqual(content["name"], "folder_struct1/submap3")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 2)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
