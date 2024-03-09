@@ -49,6 +49,8 @@ class CourseAssistantPermission(CoursePermission):
 
 class CourseStudentPermission(CoursePermission):
     """Permission class for student related endpoints."""
+    def has_permission(self, request: Request, view: ViewSet) -> bool:
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request: Request, view: ViewSet, course: Course):
         user: User = request.user
@@ -67,6 +69,8 @@ class CourseStudentPermission(CoursePermission):
 
 class CourseProjectPermission(CoursePermission):
     """Permission class for project related endpoints."""
+    def has_permission(self, request: Request, view: ViewSet) -> bool:
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request: Request, view: ViewSet, course: Course):
         user: User = request.user
