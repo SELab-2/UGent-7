@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.db import models
 from django.utils import timezone
 from api.models.course import Course
@@ -21,7 +20,7 @@ class Project(models.Model):
 
     start_date = models.DateTimeField(
         # The default value is the current date and time
-        default=datetime.now,
+        default=timezone.now,
         blank=True,
     )
 

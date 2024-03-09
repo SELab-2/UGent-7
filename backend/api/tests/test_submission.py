@@ -9,6 +9,7 @@ from api.models.project import Project
 from api.models.group import Group
 from api.models.course import Course
 from api.models.checks import ExtraCheck
+from django.conf import settings
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -98,7 +99,7 @@ class SubmissionModelTests(APITestCase):
         # Assert the details of the retrieved submission
         # match the created submission
         retrieved_submission = content_json[0]
-        expected_group_url = "http://testserver" + reverse(
+        expected_group_url = settings.TESTING_BASE_LINK + reverse(
             "group-detail", args=[str(group.id)]
         )
         self.assertEqual(int(retrieved_submission["id"]), submission.id)
@@ -139,7 +140,7 @@ class SubmissionModelTests(APITestCase):
         # Assert the details of the retrieved submission
         # match the created submission
         retrieved_submission = content_json[0]
-        expected_group_url = "http://testserver" + reverse(
+        expected_group_url = settings.TESTING_BASE_LINK + reverse(
             "group-detail", args=[str(group.id)]
         )
         self.assertEqual(int(retrieved_submission["id"]), submission1.id)
@@ -150,7 +151,7 @@ class SubmissionModelTests(APITestCase):
         self.assertEqual(retrieved_submission["group"], expected_group_url)
 
         retrieved_submission = content_json[1]
-        expected_group_url = "http://testserver" + reverse(
+        expected_group_url = settings.TESTING_BASE_LINK + reverse(
             "group-detail", args=[str(group.id)]
         )
         self.assertEqual(int(retrieved_submission["id"]), submission2.id)
@@ -188,7 +189,7 @@ class SubmissionModelTests(APITestCase):
         # Assert the details of the retrieved submission
         # match the created submission
         retrieved_submission = content_json
-        expected_group_url = "http://testserver" + reverse(
+        expected_group_url = settings.TESTING_BASE_LINK + reverse(
             "group-detail", args=[str(group.id)]
         )
         self.assertEqual(int(retrieved_submission["id"]), submission.id)
@@ -241,7 +242,7 @@ class SubmissionModelTests(APITestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        expected_project_url = "http://testserver" + reverse(
+        expected_project_url = settings.TESTING_BASE_LINK + reverse(
             "project-detail", args=[str(project.id)]
         )
 

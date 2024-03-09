@@ -1,9 +1,12 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
+from django.utils.translation import gettext_lazy as _
 from ..models.project import Project
 from ..serializers.project_serializer import ProjectSerializer
 from ..serializers.group_serializer import GroupSerializer
+from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -26,6 +29,40 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         except Project.DoesNotExist:
             # Invalid project ID
-            return Response(
-                status=status.HTTP_404_NOT_FOUND, data={"message": "Project not found"}
+            raise NotFound(_('project.status.not_found'))
+
+    @action(detail=True, methods=["get"])
+    def structure_checks(self, request, pk=None):
+        """Returns the structure checks for the given project"""
+
+        try:
+            queryset = Project.objects.get(id=pk)
+            checks = queryset.structure_checks.all()
+
+            # Serialize the check objects
+            serializer = StructureCheckSerializer(
+                checks, many=True, context={"request": request}
             )
+            return Response(serializer.data)
+
+        except Project.DoesNotExist:
+            # Invalid project ID
+            raise NotFound(_('project.status.not_found'))
+
+    @action(detail=True, methods=["get"])
+    def extra_checks(self, request, pk=None):
+        """Returns the extra checks for the given project"""
+
+        try:
+            queryset = Project.objects.get(id=pk)
+            checks = queryset.extra_checks.all()
+
+            # Serialize the check objects
+            serializer = ExtraCheckSerializer(
+                checks, many=True, context={"request": request}
+            )
+            return Response(serializer.data)
+
+        except Project.DoesNotExist:
+            # Invalid project ID
+            raise NotFound(_('project.status.not_found'))

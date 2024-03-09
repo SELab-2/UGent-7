@@ -7,6 +7,7 @@ from api.models.checks import StructureCheck, ExtraCheck
 from api.models.extension import FileExtension
 from api.models.project import Project
 from api.models.course import Course
+from django.conf import settings
 
 
 def create_fileExtension(id, extension):
@@ -300,4 +301,4 @@ class ExtraCheckModelTests(APITestCase):
         # Assert the details of the retrieved Checks match the created Checks
         retrieved_checks = content_json[0]
         self.assertEqual(int(retrieved_checks["id"]), checks.id)
-        self.assertEqual(retrieved_checks["run_script"], "http://testserver" + checks.run_script.url)
+        self.assertEqual(retrieved_checks["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)

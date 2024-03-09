@@ -7,6 +7,7 @@ from api.models.project import Project
 from api.models.course import Course
 from api.models.checks import StructureCheck, ExtraCheck
 from api.models.extension import FileExtension
+from django.conf import settings
 
 
 def create_course(id, name, academic_startyear):
@@ -212,7 +213,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 
@@ -256,7 +257,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 
@@ -268,7 +269,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[1]
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 
@@ -361,7 +362,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        expected_course_url = "http://testserver" + reverse(
+        expected_course_url = settings.TESTING_BASE_LINK + reverse(
             "course-detail", args=[str(course.id)]
         )
 
@@ -371,7 +372,7 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(retrieved_project["archived"], project.archived)
         self.assertEqual(retrieved_project["course"], expected_course_url)
 
-        response = self.client.get(retrieved_project["structure_checks"][0], follow=True)
+        response = self.client.get(retrieved_project["structure_checks"], follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -380,7 +381,7 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(response.accepted_media_type, "application/json")
 
         # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+        content_json = json.loads(response.content.decode("utf-8"))[0]
 
         self.assertEqual(int(content_json["id"]), checks.id)
 
@@ -437,7 +438,7 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json[0]
 
-        response = self.client.get(retrieved_project["extra_checks"][0], follow=True)
+        response = self.client.get(retrieved_project["extra_checks"], follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
@@ -446,10 +447,10 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(response.accepted_media_type, "application/json")
 
         # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+        content_json = json.loads(response.content.decode("utf-8"))[0]
 
         self.assertEqual(int(content_json["id"]), checks.id)
-        self.assertEqual(content_json["project"], "http://testserver" + reverse(
+        self.assertEqual(content_json["project"], settings.TESTING_BASE_LINK + reverse(
             "project-detail", args=[str(project.id)]
         ))
-        self.assertEqual(content_json["run_script"], "http://testserver" + checks.run_script.url)
+        self.assertEqual(content_json["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)
