@@ -87,8 +87,7 @@ def get_zip_structure(root_path):
     with zipfile.ZipFile(root_path, 'r') as zip_file:
         file_names = zip_file.namelist()
         for file_name in file_names:
-            # print(file_name)
-            parts = file_name.rsplit('/', 1)  # You can also use '\\' if needed
+            parts = file_name.rsplit('/', 1)
             if len(parts) == 2:
                 map, file = parts
                 _, file_extension = os.path.splitext(file)
@@ -169,7 +168,7 @@ def check_zip_structure(
     """
     base, _ = os.path.splitext(zip_file_path)
     struc = [f for f in folder_structure.keys() if not f == "."]
-    # print(struc)
+
     dirs = list_zip_directories(zip_file_path)
     for dir in struc:
         if dir not in dirs:
@@ -177,21 +176,17 @@ def check_zip_structure(
             return False, gettext(
                 'zip.errors.invalid_structure.directory_not_defined')
 
-    with zipfile.ZipFile(zip_file_path, 'r') as zip_file:
-        # zip_contents = set(zip_file.namelist())
-        # print(f"all contents in the zip are {zip_contents}")
-        for directory, info in folder_structure.items():
-            # base_name, _ = os.path.splitext(zip_file_path)
-            obligated_extensions = info.get('obligated_extensions', set())
-            blocked_extensions = info.get('blocked_extensions', set())
+    for directory, info in folder_structure.items():
+        obligated_extensions = info.get('obligated_extensions', set())
+        blocked_extensions = info.get('blocked_extensions', set())
 
-            result, message = check_zip_content(
-                zip_file_path,
-                directory,
-                obligated_extensions,
-                blocked_extensions)
-            if not result:
-                return result, message
+        result, message = check_zip_content(
+            zip_file_path,
+            directory,
+            obligated_extensions,
+            blocked_extensions)
+        if not result:
+            return result, message
     # Check for any directories not present in the folder structure dictionary
     if restrict_extra_folders:
         for actual_directory in dirs:
