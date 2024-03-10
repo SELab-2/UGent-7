@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ..models.submission import Submission, SubmissionFile, ExtraChecksResult
+from api.helpers.check_folder_structure import check_zip_file # , parse_zip_file
 
 
 class SubmissionFileSerializer(serializers.ModelSerializer):
@@ -54,8 +55,15 @@ class SubmissionSerializer(serializers.ModelSerializer):
         # Create the Submission instance without the files
         submission = Submission.objects.create(**validated_data)
 
-        # Create SubmissionFile instances for each file
+        pas: bool = True
+        # Create SubmissionFile instances for each file and check if none fail structure checks
         for file in files_data:
             SubmissionFile.objects.create(submission=submission, file=file)
+            status, _ = check_zip_file(submission.group.project, file.name)
+            if not status:
+                pas = False
 
+        # Set structure_checks_passed to True
+        submission.structure_checks_passed = pas
+        submission.save()
         return submission

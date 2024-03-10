@@ -2,6 +2,7 @@ from django.utils.translation import gettext
 from rest_framework import serializers
 from ..models.project import Project
 from rest_framework.exceptions import ValidationError
+from ..models.submission import Submission, SubmissionFile
 
 
 class ProjectSerializer(serializers.ModelSerializer):
