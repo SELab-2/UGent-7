@@ -48,7 +48,7 @@ class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
 
 
-class SubmissionAddSerializer(serializers.Serializer):
+class SubmissionAddSerializer(serializers.ModelSerializer):
     def validate(self, data):
         # The validator needs the project context.
         if "project" not in self.context:
@@ -56,6 +56,7 @@ class SubmissionAddSerializer(serializers.Serializer):
 
         project: Project = self.context["project"]
 
+        data["submission_number"] = 156
         # Check if the project's deadline is not passed.
         if project.deadline_passed():
             raise ValidationError(gettext("project.error.submission.past_project"))
