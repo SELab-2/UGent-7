@@ -12,7 +12,6 @@ from rest_framework.serializers import (
     ModelSerializer,
     Serializer,
     ValidationError,
-    PrimaryKeyRelatedField
 )
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
@@ -108,8 +107,3 @@ class UserSerializer(ModelSerializer):
     def get_or_create(self, validated_data: dict) -> Tuple[User, bool]:
         """Create or fetch the user based on the validated data."""
         return User.objects.get_or_create(**validated_data)
-
-class UserIDSerializer(Serializer):
-    user_id = PrimaryKeyRelatedField(
-        queryset=User.objects.all()
-    )

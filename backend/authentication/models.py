@@ -33,10 +33,6 @@ class User(AbstractBaseUser):
     """Model settings"""
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
-    
-    def make_admin(self):
-        self.is_staff = True
-        self.save()
 
     @staticmethod
     def get_dummy_admin():
@@ -48,6 +44,7 @@ class User(AbstractBaseUser):
             email="nikkus@ypovoli.be",
             is_staff=True
         )
+
 
 class Faculty(models.Model):
     """This model represents a faculty."""
