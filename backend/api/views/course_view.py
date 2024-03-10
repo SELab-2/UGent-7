@@ -156,6 +156,26 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    @projects.mapping.post
+    @projects.mapping.put
+    def _add_project(self, request, **_):
+        """Add a project to the course"""
+        course = self.get_object()
+
+        serializer = ProjectSerializer(
+            data=request.data, context={}
+        )
+
+        # Validate the serializer
+        if serializer.is_valid(raise_exception=True):
+            course.projects.add(
+                serializer.validated_data["project_id"]
+            )
+
+        return Response({
+            "message": gettext("course.success.project.add"),
+        })
+
     @action(detail=True, methods=["post"], permission_classes=[IsAdminUser | IsTeacher])
     def clone(self, request: Request, **__):
         """Copy the course to a new course with the same fields"""
