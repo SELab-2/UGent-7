@@ -98,6 +98,31 @@ class ProjectModelTests(APITestCase):
         past_project.toggle_archived()
         self.assertIs(past_project.archived, True)
 
+    def test_deadline_of_Project_in_past_on_creation(self):
+        """
+        unable to create a project as a teacher/admin if the deadline lies within the past.
+        """
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        past_deadline = timezone.now() - timezone.timedelta(days=1)
+
+        project_data = {
+            "name": "Test Project",
+            "description": "Test project description",
+            "visible": True,
+            "archived": False,
+            "start_date": timezone.now(),
+            "deadline": past_deadline,
+            "course": course,
+        }
+
+        response = self.client.post(
+            reverse("course-projects", args=[course.id]),
+            data=project_data,
+            follow=True
+        )
+
+        print(f"Response: {response}")
+
     def test_deadline_approaching_in_with_past_Project(self):
         """
         deadline_approaching_in() returns False for Projects whose Deadline
@@ -409,7 +434,7 @@ class ProjectModelTests(APITestCase):
 
     def test_project_extra_checks(self):
         """
-        Able to retrieve a extra check of a project after creating it.
+        Able to retrieve an extra check of a project after creating it.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
         project = create_project(
