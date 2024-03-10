@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase
 from authentication.models import User
 from api.models.project import Project
 from api.models.course import Course
+from api.models.group import Group
 from api.models.teacher import Teacher
 from api.models.student import Student
 from api.models.checks import StructureCheck, ExtraCheck
@@ -39,6 +40,13 @@ def create_project(name, description, visible, archived, days, course):
         archived=archived,
         deadline=deadline,
         course=course,
+    )
+
+def create_group(project):
+    """Create a Group with the given arguments."""
+
+    return Group.objects.create(
+        project=project
     )
 
 
@@ -482,7 +490,7 @@ class ProjectModelTestsAsTeacher(APITestCase):
             follow=True,
         )
 
-        # Make sure you can not make groups for a project that is not yours
+        # Make sure you cannot make groups for a project that is not yours
         self.assertEqual(response.status_code, 403)
 
         # Add the teacher to the course
@@ -498,6 +506,47 @@ class ProjectModelTestsAsTeacher(APITestCase):
 
         # Assert that the groups were created
         self.assertEqual(project.groups.count(), 3)
+
+    def test_submission_status(self):
+        """Retrieve the submission status for a project."""
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        response = self.client.get(
+            reverse("project-groups", args=[str(project.id)]),
+            follow=True
+        )
+
+        # Make sure you cannot retrieve the submission status for a project that is not yours
+        self.assertEqual(response.status_code, 403)
+
+        # Add the teacher to the course
+        course.teachers.add(self.user)
+
+        group1 = create_group(project=project)
+        group2 = create_group(project=project)
+        group3 = create_group(project=project)
+
+        response = self.client.get(
+            reverse("project-submission-status", args=[str(project.id)]),
+            follow=True
+        )
+
+        # TODO: Complete this test once submissions is implemented
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            "groups_total": 3,
+            # "groups_submitted": 0,
+            # "submissions_passed": 0
+        })
 
 
 class ProjectModelTestsAsStudent(APITestCase):
@@ -533,5 +582,5 @@ class ProjectModelTestsAsStudent(APITestCase):
             follow=True,
         )
 
-        # Make sure you can not make groups as a student
+        # Make sure you cannot make groups as a student
         self.assertEqual(response.status_code, 403)

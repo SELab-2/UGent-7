@@ -3,6 +3,7 @@ from django.utils.translation import gettext
 from django.utils import timezone
 from rest_framework import serializers
 from ..models.project import Project
+from api.models.group import Group
 from api.models.course import Course
 
 
@@ -52,7 +53,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         else:
             raise ValidationError(gettext("project.errors.context"))
 
-        # Check if start data of the project is not in the past
+        # Check if start date of the project is not in the past
         if data["start_date"] < timezone.now():
             raise ValidationError(gettext("project.errors.start_date_in_past"))
 
@@ -68,3 +69,8 @@ class TeacherCreateGroupSerializer(serializers.Serializer):
 
     def validate(self, data):
         return data
+
+class SubmissionStatusSerializer(serializers.Serializer):
+    groups_total = serializers.IntegerField(read_only=True)
+    # groups_submitted = serializers.IntegerField(read_only=True) # TODO : Wait for submissions to be implemented
+    # submissions_passed = serializers.IntegerField(read_only=True)
