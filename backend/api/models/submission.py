@@ -49,7 +49,6 @@ class SubmissionFile(models.Model):
         null=False,
     )
 
-    # TODO - Set the right place to save the file
     file = models.FileField(blank=False, null=False)
 
 

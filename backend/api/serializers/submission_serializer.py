@@ -47,6 +47,12 @@ class SubmissionSerializer(serializers.ModelSerializer):
             "structure_checks_passed",
             "extra_checks_results"
         ]
+        extra_kwargs = {
+            "submission_number": {
+                "required": False,
+                "default": 0,  # Provide a default value or use the one you prefer
+            }
+        }
 
     def create(self, validated_data):
         # Extract files from the request
