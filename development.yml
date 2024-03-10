@@ -1,0 +1,67 @@
+version: "3.9"
+
+############################# NETWORKS
+
+networks:
+  selab_network:
+    name: selab_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.90.0/24
+
+############################# EXTENSIONS
+
+x-common-keys-selab: &common-keys-selab
+  networks:
+    - selab_network
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+  environment:
+    TZ: $TZ
+    PUID: $PUID
+    PGID: $PGID
+  env_file:
+    - .env
+
+############################# SERVICES
+
+services:
+
+  nginx:
+    <<: *common-keys-selab
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - $DATADIR/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - $DATADIR/nginx/ssl:/etc/nginx/
+    depends_on:
+      - backend
+      - frontend
+
+  backend:
+    <<: *common-keys-selab
+    container_name: backend
+    build:
+      context: $BACKEND_DIR
+      dockerfile: Dockerfile
+    expose:
+      - 8000
+    volumes:
+      - $BACKEND_DIR:/code
+
+  frontend:
+    <<: *common-keys-selab
+    container_name: frontend
+    build:
+      context: $FRONTEND_DIR
+      dockerfile: Dockerfile
+    expose:
+      - 3000
+    depends_on:
+      - backend
