@@ -7,7 +7,9 @@ from api.models.course import Course
 
 class ProjectSerializer(serializers.ModelSerializer):
     course = serializers.HyperlinkedRelatedField(
-        many=False, view_name="course-detail", queryset=Course.objects.all()
+        many=False,
+        view_name="course-detail",
+        read_only=True
     )
 
     structure_checks = serializers.HyperlinkedIdentityField(
@@ -44,7 +46,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, data):
-        print("*** Project validation goes here ***")
+        if "course" in self.context:
+            data["course_id"] = self.context["course"].id
+
         return data
 
 

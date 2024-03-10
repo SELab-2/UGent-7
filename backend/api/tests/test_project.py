@@ -101,7 +101,7 @@ class ProjectModelTests(APITestCase):
         past_project.toggle_archived()
         self.assertIs(past_project.archived, True)
 
-    def test_deadline_of_Project_in_past_on_creation(self):
+    def test_deadline_of_project_in_past_on_creation(self):
         """
         unable to create a project as a teacher/admin if the deadline lies within the past.
         """
@@ -114,8 +114,7 @@ class ProjectModelTests(APITestCase):
             "visible": True,
             "archived": False,
             "start_date": timezone.now(),
-            "deadline": past_deadline,
-            "course": course,
+            "deadline": past_deadline
         }
 
         response = self.client.post(
@@ -124,7 +123,8 @@ class ProjectModelTests(APITestCase):
             follow=True
         )
 
-        print(f"Response: {response}")
+        # Should not work since deadline is in the past
+        self.assertEqual(response.status_code, 400)
 
     def test_deadline_approaching_in_with_past_Project(self):
         """
