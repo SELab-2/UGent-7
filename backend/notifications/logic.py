@@ -2,7 +2,9 @@ import threading
 from smtplib import SMTPException
 from typing import Dict, List
 
+from celery import shared_task
 from django.core import mail
+from django.core.cache import cache
 from django.utils.translation import gettext as _
 from notifications.models import Notification
 from ypovoli.settings import EMAIL_CUSTOM
@@ -17,6 +19,17 @@ def get_message_dict(notification: Notification) -> Dict[str, str]:
     }
 
 
+# Call the function after 60 seconds and no more than once in that period
+def schedule_send_mails():
+    print("Hiii")
+    if not cache.get("notifications_send_mails"):
+        print("Not in cache yet")
+        cache.set("notifications_send_mails", True)
+        _send_mails.apply_async(countdown=60)
+    else:
+        print("Already in cache")
+
+
 # Try to send one email and set the result
 def _send_mail(mail: mail.EmailMessage, result: List[bool]):
     try:
@@ -27,7 +40,11 @@ def _send_mail(mail: mail.EmailMessage, result: List[bool]):
 
 
 # Send all unsent emails
-def send_mails():
+@shared_task
+def _send_mails():
+    print("Sending")
+    cache.set("notifications_send_mails", False)
+
     notifications = Notification.objects.filter(is_sent=False)
 
     # No notifications to send

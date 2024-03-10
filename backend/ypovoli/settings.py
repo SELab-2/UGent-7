@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -137,3 +138,23 @@ EMAIL_CUSTOM = {
     "subject": "[Ypovoli] New Notification",
     "timeout": 2,
 }
+
+REDIS_CUSTOM = {
+    "host": os.environ.get("REDIS_IP", "localhost"),
+    "port": os.environ.get("REDIS_PORT", 6379),
+    "password": os.environ.get("REDIS_PASSWORD", ""),
+    "db_django": 0,
+    "db_celery": 1,
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_django']}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+CELERY_BROKER_URL = f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"

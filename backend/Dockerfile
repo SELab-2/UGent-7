@@ -11,7 +11,3 @@ COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 
 COPY . /code/
-
-RUN ./setup.sh
-
-CMD ["python", "manage.py", "runsslserver", "192.168.90.2:8080"]

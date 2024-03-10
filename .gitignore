@@ -1,3 +1,5 @@
 .tool-versions
-data/postgres/*
-data/nginx/ssl/*
+data/*
+
+!data/nginx/nginx.conf
+!data/nginx/ssl/.gitkeep

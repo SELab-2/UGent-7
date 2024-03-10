@@ -6,7 +6,7 @@ from typing import Dict
 from authentication.models import User
 from django.dispatch import Signal, receiver
 from django.urls import reverse
-from notifications.logic import send_mails
+from notifications.logic import schedule_send_mails
 from notifications.serializers import NotificationSerializer
 
 notification_create = Signal()
@@ -33,7 +33,7 @@ def notification_creation(
 
     serializer.save()
 
-    send_mails()
+    schedule_send_mails()
 
     return True
 
