@@ -45,3 +45,17 @@ class SubmissionSerializer(serializers.ModelSerializer):
             "structure_checks_passed",
             "extra_checks_results"
         ]
+
+    def create(self, validated_data):
+        # Extract files from the request
+        request = self.context.get('request')
+        files_data = request.FILES.getlist('files') # Assuming 'files' is the key for the files in the request
+
+        # Create the Submission instance without the files
+        submission = Submission.objects.create(**validated_data)
+
+        # Create SubmissionFile instances for each file
+        for file in files_data:
+            SubmissionFile.objects.create(submission=submission, file=file)
+
+        return submission

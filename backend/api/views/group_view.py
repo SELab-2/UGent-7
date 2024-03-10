@@ -100,13 +100,11 @@ class GroupViewSet(CreateModelMixin,
 
         # Add submission to course
         serializer = SubmissionSerializer(
-            data=request.data
+            data=request.data, context={"request": request}
         )
 
         if serializer.is_valid(raise_exception=True):
-            group.submissions.create(
-                serializer.validated_data
-            )
+            serializer.save(group=group)
 
         return Response({
             "message": gettext("group.success.submissions.add")
