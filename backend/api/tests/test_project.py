@@ -106,7 +106,7 @@ class ProjectModelTests(APITestCase):
         unable to create a project as a teacher/admin if the deadline lies within the past.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        past_deadline = timezone.now() - timezone.timedelta(days=1)
+        past_deadline = timezone.now()  timezone.timedelta(days=1)
 
         project_data = {
             "name": "Test Project",
@@ -125,6 +125,7 @@ class ProjectModelTests(APITestCase):
 
         # Should not work since deadline is in the past
         self.assertEqual(response.status_code, 400)
+        
 
     def test_deadline_approaching_in_with_past_Project(self):
         """

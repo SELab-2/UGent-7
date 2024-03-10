@@ -1,5 +1,6 @@
 from rest_framework.exceptions import ValidationError
 from django.utils.translation import gettext
+from django.utils import timezone
 from rest_framework import serializers
 from ..models.project import Project
 from api.models.course import Course
@@ -48,6 +49,12 @@ class ProjectSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if "course" in self.context:
             data["course_id"] = self.context["course"].id
+        else:
+            raise ValidationError(gettext("project.errors.context"))
+
+        # Check if deadline of the course is in the future
+        if data["deadline"] < timezone.now():
+            raise ValidationError(gettext("project.errors.deadline_in_past"))
 
         return data
 
