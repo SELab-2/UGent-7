@@ -52,9 +52,13 @@ class ProjectSerializer(serializers.ModelSerializer):
         else:
             raise ValidationError(gettext("project.errors.context"))
 
-        # Check if deadline of the course is in the future
-        if data["deadline"] < timezone.now():
-            raise ValidationError(gettext("project.errors.deadline_in_past"))
+        # Check if start data of the project is not in the past
+        if data["start_date"] < timezone.now():
+            raise ValidationError(gettext("project.errors.start_date_in_past"))
+
+        # Check if deadline of the project is before the start date
+        if data["deadline"] < data["start_date"]:
+            raise ValidationError(gettext("project.errors.deadline_before_start_date"))
 
         return data
 

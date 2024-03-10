@@ -101,20 +101,20 @@ class ProjectModelTests(APITestCase):
         past_project.toggle_archived()
         self.assertIs(past_project.archived, True)
 
-    def test_deadline_of_project_in_past_on_creation(self):
+    def test_start_date_Project_not_in_past(self):
         """
-        unable to create a project as a teacher/admin if the deadline lies within the past.
+        unable to create a project as a teacher/admin if the start date lies within the past.
         """
         course = create_course(id=3, name="test course", academic_startyear=2024)
-        past_deadline = timezone.now()  timezone.timedelta(days=1)
+        start_date = timezone.now() - timezone.timedelta(days=1)
 
         project_data = {
             "name": "Test Project",
             "description": "Test project description",
             "visible": True,
             "archived": False,
-            "start_date": timezone.now(),
-            "deadline": past_deadline
+            "start_date": start_date,
+            "deadline": timezone.now() + timezone.timedelta(days=1)
         }
 
         response = self.client.post(
@@ -123,9 +123,35 @@ class ProjectModelTests(APITestCase):
             follow=True
         )
 
-        # Should not work since deadline is in the past
+        # Should not work since the start date lies in the past
         self.assertEqual(response.status_code, 400)
-        
+
+    def test_deadline_Project_before_start_date(self):
+        """
+        unable to create a project as a teacher/admin if the deadline lies before the start date.
+        """
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        deadline = timezone.now() + timezone.timedelta(days=1)
+        start_date = timezone.now() + timezone.timedelta(days=2)
+
+        project_data = {
+            "name": "Test Project",
+            "description": "Test project description",
+            "visible": True,
+            "archived": False,
+            "start_date": start_date,
+            "deadline": deadline
+        }
+
+        response = self.client.post(
+            reverse("course-projects", args=[course.id]),
+            data=project_data,
+            follow=True
+        )
+
+        # Should not work since deadline is before the start date
+        self.assertEqual(response.status_code, 400)
+
 
     def test_deadline_approaching_in_with_past_Project(self):
         """
