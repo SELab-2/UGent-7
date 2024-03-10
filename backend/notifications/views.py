@@ -11,7 +11,6 @@ from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
 
 
-# TODO: Give admin access to everything
 class NotificationPermission(BasePermission):
     # The user can only access their own notifications
     # An admin can access all notifications
@@ -34,31 +33,5 @@ class NotificationView(APIView):
     def post(self, request: Request, user_id: str) -> Response:
         notifications = Notification.objects.filter(user=user_id)
         notifications.update(is_read=True)
-
-        return Response(status=HTTP_200_OK)
-
-
-# TODO: Remove this view
-class TestingView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request: Request):
-        from notifications.signals import NotificationType, notification_create
-
-        print("Hi")
-
-        notification_create.send(
-            sender="",
-            type=NotificationType.SCORE_ADDED,
-            user=request.user,
-            arguments={"score": "10"},
-        )
-
-        return Response(status=HTTP_200_OK)
-
-    def post(self, request: Request):
-        from notifications.logic import send_mails
-
-        send_mails()
 
         return Response(status=HTTP_200_OK)

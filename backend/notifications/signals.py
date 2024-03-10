@@ -12,7 +12,6 @@ from notifications.serializers import NotificationSerializer
 notification_create = Signal()
 
 
-# TODO: Remove send_mails call
 @receiver(notification_create)
 def notification_creation(
     type: NotificationType,
