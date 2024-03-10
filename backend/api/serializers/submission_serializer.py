@@ -49,7 +49,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Extract files from the request
         request = self.context.get('request')
-        files_data = request.FILES.getlist('files') # Assuming 'files' is the key for the files in the request
+        files_data = request.FILES.getlist('files')
 
         # Create the Submission instance without the files
         submission = Submission.objects.create(**validated_data)
