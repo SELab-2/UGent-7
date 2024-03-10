@@ -36,3 +36,29 @@ class NotificationView(APIView):
         notifications.update(is_read=True)
 
         return Response(status=HTTP_200_OK)
+
+
+# TODO: Remove this view
+class TestingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request):
+        from notifications.signals import NotificationType, notification_create
+
+        print("Hi")
+
+        notification_create.send(
+            sender="",
+            type=NotificationType.SCORE_ADDED,
+            user=request.user,
+            arguments={"score": "10"},
+        )
+
+        return Response(status=HTTP_200_OK)
+
+    def post(self, request: Request):
+        from notifications.logic import send_mails
+
+        send_mails()
+
+        return Response(status=HTTP_200_OK)

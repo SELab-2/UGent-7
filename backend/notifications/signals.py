@@ -6,14 +6,19 @@ from typing import Dict
 from authentication.models import User
 from django.dispatch import Signal, receiver
 from django.urls import reverse
+from notifications.logic import send_mails
 from notifications.serializers import NotificationSerializer
 
 notification_create = Signal()
 
 
+# TODO: Remove send_mails call
 @receiver(notification_create)
 def notification_creation(
-    type: NotificationType, user: User, arguments: Dict[str, str], **kwargs
+    type: NotificationType,
+    user: User,
+    arguments: Dict[str, str],
+    **kwargs,  # Required by django
 ) -> bool:
     serializer = NotificationSerializer(
         data={
@@ -27,6 +32,8 @@ def notification_creation(
         return False
 
     serializer.save()
+
+    send_mails()
 
     return True
 

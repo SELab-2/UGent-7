@@ -65,11 +65,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.SessionAuthentication"
+        "rest_framework.authentication.SessionAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ]
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 
 SIMPLE_JWT = {
@@ -130,3 +128,12 @@ TEMPLATES = [
         },
     },
 ]
+
+EMAIL_HOST = "smtprelay.UGent.be"
+EMAIL_PORT = 25
+
+EMAIL_CUSTOM = {
+    "from": "ypovoli@ugent.be",
+    "subject": "[Ypovoli] New Notification",
+    "timeout": 2,
+}

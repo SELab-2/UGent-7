@@ -22,3 +22,8 @@ class Notification(models.Model):
     is_sent = models.BooleanField(
         default=False
     )  # Whether the notification has been sent (email)
+
+    # Mark the notification as read
+    def sent(self):
+        self.is_sent = True
+        self.save()
