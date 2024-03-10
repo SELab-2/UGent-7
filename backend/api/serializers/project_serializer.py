@@ -2,11 +2,12 @@ from rest_framework.exceptions import ValidationError
 from django.utils.translation import gettext
 from rest_framework import serializers
 from ..models.project import Project
+from api.models.course import Course
 
 
 class ProjectSerializer(serializers.ModelSerializer):
     course = serializers.HyperlinkedRelatedField(
-        many=False, read_only=True, view_name="course-detail"
+        many=False, view_name="course-detail", queryset=Course.objects.all()
     )
 
     structure_checks = serializers.HyperlinkedRelatedField(

@@ -163,13 +163,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         course = self.get_object()
 
         serializer = ProjectSerializer(
-            data=request.data, context={}
+            data=request.data, context={"request": request}
         )
 
         # Validate the serializer
         if serializer.is_valid(raise_exception=True):
             course.projects.add(
-                serializer.validated_data["project_id"]
+                serializer.save()
             )
 
         return Response({
