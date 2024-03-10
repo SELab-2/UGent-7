@@ -1,5 +1,7 @@
+from django.utils.translation import gettext
 from rest_framework import serializers
 from ..models.project import Project
+from rest_framework.exceptions import ValidationError
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -43,3 +45,18 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
+
+
+class SubmissionAddSerializer(serializers.Serializer):
+    def validate(self, data):
+        # The validator needs the project context.
+        if "project" not in self.context:
+            raise ValidationError(gettext("project.error.context"))
+
+        project: Project = self.context["project"]
+
+        # Check if the project's deadline is not passed.
+        if project.deadline_passed():
+            raise ValidationError(gettext("project.error.submission.past_project"))
+
+        return data

@@ -3,6 +3,7 @@ from django.utils import timezone
 from api.models.course import Course
 
 
+# TODO max submission size
 class Project(models.Model):
     """Model that represents a project."""
 
