@@ -1,5 +1,3 @@
-from rest_framework.exceptions import ValidationError
-from django.utils.translation import gettext
 from rest_framework import serializers
 from ..models.project import Project
 
@@ -42,13 +40,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             "groups"
         ]
 
-    def validate(self, data):
-        print("*** Project validation goes here ***")
-        return data
-
 
 class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
-
-    def validate(self, data):
-        return data
