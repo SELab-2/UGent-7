@@ -1,4 +1,5 @@
 .tool-versions
+.env
 data/*
 
 !data/nginx/nginx.conf

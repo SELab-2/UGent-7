@@ -1,3 +1,8 @@
+if ! [ -f .env ]; then
+    echo "Error: .env file does not exist."
+    exit 1
+fi
+
 echo "Checking for existing SSL certificates..."
 
 if [ ! -f "data/nginx/ssl/private.key" ] || [ ! -f "data/nginx/ssl/certificate.crt" ]; then
