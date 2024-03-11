@@ -28,9 +28,6 @@ def parse_zip_file(project, dir_path):  # TODO block paths that start with ..
 
 # TODO block paths that start with ..
 def check_zip_file(project, dir_path, restrict_extra_folders=False):
-    # print(f"Checking project: {project}")
-    # print(f"Checking file: {dir_path}")
-
     dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
     project_structure_checks = StructureCheck.objects.filter(project=project.id)
     structuur = {}

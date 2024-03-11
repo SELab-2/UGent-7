@@ -3,7 +3,7 @@ from rest_framework import serializers
 from api.models.project import Project
 from api.models.group import Group
 from rest_framework.exceptions import ValidationError
-from ..models.submission import Submission, SubmissionFile
+from api.models.submission import Submission, SubmissionFile
 from api.serializers.submission_serializer import SubmissionSerializer
 
 
