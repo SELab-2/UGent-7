@@ -1,8 +1,10 @@
 from django.db import models
+from datetime import timedelta
 from django.utils import timezone
 from api.models.course import Course
 
 
+# TODO max submission size
 class Project(models.Model):
     """Model that represents a project."""
 
@@ -61,6 +63,14 @@ class Project(models.Model):
         now = timezone.now()
         return now > self.deadline
 
+    def is_archived(self):
+        """Returns True if a project is archived."""
+        return self.archived
+
+    def is_visible(self):
+        """Returns True if a project is visible."""
+        return self.visible
+
     def toggle_visible(self):
         """Toggles the visibility of the project."""
         self.visible = not self.visible
@@ -69,4 +79,8 @@ class Project(models.Model):
     def toggle_archived(self):
         """Toggles the archived status of the project."""
         self.archived = not self.archived
+        self.save()
+
+    def increase_deadline(self, days):
+        self.deadline = self.deadline + timedelta(days=days)
         self.save()

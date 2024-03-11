@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from datetime import timedelta
-from pathlib import Path
 import os
+from datetime import timedelta
+from os import environ
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,11 +70,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.SessionAuthentication"
+        "rest_framework.authentication.SessionAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ]
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 
 SIMPLE_JWT = {
@@ -90,8 +89,8 @@ WSGI_APPLICATION = "ypovoli.wsgi.application"
 # Application endpoints
 
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = "https://localhost:8080/auth/cas/echo"
-API_ENDPOINT = "https://localhost:8080"
+CAS_RESPONSE = "https://localhost:8080/api/auth/cas/echo"
+API_ENDPOINT = "https://localhost:8080/api"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -134,3 +133,37 @@ TEMPLATES = [
         },
     },
 ]
+
+EMAIL_HOST = "smtprelay.UGent.be"
+EMAIL_PORT = 25
+
+EMAIL_CUSTOM = {
+    "from": "ypovoli@ugent.be",
+    "subject": "[Ypovoli] New Notification",
+    "timeout": 2,
+    "max_errors": 3,
+}
+
+REDIS_CUSTOM = {
+    "host": environ.get("REDIS_IP", "localhost"),
+    "port": environ.get("REDIS_PORT", 6379),
+    "password": environ.get("REDIS_PASSWORD", ""),
+    "db_django": 0,
+    "db_celery": 1,
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/"
+        f"{REDIS_CUSTOM['db_django']}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+CELERY_BROKER_URL = (
+    f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/"
+    f"{REDIS_CUSTOM['db_celery']}"
+)

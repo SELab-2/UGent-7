@@ -33,18 +33,31 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    # Base API endpoints.
-    path("", include("api.urls")),
-    # Authentication endpoints.
-    path("auth/", include("authentication.urls")),
-    path("notifications/", include("notifications.urls"), name="notifications"),
-    # Swagger documentation.
     path(
-        "swagger/",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
-    ),
-    path(
-        "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
-    ),
+        "api/",
+        include(
+            [
+                # Base API endpoints.
+                path("", include("api.urls")),
+                # Authentication endpoints.
+                path("auth/", include("authentication.urls")),
+                path(
+                    "notifications/",
+                    include("notifications.urls"),
+                    name="notifications",
+                ),
+                # Swagger documentation.
+                path(
+                    "swagger/",
+                    schema_view.with_ui("swagger", cache_timeout=0),
+                    name="schema-swagger-ui",
+                ),
+                path(
+                    "swagger<format>/",
+                    schema_view.without_ui(cache_timeout=0),
+                    name="schema-json",
+                ),
+            ]
+        ),
+    )
 ]

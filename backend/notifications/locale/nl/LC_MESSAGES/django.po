@@ -17,6 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+# Email Template
+msgid "Email %(name)s %(title)s %(description)s"
+msgstr "Beste %(name)s\nU heeft een nieuwe notificatie.\n%(title)s\n%(description)s\n\n- Ypovoli"
 # Score Added
 msgid "Title: Score added"
 msgstr "Score toegevoegd"

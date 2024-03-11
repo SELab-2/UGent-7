@@ -5,6 +5,10 @@ from rest_framework import serializers
 from ..models.project import Project
 from api.models.group import Group
 from api.models.course import Course
+from django.utils.translation import gettext
+from rest_framework import serializers
+from api.models.submission import Submission, SubmissionFile
+from api.serializers.submission_serializer import SubmissionSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -70,7 +74,25 @@ class TeacherCreateGroupSerializer(serializers.Serializer):
     def validate(self, data):
         return data
 
+
 class SubmissionStatusSerializer(serializers.Serializer):
     groups_total = serializers.IntegerField(read_only=True)
     # groups_submitted = serializers.IntegerField(read_only=True) # TODO : Wait for submissions to be implemented
     # submissions_passed = serializers.IntegerField(read_only=True)
+
+
+class SubmissionAddSerializer(SubmissionSerializer):
+    def validate(self, data):
+        group: Group = self.context["group"]
+        project: Project = group.project
+
+        # Check if the project's deadline is not passed.
+        if project.deadline_passed():
+            raise ValidationError(gettext("project.error.submission.past_project"))
+
+        if not project.is_visible():
+            raise ValidationError(gettext("project.error.submission.non_visible_project"))
+
+        if project.is_archived():
+            raise ValidationError(gettext("project.error.submission.archived_project"))
+
