@@ -52,12 +52,6 @@ class TeacherCreateGroupSerializer(serializers.Serializer):
 
 class SubmissionAddSerializer(SubmissionSerializer):
     def validate(self, data):
-        """
-        # The validator needs the project context.
-        if "project" not in self.context:
-            raise ValidationError(gettext("project.error.context"))
-        """
-
         group: Group = self.context["group"]
         project: Project = group.project
 
