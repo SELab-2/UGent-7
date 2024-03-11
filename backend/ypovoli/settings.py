@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-import os
 from datetime import timedelta
+from os import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -140,9 +140,9 @@ EMAIL_CUSTOM = {
 }
 
 REDIS_CUSTOM = {
-    "host": os.environ.get("REDIS_IP", "localhost"),
-    "port": os.environ.get("REDIS_PORT", 6379),
-    "password": os.environ.get("REDIS_PASSWORD", ""),
+    "host": environ.get("REDIS_IP", "localhost"),
+    "port": environ.get("REDIS_PORT", 6379),
+    "password": environ.get("REDIS_PASSWORD", ""),
     "db_django": 0,
     "db_celery": 1,
 }
