@@ -10,6 +10,7 @@ from ..models.project import Project
 from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
 from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer
 from api.serializers.group_serializer import GroupSerializer
+from api.serializers.submission_serializer import SubmissionSerializer
 
 
 class ProjectViewSet(CreateModelMixin,
@@ -22,7 +23,7 @@ class ProjectViewSet(CreateModelMixin,
     serializer_class = ProjectSerializer
     permission_classes = [IsAdminUser | ProjectPermission]  # GroupPermission has exact the same logic as for a project
 
-    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | ProjectGroupPermission])
+    @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission])
     def groups(self, request, **_):
         """Returns a list of groups for the given project"""
         # This automatically fetches the group from the URL.
@@ -36,6 +37,23 @@ class ProjectViewSet(CreateModelMixin,
         )
 
         return Response(serializer.data)
+
+    """
+    @action(detail=True, permission_classes=[IsAdminUser])
+    def submissions(self, request, **_):
+        # Returns a list of subbmisions for the given project
+        # This automatically fetches the group from the URL.
+        # It automatically gives back a 404 HTTP response in case of not found.
+        project = self.get_object()
+        submissions = project.submissions.all()
+
+        # Serialize the group objects
+        serializer = SubmissionSerializer(
+            submissions, many=True, context={"request": request}
+        )
+
+        return Response(serializer.data)
+    """
 
     @groups.mapping.post
     def _create_groups(self, request, **_):

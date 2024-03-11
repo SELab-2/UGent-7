@@ -1,5 +1,10 @@
+from django.utils.translation import gettext
 from rest_framework import serializers
-from ..models.project import Project
+from api.models.project import Project
+from api.models.group import Group
+from rest_framework.exceptions import ValidationError
+from api.models.submission import Submission, SubmissionFile
+from api.serializers.submission_serializer import SubmissionSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -43,3 +48,21 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
+
+
+class SubmissionAddSerializer(SubmissionSerializer):
+    def validate(self, data):
+        group: Group = self.context["group"]
+        project: Project = group.project
+
+        # Check if the project's deadline is not passed.
+        if project.deadline_passed():
+            raise ValidationError(gettext("project.error.submission.past_project"))
+
+        if not project.is_visible():
+            raise ValidationError(gettext("project.error.submission.non_visible_project"))
+
+        if project.is_archived():
+            raise ValidationError(gettext("project.error.submission.archived_project"))
+
+        return data

@@ -10,6 +10,9 @@ from api.permissions.group_permissions import GroupStudentPermission
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.student_serializer import StudentSerializer
 from api.serializers.group_serializer import StudentJoinGroupSerializer, StudentLeaveGroupSerializer
+from api.serializers.project_serializer import SubmissionAddSerializer
+from api.serializers.submission_serializer import SubmissionSerializer
+from rest_framework.request import Request
 
 
 class GroupViewSet(CreateModelMixin,
@@ -33,6 +36,20 @@ class GroupViewSet(CreateModelMixin,
         # Serialize the student objects
         serializer = StudentSerializer(
             students, many=True, context={"request": request}
+        )
+        return Response(serializer.data)
+
+    @action(detail=True, permission_classes=[IsAdminUser])
+    def submissions(self, request, **_):
+        """Returns a list of students for the given group"""
+        # This automatically fetches the group from the URL.
+        # It automatically gives back a 404 HTTP response in case of not found.
+        group = self.get_object()
+        submissions = group.submissions.all()
+
+        # Serialize the student objects
+        serializer = SubmissionSerializer(
+            submissions, many=True, context={"request": request}
         )
         return Response(serializer.data)
 
@@ -73,4 +90,23 @@ class GroupViewSet(CreateModelMixin,
 
         return Response({
             "message": gettext("group.success.student.remove"),
+        })
+
+    @submissions.mapping.post
+    @submissions.mapping.put
+    def _add_submission(self, request: Request, **_):
+        """Add an submission to the group"""
+
+        group: Group = self.get_object()
+
+        # Add submission to course
+        serializer = SubmissionAddSerializer(
+            data=request.data, context={"group": group, "request": request}
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(group=group)
+
+        return Response({
+            "message": gettext("group.success.submissions.add")
         })
