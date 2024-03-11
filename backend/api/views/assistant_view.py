@@ -19,22 +19,14 @@ class AssistantViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAdminUser, AssistantPermission]
 
     @action(detail=True, methods=["get"])
-    def courses(self, request, pk=None):
+    def courses(self, request, **_):
         """Returns a list of courses for the given assistant"""
+        assistant = self.get_object()
+        courses = assistant.courses()
 
-        try:
-            queryset = Assistant.objects.get(id=pk)
-            courses = queryset.courses.all()
+        # Serialize the course objects
+        serializer = CourseSerializer(
+            courses, many=True, context={"request": request}
+        )
 
-            # Serialize the course objects
-            serializer = CourseSerializer(
-                courses, many=True, context={"request": request}
-            )
-            return Response(serializer.data)
-
-        except Assistant.DoesNotExist:
-            # Invalid assistant ID
-            return Response(
-                status=status.HTTP_404_NOT_FOUND,
-                data={"message": "Assistant not found"},
-            )
+        return Response(serializer.data)
