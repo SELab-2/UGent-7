@@ -150,11 +150,15 @@ REDIS_CUSTOM = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_django']}",
+        "LOCATION": f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/"
+        f"{REDIS_CUSTOM['db_django']}",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
     }
 }
 
-CELERY_BROKER_URL = f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
+CELERY_BROKER_URL = (
+    f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/"
+    f"{REDIS_CUSTOM['db_celery']}"
+)
