@@ -16,9 +16,14 @@ class GroupSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    submissions = serializers.HyperlinkedIdentityField(
+        view_name="group-submissions",
+        read_only=True,
+    )
+
     class Meta:
         model = Group
-        fields = ["id", "project", "students", "score"]
+        fields = ["id", "project", "students", "score", "submissions"]
 
     def validate(self, data):
         # Make sure the score of the group is lower or equal to the maximum score
