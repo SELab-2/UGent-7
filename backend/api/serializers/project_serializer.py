@@ -76,9 +76,9 @@ class TeacherCreateGroupSerializer(serializers.Serializer):
 
 
 class SubmissionStatusSerializer(serializers.Serializer):
-    groups_total = serializers.IntegerField(read_only=True)
-    # groups_submitted = serializers.IntegerField(read_only=True) # TODO : Wait for submissions to be implemented
-    # submissions_passed = serializers.IntegerField(read_only=True)
+    non_empty_groups = serializers.IntegerField(read_only=True)
+    groups_submitted = serializers.IntegerField(read_only=True)
+    submissions_passed = serializers.IntegerField(read_only=True)
 
 
 class SubmissionAddSerializer(SubmissionSerializer):

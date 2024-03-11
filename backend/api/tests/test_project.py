@@ -6,6 +6,7 @@ from authentication.models import User
 from api.models.project import Project
 from api.models.course import Course
 from api.models.group import Group
+from api.models.submission import Submission
 from api.models.teacher import Teacher
 from api.models.student import Student
 from api.models.checks import StructureCheck, ExtraCheck
@@ -42,11 +43,34 @@ def create_project(name, description, visible, archived, days, course):
         course=course,
     )
 
+
 def create_group(project):
     """Create a Group with the given arguments."""
 
     return Group.objects.create(
-        project=project
+        project=project,
+    )
+
+
+def create_submission(submission_number, group, structure_checks_passed):
+    """Create a Submission with the given arguments."""
+
+    return Submission.objects.create(
+        submission_number=submission_number,
+        group=group,
+        structure_checks_passed=structure_checks_passed,
+    )
+
+
+def create_student(id, first_name, last_name, email):
+    """Create a Student with the given arguments."""
+    username = f"{first_name}_{last_name}"
+    return Student.objects.create(
+        id=id,
+        first_name=first_name,
+        last_name=last_name,
+        username=username,
+        email=email,
     )
 
 
@@ -507,7 +531,63 @@ class ProjectModelTestsAsTeacher(APITestCase):
         # Assert that the groups were created
         self.assertEqual(project.groups.count(), 3)
 
-    def test_submission_status(self):
+
+    def test_submission_status_non_empty_groups(self):
+        """Submission status returns the correct amount of non empty groups participating in the corresponding project."""
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        response = self.client.get(
+            reverse("project-groups", args=[str(project.id)]),
+            follow=True
+        )
+
+        # Make sure you cannot retrieve the submission status for a project that is not yours
+        self.assertEqual(response.status_code, 403)
+
+        # Add the teacher to the course
+        course.teachers.add(self.user)
+
+        # Create example students
+        student1 = create_student(
+            id=1, first_name="John", last_name="Doe", email="john.doe@example.com"
+        )
+        student2 = create_student(
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com"
+        )
+
+        # Create example groups
+        group1 = create_group(project=project)
+        group2 = create_group(project=project)
+        group3 = create_group(project=project)
+
+        # Add the students to some of the groups
+        group1.students.add(student1)
+        group3.students.add(student2)
+
+        response = self.client.get(
+            reverse("project-submission-status", args=[str(project.id)]),
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Only two of the three created groups contain at least one student
+        self.assertEqual(response.data, {
+            "non_empty_groups": 2,
+            "groups_submitted": 0,
+            "submissions_passed": 0
+        })
+
+
+    def test_submission_status_groups_submitted_and_passed_checks(self):
         """Retrieve the submission status for a project."""
         course = create_course(id=3, name="test course", academic_startyear=2024)
         project = create_project(
@@ -530,22 +610,41 @@ class ProjectModelTestsAsTeacher(APITestCase):
         # Add the teacher to the course
         course.teachers.add(self.user)
 
+        # Create example students
+        student1 = create_student(
+            id=1, first_name="John", last_name="Doe", email="john.doe@example.com"
+        )
+        student2 = create_student(
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com"
+        )
+        student3 = create_student(
+            id=3, first_name="Joe", last_name="Doe", email="Joe.doe@example.com"
+        )
+
+        # Create example groups
         group1 = create_group(project=project)
         group2 = create_group(project=project)
         group3 = create_group(project=project)
+
+        # Add students to the groups
+        group1.students.add(student1)
+        group2.students.add(student2)
+        group3.students.add(student3)
+
+        # Create submissions for certain groups
+        create_submission(submission_number=1, group=group1, structure_checks_passed=True)
+        create_submission(submission_number=2, group=group3, structure_checks_passed=False)
 
         response = self.client.get(
             reverse("project-submission-status", args=[str(project.id)]),
             follow=True
         )
 
-        # TODO: Complete this test once submissions is implemented
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {
-            "groups_total": 3,
-            # "groups_submitted": 0,
-            # "submissions_passed": 0
+            "non_empty_groups": 3,
+            "groups_submitted": 2,
+            "submissions_passed": 1
         })
 
 
