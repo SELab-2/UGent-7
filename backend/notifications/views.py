@@ -11,7 +11,6 @@ from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
 
 
-# TODO: Give admin access to everything
 class NotificationPermission(BasePermission):
     # The user can only access their own notifications
     # An admin can access all notifications

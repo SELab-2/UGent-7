@@ -4,6 +4,13 @@ This application was developed within the framework of the course "Software Engi
 
 ## Development
 
+Run `development.sh`.
+It starts the development environment and attaches itself to the output of the backend.
+The backend will auto reload when changing a file.
+Acces the server by going to `https://localhost:8080` for the backend and `https://localhost:443` for the frontend.
+
+If you change something to one of the docker files run `docker-compose -f development.yml up --build` to rebuild.
+
 ### Backend
 
 Instructions for the setup of the Django backend are to be found in `backend/README.md`.
