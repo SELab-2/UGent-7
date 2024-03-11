@@ -50,7 +50,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "submission_number": {
                 "required": False,
-                "default": 0,  # Provide a default value or use the one you prefer
+                "default": 0,
             }
         }
 

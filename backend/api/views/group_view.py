@@ -10,6 +10,7 @@ from api.permissions.group_permissions import GroupStudentPermission
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.student_serializer import StudentSerializer
 from api.serializers.group_serializer import StudentJoinGroupSerializer, StudentLeaveGroupSerializer
+from api.serializers.project_serializer import SubmissionAddSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
 from rest_framework.request import Request
 
@@ -96,11 +97,11 @@ class GroupViewSet(CreateModelMixin,
     def _add_submission(self, request: Request, **_):
         """Add an submission to the group"""
 
-        group = self.get_object()
+        group: Group = self.get_object()
 
         # Add submission to course
-        serializer = SubmissionSerializer(
-            data=request.data, context={"request": request}
+        serializer = SubmissionAddSerializer(
+            data=request.data, context={"group": group, "request": request}
         )
 
         if serializer.is_valid(raise_exception=True):
