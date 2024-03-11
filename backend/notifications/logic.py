@@ -1,6 +1,8 @@
 import threading
+from collections import defaultdict
+from os import error
 from smtplib import SMTPException
-from typing import Dict, List
+from typing import DefaultDict, Dict, List
 
 from celery import shared_task
 from django.core import mail
@@ -38,9 +40,12 @@ def _send_mail(mail: mail.EmailMessage, result: List[bool]):
 # Send all unsent emails
 @shared_task
 def _send_mails():
-    cache.set("notifications_send_mails", False)
-
+    # All notifications that need to be sent
     notifications = Notification.objects.filter(is_sent=False)
+    # Dictionary with the number of errors for each email
+    errors: DefaultDict[str, int] = cache.get(
+        "notifications_send_mails_errors", defaultdict(int)
+    )
 
     # No notifications to send
     if notifications.count() == 0:
@@ -72,9 +77,29 @@ def _send_mails():
         thread.start()
         thread.join(timeout=EMAIL_CUSTOM["timeout"])
 
-        # If the email was not sent, continue
+        # Email failed to send
         if thread.is_alive() or not result[0]:
+            # Increase the number of errors for the email
+            errors[notification.user.email] += 1
+            # Mark notification as sent if the maximum number of errors is reached
+            if errors[notification.user.email] >= EMAIL_CUSTOM["max_errors"]:
+                errors.pop(notification.user.email)
+                notification.sent()
+
             continue
+
+        # Email sent successfully
+        if notification.user.email in errors:
+            errors.pop(notification.user.email)
 
         # Mark the notification as sent
         notification.sent()
+
+    # Save the number of errors for each email
+    cache.set("notifications_send_mails_errors", errors)
+
+    # Restart the process if there are any notifications left that were not sent
+    unsent_notifications = Notification.objects.filter(is_sent=False)
+    cache.set("notifications_send_mails", False)
+    if unsent_notifications.count() > 0:
+        schedule_send_mails()

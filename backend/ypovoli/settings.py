@@ -137,6 +137,7 @@ EMAIL_CUSTOM = {
     "from": "ypovoli@ugent.be",
     "subject": "[Ypovoli] New Notification",
     "timeout": 2,
+    "max_errors": 3,
 }
 
 REDIS_CUSTOM = {
