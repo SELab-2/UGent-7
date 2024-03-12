@@ -18,7 +18,7 @@ class Submission(models.Model):
     )
 
     # Multiple submissions can be made by a group
-    submission_number = models.PositiveIntegerField(blank=False, null=False)
+    submission_number = models.PositiveIntegerField(blank=True, null=True)
 
     # Automatically set the submission time to the current time
     submission_time = models.DateTimeField(auto_now_add=True)
@@ -49,7 +49,6 @@ class SubmissionFile(models.Model):
         null=False,
     )
 
-    # TODO - Set the right place to save the file
     file = models.FileField(blank=False, null=False)
 
 

@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from ..models.submission import Submission, SubmissionFile, ExtraChecksResult
+from api.helpers.check_folder_structure import check_zip_file  # , parse_zip_file
+from django.db.models import Max
 
 
 class SubmissionFileSerializer(serializers.ModelSerializer):
@@ -45,3 +47,44 @@ class SubmissionSerializer(serializers.ModelSerializer):
             "structure_checks_passed",
             "extra_checks_results"
         ]
+        extra_kwargs = {
+            "submission_number": {
+                "required": False,
+                "default": 0,
+            }
+        }
+
+    def create(self, validated_data):
+        # Extract files from the request
+        request = self.context.get('request')
+        files_data = request.FILES.getlist('files')
+
+        # Get the group for the submission
+        group = validated_data['group']
+
+        # Get the project associated with the group
+        project = group.project
+
+        # Get the maximum submission number for the group's project
+        max_submission_number = Submission.objects.filter(
+            group__project=project
+        ).aggregate(Max('submission_number'))['submission_number__max'] or 0
+
+        # Set the new submission number to the maximum value plus 1
+        validated_data['submission_number'] = max_submission_number + 1
+
+        # Create the Submission instance without the files
+        submission = Submission.objects.create(**validated_data)
+
+        pas: bool = True
+        # Create SubmissionFile instances for each file and check if none fail structure checks
+        for file in files_data:
+            SubmissionFile.objects.create(submission=submission, file=file)
+            status, _ = check_zip_file(submission.group.project, file.name)
+            if not status:
+                pas = False
+
+        # Set structure_checks_passed to True
+        submission.structure_checks_passed = pas
+        submission.save()
+        return submission

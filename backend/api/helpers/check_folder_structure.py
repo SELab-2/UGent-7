@@ -152,6 +152,8 @@ def check_zip_structure(
         folder_structure,
         zip_file_path,
         restrict_extra_folders=False):
+    # print(f"Checking folder_structure: {folder_structure}")
+    # print(f"Checking zip_file_path: {zip_file_path}")
     """
     Check the structure of a zip file.
 
