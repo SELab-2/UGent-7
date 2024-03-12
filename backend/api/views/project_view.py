@@ -9,8 +9,10 @@ from api.models.group import Group
 from ..models.project import Project
 from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
 from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer
+from api.serializers.project_serializer import StructureCheckAddSerializer
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
+from rest_framework.request import Request
 
 
 class ProjectViewSet(CreateModelMixin,
@@ -90,6 +92,24 @@ class ProjectViewSet(CreateModelMixin,
             checks, many=True, context={"request": request}
         )
         return Response(serializer.data)
+
+    @structure_checks.mapping.post
+    def _add_structure_check(self, request: Request, **_):
+        """Add an structure_check to the project"""
+
+        project: Project = self.get_object()
+
+        # Add submission to course
+        serializer = StructureCheckAddSerializer(
+            data=request.data, context={"project": project, "request": request}
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(project=project)
+
+        return Response({
+            "message": gettext("project.success.structure_check.add")
+        })
 
     @action(detail=True, methods=["get"])
     def extra_checks(self, request, **_):

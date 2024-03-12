@@ -5,6 +5,7 @@ from api.models.group import Group
 from rest_framework.exceptions import ValidationError
 from api.models.submission import Submission, SubmissionFile
 from api.serializers.submission_serializer import SubmissionSerializer
+from api.serializers.checks_serializer import StructureCheckSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -52,11 +53,6 @@ class TeacherCreateGroupSerializer(serializers.Serializer):
 
 class SubmissionAddSerializer(SubmissionSerializer):
     def validate(self, data):
-        """
-        # The validator needs the project context.
-        if "project" not in self.context:
-            raise ValidationError(gettext("project.error.context"))
-        """
 
         group: Group = self.context["group"]
         project: Project = group.project
@@ -70,5 +66,25 @@ class SubmissionAddSerializer(SubmissionSerializer):
 
         if project.is_archived():
             raise ValidationError(gettext("project.error.submission.archived_project"))
+
+        return data
+
+
+class StructureCheckAddSerializer(StructureCheckSerializer):
+    def validate(self, data):
+
+        project: Project = self.context["project"]
+
+        """
+        # Check if the project's deadline is not passed.
+        if project.deadline_passed():
+            raise ValidationError(gettext("project.error.submission.past_project"))
+
+        if not project.is_visible():
+            raise ValidationError(gettext("project.error.submission.non_visible_project"))
+
+        if project.is_archived():
+            raise ValidationError(gettext("project.error.submission.archived_project"))
+        """
 
         return data
