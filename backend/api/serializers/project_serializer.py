@@ -38,6 +38,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "start_date",
             "deadline",
             "max_score",
+            "score_visible",
             "group_size",
             "structure_checks",
             "extra_checks",

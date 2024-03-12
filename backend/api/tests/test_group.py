@@ -24,12 +24,12 @@ def create_course(name, academic_startyear, description=None, parent_course=None
     )
 
 
-def create_project(name, description, days, course, group_size=2, max_score=20):
+def create_project(name, description, days, course, group_size=2, max_score=20, score_visible=True):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timedelta(days=days)
     return Project.objects.create(
         name=name, description=description, deadline=deadline, course=course,
-        group_size=group_size, max_score=max_score
+        group_size=group_size, max_score=max_score, score_visible=score_visible
     )
 
 
@@ -496,3 +496,58 @@ class GroupModelTestsAsStudent(APITestCase):
 
         group.refresh_from_db()
         self.assertEqual(group.score, 10)
+
+    def test_group_score_visibility(self):
+        """Only able to retrieve the score of a group if it is visible, and the student is part of the group."""
+        course = create_course(name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course, score_visible=True
+        )
+        group = create_group(project=project, score=10)
+        course.students.add(self.user)
+
+        response = self.client.get(
+            reverse("group-detail", args=[str(group.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Make sure that score is not included, because the student is not part of the group
+        self.assertNotIn("score", content_json)
+
+        # Add the student to the group
+        group.students.add(self.user)
+
+        # Set the visibility of the score to False, to make sure the score is not included if it is not visible
+        project.score_visible = False
+        project.save()
+
+        response = self.client.get(
+            reverse("group-detail", args=[str(group.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Make sure that score is not included, because the teacher has set the visibility of the score to False
+        self.assertNotIn("score", content_json)
+
+        # Update that the score is visible
+        project.score_visible = True
+        project.save()
+
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            reverse("group-detail", args=[str(group.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Make sure the score is included now
+        self.assertIn("score", content_json)

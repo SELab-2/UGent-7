@@ -1,6 +1,7 @@
 from django.utils.translation import gettext
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from api.permissions.role_permissions import is_student
 from api.models.group import Group
 from api.models.student import Student
 from api.serializers.student_serializer import StudentIDSerializer
@@ -24,6 +25,19 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ["id", "project", "students", "score", "submissions"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # If you are not a student, you can always see the score
+        if is_student(self.context["request"].user):
+            # Student can not see the score if they are not part of the group, or it is not visible yet
+            if not instance.students.filter(id=self.context["request"].user.student.id).exists() or\
+                    not instance.project.score_visible:
+
+                data.pop("score")
+
+        return data
 
     def validate(self, data):
         # Make sure the score of the group is lower or equal to the maximum score
