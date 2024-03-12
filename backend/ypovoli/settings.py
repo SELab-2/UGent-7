@@ -75,7 +75,6 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
-    'EXCEPTION_HANDLERE': 'ypovoli'
 }
 
 SIMPLE_JWT = {
@@ -118,6 +117,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
+LANGUAGES = [("en", _("languages.en")), ("nl", _("languages.nl"))]
 USE_L10N = False
 USE_TZ = True
 
