@@ -133,6 +133,26 @@ class ProjectModelTests(APITestCase):
         past_project.toggle_archived()
         self.assertIs(past_project.archived, True)
 
+    def test_toggle_locked_groups(self):
+        """
+        toggle the locked state of the project groups.
+        """
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        past_project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=-10,
+            course=course,
+        )
+        self.assertIs(past_project.locked_groups, False)
+        past_project.toggle_groups_locked()
+        self.assertIs(past_project.locked_groups, True)
+        past_project.toggle_groups_locked()
+        self.assertIs(past_project.locked_groups, False)
+
+
     def test_start_date_Project_not_in_past(self):
         """
         unable to create a project as a teacher/admin if the start date lies within the past.
@@ -157,6 +177,7 @@ class ProjectModelTests(APITestCase):
 
         # Should not work since the start date lies in the past
         self.assertEqual(response.status_code, 400)
+
 
     def test_deadline_Project_before_start_date(self):
         """
@@ -200,6 +221,7 @@ class ProjectModelTests(APITestCase):
             course=course,
         )
         self.assertIs(past_project.deadline_approaching_in(), False)
+
 
     def test_deadline_approaching_in_with_future_Project_within_time(self):
         """
@@ -480,6 +502,45 @@ class ProjectModelTests(APITestCase):
             "project-detail", args=[str(project.id)]
         ))
         self.assertEqual(content_json["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)
+
+
+    def test_cant_join_locked_groups(self):
+        """Should not be able to add a student to a group if the groups are locked."""
+        course = create_course(id=3, name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+        student = create_student(
+            id=5, first_name="John", last_name="Doe", email="John.Doe@gmail.com"
+        )
+
+        # Add this student to the course
+        course.students.add(student)
+
+        # Lock the groups
+        project.locked_groups = True
+        project.save()
+
+        group = create_group(project=project)
+
+        response = self.client.post(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": student.id},
+            follow=True,
+        )
+
+        # Should not work since the groups are locked
+        self.assertEqual(response.status_code, 400)
+
+        # Make sure the student is not in the group now
+        self.assertFalse(group.students.filter(id=student.id).exists())
+
 
 
 class ProjectModelTestsAsTeacher(APITestCase):
