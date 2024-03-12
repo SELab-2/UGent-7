@@ -516,22 +516,33 @@ class ProjectModelTests(APITestCase):
             days=7,
             course=course,
         )
-        student = create_student(
+
+        # Create example students
+        student1 = create_student(
             id=5, first_name="John", last_name="Doe", email="John.Doe@gmail.com"
         )
+        student2 = create_student(
+            id=7, first_name="Jane", last_name="Doe", email="Jane.Doe@gmail.com"
+        )
 
-        # Add this student to the course
-        course.students.add(student)
+        # Add these student to the course
+        course.students.add(student1)
+        course.students.add(student2)
+
+        # Create an exmample group
+        group = create_group(project=project)
+
+        # Already add one student to the group
+        group.students.add(student1)
 
         # Lock the groups
         project.locked_groups = True
         project.save()
 
-        group = create_group(project=project)
-
+        # Try to add a student to the group
         response = self.client.post(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": student.id},
+            {"student_id": student2.id},
             follow=True,
         )
 
@@ -539,7 +550,17 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(response.status_code, 400)
 
         # Make sure the student is not in the group now
-        self.assertFalse(group.students.filter(id=student.id).exists())
+        self.assertFalse(group.students.filter(id=student2.id).exists())
+
+        # Try to remove a student from the group
+        response = self.client.post(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": student1.id},
+            follow=True,
+        )
+
+        # Make sure the student is still in the group now
+        self.assertTrue(group.students.filter(id=student1.id).exists())
 
 
 
