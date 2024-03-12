@@ -2,5 +2,5 @@
 .env
 data/*
 
-!data/nginx/nginx.conf
+!data/nginx/nginx.*.conf
 !data/nginx/ssl/.gitkeep
