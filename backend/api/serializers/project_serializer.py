@@ -78,6 +78,7 @@ class SubmissionStatusSerializer(serializers.Serializer):
     groups_submitted = serializers.IntegerField(read_only=True)
     submissions_passed = serializers.IntegerField(read_only=True)
 
+
 class SubmissionAddSerializer(SubmissionSerializer):
     def validate(self, data):
         group: Group = self.context["group"]

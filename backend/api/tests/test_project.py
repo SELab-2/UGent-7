@@ -90,9 +90,7 @@ def create_structure_check(id, name, project, obligated_extensions, blocked_exte
 
 class ProjectModelTests(APITestCase):
     def setUp(self) -> None:
-        self.client.force_authenticate(
-            User.get_dummy_admin()
-        )
+        self.client.force_authenticate(User.get_dummy_admin())
 
     def test_toggle_visible(self):
         """
@@ -152,7 +150,6 @@ class ProjectModelTests(APITestCase):
         past_project.toggle_groups_locked()
         self.assertIs(past_project.locked_groups, False)
 
-
     def test_start_date_Project_not_in_past(self):
         """
         unable to create a project as a teacher/admin if the start date lies within the past.
@@ -166,18 +163,15 @@ class ProjectModelTests(APITestCase):
             "visible": True,
             "archived": False,
             "start_date": start_date,
-            "deadline": timezone.now() + timezone.timedelta(days=1)
+            "deadline": timezone.now() + timezone.timedelta(days=1),
         }
 
         response = self.client.post(
-            reverse("course-projects", args=[course.id]),
-            data=project_data,
-            follow=True
+            reverse("course-projects", args=[course.id]), data=project_data, follow=True
         )
 
         # Should not work since the start date lies in the past
         self.assertEqual(response.status_code, 400)
-
 
     def test_deadline_Project_before_start_date(self):
         """
@@ -193,18 +187,15 @@ class ProjectModelTests(APITestCase):
             "visible": True,
             "archived": False,
             "start_date": start_date,
-            "deadline": deadline
+            "deadline": deadline,
         }
 
         response = self.client.post(
-            reverse("course-projects", args=[course.id]),
-            data=project_data,
-            follow=True
+            reverse("course-projects", args=[course.id]), data=project_data, follow=True
         )
 
         # Should not work since deadline is before the start date
         self.assertEqual(response.status_code, 400)
-
 
     def test_deadline_approaching_in_with_past_Project(self):
         """
@@ -221,7 +212,6 @@ class ProjectModelTests(APITestCase):
             course=course,
         )
         self.assertIs(past_project.deadline_approaching_in(), False)
-
 
     def test_deadline_approaching_in_with_future_Project_within_time(self):
         """
@@ -303,8 +293,7 @@ class ProjectModelTests(APITestCase):
         )
 
         response = self.client.get(
-            reverse("project-detail", args=[str(project.id)]),
-            follow=True
+            reverse("project-detail", args=[str(project.id)]), follow=True
         )
 
         self.assertEqual(response.status_code, 200)
@@ -340,8 +329,7 @@ class ProjectModelTests(APITestCase):
         )
 
         response = self.client.get(
-            reverse("project-detail", args=[str(project.id)]),
-            follow=True
+            reverse("project-detail", args=[str(project.id)]), follow=True
         )
 
         self.assertEqual(response.status_code, 200)
@@ -398,8 +386,7 @@ class ProjectModelTests(APITestCase):
         )
 
         response = self.client.get(
-            reverse("project-detail", args=[str(project.id)]),
-            follow=True
+            reverse("project-detail", args=[str(project.id)]), follow=True
         )
 
         self.assertEqual(response.status_code, 200)
@@ -475,8 +462,7 @@ class ProjectModelTests(APITestCase):
         )
 
         response = self.client.get(
-            reverse("project-detail", args=[str(project.id)]),
-            follow=True
+            reverse("project-detail", args=[str(project.id)]), follow=True
         )
 
         self.assertEqual(response.status_code, 200)
@@ -498,11 +484,14 @@ class ProjectModelTests(APITestCase):
         content_json = json.loads(response.content.decode("utf-8"))[0]
 
         self.assertEqual(int(content_json["id"]), checks.id)
-        self.assertEqual(content_json["project"], settings.TESTING_BASE_LINK + reverse(
-            "project-detail", args=[str(project.id)]
-        ))
-        self.assertEqual(content_json["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)
-
+        self.assertEqual(
+            content_json["project"],
+            settings.TESTING_BASE_LINK + reverse("project-detail", args=[str(project.id)]),
+        )
+        self.assertEqual(
+            content_json["run_script"],
+            settings.TESTING_BASE_LINK + checks.run_script.url,
+        )
 
     def test_cant_join_locked_groups(self):
         """Should not be able to add a student to a group if the groups are locked."""
@@ -563,7 +552,6 @@ class ProjectModelTests(APITestCase):
         self.assertTrue(group.students.filter(id=student1.id).exists())
 
 
-
 class ProjectModelTestsAsTeacher(APITestCase):
     def setUp(self) -> None:
         self.user = Teacher.objects.create(
@@ -571,12 +559,10 @@ class ProjectModelTestsAsTeacher(APITestCase):
             first_name="Bobke",
             last_name="Peeters",
             username="bpeeters",
-            email="Test@gmail.com"
+            email="Test@gmail.com",
         )
 
-        self.client.force_authenticate(
-            self.user
-        )
+        self.client.force_authenticate(self.user)
 
     def test_create_groups(self):
         """Able to create groups for a project."""
@@ -613,9 +599,8 @@ class ProjectModelTestsAsTeacher(APITestCase):
         # Assert that the groups were created
         self.assertEqual(project.groups.count(), 3)
 
-
     def test_submission_status_non_empty_groups(self):
-        """Submission status returns the correct amount of non empty groups participating in the corresponding project."""
+        """Submission status returns the correct amount of non empty groups participating in the project."""
         course = create_course(id=3, name="test course", academic_startyear=2024)
         project = create_project(
             name="test",
@@ -627,8 +612,7 @@ class ProjectModelTestsAsTeacher(APITestCase):
         )
 
         response = self.client.get(
-            reverse("project-groups", args=[str(project.id)]),
-            follow=True
+            reverse("project-groups", args=[str(project.id)]), follow=True
         )
 
         # Make sure you cannot retrieve the submission status for a project that is not yours
@@ -647,7 +631,6 @@ class ProjectModelTestsAsTeacher(APITestCase):
 
         # Create example groups
         group1 = create_group(project=project)
-        group2 = create_group(project=project)
         group3 = create_group(project=project)
 
         # Add the students to some of the groups
@@ -655,19 +638,16 @@ class ProjectModelTestsAsTeacher(APITestCase):
         group3.students.add(student2)
 
         response = self.client.get(
-            reverse("project-submission-status", args=[str(project.id)]),
-            follow=True
+            reverse("project-submission-status", args=[str(project.id)]), follow=True
         )
 
         self.assertEqual(response.status_code, 200)
 
         # Only two of the three created groups contain at least one student
-        self.assertEqual(response.data, {
-            "non_empty_groups": 2,
-            "groups_submitted": 0,
-            "submissions_passed": 0
-        })
-
+        self.assertEqual(
+            response.data,
+            {"non_empty_groups": 2, "groups_submitted": 0, "submissions_passed": 0},
+        )
 
     def test_submission_status_groups_submitted_and_passed_checks(self):
         """Retrieve the submission status for a project."""
@@ -682,8 +662,7 @@ class ProjectModelTestsAsTeacher(APITestCase):
         )
 
         response = self.client.get(
-            reverse("project-groups", args=[str(project.id)]),
-            follow=True
+            reverse("project-groups", args=[str(project.id)]), follow=True
         )
 
         # Make sure you cannot retrieve the submission status for a project that is not yours
@@ -714,20 +693,22 @@ class ProjectModelTestsAsTeacher(APITestCase):
         group3.students.add(student3)
 
         # Create submissions for certain groups
-        create_submission(submission_number=1, group=group1, structure_checks_passed=True)
-        create_submission(submission_number=2, group=group3, structure_checks_passed=False)
+        create_submission(
+            submission_number=1, group=group1, structure_checks_passed=True
+        )
+        create_submission(
+            submission_number=2, group=group3, structure_checks_passed=False
+        )
 
         response = self.client.get(
-            reverse("project-submission-status", args=[str(project.id)]),
-            follow=True
+            reverse("project-submission-status", args=[str(project.id)]), follow=True
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {
-            "non_empty_groups": 3,
-            "groups_submitted": 2,
-            "submissions_passed": 1
-        })
+        self.assertEqual(
+            response.data,
+            {"non_empty_groups": 3, "groups_submitted": 2, "submissions_passed": 1},
+        )
 
 
 class ProjectModelTestsAsStudent(APITestCase):
@@ -737,12 +718,10 @@ class ProjectModelTestsAsStudent(APITestCase):
             first_name="Bobke",
             last_name="Peeters",
             username="bpeeters",
-            email="Bobke.Peeters@gmail.com"
+            email="Bobke.Peeters@gmail.com",
         )
 
-        self.client.force_authenticate(
-            self.user
-        )
+        self.client.force_authenticate(self.user)
 
     def test_try_to_create_groups(self):
         """Not able to create groups for a project."""
