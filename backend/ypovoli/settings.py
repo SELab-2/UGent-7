@@ -26,11 +26,11 @@ TESTING_BASE_LINK = "http://testserver"
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-_upw+)mo--8_0slsl&8ot0*h8p50z_rlid6nwobd*%%gm$_!1x"
+SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = environ.get("DJANGO_DEBUG", "False").lower() in ["true", "1", "t"]
+ALLOWED_HOSTS = ["localhost", "sel2-7.ugent.be"]
 
 
 # Application definition
@@ -62,6 +62,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 REST_FRAMEWORK = {
@@ -88,18 +89,22 @@ WSGI_APPLICATION = "ypovoli.wsgi.application"
 
 # Application endpoints
 
+BASE_URL = environ.get("DJANGO_BASE_URL", "https://localhost:8080")
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = "https://localhost:8080/api/auth/cas/echo"
-API_ENDPOINT = "https://localhost:8080/api"
+CAS_RESPONSE = f"{BASE_URL}/api/auth/cas/echo"
+API_ENDPOINT = f"{BASE_URL}/api"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": environ.get("DJANGO_DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": environ.get("DJANGO_DB_NAME", BASE_DIR / "db.sqlite3"),
+        "USER": environ.get("DJANGO_DB_USER", ""),
+        "PASSWORD": environ.get("DJANGO_DB_PASSWORD", ""),
+        "HOST": environ.get("DJANGO_DB_HOST", ""),
+        "PORT": environ.get("DJANGO_DB_PORT", ""),
     },
-    "production": {"ENGINE": "django.db.backends.postgresql"},
 }
 
 # Default primary key field type
@@ -116,7 +121,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-STATIC_URL = "static/"
+STATIC_URL = "api/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 TEMPLATES = [
     {
@@ -145,9 +152,8 @@ EMAIL_CUSTOM = {
 }
 
 REDIS_CUSTOM = {
-    "host": environ.get("REDIS_IP", "localhost"),
-    "port": environ.get("REDIS_PORT", 6379),
-    "password": environ.get("REDIS_PASSWORD", ""),
+    "host": environ.get("DJANGO_REDIS_HOST", "localhost"),
+    "port": environ.get("DJANGO_REDIS_PORT", 6379),
     "db_django": 0,
     "db_celery": 1,
 }
@@ -155,15 +161,12 @@ REDIS_CUSTOM = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/"
-        f"{REDIS_CUSTOM['db_django']}",
+        "LOCATION": f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_django']}",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
     }
 }
 
-CELERY_BROKER_URL = (
-    f"redis://:{REDIS_CUSTOM['password']}@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/"
-    f"{REDIS_CUSTOM['db_celery']}"
-)
+CELERY_BROKER_URL = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
+CELERY_RESULT_BACKEND = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"

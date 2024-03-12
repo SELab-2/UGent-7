@@ -1,5 +1,12 @@
 .tool-versions
+.env
 data/*
+data/nginx/ssl/*
+data/postres*
+data/redis/*
 
-!data/nginx/nginx.conf
+backend/staticfiles/*
+
 !data/nginx/ssl/.gitkeep
+!data/production/*
+!data/testing/*
