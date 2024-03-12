@@ -13,10 +13,10 @@ TICKET = "ST-da8e1747f248a54a5f078e3905b88a9767f11d7aedcas6"
 WRONG_TICKET = "ST-da8e1747f248a54a5f078e3905b88a9767f11d7aedcas5"
 
 ID = "1234"
-USERNAME = "ddickwd"
+USERNAME = "dackers"
 EMAIL = "dummy@dummy.be"
 FIRST_NAME = "Dummy"
-LAST_NAME = "McDickwad"
+LAST_NAME = "Ackers"
 
 
 class UserSerializerModelTests(TestCase):
@@ -152,7 +152,7 @@ class SerializersTests(TestCase):
         be sent when trying to validate the token."""
 
         mock = Mock()
-        user_created.connect(mock, dispatch_uid="STDsAllAround")
+        user_created.connect(mock, dispatch_uid="duid")
         serializer = CASTokenObtainSerializer(
             data={"token": RefreshToken(), "ticket": TICKET}
         )
@@ -169,7 +169,7 @@ class SerializersTests(TestCase):
         be sent when trying to validate the token."""
 
         mock = Mock()
-        user_created.connect(mock, dispatch_uid="STDsAllAround")
+        user_created.connect(mock, dispatch_uid="duid")
         serializer = CASTokenObtainSerializer(
             data={"token": RefreshToken(), "ticket": TICKET}
         )
@@ -186,7 +186,7 @@ class SerializersTests(TestCase):
         the token, then the user_login signal should be sent.
         """
         mock = Mock()
-        user_login.connect(mock, dispatch_uid="STDsAllAround")
+        user_login.connect(mock, dispatch_uid="duid")
         serializer = CASTokenObtainSerializer(
             data={"token": RefreshToken(), "ticket": TICKET}
         )
