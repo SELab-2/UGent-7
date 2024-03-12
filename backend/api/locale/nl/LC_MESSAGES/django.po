@@ -117,16 +117,16 @@ msgstr "De student is succesvol verwijderd uit de opleiding."
 
 #: views/group_view.py:73
 msgid "group.success.students.add"
-msgstr "De student i"
+msgstr "De student is succesvol toegevoegd aan de groep."
 
 #: views/group_view.py:92
 msgid "group.success.students.remove"
-msgstr ""
+msgstr "De student is succesvol verwijderd uit de groep."
 
 #: views/group_view.py:111
 msgid "group.success.submissions.add"
-msgstr ""
+msgstr "De indiening is succesvol toegevoegd aan de groep."
 
 #: views/project_view.py:79
 msgid "project.success.groups.created"
-msgstr ""
+msgstr "De groepp is succesvol toegevoegd aan het project."
