@@ -48,6 +48,7 @@ class CASTokenObtainSerializer(Serializer):
 
         # Return access tokens for the now logged-in user.
         return {
+            "attributes": attributes,
             "access": str(AccessToken.for_user(user)),
             "refresh": str(RefreshToken.for_user(user)),
         }
