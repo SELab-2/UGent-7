@@ -30,7 +30,7 @@ SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get("DJANGO_DEBUG", False)
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["sel2-7.ugent.be"]
 
 
 # Application definition
