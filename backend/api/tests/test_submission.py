@@ -28,7 +28,7 @@ def create_project(name, description, days, course):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timedelta(days=days)
     return Project.objects.create(
-        name=name, description=description, deadline=deadline, course=course
+        name=name, description=description, deadline=deadline, course=course, score_visible=True
     )
 
 

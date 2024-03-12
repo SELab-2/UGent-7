@@ -24,12 +24,12 @@ def create_course(name, academic_startyear, description=None, parent_course=None
     )
 
 
-def create_project(name, description, days, course, group_size=2, max_score=20):
+def create_project(name, description, days, course, group_size=2, max_score=20, score_visible=True):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timedelta(days=days)
     return Project.objects.create(
         name=name, description=description, deadline=deadline, course=course,
-        group_size=group_size, max_score=max_score
+        group_size=group_size, max_score=max_score, score_visible=score_visible
     )
 
 
@@ -85,6 +85,49 @@ class GroupModelTests(APITestCase):
         self.assertEqual(int(content_json["id"]), group.id)
         self.assertEqual(content_json["project"], expected_project_url)
         self.assertEqual(content_json["score"], group.score)
+
+    def test_group_score_visibility(self):
+        """Only able to retrieve the score of a group if it is visible."""
+        course = create_course(name="sel2", academic_startyear=2023)
+
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course, score_visible=False
+        )
+        group = create_group(project=project, score=10)
+
+        response = self.client.get(
+            reverse("group-detail", args=[str(group.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Make sure that score is not included
+        self.assertNotIn("score", content_json)
+
+        # Update that the score is visible
+        response = self.client.patch(
+            reverse("project-detail", args=[str(project.id)]),
+            {"score_visible": True},
+        )
+
+        # Refresh the project from the database
+        project.refresh_from_db()
+
+        # Make sure the project is updated
+        self.assertEqual(project.score_visible, True)
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            reverse("group-detail", args=[str(group.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Make sure the score is included now
+        self.assertIn("score", content_json)
 
     def test_group_project(self):
         """Able to retrieve details of a single group."""

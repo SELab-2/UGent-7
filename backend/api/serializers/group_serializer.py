@@ -25,6 +25,15 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ["id", "project", "students", "score", "submissions"]
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # Check if the score should be visible, if not exclude it from the representation
+        if not instance.project.score_visible:
+            data.pop('score', None)
+
+        return data
+
     def validate(self, data):
         # Make sure the score of the group is lower or equal to the maximum score
         group: Group = self.instance
