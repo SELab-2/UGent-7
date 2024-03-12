@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-12 16:56+0100\n"
+"POT-Creation-Date: 2024-03-12 21:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,102 +17,116 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: api/helpers/check_folder_structure.py:141
-msgid "zip.errors.invalid_structure.blocked_extension_found"
-msgstr "Bestanden met een verboden extensie zijn gevonden in het ingediende zip-bestand."
 
-#: api/helpers/check_folder_structure.py:145
-#: api/helpers/check_folder_structure.py:196
+#: helpers/check_folder_structure.py:141
+msgid "zip.errors.invalid_structure.blocked_extension_found"
+msgstr ""
+"Bestanden met een verboden extensie zijn gevonden in het ingediende zip-"
+"bestand."
+
+#: helpers/check_folder_structure.py:145 helpers/check_folder_structure.py:196
 msgid "zip.success"
 msgstr "Het zip-bestand van de indiening bevat alle benodigde bestanden."
 
-#: api/helpers/check_folder_structure.py:148
+#: helpers/check_folder_structure.py:148
 msgid "zip.errors.invalid_structure.obligated_extension_not_found"
-msgstr "Er is geen enkel bestand met een bepaalde extensie die verplicht is in het ingediende zip-bestand."
+msgstr ""
+"Er is geen enkel bestand met een bepaalde extensie die verplicht is in het "
+"ingediende zip-bestand."
 
-#: api/helpers/check_folder_structure.py:175
+#: helpers/check_folder_structure.py:175
 msgid "zip.errors.invalid_structure.directory_not_defined"
 msgstr "Een verplichte map is niet aanwezig in het ingediende zip-bestand."
 
-#: api/helpers/check_folder_structure.py:195
+#: helpers/check_folder_structure.py:195
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
 msgstr "Het ingediende zip-bestand bevat een map die niet toegestaan is."
 
-#: api/serializers/course_serializer.py:58
-#: api/serializers/course_serializer.py:77
+#: serializers/course_serializer.py:58 serializers/course_serializer.py:77
 msgid "courses.error.context"
-msgstr "De opleiding is niet meegeleverd als context bij het aanmaken van StudentJoinSerializer."
+msgstr ""
+"De opleiding is niet meegeleverd als context bij het aanmaken van "
+"StudentJoinSerializer."
 
-#: api/serializers/course_serializer.py:64
+#: serializers/course_serializer.py:64
 msgid "courses.error.students.already_present"
-msgstr "De student die men probeert toe te voegen aan een opleiding, is daar al aan toegevoegd."
+msgstr ""
+"De student die men probeert toe te voegen aan een opleiding, is daar al aan "
+"toegevoegd."
 
-#: api/serializers/course_serializer.py:68
-#: api/serializers/course_serializer.py:87
+#: serializers/course_serializer.py:68 serializers/course_serializer.py:87
 msgid "courses.error.students.past_course"
 msgstr "De opleiding die men probeert te manipuleren is van een vorig jaar."
 
-#: api/serializers/course_serializer.py:83
+#: serializers/course_serializer.py:83
 msgid "courses.error.students.not_present"
 msgstr "De student bevindt zich niet in de opleiding."
 
-#: api/serializers/group_serializer.py:33
+#: serializers/group_serializer.py:33
 msgid "group.errors.score_exceeds_max"
 msgstr "De score van de groep is groter dan de maximum score."
 
-#: api/serializers/group_serializer.py:43
-#: api/serializers/group_serializer.py:69
+#: serializers/group_serializer.py:43 serializers/group_serializer.py:69
 msgid "group.error.context"
 msgstr "De groep is niet meegegeven als context waar dat nodig is."
 
-#: api/serializers/group_serializer.py:51
+#: serializers/group_serializer.py:51
 msgid "group.errors.full"
 msgstr "De groep is al vol."
 
-#: api/serializers/group_serializer.py:55
+#: serializers/group_serializer.py:55
 msgid "group.errors.not_in_course"
-msgstr "De student bevindt zich niet in de opleiding waartoe het project hoort."
+msgstr ""
+"De student bevindt zich niet in de opleiding waartoe het project hoort."
 
-#: api/serializers/group_serializer.py:59
+#: serializers/group_serializer.py:59
 msgid "group.errors.already_in_group"
 msgstr "De student bevindt zich al in deze groep."
 
-#: api/serializers/group_serializer.py:77
+#: serializers/group_serializer.py:77
 msgid "group.errors.not_present"
 msgstr "De student bevindt zich niet in de groep."
 
-#: api/serializers/project_serializer.py:60
-msgid "project.error.submission.past_project"
+#: serializers/project_serializer.py:60
+msgid "project.error.submissions.past_project"
 msgstr "De uiterste inleverdatum is gepasseerd voor het project."
 
-#: api/serializers/project_serializer.py:63
-msgid "project.error.submission.non_visible_project"
+#: serializers/project_serializer.py:63
+msgid "project.error.submissions.non_visible_project"
 msgstr "Het project is niet zichtbaar."
 
-#: api/serializers/project_serializer.py:66
-msgid "project.error.submission.archived_project"
+#: serializers/project_serializer.py:66
+msgid "project.error.submissions.archived_project"
 msgstr "Het project is gearchiveerd."
 
-#: api/views/course_view.py:57 api/views/course_view.py:76
+#: views/course_view.py:57
 msgid "courses.success.assistants.add"
-msgstr ""
+msgstr "De assistent is succesvol toegevoegd aan de opleiding."
 
-#: api/views/course_view.py:110 api/views/course_view.py:130
+#: views/course_view.py:76
+msgid "courses.success.assistants.remove"
+msgstr "De assistent is succesvol verwijderd uit de opleiding."
+
+#: views/course_view.py:110
 msgid "courses.success.students.add"
+msgstr "De student is succesvol toegevoegd aan de opleiding."
+
+#: views/course_view.py:130
+msgid "courses.success.students.remove"
+msgstr "De student is succesvol verwijderd uit de opleiding."
+
+#: views/group_view.py:73
+msgid "group.success.students.add"
+msgstr "De student i"
+
+#: views/group_view.py:92
+msgid "group.success.students.remove"
 msgstr ""
 
-#: api/views/group_view.py:73
-msgid "group.success.student.add"
-msgstr ""
-
-#: api/views/group_view.py:92
-msgid "group.success.student.remove"
-msgstr ""
-
-#: api/views/group_view.py:111
+#: views/group_view.py:111
 msgid "group.success.submissions.add"
 msgstr ""
 
-#: api/views/project_view.py:79
+#: views/project_view.py:79
 msgid "project.success.groups.created"
 msgstr ""

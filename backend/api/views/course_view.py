@@ -73,7 +73,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             )
 
         return Response({
-            "message": gettext("courses.success.assistants.add")
+            "message": gettext("courses.success.assistants.remove")
         })
 
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | CourseStudentPermission])
@@ -127,7 +127,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             )
 
         return Response({
-            "message": gettext("courses.success.students.add")
+            "message": gettext("courses.success.students.remove")
         })
 
     @action(detail=True, methods=["get"])
