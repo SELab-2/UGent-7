@@ -3,13 +3,17 @@ from rest_framework import serializers
 from api.models.project import Project
 from api.models.group import Group
 from rest_framework.exceptions import ValidationError
+from django.utils import timezone
+from api.models.course import Course
 from api.models.submission import Submission, SubmissionFile
 from api.serializers.submission_serializer import SubmissionSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
     course = serializers.HyperlinkedRelatedField(
-        many=False, read_only=True, view_name="course-detail"
+        many=False,
+        view_name="course-detail",
+        read_only=True
     )
 
     structure_checks = serializers.HyperlinkedIdentityField(
@@ -45,10 +49,34 @@ class ProjectSerializer(serializers.ModelSerializer):
             "groups"
         ]
 
+    def validate(self, data):
+        if "course" in self.context:
+            data["course_id"] = self.context["course"].id
+        else:
+            raise ValidationError(gettext("project.errors.context"))
+
+        # Check if start date of the project is not in the past
+        if data["start_date"] < timezone.now():
+            raise ValidationError(gettext("project.errors.start_date_in_past"))
+
+        # Check if deadline of the project is before the start date
+        if data["deadline"] < data["start_date"]:
+            raise ValidationError(gettext("project.errors.deadline_before_start_date"))
+
+        return data
+
 
 class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
 
+    def validate(self, data):
+        return data
+
+
+class SubmissionStatusSerializer(serializers.Serializer):
+    non_empty_groups = serializers.IntegerField(read_only=True)
+    groups_submitted = serializers.IntegerField(read_only=True)
+    submissions_passed = serializers.IntegerField(read_only=True)
 
 class SubmissionAddSerializer(SubmissionSerializer):
     def validate(self, data):
