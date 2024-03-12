@@ -88,9 +88,10 @@ WSGI_APPLICATION = "ypovoli.wsgi.application"
 
 # Application endpoints
 
+BASE_URL = environ.get("DJANGO_BASE_URL", "https://localhost:8080")
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = "https://localhost:8080/api/auth/cas/echo"
-API_ENDPOINT = "https://localhost:8080/api"
+CAS_RESPONSE = f"{BASE_URL}/api/auth/cas/echo"
+API_ENDPOINT = f"{BASE_URL}/api"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
