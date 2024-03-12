@@ -1,6 +1,10 @@
+echo "Checking environment file..."
+
 if ! [ -f .env ]; then
-    echo "Error: .env file does not exist."
-    exit 1
+    cp .dev.env .env
+    read -s -p "Enter a random string for the django secret (just smash keyboard): " new_secret
+    sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=$new_secret/" .env
+    echo "Created environment file"
 fi
 
 echo "Checking for existing SSL certificates..."

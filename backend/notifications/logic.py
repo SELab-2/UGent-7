@@ -1,6 +1,5 @@
 import threading
 from collections import defaultdict
-from os import error
 from smtplib import SMTPException
 from typing import DefaultDict, Dict, List
 

@@ -49,7 +49,7 @@ services:
     container_name: backend
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: /bin/bash -c "./setup.sh && python manage.py runsslserver 192.168.90.2:8080"
     expose:
       - 8080
@@ -92,7 +92,7 @@ services:
         ipv4_address: $REDIS_IP
     expose:
       - $REDIS_PORT
-    entrypoint: redis-server --appendonly yes --requirepass $REDIS_PASSWORD --maxmemory 512mb --maxmemory-policy allkeys-lru
+    entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
       - $DATADIR/redis:/data
      
