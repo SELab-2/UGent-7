@@ -212,5 +212,4 @@ class FileTestsTests(APITestCase):
             obligated=[fileExtensionTS, fileExtensionTSX],
             blocked=[])
 
-        succes = (True, 'zip.success')
-        self.assertEqual(check_zip_file(project=project, dir_path="structures/zip_struct1.zip"), succes)
+        self.assertTrue(check_zip_file(project=project, dir_path="structures/zip_struct1.zip")[0])

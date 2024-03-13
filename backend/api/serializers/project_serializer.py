@@ -86,12 +86,12 @@ class SubmissionAddSerializer(SubmissionSerializer):
 
         # Check if the project's deadline is not passed.
         if project.deadline_passed():
-            raise ValidationError(gettext("project.error.submission.past_project"))
+            raise ValidationError(gettext("project.error.submissions.past_project"))
 
         if not project.is_visible():
-            raise ValidationError(gettext("project.error.submission.non_visible_project"))
+            raise ValidationError(gettext("project.error.submissions.non_visible_project"))
 
         if project.is_archived():
-            raise ValidationError(gettext("project.error.submission.archived_project"))
+            raise ValidationError(gettext("project.error.submissions.archived_project"))
 
         return data

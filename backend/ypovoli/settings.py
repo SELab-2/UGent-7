@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from django.utils.translation import gettext_lazy as _
 import os
 from datetime import timedelta
 from os import environ
@@ -116,6 +117,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
+LANGUAGES = [("en", _("languages.en")), ("nl", _("languages.nl"))]
 USE_L10N = False
 USE_TZ = True
 
