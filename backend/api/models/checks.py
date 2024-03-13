@@ -39,6 +39,7 @@ class StructureCheck(models.Model):
     )
 
 
+
 class ExtraCheck(models.Model):
     """Model that represents an extra check for a project.
        These checks are not obligated to pass."""
