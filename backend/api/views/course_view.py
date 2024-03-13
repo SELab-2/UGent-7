@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
 from api.models.course import Course
+from api.models.group import Group
 from api.permissions.course_permissions import (
     CoursePermission,
     CourseAssistantPermission,
@@ -169,11 +170,17 @@ class CourseViewSet(viewsets.ModelViewSet):
             }
         )
 
+        project = None
+
         # Validate the serializer
         if serializer.is_valid(raise_exception=True):
-            course.projects.add(
-                serializer.save()
-            )
+            project = serializer.save()
+            course.projects.add(project)
+
+        # Create groups for the project
+        students_count = course.students.count()
+        for _ in range(students_count):
+            Group.objects.create(project=project)
 
         return Response({
             "message": gettext("course.success.project.add"),

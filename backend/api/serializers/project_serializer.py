@@ -4,7 +4,6 @@ from api.models.project import Project
 from api.models.group import Group
 from rest_framework.exceptions import ValidationError
 from django.utils import timezone
-from api.models.course import Course
 from api.models.submission import Submission, SubmissionFile
 from api.serializers.submission_serializer import SubmissionSerializer
 
@@ -57,7 +56,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             raise ValidationError(gettext("project.errors.context"))
 
         # Check if start date of the project is not in the past
-        if data["start_date"] < timezone.now():
+        if data["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
             raise ValidationError(gettext("project.errors.start_date_in_past"))
 
         # Check if deadline of the project is before the start date

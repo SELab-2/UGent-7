@@ -150,6 +150,54 @@ class ProjectModelTests(APITestCase):
         past_project.toggle_groups_locked()
         self.assertIs(past_project.locked_groups, False)
 
+    def test_automatically_create_groups_when_creating_project(self):
+        """
+        creating a project as a teacher should open the same amount of groups as students enrolled in the project.
+        """
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+
+        student1 = create_student(
+            id=1, first_name="John", last_name="Doe", email="john.doe@example.com"
+        )
+        student2 = create_student(
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com"
+        )
+        student1.courses.add(course)
+        student2.courses.add(course)
+
+        project_data = {
+            "name": "Test Project",
+            "description": "Test project description",
+            "visible": True,
+            "archived": False,
+            "start_date": timezone.now(),
+            "deadline": timezone.now() + timezone.timedelta(days=1),
+        }
+
+        response = self.client.post(
+            reverse("course-projects", args=[course.id]), data=project_data, follow=True
+        )
+
+        # Creating a group as a teacher should work
+        self.assertEqual(response.status_code, 200)
+
+        project = Project.objects.get(
+            name="Test Project",
+            description="Test project description",
+            visible=True,
+            archived=False,
+            start_date=project_data["start_date"],
+            deadline=project_data["deadline"],
+            course=course,
+        )
+
+        groups_count = project.groups.count()
+        # The amount of students participating in the corresponding course
+        expected_groups_count = 2
+
+        # We expect the amount of groups to be the same as the amount of students in the course
+        self.assertEqual(groups_count, expected_groups_count)
+
     def test_start_date_Project_not_in_past(self):
         """
         unable to create a project as a teacher/admin if the start date lies within the past.
