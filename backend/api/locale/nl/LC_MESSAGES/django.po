@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-12 21:52+0100\n"
+"POT-Creation-Date: 2024-03-13 13:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,40 +62,40 @@ msgstr "De opleiding die men probeert te manipuleren is van een vorig jaar."
 msgid "courses.error.students.not_present"
 msgstr "De student bevindt zich niet in de opleiding."
 
-#: serializers/group_serializer.py:33
+#: serializers/group_serializer.py:47
 msgid "group.errors.score_exceeds_max"
 msgstr "De score van de groep is groter dan de maximum score."
 
-#: serializers/group_serializer.py:43 serializers/group_serializer.py:69
+#: serializers/group_serializer.py:57 serializers/group_serializer.py:83
 msgid "group.error.context"
 msgstr "De groep is niet meegegeven als context waar dat nodig is."
 
-#: serializers/group_serializer.py:51
+#: serializers/group_serializer.py:65
 msgid "group.errors.full"
 msgstr "De groep is al vol."
 
-#: serializers/group_serializer.py:55
+#: serializers/group_serializer.py:69
 msgid "group.errors.not_in_course"
 msgstr ""
 "De student bevindt zich niet in de opleiding waartoe het project hoort."
 
-#: serializers/group_serializer.py:59
+#: serializers/group_serializer.py:73
 msgid "group.errors.already_in_group"
 msgstr "De student bevindt zich al in deze groep."
 
-#: serializers/group_serializer.py:77
+#: serializers/group_serializer.py:91
 msgid "group.errors.not_present"
 msgstr "De student bevindt zich niet in de groep."
 
-#: serializers/project_serializer.py:60
+#: serializers/project_serializer.py:61
 msgid "project.error.submissions.past_project"
 msgstr "De uiterste inleverdatum is gepasseerd voor het project."
 
-#: serializers/project_serializer.py:63
+#: serializers/project_serializer.py:64
 msgid "project.error.submissions.non_visible_project"
 msgstr "Het project is niet zichtbaar."
 
-#: serializers/project_serializer.py:66
+#: serializers/project_serializer.py:67
 msgid "project.error.submissions.archived_project"
 msgstr "Het project is gearchiveerd."
 
