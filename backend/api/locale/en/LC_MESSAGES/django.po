@@ -52,7 +52,7 @@ msgstr "The student is already present in the course."
 
 #: serializers/course_serializer.py:68 serializers/course_serializer.py:87
 msgid "courses.error.students.past_course"
-msgstr "The course is not from this year, thus cannot be manipulated."
+msgstr "The course is not from a past year, thus cannot be manipulated."
 
 #: serializers/course_serializer.py:83
 msgid "courses.error.students.not_present"
