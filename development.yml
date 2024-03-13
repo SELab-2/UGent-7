@@ -39,7 +39,7 @@ services:
       - 8080:8080
     volumes:
       - $DATADIR/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
-      - $DATADIR/nginx/ssl:/etc/nginx/ssl:ro
+      - $SSL_DIR:/etc/nginx/ssl:ro
     depends_on:
       - backend
       - frontend

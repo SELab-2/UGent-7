@@ -31,7 +31,8 @@ SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get("DJANGO_DEBUG", "False").lower() in ["true", "1", "t"]
-ALLOWED_HOSTS = ["localhost", "sel2-7.ugent.be"]
+DOMAIN_NAME = environ.get("DJANGO_DOMAIN_NAME", "localhost")
+ALLOWED_HOSTS = [DOMAIN_NAME]
 
 
 # Application definition
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
     "rest_framework",  # Django rest framework
     "drf_yasg",  # Yet Another Swagger generator
     "sslserver",  # Used for local SSL support (needed by CAS)
-    # First party
+    # First party``
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application
     "notifications",  # Ypovoli notifications
@@ -90,10 +91,11 @@ WSGI_APPLICATION = "ypovoli.wsgi.application"
 
 # Application endpoints
 
-BASE_URL = environ.get("DJANGO_BASE_URL", "https://localhost:8080")
+URL_PREFIX = environ.get("DJANGO_CAS_URL_PREFIX", "")
+PORT = environ.get("DJANGO_CAS_PORT", "8080")
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = f"{BASE_URL}/api/auth/cas/echo"
-API_ENDPOINT = f"{BASE_URL}/api"
+CAS_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}{'/' + URL_PREFIX if URL_PREFIX else ''}/api/auth/cas/echo"
+API_ENDPOINT = f"https://{DOMAIN_NAME}/api"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

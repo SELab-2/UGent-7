@@ -38,7 +38,7 @@ services:
       - 443:443
     volumes:
       - $DATADIR/nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
-      - $DATADIR/nginx/ssl:/etc/nginx/ssl:ro
+      - $SSL_DIR:/etc/nginx/ssl:ro
     depends_on:
       - backend
       - frontend
