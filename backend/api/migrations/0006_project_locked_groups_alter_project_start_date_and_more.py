@@ -15,14 +15,4 @@ class Migration(migrations.Migration):
             name="locked_groups",
             field=models.BooleanField(default=False),
         ),
-        migrations.AlterField(
-            model_name="project",
-            name="start_date",
-            field=models.DateTimeField(blank=True, default=django.utils.timezone.now),
-        ),
-        migrations.AlterField(
-            model_name="submission",
-            name="submission_number",
-            field=models.PositiveIntegerField(blank=True, null=True),
-        ),
     ]

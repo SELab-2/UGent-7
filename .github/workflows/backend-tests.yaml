@@ -21,9 +21,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8
           pip install -r ./backend/requirements.txt
-      - name: Make migrations
-        run: |
-          python ./backend/manage.py makemigrations --merge
-          python ./backend/manage.py migrate
       - name: Execute tests
         run: cd backend; python manage.py test
