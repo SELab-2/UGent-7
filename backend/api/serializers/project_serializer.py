@@ -75,6 +75,8 @@ class SubmissionAddSerializer(SubmissionSerializer):
 class StructureCheckAddSerializer(StructureCheckSerializer):
     def validate(self, data):
         project: Project = self.context["project"]
+        if project.structure_checks.filter(name=data["name"]).count():
+            raise ValidationError(gettext("project.error.structure_checks.already_existing"))
 
         obl_ext = set()
         for ext in self.context["obligated"]:
@@ -89,19 +91,9 @@ class StructureCheckAddSerializer(StructureCheckSerializer):
             extensie, _ = FileExtension.objects.get_or_create(
                 extension=ext
             )
+            if extensie in obl_ext:
+                raise ValidationError(gettext("project.error.structure_checks.extension_blocked_and_obligated"))
             block_ext.add(extensie)
         data["blocked_extensions"] = block_ext
-
-        """
-        # Check if the project's deadline is not passed.
-        if project.deadline_passed():
-            raise ValidationError(gettext("project.error.submission.past_project"))
-
-        if not project.is_visible():
-            raise ValidationError(gettext("project.error.submission.non_visible_project"))
-
-        if project.is_archived():
-            raise ValidationError(gettext("project.error.submission.archived_project"))
-        """
 
         return data
