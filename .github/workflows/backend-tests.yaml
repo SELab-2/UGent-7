@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.11
@@ -22,9 +22,6 @@ jobs:
           pip install flake8
           pip install -r ./backend/requirements.txt
       - name: Compile translations
-        run: |
-          apt-get update
-          apt-get install -y gettext
-          django-admin compilemessages
+        run: django-admin compilemessages
       - name: Execute tests
         run: cd backend; python manage.py test
