@@ -680,6 +680,7 @@ class ProjectModelTestsAsTeacher(APITestCase):
         # Create example groups
         group1 = create_group(project=project)
         group2 = create_group(project=project)
+        group3 = create_group(project=project)  # noqa: F841
 
         # Add the students to some of the groups
         group1.students.add(student1)
