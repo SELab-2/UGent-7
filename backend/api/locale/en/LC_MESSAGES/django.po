@@ -68,7 +68,7 @@ msgstr "The group is not supplied in the context."
 
 #: serializers/group_serializer.py:65
 msgid "group.errors.full"
-msgstr "This group is already full."
+msgstr "The group is already full."
 
 #: serializers/group_serializer.py:69
 msgid "group.errors.not_in_course"
