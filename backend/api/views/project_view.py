@@ -6,9 +6,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from api.permissions.project_permissions import ProjectGroupPermission, ProjectPermission
 from api.models.group import Group
+from api.models.submission import Submission
 from ..models.project import Project
 from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
-from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer
+from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer, SubmissionStatusSerializer
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
 
@@ -101,4 +102,25 @@ class ProjectViewSet(CreateModelMixin,
         serializer = ExtraCheckSerializer(
             checks, many=True, context={"request": request}
         )
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | ProjectGroupPermission])
+    def submission_status(self, request, **_):
+        """Returns the current submission status for the given project
+        This includes:
+            - The total amount of groups that contain at least one student
+            - The amount of groups that have uploaded a submission
+            - The amount of submissions that passed the basic tests
+        """
+        project = self.get_object()
+        non_empty_groups = project.groups.filter(students__isnull=False).count()
+        groups_submitted = Submission.objects.filter(group__project=project).count()
+        submissions_passed = Submission.objects.filter(group__project=project, structure_checks_passed=True).count()
+
+        serializer = SubmissionStatusSerializer({
+            "non_empty_groups": non_empty_groups,
+            "groups_submitted": groups_submitted,
+            "submissions_passed": submissions_passed,
+        })
+
         return Response(serializer.data)

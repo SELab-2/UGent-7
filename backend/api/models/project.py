@@ -20,6 +20,9 @@ class Project(models.Model):
     # Project archived
     archived = models.BooleanField(default=False)
 
+    # Locked groups
+    locked_groups = models.BooleanField(default=False)
+
     start_date = models.DateTimeField(
         # The default value is the current date and time
         default=timezone.now,
@@ -82,6 +85,15 @@ class Project(models.Model):
     def toggle_archived(self):
         """Toggles the archived status of the project."""
         self.archived = not self.archived
+        self.save()
+
+    def is_groups_locked(self):
+        """Returns True if participating groups are locked."""
+        return self.locked_groups
+
+    def toggle_groups_locked(self):
+        """Toggles the locked state of the groups related to the project."""
+        self.locked_groups = not self.locked_groups
         self.save()
 
     def increase_deadline(self, days):

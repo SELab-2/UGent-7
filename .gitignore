@@ -1,5 +1,6 @@
 .tool-versions
 .env
+.venv
 data/*
 data/nginx/ssl/*
 data/postres*
