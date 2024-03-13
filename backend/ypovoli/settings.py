@@ -90,12 +90,10 @@ WSGI_APPLICATION = "ypovoli.wsgi.application"
 
 # Application endpoints
 
-URL_PREFIX = environ.get("DJANGO_URL_PREFIX", "")
-PORT = environ.get("DJANGO_PORT", "8080")
+URL_PREFIX = environ.get("DJANGO_CAS_URL_PREFIX", "")
+PORT = environ.get("DJANGO_CAS_PORT", "8080")
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = (
-    f"https://{DOMAIN_NAME}:{PORT}{'/' + URL_PREFIX if URL_PREFIX else ''}/api/auth/cas/echo"
-)
+CAS_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}{'/' + URL_PREFIX if URL_PREFIX else ''}/api/auth/cas/echo"
 API_ENDPOINT = f"https://{DOMAIN_NAME}/api"
 
 # Database
