@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-12 21:52+0100\n"
+"POT-Creation-Date: 2024-03-13 12:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,73 +20,77 @@ msgstr ""
 
 #: helpers/check_folder_structure.py:141
 msgid "zip.errors.invalid_structure.blocked_extension_found"
-msgstr ""
+msgstr "The submitted zip file contains a file with a non-allowed extension."
 
 #: helpers/check_folder_structure.py:145 helpers/check_folder_structure.py:196
 msgid "zip.success"
-msgstr ""
+msgstr "The submitted zip file succeeds in all checks."
 
 #: helpers/check_folder_structure.py:148
 msgid "zip.errors.invalid_structure.obligated_extension_not_found"
 msgstr ""
+"The submitted zip file doesn't have any file with a certain file extension "
+"that's obligated."
 
 #: helpers/check_folder_structure.py:175
 msgid "zip.errors.invalid_structure.directory_not_defined"
-msgstr ""
+msgstr "An obligated directory was not found in the submitted zip file."
 
 #: helpers/check_folder_structure.py:195
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
 msgstr ""
+"There was a directory found in the submitted zip file, which was not asked "
+"for."
 
 #: serializers/course_serializer.py:58 serializers/course_serializer.py:77
 msgid "courses.error.context"
-msgstr ""
+msgstr "The course is not supplied in the context."
 
 #: serializers/course_serializer.py:64
 msgid "courses.error.students.already_present"
-msgstr ""
+msgstr "The student is already present in the course."
 
 #: serializers/course_serializer.py:68 serializers/course_serializer.py:87
 msgid "courses.error.students.past_course"
-msgstr ""
+msgstr "The course is not from this year, thus cannot be manipulated."
 
 #: serializers/course_serializer.py:83
 msgid "courses.error.students.not_present"
-msgstr ""
+msgstr "The student is not present in the course."
 
-#: serializers/group_serializer.py:33
+#: serializers/group_serializer.py:47
 msgid "group.errors.score_exceeds_max"
-msgstr ""
+msgstr "The score exceeds the group's max score."
 
-#: serializers/group_serializer.py:43 serializers/group_serializer.py:69
+#: serializers/group_serializer.py:57 serializers/group_serializer.py:83
 msgid "group.error.context"
-msgstr ""
+msgstr "The group is not supplied in the context."
 
-#: serializers/group_serializer.py:51
+#: serializers/group_serializer.py:65
 msgid "group.errors.full"
-msgstr ""
+msgstr "This group is already full."
 
-#: serializers/group_serializer.py:55
+#: serializers/group_serializer.py:69
 msgid "group.errors.not_in_course"
-msgstr ""
+msgstr "The student is not present in the related course."
 
-#: serializers/group_serializer.py:59
+#: serializers/group_serializer.py:73
 msgid "group.errors.already_in_group"
-msgstr ""
+msgstr "The student is already in the group."
 
-#: serializers/group_serializer.py:77
+#: serializers/group_serializer.py:91
 msgid "group.errors.not_present"
-msgstr ""
+msgstr "The student is currently not in this group."
 
-#: serializers/project_serializer.py:60
+#: serializers/project_serializer.py:61
 msgid "project.error.submissions.past_project"
 msgstr ""
 
-#: serializers/project_serializer.py:63
+#: serializers/project_serializer.py:64
 msgid "project.error.submissions.non_visible_project"
 msgstr ""
 
-#: serializers/project_serializer.py:66
+#: serializers/project_serializer.py:67
 msgid "project.error.submissions.archived_project"
 msgstr ""
 
