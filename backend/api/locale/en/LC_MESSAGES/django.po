@@ -52,7 +52,7 @@ msgstr "The student is already present in the course."
 
 #: serializers/course_serializer.py:68 serializers/course_serializer.py:87
 msgid "courses.error.students.past_course"
-msgstr "The course is not from a past year, thus cannot be manipulated."
+msgstr "The course is from a past year, thus cannot be manipulated."
 
 #: serializers/course_serializer.py:83
 msgid "courses.error.students.not_present"
@@ -80,7 +80,7 @@ msgstr "The student is already in the group."
 
 #: serializers/group_serializer.py:91
 msgid "group.errors.not_present"
-msgstr "The student is currently not in this group."
+msgstr "The student is currently not in the group."
 
 #: serializers/project_serializer.py:61
 msgid "project.error.submissions.past_project"

@@ -40,19 +40,15 @@ msgstr "Een verplichte map is niet aanwezig in het ingediende zip-bestand."
 
 #: helpers/check_folder_structure.py:195
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
-msgstr "Het ingediende zip-bestand bevat een map die niet toegestaan is."
+msgstr "Het ingediende zip-bestand bevat een map die niet gevraagd is."
 
 #: serializers/course_serializer.py:58 serializers/course_serializer.py:77
 msgid "courses.error.context"
-msgstr ""
-"De opleiding is niet meegeleverd als context bij het aanmaken van "
-"StudentJoinSerializer."
+msgstr "De opleiding is niet meegeleverd als context."
 
 #: serializers/course_serializer.py:64
 msgid "courses.error.students.already_present"
-msgstr ""
-"De student die men probeert toe te voegen aan een opleiding, is daar al aan "
-"toegevoegd."
+msgstr "De student bevindt zich al in de opleiding."
 
 #: serializers/course_serializer.py:68 serializers/course_serializer.py:87
 msgid "courses.error.students.past_course"
@@ -81,7 +77,7 @@ msgstr ""
 
 #: serializers/group_serializer.py:73
 msgid "group.errors.already_in_group"
-msgstr "De student bevindt zich al in deze groep."
+msgstr "De student bevindt zich al in de groep."
 
 #: serializers/group_serializer.py:91
 msgid "group.errors.not_present"
@@ -89,7 +85,7 @@ msgstr "De student bevindt zich niet in de groep."
 
 #: serializers/project_serializer.py:61
 msgid "project.error.submissions.past_project"
-msgstr "De uiterste inleverdatum is gepasseerd voor het project."
+msgstr "De uiterste inleverdatum voor het project is gepasseerd."
 
 #: serializers/project_serializer.py:64
 msgid "project.error.submissions.non_visible_project"
@@ -129,4 +125,4 @@ msgstr "De indiening is succesvol toegevoegd aan de groep."
 
 #: views/project_view.py:79
 msgid "project.success.groups.created"
-msgstr "De groepp is succesvol toegevoegd aan het project."
+msgstr "De groep is succesvol toegevoegd aan het project."
