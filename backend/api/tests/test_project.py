@@ -679,11 +679,11 @@ class ProjectModelTestsAsTeacher(APITestCase):
 
         # Create example groups
         group1 = create_group(project=project)
-        group3 = create_group(project=project)
+        group2 = create_group(project=project)
 
         # Add the students to some of the groups
         group1.students.add(student1)
-        group3.students.add(student2)
+        group2.students.add(student2)
 
         response = self.client.get(
             reverse("project-submission-status", args=[str(project.id)]), follow=True

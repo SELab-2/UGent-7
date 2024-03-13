@@ -88,11 +88,11 @@ class Project(models.Model):
         self.save()
 
     def is_groups_locked(self):
-        """Returns True if a participating groups are locked."""
+        """Returns True if participating groups are locked."""
         return self.locked_groups
 
     def toggle_groups_locked(self):
-        """Toggles the locke state of the groups related to the project."""
+        """Toggles the locked state of the groups related to the project."""
         self.locked_groups = not self.locked_groups
         self.save()
 
