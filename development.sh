@@ -1,3 +1,15 @@
+#!/bin/bash
+
+build=false
+
+while getopts ":b" opt; do
+  case ${opt} in
+    b ) build=true ;;
+    \? ) echo "Usage: $0 [-b]" >&2
+         exit 1 ;;
+  esac
+done
+
 echo "Checking environment file..."
 
 if ! [ -f .env ]; then
@@ -18,6 +30,12 @@ if [ ! -f "data/nginx/ssl/private.key" ] || [ ! -f "data/nginx/ssl/certificate.c
     echo "SSL certificates generated."
 else
     echo "SSL certificates already exist, skipping generation."
+fi
+
+if [ "$build" = true ]; then
+    echo "Building Docker images..."
+    echo "This can take a while..."
+    docker-compose -f development.yml build --no-cache
 fi
 
 echo "Starting services..."
