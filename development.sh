@@ -1,12 +1,24 @@
 #!/bin/bash
 
+backend=false
+frontend=false
 build=false
 
-while getopts ":b" opt; do
+while getopts ":bfc" opt; do
   case ${opt} in
-    b ) build=true ;;
-    \? ) echo "Usage: $0 [-b]" >&2
-         exit 1 ;;
+    b )
+      backend=true
+      ;;
+    f )
+      frontend=true
+      ;;
+    c )
+      build=true
+      ;;
+    \? )
+      echo "Usage: $0 [-b] [-f] [-c]"
+      exit 1
+      ;;
   esac
 done
 
@@ -36,17 +48,25 @@ if [ "$build" = true ]; then
     echo "Building Docker images..."
     echo "This can take a while..."
     docker-compose -f development.yml build --no-cache
+else
+    echo "$build"
 fi
 
 echo "Starting services..."
 docker-compose -f development.yml up -d
 
 echo "-------------------------------------"
-echo "Following backend logs..."
+echo "Following logs..."
 echo "Press CTRL + C to stop all containers"
 echo "-------------------------------------"
 
-docker-compose -f development.yml logs --follow --tail 50 backend
+if [ "$backend" = true ] && [ "$frontend" = true ]; then
+    docker-compose -f development.yml logs --follow --tail 50 backend frontend
+elif [ "$frontend" = true ]; then
+    docker-compose -f development.yml logs --follow --tail 50 frontend
+else
+    docker-compose -f development.yml logs --follow --tail 50 backend
+fi
 
 echo "Cleaning up..."
 
