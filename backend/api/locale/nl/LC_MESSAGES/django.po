@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-13 13:02+0100\n"
+"POT-Creation-Date: 2024-03-13 23:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,8 @@ msgstr "Het ingediende zip-bestand bevat een map die niet gevraagd is."
 msgid "courses.error.context"
 msgstr "De opleiding is niet meegeleverd als context."
 
-#: serializers/course_serializer.py:64
+#: serializers/course_serializer.py:64 tests/test_locale.py:28
+#: tests/test_locale.py:38
 msgid "courses.error.students.already_present"
 msgstr "De student bevindt zich al in de opleiding."
 

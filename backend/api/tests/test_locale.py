@@ -1,5 +1,7 @@
 import json
 from django.urls import reverse
+from django.utils.translation import activate
+from django.utils.translation import gettext as _
 from rest_framework.test import APITestCase
 
 from api.models.course import Course
@@ -22,7 +24,8 @@ class TestLocaleAddAlreadyPresentStudentToCourse(APITestCase):
 
         self.assertEqual(response.status_code, 400)
         body = json.loads(response.content.decode('utf-8'))
-        self.assertEqual(body["non_field_errors"][0], "The student is already present in the course.")
+        activate("en")
+        self.assertEqual(body["non_field_errors"][0], _("courses.error.students.already_present"))
 
     def test_nl_locale(self):
         response = self.client.post(reverse("course-students", args=["1"]),
@@ -31,4 +34,5 @@ class TestLocaleAddAlreadyPresentStudentToCourse(APITestCase):
 
         self.assertEqual(response.status_code, 400)
         body = json.loads(response.content.decode('utf-8'))
-        self.assertEqual(body["non_field_errors"][0], "De student bevindt zich al in de opleiding.")
+        activate("nl")
+        self.assertEqual(body["non_field_errors"][0], _("courses.error.students.already_present"))
