@@ -4,8 +4,10 @@ from api.models.project import Project
 from api.models.group import Group
 from rest_framework.exceptions import ValidationError
 from api.models.submission import Submission, SubmissionFile
+from api.models.checks import FileExtension
 from api.serializers.submission_serializer import SubmissionSerializer
 from api.serializers.checks_serializer import StructureCheckSerializer
+from rest_framework.request import Request
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -72,8 +74,23 @@ class SubmissionAddSerializer(SubmissionSerializer):
 
 class StructureCheckAddSerializer(StructureCheckSerializer):
     def validate(self, data):
-
         project: Project = self.context["project"]
+
+        obl_ext = set()
+        for ext in self.context["obligated"]:
+            extensie, _ = FileExtension.objects.get_or_create(
+                extension=ext
+            )
+            obl_ext.add(extensie)
+        data["obligated_extensions"] = obl_ext
+
+        block_ext = set()
+        for ext in self.context["blocked"]:
+            extensie, _ = FileExtension.objects.get_or_create(
+                extension=ext
+            )
+            block_ext.add(extensie)
+        data["blocked_extensions"] = block_ext
 
         """
         # Check if the project's deadline is not passed.

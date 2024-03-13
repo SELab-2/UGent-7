@@ -94,6 +94,7 @@ class ProjectViewSet(CreateModelMixin,
         return Response(serializer.data)
 
     @structure_checks.mapping.post
+    @structure_checks.mapping.put
     def _add_structure_check(self, request: Request, **_):
         """Add an structure_check to the project"""
 
@@ -101,7 +102,13 @@ class ProjectViewSet(CreateModelMixin,
 
         # Add submission to course
         serializer = StructureCheckAddSerializer(
-            data=request.data, context={"project": project, "request": request}
+            data=request.data,
+            context={
+                "project": project,
+                "request": request,
+                "obligated": request.data.getlist('obligated_extensions'),
+                "blocked": request.data.getlist('blocked_extensions')
+            }
         )
 
         if serializer.is_valid(raise_exception=True):
