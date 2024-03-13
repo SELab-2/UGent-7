@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from api.models.project import Project
 from api.models.extension import FileExtension
 
@@ -37,6 +38,8 @@ class StructureCheck(models.Model):
         related_name="blocked_extensions",
         blank=True
     )
+
+    # ID check should be generated automatically
 
 
 
