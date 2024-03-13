@@ -38,6 +38,9 @@ class Project(models.Model):
         default=20
     )
 
+    # Score already visible to students
+    score_visible = models.BooleanField(default=False)
+
     # Size of the groups than can be formed
     group_size = models.PositiveSmallIntegerField(
         blank=False,
