@@ -84,15 +84,15 @@ msgstr "The student is currently not in this group."
 
 #: serializers/project_serializer.py:61
 msgid "project.error.submissions.past_project"
-msgstr ""
+msgstr "The deadline of the project has already passed."
 
 #: serializers/project_serializer.py:64
 msgid "project.error.submissions.non_visible_project"
-msgstr ""
+msgstr "The project is currently in a non-visible state."
 
 #: serializers/project_serializer.py:67
 msgid "project.error.submissions.archived_project"
-msgstr ""
+msgstr "The project is archived."
 
 #: views/course_view.py:57
 msgid "courses.success.assistants.add"
