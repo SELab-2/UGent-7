@@ -5,7 +5,10 @@ from api.models.group import Group
 from rest_framework.exceptions import ValidationError
 from django.utils import timezone
 from api.models.submission import Submission, SubmissionFile
+from api.models.checks import FileExtension, StructureCheck
 from api.serializers.submission_serializer import SubmissionSerializer
+from api.serializers.checks_serializer import StructureCheckSerializer
+from rest_framework.request import Request
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -81,6 +84,7 @@ class SubmissionStatusSerializer(serializers.Serializer):
 
 class SubmissionAddSerializer(SubmissionSerializer):
     def validate(self, data):
+
         group: Group = self.context["group"]
         project: Project = group.project
 
@@ -93,5 +97,32 @@ class SubmissionAddSerializer(SubmissionSerializer):
 
         if project.is_archived():
             raise ValidationError(gettext("project.error.submissions.archived_project"))
+
+        return data
+
+
+class StructureCheckAddSerializer(StructureCheckSerializer):
+    def validate(self, data):
+        project: Project = self.context["project"]
+        if project.structure_checks.filter(name=data["name"]).count():
+            raise ValidationError(gettext("project.error.structure_checks.already_existing"))
+
+        obl_ext = set()
+        for ext in self.context["obligated"]:
+            extensie, _ = FileExtension.objects.get_or_create(
+                extension=ext
+            )
+            obl_ext.add(extensie)
+        data["obligated_extensions"] = obl_ext
+
+        block_ext = set()
+        for ext in self.context["blocked"]:
+            extensie, _ = FileExtension.objects.get_or_create(
+                extension=ext
+            )
+            if extensie in obl_ext:
+                raise ValidationError(gettext("project.error.structure_checks.extension_blocked_and_obligated"))
+            block_ext.add(extensie)
+        data["blocked_extensions"] = block_ext
 
         return data

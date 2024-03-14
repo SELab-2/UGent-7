@@ -16,9 +16,9 @@ class StructureCheckSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    obligated_extensions = FileExtensionSerializer(many=True)
+    obligated_extensions = FileExtensionSerializer(many=True, required=False, default=[], read_only=True)
 
-    blocked_extensions = FileExtensionSerializer(many=True)
+    blocked_extensions = FileExtensionSerializer(many=True, required=False, default=[], read_only=True)
 
     class Meta:
         model = StructureCheck

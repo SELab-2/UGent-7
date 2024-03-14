@@ -8,10 +8,16 @@ from api.permissions.project_permissions import ProjectGroupPermission, ProjectP
 from api.models.group import Group
 from api.models.submission import Submission
 from api.models.project import Project
+from api.models.checks import StructureCheck
 from api.serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
-from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer, SubmissionStatusSerializer
+from api.serializers.project_serializer import (
+    StructureCheckAddSerializer, SubmissionStatusSerializer,
+    ProjectSerializer, TeacherCreateGroupSerializer
+)
+
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
+from rest_framework.request import Request
 
 
 class ProjectViewSet(CreateModelMixin,
@@ -87,6 +93,31 @@ class ProjectViewSet(CreateModelMixin,
             checks, many=True, context={"request": request}
         )
         return Response(serializer.data)
+
+    @structure_checks.mapping.post
+    @structure_checks.mapping.put
+    def _add_structure_check(self, request: Request, **_):
+        """Add an structure_check to the project"""
+
+        project: Project = self.get_object()
+
+        # Add submission to course
+        serializer = StructureCheckAddSerializer(
+            data=request.data,
+            context={
+                "project": project,
+                "request": request,
+                "obligated": request.data.getlist('obligated_extensions'),
+                "blocked": request.data.getlist('blocked_extensions')
+            }
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(project=project)
+
+        return Response({
+            "message": gettext("project.success.structure_check.add")
+        })
 
     @action(detail=True, methods=["get"])
     def extra_checks(self, request, **_):
