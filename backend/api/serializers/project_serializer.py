@@ -4,7 +4,7 @@ from api.models.project import Project
 from api.models.group import Group
 from rest_framework.exceptions import ValidationError
 from api.models.submission import Submission, SubmissionFile
-from api.models.checks import FileExtension
+from api.models.checks import FileExtension, StructureCheck
 from api.serializers.submission_serializer import SubmissionSerializer
 from api.serializers.checks_serializer import StructureCheckSerializer
 from rest_framework.request import Request
@@ -95,5 +95,22 @@ class StructureCheckAddSerializer(StructureCheckSerializer):
                 raise ValidationError(gettext("project.error.structure_checks.extension_blocked_and_obligated"))
             block_ext.add(extensie)
         data["blocked_extensions"] = block_ext
+
+        return data
+
+
+class StructureCheckDeleteSerializer(StructureCheckSerializer):
+    def validate(self, data):
+        if "project" not in self.context:
+            raise ValidationError(gettext("project.error.context"))
+
+        project: Project = self.context["project"]
+
+        # Get the struture_check
+        structureCheck: StructureCheck = data["structure_check_id"]
+
+        # Make sure the struture_check was in the project
+        if True or not project.structure_checks.filter(id=structureCheck.id).exists():
+            raise ValidationError(gettext("struture_check.errors.not_present"))
 
         return data
