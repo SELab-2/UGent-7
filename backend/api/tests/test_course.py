@@ -671,6 +671,22 @@ class CourseModelTestsAsStudent(APITestCase):
 
         self.assertTrue(course.students.filter(id=self.user.id).exists())
 
+    def test_try_leave_course_not_part_of(self):
+        """
+        Students should not be able to leave a course they are not part of.
+        """
+        course = get_course()
+
+        response = self.client.delete(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        self.assertFalse(course.students.filter(id=self.user.id).exists())
+
 
 class CourseModelTestsAsTeacher(APITestCase):
     def setUp(self) -> None:
