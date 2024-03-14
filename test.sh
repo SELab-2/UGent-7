@@ -26,8 +26,7 @@ echo "Checking environment file..."
 
 if ! [ -f .env ]; then
     cp .dev.env .env
-    read -s -p "Enter a random string for the django secret (just smash keyboard): " new_secret
-    sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=$new_secret/" .env
+    sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
     echo "Created environment file"
 fi
 
@@ -47,29 +46,26 @@ fi
 if [ "$build" = true ]; then
     echo "Building Docker images..."
     echo "This can take a while..."
-    docker-compose -f development.yml build --no-cache
+    docker-compose -f testing.yml build --no-cache
 else
     echo "$build"
 fi
 
 echo "Starting services..."
-docker-compose -f development.yml up -d
+docker-compose -f testing.yml up -d
 
-echo "-------------------------------------"
-echo "Following logs..."
-echo "Press CTRL + C to stop all containers"
-echo "-------------------------------------"
+if [ "$frontend" = true ]; then
+    echo "Running frontend tests..."
+    echo "Not implemented yet"
+fi
 
-if [ "$backend" = true ] && [ "$frontend" = true ]; then
-    docker-compose -f development.yml logs --follow --tail 50 backend frontend
-elif [ "$frontend" = true ]; then
-    docker-compose -f development.yml logs --follow --tail 50 frontend
-else
-    docker-compose -f development.yml logs --follow --tail 50 backend
+if [ "$backend" = true ]; then
+    echo "Running backend tests..."
+    docker-compose -f testing.yml exec backend python manage.py test
 fi
 
 echo "Cleaning up..."
 
-docker-compose -f development.yml down
+docker-compose -f testing.yml down
 
 echo "Done."
