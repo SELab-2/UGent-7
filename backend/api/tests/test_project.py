@@ -541,6 +541,71 @@ class ProjectModelTests(APITestCase):
             settings.TESTING_BASE_LINK + checks.run_script.url,
         )
 
+    def test_project_groups(self):
+        """
+        Able to retrieve a list of groups of a project after creating it.
+        """
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        group1 = create_group(project=project)
+        group2 = create_group(project=project)
+
+        response = self.client.get(
+            reverse("project-groups", args=[str(project.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 2)
+
+        self.assertEqual(int(content_json[0]["id"]), group1.id)
+        self.assertEqual(int(content_json[1]["id"]), group2.id)
+
+    def test_project_submissions(self):
+        """
+        Able to retrieve a list of submissions of a project after creating it.
+        """
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        group1 = create_group(project=project)
+        group2 = create_group(project=project)
+
+        submission1 = create_submission(submission_number=1, group=group1, structure_checks_passed=True)
+        submission2 = create_submission(submission_number=2, group=group2, structure_checks_passed=False)
+
+        response = self.client.get(
+            reverse("project-submissions", args=[str(project.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 2)
+
+        self.assertEqual(int(content_json[0]["id"]), submission1.id)
+        self.assertEqual(int(content_json[1]["id"]), submission2.id)
+
     def test_cant_join_locked_groups(self):
         """Should not be able to add a student to a group if the groups are locked."""
         course = create_course(id=3, name="sel2", academic_startyear=2023)

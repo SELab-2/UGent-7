@@ -4,11 +4,9 @@ from api.models.project import Project
 from api.models.group import Group
 from rest_framework.exceptions import ValidationError
 from django.utils import timezone
-from api.models.submission import Submission, SubmissionFile
-from api.models.checks import FileExtension, StructureCheck
+from api.models.checks import FileExtension
 from api.serializers.submission_serializer import SubmissionSerializer
 from api.serializers.checks_serializer import StructureCheckSerializer
-from rest_framework.request import Request
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -33,6 +31,11 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    submissions = serializers.HyperlinkedIdentityField(
+        view_name="project-submissions",
+        read_only=True
+    )
+
     class Meta:
         model = Project
         fields = [
@@ -49,7 +52,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             "structure_checks",
             "extra_checks",
             "course",
-            "groups"
+            "groups",
+            "submissions"
         ]
 
     def validate(self, data):
