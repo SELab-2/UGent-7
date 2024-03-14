@@ -27,6 +27,6 @@ class AssistantSerializer(serializers.ModelSerializer):
 
 
 class AssistantIDSerializer(serializers.Serializer):
-    assistant_id = serializers.PrimaryKeyRelatedField(
+    assistant = serializers.PrimaryKeyRelatedField(
         queryset=Assistant.objects.all()
     )
