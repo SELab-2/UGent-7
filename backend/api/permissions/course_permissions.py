@@ -22,11 +22,11 @@ class CoursePermission(BasePermission):
 
     def has_object_permission(self, request: Request, view: ViewSet, course: Course) -> bool:
         """Check if user has permission to view a detailed course endpoint"""
-        user: User = request.user
+        user = request.user
 
         # Logged-in users can fetch course details.
         if request.method in SAFE_METHODS:
-            return user.is_authenticated
+            return is_student(user) or is_teacher(user) or is_assistant(user)
 
         # We only allow teachers and assistants to modify their own courses.
         return is_teacher(user) and user.teacher.courses.contains(course) or \
@@ -44,7 +44,7 @@ class CourseAssistantPermission(CoursePermission):
             return user.is_authenticated
 
         # Only teachers can modify assistants of their own courses.
-        return is_teacher(user) and user.teacher.courses.contains(course)
+        return is_teacher(user) and user.teacher.has_course(course)
 
 
 class CourseStudentPermission(CoursePermission):

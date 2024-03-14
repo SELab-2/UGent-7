@@ -1,5 +1,6 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
+from rest_framework.viewsets import ViewSet
 from authentication.models import User
 from api.models.student import Student
 from api.models.assistant import Assistant
@@ -37,3 +38,11 @@ class IsAssistant(IsAuthenticated):
         """Returns true if the request contains a user,
         with said user being a student"""
         return super().has_permission(request, view) and is_assistant(request.user)
+
+class IsSameUser(IsAuthenticated):
+    def has_permission(self, request, view):
+        return False
+
+    def has_object_permission(self, request: Request, view: ViewSet, user: User):
+        """Returns true if the request's user is the same as the given user"""
+        return super().has_permission(request, view) and user.id == request.user.id

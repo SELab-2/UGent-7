@@ -17,7 +17,7 @@ class AssistantViewSet(ReadOnlyModelViewSet):
     def courses(self, request, **_):
         """Returns a list of courses for the given assistant"""
         assistant = self.get_object()
-        courses = assistant.courses()
+        courses = assistant.courses
 
         # Serialize the course objects
         serializer = CourseSerializer(

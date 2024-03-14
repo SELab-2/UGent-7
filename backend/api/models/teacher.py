@@ -16,3 +16,7 @@ class Teacher(User):
         related_name="teachers",
         blank=True,
     )
+
+    def has_course(self, course: Course) -> bool:
+        """Checks if the teacher has the given course."""
+        return self.courses.contains(course)
