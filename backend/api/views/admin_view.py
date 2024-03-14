@@ -13,7 +13,9 @@ class AdminViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAdminUser]
 
     def create(self, request: Request) -> Response:
-        # Add an Admin
+        """
+        Make the provided user admin by setting `is_staff` = true.
+        """
         serializer = UserIDSerializer(
             data=request.data
         )
