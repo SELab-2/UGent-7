@@ -633,6 +633,44 @@ class CourseModelTestsAsStudent(APITestCase):
 
         self.assertFalse(course.projects.filter(name="become champions").exists())
 
+    def test_try_join_old_year_course(self):
+        """
+        Students should not be able to join a course from a previous year.
+        """
+        course = get_course()
+        course.academic_startyear = 2020
+        course.save()
+
+        response = self.client.post(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        self.assertFalse(course.students.filter(id=self.user.id).exists())
+
+    def test_try_leave_old_year_course(self):
+        """
+        Students should not be able to leave a course from a previous year.
+        """
+        course = get_course()
+        course.academic_startyear = 2020
+        course.save()
+
+        course.students.add(self.user)
+
+        response = self.client.delete(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        self.assertTrue(course.students.filter(id=self.user.id).exists())
+
 
 class CourseModelTestsAsTeacher(APITestCase):
     def setUp(self) -> None:

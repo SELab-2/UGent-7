@@ -824,6 +824,36 @@ class ProjectModelTestsAsTeacher(APITestCase):
             {"non_empty_groups": 3, "groups_submitted": 2, "submissions_passed": 1},
         )
 
+    def test_retrieve_list_submissions(self):
+        """Retrieve a list of submissions for a project."""
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+        course.teachers.add(self.user)
+
+        group = create_group(project=project)
+
+        create_submission(
+            submission_number=1, group=group, structure_checks_passed=True
+        )
+
+        response = self.client.get(
+            reverse("project-submissions", args=[str(project.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 1)
+
 
 class ProjectModelTestsAsStudent(APITestCase):
     def setUp(self) -> None:

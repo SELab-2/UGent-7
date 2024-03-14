@@ -65,19 +65,3 @@ class CourseStudentPermission(CoursePermission):
 
         # Teachers and assistants can add and remove any student.
         return super().has_object_permission(request, view, course)
-
-
-class CourseProjectPermission(CoursePermission):
-    """Permission class for project related endpoints."""
-    def has_permission(self, request: Request, view: ViewSet) -> bool:
-        return request.user and request.user.is_authenticated
-
-    def has_object_permission(self, request: Request, view: ViewSet, course: Course):
-        user: User = request.user
-
-        # Logged-in users can fetch course projects.
-        if request.method in SAFE_METHODS:
-            return user.is_authenticated
-
-        # Teachers and assistants can modify projects.
-        return super().has_object_permission(request, view, course)
