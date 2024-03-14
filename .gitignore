@@ -5,9 +5,8 @@ data/*
 data/nginx/ssl/*
 data/postres*
 data/redis/*
+backend/data/*
 
 backend/staticfiles/*
 
 !data/nginx/ssl/.gitkeep
-!data/production/*
-!data/testing/*
