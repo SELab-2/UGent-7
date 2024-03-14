@@ -3,9 +3,8 @@
 backend=false
 frontend=false
 build=false
-test=false
 
-while getopts ":bfct" opt; do
+while getopts ":bfc" opt; do
   case ${opt} in
     b )
       backend=true
@@ -15,9 +14,6 @@ while getopts ":bfct" opt; do
       ;;
     c )
       build=true
-      ;;
-    t )
-      test=true
       ;;
     \? )
       echo "Usage: $0 [-b] [-f] [-c]"
@@ -59,22 +55,17 @@ fi
 echo "Starting services..."
 docker-compose -f development.yml up -d
 
-if [ "$test" = true ]; then
-    echo "Running tests..."
-    docker-compose -f development.yml exec backend python manage.py test
-else
-    echo "-------------------------------------"
-    echo "Following logs..."
-    echo "Press CTRL + C to stop all containers"
-    echo "-------------------------------------"
+echo "-------------------------------------"
+echo "Following logs..."
+echo "Press CTRL + C to stop all containers"
+echo "-------------------------------------"
 
-    if [ "$backend" = true ] && [ "$frontend" = true ]; then
-        docker-compose -f development.yml logs --follow --tail 50 backend frontend
-    elif [ "$frontend" = true ]; then
-        docker-compose -f development.yml logs --follow --tail 50 frontend
-    else
-        docker-compose -f development.yml logs --follow --tail 50 backend
-    fi
+if [ "$backend" = true ] && [ "$frontend" = true ]; then
+    docker-compose -f development.yml logs --follow --tail 50 backend frontend
+elif [ "$frontend" = true ]; then
+    docker-compose -f development.yml logs --follow --tail 50 frontend
+else
+    docker-compose -f development.yml logs --follow --tail 50 backend
 fi
 
 echo "Cleaning up..."
