@@ -35,10 +35,10 @@ def create_project(name, description, days, course):
     )
 
 
-def create_past_project(name, description, days, course, days_start_ate):
+def create_past_project(name, description, days, course, days_start_date):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timedelta(days=days)
-    startDate = timezone.now() + timedelta(days=days_start_ate)
+    startDate = timezone.now() + timedelta(days=days_start_date)
     return Project.objects.create(
         name=name, description=description, deadline=deadline, course=course, score_visible=True, start_date=startDate
     )
@@ -340,7 +340,7 @@ class SubmissionModelTests(APITestCase):
 
         course = create_course(name="sel2", academic_start_year=2023)
         project = create_past_project(
-            name="Project 1", description="Description 1", days=-7, course=course, days_start_ate=-84
+            name="Project 1", description="Description 1", days=-7, course=course, days_start_date=-84
         )
 
         group = create_group(project=project, score=10)
