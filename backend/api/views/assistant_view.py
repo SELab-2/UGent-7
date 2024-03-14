@@ -7,6 +7,7 @@ from ..models.assistant import Assistant
 from ..serializers.assistant_serializer import AssistantSerializer
 from ..serializers.course_serializer import CourseSerializer
 
+
 class AssistantViewSet(ReadOnlyModelViewSet):
 
     queryset = Assistant.objects.all()

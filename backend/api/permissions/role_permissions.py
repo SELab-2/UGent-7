@@ -39,6 +39,7 @@ class IsAssistant(IsAuthenticated):
         with said user being a student"""
         return super().has_permission(request, view) and is_assistant(request.user)
 
+
 class IsSameUser(IsAuthenticated):
     def has_permission(self, request, view):
         return False

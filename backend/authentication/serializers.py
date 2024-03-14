@@ -110,6 +110,7 @@ class UserSerializer(ModelSerializer):
         """Create or fetch the user based on the validated data."""
         return User.objects.get_or_create(**validated_data)
 
+
 class UserIDSerializer(Serializer):
     user = PrimaryKeyRelatedField(
         queryset=User.objects.all()
