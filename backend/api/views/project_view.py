@@ -10,7 +10,11 @@ from api.models.submission import Submission
 from api.models.project import Project
 from api.models.checks import StructureCheck
 from api.serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
-from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer, StructureCheckAddSerializer, SubmissionStatusSerializer
+from api.serializers.project_serializer import (
+    StructureCheckAddSerializer, SubmissionStatusSerializer,
+    ProjectSerializer, TeacherCreateGroupSerializer
+)
+
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
 from rest_framework.request import Request
