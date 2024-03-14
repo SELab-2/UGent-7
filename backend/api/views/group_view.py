@@ -70,7 +70,7 @@ class GroupViewSet(CreateModelMixin,
             )
 
         return Response({
-            "message": gettext("group.success.student.add"),
+            "message": gettext("group.success.students.add"),
         })
 
     @students.mapping.delete
@@ -89,7 +89,7 @@ class GroupViewSet(CreateModelMixin,
             )
 
         return Response({
-            "message": gettext("group.success.student.remove"),
+            "message": gettext("group.success.students.remove"),
         })
 
     @submissions.mapping.post

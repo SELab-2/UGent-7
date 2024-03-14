@@ -2,7 +2,7 @@ import re
 from typing import Dict, List
 
 from authentication.models import User
-from django.utils.translation import gettext as _
+from notifications.logic import get_message_dict
 from notifications.models import Notification, NotificationTemplate
 from rest_framework import serializers
 
@@ -57,10 +57,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     # Get the message from the template and arguments
     def get_message(self, obj: Notification) -> Dict[str, str]:
-        return {
-            "title": _(obj.template_id.title_key),
-            "description": _(obj.template_id.description_key) % obj.arguments,
-        }
+        return get_message_dict(obj)
 
     class Meta:
         model = Notification

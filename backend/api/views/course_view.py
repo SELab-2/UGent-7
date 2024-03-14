@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
 from api.models.course import Course
+from api.models.group import Group
 from api.permissions.course_permissions import (
     CoursePermission,
     CourseAssistantPermission,
@@ -73,7 +74,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             )
 
         return Response({
-            "message": gettext("courses.success.assistants.add")
+            "message": gettext("courses.success.assistants.remove")
         })
 
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | CourseStudentPermission])
@@ -127,7 +128,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             )
 
         return Response({
-            "message": gettext("courses.success.students.add")
+            "message": gettext("courses.success.students.remove")
         })
 
     @action(detail=True, methods=["get"])
@@ -155,6 +156,35 @@ class CourseViewSet(viewsets.ModelViewSet):
         )
 
         return Response(serializer.data)
+
+    @projects.mapping.post
+    @projects.mapping.put
+    def _add_project(self, request, **_):
+        """Add a project to the course"""
+        course = self.get_object()
+
+        serializer = ProjectSerializer(
+            data=request.data, context={
+                "request": request,
+                "course": course
+            }
+        )
+
+        project = None
+
+        # Validate the serializer
+        if serializer.is_valid(raise_exception=True):
+            project = serializer.save()
+            course.projects.add(project)
+
+        # Create groups for the project
+        students_count = course.students.count()
+        for _ in range(students_count):
+            Group.objects.create(project=project)
+
+        return Response({
+            "message": gettext("course.success.project.add"),
+        })
 
     @action(detail=True, methods=["post"], permission_classes=[IsAdminUser | IsTeacher])
     def clone(self, request: Request, **__):

@@ -11,10 +11,10 @@ class TestWhomAmIView(APITestCase):
         """Create a user and generate a token for that user"""
         self.user = User.objects.create(**{
             "id": "1234",
-            "username": "ddickwd",
+            "username": "dackers",
             "email": "dummy@dummy.com",
             "first_name": "dummy",
-            "last_name": "McDickwad",
+            "last_name": "Ackers",
         })
 
         self.token = f'Bearer {AccessToken().for_user(self.user)}'
@@ -54,10 +54,10 @@ class TestLogoutView(APITestCase):
     def setUp(self):
         user_data = {
             "id": "1234",
-            "username": "ddickwd",
+            "username": "dackers",
             "email": "dummy@dummy.com",
             "first_name": "dummy",
-            "last_name": "McDickwad",
+            "last_name": "Ackers",
         }
         self.user = User.objects.create(**user_data)
 

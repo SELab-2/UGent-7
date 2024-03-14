@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from datetime import timedelta
-from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 import os
+from datetime import timedelta
+from os import environ
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,11 +27,12 @@ TESTING_BASE_LINK = "http://testserver"
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-_upw+)mo--8_0slsl&8ot0*h8p50z_rlid6nwobd*%%gm$_!1x"
+SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = environ.get("DJANGO_DEBUG", "False").lower() in ["true", "1", "t"]
+DOMAIN_NAME = environ.get("DJANGO_DOMAIN_NAME", "localhost")
+ALLOWED_HOSTS = [DOMAIN_NAME]
 
 
 # Application definition
@@ -46,7 +49,7 @@ INSTALLED_APPS = [
     "rest_framework",  # Django rest framework
     "drf_yasg",  # Yet Another Swagger generator
     "sslserver",  # Used for local SSL support (needed by CAS)
-    # First party
+    # First party``
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application
     "notifications",  # Ypovoli notifications
@@ -61,6 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 REST_FRAMEWORK = {
@@ -69,11 +73,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.SessionAuthentication"
+        "rest_framework.authentication.SessionAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ]
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 
 SIMPLE_JWT = {
@@ -89,18 +91,23 @@ WSGI_APPLICATION = "ypovoli.wsgi.application"
 
 # Application endpoints
 
+URL_PREFIX = environ.get("DJANGO_CAS_URL_PREFIX", "")
+PORT = environ.get("DJANGO_CAS_PORT", "8080")
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = "https://localhost:8080/auth/cas/echo"
-API_ENDPOINT = "https://localhost:8080"
+CAS_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}{'/' + URL_PREFIX if URL_PREFIX else ''}/api/auth/cas/echo"
+API_ENDPOINT = f"https://{DOMAIN_NAME}/api"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": environ.get("DJANGO_DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": environ.get("DJANGO_DB_NAME", BASE_DIR / "db.sqlite3"),
+        "USER": environ.get("DJANGO_DB_USER", ""),
+        "PASSWORD": environ.get("DJANGO_DB_PASSWORD", ""),
+        "HOST": environ.get("DJANGO_DB_HOST", ""),
+        "PORT": environ.get("DJANGO_DB_PORT", ""),
     },
-    "production": {"ENGINE": "django.db.backends.postgresql"},
 }
 
 # Default primary key field type
@@ -112,12 +119,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
+LANGUAGES = [("en", _("languages.en")), ("nl", _("languages.nl"))]
 USE_L10N = False
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-STATIC_URL = "static/"
+STATIC_URL = "api/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 TEMPLATES = [
     {
@@ -134,3 +144,33 @@ TEMPLATES = [
         },
     },
 ]
+
+EMAIL_HOST = "smtprelay.UGent.be"
+EMAIL_PORT = 25
+
+EMAIL_CUSTOM = {
+    "from": "ypovoli@ugent.be",
+    "subject": "[Ypovoli] New Notification",
+    "timeout": 2,
+    "max_errors": 3,
+}
+
+REDIS_CUSTOM = {
+    "host": environ.get("DJANGO_REDIS_HOST", "localhost"),
+    "port": environ.get("DJANGO_REDIS_PORT", 6379),
+    "db_django": 0,
+    "db_celery": 1,
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_django']}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+CELERY_BROKER_URL = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
+CELERY_RESULT_BACKEND = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
