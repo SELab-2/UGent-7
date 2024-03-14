@@ -1,4 +1,5 @@
 import json
+from django.utils.translation import gettext
 from datetime import timedelta
 from django.utils import timezone
 from django.urls import reverse
@@ -10,6 +11,7 @@ from api.models.group import Group
 from api.models.course import Course
 from api.models.checks import ExtraCheck
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -29,6 +31,15 @@ def create_project(name, description, days, course):
     deadline = timezone.now() + timedelta(days=days)
     return Project.objects.create(
         name=name, description=description, deadline=deadline, course=course, score_visible=True
+    )
+
+
+def create_past_project(name, description, days, course, daysStartDate):
+    """Create a Project with the given arguments."""
+    deadline = timezone.now() + timedelta(days=days)
+    startDate = timezone.now() + timedelta(days=daysStartDate)
+    return Project.objects.create(
+        name=name, description=description, deadline=deadline, course=course, score_visible=True, start_date=startDate
     )
 
 
@@ -292,3 +303,54 @@ class SubmissionModelTests(APITestCase):
         self.assertEqual(
             retrieved_extra_check["passed"], extra_check_result.passed
         )
+
+    def test_submission_before_deadline(self):
+        """
+        Able to subbmit to a project before the deadline.
+        """
+        zip_file_path = "data/testing/tests/mixed.zip"
+
+        with open(zip_file_path, 'rb') as f:
+            files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        group = create_group(project=project, score=10)
+
+        response = self.client.post(
+            reverse("group-submissions", args=[str(group.id)]),
+            files,
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(json.loads(response.content), {"message": gettext("group.success.submissions.add")})
+
+    def test_submission_after_deadline(self):
+        """
+        Not able to subbmit to a project after the deadline.
+        """
+        zip_file_path = "data/testing/tests/mixed.zip"
+
+        with open(zip_file_path, 'rb') as f:
+            files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
+
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_past_project(
+            name="Project 1", description="Description 1", days=-7, course=course, daysStartDate=-84
+        )
+        # project.increase_deadline(days=-10)
+
+        group = create_group(project=project, score=10)
+
+        response = self.client.post(
+            reverse("group-submissions", args=[str(group.id)]),
+            files,
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(json.loads(response.content), {'non_field_errors': [gettext("project.error.submissions.past_project")]})

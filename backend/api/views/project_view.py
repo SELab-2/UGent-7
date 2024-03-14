@@ -120,10 +120,6 @@ class ProjectViewSet(CreateModelMixin,
             "message": gettext("project.success.structure_check.add")
         })
 
-        return Response({
-            "message": gettext("project.success.structure_check.remove")
-        })
-
     @action(detail=True, methods=["get"])
     def extra_checks(self, request, **_):
         """Returns the extra checks for the given project"""
