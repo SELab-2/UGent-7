@@ -1,0 +1,24 @@
+- model: api.project
+  pk: 123456
+  fields:
+    name: sel2
+    description: make a project
+    visible: true
+    archived: false
+    start_date: 2024-02-26 00:00:00+00:00
+    deadline: 2024-02-27 00:00:00+00:00
+    group_size: 3
+    max_score: 20
+    course: 2
+- model: api.project
+  pk: 1
+  fields:
+    name: sel3
+    description: make a project
+    visible: true
+    archived: false
+    start_date: 2024-02-26 00:00:00+00:00
+    deadline: 2024-02-27 00:00:00+00:00
+    group_size: 3
+    max_score: 20
+    course: 1

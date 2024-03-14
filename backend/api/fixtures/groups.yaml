@@ -1,0 +1,20 @@
+- model: api.group
+  pk: 1
+  fields:
+    project: 123456
+    score: 7
+    students:
+    - '1'
+    - '2'
+- model: api.group
+  pk: 3
+  fields:
+    project: 123456
+    score: 8
+    students: []
+- model: api.group
+  pk: 2
+  fields:
+    project: 1
+    score: 8
+    students: []

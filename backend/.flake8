@@ -1,0 +1,15 @@
+[flake8]
+
+# Ignore unused imports
+ignore = F401
+
+max-line-length = 125
+
+max-complexity = 10
+
+exclude = .git, 
+          __pycache__,
+          .venv,
+          venv,
+          migrations
+

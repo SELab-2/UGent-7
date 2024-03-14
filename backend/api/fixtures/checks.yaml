@@ -1,0 +1,22 @@
+- model: api.extracheck
+  pk: 1
+  fields:
+    project: 123456
+    run_script: 'scripts/run.sh'
+
+- model: api.fileextension
+  pk: 1
+  fields:
+    extension: 'class'
+- model: api.fileextension
+  pk: 2
+  fields:
+    extension: 'png'
+- model: api.fileextension
+  pk: 3
+  fields:
+    extension: 'java'
+- model: api.fileextension
+  pk: 4
+  fields:
+    extension: 'py'
