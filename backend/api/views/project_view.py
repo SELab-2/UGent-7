@@ -11,7 +11,7 @@ from ..models.project import Project
 from api.models.checks import StructureCheck
 from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
 from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer
-from api.serializers.project_serializer import StructureCheckAddSerializer, StructureCheckDeleteSerializer, SubmissionStatusSerializer
+from api.serializers.project_serializer import StructureCheckAddSerializer, SubmissionStatusSerializer
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
 from rest_framework.request import Request
@@ -119,26 +119,6 @@ class ProjectViewSet(CreateModelMixin,
         return Response({
             "message": gettext("project.success.structure_check.add")
         })
-
-    @structure_checks.mapping.delete
-    def _delete_structure_check(self, request: Request, **_):  # TODO test
-        """Remove an structure_check to the project"""
-
-        project: Project = self.get_object()
-
-        # Add submission to course
-        serializer = StructureCheckDeleteSerializer(
-            data=request.data,
-            context={
-                "project": project,
-                "request": request
-            }
-        )
-
-        if serializer.is_valid(raise_exception=True):
-            project.structure_checks.remove(
-                serializer.validated_data["structure_check_id"]
-            )
 
         return Response({
             "message": gettext("project.success.structure_check.remove")

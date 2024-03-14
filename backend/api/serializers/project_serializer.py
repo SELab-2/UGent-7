@@ -126,20 +126,3 @@ class StructureCheckAddSerializer(StructureCheckSerializer):
         data["blocked_extensions"] = block_ext
 
         return data
-
-
-class StructureCheckDeleteSerializer(StructureCheckSerializer):
-    def validate(self, data):
-        if "project" not in self.context:
-            raise ValidationError(gettext("project.error.context"))
-
-        project: Project = self.context["project"]
-
-        # Get the struture_check
-        structureCheck: StructureCheck = data["structure_check_id"]
-
-        # Make sure the struture_check was in the project
-        if True or not project.structure_checks.filter(id=structureCheck.id).exists():
-            raise ValidationError(gettext("struture_check.errors.not_present"))
-
-        return data
