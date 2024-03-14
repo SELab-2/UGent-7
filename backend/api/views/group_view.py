@@ -95,8 +95,7 @@ class GroupViewSet(CreateModelMixin,
     @submissions.mapping.post
     @submissions.mapping.put
     def _add_submission(self, request: Request, **_):
-        """Add an submission to the group"""
-
+        """Add a submission to the group"""
         group: Group = self.get_object()
 
         # Add submission to course

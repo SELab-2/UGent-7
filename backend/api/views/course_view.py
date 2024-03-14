@@ -51,7 +51,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.assistants.add(
-                serializer.validated_data["assistant_id"]
+                serializer.validated_data["assistant"]
             )
 
         return Response({
@@ -70,7 +70,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.assistants.remove(
-                serializer.validated_data["assistant_id"]
+                serializer.validated_data["assistant"]
             )
 
         return Response({

@@ -1,52 +1,40 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from ..models.student import Student
-from ..serializers.student_serializer import StudentSerializer
-from ..serializers.course_serializer import CourseSerializer
-from ..serializers.group_serializer import GroupSerializer
+from rest_framework.permissions import IsAdminUser
+from api.permissions.role_permissions import IsSameUser, IsTeacher
+from api.models.student import Student
+from api.serializers.student_serializer import StudentSerializer
+from api.serializers.course_serializer import CourseSerializer
+from api.serializers.group_serializer import GroupSerializer
 
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    permission_classes = [IsAdminUser | IsTeacher | IsSameUser]
 
-    @action(detail=True, methods=["get"])
-    def courses(self, request, pk=None):
+    @action(detail=True)
+    def courses(self, request, **_):
         """Returns a list of courses for the given student"""
+        student = self.get_object()
+        courses = student.courses.all()
 
-        try:
-            queryset = Student.objects.get(id=pk)
-            courses = queryset.courses.all()
+        # Serialize the course objects
+        serializer = CourseSerializer(
+            courses, many=True, context={"request": request}
+        )
 
-            # Serialize the course objects
-            serializer = CourseSerializer(
-                courses, many=True, context={"request": request}
-            )
-            return Response(serializer.data)
+        return Response(serializer.data)
 
-        except Student.DoesNotExist:
-            # Invalid student ID
-            return Response(
-                status=status.HTTP_404_NOT_FOUND, data={"message": "Student not found"}
-            )
-
-    @action(detail=True, methods=["get"])
-    def groups(self, request, pk=None):
+    @action(detail=True)
+    def groups(self, request, **_):
         """Returns a list of groups for the given student"""
+        student = self.get_object()
+        groups = student.groups.all()
 
-        try:
-            queryset = Student.objects.get(id=pk)
-            groups = queryset.groups.all()
-
-            # Serialize the group objects
-            serializer = GroupSerializer(
-                groups, many=True, context={"request": request}
-            )
-            return Response(serializer.data)
-
-        except Student.DoesNotExist:
-            # Invalid student ID
-            return Response(
-                status=status.HTTP_404_NOT_FOUND, data={"message": "Student not found"}
-            )
+        # Serialize the group objects
+        serializer = GroupSerializer(
+            groups, many=True, context={"request": request}
+        )
+        return Response(serializer.data)

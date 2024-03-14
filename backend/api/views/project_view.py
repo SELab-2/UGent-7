@@ -1,17 +1,16 @@
 from django.utils.translation import gettext
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAdminUser
-from rest_framework import viewsets
+from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from api.permissions.project_permissions import ProjectGroupPermission, ProjectPermission
 from api.models.group import Group
 from api.models.submission import Submission
-from ..models.project import Project
+from api.models.project import Project
 from api.models.checks import StructureCheck
-from ..serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
-from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer
-from api.serializers.project_serializer import StructureCheckAddSerializer, SubmissionStatusSerializer
+from api.serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
+from api.serializers.project_serializer import ProjectSerializer, TeacherCreateGroupSerializer, StructureCheckAddSerializer, SubmissionStatusSerializer
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
 from rest_framework.request import Request
@@ -21,7 +20,7 @@ class ProjectViewSet(CreateModelMixin,
                      RetrieveModelMixin,
                      UpdateModelMixin,
                      DestroyModelMixin,
-                     viewsets.GenericViewSet):
+                     GenericViewSet):
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -42,12 +41,9 @@ class ProjectViewSet(CreateModelMixin,
 
         return Response(serializer.data)
 
-    """
-    @action(detail=True, permission_classes=[IsAdminUser])
+    @action(detail=True)
     def submissions(self, request, **_):
-        # Returns a list of subbmisions for the given project
-        # This automatically fetches the group from the URL.
-        # It automatically gives back a 404 HTTP response in case of not found.
+        """Returns a list of submissions for the given project"""
         project = self.get_object()
         submissions = project.submissions.all()
 
@@ -57,7 +53,6 @@ class ProjectViewSet(CreateModelMixin,
         )
 
         return Response(serializer.data)
-    """
 
     @groups.mapping.post
     def _create_groups(self, request, **_):

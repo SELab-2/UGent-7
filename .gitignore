@@ -1,12 +1,15 @@
 .tool-versions
 .env
 .venv
+.idea
+.vscode
 data/*
 data/nginx/ssl/*
 data/postres*
 data/redis/*
 backend/data/production*
 
+/node_modules
 backend/staticfiles/*
 
 !data/nginx/ssl/.gitkeep
