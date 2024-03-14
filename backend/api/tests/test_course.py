@@ -588,6 +588,51 @@ class CourseModelTestsAsStudent(APITestCase):
 
         self.assertTrue(course.students.filter(id=other_student.id).exists())
 
+    def test_try_create_course(self):
+        """
+        Students should not be able to create a course.
+        """
+        response = self.client.post(
+            reverse("course-list"),
+            data={
+                "name": "Introduction to Computer Science",
+                "academic_startyear": 2022,
+                "description": "An introductory course on computer science.",
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        self.assertFalse(
+            Course.objects.filter(name="Introduction to Computer Science").exists()
+        )
+
+    def test_try_create_project(self):
+        """
+        Students should not be able to create a project.
+        """
+        course = get_course()
+        course.students.add(self.user)
+
+        response = self.client.post(
+            reverse("course-projects", args=[str(course.id)]),
+            data={
+                "name": "become champions",
+                "description": "win the jpl",
+                "visible": True,
+                "archived": False,
+                "days": 50,
+                "deadline": timezone.now() + timezone.timedelta(days=50),
+                "start_date": timezone.now()
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        self.assertFalse(course.projects.filter(name="become champions").exists())
+
 
 class CourseModelTestsAsTeacher(APITestCase):
     def setUp(self) -> None:
@@ -678,3 +723,62 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(course.students.filter(id=student.id).exists())
+
+    def test_create_course(self):
+        """
+        Able to create a course.
+        """
+        response = self.client.post(
+            reverse("course-list"),
+            data={
+                "name": "Introduction to Computer Science",
+                "academic_startyear": 2022,
+                "description": "An introductory course on computer science.",
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(
+            Course.objects.filter(name="Introduction to Computer Science").exists()
+        )
+
+    def test_create_project(self):
+        """
+        Able to create a project for a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        response = self.client.post(
+            reverse("course-projects", args=[str(course.id)]),
+            data={
+                "name": "become champions",
+                "description": "win the jpl",
+                "visible": True,
+                "archived": False,
+                "days": 50,
+                "deadline": timezone.now() + timezone.timedelta(days=50),
+                "start_date": timezone.now()
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.projects.filter(name="become champions").exists())
+
+    def test_clone_course(self):
+        """
+        Able to clone a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        response = self.client.post(
+            reverse("course-clone", args=[str(course.id)]),
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Course.objects.filter(name=course.name,
+                                              academic_startyear=course.academic_startyear + 1).exists())
