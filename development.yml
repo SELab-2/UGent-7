@@ -38,8 +38,8 @@ services:
       - 443:443
       - 8080:8080
     volumes:
-      - $DATADIR/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
-      - $SSL_DIR:/etc/nginx/ssl:ro
+      - ${DATA_DIR}/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+      - ${SSL_DIR}:/etc/nginx/ssl:ro
     depends_on:
       - backend
       - frontend
@@ -94,5 +94,5 @@ services:
       - $REDIS_PORT
     entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
-      - $DATADIR/redis:/data
+      - ${DATA_DIR}/redis:/data
      
