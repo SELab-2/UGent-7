@@ -512,7 +512,10 @@ class ProjectModelTests(APITestCase):
 
         response = self.client.post(
             reverse("project-structure-checks", args=[str(project.id)]),
-            {"name": ".", "obligated_extensions": [fileExtension1.extension, fileExtension4.extension], "blocked_extensions": [fileExtension2.extension, fileExtension3.extension]},
+            {
+                "name": ".",
+                "obligated_extensions": [fileExtension1.extension, fileExtension4.extension],
+                "blocked_extensions": [fileExtension2.extension, fileExtension3.extension]},
             follow=True,
         )
 
@@ -573,7 +576,10 @@ class ProjectModelTests(APITestCase):
 
         response = self.client.post(
             reverse("project-structure-checks", args=[str(project.id)]),
-            {"name": ".", "obligated_extensions": [fileExtension1.extension, fileExtension4.extension], "blocked_extensions": [fileExtension2.extension, fileExtension3.extension]},
+            {
+                "name": ".",
+                "obligated_extensions": [fileExtension1.extension, fileExtension4.extension],
+                "blocked_extensions": [fileExtension2.extension, fileExtension3.extension]},
             follow=True,
         )
 
@@ -581,7 +587,7 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(response.accepted_media_type, "application/json")
         self.assertEqual(json.loads(response.content), {
             'non_field_errors': [gettext("project.error.structure_checks.already_existing")]})
-        
+
     def test_project_structure_checks_post_blocked_and_obligated(self):
         """
         Able to retrieve a structure check of a project after posting it.
@@ -603,7 +609,10 @@ class ProjectModelTests(APITestCase):
 
         response = self.client.post(
             reverse("project-structure-checks", args=[str(project.id)]),
-            {"name": ".", "obligated_extensions": [fileExtension1.extension, fileExtension4.extension], "blocked_extensions": [fileExtension1.extension, fileExtension2.extension, fileExtension3.extension]},
+            {
+                "name": ".",
+                "obligated_extensions": [fileExtension1.extension, fileExtension4.extension],
+                "blocked_extensions": [fileExtension1.extension, fileExtension2.extension, fileExtension3.extension]},
             follow=True,
         )
 

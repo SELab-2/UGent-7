@@ -474,4 +474,5 @@ class FileTestsTests(APITestCase):
             obligated=[fileExtensionTS, fileExtensionTSX],
             blocked=[])
 
-        self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip3struct1.zip", restrict_extra_folders=True)[0])
+        self.assertFalse(
+            check_zip_file(project=project, dir_path="tests/test_zip3struct1.zip", restrict_extra_folders=True)[0])
