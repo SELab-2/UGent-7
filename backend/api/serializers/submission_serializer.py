@@ -84,7 +84,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
             if not status:
                 pas = False
 
-        # Set structure_checks_passed to True
+        # Set structure_checks_passed
         submission.structure_checks_passed = pas
         submission.save()
         return submission

@@ -12,6 +12,7 @@ from api.models.course import Course
 from api.models.checks import ExtraCheck
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.models import Max
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -341,7 +342,6 @@ class SubmissionModelTests(APITestCase):
         project = create_past_project(
             name="Project 1", description="Description 1", days=-7, course=course, daysStartDate=-84
         )
-        # project.increase_deadline(days=-10)
 
         group = create_group(project=project, score=10)
 
@@ -353,4 +353,106 @@ class SubmissionModelTests(APITestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.accepted_media_type, "application/json")
-        self.assertEqual(json.loads(response.content), {'non_field_errors': [gettext("project.error.submissions.past_project")]})
+        self.assertEqual(json.loads(response.content), {
+            'non_field_errors': [gettext("project.error.submissions.past_project")]})
+
+    def test_submission_number_increases_by_1(self):
+        """
+        When submiting a submission the submission number should be the prev one + 1
+        """
+        zip_file_path = "data/testing/tests/mixed.zip"
+
+        with open(zip_file_path, 'rb') as f:
+            files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
+
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        group = create_group(project=project, score=10)
+
+        max_submission_number_before = group.submissions.aggregate(Max('submission_number'))['submission_number__max']
+
+        if max_submission_number_before is None:
+            max_submission_number_before = 0
+
+        old_submissions = group.submissions.count()
+        response = self.client.post(
+            reverse("group-submissions", args=[str(group.id)]),
+            files,
+            follow=True,
+        )
+
+        group.refresh_from_db()
+        new_submissions = group.submissions.count()
+
+        max_submission_number_after = group.submissions.aggregate(Max('submission_number'))['submission_number__max']
+
+        if max_submission_number_after is None:
+            max_submission_number_after = 0
+        self.assertEqual(max_submission_number_after - max_submission_number_before, 1)
+        self.assertEqual(new_submissions - old_submissions, 1)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(json.loads(response.content), {"message": gettext("group.success.submissions.add")})
+
+    def test_submission_invisible_project(self):
+        """
+        Not able to subbmit to a project if its not visible.
+        """
+        zip_file_path = "data/testing/tests/mixed.zip"
+
+        with open(zip_file_path, 'rb') as f:
+            files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
+
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+
+        project.toggle_visible()
+        project.save()
+
+        group = create_group(project=project, score=10)
+
+        response = self.client.post(
+            reverse("group-submissions", args=[str(group.id)]),
+            files,
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(json.loads(response.content), {
+            'non_field_errors': [gettext("project.error.submissions.non_visible_project")]})
+
+    def test_submission_archived_project(self):
+        """
+        Not able to subbmit to a project if its archived.
+        """
+        zip_file_path = "data/testing/tests/mixed.zip"
+
+        with open(zip_file_path, 'rb') as f:
+            files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
+
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+
+        project.toggle_archived()
+        project.save()
+
+        group = create_group(project=project, score=10)
+
+        response = self.client.post(
+            reverse("group-submissions", args=[str(group.id)]),
+            files,
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(json.loads(response.content), {
+            'non_field_errors': [gettext("project.error.submissions.archived_project")]})
