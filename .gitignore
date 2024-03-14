@@ -7,7 +7,7 @@ data/*
 data/nginx/ssl/*
 data/postres*
 data/redis/*
-backend/data/production*
+backend/data/production/*
 
 /node_modules
 backend/staticfiles/*
