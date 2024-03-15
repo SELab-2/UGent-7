@@ -84,6 +84,27 @@ def create_course(name, academic_startyear, description=None, parent_course=None
     )
 
 
+def get_course():
+    """
+    Return a random course to use in tests.
+    """
+    return create_course(name="Chemistry 101", academic_startyear=2023, description="An introductory chemistry course.")
+
+
+def get_assistant():
+    """
+    Return a random assistant to use in tests.
+    """
+    return create_assistant(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmail.com")
+
+
+def get_student():
+    """
+    Return a random student to use in tests.
+    """
+    return create_student(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmai.com")
+
+
 class CourseModelTests(APITestCase):
     def setUp(self) -> None:
         self.client.force_authenticate(
@@ -440,3 +461,376 @@ class CourseModelTests(APITestCase):
         self.assertEqual(content["description"], project2.description)
         self.assertEqual(content["visible"], project2.visible)
         self.assertEqual(content["archived"], project2.archived)
+
+
+class CourseModelTestsAsStudent(APITestCase):
+    def setUp(self) -> None:
+        self.user = Student.objects.create(
+            id="student",
+            first_name="Bobke",
+            last_name="Peeters",
+            username="bpeeters",
+            email="Bobke.Peeters@gmail.com"
+        )
+
+        self.client.force_authenticate(
+            self.user
+        )
+
+    def test_try_add_assistant(self):
+        """
+        Students should not be able to add assistants.
+        """
+        course = get_course()
+        course.students.add(self.user)
+
+        assistant = get_assistant()
+
+        response = self.client.post(
+            reverse("course-assistants", args=[str(course.id)]),
+            data={"assistant": assistant.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        self.assertFalse(course.assistants.filter(id=assistant.id).exists())
+
+    def test_try_remove_assistant(self):
+        """
+        Students should not be able to remove assistants.
+        """
+        course = get_course()
+        course.students.add(self.user)
+
+        assistant = get_assistant()
+
+        course.assistants.add(assistant)
+
+        response = self.client.delete(
+            reverse("course-assistants", args=[str(course.id)]),
+            data={"assistant": assistant.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        self.assertTrue(course.assistants.filter(id=assistant.id).exists())
+
+    def test_add_self_to_course(self):
+        """
+        Able to add self to a course.
+        """
+        course = get_course()
+
+        response = self.client.post(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.students.filter(id=self.user.id).exists())
+
+    def test_remove_self_from_course(self):
+        """
+        Able to remove self from a course.
+        """
+        course = get_course()
+        course.students.add(self.user)
+
+        response = self.client.delete(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(course.students.filter(id=self.user.id).exists())
+
+    def test_try_add_other_student_to_course(self):
+        """
+        Students should not be able to add other students to a course.
+        """
+        course = get_course()
+        course.students.add(self.user)
+
+        other_student = get_student()
+
+        response = self.client.post(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": other_student.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        self.assertFalse(course.students.filter(id=other_student.id).exists())
+
+    def test_try_remove_other_student_from_course(self):
+        """
+        Students should not be able to remove other students from a course.
+        """
+        course = get_course()
+        course.students.add(self.user)
+
+        other_student = get_student()
+
+        course.students.add(other_student)
+
+        response = self.client.delete(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": other_student.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        self.assertTrue(course.students.filter(id=other_student.id).exists())
+
+    def test_try_create_course(self):
+        """
+        Students should not be able to create a course.
+        """
+        response = self.client.post(
+            reverse("course-list"),
+            data={
+                "name": "Introduction to Computer Science",
+                "academic_startyear": 2022,
+                "description": "An introductory course on computer science.",
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        self.assertFalse(
+            Course.objects.filter(name="Introduction to Computer Science").exists()
+        )
+
+    def test_try_create_project(self):
+        """
+        Students should not be able to create a project.
+        """
+        course = get_course()
+        course.students.add(self.user)
+
+        response = self.client.post(
+            reverse("course-projects", args=[str(course.id)]),
+            data={
+                "name": "become champions",
+                "description": "win the jpl",
+                "visible": True,
+                "archived": False,
+                "days": 50,
+                "deadline": timezone.now() + timezone.timedelta(days=50),
+                "start_date": timezone.now()
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        self.assertFalse(course.projects.filter(name="become champions").exists())
+
+    def test_try_join_old_year_course(self):
+        """
+        Students should not be able to join a course from a previous year.
+        """
+        course = get_course()
+        course.academic_startyear = 2020
+        course.save()
+
+        response = self.client.post(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        self.assertFalse(course.students.filter(id=self.user.id).exists())
+
+    def test_try_leave_old_year_course(self):
+        """
+        Students should not be able to leave a course from a previous year.
+        """
+        course = get_course()
+        course.academic_startyear = 2020
+        course.save()
+
+        course.students.add(self.user)
+
+        response = self.client.delete(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        self.assertTrue(course.students.filter(id=self.user.id).exists())
+
+    def test_try_leave_course_not_part_of(self):
+        """
+        Students should not be able to leave a course they are not part of.
+        """
+        course = get_course()
+
+        response = self.client.delete(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": self.user.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        self.assertFalse(course.students.filter(id=self.user.id).exists())
+
+
+class CourseModelTestsAsTeacher(APITestCase):
+    def setUp(self) -> None:
+        self.user = Teacher.objects.create(
+            id="teacher",
+            first_name="Bobke",
+            last_name="Peeters",
+            username="bpeeters",
+            email="Bobke.Peeters@gmail.com"
+        )
+
+        self.client.force_authenticate(
+            self.user
+        )
+
+    def test_add_assistant(self):
+        """
+        Able to add an assistant to a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        assistant = get_assistant()
+
+        response = self.client.post(
+            reverse("course-assistants", args=[str(course.id)]),
+            data={"assistant": assistant.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.assistants.filter(id=assistant.id).exists())
+
+    def test_remove_assistant(self):
+        """
+        Able to remove an assistant from a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        assistant = get_assistant()
+
+        course.assistants.add(assistant)
+
+        response = self.client.delete(
+            reverse("course-assistants", args=[str(course.id)]),
+            data={"assistant": assistant.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(course.assistants.filter(id=assistant.id).exists())
+
+    def test_add_student(self):
+        """
+        Able to add a student to a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        student = get_student()
+
+        response = self.client.post(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": student.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.students.filter(id=student.id).exists())
+
+    def test_remove_student(self):
+        """
+        Able to remove a student from a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        student = get_student()
+
+        course.students.add(student)
+
+        response = self.client.delete(
+            reverse("course-students", args=[str(course.id)]),
+            data={"student_id": student.id},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(course.students.filter(id=student.id).exists())
+
+    def test_create_course(self):
+        """
+        Able to create a course.
+        """
+        response = self.client.post(
+            reverse("course-list"),
+            data={
+                "name": "Introduction to Computer Science",
+                "academic_startyear": 2022,
+                "description": "An introductory course on computer science.",
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(Course.objects.filter(name="Introduction to Computer Science").exists())
+
+    def test_create_project(self):
+        """
+        Able to create a project for a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        response = self.client.post(
+            reverse("course-projects", args=[str(course.id)]),
+            data={
+                "name": "become champions",
+                "description": "win the jpl",
+                "visible": True,
+                "archived": False,
+                "days": 50,
+                "deadline": timezone.now() + timezone.timedelta(days=50),
+                "start_date": timezone.now()
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.projects.filter(name="become champions").exists())
+
+    def test_clone_course(self):
+        """
+        Able to clone a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        response = self.client.post(
+            reverse("course-clone", args=[str(course.id)]),
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Course.objects.filter(name=course.name,
+                                              academic_startyear=course.academic_startyear + 1).exists())

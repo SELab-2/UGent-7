@@ -417,6 +417,51 @@ class GroupModelTestsAsStudent(APITestCase):
         # Make sure the student is not in the group anymore
         self.assertFalse(group.students.filter(id=self.user.id).exists())
 
+    def test_try_leave_locked_group(self):
+        """Not able to leave a locked group as a student."""
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        group = create_group(project=project, score=10)
+        project.locked_groups = True
+        project.save()
+
+        # Add the student to the course
+        course.students.add(self.user)
+        group.students.add(self.user)
+
+        # Try to leave the group
+        response = self.client.delete(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure that you are not able to leave a locked group
+        self.assertEqual(response.status_code, 400)
+
+    def test_try_leave_group_not_part_of(self):
+        """Not able to leave a group you are not part of as a student."""
+        course = create_course(name="sel2", academic_startyear=2023)
+        project = create_project(
+            name="Project 1", description="Description 1", days=7, course=course
+        )
+        group = create_group(project=project, score=10)
+
+        # Add the student to the course
+        course.students.add(self.user)
+
+        # Try to leave the group
+        response = self.client.delete(
+            reverse("group-students", args=[str(group.id)]),
+            {"student_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure that you are not able to leave a group you are not part of
+        self.assertEqual(response.status_code, 400)
+
     def test_try_to_assign_other_student_to_group(self):
         """Not able to assign another student to a group."""
         course = create_course(name="sel2", academic_startyear=2023)

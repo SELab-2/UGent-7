@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from api.models.assistant import Assistant
+from api.models.teacher import Teacher
 from api.models.course import Course
 from authentication.models import Faculty, User
 
@@ -287,3 +288,44 @@ class AssistantModelTests(APITestCase):
         self.assertEqual(content["name"], course2.name)
         self.assertEqual(int(content["academic_startyear"]), course2.academic_startyear)
         self.assertEqual(content["description"], course2.description)
+
+
+class AssitantModelAsTeacherTests(APITestCase):
+    def setUp(self) -> None:
+        self.user = Teacher.objects.create(
+            id=1,
+            first_name="John",
+            last_name="Doe",
+            username="john_doe",
+            email="John.Doe@gmail.com"
+        )
+
+        self.client.force_authenticate(self.user)
+
+    def test_retrieve_assistant_list(self):
+        """
+        Able to retrieve assistant list as a teacher.
+        """
+        # Create an assistant for testing with the name "Bob Peeters"
+        create_assistant(
+            id=5, first_name="Bob", last_name="Peeters", email="Bob.Peeters@gmail.com"
+        )
+
+        create_assistant(
+            id=6, first_name="Jane", last_name="Doe", email="Jane.Doe@gmail.com"
+        )
+
+        # Make a GET request to retrieve the assistant details
+        response = self.client.get(reverse("assistant-list"), follow=True)
+
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the response is JSON
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        # Assert that the parsed JSON is a list with multiple assistant
+        self.assertEqual(len(content_json), 2)

@@ -49,7 +49,7 @@ class ProjectViewSet(CreateModelMixin,
     def submissions(self, request, **_):
         """Returns a list of submissions for the given project"""
         project = self.get_object()
-        submissions = project.submissions.all()
+        submissions = Submission.objects.filter(group__project=project)
 
         # Serialize the group objects
         serializer = SubmissionSerializer(
