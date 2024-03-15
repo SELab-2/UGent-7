@@ -956,7 +956,7 @@ class ProjectModelTestsAsTeacher(APITestCase):
         )
 
     def test_retrieve_list_submissions(self):
-        """Retrieve a list of submissions for a project."""
+        """Able to retrieve a list of submissions for a project."""
         course = create_course(id=3, name="test course", academic_startyear=2024)
         project = create_project(
             name="test",

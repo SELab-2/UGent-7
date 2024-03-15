@@ -793,9 +793,7 @@ class CourseModelTestsAsTeacher(APITestCase):
         )
 
         self.assertEqual(response.status_code, 201)
-        self.assertTrue(
-            Course.objects.filter(name="Introduction to Computer Science").exists()
-        )
+        self.assertTrue(Course.objects.filter(name="Introduction to Computer Science").exists())
 
     def test_create_project(self):
         """
