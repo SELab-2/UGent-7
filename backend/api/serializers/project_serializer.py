@@ -76,9 +76,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
 
-    def validate(self, data):
-        return data
-
 
 class SubmissionStatusSerializer(serializers.Serializer):
     non_empty_groups = serializers.IntegerField(read_only=True)

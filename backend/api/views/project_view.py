@@ -4,11 +4,11 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
 from api.permissions.project_permissions import ProjectGroupPermission, ProjectPermission
 from api.models.group import Group
 from api.models.submission import Submission
 from api.models.project import Project
-from api.models.checks import StructureCheck
 from api.serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
 from api.serializers.project_serializer import (
     StructureCheckAddSerializer, SubmissionStatusSerializer,
@@ -59,6 +59,8 @@ class ProjectViewSet(CreateModelMixin,
         return Response(serializer.data)
 
     @groups.mapping.post
+    @groups.mapping.put
+    @swagger_auto_schema(request_body=TeacherCreateGroupSerializer)
     def _create_groups(self, request, **_):
         """Create a number of groups for the project"""
         project = self.get_object()
@@ -96,8 +98,9 @@ class ProjectViewSet(CreateModelMixin,
 
     @structure_checks.mapping.post
     @structure_checks.mapping.put
+    @swagger_auto_schema(request_body=StructureCheckAddSerializer)
     def _add_structure_check(self, request: Request, **_):
-        """Add an structure_check to the project"""
+        """Add a structure check to the project"""
 
         project: Project = self.get_object()
 

@@ -28,7 +28,7 @@ class GroupViewSet(CreateModelMixin,
 
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | GroupStudentPermission])
     def students(self, request, **_):
-        """Returns a list of submissions for the given group"""
+        """Returns a list of students for the given group"""
         group = self.get_object()
         students = group.students.all()
 
@@ -40,7 +40,7 @@ class GroupViewSet(CreateModelMixin,
 
     @action(detail=True, permission_classes=[IsAdminUser])
     def submissions(self, request, **_):
-        """Returns a list of students for the given group"""
+        """Returns a list of submissions for the given group"""
         group = self.get_object()
         submissions = group.submissions.all()
 
