@@ -19,11 +19,15 @@ from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from django.http import JsonResponse
 
 schema_view = get_schema_view(
     openapi.Info(
         title="Ypovoli API",
-        default_version="v1",
+        default_version="v1.0.0",
+        description="API used for the Ypovoli application.",
+        license=openapi.License(name="MIT License"),
+        contact=openapi.Contact(email="Tybo.Verslype@ugent.be"),
     ),
     public=True,
     permission_classes=[
@@ -32,11 +36,18 @@ schema_view = get_schema_view(
 )
 
 
+def swagger_json(request):
+    """Return the Swagger JSON content."""
+    schema = schema_view.without_ui(cache_timeout=0)(request)
+    return JsonResponse(schema.data)
+
+
 urlpatterns = [
     path(
         "api/",
         include(
             [
+                path("", swagger_json, name="swagger-json"),
                 # Base API endpoints.
                 path("", include("api.urls")),
                 # Authentication endpoints.
