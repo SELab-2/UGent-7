@@ -4,6 +4,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
 from api.models.group import Group
 from api.permissions.group_permissions import GroupPermission
 from api.permissions.group_permissions import GroupStudentPermission
@@ -27,9 +28,7 @@ class GroupViewSet(CreateModelMixin,
 
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | GroupStudentPermission])
     def students(self, request, **_):
-        """Returns a list of students for the given group"""
-        # This automatically fetches the group from the URL.
-        # It automatically gives back a 404 HTTP response in case of not found.
+        """Returns a list of submissions for the given group"""
         group = self.get_object()
         students = group.students.all()
 
@@ -42,8 +41,6 @@ class GroupViewSet(CreateModelMixin,
     @action(detail=True, permission_classes=[IsAdminUser])
     def submissions(self, request, **_):
         """Returns a list of students for the given group"""
-        # This automatically fetches the group from the URL.
-        # It automatically gives back a 404 HTTP response in case of not found.
         group = self.get_object()
         submissions = group.submissions.all()
 
@@ -55,6 +52,7 @@ class GroupViewSet(CreateModelMixin,
 
     @students.mapping.post
     @students.mapping.put
+    @swagger_auto_schema(request_body=StudentJoinGroupSerializer)
     def _add_student(self, request, **_):
         """Add a student to the group"""
         group = self.get_object()
@@ -74,6 +72,7 @@ class GroupViewSet(CreateModelMixin,
         })
 
     @students.mapping.delete
+    @swagger_auto_schema(request_body=StudentLeaveGroupSerializer)
     def _remove_student(self, request, **_):
         """Removes a student from the group"""
         group = self.get_object()
@@ -94,6 +93,7 @@ class GroupViewSet(CreateModelMixin,
 
     @submissions.mapping.post
     @submissions.mapping.put
+    @swagger_auto_schema(request_body=SubmissionAddSerializer)
     def _add_submission(self, request: Request, **_):
         """Add a submission to the group"""
         group: Group = self.get_object()

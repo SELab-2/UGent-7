@@ -51,6 +51,10 @@ class CourseIDSerializer(serializers.Serializer):
     )
 
 
+class CourseCloneSerializer(serializers.Serializer):
+    clone_assistants = serializers.BooleanField()
+
+
 class StudentJoinSerializer(StudentIDSerializer):
     def validate(self, data):
         # The validator needs the course context.
