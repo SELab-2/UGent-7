@@ -12,7 +12,7 @@ class StudentPermission(BasePermission):
         """Check if user has permission to view a general student endpoint."""
         user: User = request.user
         if view.action in ['list', 'create', 'update', 'partial_update', 'destroy']:
-            return user.is_staff
+            return False
         return True
 
     def has_object_permission(self, request, view, obj):
