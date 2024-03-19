@@ -3,9 +3,14 @@
 </script>
 
 <template>
-
+    <div id="footer" class="p-4">
+    </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/variables';
 
+#footer {
+    background: $blue;
+}
 </style>

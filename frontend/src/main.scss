@@ -1,1 +1,31 @@
+@import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css';
+@import '../node_modules/primeflex/primeflex.css';
+@import '../node_modules/primeicons/primeicons.css';
+
 @import './assets/scss/variables';
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+
+    h1 {
+        color: $blue;
+        position: relative;
+        display: inline-block;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            display: block;
+            width: 100%;
+            border-top: 4px solid $blue;
+        }
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+}
