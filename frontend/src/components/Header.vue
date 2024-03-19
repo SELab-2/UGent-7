@@ -9,7 +9,7 @@ const items = [
     {icon: 'home', label: t('layout.header.navigation.dashboard'), path: ''},
     {icon: 'calendar', label: t('layout.header.navigation.calendar'), path: ''},
     {icon: 'book', label: t('layout.header.navigation.courses'), path: ''},
-    {icon: 'cog', label: t('layout.header.navigation.calendar'), path: ''},
+    {icon: 'cog', label: t('layout.header.navigation.settings'), path: ''},
     {icon: 'info-circle', label: t('layout.header.navigation.help'), path: ''}
 ];
 </script>
