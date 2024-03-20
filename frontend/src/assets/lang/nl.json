@@ -14,5 +14,19 @@
                 "en": "Engels"
             }
         }
+    },
+    "views": {
+        "dashboard": {
+            "courses": "Mijn vakken",
+            "projects": "Lopende projecten"
+        }
+    },
+    "components": {
+        "card": {
+            "open": "Details"
+        }
+    },
+    "buttons": {
+        "academic_year": "Academiejaar {0}"
     }
 }

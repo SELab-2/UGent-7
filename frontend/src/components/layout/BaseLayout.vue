@@ -5,7 +5,7 @@ import Footer from '@/components/Footer.vue';
 </script>
 
 <template>
-    <div class="w-12 lg:w-8 mx-auto">
+    <div class="w-12 lg:w-9 mx-auto">
         <Header/>
 
         <Body>

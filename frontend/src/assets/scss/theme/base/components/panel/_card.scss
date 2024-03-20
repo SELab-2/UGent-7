@@ -6,6 +6,10 @@
 
     .p-card-body {
         padding: $cardBodyPadding;
+        background: $primaryLightColor;
+        border-bottom-left-radius: $borderRadius;
+        border-bottom-right-radius: $borderRadius;
+        height: 100%;
     }
 
     .p-card-title {

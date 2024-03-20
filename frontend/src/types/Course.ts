@@ -1,7 +1,18 @@
 export default class Course {
     constructor(
-        public id: string,
+        public id: number,
+        public name: string,
+        public description: string,
+        public academic_startyear: number
     ) {
+    }
+
+    /**
+     * Get the course year.
+     * @returns string
+     */
+    public getCourseYear(): string {
+        return `${this.academic_startyear} - ${this.academic_startyear + 1}`;
     }
 
     /**
@@ -9,9 +20,12 @@ export default class Course {
      *
      * @param course
      */
-    static fromJSON(course: object): Course {
+    static fromJSON(course: Course): Course {
         return new Course(
-            course.id
+            course.id,
+            course.name,
+            course.description,
+            course.academic_startyear
         );
     }
 }

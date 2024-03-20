@@ -26,7 +26,7 @@ const items = computed(() => [
 
 <template>
     <div class="flex w-full">
-        <div class="w-full lg:w-2 flex align-items-center py-3">
+        <div class="w-full lg:w-2 flex align-items-center p-3">
             <img class="w-full max-w-9rem" :src="logo[locale]" :alt="t('layout.header.logo')">
         </div>
         <div class="flex flex-column w-full lg:w-10">
@@ -96,16 +96,15 @@ const items = computed(() => [
         content: '';
         display: block;
         position: absolute;
-        bottom: .25rem;
+        bottom: .2rem;
         left: 0;
         width: 0;
-        height: 3px;
+        height: 2px;
         background: var(--primary-color);
         transition: width .3s;
-        margin-top: 0.5rem;
     }
 
-    &:hover::after {
+    &:hover::after, &.active::after {
         width: calc(100% - 1rem);
     }
 }
