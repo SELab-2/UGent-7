@@ -1,0 +1,29 @@
+@import '../node_modules/primeflex/primeflex.css';
+@import '../node_modules/primeicons/primeicons.css';
+@import 'assets/scss/theme/theme.scss';
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+
+    h1 {
+        color: $primaryColor;
+        position: relative;
+        display: inline-block;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            display: block;
+            width: 100%;
+            border-top: 4px solid $primaryColor;
+        }
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+}

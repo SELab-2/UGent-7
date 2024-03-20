@@ -1,0 +1,14 @@
+{
+    "layout": {
+        "header": {
+            "logo": "Logo van de Universiteit Gent",
+            "navigation": {
+                "dashboard": "Dashboard",
+                "calendar": "Kalender",
+                "courses": "Vakken",
+                "settings": "Voorkeuren",
+                "help": "Help"
+            }
+        }
+    }
+}
