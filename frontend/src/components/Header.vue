@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {useI18n} from 'vue-i18n';
-import logoEN from '@/assets/img/logo-en.png';
-import logoNL from '@/assets/img/logo-nl.png';
+import en from '@/assets/img/logo-en.png';
+import nl from '@/assets/img/logo-nl.png';
 
 const { t, locale } = useI18n();
+
+const logo: {[key: string]: string} = {nl, en};
 
 const items = [
     {icon: 'home', label: t('layout.header.navigation.dashboard'), path: ''},
@@ -17,7 +19,7 @@ const items = [
 <template>
     <div class="flex w-full">
         <div class="w-full lg:w-2 flex align-items-center px-4 py-3">
-            <img class="w-full max-w-7rem" :src="locale == 'nl' ? logoNL : logoEN" :alt="t('layout.header.logo')">
+            <img class="w-full max-w-7rem" :src="logo[locale]" :alt="t('layout.header.logo')">
         </div>
         <div class="flex flex-column w-full lg:w-10 border-x-1 border-200">
             <div id="header" class="w-full text-white p-4">
@@ -26,8 +28,8 @@ const items = [
                 </div>
             </div>
             <div id="navigation" class="w-full h-full flex border-bottom-1 border-200">
-                <div class="flex align-items-center w-9rem flex justify-content-center p-3 border-right-1 border-200 cursor-pointer" v-for="item in items">
-                    <span :class="'pi mr-3 pi-' + item.icon"/> {{ item.label }}
+                <div class="flex align-items-center w-9rem flex justify-content-center p-3 border-right-1 border-200 cursor-pointer text-primary font-bold" v-for="item in items">
+                    <span :class="'pi mr-2 pi-' + item.icon"/> {{ item.label }}
                 </div>
             </div>
         </div>
@@ -35,9 +37,7 @@ const items = [
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/variables';
-
 #header {
-    background: $blue;
+    background: var(--primary-color);
 }
 </style>

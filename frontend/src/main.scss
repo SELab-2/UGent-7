@@ -1,8 +1,6 @@
-@import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css';
 @import '../node_modules/primeflex/primeflex.css';
 @import '../node_modules/primeicons/primeicons.css';
-
-@import './assets/scss/variables';
+@import 'assets/scss/theme/theme.scss';
 
 body {
     margin: 0;
@@ -10,7 +8,7 @@ body {
     overflow-x: hidden;
 
     h1 {
-        color: $blue;
+        color: $primaryColor;
         position: relative;
         display: inline-block;
 
@@ -21,7 +19,7 @@ body {
             bottom: -8px;
             display: block;
             width: 100%;
-            border-top: 4px solid $blue;
+            border-top: 4px solid $primaryColor;
         }
     }
 

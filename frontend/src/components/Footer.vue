@@ -8,9 +8,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/variables';
-
 #footer {
-    background: $blue;
+    background: var(--primary-color);
 }
 </style>
