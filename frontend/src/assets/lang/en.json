@@ -1,1 +1,18 @@
-{}
+{
+    "layout": {
+        "header": {
+            "logo": "Logo of Ghent University",
+            "navigation": {
+                "dashboard": "Dashboard",
+                "calendar": "Calendar",
+                "courses": "Courses",
+                "settings": "Preferences",
+                "help": "Help"
+            },
+            "language": {
+                "nl": "Dutch",
+                "en": "English"
+            }
+        }
+    }
+}

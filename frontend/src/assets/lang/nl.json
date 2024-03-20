@@ -8,7 +8,25 @@
                 "courses": "Vakken",
                 "settings": "Voorkeuren",
                 "help": "Help"
+            },
+            "language": {
+                "nl": "Nederlands",
+                "en": "Engels"
             }
         }
+    },
+    "views": {
+        "dashboard": {
+            "courses": "Mijn vakken",
+            "projects": "Lopende projecten"
+        }
+    },
+    "components": {
+        "card": {
+            "open": "Details"
+        }
+    },
+    "buttons": {
+        "academic_year": "Academiejaar {0}"
     }
 }

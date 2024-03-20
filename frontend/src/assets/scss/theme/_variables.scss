@@ -67,7 +67,7 @@ $actionIconHoverColor:$shade800 !default;
 $actionIconBorderRadius:50% !default;
 
 //input field (e.g. inputtext, spinner, inputmask)
-$inputPadding:.75rem .75rem !default;
+$inputPadding: .75rem .75rem !default;
 $inputTextFontSize:1rem !default;
 
 $inputBg:$shade000 !default;
@@ -85,13 +85,13 @@ $inputFilledFocusBg:$shade000 !default;
 //input groups
 $inputGroupBg:$shade200 !default;
 $inputGroupTextColor:$shade600 !default;
-$inputGroupAddOnMinWidth: 3rem !default;
+$inputGroupAddOnMinWidth: 2.5rem !default;
 
 //input lists (e.g. dropdown, autocomplete, multiselect, orderlist)
 $inputListBg:$shade000 !default;
 $inputListTextColor:$shade700 !default;
 $inputListBorder:$inputBorder !default;
-$inputListPadding:.75rem 0 !default;
+$inputListPadding:0 0 !default;
 $inputListItemPadding:.75rem 1.25rem !default;
 $inputListItemBg:transparent !default;
 $inputListItemTextColor:$shade700 !default;
@@ -144,16 +144,16 @@ $plainButtonTextColor:$textSecondaryColor !default;
 $plainButtonHoverBgColor:$shade200 !default;
 $plainButtonActiveBgColor:$shade300 !default;
 
-$secondaryButtonBg:#64748B !default;
-$secondaryButtonTextColor:#ffffff !default;
-$secondaryButtonBorder:1px solid #64748B !default;
-$secondaryButtonHoverBg:#475569 !default;
+$secondaryButtonBg: $secondaryColor !default;
+$secondaryButtonTextColor: $secondaryTextColor !default;
+$secondaryButtonBorder:1px solid $secondaryColor !default;
+$secondaryButtonHoverBg:$secondaryDarkColor !default;
 $secondaryButtonTextHoverColor:$secondaryButtonTextColor !default;
-$secondaryButtonHoverBorderColor:#475569 !default;
-$secondaryButtonActiveBg:#334155 !default;
+$secondaryButtonHoverBorderColor:$secondaryDarkColor !default;
+$secondaryButtonActiveBg:$secondaryDarkerColor !default;
 $secondaryButtonTextActiveColor:$secondaryButtonTextColor !default;
-$secondaryButtonActiveBorderColor:#334155 !default;
-$secondaryButtonFocusShadow:0 0 0 0.2rem #E2E8F0 !default;
+$secondaryButtonActiveBorderColor:$secondaryDarkColor !default;
+$secondaryButtonFocusShadow:0 0 0 2px #ffffff, 0 0 0 4px #85b0ed, 0 1px 2px 0 rgb(0, 0, 0) !default;
 
 $infoButtonBg:#0ea5e9 !default;
 $infoButtonTextColor:#ffffff !default;
@@ -448,9 +448,9 @@ $cardTitleFontSize:1.5rem !default;
 $cardTitleFontWeight:700 !default;
 $cardSubTitleFontWeight:400 !default;
 $cardSubTitleColor:$shade600 !default;
-$cardContentPadding:1.25rem 0 !default;
-$cardFooterPadding:1.25rem 0 0 0 !default;
-$cardShadow:0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12) !default;
+$cardContentPadding:.5rem 0 !default;
+$cardFooterPadding:1rem 0 0 0 !default;
+$cardShadow: none !default;
 
 //editor
 $editorToolbarBg:$panelHeaderBg !default;
@@ -871,6 +871,8 @@ $imagePreviewActionIconBorderRadius:50% !default;
     --text-color-secondary:#{$shade600};
     --primary-color:#{$primaryColor};
     --primary-color-text:#{$primaryTextColor};
+    --secondary-color:#{$secondaryColor};
+    --secondary-color-text:#{$secondaryTextColor};
     --surface-0: #ffffff;
     --surface-50: #f9fafb;
     --surface-100: #f3f4f6;
