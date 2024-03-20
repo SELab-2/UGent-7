@@ -42,7 +42,7 @@ class IsAssistant(IsAuthenticated):
 
 class IsSameUser(IsAuthenticated):
     def has_permission(self, request, view):
-        return False    
+        return False
 
     def has_object_permission(self, request: Request, view: ViewSet, user: User):
         """Returns true if the request's user is the same as the given user"""
