@@ -1,6 +1,8 @@
 import nl from '@/assets/lang/nl.json';
 import en from '@/assets/lang/en.json';
 import App from '@/views/App.vue';
+import PrimeVue from 'primevue/config';
+import Ripple from 'primevue/ripple';
 import {createApp} from 'vue';
 import {createI18n} from 'vue-i18n';
 import {routes} from '@/router/routes.ts';
@@ -23,6 +25,14 @@ app.use(createI18n({
 app.use(createRouter({
     history: createWebHistory(), routes
 }));
+
+app.use(PrimeVue, {
+    ripple: true
+});
+
+/* Bind app directives */
+
+app.directive('ripple', Ripple);
 
 /* Mount the application */
 app.mount('#app');
