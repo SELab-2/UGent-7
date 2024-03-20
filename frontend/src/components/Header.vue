@@ -26,7 +26,7 @@ const items = computed(() => [
 
 <template>
     <div class="flex w-full">
-        <div class="w-full lg:w-2 flex align-items-center p-3">
+        <div class="w-full lg:w-2 flex align-items-center p-3 lg:pl-0">
             <img class="w-full max-w-9rem" :src="logo[locale]" :alt="t('layout.header.logo')">
         </div>
         <div class="flex flex-column w-full lg:w-10">
