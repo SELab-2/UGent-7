@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import ButtonGroup from 'primevue/buttongroup';
 import Button from 'primevue/button';
+import CourseCard from '@/components/courses/CourseCard.vue';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/Title.vue';
 import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';
 import {ref} from 'vue';
-import Course from '@/types/Course.ts';
-import CourseCard from '@/components/courses/CourseCard.vue';
+import {Course} from '@/types/Course.ts';
 
 /* Composable injections */
 const { t } = useI18n();

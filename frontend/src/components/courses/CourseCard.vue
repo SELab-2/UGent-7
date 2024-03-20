@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
 import Button from 'primevue/button';
-import Course from '@/types/Course.ts';
+import {Course} from '@/types/Course.ts';
 import {PrimeIcons} from 'primevue/api';
 import {useI18n} from 'vue-i18n';
 
 /* Component props */
-defineProps<{course: Course}>();
+defineProps<{
+    course: Course
+}>();
 
 /* Composable injections */
 const { t } = useI18n();
