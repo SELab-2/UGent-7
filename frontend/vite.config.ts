@@ -10,5 +10,10 @@ export default defineConfig({
             'font': resolve(__dirname, './src/assets/scss/theme/font'),
             '@': resolve(__dirname, './src')
         }
+    },
+    server: {
+        hmr: {
+            port: 5174
+        }
     }
 });

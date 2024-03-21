@@ -29,7 +29,7 @@ const courses = ref([
             <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
             <!-- Course list controls -->
             <ButtonGroup>
-                <Button :label="t('buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN" icon-pos="right" outlined/>
+                <Button :label="t('components.buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN" icon-pos="right" outlined/>
                 <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
             </ButtonGroup>
         </div>
@@ -45,7 +45,7 @@ const courses = ref([
             <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
             <!-- Project list controls -->
             <ButtonGroup>
-                <Button :label="t('buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN" icon-pos="right" outlined/>
+                <Button :label="t('components.buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN" icon-pos="right" outlined/>
                 <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
             </ButtonGroup>
         </div>

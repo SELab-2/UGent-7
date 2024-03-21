@@ -1,20 +1,27 @@
 import {Course} from '@/types/Course.ts';
 import {ref} from 'vue';
+import axios from 'axios';
+import {endpoints} from '@/config/endpoints.ts';
 
 export function useCourses() {
-    const courses = ref<Course[]>([]);
+    const courses = ref<Course[]|null>(null);
+    const course = ref<Course|null>(null);
 
-    const loadCourses = async () => {
-        const response = await fetch('http://localhost:3000/courses');
-        const data = await response.json();
+    async function getCourseByID(id: number) {
+        const endpoint = endpoints.courses.retrieve.replace('{id}', id.toString());
 
-        courses.value = data.map((course: Course) => {
-            return Course.fromJSON(course);
+        axios.get(endpoint).then(response => {
+            course.value = Course.fromJSON(response.data);
+        }).catch(error => {
+            console.log(error.data);
         });
+
+        console.log(Course)
     }
 
     return {
         courses,
-        loadCourses
+        course,
+        getCourseByID
     };
 }
