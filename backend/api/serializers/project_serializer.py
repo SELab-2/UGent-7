@@ -38,23 +38,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = [
-            "id",
-            "name",
-            "description",
-            "visible",
-            "archived",
-            "start_date",
-            "deadline",
-            "max_score",
-            "score_visible",
-            "group_size",
-            "structure_checks",
-            "extra_checks",
-            "course",
-            "groups",
-            "submissions"
-        ]
+        fields = "__all__"
 
     def validate(self, data):
         if "course" in self.context:

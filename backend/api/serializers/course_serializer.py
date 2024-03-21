@@ -32,17 +32,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = [
-            "id",
-            "name",
-            "academic_startyear",
-            "description",
-            "parent_course",
-            "teachers",
-            "assistants",
-            "students",
-            "projects",
-        ]
+        fields = "__all__"
 
 
 class CourseIDSerializer(serializers.Serializer):

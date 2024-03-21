@@ -14,16 +14,7 @@ class AssistantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Assistant
-        fields = [
-            "id",
-            "first_name",
-            "last_name",
-            "email",
-            "faculties",
-            "last_enrolled",
-            "create_time",
-            "courses",
-        ]
+        fields = "__all__"
 
 
 class AssistantIDSerializer(serializers.Serializer):

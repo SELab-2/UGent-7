@@ -22,13 +22,7 @@ class StructureCheckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StructureCheck
-        fields = [
-            "id",
-            "name",
-            "project",
-            "obligated_extensions",
-            "blocked_extensions"
-        ]
+        fields = "__all__"
 
 
 class ExtraCheckSerializer(serializers.ModelSerializer):
