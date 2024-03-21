@@ -19,6 +19,7 @@ class UserViewSet(ReadOnlyModelViewSet):
 
     @action(detail=True, methods=["get"], permission_classes=[NotificationPermission])
     def notifications(self, request: Request, pk: str):
+        """Returns a list of notifications for the given user"""
         notifications = Notification.objects.filter(user=pk)
         serializer = NotificationSerializer(
             notifications, many=True, context={"request": request}
@@ -33,6 +34,7 @@ class UserViewSet(ReadOnlyModelViewSet):
         url_path="notifications/read",
     )
     def read(self, request: Request, pk: str):
+        """Marks all notifications as read for the given user"""
         notifications = Notification.objects.filter(user=pk)
         notifications.update(is_read=True)
 
