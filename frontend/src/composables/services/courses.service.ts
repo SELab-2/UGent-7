@@ -11,10 +11,12 @@ export function useCourses() {
         const endpoint = endpoints.courses.retrieve.replace('{id}', id.toString());
 
         axios.get(endpoint).then(response => {
-            course.value = response.data;
+            course.value = Course.fromJSON(response.data);
         }).catch(error => {
-            console.log(error);
+            console.log(error.data);
         });
+
+        console.log(Course)
     }
 
     return {

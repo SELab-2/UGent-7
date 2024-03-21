@@ -18,9 +18,7 @@ const flags: {[key: string]: string} = { nl: nlFlag, en: enFlag };
 const items = computed(() => [
     {icon: 'home', label: t('layout.header.navigation.dashboard'), route: 'dashboard'},
     {icon: 'calendar', label: t('layout.header.navigation.calendar'), route: ''},
-    {icon: 'book', label: t('layout.header.navigation.courses'), route: ''},
-    {icon: 'cog', label: t('layout.header.navigation.settings'), route: ''},
-    {icon: 'info-circle', label: t('layout.header.navigation.help'), route: ''}
+    {icon: 'book', label: t('layout.header.navigation.courses'), route: ''}
 ]);
 </script>
 
