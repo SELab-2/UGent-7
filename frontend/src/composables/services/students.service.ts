@@ -1,4 +1,4 @@
-import {Student} from '@/types/Students';
+import {Student} from '@/types/Students.ts';
 import {ref} from 'vue';
 import axios from 'axios';
 import {endpoints} from '@/config/endpoints.ts';
