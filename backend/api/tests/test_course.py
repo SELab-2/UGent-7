@@ -828,6 +828,7 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         response = self.client.post(
             reverse("course-clone", args=[str(course.id)]),
+            data={"clone_assistants": False},
             follow=True,
         )
 
