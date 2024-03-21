@@ -1,3 +1,6 @@
 export const endpoints = {
-    api: ''
+    courses: {
+        index: '/api/courses/',
+        retrieve: '/api/courses/{id}/'
+    }
 };
