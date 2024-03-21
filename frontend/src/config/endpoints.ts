@@ -10,5 +10,9 @@ export const endpoints = {
     students: {
         index: '/api/students/',
         retrieve: '/api/students/{id}/'
+    },
+    faculties: {
+        index: '/api/faculties/',
+        retrieve: '/api/faculties/{name}'
     }
 };

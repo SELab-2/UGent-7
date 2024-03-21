@@ -2,7 +2,7 @@ import { Course } from "./Course";
 import { Faculty } from "./Faculty";
 import { Group } from "./Group";
 
-export class Student {
+export class Teacher {
     constructor(
         public id: number,
         public last_login: Date |null,
@@ -21,10 +21,11 @@ export class Student {
     }
 
     /**
-     * Convert a student object to a student instance.
+     * Convert a teacher object to a teacher instance.
      *
-     * @param student
+     * @param teacher
      */
+    /*
     static fromJSON(student: Student): Student {
         return new Student(
             student.id,
@@ -39,4 +40,5 @@ export class Student {
             student.student_id
         );
     }
+    */
 }
