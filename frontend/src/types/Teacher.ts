@@ -1,6 +1,4 @@
-import { Course } from "./Course";
 import { Faculty } from "./Faculty";
-import { Group } from "./Group";
 
 export class Teacher {
     constructor(
@@ -13,9 +11,6 @@ export class Teacher {
         public last_name: string,
         public last_enrolled: number,
         public create_time: Date,
-        public student_id: string,
-        public courses: Course[] = [],
-        public groups: Group[] = [],
         public faculties: Faculty[] = []
     ) {
     }
@@ -36,8 +31,7 @@ export class Teacher {
             teacher.first_name,
             teacher.last_name,
             teacher.last_enrolled,
-            new Date(teacher.create_time),
-            teacher.student_id
+            new Date(teacher.create_time)
         );
     }
 }
