@@ -25,20 +25,19 @@ export class Teacher {
      *
      * @param teacher
      */
-    /*
-    static fromJSON(student: Student): Student {
-        return new Student(
-            student.id,
-            student.last_login ? new Date(student.last_login) : null,
-            student.username,
-            student.is_staff,
-            student.email,
-            student.first_name,
-            student.last_name,
-            student.last_enrolled,
-            new Date(student.create_time),
-            student.student_id
+    
+    static fromJSON(teacher: Teacher): Teacher {
+        return new Teacher(
+            teacher.id,
+            teacher.last_login ? new Date(teacher.last_login) : null,
+            teacher.username,
+            teacher.is_staff,
+            teacher.email,
+            teacher.first_name,
+            teacher.last_name,
+            teacher.last_enrolled,
+            new Date(teacher.create_time),
+            teacher.student_id
         );
     }
-    */
 }
