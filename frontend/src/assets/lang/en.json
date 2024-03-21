@@ -1,0 +1,32 @@
+{
+    "layout": {
+        "header": {
+            "logo": "University of Ghent logo",
+            "navigation": {
+                "dashboard": "Dashboard",
+                "calendar": "Calendar",
+                "courses": "Courses",
+                "settings": "Preferences",
+                "help": "Help"
+            },
+            "language": {
+                "nl": "Dutch",
+                "en": "English"
+            }
+        }
+    },
+    "views": {
+        "dashboard": {
+            "courses": "My courses",
+            "projects": "Current projects"
+        }
+    },
+    "components": {
+        "buttons": {
+            "academic_year": "Academic year {0}"
+        },
+        "card": {
+            "open": "Details"
+        }
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "layout": {
+        "header": {
+            "logo": "Logo van de Universiteit Gent",
+            "navigation": {
+                "dashboard": "Dashboard",
+                "calendar": "Kalender",
+                "courses": "Vakken",
+                "settings": "Voorkeuren",
+                "help": "Help"
+            },
+            "language": {
+                "nl": "Nederlands",
+                "en": "Engels"
+            }
+        }
+    },
+    "views": {
+        "dashboard": {
+            "courses": "Mijn vakken",
+            "projects": "Lopende projecten"
+        },
+        "login": {
+            "title": "Inloggen",
+            "subtitle": "Inloggen gebeurt met je UGent-account. Bij problemen met het inloggen kan je de beheerder contacteren.",
+            "button": "UGent login",
+            "card": {
+                "title": "Ypovoli",
+                "subtitle": "Het officieel indieningsplatform van de Universiteit Gent."
+            }
+        }
+    },
+    "components": {
+        "buttons": {
+            "academic_year": "Academiejaar {0}"
+        },
+        "card": {
+            "open": "Details"
+        }
+    }
+}
