@@ -1,9 +1,11 @@
 <script setup lang="ts">
-
+withDefaults(defineProps<{color: 'primary'|'contrast'}>(), {
+    color: 'primary'
+});
 </script>
 
 <template>
-    <h1 class="title">
+    <h1 class="title" :class="color">
         <slot/>
     </h1>
 </template>
@@ -19,10 +21,18 @@
         content: '';
         position: absolute;
         left: 0;
-        bottom: -8px;
+        bottom: -14px;
         display: block;
         width: 100%;
-        border-top: 4px solid var(--primary-color);;
+        border-top: 4px solid var(--primary-color);
+    }
+
+    &.contrast {
+        color: var(--primary-color-text);
+
+        &::after {
+            border-color: var(--primary-color-text);
+        }
     }
 }
 </style>

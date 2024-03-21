@@ -19,6 +19,15 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten"
+        },
+        "login": {
+            "title": "Inloggen",
+            "subtitle": "Inloggen gebeurt met je UGent-account. Bij problemen met het inloggen kan je de beheerder contacteren.",
+            "button": "UGent login",
+            "card": {
+                "title": "Ypovoli",
+                "subtitle": "Het officieel indieningsplatform van de Universiteit Gent."
+            }
         }
     },
     "components": {
