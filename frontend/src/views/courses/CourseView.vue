@@ -1,42 +1,47 @@
 <script setup lang="ts">
 import Calendar from 'primevue/calendar';
-import ProgressSpinner from 'primevue/progressspinner';
+import Skeleton from 'primevue/skeleton';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/Title.vue';
-import {Course} from '@/types/Course.ts';
-import {onMounted, Ref, ref} from 'vue';
+import {onMounted} from 'vue';
+import {useCourses} from '@/composables/services/courses.service.ts';
+import {useRoute} from 'vue-router';
 
-const course: Ref<Course|null> = ref(null);
+const { params } = useRoute();
+const { course, getCourseByID } = useCourses();
 
 onMounted(() => {
-    // Set a timeout to simulate a network fetch.
-    setTimeout(() => {
-        course.value = new Course(1, 'Information Security Yippee', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In purus arcu, pharetra sit amet purus posuere, laoreet ullamcorper mi. Vivamus vitae egestas nibh. Proin id enim condimentum, egestas nisl in, vehicula nunc. Fusce ornare mattis dolor finibus dictum.', 2023)
-    }, 1000);
+    getCourseByID(
+        parseInt(params.id as string)
+    );
 });
 </script>
 
 <template>
     <BaseLayout>
-        <template v-if="course">
-            <div class="grid">
-                <div class="col-12 md:col-6">
-                    <Title>
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <div>
+                    <Title v-if="course">
                         {{ course.name }}
                     </Title>
-                    <p>{{ course.description }}</p>
+                    <Skeleton class="mb-4" height="3rem" width="30rem" v-else/>
                 </div>
-                <div class="col-12 md:col-6">
-                    <Calendar class="w-full" inline/>
+
+                <div>
+                    <p v-if="course">
+                        {{ course.description }}
+                    </p>
+                    <Skeleton height="10rem" v-else/>
                 </div>
             </div>
-        </template>
-        <template v-else>
-            <!-- Course is still loading -->
-            <div class="flex align-items-center justify-content-center p-4 w-full">
-                <ProgressSpinner/>
+            <div class="col-12 md:col-6">
+                <div>
+                    <Calendar v-if="course" class="w-full" inline/>
+                    <Skeleton height="30rem" v-else/>
+                </div>
             </div>
-        </template>
+        </div>
     </BaseLayout>
 </template>
 

@@ -2,19 +2,18 @@ import {Course} from '@/types/Course.ts';
 import {ref} from 'vue';
 
 export function useCourses() {
-    const courses = ref<Course[]>([]);
+    const courses = ref<Course[]|null>(null);
+    const course = ref<Course|null>(null);
 
-    const loadCourses = async () => {
-        const response = await fetch('http://localhost:3000/courses');
-        const data = await response.json();
-
-        courses.value = data.map((course: Course) => {
-            return Course.fromJSON(course);
-        });
+    async function getCourseByID(id: number) {
+        setTimeout(() => {
+            course.value = new Course(id, 'Information Security Yippee', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In purus arcu, pharetra sit amet purus posuere, laoreet ullamcorper mi. Vivamus vitae egestas nibh. Proin id enim condimentum, egestas nisl in, vehicula nunc. Fusce ornare mattis dolor finibus dictum.', 2023);
+        }, 1000);
     }
 
     return {
         courses,
-        loadCourses
+        course,
+        getCourseByID
     };
 }

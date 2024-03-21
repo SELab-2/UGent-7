@@ -22,11 +22,11 @@
         }
     },
     "components": {
+        "buttons": {
+            "academic_year": "Academiejaar {0}"
+        },
         "card": {
             "open": "Details"
         }
-    },
-    "buttons": {
-        "academic_year": "Academiejaar {0}"
     }
 }
