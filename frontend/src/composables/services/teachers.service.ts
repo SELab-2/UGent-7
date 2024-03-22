@@ -9,9 +9,7 @@ export function useTeacher() {
 
     async function getTeacherByID(id: number) {
         const endpoint = endpoints.teachers.retrieve.replace('{id}', id.toString());
-
         get<Teacher>(endpoint, teacher, Teacher.fromJSON);
-
         console.log(teacher)
     }
 
