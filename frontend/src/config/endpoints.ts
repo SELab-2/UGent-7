@@ -6,7 +6,7 @@ export const endpoints = {
     courses: {
         index: '/api/courses/',
         retrieve: '/api/courses/{id}/',
-        byStudent: 'api/students/{student_id}/courses/'
+        byStudent: '/api/students/{student_id}/courses/'
     },
     students: {
         index: '/api/students/',
@@ -17,8 +17,8 @@ export const endpoints = {
         retrieve: '/api/teachers/{id}/'
     },
     assistants: {
-        index: '/api/assistant/',
-        retrieve: '/api/assistant/{id}/'
+        index: '/api/assistants/',
+        retrieve: '/api/assistants/{id}/'
     },
     admins: {
         index: '/api/admins/',
