@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { Course } from '../Course.ts'
+import { Course } from '@/types/Course.ts'
 
 describe("course", (): void => {
     it("returns correct course year", (): void => {
