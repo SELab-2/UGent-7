@@ -57,6 +57,33 @@ class ProjectSerializer(serializers.ModelSerializer):
         return data
 
 
+class CreateProjectSerializer(ProjectSerializer):
+    number_groups = serializers.IntegerField(min_value=1, required=False)
+
+    def create(self, validated_data):
+        # Pop the 'number_groups' field from validated_data
+        number_groups = validated_data.pop('number_groups', None)
+
+        # Create the project object without passing 'number_groups' field
+        project = super().create(validated_data)
+
+        # Create groups for the project, if specified
+        if number_groups is not None:
+
+            for _ in range(number_groups):
+                Group.objects.create(project=project)
+
+        elif project.group_size == 1:
+            # If the group_size is set to one, create a group for each student
+            students = project.course.students.all()
+
+            for student in students:
+                group = Group.objects.create(project=project)
+                group.students.add(student)
+
+        return project
+
+
 class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
 

@@ -811,13 +811,89 @@ class CourseModelTestsAsTeacher(APITestCase):
                 "archived": False,
                 "days": 50,
                 "deadline": timezone.now() + timezone.timedelta(days=50),
-                "start_date": timezone.now()
+                "start_date": timezone.now(),
+                "group_size": 2
             },
             follow=True,
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertTrue(course.projects.filter(name="become champions").exists())
+
+        # Make sure there are no groups automatically made
+        project = course.projects.get(name="become champions")
+        self.assertEqual(project.groups.count(), 0)
+
+    def test_create_project_with_number_groups(self):
+        """
+        Able to create a project for a course with a number of groups.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        response = self.client.post(
+            reverse("course-projects", args=[str(course.id)]),
+            data={
+                "name": "become champions",
+                "description": "win the jpl",
+                "visible": True,
+                "archived": False,
+                "days": 50,
+                "deadline": timezone.now() + timezone.timedelta(days=50),
+                "start_date": timezone.now(),
+                "number_groups": 5
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.projects.filter(name="become champions").exists())
+
+        # Make sure the groups are created
+        project = course.projects.get(name="become champions")
+        self.assertEqual(project.groups.count(), 5)
+
+    def test_create_individual_project(self):
+        """
+        Able to create an individual project for a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        # Create some students
+        student1 = create_student(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmail.com")
+        student2 = create_student(id=6, first_name="Ronny", last_name="Deila", email="Ronny.Deila@gmail.com")
+        student3 = create_student(id=7, first_name="Karel", last_name="Geraerts", email="Karel.Geraerts@gmail.com")
+
+        # Add the students to the course
+        course.students.add(student1)
+        course.students.add(student2)
+        course.students.add(student3)
+
+        response = self.client.post(
+            reverse("course-projects", args=[str(course.id)]),
+            data={
+                "name": "become champions",
+                "description": "win the jpl",
+                "visible": True,
+                "archived": False,
+                "days": 50,
+                "deadline": timezone.now() + timezone.timedelta(days=50),
+                "start_date": timezone.now(),
+                "group_size": 1
+            },
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.projects.filter(name="become champions").exists())
+
+        # Make sure the groups are created
+        project = course.projects.get(name="become champions")
+        self.assertEqual(project.groups.count(), 3)
+
+        for group in project.groups.all():
+            self.assertEqual(group.students.count(), 1)
 
     def test_clone_course(self):
         """

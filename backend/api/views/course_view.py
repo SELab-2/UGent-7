@@ -19,7 +19,7 @@ from api.serializers.course_serializer import (
 from api.serializers.teacher_serializer import TeacherSerializer
 from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
 from api.serializers.student_serializer import StudentSerializer
-from api.serializers.project_serializer import ProjectSerializer
+from api.serializers.project_serializer import ProjectSerializer, CreateProjectSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -166,29 +166,22 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     @projects.mapping.post
     @projects.mapping.put
-    @swagger_auto_schema(request_body=ProjectSerializer)
+    @swagger_auto_schema(request_body=CreateProjectSerializer)
     def _add_project(self, request, **_):
         """Add a project to the course"""
         course = self.get_object()
 
-        serializer = ProjectSerializer(
+        serializer = CreateProjectSerializer(
             data=request.data, context={
                 "request": request,
                 "course": course
             }
         )
 
-        project = None
-
         # Validate the serializer
         if serializer.is_valid(raise_exception=True):
             project = serializer.save()
             course.projects.add(project)
-
-        # Create groups for the project
-        students_count = course.students.count()
-        for _ in range(students_count):
-            Group.objects.create(project=project)
 
         return Response({
             "message": gettext("course.success.project.add"),
