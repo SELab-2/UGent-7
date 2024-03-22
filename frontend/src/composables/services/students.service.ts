@@ -1,7 +1,7 @@
 import {Student} from '@/types/Student';
 import {ref} from 'vue';
-import axios from 'axios';
 import {endpoints} from '@/config/endpoints.ts';
+import { get, getList } from '@/composables/services/helpers.ts';
 
 export function useStudents() {
     const students = ref<Student[]|null>(null);
@@ -9,25 +9,13 @@ export function useStudents() {
 
     async function getStudentByID(id: number) {
         const endpoint = endpoints.students.retrieve.replace('{id}', id.toString());
-
-        axios.get(endpoint).then(response => {
-            student.value = Student.fromJSON(response.data);
-        }).catch(error => {
-            console.log(error.data);
-        });
-
+        get<Student>(endpoint, student, Student.fromJSON);
         console.log(student)
     }
 
     async function getStudents() {
         const endpoint = endpoints.students.index;
-
-        axios.get(endpoint).then(response => {
-            students.value = response.data.map((studentData: Student) => Student.fromJSON(studentData));
-        }).catch(error => {
-            console.log(error.data);
-        });
-
+        getList<Student>(endpoint, students, Student.fromJSON);
         console.log(students.value ? students.value.map((student, index) => `Student ${index + 1}: ${JSON.stringify(student)}`) : 'Students is null');
     }
 

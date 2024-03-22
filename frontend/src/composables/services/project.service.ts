@@ -1,7 +1,9 @@
 import {Project} from '@/types/Projects.ts';
 import {ref} from 'vue';
-import axios from 'axios';
 import {endpoints} from '@/config/endpoints.ts';
+import axios from 'axios';
+import { get, getList } from '@/composables/services/helpers.ts';
+
 
 export function useProject() {
     const projects = ref<Project[]|null>(null);
@@ -9,25 +11,13 @@ export function useProject() {
 
     async function getProjectByID(id: number) {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id.toString());
-
-        axios.get(endpoint).then(response => {
-            project.value = Project.fromJSON(response.data);
-        }).catch(error => {
-            console.log(error.data);
-        });
-
+        get<Project>(endpoint, project, Project.fromJSON);
         console.log(project)
     }
 
     async function getProjectsByCourse(course_id: number) {
         const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id.toString());
-
-        axios.get(endpoint).then(response => {
-            projects.value = response.data.map((projectData: Project) => Project.fromJSON(projectData));
-        }).catch(error => {
-            console.log(error.data);
-        });
-
+        getList<Project>(endpoint, projects, Project.fromJSON);
         console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
     }
 
