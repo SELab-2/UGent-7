@@ -19,9 +19,22 @@ export function useAdmin() {
         console.log(admin)
     }
 
+    async function getAdmins() {
+        const endpoint = endpoints.admins.index;
+
+        axios.get(endpoint).then(response => {
+            admins.value = response.data.map((adminData: Admin) => Admin.fromJSON(adminData));
+        }).catch(error => {
+            console.log(error.data);
+        });
+
+        console.log(admins.value ? admins.value.map((admin, index) => `Admin ${index + 1}: ${JSON.stringify(admin)}`) : 'Admins is null');
+    }
+
     return {
         admins,
         admin,
-        getAdminByID
+        getAdminByID,
+        getAdmins
     };
 }
