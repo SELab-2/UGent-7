@@ -37,10 +37,9 @@ services:
       - 80:80
       - 443:443
       - 8080:8080
-      - 5174:5174
     volumes:
-      - $DATA_DIR/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
-      - $SSL_DIR:/etc/nginx/ssl:ro
+      - ${DATA_DIR}/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+      - ${SSL_DIR}:/etc/nginx/ssl:ro
     depends_on:
       - backend
       - frontend
@@ -55,7 +54,7 @@ services:
     expose:
       - 8080
     volumes:
-      - $BACKEND_DIR:/code
+      - ${BACKEND_DIR}:/code
 
   celery:
     <<: *common-keys-selab
@@ -65,7 +64,7 @@ services:
       dockerfile: Dockerfile.dev
     command: celery -A ypovoli worker -l DEBUG
     volumes:
-      - $BACKEND_DIR:/code
+      - ${BACKEND_DIR}:/code
     depends_on:
       - backend
       - redis
@@ -80,7 +79,7 @@ services:
     expose:
       - 5173
     volumes:
-      - $FRONTEND_DIR:/app
+      - ${FRONTEND_DIR}:/app
     depends_on:
       - backend
 
@@ -95,5 +94,5 @@ services:
       - $REDIS_PORT
     entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
-      - $DATADIR/redis:/data
+      - ${DATA_DIR}/redis:/data
      
