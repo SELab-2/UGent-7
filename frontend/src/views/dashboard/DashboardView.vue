@@ -6,19 +6,21 @@ import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/Title.vue';
 import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';
-import {ref} from 'vue';
-import {Course} from '@/types/Course.ts';
+import {onMounted } from 'vue';
+import { useCourses } from '@/composables/services/courses.service.ts';
 
 /* Composable injections */
 const { t } = useI18n();
 
-/* View data */
-const courses = ref([
-    new Course(1, 'Information Security Yippee', 'Eric ❤️', 2023),
-    new Course(1, 'Computationele Biologie', 'Bachelor opvulvak 🐜', 2023),
-    new Course(1, 'Inleiding tot de elektrotechniek', 'Lightning ⚡', 2023),
-    new Course(1, 'Mobile and Broadband Access Networks', 'WiFi moment 🛜', 2023),
-]);
+/* Service injection */
+const { courses, getCoursesByStudent } = useCourses();
+
+
+onMounted(async () => {
+  console.log("fetching courses");
+  await getCoursesByStudent(1);  // TODO make this the id of the logged in user
+});
+
 </script>
 
 <template>
