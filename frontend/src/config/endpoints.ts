@@ -40,5 +40,9 @@ export const endpoints = {
         retrieve: '/api/submissions/{id}',
         byProject: '/api/projects/{project_id}/submissions/',
         byGroup: '/api/groups/{group_id}/submissions/'
+    },
+    structure_checks: {
+        retrieve: '/api/structure_checks/{id}',
+        byProject: '/api/projects/{project_id}/structure_checks/'
     }
 };

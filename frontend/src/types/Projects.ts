@@ -23,11 +23,11 @@ export class Project {
             "default",
             "this is a default project given in the service because it isnt initiated",
              0
-        ),
+        ), //TODO check
         public structure_checks: Structure_check[] = [],
         public extra_checks: Extra_check[] = [],
         public groups: Group[] = [],
-        public submissions: Submission = new Submission(),
+        public submissions: Submission = new Submission(0,0,new Date(), false), //TODO check
     ) {
     }
 
