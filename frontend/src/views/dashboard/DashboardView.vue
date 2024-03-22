@@ -14,14 +14,15 @@ import { useCourses } from '@/composables/services/courses.service.ts';
 const { t } = useI18n();
 
 /* Service injection */
-const { getCourseByID, getCourses } = useCourses();
+const { courses,
+        course,
+        getCourseByID,
+        getCourses } = useCourses();
 
-/* View data */
-const courses = ref<Course[]>([]);
 
 onMounted(async () => {
   console.log("fetching courses");
-  courses.value = await getCourses();
+  await getCourses();
 });
 
 </script>
