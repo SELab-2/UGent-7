@@ -16,12 +16,25 @@ export function useStudents() {
             console.log(error.data);
         });
 
-        console.log(Student)
+        console.log(student)
+    }
+
+    async function getStudents() {
+        const endpoint = endpoints.students.index;
+
+        axios.get(endpoint).then(response => {
+            students.value = response.data.map((studentData: Student) => Student.fromJSON(studentData));
+        }).catch(error => {
+            console.log(error.data);
+        });
+
+        console.log(students.value ? students.value.map((student, index) => `Student ${index + 1}: ${JSON.stringify(student)}`) : 'Students is null');
     }
 
     return {
         students,
         student,
-        getStudentByID
+        getStudentByID,
+        getStudents
     };
 }
