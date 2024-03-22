@@ -9,7 +9,7 @@ export function get<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data: any)
 
     axios.get(endpoint).then((response: AxiosResponse) => {
         ref.value = fromJson(response.data);
-        toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
+        // toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
     }).catch((error: AxiosError) => {
         processError(error, toast);
         console.error(error); // Log the error for debugging
@@ -21,7 +21,7 @@ export function getList<T>(endpoint: string, ref: Ref<T[]|null>, fromJson: (data
 
     axios.get(endpoint).then(response => {
         ref.value = response.data.map((data: T) => fromJson(data));
-        toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
+        // toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
     }
     ).catch((error: AxiosError) => {
         processError(error, toast);
