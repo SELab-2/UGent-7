@@ -5,7 +5,8 @@ export const endpoints = {
     },
     courses: {
         index: '/api/courses/',
-        retrieve: '/api/courses/{id}/'
+        retrieve: '/api/courses/{id}/',
+        byStudent: 'api/students/{student_id}/courses/'
     },
     students: {
         index: '/api/students/',
@@ -26,5 +27,13 @@ export const endpoints = {
     faculties: {
         index: '/api/faculties/',
         retrieve: '/api/faculties/{name}'
+    },
+    groups: {
+        retrieve: '/api/groups/{id}/',
+        byProject: '/api/projects/{project_id}/groups/'
+    },
+    projects: {
+        retrieve: '/api/projects/{id}',
+        byCourse : '/api/courses/{course_id}/projects/'
     }
 };

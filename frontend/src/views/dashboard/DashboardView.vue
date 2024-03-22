@@ -6,23 +6,19 @@ import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/Title.vue';
 import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';
-import {ref, onMounted } from 'vue';
-import {Course} from '@/types/Course.ts';
+import {onMounted } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 
 /* Composable injections */
 const { t } = useI18n();
 
 /* Service injection */
-const { courses,
-        course,
-        getCourseByID,
-        getCourses } = useCourses();
+const { courses, getCoursesByStudent } = useCourses();
 
 
 onMounted(async () => {
   console.log("fetching courses");
-  await getCourses();
+  await getCoursesByStudent(1);  // TODO make this the id of the logged in user
 });
 
 </script>
