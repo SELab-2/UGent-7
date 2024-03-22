@@ -28,6 +28,9 @@
                 "title": "Ypovoli",
                 "subtitle": "Het officieel indieningsplatform van de Universiteit Gent."
             }
+        },
+        "calendar": {
+            "title": "Kalender"
         }
     },
     "components": {

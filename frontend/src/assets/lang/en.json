@@ -19,6 +19,9 @@
         "dashboard": {
             "courses": "My courses",
             "projects": "Current projects"
+        },
+        "calendar": {
+            "title": "Calendar"
         }
     },
     "components": {
