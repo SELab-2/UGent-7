@@ -16,12 +16,25 @@ export function useCourses() {
             console.log(error.data);
         });
 
-        console.log(Course)
+        console.log(course)
+    }
+
+    async function getCourses() {
+        const endpoint = endpoints.courses.index;
+
+        axios.get(endpoint).then(response => {
+            courses.value = response.data.map((courseData: Course) => Course.fromJSON(courseData));
+        }).catch(error => {
+            console.log(error.data);
+        });
+
+        console.log(courses.value ? courses.value.map((course, index) => `Course ${index + 1}: ${JSON.stringify(course)}`) : 'Courses is null');
     }
 
     return {
         courses,
         course,
-        getCourseByID
+        getCourseByID,
+        getCourses
     };
 }

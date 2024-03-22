@@ -7,8 +7,8 @@ export function useFaculty() {
     const faculties = ref<Faculty[]|null>(null);
     const faculty = ref<Faculty|null>(null);
 
-    async function getFacultyByID(id: number) {
-        const endpoint = endpoints.faculties.retrieve.replace('{id}', id.toString());
+    async function getFacultyByID(name: string) {
+        const endpoint = endpoints.faculties.retrieve.replace('{name}', name);
 
         axios.get(endpoint).then(response => {
             faculty.value = Faculty.fromJSON(response.data);
