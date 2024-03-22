@@ -7,7 +7,7 @@ export function useAssistant() {
     const assistants = ref<Assistant[]|null>(null);
     const assistant = ref<Assistant|null>(null);
 
-    async function getAssistentByID(id: number) {
+    async function getAssistantByID(id: number) {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id.toString());
 
         axios.get(endpoint).then(response => {
@@ -19,9 +19,22 @@ export function useAssistant() {
         console.log(assistant)
     }
 
+    async function getAssistants() {
+        const endpoint = endpoints.assistants.index;
+
+        axios.get(endpoint).then(response => {
+            assistants.value = response.data.map((assistantData: Assistant) => Assistant.fromJSON(assistantData));
+        }).catch(error => {
+            console.log(error.data);
+        });
+
+        console.log(assistants.value ? assistants.value.map((assistant, index) => `Assistant ${index + 1}: ${JSON.stringify(assistant)}`) : 'assistants is null');
+    }
+
     return {
         assistants,
         assistant,
-        getAssistentByID
+        getAssistantByID,
+        getAssistants
     };
 }
