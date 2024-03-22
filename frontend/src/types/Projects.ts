@@ -44,8 +44,8 @@ export class Project {
             project.visible,
             project.archived,
             project.locked_groups,
-            project.start_date,
-            project.deadline,
+            new Date(project.start_date),
+            new Date(project.deadline),
             project.max_score,
             project.score_visible,
             project.group_size

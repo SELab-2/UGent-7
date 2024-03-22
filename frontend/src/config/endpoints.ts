@@ -35,5 +35,10 @@ export const endpoints = {
     projects: {
         retrieve: '/api/projects/{id}',
         byCourse : '/api/courses/{course_id}/projects/'
+    },
+    submissions: {
+        retrieve: '/api/submissions/{id}',
+        byProject: '/api/projects/{project_id}/submissions/',
+        byGroup: '/api/groups/{group_id}/submissions/'
     }
 };
