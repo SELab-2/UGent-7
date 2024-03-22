@@ -19,9 +19,22 @@ export function useTeacher() {
         console.log(teacher)
     }
 
+    async function getTeachers() {
+        const endpoint = endpoints.teachers.index;
+
+        axios.get(endpoint).then(response => {
+            teachers.value = response.data.map((teacherData: Teacher) => Teacher.fromJSON(teacherData));
+        }).catch(error => {
+            console.log(error.data);
+        });
+
+        console.log(teachers.value ? teachers.value.map((teacher, index) => `Teacher ${index + 1}: ${JSON.stringify(teacher)}`) : 'Teachers is null');
+    }
+
     return {
         teachers,
         teacher,
-        getTeacherByID
+        getTeacherByID,
+        getTeachers
     };
 }
