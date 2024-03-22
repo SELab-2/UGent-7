@@ -38,7 +38,7 @@ class Course(models.Model):
 
     def clone(self, clone_assistants=True) -> Self:
         """Clone the course to the next academic start year"""
-        course = Course(
+        course = Course.objects.create(
             name=self.name,
             description=self.description,
             academic_startyear=self.academic_startyear + 1,
@@ -46,7 +46,9 @@ class Course(models.Model):
         )
 
         if clone_assistants:
-            course.assistants.add(self.assistants)
+            # Add all the assistants of the current course to the follow up course
+            for assistant in self.assistants.all():
+                course.assistants.add(assistant)
 
         return course
 

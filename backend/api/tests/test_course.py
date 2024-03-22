@@ -826,6 +826,10 @@ class CourseModelTestsAsTeacher(APITestCase):
         course = get_course()
         course.teachers.add(self.user)
 
+        # Create an assistant and add it to the course
+        assistant = get_assistant()
+        course.assistants.add(assistant)
+
         response = self.client.post(
             reverse("course-clone", args=[str(course.id)]),
             data={"clone_assistants": False},
@@ -835,3 +839,33 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Course.objects.filter(name=course.name,
                                               academic_startyear=course.academic_startyear + 1).exists())
+
+        # Make sure there are no assistants in the cloned course
+        cloned_course = Course.objects.get(name=course.name, academic_startyear=course.academic_startyear + 1)
+        self.assertFalse(cloned_course.assistants.exists())
+
+    def test_clone_with_assistants(self):
+        """
+        Able to clone a course with assistants.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        # Create an assistant and add it to the course
+        assistant = get_assistant()
+        course.assistants.add(assistant)
+
+        # Clone the course with the assistants
+        response = self.client.post(
+            reverse("course-clone", args=[str(course.id)]),
+            data={"clone_assistants": True},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Course.objects.filter(name=course.name,
+                                              academic_startyear=course.academic_startyear + 1).exists())
+
+        # Make sure the assistant is also cloned
+        cloned_course = Course.objects.get(name=course.name, academic_startyear=course.academic_startyear + 1)
+        self.assertTrue(cloned_course.assistants.filter(id=assistant.id).exists())

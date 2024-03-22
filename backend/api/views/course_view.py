@@ -211,11 +211,9 @@ class CourseViewSet(viewsets.ModelViewSet):
 
             except Course.DoesNotExist:
                 # Else, we clone the course
-                course = course.clone(
+                course.clone(
                     clone_assistants=serializer.validated_data["clone_assistants"]
                 )
-
-                course.save()
 
         # Return serialized cloned course
         course_serializer = CourseSerializer(course, context={"request": request})
