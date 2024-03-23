@@ -97,7 +97,7 @@ class ProjectViewSet(CreateModelMixin,
     @structure_checks.mapping.post
     @structure_checks.mapping.put
     def _add_structure_check(self, request: Request, **_):
-        """Add an structure_check to the project"""
+        """Add a structure_check to the project"""
 
         project: Project = self.get_object()
 
