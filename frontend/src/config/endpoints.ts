@@ -39,7 +39,8 @@ export const endpoints = {
     submissions: {
         retrieve: '/api/submissions/{id}',
         byProject: '/api/projects/{project_id}/submissions/',
-        byGroup: '/api/groups/{group_id}/submissions/'
+        byGroup: '/api/groups/{group_id}/submissions/',
+        status: '/api/projects/{project_id}/submission_status/'
     },
     structure_checks: {
         retrieve: '/api/structure_checks/{id}',
