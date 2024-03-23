@@ -29,6 +29,27 @@ export function getList<T>(endpoint: string, ref: Ref<T[]|null>, fromJson: (data
     });
 }
 
+export function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, fromJson: (data: any) => T): void {
+    const toast = useToast();
+
+    // Create an array to accumulate all response data
+    const allData: T[] = [];
+
+    for (const endpoint of endpoints){
+
+        axios.get(endpoint).then(response => {
+            const responseData: T[] = response.data.map((data: T) => fromJson(data));
+            allData.push(...responseData); // Merge into the allData array
+            // toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
+        }
+        ).catch((error: AxiosError) => {
+            processError(error, toast);
+            console.error(error); // Log the error for debugging
+        });
+    }
+    ref.value = allData;
+}
+
 function processError(error: AxiosError, toast:any){
     if (error.response) {
         // The request was made and the server responded with a status code
