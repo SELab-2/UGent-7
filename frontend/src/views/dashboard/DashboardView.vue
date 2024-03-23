@@ -8,6 +8,8 @@ import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';
 import {onMounted } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
+import {Project} from "@/composables/services/project.service.ts";
+import {ref} from 'vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -20,6 +22,16 @@ onMounted(async () => {
   console.log("fetching courses");
   await getCoursesByStudent(1);  // TODO make this the id of the logged in user
 });
+
+/**
+ * TODO straks, dit hieronder zoals hierboven doen
+ */
+const projects = ref([
+  new Project(1, 'No Life Simulator', '-100 hours of your life', 'Computationele Biologie',
+      '31-12-2024'),
+  new Project(1, 'No Friends Simulator', '-10 good friends', 'Movile and Broadband Access Networks',
+      '31-12-2024'),
+]);
 
 </script>
 
@@ -53,7 +65,9 @@ onMounted(async () => {
         </div>
         <!-- Project list body -->
         <div class="grid align-items-stretch">
-
+            <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in courses">
+                <ProjectCard class="h-100" :course="course"/>
+            </div>
         </div>
     </BaseLayout>
 </template>
