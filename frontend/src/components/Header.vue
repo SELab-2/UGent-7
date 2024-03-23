@@ -5,10 +5,21 @@ import nlFlag from '@/assets/img/flags/nl-flag.svg'
 import enFlag from '@/assets/img/flags/en-flag.svg'
 import Dropdown from 'primevue/dropdown';
 import {useI18n} from 'vue-i18n';
-import {computed} from 'vue';
+import {watch, computed, onMounted} from 'vue';
+import { usePrimeVue } from "primevue/config";
+import nl from '@/assets/lang/nl.json';
+import en from '@/assets/lang/en.json';
 
 /* Translation composable */
 const { t, locale, availableLocales } = useI18n();
+const { config } = usePrimeVue();
+
+const localeFiles : {[key: string]: any} = { "nl": nl, "en": en };
+
+/* Set the primevue locale when the locale changes */
+watch(locale, (newVal) => {
+    config.locale = localeFiles[newVal].primevue;
+});
 
 /* Available localized images */
 const logo: {[key: string]: string} = { nl: nlLogo, en: enLogo };
@@ -20,6 +31,12 @@ const items = computed(() => [
     {icon: 'calendar', label: t('layout.header.navigation.calendar'), route: 'calendar'},
     {icon: 'book', label: t('layout.header.navigation.courses'), route: ''}
 ]);
+
+/* Set the primevue locale on mounted */
+onMounted(() => {
+    config.locale = localeFiles[locale.value].primevue;
+});
+
 </script>
 
 <template>
