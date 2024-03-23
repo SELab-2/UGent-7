@@ -7,7 +7,6 @@ import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
-import NotAuthorized from '@/components/error/NotAuthorized.vue';
 
 const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, name: 'dashboard' },
@@ -69,11 +68,6 @@ const routes: RouteRecordRaw[] = [
         { path: 'login', component: LoginView, name: 'login' },
     ]},
 
-    // Errors
-    { path: '/error', children: [
-        { path: '/403', component: NotAuthorized, name: 'not-authorized' },
-    ]},
-
     // Page not found: redirect to dashboard
     { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } }
 ];
@@ -89,7 +83,7 @@ router.beforeEach((to, _) => {
     const isAdmin: boolean = false
     if (to.name === 'faculty-create') {
         if (!isAdmin) {
-            return { name: 'not-authorized' }
+            return false
         }
     }
 })
