@@ -13,7 +13,7 @@ export function useSubmission() {
     }
 
     return {
-        submission: submissionStatus,
+        submissionStatus,
         getSubmissionStatus
     };
 }
