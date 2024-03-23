@@ -7,11 +7,64 @@ import PageNotFound from '@/components/PageNotFound.vue';
 
 const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, name: 'dashboard' },
-    { path: '/courses', name: 'courses', children: [
-        { path: ':id', component: CourseView, name: 'view' }
+
+    // Courses
+    { path: '/courses', children: [
+        { path: '', component: Dummy, name: 'courses' },
+        { path: 'create', component: Dummy, name: 'course-create' },
+        // Single course  
+        { path: ':id', children: [
+            { path: '', component: CourseView, name: 'course' },
+            { path: 'edit', component: Dummy, name: 'course-edit' },
+            // Projects
+            { path: 'projects', children: [
+                { path: '', component: Dummy, name: 'projects' },
+                { path: 'create', component: Dummy, name: 'project-create' },
+                // Single project
+                { path: ':id', children: [
+                    { path: '', component: Dummy, name: 'project' },
+                    { path: 'edit', component: Dummy, name: 'project-edit' },
+                    { path: 'groups', component: Dummy, name: 'project-groups' },
+                    { path: 'submit', component: Dummy, name: 'project-submit' },
+                ]}
+            ]},
+        ]}
     ]},
+
+    // Users
+    { path: '/users', children: [
+        { path: ':id', component: Dummy, name: 'user' },
+        { path: 'students', children: [
+            { path: '', component: Dummy, name: 'students' },
+            { path: ':id', component: Dummy, name: 'student' },
+        ]},
+        { path: 'admins', children: [
+            { path: '', component: Dummy, name: 'admins' },
+            { path: ':id', component: Dummy, name: 'admin' },
+        ]},
+        { path: 'teachers', children: [
+            { path: '', component: Dummy, name: 'teachers' },
+            { path: ':id', component: Dummy, name: 'teacher' },
+        ]},
+        { path: 'assistants', children: [
+            { path: '', component: Dummy, name: 'assistants' },
+            { path: ':id', component: Dummy, name: 'assistant' },
+        ]},
+    ]},
+
+    // Faculties
+    { path: '/faculties', component: Dummy, name: 'faculties' },
+    { path: '/faculties/create', component: Dummy, name: 'faculty-create' },
+
+    // Notifications
+    { path: '/notifications', component: Dummy, name: 'notifications' },
+    { path: '/notifications/:id', component: Dummy, name: 'notification' },
+
+    // Authentication
     { path: '/login', component: Dummy, name: 'login' },
-    { path: '/:pathMatch(.*)*', name: 'PageNotFound', component: PageNotFound },
+
+    // Page not found
+    { path: '/:pathMatch(.*)*', name: 'page-not-found', component: PageNotFound },
 ];
 
 const router = createRouter({
@@ -31,8 +84,8 @@ export default router
  * /courses/id
  * /courses/id/edit
  * /courses/id/projects
- * /courses/id/projects/id
  * /courses/id/projects/create
+ * /courses/id/projects/id
  * /courses/id/projects/id/edit
  * /courses/id/projects/id/groups
  * /courses/id/projects/id/submit
