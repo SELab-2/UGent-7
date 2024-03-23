@@ -24,7 +24,7 @@ const { projects, getProjectsByStudent } = useProject();
 
 // TODO: Set correct user ID
 const loadProjects = async () => {
-    await getProjectsByStudent("000210394313");
+    await getProjectsByStudent("1");
 };
 
 /* Load the projects when the component is mounted */
