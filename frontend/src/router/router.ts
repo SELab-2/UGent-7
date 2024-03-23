@@ -3,13 +3,15 @@ import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import Dummy from '@/components/Dummy.vue';
+import PageNotFound from '@/components/PageNotFound.vue';
 
 const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, name: 'dashboard' },
     { path: '/courses', name: 'courses', children: [
         { path: ':id', component: CourseView, name: 'view' }
     ]},
-    { path: '/login', component: Dummy, name: 'login' }
+    { path: '/login', component: Dummy, name: 'login' },
+    { path: '/:pathMatch(.*)*', name: 'PageNotFound', component: PageNotFound },
 ];
 
 const router = createRouter({
