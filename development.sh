@@ -2,9 +2,10 @@
 
 backend=false
 frontend=false
+windows_hmr=false
 build=false
 
-while getopts ":bfc" opt; do
+while getopts ":bfcw" opt; do
   case ${opt} in
     b )
       backend=true
@@ -12,11 +13,14 @@ while getopts ":bfc" opt; do
     f )
       frontend=true
       ;;
+    w )
+      windows_hmr=true
+      ;;
     c )
       build=true
       ;;
     \? )
-      echo "Usage: $0 [-b] [-f] [-c]"
+      echo "Usage: $0 [-b] [-f] [-w] [-c]"
       exit 1
       ;;
   esac
@@ -32,6 +36,12 @@ if ! [ -f .env ]; then
     cp .dev.env .env
     sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
     echo "Created environment file"
+fi
+
+if [ "$windows_hmr" = true ]; then
+    sed -i "s/^FRONTEND_CMD=.*/FRONTEND_CMD=\"npm run watch\"/" .env
+else
+    sed -i "s/^FRONTEND_CMD=.*/FRONTEND_CMD=\"npm run host\"/" .env
 fi
 
 echo "Checking for existing SSL certificates..."
