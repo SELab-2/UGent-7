@@ -33,17 +33,17 @@ function processError(error: AxiosError, toast:any){
     if (error.response) {
         // The request was made and the server responded with a status code
         if (error.response.status === 404) {
-            toast.add({ severity: 'error', summary: 'Not Found', detail: 'Resource not found.' });
+            toast.add({ severity: 'error', summary: 'Not Found', detail: 'Resource not found.', life: lifeTime });
         } else if (error.response.status === 401) {
-            toast.add({ severity: 'error', summary: 'Unauthorized', detail: 'You are not authorized to access this resource.' });
+            toast.add({ severity: 'error', summary: 'Unauthorized', detail: 'You are not authorized to access this resource.', life: lifeTime });
         } else {
-            toast.add({ severity: 'error', summary: 'Server Error', detail: 'An error occurred on the server.' });
+            toast.add({ severity: 'error', summary: 'Server Error', detail: 'An error occurred on the server.', life: lifeTime });
         }
     } else if (error.request) {
         // The request was made but no response was received
-        toast.add({ severity: 'error', summary: 'Network Error', detail: 'Unable to connect to the server.' });
+        toast.add({ severity: 'error', summary: 'Network Error', detail: 'Unable to connect to the server.', life: lifeTime });
     } else {
         // Something happened in setting up the request that triggered an error
-        toast.add({ severity: 'error', summary: 'Request Error', detail: 'An error occurred while making the request.' });
+        toast.add({ severity: 'error', summary: 'Request Error', detail: 'An error occurred while making the request.', life: lifeTime });
     }
 }
