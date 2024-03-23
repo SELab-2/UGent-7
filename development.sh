@@ -60,12 +60,12 @@ echo "Following logs..."
 echo "Press CTRL + C to stop all containers"
 echo "-------------------------------------"
 
-if [ "$backend" = true ] && [ "$frontend" = true ]; then
-    docker-compose -f development.yml logs --follow --tail 50 backend frontend
+if [ "$backend" = true ]; then
+    docker-compose -f development.yml logs --follow --tail 50 backend
 elif [ "$frontend" = true ]; then
     docker-compose -f development.yml logs --follow --tail 50 frontend
 else
-    docker-compose -f development.yml logs --follow --tail 50 backend
+    docker-compose -f development.yml logs --follow --tail 50 backend frontend
 fi
 
 echo "Cleaning up..."
