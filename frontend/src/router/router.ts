@@ -1,9 +1,13 @@
 import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 
+// import { useUserStore } from '@/stores/userStore';
+// TODO: after pinia setup is done
+
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
+import NotAuthorized from '@/components/error/NotAuthorized.vue';
 
 const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, name: 'dashboard' },
@@ -28,7 +32,7 @@ const routes: RouteRecordRaw[] = [
                     { path: 'submit', component: Dummy, name: 'project-submit' },
                 ]}
             ]},
-        ]}
+        ]},
     ]},
 
     // Users
@@ -65,7 +69,12 @@ const routes: RouteRecordRaw[] = [
         { path: 'login', component: LoginView, name: 'login' },
     ]},
 
-    // Page not found
+    // Errors
+    { path: '/error', children: [
+        { path: '/403', component: NotAuthorized, name: 'not-authorized' },
+    ]},
+
+    // Page not found: redirect to dashboard
     { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } }
 ];
 
@@ -74,44 +83,16 @@ const router = createRouter({
     routes,
 })
 
+// TODO: once pinia store is setup, implement navigation guards
+// Navigation guard example:
+router.beforeEach((to, _) => {
+    const isAdmin: boolean = false
+    if (to.name === 'faculty-create') {
+        if (!isAdmin) {
+            return { name: 'not-authorized' }
+        }
+    }
+})
+
+
 export default router
-
-
-/**
- * Routes:
- * 
- * ### COURSES ###
- * /courses
- * /courses/create (teacher / admin)
- * /courses/id
- * /courses/id/edit
- * /courses/id/projects
- * /courses/id/projects/create
- * /courses/id/projects/id
- * /courses/id/projects/id/edit
- * /courses/id/projects/id/groups
- * /courses/id/projects/id/submit
- * 
- * ### USERS ###
- * /users (teacher /admin)
- * /users/students/
- * /users/students/id
- * /users/admins
- * /users/admins/id
- * /users/teachers
- * /users/teachers/id
- * /users/assistants
- * /users/assistants/id
- * /users/id (teacher / admin)
- * 
- * ### FACULTIES ###
- * /faculties (teacher / admin)
- * /faculties/create (teacher / admin)
- * 
- * ### NOTIFICATIONS ###
- * /notifications
- * /notifications/id
- * 
- * ### AUTHENTICATION ###
- * /login
- */
