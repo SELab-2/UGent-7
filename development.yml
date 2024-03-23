@@ -75,7 +75,7 @@ services:
     build:
       context: $FRONTEND_DIR
       dockerfile: Dockerfile.dev
-    command: bash -c "npm install && ${FRONTEND_CMD}"
+    command: bash -c "npm install && npm run host"
     expose:
       - 5173
     volumes:
