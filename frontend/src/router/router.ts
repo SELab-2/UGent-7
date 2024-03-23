@@ -1,15 +1,23 @@
-import { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
+
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import Dummy from '@/components/Dummy.vue';
 
-export const routes: RouteRecordRaw[] = [
+const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, name: 'dashboard' },
     { path: '/courses', name: 'courses', children: [
         { path: ':id', component: CourseView, name: 'view' }
     ]},
     { path: '/login', component: Dummy, name: 'login' }
 ];
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+})
+
+export default router
 
 
 /**
