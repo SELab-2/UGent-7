@@ -2,6 +2,7 @@
 import moment from 'moment';
 import 'moment/dist/locale/nl';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
+import ProjectLink from '@/components/projects/ProjectLink.vue';
 import Calendar from 'primevue/calendar';
 import Title from '@/components/Title.vue';
 import { useProject } from '@/composables/services/project.service';
@@ -24,13 +25,21 @@ const { projects, getProjectsByStudent } = useProject();
 
 // TODO: Set correct user ID
 const loadProjects = async () => {
-    await getProjectsByStudent("1");
+    await getProjectsByStudent("000210394313");
 };
+
+const projectsWithDeadline = computed(() => {
+    // Filter the projects with the selected date
+    return projects.value?.filter(project => {
+        return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
+    });
+});
 
 /* Load the projects when the component is mounted */
 onMounted(() => {
     loadProjects();
 });
+
 
 </script>
 
@@ -50,9 +59,12 @@ onMounted(() => {
                 <!-- Selected date on the calendar -->
                 <Title class="mb-6">{{ formattedDate }}</Title>
 
-                <!-- List of projects -->
-                <div v-for="project in projects" :key="project.id">
-                    <p>{{ project.name }}</p>
+                <!-- Listing projects with given deadline -->
+                <div>
+                    <div class="col-12" v-for="project in projectsWithDeadline" :key="project.id">
+                        <!-- Each ProjectLink card -->
+                        <ProjectLink class="h-100 mb-2" :project="project"/>
+                    </div>
                 </div>
             </div>
         </div>
