@@ -26,8 +26,7 @@ echo "Checking environment file..."
 
 if ! [ -f .env ]; then
     cp .dev.env .env
-    read -s -p "Enter a random string for the django secret (just smash keyboard): " new_secret
-    sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=$new_secret/" .env
+    sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
     echo "Created environment file"
 fi
 
@@ -65,7 +64,7 @@ if [ "$backend" = true ] && [ "$frontend" = true ]; then
 elif [ "$frontend" = true ]; then
     docker-compose -f development.yml logs --follow --tail 50 frontend
 else
-    docker-compose -f development.yml logs --follow --tail 50 backend
+    docker-compose -f development.yml logs --follow --tail 50 frontend
 fi
 
 echo "Cleaning up..."
