@@ -2,7 +2,7 @@ name: Deploy
 on:
   push:
     branches:
-      - deployment
+      - main
 
 jobs:
   deploy:
@@ -16,8 +16,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd test
-            git checkout deployment
+            cd UGent-7
             docker-compose -f production.yml down
             git pull
             docker-compose -f production.yml build --no-cache
