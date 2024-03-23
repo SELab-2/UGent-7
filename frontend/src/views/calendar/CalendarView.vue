@@ -11,6 +11,8 @@ import {useI18n} from 'vue-i18n';
 import { ref } from 'vue';
 
 const { t, locale } = useI18n();
+const { projects, getProjectsByStudent } = useProject();
+
 
 /* Keeps track of the selected date */
 const selectedDate = ref(new Date());
@@ -21,13 +23,12 @@ const formattedDate = computed(() => {
 });
 
 /* Load the projects of the current student */
-const { projects, getProjectsByStudent } = useProject();
-
 // TODO: Set correct user ID
 const loadProjects = async () => {
     await getProjectsByStudent("000210394313");
 };
 
+/* Filter the projects on the date selected on the calendar */
 const projectsWithDeadline = computed(() => {
     // Filter the projects with the selected date
     return projects.value?.filter(project => {
@@ -39,7 +40,6 @@ const projectsWithDeadline = computed(() => {
 onMounted(() => {
     loadProjects();
 });
-
 
 </script>
 
