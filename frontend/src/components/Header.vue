@@ -16,11 +16,9 @@ const flags: {[key: string]: string} = { nl: nlFlag, en: enFlag };
 
 /* Navigation items */
 const items = computed(() => [
-    {icon: 'home', label: t('layout.header.navigation.dashboard'), path: ''},
-    {icon: 'calendar', label: t('layout.header.navigation.calendar'), path: ''},
-    {icon: 'book', label: t('layout.header.navigation.courses'), path: ''},
-    {icon: 'cog', label: t('layout.header.navigation.settings'), path: ''},
-    {icon: 'info-circle', label: t('layout.header.navigation.help'), path: ''}
+    {icon: 'home', label: t('layout.header.navigation.dashboard'), route: 'dashboard'},
+    {icon: 'calendar', label: t('layout.header.navigation.calendar'), route: ''},
+    {icon: 'book', label: t('layout.header.navigation.courses'), route: ''}
 ]);
 </script>
 
@@ -57,9 +55,11 @@ const items = computed(() => [
             </div>
             <!-- Navigation -->
             <div id="navigation" class="w-full h-full flex">
-                <div class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium nav-item" v-for="item in items">
-                    <span class="mr-2" :class="'pi pi-' + item.icon"/> {{ item.label }}
-                </div>
+                <RouterLink :to="{ name: item.route }" v-for="item in items">
+                    <div class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium nav-item">
+                        <span class="mr-2" :class="'pi pi-' + item.icon"/> {{ item.label }}
+                    </div>
+                </RouterLink>
             </div>
         </div>
     </div>

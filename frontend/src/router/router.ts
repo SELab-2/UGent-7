@@ -3,6 +3,7 @@ import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import Dummy from '@/components/Dummy.vue';
+import LoginView from '@/views/authentication/LoginView.vue';
 import PageNotFound from '@/components/PageNotFound.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -61,10 +62,12 @@ const routes: RouteRecordRaw[] = [
     { path: '/notifications/:id', component: Dummy, name: 'notification' },
 
     // Authentication
-    { path: '/login', component: Dummy, name: 'login' },
+    { path: '/auth/', children: [
+        { path: 'login', component: LoginView, name: 'login' },
+    ]},
 
     // Page not found
-    { path: '/:pathMatch(.*)*', name: 'page-not-found', component: PageNotFound },
+    { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } }
 ];
 
 const router = createRouter({

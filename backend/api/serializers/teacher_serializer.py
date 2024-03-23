@@ -14,13 +14,4 @@ class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Teacher
-        fields = [
-            "id",
-            "first_name",
-            "last_name",
-            "email",
-            "faculties",
-            "last_enrolled",
-            "create_time",
-            "courses",
-        ]
+        fields = "__all__"

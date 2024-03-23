@@ -7,10 +7,12 @@ import {createApp} from 'vue';
 import {createI18n} from 'vue-i18n';
 import router from './router/router';
 import {createPinia} from 'pinia';
+import ToastService from 'primevue/toastservice';
 
 const app = createApp(App);
 
 /* Bind application plugins */
+app.use(ToastService);
 
 app.use(createPinia());
 
