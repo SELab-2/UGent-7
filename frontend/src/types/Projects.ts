@@ -51,4 +51,21 @@ export class Project {
             project.group_size
         );
     }
+
+    static fromJSONWithCourse(project: Project, course: Course): Project {
+        return new Project(
+            project.id,
+            project.name,
+            project.description,
+            project.visible,
+            project.archived,
+            project.locked_groups,
+            new Date(project.start_date),
+            new Date(project.deadline),
+            project.max_score,
+            project.score_visible,
+            project.group_size,
+            project.course = course
+        );
+    }
 }

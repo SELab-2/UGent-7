@@ -6,17 +6,20 @@ import {PrimeIcons} from 'primevue/api';
 import {useI18n} from 'vue-i18n';
 
 /* Component props */
-defineProps<{
+const props = defineProps<{
   project: Project
 }>();
 
 /* Composable injections */
 const { t } = useI18n();
 
+console.log(props.project)
+
 /* Default image thumbnails */
 const images = Object.keys(import.meta.glob('@/assets/img/placeholders/*', {
   eager: true
 }));
+
 </script>
 
 <template>
@@ -34,9 +37,7 @@ const images = Object.keys(import.meta.glob('@/assets/img/placeholders/*', {
       {{ project.description }}
     </template>
     <template #footer>
-      <RouterLink :to="{ name: 'project-view', params: { id: project.id } }">
-        <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined/>
-      </RouterLink>
+
     </template>
   </Card>
 </template>

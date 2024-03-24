@@ -7,7 +7,7 @@ import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/Title.vue';
 import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';
-import {onMounted } from 'vue';
+import {onMounted} from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 import { useProject } from '@/composables/services/project.service.ts';
 
@@ -16,12 +16,12 @@ const { t } = useI18n();
 
 /* Service injection */
 const { courses, getCoursesByStudent } = useCourses();
-const { projects, getProjectsByStudent } = useProject();
+const { projects, getProjectWithCourseContext } = useProject();
 
 onMounted(async () => {
   console.log("fetching courses");
   await getCoursesByStudent(1);  // TODO make this the id of the logged in user
-  await getProjectsByStudent('1');
+  await getProjectWithCourseContext('1');
 });
 
 </script>
