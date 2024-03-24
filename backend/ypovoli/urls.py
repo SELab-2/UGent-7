@@ -20,6 +20,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from django.http import JsonResponse
+from ypovoli.settings import DOMAIN_NAME
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -33,6 +34,7 @@ schema_view = get_schema_view(
     permission_classes=[
         permissions.AllowAny,
     ],
+    url=f"https://{DOMAIN_NAME}",
 )
 
 
@@ -52,11 +54,6 @@ urlpatterns = [
                 path("", include("api.urls")),
                 # Authentication endpoints.
                 path("auth/", include("authentication.urls")),
-                path(
-                    "notifications/",
-                    include("notifications.urls"),
-                    name="notifications",
-                ),
                 # Swagger documentation.
                 path(
                     "swagger/",
