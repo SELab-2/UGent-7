@@ -14,13 +14,16 @@ export function useStudents() {
     async function getStudentByID(id: number) {
         const endpoint = endpoints.students.retrieve.replace('{id}', id.toString());
         get<Student>(endpoint, student, Student.fromJSON, toast);
-        console.log(student)
     }
 
     async function getStudents() {
         const endpoint = endpoints.students.index;
         getList<Student>(endpoint, students, Student.fromJSON, toast);
-        console.log(students.value ? students.value.map((student, index) => `Student ${index + 1}: ${JSON.stringify(student)}`) : 'Students is null');
+    }
+
+    async function getStudentsbyCourse(course_id: string) {
+        const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
+        getList<Student>(endpoint, students, Student.fromJSON, toast);
     }
 
     async function studentJoinCourse(course_id: string, student_id: string) {
@@ -34,6 +37,7 @@ export function useStudents() {
         response,
         getStudentByID,
         getStudents,
-        studentJoinCourse
+        studentJoinCourse,
+        getStudentsbyCourse
     };
 }

@@ -1,7 +1,7 @@
 import {Course} from '@/types/Course.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList, create } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 export function useCourses() {
@@ -26,6 +26,11 @@ export function useCourses() {
         create<Course>(endpoint, course_data, course, Course.fromJSON, toast);
     }
 
+    async function deleteCourse(id: string) {
+        const endpoint = endpoints.courses.retrieve.replace('{id}', id.toString());
+        delete_id<Course>(endpoint, course, Course.fromJSON, toast);
+    }
+
     async function getCoursesByStudent(student_id: number) {
         const endpoint = endpoints.courses.byStudent.replace('{student_id}', student_id.toString());
         getList<Course>(endpoint, courses, Course.fromJSON, toast);
@@ -40,6 +45,7 @@ export function useCourses() {
         getCourseByID,
         getCourses,
         getCoursesByStudent,
-        createCourse
+        createCourse,
+        deleteCourse
     };
 }

@@ -16,7 +16,7 @@ import {ref} from 'vue';
 const { t } = useI18n();
 
 /* Service injection */
-const { courses, getCoursesByStudent, createCourse } = useCourses();
+const { courses, getCoursesByStudent, createCourse, deleteCourse } = useCourses();
 const { studentJoinCourse } = useStudents();
 
 
@@ -44,6 +44,13 @@ const handleSubmit = () => {
   studentJoinCourse(idValue.value, "1");
 };
 
+// Function to handle form submission
+const handleDelete = () => {
+  // Perform actions here, such as sending the input value to a backend API
+  console.log('Submitted value:', idValue.value);
+  deleteCourse(idValue.value);
+};
+
 // test code ^^^^
 
 </script>
@@ -65,6 +72,7 @@ const handleSubmit = () => {
         <button @click="executeCode">create course with vaknaam</button>
         <input type="text" v-model="idValue" placeholder="ID" />
         <button @click="handleSubmit">join course with id</button>
+        <button @click="handleDelete">delete course with id</button>
         <!--extra code to test -->
 
         <!-- Course list body -->
