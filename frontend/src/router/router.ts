@@ -17,7 +17,7 @@ const routes: RouteRecordRaw[] = [
         { path: '', component: Dummy, name: 'courses' },
         { path: 'create', component: Dummy, name: 'course-create' },
         // Single course  
-        { path: ':id', children: [
+        { path: ':courseId', children: [
             { path: '', component: CourseView, name: 'course' },
             { path: 'edit', component: Dummy, name: 'course-edit' },
             // Projects
@@ -25,7 +25,7 @@ const routes: RouteRecordRaw[] = [
                 { path: '', component: Dummy, name: 'projects' },
                 { path: 'create', component: Dummy, name: 'project-create' },
                 // Single project
-                { path: ':id', children: [
+                { path: ':projectId', children: [
                     { path: '', component: Dummy, name: 'project' },
                     { path: 'edit', component: Dummy, name: 'project-edit' },
                     { path: 'groups', component: Dummy, name: 'project-groups' },
