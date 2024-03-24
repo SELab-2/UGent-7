@@ -12,7 +12,7 @@ const { course, getCourseByID } = useCourses();
 
 onMounted(() => {
     getCourseByID(
-        parseInt(params.id as string)
+        parseInt(params.courseId as string)
     );
 });
 </script>

@@ -37,6 +37,20 @@ export function useProject() {
         console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
     }
 
+    async function getProjectWithCourseContext(student_id: string) {
+        const endpoint = endpoints.courses.byStudent.replace('{student_id}', student_id);
+        const courses = ref<Course[]|null>(null);
+        await getList<Course>(endpoint, courses, Course.fromJSON, toast);
+
+        for (const course of courses.value ? courses.value : []) {
+            const courseEndpoint = endpoints.projects.byCourse.replace('{course_id}', course.id.toString());
+            axios.get(courseEndpoint).then(response => {
+                const allProjectsFromCourse = response.data.map((projectData: any) => Project.fromJSONWithCourse(projectData, course));
+                projects.value = [...(projects.value || []), ...allProjectsFromCourse];
+            });
+        }
+    }
+
     async function getProjectsByCourseAndDeadline(course_id: number, deadlineDate: Date ) {
 
         const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id.toString());
@@ -65,6 +79,7 @@ export function useProject() {
         getProjectByID,
         getProjectsByCourse,
         getProjectsByCourseAndDeadline,
-        getProjectsByStudent
+        getProjectsByStudent,
+        getProjectWithCourseContext
     };
 }
