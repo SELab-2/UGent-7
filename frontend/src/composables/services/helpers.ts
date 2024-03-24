@@ -12,8 +12,21 @@ export async function get<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data
     });
 }
 
-export async function getList<T>(endpoint: string, ref: Ref<T[]|null>, fromJson: (data: any) => T, toast:any): Promise<void> {
+export async function create<T>(endpoint: string, data:any, ref: Ref<T|null>, fromJson: (data: any) => T, toast:any): Promise<void> {
+    const headers = {
+        // TODO change this to your token
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyODQwMjY1LCJpYXQiOjE3MTEzMDQyNjUsImp0aSI6ImQwYTgxY2YxMzU5NTQ4OWQ4OGNiZDFmZmZiMGI0MmJhIiwidXNlcl9pZCI6IjAwMDIwMTI0NzAxMSJ9.izGK0MStcMiPkOAWs0wgWsYEs0_5S1WvsleWaIcttnk"
+    };
+    await axios.post(endpoint, data, { headers }).then((response: AxiosResponse) => {
+        ref.value = fromJson(response.data);
+        //toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
+    }).catch((error: AxiosError) => {
+        processError(error, toast);
+        console.error(error); // Log the error for debugging
+    });
+}
 
+export async function getList<T>(endpoint: string, ref: Ref<T[]|null>, fromJson: (data: any) => T, toast:any): Promise<void> {
     await axios.get(endpoint).then(response => {
         ref.value = response.data.map((data: T) => fromJson(data));
         //toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
