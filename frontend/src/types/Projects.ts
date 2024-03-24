@@ -27,7 +27,7 @@ export class Project {
         public structure_checks: Structure_check[] = [],
         public extra_checks: Extra_check[] = [],
         public groups: Group[] = [],
-        public submissions: Submission = new Submission(0,0,new Date(), false), //TODO check
+        public submissions: Submission[] = [new Submission(0,0,new Date(), false)], //TODO check
     ) {
     }
 

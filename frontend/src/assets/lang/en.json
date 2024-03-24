@@ -22,6 +22,10 @@
         },
         "calendar": {
             "title": "Calendar"
+        },
+        "projects": {
+          "deadline": "Deadline",
+          "submissionStatus": "Indienstatus"
         }
     },
     "components": {

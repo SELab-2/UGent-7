@@ -8,6 +8,7 @@ import CourseView from '@/views/courses/CourseView.vue';
 import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
 import CalendarView from '@/views/calendar/CalendarView.vue';
+import ProjectView from "@/views/projects/ProjectView.vue";
 
 const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, name: 'dashboard' },
@@ -26,7 +27,7 @@ const routes: RouteRecordRaw[] = [
                 { path: 'create', component: Dummy, name: 'project-create' },
                 // Single project
                 { path: ':projectId', children: [
-                    { path: '', component: Dummy, name: 'project' },
+                    { path: '', component: ProjectView, name: 'project' },
                     { path: 'edit', component: Dummy, name: 'project-edit' },
                     { path: 'groups', component: Dummy, name: 'project-groups' },
                     { path: 'submit', component: Dummy, name: 'project-submit' },
