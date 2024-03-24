@@ -11,8 +11,7 @@ defineProps<{
 </script>
 
 <template>
-  <!-- TODO: Fix link to the correct project details -->
-  <RouterLink :to="{ name: 'dashboard' }" class="card-link">
+  <RouterLink :to="{ name: 'project',  params: { courseId: project.course.id, projectId: project.id } }">
     <Card class="border-round">
       <template #title>
         <h2 class="text-primary m-0 text-2xl">{{ project.name }}</h2>
@@ -24,7 +23,7 @@ defineProps<{
         <div>{{ project.description }}</div>
       </template>
     </Card>
-  </RouterLink>
+ </RouterLink>
 </template>
 
 <style lang="scss">
