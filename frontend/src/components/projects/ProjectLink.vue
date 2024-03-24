@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
-import Button from 'primevue/button';
 import {Project} from '@/types/Projects.ts';
-import {PrimeIcons} from 'primevue/api';
 
 /* Component props */
 defineProps<{
@@ -13,6 +11,7 @@ defineProps<{
 </script>
 
 <template>
+  <!-- TODO: Fix link to the correct project details -->
   <RouterLink :to="{ name: 'dashboard' }" class="card-link">
     <Card class="border-round">
       <template #title>
