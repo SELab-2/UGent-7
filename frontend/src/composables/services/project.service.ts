@@ -2,22 +2,38 @@ import {Project} from '@/types/Projects.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
 import axios from 'axios';
-import { get, getList } from '@/composables/services/helpers.ts';
+import { get, getList, getListMerged } from '@/composables/services/helpers.ts';
+import { Course } from '@/types/Course';
+import { useToast } from 'primevue/usetoast';
 
 
 export function useProject() {
     const projects = ref<Project[]|null>(null);
     const project = ref<Project|null>(null);
+    const toast = useToast();
 
     async function getProjectByID(id: number) {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id.toString());
-        get<Project>(endpoint, project, Project.fromJSON);
+        get<Project>(endpoint, project, Project.fromJSON, toast);
         console.log(project)
     }
 
     async function getProjectsByCourse(course_id: number) {
         const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id.toString());
-        getList<Project>(endpoint, projects, Project.fromJSON);
+        getList<Project>(endpoint, projects, Project.fromJSON, toast);
+        console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
+    }
+
+    async function getProjectsByStudent(student_id: string) {
+        const endpoint = endpoints.courses.byStudent.replace('{student_id}', student_id);
+        const courses = ref<Course[]|null>(null);
+        await getList<Course>(endpoint, courses, Course.fromJSON, toast);
+
+        const endpList = [];
+        for (const course of courses.value?courses.value:[]){
+            endpList.push(endpoints.projects.byCourse.replace('{course_id}', course.id.toString()));
+        }
+        await getListMerged<Project>(endpList, projects, Project.fromJSON, toast);
         console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
     }
 
@@ -48,6 +64,7 @@ export function useProject() {
         project,
         getProjectByID,
         getProjectsByCourse,
-        getProjectsByCourseAndDeadline
+        getProjectsByCourseAndDeadline,
+        getProjectsByStudent
     };
 }

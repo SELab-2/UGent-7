@@ -5,9 +5,8 @@ import PrimeVue from 'primevue/config';
 import Ripple from 'primevue/ripple';
 import {createApp} from 'vue';
 import {createI18n} from 'vue-i18n';
-import {routes} from '@/router/routes.ts';
+import router from './router/router';
 import {createPinia} from 'pinia';
-import {createRouter, createWebHistory} from 'vue-router';
 import ToastService from 'primevue/toastservice';
 
 const app = createApp(App);
@@ -24,9 +23,7 @@ app.use(createI18n({
     messages: { en, nl }
 }));
 
-app.use(createRouter({
-    history: createWebHistory(), routes
-}));
+app.use(router)
 
 app.use(PrimeVue, {
     ripple: true

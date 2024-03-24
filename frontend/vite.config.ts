@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import { resolve } from 'path';
 import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,8 +12,17 @@ export default defineConfig({
         }
     },
     server: {
+        host: '0.0.0.0',
+        port: 5173,
+        proxy: {
+            '/hmr': {
+                target: 'ws://localhost:5173',
+                ws: true
+            },
+        },
         hmr: {
-            port: 5174
+            path: "/hmr",
+            port: 443
         }
     }
 });

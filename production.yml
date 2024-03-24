@@ -92,7 +92,7 @@ services:
       dockerfile: Dockerfile.prod
     command: celery -A ypovoli worker -l ERROR
     volumes:
-      - $BACKEND_DIR:/code
+      - ${BACKEND_DIR}:/code
     depends_on:
       - backend
       - redis
