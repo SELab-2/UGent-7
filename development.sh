@@ -24,6 +24,10 @@ done
 
 echo "Checking environment file..."
 
+if [ "$build" = true ]; then
+    rm .env > /dev/null 2>&1
+fi
+
 if ! [ -f .env ]; then
     cp .dev.env .env
     sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
@@ -47,8 +51,6 @@ if [ "$build" = true ]; then
     echo "Building Docker images..."
     echo "This can take a while..."
     docker-compose -f development.yml build --no-cache
-else
-    echo "$build"
 fi
 
 echo "Starting services..."
