@@ -24,8 +24,13 @@ export function useCourses() {
         create<Course>(endpoint, course_data, course, Course.fromJSON, toast);
     }
 
+    async function cloneCourse(data: any, course_id: string) {
+        const endpoint = endpoints.courses.clone.replace('{course_id}', course_id);
+        create<Course>(endpoint, data, course, Course.fromJSON, toast);
+    }
+
     async function deleteCourse(id: string) {
-        const endpoint = endpoints.courses.retrieve.replace('{id}', id.toString());
+        const endpoint = endpoints.courses.retrieve.replace('{id}', id);
         delete_id<Course>(endpoint, course, Course.fromJSON, toast);
     }
 
@@ -39,10 +44,13 @@ export function useCourses() {
     return {
         courses,
         course,
+
         getCourseByID,
         getCourses,
         getCoursesByStudent,
+
         createCourse,
+        cloneCourse,
         deleteCourse
     };
 }
