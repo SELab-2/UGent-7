@@ -16,11 +16,13 @@ export const endpoints = {
     },
     teachers: {
         index: '/api/teachers/',
-        retrieve: '/api/teachers/{id}/'
+        retrieve: '/api/teachers/{id}/',
+        byCourse: '/api/courses/{course_id}/teachers/'
     },
     assistants: {
         index: '/api/assistants/',
-        retrieve: '/api/assistants/{id}/'
+        retrieve: '/api/assistants/{id}/',
+        byCourse: '/api/courses/{course_id}/assistants/'
     },
     admins: {
         index: '/api/admins/',

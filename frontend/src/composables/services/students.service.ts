@@ -36,6 +36,11 @@ export function useStudents() {
         create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast);
     }
 
+    async function studentJoinGroup(group_id: string, student_id: string) {
+        const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
+        create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast);
+    }
+
     async function createStudent(student_data: any) {
         const endpoint = endpoints.students.index;
         create<Student>(endpoint, student_data, student, Student.fromJSON, toast);
@@ -61,5 +66,6 @@ export function useStudents() {
         deleteStudent,
 
         studentJoinCourse,
+        studentJoinGroup
     };
 }
