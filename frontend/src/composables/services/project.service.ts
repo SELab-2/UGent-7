@@ -5,6 +5,7 @@ import axios from 'axios';
 import { get, getList, getListMerged } from '@/composables/services/helpers.ts';
 import { Course } from '@/types/Course';
 import { useToast } from 'primevue/usetoast';
+import {ComposerTranslation} from "vue-i18n";
 
 
 export function useProject() {
@@ -12,28 +13,28 @@ export function useProject() {
     const project = ref<Project|null>(null);
     const toast = useToast();
 
-    async function getProjectByID(id: number) {
+    async function getProjectByID(id: number, t: ComposerTranslation) {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id.toString());
-        get<Project>(endpoint, project, Project.fromJSON, toast);
+        get<Project>(endpoint, project, Project.fromJSON, toast, t);
         console.log(project)
     }
 
-    async function getProjectsByCourse(course_id: number) {
+    async function getProjectsByCourse(course_id: number, t: ComposerTranslation) {
         const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id.toString());
-        getList<Project>(endpoint, projects, Project.fromJSON, toast);
+        getList<Project>(endpoint, projects, Project.fromJSON, toast, t);
         console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
     }
 
-    async function getProjectsByStudent(student_id: string) {
+    async function getProjectsByStudent(student_id: string, t: ComposerTranslation) {
         const endpoint = endpoints.courses.byStudent.replace('{student_id}', student_id);
         const courses = ref<Course[]|null>(null);
-        await getList<Course>(endpoint, courses, Course.fromJSON, toast);
+        await getList<Course>(endpoint, courses, Course.fromJSON, toast, t);
 
         const endpList = [];
         for (const course of courses.value?courses.value:[]){
             endpList.push(endpoints.projects.byCourse.replace('{course_id}', course.id.toString()));
         }
-        await getListMerged<Project>(endpList, projects, Project.fromJSON, toast);
+        await getListMerged<Project>(endpList, projects, Project.fromJSON, toast, t);
         console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
     }
 

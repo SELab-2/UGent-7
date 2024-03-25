@@ -3,21 +3,22 @@ import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
 import { get, getList } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
+import {ComposerTranslation} from "vue-i18n";
 
 export function useStructure_check() {
     const structure_checks = ref<Structure_check[]|null>(null);
     const structure_check = ref<Structure_check|null>(null);
     const toast = useToast();
 
-    async function getStructure_checkByID(id: number) {
+    async function getStructure_checkByID(id: number, t: ComposerTranslation) {
         const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id.toString());
-        get<Structure_check>(endpoint, structure_check, Structure_check.fromJSON, toast);
+        get<Structure_check>(endpoint, structure_check, Structure_check.fromJSON, toast, t);
         console.log(structure_check)
     }
 
-    async function getStructure_checkByProject(project_id: number) {
+    async function getStructure_checkByProject(project_id: number, t: ComposerTranslation) {
         const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id.toString());
-        getList<Structure_check>(endpoint, structure_checks, Structure_check.fromJSON, toast);
+        getList<Structure_check>(endpoint, structure_checks, Structure_check.fromJSON, toast, t);
         console.log(structure_checks.value ? structure_checks.value.map((structure_check, index) => `Structure_check ${index + 1}: ${JSON.stringify(structure_check)}`) : 'Structure_check is null');
     }
 
