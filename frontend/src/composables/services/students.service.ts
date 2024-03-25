@@ -2,7 +2,7 @@ import {Student} from '@/types/Student';
 import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList, create } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 export function useStudents() {
@@ -36,6 +36,16 @@ export function useStudents() {
         create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast);
     }
 
+    async function createStudent(student_data: any) {
+        const endpoint = endpoints.students.index;
+        create<Student>(endpoint, student_data, student, Student.fromJSON, toast);
+    }
+
+    async function deleteStudent(id: string) {
+        const endpoint = endpoints.students.retrieve.replace('{id}', id.toString());
+        delete_id<Student>(endpoint, student, Student.fromJSON, toast);
+    }
+
     return {
         students,
         student,
@@ -46,6 +56,9 @@ export function useStudents() {
         getStudents,
         getStudentsbyCourse,
         getStudentsbyGroup,
+
+        createStudent,
+        deleteStudent,
 
         studentJoinCourse,
     };
