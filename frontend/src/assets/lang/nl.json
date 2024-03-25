@@ -36,7 +36,6 @@
     "composables": {
       "helpers": {
         "errors": {
-          "error": "fout",
           "notFound": "Niet Gevonden",
           "notFoundDetail": "Resource niet gevonden.",
           "unauthorized": "Onbevoegd",

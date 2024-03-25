@@ -27,7 +27,6 @@
     "composables": {
       "helpers": {
         "errors": {
-          "error": "error",
           "notFound": "Not Found",
           "notFoundDetail": "Resource not found.",
           "unauthorized": "Unauthorized",
