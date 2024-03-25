@@ -9,8 +9,8 @@ export function useAdmin() {
     const admin = ref<Admin|null>(null);
     const toast = useToast();
 
-    async function getAdminByID(id: number) {
-        const endpoint = endpoints.admins.retrieve.replace('{id}', id.toString());
+    async function getAdminByID(id: string) {
+        const endpoint = endpoints.admins.retrieve.replace('{id}', id);
         get<Admin>(endpoint, admin, Admin.fromJSON, toast);
     }
 

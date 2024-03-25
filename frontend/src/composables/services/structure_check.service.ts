@@ -9,13 +9,13 @@ export function useStructure_check() {
     const structure_check = ref<Structure_check|null>(null);
     const toast = useToast();
 
-    async function getStructure_checkByID(id: number) {
-        const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id.toString());
+    async function getStructure_checkByID(id: string) {
+        const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id);
         get<Structure_check>(endpoint, structure_check, Structure_check.fromJSON, toast);
     }
 
-    async function getStructure_checkByProject(project_id: number) {
-        const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id.toString());
+    async function getStructure_checkByProject(project_id: string) {
+        const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id);
         getList<Structure_check>(endpoint, structure_checks, Structure_check.fromJSON, toast);
     }
 
@@ -25,7 +25,7 @@ export function useStructure_check() {
     }
 
     async function deleteStructure_check(id: string) {
-        const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id.toString());
+        const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id);
         delete_id<Structure_check>(endpoint, structure_check, Structure_check.fromJSON, toast);
     }
 

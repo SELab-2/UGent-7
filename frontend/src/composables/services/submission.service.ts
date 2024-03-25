@@ -9,18 +9,18 @@ export function useSubmission() {
     const submission = ref<Submission|null>(null);
     const toast = useToast();
 
-    async function getSubmissionByID(id: number) {
-        const endpoint = endpoints.submissions.retrieve.replace('{id}', id.toString());
+    async function getSubmissionByID(id: string) {
+        const endpoint = endpoints.submissions.retrieve.replace('{id}', id);
         get<Submission>(endpoint, submission, Submission.fromJSON, toast);
     }
 
-    async function getSubmissionByProject(project_id: number) {
-        const endpoint = endpoints.submissions.byProject.replace('{project_id}', project_id.toString());
+    async function getSubmissionByProject(project_id: string) {
+        const endpoint = endpoints.submissions.byProject.replace('{project_id}', project_id);
         getList<Submission>(endpoint, submissions, Submission.fromJSON, toast);
     }
 
-    async function getSubmissionByGroup(group_id: number) {
-        const endpoint = endpoints.submissions.byGroup.replace('{group_id}', group_id.toString());
+    async function getSubmissionByGroup(group_id: string) {
+        const endpoint = endpoints.submissions.byGroup.replace('{group_id}', group_id);
         getList<Submission>(endpoint, submissions, Submission.fromJSON, toast);
     }
 

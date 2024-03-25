@@ -9,13 +9,13 @@ export function useGroup() {
     const group = ref<Group|null>(null);
     const toast = useToast();
 
-    async function getGroupByID(id: number) {
-        const endpoint = endpoints.groups.retrieve.replace('{id}', id.toString());
+    async function getGroupByID(id: string) {
+        const endpoint = endpoints.groups.retrieve.replace('{id}', id);
         get<Group>(endpoint, group, Group.fromJSON, toast);
     }
 
-    async function getGroupsByProject(project_id: number) {
-        const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id.toString());
+    async function getGroupsByProject(project_id: string) {
+        const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id);
         getList<Group>(endpoint, groups, Group.fromJSON, toast);
     }
 

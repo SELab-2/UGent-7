@@ -9,8 +9,8 @@ export function useCourses() {
     const course = ref<Course|null>(null);
     const toast = useToast();
 
-    async function getCourseByID(id: number) {
-        const endpoint = endpoints.courses.retrieve.replace('{id}', id.toString());
+    async function getCourseByID(id: string) {
+        const endpoint = endpoints.courses.retrieve.replace('{id}', id);
         get<Course>(endpoint, course, Course.fromJSON, toast);
     }
 
@@ -29,8 +29,8 @@ export function useCourses() {
         delete_id<Course>(endpoint, course, Course.fromJSON, toast);
     }
 
-    async function getCoursesByStudent(student_id: number) {
-        const endpoint = endpoints.courses.byStudent.replace('{student_id}', student_id.toString());
+    async function getCoursesByStudent(student_id: string) {
+        const endpoint = endpoints.courses.byStudent.replace('{student_id}', student_id);
         getList<Course>(endpoint, courses, Course.fromJSON, toast);
     }
 

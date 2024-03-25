@@ -25,7 +25,7 @@ export function useFaculty() {
     }
 
     async function deleteFaculty(id: string) {
-        const endpoint = endpoints.faculties.retrieve.replace('{id}', id.toString());
+        const endpoint = endpoints.faculties.retrieve.replace('{id}', id);
         delete_id<Faculty>(endpoint, faculty, Faculty.fromJSON, toast);
     }
 

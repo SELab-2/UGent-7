@@ -11,8 +11,8 @@ export function useStudents() {
     const response = ref<Response|null>(null);
     const toast = useToast();
 
-    async function getStudentByID(id: number) {
-        const endpoint = endpoints.students.retrieve.replace('{id}', id.toString());
+    async function getStudentByID(id: string) {
+        const endpoint = endpoints.students.retrieve.replace('{id}', id);
         get<Student>(endpoint, student, Student.fromJSON, toast);
     }
 
@@ -47,7 +47,7 @@ export function useStudents() {
     }
 
     async function deleteStudent(id: string) {
-        const endpoint = endpoints.students.retrieve.replace('{id}', id.toString());
+        const endpoint = endpoints.students.retrieve.replace('{id}', id);
         delete_id<Student>(endpoint, student, Student.fromJSON, toast);
     }
 

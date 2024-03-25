@@ -37,7 +37,7 @@ export function useTeacher() {
     }
 
     async function deleteTeacher(id: string) {
-        const endpoint = endpoints.students.retrieve.replace('{id}', id.toString());
+        const endpoint = endpoints.students.retrieve.replace('{id}', id);
         delete_id<Teacher>(endpoint, teacher, Teacher.fromJSON, toast);
     }
 
