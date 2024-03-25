@@ -26,9 +26,9 @@ export function useAssistant() {
         getList<Assistant>(endpoint, assistants, Assistant.fromJSON, toast);
     }
 
-    async function assistantJoinCourse(course_id: string, teacher_id: string) {
+    async function assistantJoinCourse(course_id: string, assistant_id: string) {
         const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
-        create<Response>(endpoint, {teacher_id: teacher_id}, response, Response.fromJSON, toast);
+        create<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON, toast);
     }
 
     async function createAssistant(assistant_data: any) {

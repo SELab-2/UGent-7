@@ -24,9 +24,9 @@ export function useCourses() {
         create<Course>(endpoint, course_data, course, Course.fromJSON, toast);
     }
 
-    async function cloneCourse(data: any, course_id: string) {
+    async function cloneCourse(course_id: string, clone_assistants: boolean) {
         const endpoint = endpoints.courses.clone.replace('{course_id}', course_id);
-        create<Course>(endpoint, data, course, Course.fromJSON, toast);
+        create<Course>(endpoint, {clone_assistants: clone_assistants.toString() }, course, Course.fromJSON, toast);
     }
 
     async function deleteCourse(id: string) {

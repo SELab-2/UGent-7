@@ -40,6 +40,7 @@ export async function delete_id<T>(endpoint: string, ref: Ref<T|null>, fromJson:
     });
 }
 
+
 export async function getList<T>(endpoint: string, ref: Ref<T[]|null>, fromJson: (data: any) => T, toast:any): Promise<void> {
     await axios.get(endpoint).then(response => {
         ref.value = response.data.map((data: T) => fromJson(data));

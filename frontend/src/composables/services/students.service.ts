@@ -36,6 +36,11 @@ export function useStudents() {
         create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast);
     }
 
+    async function studentLeaveCourse(course_id: string, student_id: string) {
+        const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
+        delete_id<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast);
+    }
+
     async function studentJoinGroup(group_id: string, student_id: string) {
         const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
         create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast);
@@ -66,6 +71,7 @@ export function useStudents() {
         deleteStudent,
 
         studentJoinCourse,
+        studentLeaveCourse,
         studentJoinGroup
     };
 }
