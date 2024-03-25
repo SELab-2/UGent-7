@@ -1,9 +1,9 @@
 import {Project} from '@/types/Projects.ts';
+import { Course } from '@/types/Course';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
 import axios from 'axios';
-import { get, getList, getListMerged } from '@/composables/services/helpers.ts';
-import { Course } from '@/types/Course';
+import { get, getList, getListMerged, create, delete_id } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 
@@ -59,12 +59,26 @@ export function useProject() {
         console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
     }
 
+
+    async function createProject(project_data: any, course_id: string) {
+        const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id);
+        create<Project>(endpoint, project_data, project, Project.fromJSON, toast);
+    }
+
+    async function deleteProject(id: string) {
+        const endpoint = endpoints.projects.retrieve.replace('{id}', id.toString());
+        delete_id<Project>(endpoint, project, Project.fromJSON, toast);
+    }
+
     return {
         projects,
         project,
         getProjectByID,
         getProjectsByCourse,
         getProjectsByCourseAndDeadline,
-        getProjectsByStudent
+        getProjectsByStudent,
+
+        createProject,
+        deleteProject
     };
 }

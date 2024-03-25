@@ -26,6 +26,11 @@ export function useStudents() {
         getList<Student>(endpoint, students, Student.fromJSON, toast);
     }
 
+    async function getStudentsbyGroup(group_id: string) {
+        const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
+        getList<Student>(endpoint, students, Student.fromJSON, toast);
+    }
+
     async function studentJoinCourse(course_id: string, student_id: string) {
         const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
         create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast);
@@ -34,10 +39,14 @@ export function useStudents() {
     return {
         students,
         student,
+
         response,
+
         getStudentByID,
         getStudents,
+        getStudentsbyCourse,
+        getStudentsbyGroup,
+
         studentJoinCourse,
-        getStudentsbyCourse
     };
 }

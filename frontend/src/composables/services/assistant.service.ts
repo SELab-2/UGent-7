@@ -1,7 +1,7 @@
 import {Assistant} from '@/types/Assistant.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 export function useAssistant() {
@@ -21,10 +21,23 @@ export function useAssistant() {
         console.log(assistants.value ? assistants.value.map((assistant, index) => `Assistant ${index + 1}: ${JSON.stringify(assistant)}`) : 'assistants is null');
     }
 
+    async function createAssistant(assistant_data: any) {
+        const endpoint = endpoints.assistants.index;
+        create<Assistant>(endpoint, assistant_data, assistant, Assistant.fromJSON, toast);
+    }
+
+    async function deleteAssistant(id: string) {
+        const endpoint = endpoints.admins.retrieve.replace('{id}', id.toString());
+        delete_id<Assistant>(endpoint, assistant, Assistant.fromJSON, toast);
+    }
+
     return {
         assistants,
         assistant,
         getAssistantByID,
-        getAssistants
+        getAssistants,
+
+        createAssistant,
+        deleteAssistant
     };
 }
