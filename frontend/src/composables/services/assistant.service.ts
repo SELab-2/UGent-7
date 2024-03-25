@@ -14,19 +14,16 @@ export function useAssistant() {
     async function getAssistantByID(id: string) {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
         get<Assistant>(endpoint, assistant, Assistant.fromJSON, toast);
-        console.log(assistant)
     }
 
     async function getAssistantByCourse(course_id: string) {
         const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
         get<Assistant>(endpoint, assistant, Assistant.fromJSON, toast);
-        console.log(assistant)
     }
 
     async function getAssistants() {
         const endpoint = endpoints.assistants.index;
         getList<Assistant>(endpoint, assistants, Assistant.fromJSON, toast);
-        console.log(assistants.value ? assistants.value.map((assistant, index) => `Assistant ${index + 1}: ${JSON.stringify(assistant)}`) : 'assistants is null');
     }
 
     async function assistantJoinCourse(course_id: string, teacher_id: string) {

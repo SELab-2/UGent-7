@@ -12,13 +12,11 @@ export function useAdmin() {
     async function getAdminByID(id: number) {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id.toString());
         get<Admin>(endpoint, admin, Admin.fromJSON, toast);
-        console.log(admin)
     }
 
     async function getAdmins() {
         const endpoint = endpoints.admins.index;
         getList<Admin>(endpoint, admins, Admin.fromJSON, toast);
-        console.log(admins.value ? admins.value.map((admin, index) => `Admin ${index + 1}: ${JSON.stringify(admin)}`) : 'Admins is null');
     }
 
 

@@ -12,13 +12,11 @@ export function useGroup() {
     async function getGroupByID(id: number) {
         const endpoint = endpoints.groups.retrieve.replace('{id}', id.toString());
         get<Group>(endpoint, group, Group.fromJSON, toast);
-        console.log(group)
     }
 
     async function getGroupsByProject(project_id: number) {
         const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id.toString());
         getList<Group>(endpoint, groups, Group.fromJSON, toast);
-        console.log(groups.value ? groups.value.map((group, index) => `Group ${index + 1}: ${JSON.stringify(group)}`) : 'Groups is null');
     }
 
     async function createGroup(group_data: any, group_id: string) {

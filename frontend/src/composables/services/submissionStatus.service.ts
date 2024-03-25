@@ -11,7 +11,6 @@ export function useSubmission() {
     async function getSubmissionStatus(project_id: number) {
         const endpoint = endpoints.submissions.status.replace('{project_id}', project_id.toString());
         get<SubmissionStatus>(endpoint, submissionStatus, SubmissionStatus.fromJSON, toast);
-        console.log(submissionStatus)
     }
 
     return {

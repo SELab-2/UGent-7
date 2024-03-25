@@ -12,13 +12,11 @@ export function useStructure_check() {
     async function getStructure_checkByID(id: number) {
         const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id.toString());
         get<Structure_check>(endpoint, structure_check, Structure_check.fromJSON, toast);
-        console.log(structure_check)
     }
 
     async function getStructure_checkByProject(project_id: number) {
         const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id.toString());
         getList<Structure_check>(endpoint, structure_checks, Structure_check.fromJSON, toast);
-        console.log(structure_checks.value ? structure_checks.value.map((structure_check, index) => `Structure_check ${index + 1}: ${JSON.stringify(structure_check)}`) : 'Structure_check is null');
     }
 
     async function createStructure_check(structure_check_data: any, project_id: string) {

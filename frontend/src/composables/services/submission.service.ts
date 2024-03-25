@@ -12,19 +12,16 @@ export function useSubmission() {
     async function getSubmissionByID(id: number) {
         const endpoint = endpoints.submissions.retrieve.replace('{id}', id.toString());
         get<Submission>(endpoint, submission, Submission.fromJSON, toast);
-        console.log(submission)
     }
 
     async function getSubmissionByProject(project_id: number) {
         const endpoint = endpoints.submissions.byProject.replace('{project_id}', project_id.toString());
         getList<Submission>(endpoint, submissions, Submission.fromJSON, toast);
-        console.log(submissions.value ? submissions.value.map((submission, index) => `Submission ${index + 1}: ${JSON.stringify(submission)}`) : 'Submission is null');
     }
 
     async function getSubmissionByGroup(group_id: number) {
         const endpoint = endpoints.submissions.byGroup.replace('{group_id}', group_id.toString());
         getList<Submission>(endpoint, submissions, Submission.fromJSON, toast);
-        console.log(submissions.value ? submissions.value.map((submission, index) => `Submission ${index + 1}: ${JSON.stringify(submission)}`) : 'Submission is null');
     }
 
     async function createSubmission(submission_data: any, group_id: string) {

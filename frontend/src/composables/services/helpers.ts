@@ -72,7 +72,7 @@ export async function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, 
     ref.value = allData;
 }
 
-function processError(error: AxiosError, toast:any){
+export function processError(error: AxiosError, toast:any){
     if (error.response) {
         console.log(error.response.status);
         // The request was made and the server responded with a status code
