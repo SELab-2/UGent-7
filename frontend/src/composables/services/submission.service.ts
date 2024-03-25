@@ -1,7 +1,7 @@
 import {Submission} from '@/types/Submission.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 export function useSubmission() {
@@ -27,11 +27,24 @@ export function useSubmission() {
         console.log(submissions.value ? submissions.value.map((submission, index) => `Submission ${index + 1}: ${JSON.stringify(submission)}`) : 'Submission is null');
     }
 
+    async function createSubmission(submission_data: any, group_id: string) {
+        const endpoint = endpoints.submissions.byGroup.replace('{group_id}', group_id);
+        create<Submission>(endpoint, submission_data, submission, Submission.fromJSON, toast);
+    }
+
+    async function deleteSubmission(id: string) {
+        const endpoint = endpoints.submissions.retrieve.replace('{id}', id);
+        delete_id<Submission>(endpoint, submission, Submission.fromJSON, toast);
+    }
+
     return {
         submissions,
         submission,
         getSubmissionByID,
         getSubmissionByProject,
-        getSubmissionByGroup
+        getSubmissionByGroup,
+
+        createSubmission,
+        deleteSubmission
     };
 }
