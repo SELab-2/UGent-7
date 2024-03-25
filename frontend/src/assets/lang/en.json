@@ -24,6 +24,23 @@
             "title": "Calendar"
         }
     },
+    "composables": {
+      "helpers": {
+        "errors": {
+          "error": "error",
+          "notFound": "Not Found",
+          "notFoundDetail": "Resource not found.",
+          "unauthorized": "Unauthorized",
+          "unauthorizedDetail": "You are not authorized to access this resource.",
+          "server": "Server Error",
+          "serverDetail": "An error occurred on the server.",
+          "network": "Network Error",
+          "networkDetail": "Unable to connect to the server.",
+          "request": "Request Error",
+          "requestDetail": "An error occurred while making the request."
+        }
+      }
+    },
     "components": {
         "buttons": {
             "academic_year": "Academic year {0}"
