@@ -1,7 +1,7 @@
 import {Submission} from '@/types/Submission.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 export function useSubmission() {
@@ -9,22 +9,29 @@ export function useSubmission() {
     const submission = ref<Submission|null>(null);
     const toast = useToast();
 
-    async function getSubmissionByID(id: number) {
-        const endpoint = endpoints.submissions.retrieve.replace('{id}', id.toString());
+    async function getSubmissionByID(id: string) {
+        const endpoint = endpoints.submissions.retrieve.replace('{id}', id);
         get<Submission>(endpoint, submission, Submission.fromJSON, toast);
-        console.log(submission)
     }
 
-    async function getSubmissionByProject(project_id: number) {
-        const endpoint = endpoints.submissions.byProject.replace('{project_id}', project_id.toString());
+    async function getSubmissionByProject(project_id: string) {
+        const endpoint = endpoints.submissions.byProject.replace('{project_id}', project_id);
         getList<Submission>(endpoint, submissions, Submission.fromJSON, toast);
-        console.log(submissions.value ? submissions.value.map((submission, index) => `Submission ${index + 1}: ${JSON.stringify(submission)}`) : 'Submission is null');
     }
 
-    async function getSubmissionByGroup(group_id: number) {
-        const endpoint = endpoints.submissions.byGroup.replace('{group_id}', group_id.toString());
+    async function getSubmissionByGroup(group_id: string) {
+        const endpoint = endpoints.submissions.byGroup.replace('{group_id}', group_id);
         getList<Submission>(endpoint, submissions, Submission.fromJSON, toast);
-        console.log(submissions.value ? submissions.value.map((submission, index) => `Submission ${index + 1}: ${JSON.stringify(submission)}`) : 'Submission is null');
+    }
+
+    async function createSubmission(submission_data: any, group_id: string) {
+        const endpoint = endpoints.submissions.byGroup.replace('{group_id}', group_id);
+        create<Submission>(endpoint, submission_data, submission, Submission.fromJSON, toast);
+    }
+
+    async function deleteSubmission(id: string) {
+        const endpoint = endpoints.submissions.retrieve.replace('{id}', id);
+        delete_id<Submission>(endpoint, submission, Submission.fromJSON, toast);
     }
 
     return {
@@ -32,6 +39,9 @@ export function useSubmission() {
         submission,
         getSubmissionByID,
         getSubmissionByProject,
-        getSubmissionByGroup
+        getSubmissionByGroup,
+
+        createSubmission,
+        deleteSubmission
     };
 }

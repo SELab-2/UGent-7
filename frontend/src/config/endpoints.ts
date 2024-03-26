@@ -6,19 +6,24 @@ export const endpoints = {
     courses: {
         index: '/api/courses/',
         retrieve: '/api/courses/{id}/',
-        byStudent: '/api/students/{student_id}/courses/'
+        byStudent: '/api/students/{student_id}/courses/',
+        clone: '/api/courses/{course_id}/clone/'
     },
     students: {
         index: '/api/students/',
-        retrieve: '/api/students/{id}/'
+        retrieve: '/api/students/{id}/',
+        byCourse: '/api/courses/{course_id}/students/',
+        byGroup: '/api/groups/{group_id}/students/'
     },
     teachers: {
         index: '/api/teachers/',
-        retrieve: '/api/teachers/{id}/'
+        retrieve: '/api/teachers/{id}/',
+        byCourse: '/api/courses/{course_id}/teachers/'
     },
     assistants: {
         index: '/api/assistants/',
-        retrieve: '/api/assistants/{id}/'
+        retrieve: '/api/assistants/{id}/',
+        byCourse: '/api/courses/{course_id}/assistants/'
     },
     admins: {
         index: '/api/admins/',

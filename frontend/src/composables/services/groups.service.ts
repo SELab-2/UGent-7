@@ -1,7 +1,7 @@
 import {Group} from '@/types/Group.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 export function useGroup() {
@@ -9,22 +9,33 @@ export function useGroup() {
     const group = ref<Group|null>(null);
     const toast = useToast();
 
-    async function getGroupByID(id: number) {
-        const endpoint = endpoints.groups.retrieve.replace('{id}', id.toString());
+    async function getGroupByID(id: string) {
+        const endpoint = endpoints.groups.retrieve.replace('{id}', id);
         get<Group>(endpoint, group, Group.fromJSON, toast);
-        console.log(group)
     }
 
-    async function getGroupsByProject(project_id: number) {
-        const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id.toString());
+    async function getGroupsByProject(project_id: string) {
+        const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id);
         getList<Group>(endpoint, groups, Group.fromJSON, toast);
-        console.log(groups.value ? groups.value.map((group, index) => `Group ${index + 1}: ${JSON.stringify(group)}`) : 'Groups is null');
+    }
+
+    async function createGroup(group_data: any, group_id: string) {
+        const endpoint = endpoints.groups.byProject.replace('{group_id}', group_id);
+        create<Group>(endpoint, group_data, group, Group.fromJSON, toast);
+    }
+
+    async function deleteGroup(id: string) {
+        const endpoint = endpoints.groups.retrieve.replace('{id}', id);
+        delete_id<Group>(endpoint, group, Group.fromJSON, toast);
     }
 
     return {
         groups,
         group,
         getGroupByID,
-        getGroupsByProject
+        getGroupsByProject,
+
+        createGroup,
+        deleteGroup
     };
 }

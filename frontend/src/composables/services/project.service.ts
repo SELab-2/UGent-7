@@ -1,9 +1,9 @@
 import {Project} from '@/types/Projects.ts';
+import { Course } from '@/types/Course';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
 import axios from 'axios';
-import { get, getList, getListMerged } from '@/composables/services/helpers.ts';
-import { Course } from '@/types/Course';
+import { get, getList, getListMerged, create, delete_id, processError } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 
@@ -12,16 +12,14 @@ export function useProject() {
     const project = ref<Project|null>(null);
     const toast = useToast();
 
-    async function getProjectByID(id: number) {
-        const endpoint = endpoints.projects.retrieve.replace('{id}', id.toString());
+    async function getProjectByID(id: string) {
+        const endpoint = endpoints.projects.retrieve.replace('{id}', id);
         get<Project>(endpoint, project, Project.fromJSON, toast);
-        console.log(project)
     }
 
-    async function getProjectsByCourse(course_id: number) {
-        const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id.toString());
+    async function getProjectsByCourse(course_id: string) {
+        const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id);
         getList<Project>(endpoint, projects, Project.fromJSON, toast);
-        console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
     }
 
     async function getProjectsByStudent(student_id: string) {
@@ -34,12 +32,11 @@ export function useProject() {
             endpList.push(endpoints.projects.byCourse.replace('{course_id}', course.id.toString()));
         }
         await getListMerged<Project>(endpList, projects, Project.fromJSON, toast);
-        console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
     }
 
-    async function getProjectsByCourseAndDeadline(course_id: number, deadlineDate: Date ) {
+    async function getProjectsByCourseAndDeadline(course_id: string, deadlineDate: Date ) {
 
-        const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id.toString());
+        const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id);
 
         axios.get(endpoint).then(response => {
             const allProjects = response.data.map((projectData: Project) => Project.fromJSON(projectData));
@@ -53,10 +50,20 @@ export function useProject() {
             // Update the projects ref with the filtered projects
             projects.value = projectsWithMatchingDeadline;
         }).catch(error => {
+            processError(error, toast);
             console.log(error.data);
         });
+    }
 
-        console.log(projects.value ? projects.value.map((project, index) => `Project ${index + 1}: ${JSON.stringify(project)}`) : 'Projects is null');
+
+    async function createProject(project_data: any, course_id: string) {
+        const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id);
+        create<Project>(endpoint, project_data, project, Project.fromJSON, toast);
+    }
+
+    async function deleteProject(id: string) {
+        const endpoint = endpoints.projects.retrieve.replace('{id}', id.toString());
+        delete_id<Project>(endpoint, project, Project.fromJSON, toast);
     }
 
     return {
@@ -65,6 +72,9 @@ export function useProject() {
         getProjectByID,
         getProjectsByCourse,
         getProjectsByCourseAndDeadline,
-        getProjectsByStudent
+        getProjectsByStudent,
+
+        createProject,
+        deleteProject
     };
 }
