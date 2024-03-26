@@ -328,7 +328,7 @@ $calendarCellDateBorder:1px solid transparent !default;
 $calendarCellDateHoverBg:$primaryLightColor !default;
 $calendarCellDateTodayBg:$primaryColor !important !default;
 $calendarCellDateTodayBorderColor:transparent !default;
-$calendarCellDateTodayTextColor:$primaryTextColor !default;
+$calendarCellDateTodayTextColor:$primaryTextColor !important !default;
 
 $calendarButtonBarPadding:1rem 0 !default;
 $calendarTimePickerPadding:.5rem !default;

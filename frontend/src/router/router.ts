@@ -1,15 +1,19 @@
-import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
-
-// import { useUserStore } from '@/stores/userStore';
-// TODO: after pinia setup is done
-
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
 import CalendarView from '@/views/calendar/CalendarView.vue';
+import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
+import {AuthenticationGuard} from '@/router/guards/authentication.guard.ts';
 
 const routes: RouteRecordRaw[] = [
+
+    // Authentication
+    { path: '/auth/', children: [
+        { path: 'login', component: LoginView, name: 'login' },
+        { path: 'verify', component: LoginView, name: 'verify' },
+    ]},
+
     { path: '/', component: DashboardView, name: 'dashboard' },
 
     // Courses
@@ -67,30 +71,16 @@ const routes: RouteRecordRaw[] = [
     { path: '/notifications', component: Dummy, name: 'notifications' },
     { path: '/notifications/:id', component: Dummy, name: 'notification' },
 
-    // Authentication
-    { path: '/auth/', children: [
-        { path: 'login', component: LoginView, name: 'login' },
-    ]},
-
     // Page not found: redirect to dashboard
     { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } }
 ];
 
 const router = createRouter({
     history: createWebHistory(),
+    linkActiveClass: 'active',
     routes,
-})
+});
 
-// TODO: once pinia store is setup, implement navigation guards
-// Navigation guard example:
-router.beforeEach((to, _) => {
-    const isAdmin: boolean = false
-    if (to.name === 'faculty-create') {
-        if (!isAdmin) {
-            return false
-        }
-    }
-})
+router.beforeEach(AuthenticationGuard);
 
-
-export default router
+export default router;

@@ -1,64 +1,28 @@
 <script setup lang="ts">
+import Skeleton from 'primevue/skeleton';
 import ButtonGroup from 'primevue/buttongroup';
 import Button from 'primevue/button';
 import CourseCard from '@/components/courses/CourseCard.vue';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/Title.vue';
-import { useI18n } from 'vue-i18n';
-import { PrimeIcons } from 'primevue/api';
-import { onMounted } from 'vue';
+import {useI18n} from 'vue-i18n';
+import {PrimeIcons} from 'primevue/api';
 import { useCourses } from '@/composables/services/courses.service.ts';
-import { useStudents } from '@/composables/services/students.service.ts';
-import { Course } from '@/types/Course.ts';
-import {ref} from 'vue';
+import {onBeforeMount} from 'vue';
+import {useAuthStore} from '@/store/authentication.store.ts';
 
 /* Composable injections */
 const { t } = useI18n();
 
 /* Service injection */
-const { courses, getCoursesByStudent, createCourse, deleteCourse } = useCourses();
-const { studentJoinCourse, studentLeaveCourse } = useStudents();
+const { user } = useAuthStore();
+const { courses, getCoursesByStudent } = useCourses();
 
-
-onMounted(async () => {
-  console.log("fetching courses");
-  await getCoursesByStudent("1", t);  // TODO make this the id of the logged in user
+onBeforeMount( async () => {
+    if (user !== null) {
+        await getCoursesByStudent(user.id);
+    }
 });
-
-// test code vvvv
-
-const idValue = ref('');
-const vaknaam = ref('');
-
-// Method to execute when the button is clicked
-const executeCode = () => {
-  // Put your code here that you want to execute
-  console.log('Button clicked! Code executed.');
-  createCourse({name: vaknaam.value, academic_startyear:2023}, t);
-};
-
-// Function to handle form submission
-const handleSubmit = () => {
-  // Perform actions here, such as sending the input value to a backend API
-  console.log('Submitted value:', idValue.value);
-  studentJoinCourse(idValue.value, "1", t);
-};
-
-// Function to handle form submission
-const handleDelete = () => {
-  // Perform actions here, such as sending the input value to a backend API
-  console.log('Submitted value:', idValue.value);
-  deleteCourse(idValue.value, t);
-};
-
-// Function to handle form submission
-const handleLeave = () => {
-  // Perform actions here, such as sending the input value to a backend API
-  console.log('Submitted value:', idValue.value);
-  studentLeaveCourse(idValue.value, "1");
-};
-
-// test code ^^^^
 
 </script>
 
@@ -74,20 +38,25 @@ const handleLeave = () => {
                 <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
             </ButtonGroup>
         </div>
-        <!--extra code to test -->
-        <input type="text" v-model="vaknaam" placeholder="vaknaam" />
-        <button @click="executeCode">create course with vaknaam</button>
-        <input type="text" v-model="idValue" placeholder="ID" />
-        <button @click="handleSubmit">join course with id</button>
-        <button @click="handleDelete">delete course with id</button>
-        <button @click="handleLeave">leave course with id</button>
-        <!--extra code to test -->
-
         <!-- Course list body -->
         <div class="grid align-items-stretch">
-            <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in courses">
-                <CourseCard class="h-100" :course="course"/>
-            </div>
+            <template v-if="courses !== null">
+                <template v-if="courses.length > 0">
+                    <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in courses">
+                        <CourseCard class="h-100" :course="course"/>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="col-12">
+                        <p>{{ t('views.dashboard.no_courses') }}</p>
+                    </div>
+                </template>
+            </template>
+            <template v-else>
+                <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="index in 4" :key="index">
+                    <Skeleton height="25rem"/>
+                </div>
+            </template>
         </div>
         <!-- Project heading -->
         <div class="flex justify-content-between align-items-center my-6">

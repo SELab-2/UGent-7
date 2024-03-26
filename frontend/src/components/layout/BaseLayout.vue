@@ -8,7 +8,7 @@ import Footer from '@/components/Footer.vue';
     <div id="layout" class="w-12 lg:w-9 mx-auto">
         <Header/>
 
-        <Body>
+        <Body id="body">
             <slot/>
         </Body>
 
@@ -19,5 +19,9 @@ import Footer from '@/components/Footer.vue';
 <style scoped>
 #layout {
     max-width: 1460px;
+
+    #body {
+        min-height: calc(100vh - (180 + 174));
+    }
 }
 </style>

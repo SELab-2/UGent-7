@@ -89,7 +89,6 @@ export async function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, 
 
 export function processError(error: AxiosError, toast:any, t: ComposerTranslation){
     if (error.response) {
-        console.log(error.response.status);
         // The request was made and the server responded with a status code
         if (error.response.status === 404) {
             toast.add({ severity: 'error', summary: t('composables.helpers.errors.notFound'), detail: t('composables.helpers.errors.notFoundDetail'), life: lifeTime });

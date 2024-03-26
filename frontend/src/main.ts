@@ -1,13 +1,13 @@
 import nl from '@/assets/lang/nl.json';
 import en from '@/assets/lang/en.json';
 import App from '@/views/App.vue';
+import router from '@/router/router';
 import PrimeVue from 'primevue/config';
+import ToastService from 'primevue/toastservice';
 import Ripple from 'primevue/ripple';
 import {createApp} from 'vue';
 import {createI18n} from 'vue-i18n';
-import router from './router/router';
 import {createPinia} from 'pinia';
-import ToastService from 'primevue/toastservice';
 
 const app = createApp(App);
 
@@ -16,6 +16,7 @@ app.use(ToastService);
 
 app.use(createPinia());
 
+import 'moment/dist/locale/nl';
 app.use(createI18n({
     locale: 'nl',
     fallbackLocale: 'en',
@@ -30,7 +31,6 @@ app.use(PrimeVue, {
 });
 
 /* Bind app directives */
-
 app.directive('ripple', Ripple);
 
 /* Mount the application */
