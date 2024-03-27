@@ -2,17 +2,15 @@
 import ButtonGroup from 'primevue/buttongroup';
 import Button from 'primevue/button';
 import CourseCard from '@/components/courses/CourseCard.vue';
-import ProjectCard from '@/components/projects/ProjectCard.vue';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/Title.vue';
 import { useI18n } from 'vue-i18n';
 import { PrimeIcons } from 'primevue/api';
-import {onMounted} from 'vue';
+import { onMounted } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
-import { useProject } from '@/composables/services/project.service.ts';
 import { useStudents } from '@/composables/services/students.service.ts';
+import { Course } from '@/types/Course.ts';
 import {ref} from 'vue';
-import {Project} from "@/types/Projects.ts";
 
 /* Composable injections */
 const { t } = useI18n();
@@ -94,9 +92,23 @@ const handleDelete = () => {
 
         <!-- Course list body -->
         <div class="grid align-items-stretch">
-            <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in courses">
-                <CourseCard class="h-100" :course="course"/>
-            </div>
+            <template v-if="courses !== null">
+                <template v-if="courses.length > 0">
+                    <div class="col-12 md:col-6 lg:col-4 xl:col-3 fadein" v-for="course in courses">
+                        <CourseCard class="h-100" :course="course"/>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="col-12">
+                        <p>{{ t('views.dashboard.no_courses') }}</p>
+                    </div>
+                </template>
+            </template>
+            <template v-else>
+                <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="index in 4" :key="index">
+                    <Skeleton height="25rem" style="visibility: hidden;"/>
+                </div>
+            </template>
         </div>
         <!-- Project heading -->
         <div class="flex justify-content-between align-items-center my-6">

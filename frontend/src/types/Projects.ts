@@ -6,7 +6,7 @@ import { Submission } from "./Submission";
 
 export class Project {
     constructor(
-        public id: number,
+        public id: string,
         public name: string,
         public description: string,
         public visible: boolean,
@@ -19,7 +19,7 @@ export class Project {
         public group_size: number,
 
         public course: Course = new Course(
-            -1,
+            "-1",
             "default",
             "this is a default project given in the service because it isnt initiated",
              0
@@ -27,7 +27,7 @@ export class Project {
         public structure_checks: Structure_check[] = [],
         public extra_checks: Extra_check[] = [],
         public groups: Group[] = [],
-        public submissions: Submission[] = [new Submission(0,0,new Date(), false)], //TODO check
+        public submissions: Submission = new Submission("0",0,new Date(), false), //TODO check
     ) {
     }
 
@@ -49,23 +49,6 @@ export class Project {
             project.max_score,
             project.score_visible,
             project.group_size
-        );
-    }
-
-    static fromJSONWithCourse(project: Project, course: Course): Project {
-        return new Project(
-            project.id,
-            project.name,
-            project.description,
-            project.visible,
-            project.archived,
-            project.locked_groups,
-            new Date(project.start_date),
-            new Date(project.deadline),
-            project.max_score,
-            project.score_visible,
-            project.group_size,
-            project.course = course
         );
     }
 }

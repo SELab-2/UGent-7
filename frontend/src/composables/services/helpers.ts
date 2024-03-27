@@ -1,10 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-// import { useI18n } from 'vue-i18n';
 import {Ref} from 'vue';
 import {ComposerTranslation} from "vue-i18n";
 const lifeTime = 3000;
-
-// const { t } = useI18n();
 
 export async function get<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data: any) => T, toast:any, t: ComposerTranslation): Promise<void> {
     await axios.get(endpoint).then((response: AxiosResponse) => {
@@ -36,6 +33,20 @@ export async function delete_id<T>(endpoint: string, ref: Ref<T|null>, fromJson:
         Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyODQwMjY1LCJpYXQiOjE3MTEzMDQyNjUsImp0aSI6ImQwYTgxY2YxMzU5NTQ4OWQ4OGNiZDFmZmZiMGI0MmJhIiwidXNlcl9pZCI6IjAwMDIwMTI0NzAxMSJ9.izGK0MStcMiPkOAWs0wgWsYEs0_5S1WvsleWaIcttnk"
     };
     await axios.delete(endpoint,{ headers }).then((response: AxiosResponse) => {
+        ref.value = fromJson(response.data);
+        //toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
+    }).catch((error: AxiosError) => {
+        processError(error, toast, t);
+        console.error(error); // Log the error for debugging
+    });
+}
+
+export async function delete_id_with_data<T>(endpoint: string, data: any, ref: Ref<T|null>, fromJson: (data: any) => T, toast:any, t: ComposerTranslation): Promise<void> {
+    const headers = {
+        // TODO change this to your token
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyODQwMjY1LCJpYXQiOjE3MTEzMDQyNjUsImp0aSI6ImQwYTgxY2YxMzU5NTQ4OWQ4OGNiZDFmZmZiMGI0MmJhIiwidXNlcl9pZCI6IjAwMDIwMTI0NzAxMSJ9.izGK0MStcMiPkOAWs0wgWsYEs0_5S1WvsleWaIcttnk"
+    };
+    await axios.delete(endpoint,{ headers, data }).then((response: AxiosResponse) => {
         ref.value = fromJson(response.data);
         //toast.add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
     }).catch((error: AxiosError) => {
@@ -78,7 +89,6 @@ export async function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, 
 
 export function processError(error: AxiosError, toast:any, t: ComposerTranslation){
     if (error.response) {
-        console.log(error.response.status);
         // The request was made and the server responded with a status code
         if (error.response.status === 404) {
             toast.add({ severity: 'error', summary: t('composables.helpers.errors.notFound'), detail: t('composables.helpers.errors.notFoundDetail'), life: lifeTime });

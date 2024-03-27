@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import moment from 'moment';
-import 'moment/dist/locale/nl';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Calendar from 'primevue/calendar';
 import Title from '@/components/Title.vue';
 import { useProject } from '@/composables/services/project.service';
 import { computed, onMounted } from 'vue';
-import {useI18n} from 'vue-i18n';
+import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 
 const { t, locale } = useI18n();
@@ -28,8 +27,8 @@ const loadProjects = async () => {
 };
 
 /* Load the projects when the component is mounted */
-onMounted(() => {
-    loadProjects();
+onMounted(async () => {
+    await loadProjects();
 });
 
 </script>

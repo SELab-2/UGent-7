@@ -4,7 +4,7 @@ import { Group } from "./Group";
 
 export class Student {
     constructor(
-        public id: number,
+        public id: string,
         public last_login: Date |null,
         public username: string,
         public is_staff: boolean,

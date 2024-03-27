@@ -2,6 +2,7 @@
     "layout": {
         "header": {
             "logo": "Logo van de Universiteit Gent",
+            "login": "Login",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
@@ -22,6 +23,7 @@
         },
         "login": {
             "title": "Inloggen",
+            "illustration": "Durf denken",
             "subtitle": "Inloggen gebeurt met je UGent-account. Bij problemen met het inloggen kan je de beheerder contacteren.",
             "button": "UGent login",
             "card": {
@@ -41,14 +43,14 @@
       "helpers": {
         "errors": {
           "notFound": "Niet Gevonden",
-          "notFoundDetail": "Resource niet gevonden.",
+          "notFoundDetail": "Bron niet gevonden.",
           "unauthorized": "Onbevoegd",
-          "unauthorizedDetail": "Je bent niet bevoegd om deze resource te bereiken.",
+          "unauthorizedDetail": "Je bent niet bevoegd om deze bron te bereiken.",
           "server": "Server Fout",
           "serverDetail": "Er vond een fout plaats op de server.",
           "network": "Netwerk Fout",
           "networkDetail": "Kan de server niet bereiken.",
-          "request": "Verzoek Fout",
+          "request": "Fout verzoek",
           "requestDetail": "Een fout vond plaats tijdens het maken van het verzoek."
         }
       }

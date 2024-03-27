@@ -1,41 +1,29 @@
 <script setup lang="ts">
 import enLogo from '@/assets/img/logo-en.png';
 import nlLogo from '@/assets/img/logo-nl.png';
-import nlFlag from '@/assets/img/flags/nl-flag.svg'
-import enFlag from '@/assets/img/flags/en-flag.svg'
+import nlFlag from '@/assets/img/flags/nl-flag.svg';
+import enFlag from '@/assets/img/flags/en-flag.svg';
 import Dropdown from 'primevue/dropdown';
+import Button from 'primevue/button';
 import {useI18n} from 'vue-i18n';
-import {watch, computed, onMounted} from 'vue';
-import { usePrimeVue } from "primevue/config";
-import nl from '@/assets/lang/nl.json';
-import en from '@/assets/lang/en.json';
+import {computed} from 'vue';
+import {useAuthStore} from '@/store/authentication.store.ts';
+import {storeToRefs} from 'pinia';
 
-/* Translation composable */
+/* Composables */
+const { user, isAuthenticated } = storeToRefs(useAuthStore());
 const { t, locale, availableLocales } = useI18n();
-const { config } = usePrimeVue();
 
-const localeFiles : {[key: string]: any} = { "nl": nl, "en": en };
-
-/* Set the primevue locale when the locale changes */
-watch(locale, (newVal) => {
-    config.locale = localeFiles[newVal].primevue;
-});
-
-/* Available localized images */
-const logo: {[key: string]: string} = { nl: nlLogo, en: enLogo };
+/* Localization variables */
+const logo: {[key: string]: string} = { 'nl': nlLogo, en: enLogo };
 const flags: {[key: string]: string} = { nl: nlFlag, en: enFlag };
 
 /* Navigation items */
 const items = computed(() => [
     {icon: 'home', label: t('layout.header.navigation.dashboard'), route: 'dashboard'},
     {icon: 'calendar', label: t('layout.header.navigation.calendar'), route: 'calendar'},
-    {icon: 'book', label: t('layout.header.navigation.courses'), route: ''}
+    {icon: 'book', label: t('layout.header.navigation.courses'), route: 'courses'}
 ]);
-
-/* Set the primevue locale on mounted */
-onMounted(() => {
-    config.locale = localeFiles[locale.value].primevue;
-});
 
 </script>
 
@@ -49,7 +37,7 @@ onMounted(() => {
                 <div class="flex align-items-end">
                     <h1 class="text-white m-0">Ypovoli</h1>
                 </div>
-                <div class="text-right w-12rem ml-auto text-sm flex flex-column align-items-end gap-3">
+                <div class="text-right w-14rem ml-auto text-sm flex flex-column align-items-end gap-3">
                     <!-- Language selector -->
                     <Dropdown id="language" v-model="locale" class="w-auto" :options="availableLocales" variant="outlined">
                         <template #option="{ option }">
@@ -65,18 +53,29 @@ onMounted(() => {
                         </template>
                     </Dropdown>
                     <!-- User information -->
-                    <span>
-                        Ingelogd als Lander Maes
-                    </span>
+                    <div>
+                        <template v-if="isAuthenticated && user">
+                            <RouterLink :to="{name:'logout'}" class="text-white">
+                                Ingelogd als {{ user.getFullName() }}
+                            </RouterLink>
+                        </template>
+                        <template v-else>
+                            <RouterLink :to="{ name: 'login' }">
+                                <Button icon="pi pi-unlock" :label="t('layout.header.login')" severity="secondary" class="text-sm"/>
+                            </RouterLink>
+                        </template>
+                    </div>
                 </div>
             </div>
             <!-- Navigation -->
             <div id="navigation" class="w-full h-full flex">
-                <RouterLink :to="{ name: item.route }" v-for="item in items">
-                    <div class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium nav-item">
-                        <span class="mr-2" :class="'pi pi-' + item.icon"/> {{ item.label }}
-                    </div>
-                </RouterLink>
+                <template v-if="isAuthenticated">
+                    <RouterLink :to="{ name: item.route }" v-for="item in items" class="nav-item">
+                        <div class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium">
+                            <span class="mr-2" :class="'pi pi-' + item.icon"/> {{ item.label }}
+                        </div>
+                    </RouterLink>
+                </template>
             </div>
         </div>
     </div>

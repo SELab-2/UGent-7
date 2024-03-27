@@ -2,7 +2,7 @@ import {Assistant} from '@/types/Assistant.ts';
 import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id, delete_id_with_data } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 import {ComposerTranslation} from "vue-i18n";
 
@@ -32,6 +32,11 @@ export function useAssistant() {
         create<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON, toast, t);
     }
 
+    async function assistantLeaveCourse(course_id: string, assistant_id: string, t: ComposerTranslation) {
+        const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
+        delete_id_with_data<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON, toast, t);
+    }
+
     async function createAssistant(assistant_data: any, t: ComposerTranslation) {
         const endpoint = endpoints.assistants.index;
         create<Assistant>(endpoint, assistant_data, assistant, Assistant.fromJSON, toast, t);
@@ -54,6 +59,7 @@ export function useAssistant() {
         createAssistant,
         deleteAssistant,
 
-        assistantJoinCourse
+        assistantJoinCourse,
+        assistantLeaveCourse
     };
 }
