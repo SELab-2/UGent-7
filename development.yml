@@ -54,7 +54,7 @@ services:
     expose:
       - 8080
     volumes:
-      - $BACKEND_DIR:/code
+      - ${BACKEND_DIR}:/code
 
   celery:
     <<: *common-keys-selab
@@ -64,7 +64,7 @@ services:
       dockerfile: Dockerfile.dev
     command: celery -A ypovoli worker -l DEBUG
     volumes:
-      - $BACKEND_DIR:/code
+      - ${BACKEND_DIR}:/code
     depends_on:
       - backend
       - redis
@@ -79,7 +79,7 @@ services:
     expose:
       - 5173
     volumes:
-      - $FRONTEND_DIR:/app
+      - ${FRONTEND_DIR}:/app
     depends_on:
       - backend
 
