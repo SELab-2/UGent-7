@@ -2,7 +2,7 @@ import {Student} from '@/types/Student';
 import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id} from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 import {ComposerTranslation} from "vue-i18n";
 
@@ -36,11 +36,11 @@ export function useStudents() {
         const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
         create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast, t);
     }
-
+    /*
     async function studentLeaveCourse(course_id: string, student_id: string, t: ComposerTranslation) {
         const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
-        delete_id<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast, t);
-    }
+        delete_id_with<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast, t);
+    }*/
 
     async function studentJoinGroup(group_id: string, student_id: string, t: ComposerTranslation) {
         const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
@@ -72,7 +72,7 @@ export function useStudents() {
         deleteStudent,
 
         studentJoinCourse,
-        studentLeaveCourse,
+        // studentLeaveCourse,
         studentJoinGroup
     };
 }
