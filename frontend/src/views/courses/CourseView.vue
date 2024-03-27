@@ -22,26 +22,23 @@ onMounted(() => {
 
 <template>
     <BaseLayout>
-        <div class="grid">
+        <div class="grid fadein" v-if="course">
             <div class="col-12 md:col-6">
                 <div>
-                    <Title v-if="course">
+                    <Title>
                         {{ course.name }}
                     </Title>
-                    <Skeleton class="mb-4" height="3rem" width="30rem" v-else/>
                 </div>
 
                 <div>
-                    <p v-if="course">
+                    <p>
                         {{ course.description }}
                     </p>
-                    <Skeleton height="10rem" v-else/>
                 </div>
             </div>
             <div class="col-12 md:col-6">
                 <div>
-                    <Calendar v-if="course" class="w-full" inline/>
-                    <Skeleton height="30rem" v-else/>
+                    <Calendar class="w-full" inline/>
                 </div>
             </div>
         </div>

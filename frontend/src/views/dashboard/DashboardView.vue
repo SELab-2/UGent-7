@@ -42,7 +42,7 @@ onBeforeMount( async () => {
         <div class="grid align-items-stretch">
             <template v-if="courses !== null">
                 <template v-if="courses.length > 0">
-                    <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in courses">
+                    <div class="col-12 md:col-6 lg:col-4 xl:col-3 fadein" v-for="course in courses">
                         <CourseCard class="h-100" :course="course"/>
                     </div>
                 </template>
@@ -54,7 +54,7 @@ onBeforeMount( async () => {
             </template>
             <template v-else>
                 <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="index in 4" :key="index">
-                    <Skeleton height="25rem"/>
+                    <Skeleton height="25rem" style="visibility: hidden;"/>
                 </div>
             </template>
         </div>

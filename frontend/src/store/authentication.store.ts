@@ -4,6 +4,7 @@ import {User} from '@/types/User.ts';
 import {endpoints} from '@/config/endpoints.ts';
 import {ref} from 'vue';
 import {useToastStore} from '@/store/toast.store.ts';
+import {client} from '@/composables/axios.ts';
 
 const INTENT_KEY = 'intent';
 
@@ -15,34 +16,37 @@ export const useAuthStore = defineStore('auth', {
     },
     actions: {
         /**
-         * Attempt to log in the user by
-         * 1. Using a CAS ticket if it is not null.
-         * 2. Using a cookie if the ticket is null.
+         * Attempt to log in the user using a CAS ticket.
          *
          * @param ticket
          */
-        async login(ticket: string|null = null) {
+        async login(ticket: string) {
             // Display toast messages.
             const { add } = useToastStore();
 
-            // Attempt to log in the user if the ticket is not null.
-            if (ticket !== null) {
-                await axios.post(endpoints.auth.token.obtain, {
-                    ticket
-                }).then(() => {
-                    add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'You have successfully logged in.'
-                    })
-                }).catch((error) => {
-                    add({
-                        severity: 'error',
-                        summary: error.response.statusText,
-                        detail: error.response.data.detail
-                    });
+            // Attempt to log in the user using the ticket.
+            await axios.post(endpoints.auth.token.obtain, {
+                ticket
+            }).then(() => {
+                add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'You have successfully logged in.'
+                })
+            }).catch((error) => {
+                add({
+                    severity: 'error',
+                    summary: error.response.statusText,
+                    detail: error.response.data.detail
                 });
-            }
+            });
+        },
+        /**
+         * Refresh the user objects in the API endpoint.
+         */
+        async refresh() {
+            // Display toast messages.
+            const { add } = useToastStore();
 
             // Get the user information (using a cookie).
             await axios.get(endpoints.auth.whoami).then(response => {
@@ -56,6 +60,7 @@ export const useAuthStore = defineStore('auth', {
             });
         },
         async logout() {
+            await client.post(endpoints.auth.logout).catch();
             this.user = null;
         },
         /**
@@ -72,7 +77,7 @@ export const useAuthStore = defineStore('auth', {
          * @return string
          */
         popIntent(): string {
-            const intent = localStorage.getItem(INTENT_KEY) || '';
+            const intent = localStorage.getItem(INTENT_KEY) || '/';
             localStorage.removeItem(INTENT_KEY);
             return intent;
         }

@@ -12,7 +12,6 @@ import {storeToRefs} from 'pinia';
 
 /* Composables */
 const { user, isAuthenticated } = storeToRefs(useAuthStore());
-const { logout } = useAuthStore();
 const { t, locale, availableLocales } = useI18n();
 
 /* Localization variables */
@@ -56,9 +55,9 @@ const items = computed(() => [
                     <!-- User information -->
                     <div>
                         <template v-if="isAuthenticated && user">
-                            <span @click="logout" class="cursor-pointer">
+                            <RouterLink :to="{name:'logout'}" class="text-white">
                                 Ingelogd als {{ user.getFullName() }}
-                            </span>
+                            </RouterLink>
                         </template>
                         <template v-else>
                             <RouterLink :to="{ name: 'login' }">

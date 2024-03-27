@@ -21,7 +21,7 @@ import Footer from '@/components/Footer.vue';
     max-width: 1460px;
 
     #body {
-        min-height: calc(100vh - (180 + 174));
+        min-height: calc(100vh - (180px + 175px));
     }
 }
 </style>
