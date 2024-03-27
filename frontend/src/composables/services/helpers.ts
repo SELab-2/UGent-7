@@ -1,10 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-// import { useI18n } from 'vue-i18n';
 import {Ref} from 'vue';
 import {ComposerTranslation} from "vue-i18n";
 const lifeTime = 3000;
-
-// const { t } = useI18n();
 
 export async function get<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data: any) => T, toast:any, t: ComposerTranslation): Promise<void> {
     await axios.get(endpoint).then((response: AxiosResponse) => {
