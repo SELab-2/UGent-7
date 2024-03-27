@@ -34,21 +34,21 @@ const vaknaam = ref('');
 const executeCode = () => {
   // Put your code here that you want to execute
   console.log('Button clicked! Code executed.');
-  createCourse({name: vaknaam.value, academic_startyear:2023});
+  createCourse({name: vaknaam.value, academic_startyear:2023}, t);
 };
 
 // Function to handle form submission
 const handleSubmit = () => {
   // Perform actions here, such as sending the input value to a backend API
   console.log('Submitted value:', idValue.value);
-  studentJoinCourse(idValue.value, "1");
+  studentJoinCourse(idValue.value, "1", t);
 };
 
 // Function to handle form submission
 const handleDelete = () => {
   // Perform actions here, such as sending the input value to a backend API
   console.log('Submitted value:', idValue.value);
-  deleteCourse(idValue.value);
+  deleteCourse(idValue.value, t);
 };
 
 // test code ^^^^
