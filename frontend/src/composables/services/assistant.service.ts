@@ -34,9 +34,15 @@ export function useAssistant() {
         await delete_id_with_data<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON);
     }
 
-    async function createAssistant(assistant_data: any) {
+    async function createAssistant(assistant_data: Assistant) {
         const endpoint = endpoints.assistants.index;
-        await create<Assistant>(endpoint, assistant_data, assistant, Assistant.fromJSON);
+        await create<Assistant>(endpoint, 
+            {
+                email:assistant_data.email,
+                first_name:assistant_data.first_name,
+                last_name: assistant_data.last_name
+            },
+        assistant, Assistant.fromJSON);
     }
 
     async function deleteAssistant(id: string) {

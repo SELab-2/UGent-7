@@ -49,9 +49,15 @@ export function useStudents() {
         await delete_id_with_data<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON);
     }
 
-    async function createStudent(student_data: any) {
+    async function createStudent(student_data: Student) {
         const endpoint = endpoints.students.index;
-        await create<Student>(endpoint, student_data, student, Student.fromJSON);
+        await create<Student>(endpoint, 
+            {
+                email:student_data.email,
+                first_name:student_data.first_name,
+                last_name: student_data.last_name
+            },
+         student, Student.fromJSON);
     }
 
     async function deleteStudent(id: string) {

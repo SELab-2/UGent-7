@@ -17,9 +17,13 @@ export function useStructure_check() {
         await getList<Structure_check>(endpoint, structure_checks, Structure_check.fromJSON);
     }
 
-    async function createStructure_check(structure_check_data: any, project_id: string) {
+    async function createStructure_check(structure_check_data: Structure_check, project_id: string) {
         const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id);
-        await create<Structure_check>(endpoint, structure_check_data, structure_check, Structure_check.fromJSON);
+        await create<Structure_check>(endpoint, 
+            {
+                name: structure_check_data.name
+            },
+        structure_check, Structure_check.fromJSON);
     }
 
     async function deleteStructure_check(id: string) {

@@ -55,9 +55,22 @@ export function useProject() {
     }
 
 
-    async function createProject(project_data: any, course_id: string) {
+    async function createProject(project_data: Project, course_id: string) {
         const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id);
-        await create<Project>(endpoint, project_data, project, Project.fromJSON);
+        await create<Project>(endpoint, 
+            {
+                name: project_data.name,
+                description: project_data.description,
+                visible: project_data.visible,
+                archived: project_data.archived,
+                locked_groups: project_data.locked_groups,
+                start_data: project_data.start_date,
+                deadline: project_data.deadline,
+                max_score: project_data.max_score,
+                score_visible: project_data.score_visible,
+                group_size: project_data.group_size
+            },
+        project, Project.fromJSON);
     }
 
     async function deleteProject(id: string) {

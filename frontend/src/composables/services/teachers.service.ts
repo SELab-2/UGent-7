@@ -34,9 +34,15 @@ export function useTeacher() {
         await delete_id_with_data<Response>(endpoint, {teacher_id: teacher_id}, response, Response.fromJSON);
     }
 
-    async function createTeacher(teacher_data: any) {
+    async function createTeacher(teacher_data: Teacher) {
         const endpoint = endpoints.teachers.index;
-        await create<Teacher>(endpoint, teacher_data, teacher, Teacher.fromJSON);
+        await create<Teacher>(endpoint, 
+            {
+                email:teacher_data.email,
+                first_name:teacher_data.first_name,
+                last_name: teacher_data.last_name
+            },
+        teacher, Teacher.fromJSON);
     }
 
     async function deleteTeacher(id: string) {

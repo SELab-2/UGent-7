@@ -22,9 +22,15 @@ export function useCourses() {
         await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
-    async function createCourse(course_data: any) {
+    async function createCourse(course_data: Course) {
         const endpoint = endpoints.courses.index;
-        await create<Course>(endpoint, course_data, course, Course.fromJSON);
+        await create<Course>(endpoint,
+            {
+                name: course_data.name,
+                description: course_data.description,
+                academic_startyear: course_data.academic_startyear
+            },
+        course, Course.fromJSON);
     }
 
     async function cloneCourse(course_id: string, clone_assistants: boolean) {

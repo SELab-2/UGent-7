@@ -17,9 +17,15 @@ export function useAdmin() {
         await getList<Admin>(endpoint, admins, Admin.fromJSON);
     }
 
-    async function createAdmin(admin_data: any) {
+    async function createAdmin(admin_data: Admin) {
         const endpoint = endpoints.admins.index;
-        await create<Admin>(endpoint, admin_data, admin, Admin.fromJSON);
+        await create<Admin>(endpoint, 
+            {
+                email:admin_data.email,
+                first_name:admin_data.first_name,
+                last_name: admin_data.last_name
+            },
+         admin, Admin.fromJSON);
     }
 
     async function deleteAdmin(id: string) {

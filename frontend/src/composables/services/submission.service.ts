@@ -22,9 +22,13 @@ export function useSubmission() {
         await getList<Submission>(endpoint, submissions, Submission.fromJSON);
     }
 
-    async function createSubmission(submission_data: any, group_id: string) {
+    async function createSubmission(submission_data: Submission, group_id: string) {
         const endpoint = endpoints.submissions.byGroup.replace('{group_id}', group_id);
-        await create<Submission>(endpoint, submission_data, submission, Submission.fromJSON);
+        await create<Submission>(endpoint,
+            {
+                files: submission_data.files //TODO look how this will need to be given
+            },
+        submission, Submission.fromJSON);
     }
 
     async function deleteSubmission(id: string) {
