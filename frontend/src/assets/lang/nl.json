@@ -2,6 +2,7 @@
     "layout": {
         "header": {
             "logo": "Logo van de Universiteit Gent",
+            "login": "Login",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
@@ -22,6 +23,7 @@
         },
         "login": {
             "title": "Inloggen",
+            "illustration": "Durf denken",
             "subtitle": "Inloggen gebeurt met je UGent-account. Bij problemen met het inloggen kan je de beheerder contacteren.",
             "button": "UGent login",
             "card": {
