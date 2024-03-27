@@ -2,8 +2,8 @@ import { Faculty } from "./Faculty";
 
 export class Teacher {
     constructor(
-        public id: number,
-        public last_login: Date |null,
+        public id: string,
+        public last_login: Date | null,
         public username: string,
         public is_staff: boolean,
         public email: string,
