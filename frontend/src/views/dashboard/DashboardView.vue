@@ -17,7 +17,7 @@ const { t } = useI18n();
 
 /* Service injection */
 const { courses, getCoursesByStudent, createCourse, deleteCourse } = useCourses();
-const { studentJoinCourse } = useStudents();
+const { studentJoinCourse, studentLeaveCourse } = useStudents();
 
 
 onMounted(async () => {
@@ -51,6 +51,13 @@ const handleDelete = () => {
   deleteCourse(idValue.value, t);
 };
 
+// Function to handle form submission
+const handleLeave = () => {
+  // Perform actions here, such as sending the input value to a backend API
+  console.log('Submitted value:', idValue.value);
+  studentLeaveCourse(idValue.value, "1");
+};
+
 // test code ^^^^
 
 </script>
@@ -73,6 +80,7 @@ const handleDelete = () => {
         <input type="text" v-model="idValue" placeholder="ID" />
         <button @click="handleSubmit">join course with id</button>
         <button @click="handleDelete">delete course with id</button>
+        <button @click="handleLeave">leave course with id</button>
         <!--extra code to test -->
 
         <!-- Course list body -->

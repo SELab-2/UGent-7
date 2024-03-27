@@ -4,7 +4,7 @@ import { Submission } from "./Submission";
 
 export class Group {
     constructor(
-        public id: number,
+        public id: string,
         public score: number = -1,
         public projects: Project[] = [],
         public students: Student[] = [],

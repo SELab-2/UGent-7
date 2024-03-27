@@ -2,11 +2,11 @@ import { Group } from "./Group";
 
 export class Submission {
     constructor(
-        public id: number,
+        public id: string,
         public submission_number: number,
         public submission_time: Date,
         public structure_checks_passed: boolean,
-        public group: Group = new Group(0),
+        public group: Group = new Group("0"),
         public files: File[] = [], //TODO check
         public extra_checks_results : any[] = [], // TODO
 

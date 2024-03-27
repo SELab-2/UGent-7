@@ -2,7 +2,7 @@ import {Teacher} from '@/types/Teacher.ts';
 import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id, delete_id_with_data } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 import {ComposerTranslation} from "vue-i18n";
 
@@ -32,6 +32,11 @@ export function useTeacher() {
         create<Response>(endpoint, {teacher_id: teacher_id}, response, Response.fromJSON, toast, t);
     }
 
+    async function teacherLeaveCourse(course_id: string, teacher_id: string, t: ComposerTranslation) {
+        const endpoint = endpoints.teachers.byCourse.replace('{course_id}', course_id);
+        delete_id_with_data<Response>(endpoint, {teacher_id: teacher_id}, response, Response.fromJSON, toast, t);
+    }
+
     async function createTeacher(teacher_data: any, t: ComposerTranslation) {
         const endpoint = endpoints.teachers.index;
         create<Teacher>(endpoint, teacher_data, teacher, Teacher.fromJSON, toast, t);
@@ -54,6 +59,7 @@ export function useTeacher() {
         createTeacher,
         deleteTeacher,
 
-        teacherJoinCourse
+        teacherJoinCourse,
+        teacherLeaveCourse
     };
 }

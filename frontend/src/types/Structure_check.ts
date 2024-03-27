@@ -3,12 +3,12 @@ import { Project } from "./Projects";
 
 export class Structure_check {
     constructor(
-        public id: number,
+        public id: string,
         public name: string,
         public obligated_extensions: File_extension[] = [],
         public blocked_extensions: File_extension[] = [],
         public project: Project = new Project(
-            0,
+            "0",
             "default",
             "this is a default project given in the service because it isnt initiated",
             false,

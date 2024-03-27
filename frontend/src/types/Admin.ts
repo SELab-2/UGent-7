@@ -2,7 +2,7 @@ import { Faculty } from "./Faculty";
 
 export class Admin {
     constructor(
-        public id: number,
+        public id: string,
         public last_login: Date |null,
         public username: string,
         public is_staff: boolean,
