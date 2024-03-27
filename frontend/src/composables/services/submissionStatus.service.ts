@@ -9,10 +9,9 @@ export function useSubmission() {
     const submissionStatus = ref<SubmissionStatus|null>(null);
     const toast = useToast();
     
-    async function getSubmissionStatus(project_id: number, t: ComposerTranslation) {
-        const endpoint = endpoints.submissions.status.replace('{project_id}', project_id.toString());
+    async function getSubmissionStatus(project_id: string, t: ComposerTranslation) {
+        const endpoint = endpoints.submissions.status.replace('{project_id}', project_id);
         get<SubmissionStatus>(endpoint, submissionStatus, SubmissionStatus.fromJSON, toast, t);
-        console.log(submissionStatus)
     }
 
     return {
