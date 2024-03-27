@@ -6,13 +6,16 @@ import Title from '@/components/Title.vue';
 import {onMounted} from 'vue';
 import {useCourses} from '@/composables/services/courses.service.ts';
 import {useRoute} from 'vue-router';
+import {useI18n} from "vue-i18n";
 
 const { params } = useRoute();
 const { course, getCourseByID } = useCourses();
+const { t } = useI18n()
 
 onMounted(() => {
     getCourseByID(
-        parseInt(params.courseId as string)
+        params.courseId as string,
+        t
     );
 });
 </script>

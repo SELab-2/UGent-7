@@ -5,24 +5,70 @@ import CourseCard from '@/components/courses/CourseCard.vue';
 import ProjectCard from '@/components/projects/ProjectCard.vue';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/Title.vue';
-import {useI18n} from 'vue-i18n';
-import {PrimeIcons} from 'primevue/api';
+import { useI18n } from 'vue-i18n';
+import { PrimeIcons } from 'primevue/api';
 import {onMounted} from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 import { useProject } from '@/composables/services/project.service.ts';
+import { useStudents } from '@/composables/services/students.service.ts';
+import {ref} from 'vue';
+import {Project} from "@/types/Projects.ts";
 
 /* Composable injections */
 const { t } = useI18n();
 
+const allProjects= ref<Project[]>([]);
+
 /* Service injection */
-const { courses, getCoursesByStudent } = useCourses();
-const { projects, getProjectWithCourseContext } = useProject();
+const { projects, getProjectsByCourse } = useProject();
+const { courses, getCoursesByStudent, createCourse, deleteCourse } = useCourses();
+const { studentJoinCourse } = useStudents();
+
 
 onMounted(async () => {
   console.log("fetching courses");
-  await getCoursesByStudent(1);  // TODO make this the id of the logged in user
-  await getProjectWithCourseContext('1');
+  await getCoursesByStudent("1", t);  // TODO make this the id of the logged in user
+  // loop through courses and fetch all projects
+  let tempProjects: Project[] = [];
+  for (const course of courses.value ?? []) {
+    await getProjectsByCourse(course.id, t);
+    const projectsWithCourse = projects.value?.map(project => ({
+      ...project,
+      course: course // Voeg de huidige cursus toe aan elk project
+    }));
+    // Add current course to the received projects
+    tempProjects = tempProjects.concat(projectsWithCourse ?? []);
+  }
+  allProjects.value = tempProjects;
 });
+
+// test code vvvv
+
+const idValue = ref('');
+const vaknaam = ref('');
+
+// Method to execute when the button is clicked
+const executeCode = () => {
+  // Put your code here that you want to execute
+  console.log('Button clicked! Code executed.');
+  createCourse({name: vaknaam.value, academic_startyear:2023}, t);
+};
+
+// Function to handle form submission
+const handleSubmit = () => {
+  // Perform actions here, such as sending the input value to a backend API
+  console.log('Submitted value:', idValue.value);
+  studentJoinCourse(idValue.value, "1", t);
+};
+
+// Function to handle form submission
+const handleDelete = () => {
+  // Perform actions here, such as sending the input value to a backend API
+  console.log('Submitted value:', idValue.value);
+  deleteCourse(idValue.value, t);
+};
+
+// test code ^^^^
 
 </script>
 
@@ -38,6 +84,14 @@ onMounted(async () => {
                 <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
             </ButtonGroup>
         </div>
+        <!--extra code to test -->
+        <input type="text" v-model="vaknaam" placeholder="vaknaam" />
+        <button @click="executeCode">create course with vaknaam</button>
+        <input type="text" v-model="idValue" placeholder="ID" />
+        <button @click="handleSubmit">join course with id</button>
+        <button @click="handleDelete">delete course with id</button>
+        <!--extra code to test -->
+
         <!-- Course list body -->
         <div class="grid align-items-stretch">
             <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in courses">
@@ -56,7 +110,7 @@ onMounted(async () => {
         </div>
         <!-- Project list body -->
         <div class="grid align-items-stretch">
-           <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="project in projects">
+           <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="project in allProjects">
                 <ProjectCard class="h-100" :project="project"/>
             </div>
 
