@@ -2,40 +2,39 @@ import {Course} from '@/types/Course.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
 import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
-import {ComposerTranslation} from "vue-i18n";
 
 export function useCourses() {
     const courses = ref<Course[]|null>(null);
     const course = ref<Course|null>(null);
 
-    async function getCourseByID(id: string, t: ComposerTranslation) {
+    async function getCourseByID(id: string) {
         const endpoint = endpoints.courses.retrieve.replace('{id}', id);
-        await get<Course>(endpoint, course, Course.fromJSON, t);
+        await get<Course>(endpoint, course, Course.fromJSON);
     }
 
-    async function getCourses(t: ComposerTranslation) {
+    async function getCourses() {
         const endpoint = endpoints.courses.index;
-        await getList<Course>(endpoint, courses, Course.fromJSON, t);
+        await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
-    async function getCoursesByStudent(student_id: string, t: ComposerTranslation) {
+    async function getCoursesByStudent(student_id: string) {
         const endpoint = endpoints.courses.byStudent.replace('{student_id}', student_id);
-        await getList<Course>(endpoint, courses, Course.fromJSON, t);
+        await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
-    async function createCourse(course_data: any, t: ComposerTranslation) {
+    async function createCourse(course_data: any) {
         const endpoint = endpoints.courses.index;
-        await create<Course>(endpoint, course_data, course, Course.fromJSON, t);
+        await create<Course>(endpoint, course_data, course, Course.fromJSON);
     }
 
-    async function cloneCourse(course_id: string, clone_assistants: boolean, t: ComposerTranslation) {
+    async function cloneCourse(course_id: string, clone_assistants: boolean) {
         const endpoint = endpoints.courses.clone.replace('{course_id}', course_id);
-        await create<Course>(endpoint, {clone_assistants: clone_assistants.toString() }, course, Course.fromJSON, t);
+        await create<Course>(endpoint, {clone_assistants: clone_assistants.toString() }, course, Course.fromJSON);
     }
 
-    async function deleteCourse(id: string, t: ComposerTranslation) {
+    async function deleteCourse(id: string) {
         const endpoint = endpoints.courses.retrieve.replace('{id}', id);
-        await delete_id<Course>(endpoint, course, Course.fromJSON, t);
+        await delete_id<Course>(endpoint, course, Course.fromJSON);
     }
 
     return {
