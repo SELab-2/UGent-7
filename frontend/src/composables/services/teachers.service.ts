@@ -2,7 +2,7 @@ import {Teacher} from '@/types/Teacher.ts';
 import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
+import { get, getList, create, delete_id, delete_id_with_data } from '@/composables/services/helpers.ts';
 import { useToast } from 'primevue/usetoast';
 
 export function useTeacher() {
@@ -31,6 +31,11 @@ export function useTeacher() {
         create<Response>(endpoint, {teacher_id: teacher_id}, response, Response.fromJSON, toast);
     }
 
+    async function teacherLeaveCourse(course_id: string, teacher_id: string) {
+        const endpoint = endpoints.teachers.byCourse.replace('{course_id}', course_id);
+        delete_id_with_data<Response>(endpoint, {teacher_id: teacher_id}, response, Response.fromJSON, toast);
+    }
+
     async function createTeacher(teacher_data: any) {
         const endpoint = endpoints.teachers.index;
         create<Teacher>(endpoint, teacher_data, teacher, Teacher.fromJSON, toast);
@@ -53,6 +58,7 @@ export function useTeacher() {
         createTeacher,
         deleteTeacher,
 
-        teacherJoinCourse
+        teacherJoinCourse,
+        teacherLeaveCourse
     };
 }
