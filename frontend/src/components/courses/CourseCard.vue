@@ -34,7 +34,7 @@ const images = Object.keys(import.meta.glob('@/assets/img/placeholders/*', {
             {{ course.description }}
         </template>
         <template #footer>
-            <RouterLink :to="{ name: 'course-view', params: { id: course.id } }">
+            <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">
                 <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined/>
             </RouterLink>
         </template>

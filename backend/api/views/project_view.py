@@ -100,7 +100,7 @@ class ProjectViewSet(CreateModelMixin,
     @structure_checks.mapping.put
     @swagger_auto_schema(request_body=StructureCheckAddSerializer)
     def _add_structure_check(self, request: Request, **_):
-        """Add a structure check to the project"""
+        """Add a structure_check to the project"""
 
         project: Project = self.get_object()
 
