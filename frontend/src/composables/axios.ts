@@ -16,5 +16,5 @@ export const client = axios.create({
     },
     withCredentials: true,
     xsrfHeaderName: "X-CSRFToken",
-    xsrfCookieName: "csrftoken",
+    xsrfCookieName: "csrftoken"
 });
