@@ -5,59 +5,59 @@ import {ComposerTranslation} from "vue-i18n";
 import {useToastStore} from '@/store/toast.store.ts';
 const lifeTime = 3000;
 
-export async function get<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data: any) => T, toast:any, t: ComposerTranslation): Promise<void> {
+export async function get<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data: any) => T, t: ComposerTranslation): Promise<void> {
     await client.get(endpoint).then((response: AxiosResponse) => {
         ref.value = fromJson(response.data);
         //add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
     }).catch((error: AxiosError) => {
-        processError(error, toast, t);
+        processError(error, t);
         console.error(error); // Log the error for debugging
     });
 }
 
-export async function create<T>(endpoint: string, data:any, ref: Ref<T|null>, fromJson: (data: any) => T, toast:any,  t: ComposerTranslation): Promise<void> {
+export async function create<T>(endpoint: string, data:any, ref: Ref<T|null>, fromJson: (data: any) => T,  t: ComposerTranslation): Promise<void> {
     await client.post(endpoint, data).then((response: AxiosResponse) => {
         ref.value = fromJson(response.data);
         //add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
     }).catch((error: AxiosError) => {
-        processError(error, toast, t);
+        processError(error, t);
         console.error(error); // Log the error for debugging
     });
 }
 
-export async function delete_id<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data: any) => T, toast:any, t: ComposerTranslation): Promise<void> {
+export async function delete_id<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data: any) => T, t: ComposerTranslation): Promise<void> {
     await client.delete(endpoint).then((response: AxiosResponse) => {
         ref.value = fromJson(response.data);
         //add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
     }).catch((error: AxiosError) => {
-        processError(error, toast, t);
+        processError(error, t);
         console.error(error); // Log the error for debugging
     });
 }
 
-export async function delete_id_with_data<T>(endpoint: string, data: any, ref: Ref<T|null>, fromJson: (data: any) => T, toast:any, t: ComposerTranslation): Promise<void> {
+export async function delete_id_with_data<T>(endpoint: string, data: any, ref: Ref<T|null>, fromJson: (data: any) => T, t: ComposerTranslation): Promise<void> {
     await client.delete(endpoint,{ data }).then((response: AxiosResponse) => {
         ref.value = fromJson(response.data);
         //add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
     }).catch((error: AxiosError) => {
-        processError(error, toast, t);
+        processError(error, t);
         console.error(error); // Log the error for debugging
     });
 }
 
 
-export async function getList<T>(endpoint: string, ref: Ref<T[]|null>, fromJson: (data: any) => T, toast:any,  t: ComposerTranslation): Promise<void> {
+export async function getList<T>(endpoint: string, ref: Ref<T[]|null>, fromJson: (data: any) => T,  t: ComposerTranslation): Promise<void> {
     await client.get(endpoint).then(response => {
         ref.value = response.data.map((data: T) => fromJson(data));
         //add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
     }
     ).catch((error: AxiosError) => {
-        processError(error, toast, t);
+        processError(error, t);
         console.error(error); // Log the error for debugging
     });
 }
 
-export async function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, fromJson: (data: any) => T, toast:any, t: ComposerTranslation): Promise<void> {
+export async function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, fromJson: (data: any) => T, t: ComposerTranslation): Promise<void> {
     // Create an array to accumulate all response data
     const allData: T[] = [];
 
@@ -69,14 +69,14 @@ export async function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, 
             // add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
         }
         ).catch((error: AxiosError) => {
-            processError(error, toast, t);
+            processError(error, t);
             console.error(error); // Log the error for debugging
         });
     }
     ref.value = allData;
 }
 
-export function processError(error: AxiosError, toast:any, t: ComposerTranslation){
+export function processError(error: AxiosError, t: ComposerTranslation){
     const { add } = useToastStore();
     if (error.response) {
         // The request was made and the server responded with a status code
