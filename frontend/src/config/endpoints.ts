@@ -1,7 +1,13 @@
 export const endpoints = {
     auth: {
+        whoami: '/api/auth/cas/whoami/',
         login: '/api/auth/cas/login/',
-        logout: '/api/auth/cas/logout/'
+        logout: '/api/auth/cas/logout/',
+        token: {
+            refresh: '/api/auth/token/refresh/',
+            verify: '/api/auth/token/verify/',
+            obtain: '/api/auth/token/'
+        }
     },
     courses: {
         index: '/api/courses/',

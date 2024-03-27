@@ -22,17 +22,12 @@ class CASViewSet(ViewSet):
         """Attempt to log in. Redirect to our single CAS endpoint."""
         return redirect(client.get_login_url())
 
-    @action(detail=False, methods=['GET'])
+    @action(detail=False, methods=['POST'])
     def logout(self, request: Request) -> Response:
-        """Attempt to log out. Redirect to our single CAS endpoint.
-        Normally would only allow POST requests to a logout endpoint.
-        Since the CAS logout location handles the actual logout, we should accept GET requests.
-        """
+        """Log out the current user."""
         logout(request)
 
-        return redirect(
-            client.get_logout_url(service_url=settings.API_ENDPOINT)
-        )
+        return Response()
 
     @action(detail=False, methods=['GET'], url_path='whoami', url_name='whoami')
     def who_am_i(self, request: Request) -> Response:

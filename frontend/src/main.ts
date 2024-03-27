@@ -1,13 +1,11 @@
-import nl from '@/assets/lang/nl.json';
-import en from '@/assets/lang/en.json';
 import App from '@/views/App.vue';
+import router from '@/router/router';
 import PrimeVue from 'primevue/config';
-import Ripple from 'primevue/ripple';
-import {createApp} from 'vue';
-import {createI18n} from 'vue-i18n';
-import router from './router/router';
-import {createPinia} from 'pinia';
 import ToastService from 'primevue/toastservice';
+import Ripple from 'primevue/ripple';
+import {i18n} from '@/composables/i18n';
+import {createApp} from 'vue';
+import {createPinia} from 'pinia';
 
 const app = createApp(App);
 
@@ -16,12 +14,7 @@ app.use(ToastService);
 
 app.use(createPinia());
 
-app.use(createI18n({
-    locale: 'nl',
-    fallbackLocale: 'en',
-    legacy: false,
-    messages: { en, nl }
-}));
+app.use(i18n);
 
 app.use(router)
 
@@ -30,7 +23,6 @@ app.use(PrimeVue, {
 });
 
 /* Bind app directives */
-
 app.directive('ripple', Ripple);
 
 /* Mount the application */

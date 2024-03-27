@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import enLogo from '@/assets/img/logo-white-en.png';
-import nlLogo from '@/assets/img/logo-white-nl.png';
+import en from '@/assets/img/logo-white-en.png';
+import nl from '@/assets/img/logo-white-nl.png';
 import {useI18n} from 'vue-i18n';
 
 /* Translation composable */
 const { t, locale } = useI18n();
 
 /* Available localized images */
-const logo: {[key: string]: string} = { nl: nlLogo, en: enLogo };
+const logo: {[key: string]: string} = { nl, en };
 </script>
 
 <template>
