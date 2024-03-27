@@ -14,7 +14,7 @@ const { t } = useI18n()
 
 onMounted(() => {
     getCourseByID(
-        parseInt(params.courseId as string),
+        params.courseId as string,
         t
     );
 });

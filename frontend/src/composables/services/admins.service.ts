@@ -25,7 +25,7 @@ export function useAdmin() {
         create<Admin>(endpoint, admin_data, admin, Admin.fromJSON, toast, t);
     }
 
-    async function deleteAdmin(id: string, , t: ComposerTranslation) {
+    async function deleteAdmin(id: string, t: ComposerTranslation) {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id);
         delete_id<Admin>(endpoint, admin, Admin.fromJSON, toast, t);
     }
