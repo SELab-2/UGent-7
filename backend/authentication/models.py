@@ -49,6 +49,7 @@ class User(AbstractBaseUser):
             is_staff=True
         )
 
+
 class Faculty(models.Model):
     """This model represents a faculty."""
 

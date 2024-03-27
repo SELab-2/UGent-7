@@ -18,7 +18,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     @action(detail=True)
     def courses(self, request, **_):
         """Returns a list of courses for the given student"""
-        student = self.get_object() 
+        student = self.get_object()
         courses = student.courses.all()
 
         # Serialize the course objects

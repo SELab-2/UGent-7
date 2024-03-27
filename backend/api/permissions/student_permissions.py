@@ -2,11 +2,11 @@ from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from api.permissions.role_permissions import is_teacher
 from authentication.models import User
 
+
 class StudentPermission(IsAuthenticated):
 
     def has_permission(self, request, view):
         """Check if user has permission to view a general student endpoint."""
-        user: User = request.user
         if view.action in ['list', 'create', 'update', 'partial_update', 'destroy']:
             return False
         return True
