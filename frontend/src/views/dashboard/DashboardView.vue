@@ -9,8 +9,10 @@ import { PrimeIcons } from 'primevue/api';
 import { onMounted } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 import { useStudents } from '@/composables/services/students.service.ts';
-import { Course } from '@/types/Course.ts';
 import {ref} from 'vue';
+import {Project} from "@/types/Projects.ts";
+import {useProject} from "@/composables/services/project.service.ts";
+import ProjectCard from "@/components/projects/ProjectCard.vue";
 
 /* Composable injections */
 const { t } = useI18n();

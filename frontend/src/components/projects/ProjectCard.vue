@@ -6,6 +6,11 @@ import {PrimeIcons} from 'primevue/api';
 import {useI18n} from 'vue-i18n';
 import {computed} from "vue";
 
+/**
+ * TODO
+ *  - Submission check depends on more than just structure checks
+ */
+
 /* Component props */
 const props = defineProps<{
   project: Project
@@ -34,7 +39,7 @@ const { t } = useI18n();
       </div>
       <div>
         <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-        {{t('views.projects.submissionStatus')}}: {{ project.submissions[project.submissions.length - 1].structure_checks_passed }}
+        {{t('views.projects.submissionStatus')}}: {{ project.submissions.structure_checks_passed }}
       </div>
     </template>
     <template #footer>

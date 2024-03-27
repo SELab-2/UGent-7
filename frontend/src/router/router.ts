@@ -1,4 +1,3 @@
-import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 
 // import { useUserStore } from '@/stores/userStore';
 // TODO: after pinia setup is done
