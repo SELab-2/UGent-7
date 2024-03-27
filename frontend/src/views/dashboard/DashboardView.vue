@@ -22,7 +22,7 @@ const { studentJoinCourse, studentLeaveCourse } = useStudents();
 
 onMounted(async () => {
   console.log("fetching courses");
-  await getCoursesByStudent("1");  // TODO make this the id of the logged in user
+  await getCoursesByStudent("1", t);  // TODO make this the id of the logged in user
 });
 
 // test code vvvv
