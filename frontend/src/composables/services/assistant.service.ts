@@ -3,48 +3,51 @@ import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
 import { get, getList, create, delete_id, delete_id_with_data } from '@/composables/services/helpers.ts';
-import { useToast } from 'primevue/usetoast';
-import {ComposerTranslation} from "vue-i18n";
 
 export function useAssistant() {
     const assistants = ref<Assistant[]|null>(null);
     const assistant = ref<Assistant|null>(null);
     const response = ref<Response|null>(null);
-    const toast = useToast();
 
-    async function getAssistantByID(id: string, t: ComposerTranslation) {
+    async function getAssistantByID(id: string) {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
-        get<Assistant>(endpoint, assistant, Assistant.fromJSON, toast, t);
+        await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 
-    async function getAssistantByCourse(course_id: string, t: ComposerTranslation) {
+    async function getAssistantByCourse(course_id: string) {
         const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
-        get<Assistant>(endpoint, assistant, Assistant.fromJSON, toast, t);
+        await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 
-    async function getAssistants(t: ComposerTranslation) {
+    async function getAssistants() {
         const endpoint = endpoints.assistants.index;
-        getList<Assistant>(endpoint, assistants, Assistant.fromJSON, toast, t);
+        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON);
     }
 
-    async function assistantJoinCourse(course_id: string, assistant_id: string, t: ComposerTranslation) {
+    async function assistantJoinCourse(course_id: string, assistant_id: string) {
         const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
-        create<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON, toast, t);
+        await create<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON);
     }
 
-    async function assistantLeaveCourse(course_id: string, assistant_id: string, t: ComposerTranslation) {
+    async function assistantLeaveCourse(course_id: string, assistant_id: string) {
         const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
-        delete_id_with_data<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON, toast, t);
+        await delete_id_with_data<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON);
     }
 
-    async function createAssistant(assistant_data: any, t: ComposerTranslation) {
+    async function createAssistant(assistant_data: Assistant) {
         const endpoint = endpoints.assistants.index;
-        create<Assistant>(endpoint, assistant_data, assistant, Assistant.fromJSON, toast, t);
+        await create<Assistant>(endpoint, 
+            {
+                email:assistant_data.email,
+                first_name:assistant_data.first_name,
+                last_name: assistant_data.last_name
+            },
+        assistant, Assistant.fromJSON);
     }
 
-    async function deleteAssistant(id: string, t: ComposerTranslation) {
+    async function deleteAssistant(id: string) {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id);
-        delete_id<Assistant>(endpoint, assistant, Assistant.fromJSON, toast, t);
+        await delete_id<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 
     return {

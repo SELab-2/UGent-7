@@ -9,7 +9,7 @@ describe("course", (): void => {
     // you can also import "test" instead of "it", because it's the exact same
     // but with "it", it's easy to read => it (referring to the course) returns correct course year
     it("returns correct course year", (): void => {
-        const course: Course = new Course(1, "course", "description", 2003)
+        const course: Course = new Course("1", "course", "description", 2003)
         // use expect for assertions
         // after expect, there are a multitude of possible functions such as:
         // toBe, toEqual, toContain
