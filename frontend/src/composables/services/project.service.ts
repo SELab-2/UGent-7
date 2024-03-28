@@ -15,7 +15,7 @@ export function useProject() {
 
     async function getProjectByID(id: string, t: ComposerTranslation) {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
-        get<Project>(endpoint, project, Project.fromJSON, toast, t);
+        await get<Project>(endpoint, project, Project.fromJSON, toast, t);
     }
 
     async function getProjectsByCourse(course_id: string, t: ComposerTranslation) {

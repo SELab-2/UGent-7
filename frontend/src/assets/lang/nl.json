@@ -36,7 +36,8 @@
         },
         "projects": {
             "deadline": "Deadline",
-            "submissionStatus": "Indienstatus"
+            "submissionStatus": "Indienstatus",
+            "groupMembers": "Groepsleden"
         }
     },
     "composables": {

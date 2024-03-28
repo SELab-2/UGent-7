@@ -22,14 +22,14 @@ export function useStudents() {
         getList<Student>(endpoint, students, Student.fromJSON, toast, t);
     }
 
-    async function getStudentsbyCourse(course_id: string, t: ComposerTranslation) {
+    async function getStudentsByCourse(course_id: string, t: ComposerTranslation) {
         const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
         getList<Student>(endpoint, students, Student.fromJSON, toast, t);
     }
 
-    async function getStudentsbyGroup(group_id: string, t: ComposerTranslation) {
+    async function getStudentsByGroup(group_id: string, t: ComposerTranslation) {
         const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
-        getList<Student>(endpoint, students, Student.fromJSON, toast, t);
+        await getList<Student>(endpoint, students, Student.fromJSON, toast, t);
     }
 
     async function studentJoinCourse(course_id: string, student_id: string, t: ComposerTranslation) {
@@ -70,8 +70,8 @@ export function useStudents() {
 
         getStudentByID,
         getStudents,
-        getStudentsbyCourse,
-        getStudentsbyGroup,
+        getStudentsByCourse,
+        getStudentsByGroup,
 
         createStudent,
         deleteStudent,

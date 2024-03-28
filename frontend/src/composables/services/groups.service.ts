@@ -12,12 +12,17 @@ export function useGroup() {
 
     async function getGroupByID(id: string, t: ComposerTranslation) {
         const endpoint = endpoints.groups.retrieve.replace('{id}', id);
-        get<Group>(endpoint, group, Group.fromJSON, toast, t);
+        await get<Group>(endpoint, group, Group.fromJSONFullObject, toast, t);
     }
 
     async function getGroupsByProject(project_id: string, t: ComposerTranslation) {
         const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id);
-        getList<Group>(endpoint, groups, Group.fromJSON, toast, t);
+        await getList<Group>(endpoint, groups, Group.fromJSON, toast, t);
+    }
+
+    async function getGroupsByStudent(student_id: string, t: ComposerTranslation) {
+        const endpoint = endpoints.groups.byStudent.replace('{student_id}', student_id);
+        await getList<Group>(endpoint, groups, Group.fromJSON, toast, t);
     }
 
     async function createGroup(group_data: any, group_id: string, t: ComposerTranslation) {
@@ -35,6 +40,7 @@ export function useGroup() {
         group,
         getGroupByID,
         getGroupsByProject,
+        getGroupsByStudent,
 
         createGroup,
         deleteGroup
