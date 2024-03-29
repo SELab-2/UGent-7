@@ -1,9 +1,19 @@
+import { Assistant } from "./Assistant";
+import { Project } from "./Projects";
+import { Student } from "./Student";
+import { Teacher } from "./Teacher";
+
 export class Course {
     constructor(
         public id: string,
         public name: string,
-        public description: string,
-        public academic_startyear: number
+        public description: string|null,
+        public academic_startyear: number,
+        public parent_course: Course|null = null,
+        public teachers: Teacher[] = [],
+        public assistants: Assistant[] = [],
+        public students: Student[] = [],
+        public projects: Project[] = []
     ) {
     }
 
@@ -25,7 +35,8 @@ export class Course {
             course.id,
             course.name,
             course.description,
-            course.academic_startyear
+            course.academic_startyear,
+            course.parent_course
         );
     }
 }

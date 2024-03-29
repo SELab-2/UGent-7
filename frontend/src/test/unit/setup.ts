@@ -35,6 +35,86 @@ const projects = [
     }
 ]
 
+const courses = [
+    {
+    "id": "1",
+    "teachers": "https://localhost/api/courses/1/teachers/",
+    "assistants": "https://localhost/api/courses/1/assistants/",
+    "students": "https://localhost/api/courses/1/students/",
+    "projects": "https://localhost/api/courses/1/projects/",
+    "parent_course": null,
+    "name": "Math",
+    "academic_startyear": 2023,
+    "description": "Math course"
+  },
+  {
+    "id": "2",
+    "teachers": [],
+    "assistants": [],
+    "students": [],
+    "projects": [],
+    "parent_course": "3",
+    "name": "Sel2",
+    "academic_startyear": 2023,
+    "description": "Software course"
+  },
+  {
+    "id": "3",
+    "teachers": [],
+    "assistants": [],
+    "students": [],
+    "projects": [],
+    "parent_course": null,
+    "name": "Sel1",
+    "academic_startyear": 2022,
+    "description": "Software course"
+  },
+  {
+    "id": "12",
+    "teachers": [],
+    "assistants": [],
+    "students": [],
+    "projects": [],
+    "parent_course": "1",
+    "name": "Math",
+    "academic_startyear": 2024,
+    "description": "Math course"
+  },
+  {
+    "id": "13",
+    "teachers": [],
+    "assistants": [],
+    "students": [],
+    "projects": [],
+    "parent_course": "12",
+    "name": "Math",
+    "academic_startyear": 2025,
+    "description": "Math course"
+  },
+  {
+    "id": "14",
+    "teachers": [],
+    "assistants": [],
+    "students": [],
+    "projects": [],
+    "parent_course": null,
+    "name": "Club brugge",
+    "academic_startyear": 2023,
+    "description": null
+  },
+  {
+    "id": "15",
+    "teachers": [],
+    "assistants": [],
+    "students": [],
+    "projects": [],
+    "parent_course": null,
+    "name": "vergeet barbara",
+    "academic_startyear": 2023,
+    "description": null
+  }
+]
+
 const faculties = [
     {name: "wetenschappen"},
     {name: "voetbal"}
@@ -46,6 +126,13 @@ export const restHandlers = [
             return HttpResponse.json(groups.find(x => x.id == params.id))
         }
     ),
+
+    http.get(baseUrl + endpoints.courses.retrieve.replace('{id}', ':id'),
+    ({ params }) => {
+        return HttpResponse.json(courses.find(x => x.id == params.id))
+    }
+    ),
+
     http.get(baseUrl + endpoints.groups.byProject.replace('{project_id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(groups.filter(x => x.project == params.id))
@@ -59,6 +146,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.faculties.index,
         ({}) => {
             return HttpResponse.json(faculties)
+        }
+    ),
+    http.get(baseUrl + endpoints.courses.index,
+        ({}) => {
+            return HttpResponse.json(courses)
         }
     )
 
