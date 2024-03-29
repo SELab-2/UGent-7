@@ -63,6 +63,10 @@ msgstr "The student is not present in the course."
 msgid "courses.error.teachers.already_present"
 msgstr "The teacher is already present in the course."
 
+#: serializers/course_serializer.py:116
+msgid "courses.error.teachers.not_present"
+msgstr "The teacher is not present in the course."
+
 #: serializers/group_serializer.py:47
 msgid "group.errors.score_exceeds_max"
 msgstr "The score exceeds the group's max score."
@@ -134,6 +138,10 @@ msgstr "The student was successfully removed from the course."
 #: views/course_view.py:172
 msgid "course.success.teachers.add"
 msgstr "The teacher was successfully added to the course."
+
+#: views/course_view.py:195
+msgid "course.success.teachers.remove"
+msgstr "The teacher was successfully removed from the course."
 
 #: views/course_view.py:186
 msgid "course.success.project.add"

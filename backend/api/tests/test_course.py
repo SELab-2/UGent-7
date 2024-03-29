@@ -741,6 +741,38 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(course.teachers.filter(id=self.user.id).exists())
 
+    def test_remove_self(self):
+        """
+        Teacher should be able to remove him/herself from a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        response = self.client.delete(
+            reverse("course-teachers", args=[str(course.id)]),
+            data={"teacher_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure the current logged in teacher was removed correctly
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(course.teachers.filter(id=self.user.id).exists())
+
+    def test_try_remove_self_when_not_part_of(self):
+        """
+        Teacher should not be able to remove him/herself from a course he/she is not part of.
+        """
+        course = get_course()
+
+        response = self.client.delete(
+            reverse("course-teachers", args=[str(course.id)]),
+            data={"teacher_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure the check was successful
+        self.assertEqual(response.status_code, 400)
+
     def test_add_assistant(self):
         """
         Able to add an assistant to a course.

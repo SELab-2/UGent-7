@@ -14,7 +14,8 @@ from api.permissions.course_permissions import (
 )
 from api.permissions.role_permissions import IsTeacher
 from api.serializers.course_serializer import (
-    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer, TeacherJoinSerializer
+    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer, 
+    TeacherJoinSerializer, TeacherLeaveSerializer
 )
 from api.serializers.teacher_serializer import TeacherSerializer
 from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
@@ -124,7 +125,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         # Get the course
         course = self.get_object()
 
-        # Add student to course
+        # Remove the student from the course
         serializer = StudentLeaveSerializer(data=request.data, context={
             "course": course
         })
@@ -171,6 +172,27 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response({
             "message": gettext("courses.success.teachers.add")
+        })
+
+    @teachers.mapping.delete
+    @swagger_auto_schema(request_body=TeacherLeaveSerializer)
+    def _remove_teacher(self, request, **_):
+        """Remove a teacher from the course"""
+        # Get the course
+        course = self.get_object()
+
+        # Remove the teacher from the course
+        serializer = TeacherLeaveSerializer(data=request.data, context={
+            "course": course
+        })
+
+        if serializer.is_valid(raise_exception=True):
+            course.teachers.remove(
+                serializer.validated_data["teacher_id"]
+            )
+
+        return Response({
+            "message": gettext("courses.success.teachers.remove")
         })
 
     @action(detail=True, methods=["get"])
