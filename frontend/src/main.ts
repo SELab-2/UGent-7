@@ -10,9 +10,9 @@ import {createPinia} from 'pinia';
 const app = createApp(App);
 
 /* Bind application plugins */
-app.use(ToastService);
-
 app.use(createPinia());
+
+app.use(ToastService);
 
 app.use(i18n);
 

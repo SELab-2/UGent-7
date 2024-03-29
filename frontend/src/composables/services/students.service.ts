@@ -3,63 +3,66 @@ import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
 import { get, getList, create, delete_id, delete_id_with_data } from '@/composables/services/helpers.ts';
-import { useToast } from 'primevue/usetoast';
-import {ComposerTranslation} from "vue-i18n";
 
 export function useStudents() {
     const students = ref<Student[]|null>(null);
     const student = ref<Student|null>(null);
     const response = ref<Response|null>(null);
-    const toast = useToast();
 
-    async function getStudentByID(id: string, t: ComposerTranslation) {
+    async function getStudentByID(id: string) {
         const endpoint = endpoints.students.retrieve.replace('{id}', id);
-        get<Student>(endpoint, student, Student.fromJSON, toast, t);
+        await get<Student>(endpoint, student, Student.fromJSON);
     }
 
-    async function getStudents(t: ComposerTranslation) {
+    async function getStudents() {
         const endpoint = endpoints.students.index;
-        getList<Student>(endpoint, students, Student.fromJSON, toast, t);
+        await getList<Student>(endpoint, students, Student.fromJSON);
     }
 
-    async function getStudentsByCourse(course_id: string, t: ComposerTranslation) {
+    async function getStudentsByCourse(course_id: string) {
         const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
-        getList<Student>(endpoint, students, Student.fromJSON, toast, t);
+        await getList<Student>(endpoint, students, Student.fromJSON);
     }
 
-    async function getStudentsByGroup(group_id: string, t: ComposerTranslation) {
+    async function getStudentsByGroup(group_id: string) {
         const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
-        await getList<Student>(endpoint, students, Student.fromJSON, toast, t);
+        await getList<Student>(endpoint, students, Student.fromJSON);
     }
 
-    async function studentJoinCourse(course_id: string, student_id: string, t: ComposerTranslation) {
+    async function studentJoinCourse(course_id: string, student_id: string) {
         const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
-        create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast, t);
+        await create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON);
     }
 
-    async function studentLeaveCourse(course_id: string, student_id: string, t: ComposerTranslation) {
+    async function studentLeaveCourse(course_id: string, student_id: string) {
         const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
-        delete_id_with_data<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast, t);
+        await delete_id_with_data<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON);
     }
 
-    async function studentJoinGroup(group_id: string, student_id: string, t: ComposerTranslation) {
+    async function studentJoinGroup(group_id: string, student_id: string) {
         const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
-        create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast, t);
+        await create<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON);
     }
 
-    async function studentLeaveGroup(group_id: string, student_id: string, t: ComposerTranslation) {
+    async function studentLeaveGroup(group_id: string, student_id: string) {
         const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
-        delete_id_with_data<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON, toast, t);
+        await delete_id_with_data<Response>(endpoint, {student_id: student_id}, response, Response.fromJSON);
     }
 
-    async function createStudent(student_data: any, t: ComposerTranslation) {
+    async function createStudent(student_data: Student) {
         const endpoint = endpoints.students.index;
-        create<Student>(endpoint, student_data, student, Student.fromJSON, toast, t);
+        await create<Student>(endpoint,
+            {
+                email:student_data.email,
+                first_name:student_data.first_name,
+                last_name: student_data.last_name
+            },
+         student, Student.fromJSON);
     }
 
-    async function deleteStudent(id: string, t: ComposerTranslation) {
+    async function deleteStudent(id: string) {
         const endpoint = endpoints.students.retrieve.replace('{id}', id);
-        delete_id<Student>(endpoint, student, Student.fromJSON, toast, t);
+        await delete_id<Student>(endpoint, student, Student.fromJSON);
     }
 
     return {
