@@ -15,3 +15,9 @@ class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = "__all__"
+
+
+class TeacherIDSerializer(serializers.Serializer):
+    teacher_id = serializers.PrimaryKeyRelatedField(
+        queryset=Teacher.objects.all()
+    )

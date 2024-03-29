@@ -6,15 +6,15 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from drf_yasg.utils import swagger_auto_schema
 from api.models.course import Course
-from api.models.group import Group
 from api.permissions.course_permissions import (
     CoursePermission,
     CourseAssistantPermission,
-    CourseStudentPermission
+    CourseStudentPermission,
+    CourseTeacherPermission
 )
 from api.permissions.role_permissions import IsTeacher
 from api.serializers.course_serializer import (
-    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer
+    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer, TeacherJoinSerializer
 )
 from api.serializers.teacher_serializer import TeacherSerializer
 from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
@@ -138,7 +138,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             "message": gettext("courses.success.students.remove")
         })
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | CourseTeacherPermission])
     def teachers(self, request, **_):
         """Returns a list of teachers for the given course"""
         course = self.get_object()
@@ -150,6 +150,28 @@ class CourseViewSet(viewsets.ModelViewSet):
         )
 
         return Response(serializer.data)
+
+    @teachers.mapping.post
+    @teachers.mapping.put
+    @swagger_auto_schema(request_body=TeacherJoinSerializer)
+    def _add_teacher(self, request, **_):
+        """Add a teacher to the course"""
+        # Get the course
+        course = self.get_object()
+
+        # Add teacher to course
+        serializer = TeacherJoinSerializer(data=request.data, context={
+            "course": course
+        })
+
+        if serializer.is_valid(raise_exception=True):
+            course.teachers.add(
+                serializer.validated_data["teacher_id"]
+            )
+
+        return Response({
+            "message": gettext("courses.success.teachers.add")
+        })
 
     @action(detail=True, methods=["get"])
     def projects(self, request, **_):

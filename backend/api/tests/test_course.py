@@ -98,6 +98,13 @@ def get_assistant():
     return create_assistant(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmail.com")
 
 
+def get_teacher():
+    """
+    Return a random teacher to use in tests.
+    """
+    return create_teacher(id=5, first_name="Sinan", last_name="Bolat", email="Sinan.Bolat@gmail.com")
+
+
 def get_student():
     """
     Return a random student to use in tests.
@@ -532,6 +539,22 @@ class CourseModelTestsAsStudent(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(course.students.filter(id=self.user.id).exists())
 
+    def test_try_add_self_as_teacher_to_course(self):
+        """
+        Students should not be able to add themselves as teachers to a course.
+        """
+        course = get_course()
+
+        response = self.client.post(
+            reverse("course-teachers", args=[str(course.id)]),
+            data={"teacher_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure that the student has not been added as a teacher
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(course.teachers.filter(id=self.user.id).exists())
+
     def test_remove_self_from_course(self):
         """
         Able to remove self from a course.
@@ -701,6 +724,22 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.client.force_authenticate(
             self.user
         )
+
+    def test_add_self(self):
+        """
+        Teacher should be able to add him/herself to a course.
+        """
+        course = get_course()
+
+        response = self.client.post(
+            reverse("course-teachers", args=[str(course.id)]),
+            data={"teacher_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure the current logged in teacher was added correctly
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.teachers.filter(id=self.user.id).exists())
 
     def test_add_assistant(self):
         """
