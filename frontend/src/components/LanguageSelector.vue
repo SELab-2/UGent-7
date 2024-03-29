@@ -17,12 +17,11 @@ const localeStorage = useLocalStorage('locale', locale.value);
  *
  * @param locale
  */
-function updateLocale(locale: Ref<string>) {
+function updateLocale(locale: string) {
     // Update saved locale
-    localeStorage.value = locale.value;
-
+    localeStorage.value = locale;
     // Update PrimeVue locale
-    config.locale = messages.value[locale.value]['primevue'] as PrimeVueLocaleOptions;
+    config.locale = messages.value[locale]['primevue'] as PrimeVueLocaleOptions;
 }
 
 /**
@@ -40,12 +39,12 @@ function getFlag(locale: string) {
 
 /* Hooks */
 onMounted(() => {
-    updateLocale(locale);
+    updateLocale(locale.value);
 });
 </script>
 
 <template>
-    <Dropdown id="language" v-model="locale" class="w-auto" :options="availableLocales" @change="updateLocale" variant="outlined">
+    <Dropdown id="language" v-model="locale" class="w-auto" :options="availableLocales" @change="updateLocale($event.value)" variant="outlined">
         <template #option="{ option }">
             <div class="flex align-items-center">
                 <img :alt="t('layout.header.language.' + option)" :src="getFlag(option)" class="h-1rem mr-2"/>
