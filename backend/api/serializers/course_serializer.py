@@ -43,6 +43,7 @@ class CourseIDSerializer(serializers.Serializer):
 
 
 class CourseCloneSerializer(serializers.Serializer):
+    clone_teachers = serializers.BooleanField()
     clone_assistants = serializers.BooleanField()
 
 

@@ -248,7 +248,8 @@ class CourseViewSet(viewsets.ModelViewSet):
 
             except Course.DoesNotExist:
                 # Else, we clone the course
-                course.clone(
+                course = course.clone(
+                    clone_teachers=serializer.validated_data["clone_teachers"],
                     clone_assistants=serializer.validated_data["clone_assistants"]
                 )
 
