@@ -90,7 +90,6 @@ class CASTokenObtainSerializer(Serializer):
         return serializer.save(), created
 
 
-
 class UserSerializer(ModelSerializer):
     """Serializer for the user model
     This serializer validates the user fields for creation and updating.
