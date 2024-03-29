@@ -4,11 +4,9 @@ from api.models.project import Project
 from api.models.group import Group
 from rest_framework.exceptions import ValidationError
 from django.utils import timezone
-from api.models.submission import Submission, SubmissionFile
-from api.models.checks import FileExtension, StructureCheck
+from api.models.checks import FileExtension
 from api.serializers.submission_serializer import SubmissionSerializer
 from api.serializers.checks_serializer import StructureCheckSerializer
-from rest_framework.request import Request
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -33,24 +31,14 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    submissions = serializers.HyperlinkedIdentityField(
+        view_name="project-submissions",
+        read_only=True
+    )
+
     class Meta:
         model = Project
-        fields = [
-            "id",
-            "name",
-            "description",
-            "visible",
-            "archived",
-            "start_date",
-            "deadline",
-            "max_score",
-            "score_visible",
-            "group_size",
-            "structure_checks",
-            "extra_checks",
-            "course",
-            "groups"
-        ]
+        fields = "__all__"
 
     def validate(self, data):
         if "course" in self.context:
@@ -69,11 +57,35 @@ class ProjectSerializer(serializers.ModelSerializer):
         return data
 
 
+class CreateProjectSerializer(ProjectSerializer):
+    number_groups = serializers.IntegerField(min_value=1, required=False)
+
+    def create(self, validated_data):
+        # Pop the 'number_groups' field from validated_data
+        number_groups = validated_data.pop('number_groups', None)
+
+        # Create the project object without passing 'number_groups' field
+        project = super().create(validated_data)
+
+        # Create groups for the project, if specified
+        if number_groups is not None:
+
+            for _ in range(number_groups):
+                Group.objects.create(project=project)
+
+        elif project.group_size == 1:
+            # If the group_size is set to one, create a group for each student
+            students = project.course.students.all()
+
+            for student in students:
+                group = Group.objects.create(project=project)
+                group.students.add(student)
+
+        return project
+
+
 class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
-
-    def validate(self, data):
-        return data
 
 
 class SubmissionStatusSerializer(serializers.Serializer):

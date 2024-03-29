@@ -1,6 +1,6 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser
 from api.permissions.assistant_permissions import AssistantPermission
 from ..models.assistant import Assistant
@@ -8,7 +8,7 @@ from ..serializers.assistant_serializer import AssistantSerializer
 from ..serializers.course_serializer import CourseSerializer
 
 
-class AssistantViewSet(ReadOnlyModelViewSet):
+class AssistantViewSet(ModelViewSet):
 
     queryset = Assistant.objects.all()
     serializer_class = AssistantSerializer

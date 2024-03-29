@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
+from drf_yasg.utils import swagger_auto_schema
 from api.models.course import Course
 from api.models.group import Group
 from api.permissions.course_permissions import (
@@ -12,11 +13,13 @@ from api.permissions.course_permissions import (
     CourseStudentPermission
 )
 from api.permissions.role_permissions import IsTeacher
-from api.serializers.course_serializer import CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer
+from api.serializers.course_serializer import (
+    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer
+)
 from api.serializers.teacher_serializer import TeacherSerializer
 from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
 from api.serializers.student_serializer import StudentSerializer
-from api.serializers.project_serializer import ProjectSerializer
+from api.serializers.project_serializer import ProjectSerializer, CreateProjectSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -40,6 +43,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     @assistants.mapping.post
     @assistants.mapping.put
+    @swagger_auto_schema(request_body=AssistantIDSerializer)
     def _add_assistant(self, request: Request, **_):
         """Add an assistant to the course"""
         course = self.get_object()
@@ -59,6 +63,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         })
 
     @assistants.mapping.delete
+    @swagger_auto_schema(request_body=AssistantIDSerializer)
     def _remove_assistant(self, request: Request, **_):
         """Remove an assistant from the course"""
         course = self.get_object()
@@ -92,6 +97,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     @students.mapping.post
     @students.mapping.put
+    @swagger_auto_schema(request_body=StudentJoinSerializer)
     def _add_student(self, request: Request, **_):
         """Add a student to the course"""
         # Get the course
@@ -112,6 +118,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         })
 
     @students.mapping.delete
+    @swagger_auto_schema(request_body=StudentLeaveSerializer)
     def _remove_student(self, request: Request, **_):
         """Remove a student from the course"""
         # Get the course
@@ -159,49 +166,47 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     @projects.mapping.post
     @projects.mapping.put
+    @swagger_auto_schema(request_body=CreateProjectSerializer)
     def _add_project(self, request, **_):
         """Add a project to the course"""
         course = self.get_object()
 
-        serializer = ProjectSerializer(
+        serializer = CreateProjectSerializer(
             data=request.data, context={
                 "request": request,
                 "course": course
             }
         )
 
-        project = None
-
         # Validate the serializer
         if serializer.is_valid(raise_exception=True):
             project = serializer.save()
             course.projects.add(project)
-
-        # Create groups for the project
-        students_count = course.students.count()
-        for _ in range(students_count):
-            Group.objects.create(project=project)
 
         return Response({
             "message": gettext("course.success.project.add"),
         })
 
     @action(detail=True, methods=["post"], permission_classes=[IsAdminUser | IsTeacher])
+    @swagger_auto_schema(request_body=CourseCloneSerializer)
     def clone(self, request: Request, **__):
         """Copy the course to a new course with the same fields"""
         course: Course = self.get_object()
 
-        try:
-            # We should return the already cloned course, if present
-            course = course.child_course
+        serializer = CourseCloneSerializer(
+            data=request.data
+        )
 
-        except Course.DoesNotExist:
-            # Else, we clone the course
-            course = course.clone(
-                clone_assistants=request.data.get("clone_assistants")
-            )
+        if serializer.is_valid(raise_exception=True):
+            try:
+                # We should return the already cloned course, if present
+                course = course.child_course
 
-            course.save()
+            except Course.DoesNotExist:
+                # Else, we clone the course
+                course.clone(
+                    clone_assistants=serializer.validated_data["clone_assistants"]
+                )
 
         # Return serialized cloned course
         course_serializer = CourseSerializer(course, context={"request": request})

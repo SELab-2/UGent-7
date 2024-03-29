@@ -1,0 +1,21 @@
+/* Package stylesheets */
+@import '../node_modules/primeflex/primeflex.css';
+@import '../node_modules/primeicons/primeicons.css';
+
+/* Custom PrimeVue theme */
+@import 'assets/scss/theme/theme.scss';
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    line-height: 1.6rem;
+
+    * {
+        box-sizing: border-box;
+    }
+
+    a {
+        text-decoration: none;
+    }
+}

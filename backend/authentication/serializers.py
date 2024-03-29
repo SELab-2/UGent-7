@@ -7,7 +7,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import update_last_login
 from rest_framework.serializers import (
     CharField,
-    EmailField,
+    SerializerMethodField,
     HyperlinkedRelatedField,
     ModelSerializer,
     Serializer,
@@ -23,7 +23,6 @@ class CASTokenObtainSerializer(Serializer):
     This serializer takes the CAS ticket and tries to validate it.
     Upon successful validation, create a new user if it doesn't exist.
     """
-
     ticket = CharField(required=True, min_length=49, max_length=49)
 
     def validate(self, data):
@@ -64,35 +63,37 @@ class CASTokenObtainSerializer(Serializer):
         return response.data.get("attributes", dict)
 
     def _fetch_user_from_cas(self, attributes: dict) -> Tuple[User, bool]:
+        # Convert the lastenrolled attribute
         if attributes.get("lastenrolled"):
             attributes["lastenrolled"] = int(attributes.get("lastenrolled").split()[0])
 
-        user = UserSerializer(
-            data={
-                "id": attributes.get("ugentID"),
-                "username": attributes.get("uid"),
-                "email": attributes.get("mail"),
-                "first_name": attributes.get("givenname"),
-                "last_name": attributes.get("surname"),
-                "last_enrolled": attributes.get("lastenrolled"),
-            }
-        )
+        # Map the CAS data onto the user data
+        data = {
+            "id": attributes.get("ugentID"),
+            "username": attributes.get("uid"),
+            "email": attributes.get("mail"),
+            "first_name": attributes.get("givenname"),
+            "last_name": attributes.get("surname"),
+            "last_enrolled": attributes.get("lastenrolled"),
+        }
 
-        if not user.is_valid():
-            raise ValidationError(user.errors)
+        # Get or create the user
+        user, created = User.objects.get_or_create(id=data["id"], defaults=data)
 
-        return user.get_or_create(user.validated_data)
+        # Validate the serializer
+        serializer = UserSerializer(user, data=data)
+
+        if not serializer.is_valid():
+            raise ValidationError(serializer.errors)
+
+        # Save the user
+        return serializer.save(), created
 
 
 class UserSerializer(ModelSerializer):
     """Serializer for the user model
     This serializer validates the user fields for creation and updating.
     """
-
-    id = CharField()
-    username = CharField()
-    email = EmailField()
-
     faculties = HyperlinkedRelatedField(
         many=True, read_only=True, view_name="faculty-detail"
     )
@@ -102,13 +103,15 @@ class UserSerializer(ModelSerializer):
         read_only=True,
     )
 
+    roles = SerializerMethodField()
+
+    def get_roles(self, user: User):
+        """Get the roles for the user"""
+        return user.roles
+
     class Meta:
         model = User
         fields = "__all__"
-
-    def get_or_create(self, validated_data: dict) -> Tuple[User, bool]:
-        """Create or fetch the user based on the validated data."""
-        return User.objects.get_or_create(**validated_data)
 
 
 class UserIDSerializer(Serializer):

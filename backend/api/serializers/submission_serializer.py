@@ -38,15 +38,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Submission
-        fields = [
-            "id",
-            "group",
-            "submission_number",
-            "submission_time",
-            "files",
-            "structure_checks_passed",
-            "extra_checks_results"
-        ]
+        fields = "__all__"
         extra_kwargs = {
             "submission_number": {
                 "required": False,

@@ -1,6 +1,7 @@
 import json
 from django.utils import timezone
 from django.urls import reverse
+from django.utils.translation import gettext
 from rest_framework.test import APITestCase
 from authentication.models import User
 from api.models.project import Project
@@ -490,6 +491,136 @@ class ProjectModelTests(APITestCase):
             fileExtension3.extension,
         )
 
+    def test_project_structure_checks_post(self):
+        """
+        Able to retrieve a structure check of a project after posting it.
+        """
+
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        fileExtension1 = create_fileExtension(id=1, extension="jpg")
+        fileExtension2 = create_fileExtension(id=2, extension="png")
+        fileExtension3 = create_fileExtension(id=3, extension="tar")
+        fileExtension4 = create_fileExtension(id=4, extension="wfp")
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        response = self.client.post(
+            reverse("project-structure-checks", args=[str(project.id)]),
+            {
+                "name": ".",
+                "obligated_extensions": [fileExtension1.extension, fileExtension4.extension],
+                "blocked_extensions": [fileExtension2.extension, fileExtension3.extension]},
+            follow=True,
+        )
+
+        project.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(json.loads(response.content), {'message': 'project.success.structure_check.add'})
+
+        upd: StructureCheck = project.structure_checks.all()[0]
+        retrieved_obligated_extensions = upd.obligated_extensions.all()
+        retrieved_blocked_file_extensions = upd.blocked_extensions.all()
+
+        self.assertEqual(len(retrieved_obligated_extensions), 2)
+        self.assertEqual(
+            retrieved_obligated_extensions[0].extension, fileExtension1.extension
+        )
+        self.assertEqual(
+            retrieved_obligated_extensions[1].extension, fileExtension4.extension
+        )
+
+        self.assertEqual(len(retrieved_blocked_file_extensions), 2)
+        self.assertEqual(
+            retrieved_blocked_file_extensions[0].extension,
+            fileExtension2.extension,
+        )
+        self.assertEqual(
+            retrieved_blocked_file_extensions[1].extension,
+            fileExtension3.extension,
+        )
+
+    def test_project_structure_checks_post_already_existing(self):
+        """
+        Able to retrieve a structure check of a project after posting it.
+        """
+
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        fileExtension1 = create_fileExtension(id=1, extension="jpg")
+        fileExtension2 = create_fileExtension(id=2, extension="png")
+        fileExtension3 = create_fileExtension(id=3, extension="tar")
+        fileExtension4 = create_fileExtension(id=4, extension="wfp")
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        create_structure_check(
+            id=5,
+            name=".",
+            project=project,
+            obligated_extensions=[fileExtension1, fileExtension4],
+            blocked_extensions=[fileExtension2, fileExtension3],
+        )
+
+        response = self.client.post(
+            reverse("project-structure-checks", args=[str(project.id)]),
+            {
+                "name": ".",
+                "obligated_extensions": [fileExtension1.extension, fileExtension4.extension],
+                "blocked_extensions": [fileExtension2.extension, fileExtension3.extension]},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(json.loads(response.content), {
+            'non_field_errors': [gettext("project.error.structure_checks.already_existing")]})
+
+    def test_project_structure_checks_post_blocked_and_obligated(self):
+        """
+        Able to retrieve a structure check of a project after posting it.
+        """
+
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        fileExtension1 = create_fileExtension(id=1, extension="jpg")
+        fileExtension2 = create_fileExtension(id=2, extension="png")
+        fileExtension3 = create_fileExtension(id=3, extension="tar")
+        fileExtension4 = create_fileExtension(id=4, extension="wfp")
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        response = self.client.post(
+            reverse("project-structure-checks", args=[str(project.id)]),
+            {
+                "name": ".",
+                "obligated_extensions": [fileExtension1.extension, fileExtension4.extension],
+                "blocked_extensions": [fileExtension1.extension, fileExtension2.extension, fileExtension3.extension]},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(json.loads(response.content), {
+            'non_field_errors': [gettext("project.error.structure_checks.extension_blocked_and_obligated")]})
+
     def test_project_extra_checks(self):
         """
         Able to retrieve an extra check of a project after creating it.
@@ -540,6 +671,71 @@ class ProjectModelTests(APITestCase):
             content_json["run_script"],
             settings.TESTING_BASE_LINK + checks.run_script.url,
         )
+
+    def test_project_groups(self):
+        """
+        Able to retrieve a list of groups of a project after creating it.
+        """
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        group1 = create_group(project=project)
+        group2 = create_group(project=project)
+
+        response = self.client.get(
+            reverse("project-groups", args=[str(project.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 2)
+
+        self.assertEqual(int(content_json[0]["id"]), group1.id)
+        self.assertEqual(int(content_json[1]["id"]), group2.id)
+
+    def test_project_submissions(self):
+        """
+        Able to retrieve a list of submissions of a project after creating it.
+        """
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+
+        group1 = create_group(project=project)
+        group2 = create_group(project=project)
+
+        submission1 = create_submission(submission_number=1, group=group1, structure_checks_passed=True)
+        submission2 = create_submission(submission_number=2, group=group2, structure_checks_passed=False)
+
+        response = self.client.get(
+            reverse("project-submissions", args=[str(project.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 2)
+
+        self.assertEqual(int(content_json[0]["id"]), submission1.id)
+        self.assertEqual(int(content_json[1]["id"]), submission2.id)
 
     def test_cant_join_locked_groups(self):
         """Should not be able to add a student to a group if the groups are locked."""
@@ -758,6 +954,36 @@ class ProjectModelTestsAsTeacher(APITestCase):
             response.data,
             {"non_empty_groups": 3, "groups_submitted": 2, "submissions_passed": 1},
         )
+
+    def test_retrieve_list_submissions(self):
+        """Able to retrieve a list of submissions for a project."""
+        course = create_course(id=3, name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+        course.teachers.add(self.user)
+
+        group = create_group(project=project)
+
+        create_submission(
+            submission_number=1, group=group, structure_checks_passed=True
+        )
+
+        response = self.client.get(
+            reverse("project-submissions", args=[str(project.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 1)
 
 
 class ProjectModelTestsAsStudent(APITestCase):
