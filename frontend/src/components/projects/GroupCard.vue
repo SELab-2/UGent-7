@@ -39,9 +39,11 @@ onMounted(async () => {
   .groupcard {
     background-color: white;
     border-radius: $borderRadius;
-    padding: 1.5rem;
-    margin: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: $cardBodyPadding;
+    border-style: solid;
+    border-color: $primaryLightColor;
+    border-width: $borderWidth;
+    color: $primaryColor;
 
     div {
       p {

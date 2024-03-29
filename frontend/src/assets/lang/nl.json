@@ -62,7 +62,8 @@
         },
         "card": {
             "open": "Details"
-        }
+        },
+        "submission" : "Indienen"
     },
     
     "primevue": {

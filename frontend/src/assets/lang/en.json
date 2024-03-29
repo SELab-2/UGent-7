@@ -51,7 +51,8 @@
         },
         "card": {
             "open": "Details"
-        }
+        },
+        "submission": "Submit"
     },
 
     "primevue": {

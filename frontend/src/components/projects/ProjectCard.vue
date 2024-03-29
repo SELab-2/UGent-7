@@ -54,7 +54,7 @@ const { t } = useI18n();
 @import '@/assets/scss/theme/theme.scss';
 .icon-color {
   color: $primaryColor;
-  font-size: 18px;
+  font-size: $fontSize;
 }
 
 .border-round {
@@ -63,7 +63,7 @@ const { t } = useI18n();
 
 .project-card {
   border-style: solid;
-  border-width: 2px;
+  border-width: $borderWidth;
   border-color: $primaryLightColor;
 
   .p-card-body {

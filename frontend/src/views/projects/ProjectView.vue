@@ -9,6 +9,7 @@ import Skeleton from "primevue/skeleton";
 import GroupCard from "@/components/projects/GroupCard.vue";
 import {useGroup} from "@/composables/services/groups.service.ts";
 import {Group} from "@/types/Group.ts";
+import SubmissionCard from "@/components/projects/SubmissionCard.vue";
 
 /**
  * Todo change all static id's to user.id
@@ -24,13 +25,13 @@ const finalGroup = ref<Group>(new Group("-1"));
 
 onMounted(async () => {
   const projectId = route.params.projectId;
-  await getProjectByID(projectId as string, t);
+  await getProjectByID(projectId as string);
   console.log("fetching groups")
   // Get id group from project by comparing the users groups and the project groups
-  await getGroupsByProject(projectId as string, t);
+  await getGroupsByProject(projectId as string);
   const projectGroups = groups.value;
   // get all groups from the user
-  await getGroupsByStudent("1", t);
+  await getGroupsByStudent("1");
   for (const group of groups.value ?? []) {
     const isCommonGroup = projectGroups?.some(projectGroup => projectGroup.id === group.id);
 
@@ -39,8 +40,6 @@ onMounted(async () => {
       break;
     }
   }
-  console.log('laatste id')
-  console.log(finalGroup.value.id);
 });
 
 </script>
@@ -63,6 +62,7 @@ onMounted(async () => {
         </div>
       </div>
       <div class="col-12 md:col-4">
+        <SubmissionCard v-if="project" :project="project" style="margin-bottom: 20px;"></SubmissionCard>
         <GroupCard v-if="finalGroup.id !== '-1'" :group-id="finalGroup.id"></GroupCard>
       </div>
     </div>
