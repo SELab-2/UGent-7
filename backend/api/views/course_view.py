@@ -14,7 +14,7 @@ from api.permissions.course_permissions import (
 )
 from api.permissions.role_permissions import IsTeacher
 from api.serializers.course_serializer import (
-    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer, 
+    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer,
     TeacherJoinSerializer, TeacherLeaveSerializer
 )
 from api.serializers.teacher_serializer import TeacherSerializer
