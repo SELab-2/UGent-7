@@ -77,26 +77,17 @@ class CASTokenObtainSerializer(Serializer):
             "last_enrolled": attributes.get("lastenrolled"),
         }
 
-        try:
-            # Fetch the user if it already exists
-            user = UserSerializer(User.objects.get(id=data["id"]), data=data)
+        # Get or create the user
+        user, created = User.objects.get_or_create(id=data["id"], defaults=data)
 
-            # Validate the serializer
-            if not user.is_valid():
-                raise ValidationError(user.errors)
+        # Validate the serializer
+        serializer = UserSerializer(user, data=data)
 
-            # Save the new user
-            return user.save(), False
-        except User.DoesNotExist:
-            # Create a new user
-            user = UserSerializer(data=data)
+        if not serializer.is_valid():
+            raise ValidationError(serializer.errors)
 
-            # Validate the serializer
-            if not user.is_valid():
-                raise ValidationError(user.errors)
-
-            # Save the new user
-            return user.save(), True
+        # Save the user
+        return serializer.save(), created
 
 
 
