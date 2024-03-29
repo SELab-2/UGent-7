@@ -45,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Dropdown id="language" v-model="locale" class="w-auto" :options="availableLocales" @change="updateLocale" variant="outlined">
+    <Dropdown id="language" v-model="locale" class="w-auto" :options="availableLocales" @change="updateLocale($event.value)" variant="outlined">
         <template #option="{ option }">
             <div class="flex align-items-center">
                 <img :alt="t('layout.header.language.' + option)" :src="getFlag(option)" class="h-1rem mr-2"/>
