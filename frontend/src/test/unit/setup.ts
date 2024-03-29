@@ -9,18 +9,36 @@ const baseUrl = "http://localhost"
 const groups = [
     {
         id: "0",
-        score: 20
+        score: 20,
+        project:"0",
     },
     {
         id: "1",
-        score: 18
+        score: 18,
+        project:"0"
+    }
+]
+
+const projects = [
+    {
+        id: "0",
+        name: "sel2",
+        description: "this is a test",
+        visible: true,
+        archived: false,
+        locked_groups: false,
+        start_date: new Date(),
+        deadline: new Date(),
+        max_score: 100,
+        score_visible: true,
+        group_size: 8
     }
 ]
 
 export const restHandlers = [
     http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(groups.filter(x => x.id == params.id))
+            return HttpResponse.json(groups.find(x => x.id == params.id))
         }
     )
 ]
