@@ -50,7 +50,6 @@ const { t } = useI18n();
   </Card>
 </template>
 
-// TODO fix ewout om mooit te maken
 <style lang="scss">
 @import '@/assets/scss/theme/theme.scss';
 .icon-color {
