@@ -987,6 +987,13 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.assertTrue(Course.objects.filter(name=course.name,
                                               academic_startyear=course.academic_startyear + 1).exists())
 
+        # Make sure the returned course is the cloned course
+        retrieved_course = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(retrieved_course["name"], course.name)
+        self.assertEqual(retrieved_course["academic_startyear"], course.academic_startyear + 1)
+
+        # Get the cloned course
         cloned_course = Course.objects.get(name=course.name, academic_startyear=course.academic_startyear + 1)
 
         # Make sure there are no assistants in the cloned course
@@ -1031,3 +1038,30 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.assertTrue(cloned_course.teachers.filter(id=self.user.id).exists())
         self.assertTrue(cloned_course.teachers.filter(id=teacher.id).exists())
         self.assertEqual(cloned_course.teachers.count(), 2)
+
+    def test_clone_course_that_already_has_child_course(self):
+        """
+        Course that has already a child course should not be cloned, but the child course should be returned.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        # Create a child course
+        child_course = create_course(name="Chemistry 101", academic_startyear=2024,
+                                     description="An introductory chemistry course.", parent_course=course)
+
+        # Clone the course
+        response = self.client.post(
+            reverse("course-clone", args=[str(course.id)]),
+            data={"clone_assistants": False, "clone_teachers": False},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Make sure the returned course is just the child course
+        retrieved_course = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(retrieved_course["id"], child_course.id)
+        self.assertEqual(retrieved_course["name"], child_course.name)
+        self.assertEqual(retrieved_course["academic_startyear"], child_course.academic_startyear)
