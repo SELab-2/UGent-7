@@ -16,7 +16,7 @@ const props = defineProps<{
 }>();
 
 onMounted(async () => {
-  await getStudentsByGroup(props.groupId, t);
+  await getStudentsByGroup(props.groupId);
 });
 
 </script>
