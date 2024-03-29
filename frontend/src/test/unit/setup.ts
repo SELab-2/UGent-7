@@ -35,6 +35,12 @@ const projects = [
     }
 ]
 
+const faculties = [
+    {
+        name: "wetenschappen"
+    }
+]
+
 export const restHandlers = [
     http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
         ({ params }) => {
@@ -43,9 +49,24 @@ export const restHandlers = [
     ),
     http.get(baseUrl + endpoints.groups.byProject.replace('{project_id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(groups.find(x => x.project == params.id))
+            return HttpResponse.json(groups.filter(x => x.project == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.faculties.retrieve.replace('{name}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(faculties.find(x => x.name == params.name))
         }
     )
+
+    /*
+    http.post(baseUrl + endpoints.groups.byProject.replace('{project_id}', ':id'),
+        ({ params }) => {
+            const newGroup = params.body; // Assuming the request body contains the new group data
+            groups.push(newGroup);
+            return HttpResponse.json(newGroup);
+        }
+    )
+    */
 ]
 
 const server = setupServer(...restHandlers)
