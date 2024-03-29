@@ -24,7 +24,6 @@ describe("group", (): void => {
         expect(group.value?.project).toBeNull()
         expect(group.value?.students).toEqual([]);
         expect(group.value?.submissions).toEqual([]);
-        console.log(group.value)
     })
 
     it("gets groups data by project", async () => {

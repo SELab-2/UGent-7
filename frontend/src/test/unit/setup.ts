@@ -40,6 +40,11 @@ export const restHandlers = [
         ({ params }) => {
             return HttpResponse.json(groups.find(x => x.id == params.id))
         }
+    ),
+    http.get(baseUrl + endpoints.groups.byProject.replace('{project_id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(groups.find(x => x.project == params.id))
+        }
     )
 ]
 
