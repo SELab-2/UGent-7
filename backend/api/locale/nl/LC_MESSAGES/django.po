@@ -52,12 +52,20 @@ msgid "courses.error.students.already_present"
 msgstr "De student bevindt zich al in de opleiding."
 
 #: serializers/course_serializer.py:68 serializers/course_serializer.py:87
-msgid "courses.error.students.past_course"
+msgid "courses.error.past_course"
 msgstr "De opleiding die men probeert te manipuleren is van een vorig jaar."
 
 #: serializers/course_serializer.py:83
 msgid "courses.error.students.not_present"
 msgstr "De student bevindt zich niet in de opleiding."
+
+#: serializers/course_serializer.py:97
+msgid "courses.error.teachers.already_present"
+msgstr "De lesgever bevindt zich al in de opleiding."
+
+#: serializers/course_serializer.py:116
+msgid "courses.error.teachers.not_present"
+msgstr "De lesgever bevindt zich niet in de opleiding."
 
 #: serializers/group_serializer.py:47
 msgid "group.errors.score_exceeds_max"
@@ -127,6 +135,14 @@ msgstr "De student is succesvol toegevoegd aan de opleiding."
 #: views/course_view.py:131
 msgid "courses.success.students.remove"
 msgstr "De student is succesvol verwijderd uit de opleiding."
+
+#: views/course_view.py:172
+msgid "course.success.teachers.add"
+msgstr "De lesgever is succesvol toegevoegd aan de opleiding."
+
+#: views/course_view.py:195
+msgid "course.success.teachers.remove"
+msgstr "De lesgever is succesvol verwijderd uit de opleiding."
 
 #: views/course_view.py:186
 msgid "course.success.project.add"
