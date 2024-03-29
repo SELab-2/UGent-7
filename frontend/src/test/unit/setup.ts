@@ -36,9 +36,8 @@ const projects = [
 ]
 
 const faculties = [
-    {
-        name: "wetenschappen"
-    }
+    {name: "wetenschappen"},
+    {name: "voetbal"}
 ]
 
 export const restHandlers = [
@@ -52,9 +51,14 @@ export const restHandlers = [
             return HttpResponse.json(groups.filter(x => x.project == params.id))
         }
     ),
-    http.get(baseUrl + endpoints.faculties.retrieve.replace('{name}', ':id'),
+    http.get(baseUrl + endpoints.faculties.retrieve.replace('{name}', ':name'),
         ({ params }) => {
             return HttpResponse.json(faculties.find(x => x.name == params.name))
+        }
+    ),
+    http.get(baseUrl + endpoints.faculties.index,
+        ({}) => {
+            return HttpResponse.json(faculties)
         }
     )
 
