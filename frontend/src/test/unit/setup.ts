@@ -10,13 +10,19 @@ const groups = [
     {
         id: "0",
         score: 20
+    },
+    {
+        id: "1",
+        score: 18
     }
 ]
 
 export const restHandlers = [
-    http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', '0'), () => {
-        return HttpResponse.json(groups[0])
-    })
+    http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(groups.filter(x => x.id == params.id))
+        }
+    )
 ]
 
 const server = setupServer(...restHandlers)
