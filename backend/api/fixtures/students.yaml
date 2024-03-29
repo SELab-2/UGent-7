@@ -8,4 +8,11 @@
   pk: '2'
   fields:
     student_id: null
-    courses: []
+    courses:
+      - 1
+- model: api.student
+  pk: '3'
+  fields:
+    student_id: null
+    courses:
+      - 1

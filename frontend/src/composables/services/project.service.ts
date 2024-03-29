@@ -57,7 +57,7 @@ export function useProject() {
 
     async function createProject(project_data: Project, course_id: string) {
         const endpoint = endpoints.projects.byCourse.replace('{course_id}', course_id);
-        await create<Project>(endpoint, 
+        await create<Project>(endpoint,
             {
                 name: project_data.name,
                 description: project_data.description,

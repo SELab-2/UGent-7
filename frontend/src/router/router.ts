@@ -1,3 +1,7 @@
+
+// import { useUserStore } from '@/stores/userStore';
+// TODO: after pinia setup is done
+
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import Dummy from '@/components/Dummy.vue';
@@ -7,6 +11,7 @@ import VerifyView from '@/views/authentication/VerifyView.vue';
 import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 import {AuthenticationGuard} from '@/router/guards/authentication.guard.ts';
 import {LogoutGuard} from '@/router/guards/logout.guard.ts';
+import ProjectView from "@/views/projects/ProjectView.vue";
 
 const routes: RouteRecordRaw[] = [
 
@@ -33,7 +38,7 @@ const routes: RouteRecordRaw[] = [
                 { path: 'create', component: Dummy, name: 'project-create' },
                 // Single project
                 { path: ':projectId', children: [
-                    { path: '', component: Dummy, name: 'project' },
+                    { path: '', component: ProjectView, name: 'project'},
                     { path: 'edit', component: Dummy, name: 'project-edit' },
                     { path: 'groups', component: Dummy, name: 'project-groups' },
                     { path: 'submit', component: Dummy, name: 'project-submit' },
@@ -73,6 +78,11 @@ const routes: RouteRecordRaw[] = [
     // Notifications
     { path: '/notifications', component: Dummy, name: 'notifications' },
     { path: '/notifications/:id', component: Dummy, name: 'notification' },
+
+    // Authentication
+    { path: '/auth/', children: [
+        { path: 'login', component: LoginView, name: 'login' },
+    ]},
 
     // Page not found: redirect to dashboard
     { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } }

@@ -33,6 +33,11 @@
         },
         "calendar": {
             "title": "Kalender"
+        },
+        "projects": {
+            "deadline": "Deadline",
+            "submissionStatus": "Indienstatus",
+            "groupMembers": "Groepsleden"
         }
     },
     "composables": {

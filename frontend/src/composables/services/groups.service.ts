@@ -17,6 +17,11 @@ export function useGroup() {
         await getList<Group>(endpoint, groups, Group.fromJSON);
     }
 
+    async function getGroupsByStudent(student_id: string) {
+        const endpoint = endpoints.groups.byStudent.replace('{student_id}', student_id);
+        await getList<Group>(endpoint, groups, Group.fromJSON);
+    }
+
     async function createGroup(group_data: Group, group_id: string) {
         const endpoint = endpoints.groups.byProject.replace('{group_id}', group_id);
         await create<Group>(endpoint,
@@ -36,6 +41,7 @@ export function useGroup() {
         group,
         getGroupByID,
         getGroupsByProject,
+        getGroupsByStudent,
 
         createGroup,
         deleteGroup

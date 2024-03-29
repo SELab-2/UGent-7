@@ -17,4 +17,7 @@
   fields:
     project: 1
     score: 8
-    students: []
+    students:
+      - '1'
+      - '2'
+      - '3'

@@ -19,12 +19,12 @@ export function useStudents() {
         await getList<Student>(endpoint, students, Student.fromJSON);
     }
 
-    async function getStudentsbyCourse(course_id: string) {
+    async function getStudentsByCourse(course_id: string) {
         const endpoint = endpoints.students.byCourse.replace('{course_id}', course_id);
         await getList<Student>(endpoint, students, Student.fromJSON);
     }
 
-    async function getStudentsbyGroup(group_id: string) {
+    async function getStudentsByGroup(group_id: string) {
         const endpoint = endpoints.students.byGroup.replace('{group_id}', group_id);
         await getList<Student>(endpoint, students, Student.fromJSON);
     }
@@ -51,7 +51,7 @@ export function useStudents() {
 
     async function createStudent(student_data: Student) {
         const endpoint = endpoints.students.index;
-        await create<Student>(endpoint, 
+        await create<Student>(endpoint,
             {
                 email:student_data.email,
                 first_name:student_data.first_name,
@@ -73,8 +73,8 @@ export function useStudents() {
 
         getStudentByID,
         getStudents,
-        getStudentsbyCourse,
-        getStudentsbyGroup,
+        getStudentsByCourse,
+        getStudentsByGroup,
 
         createStudent,
         deleteStudent,
