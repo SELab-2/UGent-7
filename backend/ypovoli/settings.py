@@ -20,11 +20,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, "data/production"))
 
+
 TESTING_BASE_LINK = "http://testserver"
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
@@ -36,7 +33,6 @@ ALLOWED_HOSTS = [DOMAIN_NAME]
 
 
 # Application definition
-
 INSTALLED_APPS = [
     # Built-ins
     "django.contrib.auth",
@@ -44,12 +40,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Third party
+
     "rest_framework_swagger",  # Swagger
     "rest_framework",  # Django rest framework
     "drf_yasg",  # Yet Another Swagger generator
     "sslserver",  # Used for local SSL support (needed by CAS)
-    # First party``
+
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application
     "notifications",  # Ypovoli notifications
@@ -85,12 +81,13 @@ SIMPLE_JWT = {
     "TOKEN_OBTAIN_SERIALIZER": "authentication.serializers.CASTokenObtainSerializer",
 }
 
-AUTH_USER_MODEL = "authentication.User"
 ROOT_URLCONF = "ypovoli.urls"
 WSGI_APPLICATION = "ypovoli.wsgi.application"
 
-# Application endpoints
+# Authentication
+AUTH_USER_MODEL = "authentication.User"
 
+# Application endpoints
 PORT = environ.get("DJANGO_CAS_PORT", "8080")
 CAS_ENDPOINT = "https://login.ugent.be"
 CAS_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}/auth/verify"
@@ -114,7 +111,6 @@ DATABASES = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Internationalization
-
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True

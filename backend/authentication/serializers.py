@@ -7,7 +7,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import update_last_login
 from rest_framework.serializers import (
     CharField,
-    EmailField,
+    SerializerMethodField,
     HyperlinkedRelatedField,
     ModelSerializer,
     Serializer,
@@ -88,11 +88,6 @@ class UserSerializer(ModelSerializer):
     """Serializer for the user model
     This serializer validates the user fields for creation and updating.
     """
-
-    id = CharField()
-    username = CharField()
-    email = EmailField()
-
     faculties = HyperlinkedRelatedField(
         many=True, read_only=True, view_name="faculty-detail"
     )
@@ -102,13 +97,20 @@ class UserSerializer(ModelSerializer):
         read_only=True,
     )
 
-    class Meta:
-        model = User
-        fields = "__all__"
+    roles = SerializerMethodField()
+
+    def get_roles(self, user: User):
+        """Get the roles for the user"""
+        return user.roles
 
     def get_or_create(self, validated_data: dict) -> Tuple[User, bool]:
         """Create or fetch the user based on the validated data."""
         return User.objects.get_or_create(**validated_data)
+
+    class Meta:
+        model = User
+        fields = "__all__"
+        read_only_fields = ["id", "username", "email"]
 
 
 class UserIDSerializer(Serializer):

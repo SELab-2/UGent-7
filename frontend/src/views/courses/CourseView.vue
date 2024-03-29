@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Calendar from 'primevue/calendar';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
-import Title from '@/components/Title.vue';
+import Title from '@/components/layout/Title.vue';
 import {onMounted} from 'vue';
 import {useCourses} from '@/composables/services/courses.service.ts';
 import {useRoute} from 'vue-router';

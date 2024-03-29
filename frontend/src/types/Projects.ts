@@ -1,7 +1,7 @@
 import { Course } from "./Course";
-import { Extra_check } from "./Extra_check";
+import { ExtraCheck } from "./ExtraCheck.ts";
 import { Group } from "./Group";
-import { Structure_check } from "./Structure_check";
+import { StructureCheck } from "./StructureCheck.ts";
 import { Submission } from "./Submission";
 
 export class Project {
@@ -24,8 +24,8 @@ export class Project {
             "this is a default project given in the service because it isnt initiated",
              0
         ), //TODO check
-        public structure_checks: Structure_check[] = [],
-        public extra_checks: Extra_check[] = [],
+        public structure_checks: StructureCheck[] = [],
+        public extra_checks: ExtraCheck[] = [],
         public groups: Group[] = [],
         public submissions: Submission = new Submission("0",0,new Date(), false), //TODO check
     ) {

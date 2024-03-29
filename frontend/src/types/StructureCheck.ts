@@ -1,7 +1,7 @@
-import { File_extension } from "./File_extensions";
+import { File_extension } from "./FileExtension.ts";
 import { Project } from "./Projects";
 
-export class Structure_check {
+export class StructureCheck {
     constructor(
         public id: string,
         public name: string,
@@ -28,8 +28,8 @@ export class Structure_check {
      *
      * @param structure_check
      */
-    static fromJSON(structure_check: Structure_check): Structure_check {
-        return new Structure_check(
+    static fromJSON(structure_check: StructureCheck): StructureCheck {
+        return new StructureCheck(
             structure_check.id,
             structure_check.name
         )
