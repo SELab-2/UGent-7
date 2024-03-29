@@ -34,6 +34,10 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
 
+    def make_admin(self):
+        self.is_staff = True
+        self.save()
+
     @staticmethod
     def get_dummy_admin():
         return User(
