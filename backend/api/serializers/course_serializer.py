@@ -93,7 +93,7 @@ class TeacherJoinSerializer(TeacherIDSerializer):
         course: Course = self.context["course"]
 
         # Check if the teacher isn't already enrolled.
-        if course.students.contains(data["teacher_id"]):
+        if course.teachers.contains(data["teacher_id"]):
             raise ValidationError(gettext("courses.error.teachers.already_present"))
 
         # Check if the course is not from a past academic year.

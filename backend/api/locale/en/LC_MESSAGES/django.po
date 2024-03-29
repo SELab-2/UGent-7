@@ -131,6 +131,10 @@ msgstr "The student was successfully added to the course."
 msgid "courses.success.students.remove"
 msgstr "The student was successfully removed from the course."
 
+#: views/course_view.py:172
+msgid "course.success.teachers.add"
+msgstr "The teacher was successfully added to the course."
+
 #: views/course_view.py:186
 msgid "course.success.project.add"
 msgstr "The project was successfully added to the course."
