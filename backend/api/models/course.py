@@ -46,7 +46,7 @@ class Course(models.Model):
         )
 
         if clone_assistants:
-            # Add all the assistants of the current course to the follow up course
+            # Add all the assistants of the current course to the follow-up course
             for assistant in self.assistants.all():
                 course.assistants.add(assistant)
 

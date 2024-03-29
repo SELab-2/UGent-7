@@ -3,7 +3,9 @@ import {useAuthStore} from '@/store/authentication.store.ts';
 import {storeToRefs} from 'pinia';
 
 export async function AuthenticationGuard(to: RouteLocationNormalized) {
-    const { refresh, pushIntent } = useAuthStore();
+    const { refresh } = useAuthStore();
+    const { intent } = storeToRefs(useAuthStore());
+
     const { isAuthenticated} = storeToRefs(useAuthStore());
 
     if (!['login', 'verify'].includes(to.name as string)) {
@@ -11,8 +13,7 @@ export async function AuthenticationGuard(to: RouteLocationNormalized) {
             await refresh();
 
             if (!isAuthenticated.value) {
-                pushIntent(to.fullPath);
-
+                intent.value = to.fullPath;
                 return { name: 'login' };
             }
         }

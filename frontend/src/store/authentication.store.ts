@@ -1,95 +1,93 @@
 import axios from 'axios';
 import {defineStore} from 'pinia';
-import {User} from '@/types/User.ts';
+import {Role, User} from '@/types/User.ts';
 import {endpoints} from '@/config/endpoints.ts';
-import {ref} from 'vue';
-import {useToastStore} from '@/store/toast.store.ts';
+import {useMessagesStore} from '@/store/messages.store.ts';
 import {client} from '@/composables/axios.ts';
+import {Teacher} from '@/types/Teacher.ts';
+import {Student} from '@/types/Student.ts';
+import {Assistant} from '@/types/Assistant.ts';
+import {useLocalStorage} from '@vueuse/core';
+import {computed, ref} from 'vue';
 
-const INTENT_KEY = 'intent';
+export const useAuthStore = defineStore('auth', () => {
+    /* Stores */
+    const user = ref<User|null>(null);
+    const teacher = ref<Teacher|null>(null);
+    const student = ref<Student|null>(null);
+    const assistant = ref<Assistant|null>(null);
+    const view = useLocalStorage<Role|null>('view', null);
+    const intent = useLocalStorage<string>('intent', '/');
 
-export const useAuthStore = defineStore('auth', {
-    state: () => {
-        return {
-            user: ref<User|null>(null)
-        };
-    },
-    actions: {
-        /**
-         * Attempt to log in the user using a CAS ticket.
-         *
-         * @param ticket
-         */
-        async login(ticket: string) {
-            // Display toast messages.
-            const { add } = useToastStore();
+    /**
+     * Attempt to log in the user using a CAS ticket.
+     *
+     * @param ticket
+     */
+    async function login(ticket: string) {
+        // Display toast messages.
+        const { add } = useMessagesStore();
 
-            // Attempt to log in the user using the ticket.
-            await axios.post(endpoints.auth.token.obtain, {
-                ticket
-            }).then(() => {
-                add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'You have successfully logged in.'
-                })
-            }).catch((error) => {
-                add({
-                    severity: 'error',
-                    summary: error.response.statusText,
-                    detail: error.response.data.detail
-                });
+        // Attempt to log in the user using the ticket.
+        await axios.post(endpoints.auth.token.obtain, {
+            ticket
+        }).then(() => {
+            add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'You have successfully logged in.'
+            })
+        }).catch((error) => {
+            add({
+                severity: 'error',
+                summary: error.response.statusText,
+                detail: error.response.data.detail
             });
-        },
-        /**
-         * Refresh the user objects in the API endpoint.
-         */
-        async refresh() {
-            // Display toast messages.
-            const { add } = useToastStore();
+        });
+    }
 
-            // Get the user information (using a cookie).
-            await axios.get(endpoints.auth.whoami).then(response => {
-                this.user = User.fromJSON(response.data);
-            }).catch((error) => {
-                add({
-                    severity: 'error',
-                    summary: error.response.statusText,
-                    detail: error.response.data.detail
-                });
+    /**
+     * Refresh the user objects in the API endpoint.
+     */
+    async function refresh() {
+        // Display toast messages.
+        const { add } = useMessagesStore();
+
+        // Get the user information (using a cookie).
+        await axios.get(endpoints.auth.whoami).then(response => {
+            user.value = User.fromJSON(response.data);
+
+            if (view.value === null) {
+                view.value = user.value.roles[0];
+            }
+
+            // TODO: Get the teacher, student, and assistant information.
+
+        }).catch((error) => {
+            add({
+                severity: 'error',
+                summary: error.response.statusText,
+                detail: error.response.data.detail
             });
-        },
-        async logout() {
-            await client.post(endpoints.auth.logout).catch();
-            this.user = null;
-        },
-        /**
-         * Save the intent URL in the local storage.
-         *
-         * @param intent
-         */
-        pushIntent(intent: string): void {
-            localStorage.setItem(INTENT_KEY, intent);
-        },
-        /**
-         * Get the intent URL from the local storage.
-         *
-         * @return string
-         */
-        popIntent(): string {
-            const intent = localStorage.getItem(INTENT_KEY) || '/';
-            localStorage.removeItem(INTENT_KEY);
-            return intent;
-        }
-    },
-    getters: {
-        /**
-         * Check if the user is authenticated.
-         *
-         * @param state
-         */
-        isAuthenticated(state): boolean {
-            return state.user !== null;
-        }
+        });
+    }
+
+    /**
+     * Log out the user.
+     */
+    async function logout() {
+        await client.post(endpoints.auth.logout).catch();
+        user.value = null;
+    }
+
+    /* Getters */
+    const isAuthenticated = computed(() => {
+        return user.value !== null;
+    });
+
+    return {
+        user, teacher, student, assistant, view, intent,
+        login, refresh, logout,
+        isAuthenticated
     }
 });
