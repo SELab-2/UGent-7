@@ -7,9 +7,7 @@ class StudentPermission(IsAuthenticated):
 
     def has_permission(self, request, view):
         """Check if user has permission to view a general student endpoint."""
-        if view.action in ['list', 'create', 'update', 'partial_update', 'destroy']:
-            return False
-        return True
+        return view.action == 'retrieve'
 
     def has_object_permission(self, request, view, obj):
         """Check if user has permission to view a detailed group endpoint"""
