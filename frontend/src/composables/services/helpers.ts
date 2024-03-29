@@ -1,8 +1,9 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { client } from '@/composables/axios.ts'
-import {Ref} from 'vue';
-import {useToastStore} from '@/store/toast.store.ts';
+import { Ref } from 'vue';
+import { useMessagesStore } from '@/store/messages.store.ts';
 import { i18n } from '../i18n';
+
 const lifeTime = 3000;
 
 export async function get<T>(endpoint: string, ref: Ref<T|null>, fromJson: (data: any) => T): Promise<void> {
@@ -78,7 +79,8 @@ export async function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, 
 
 export function processError(error: AxiosError){
     const { t } = i18n.global;
-    const { add } = useToastStore();
+    const { add } = useMessagesStore();
+
     if (error.response) {
         // The request was made and the server responded with a status code
         if (error.response.status === 404) {

@@ -1,43 +1,43 @@
-import {Structure_check} from '@/types/Structure_check.ts';
+import {StructureCheck} from '@/types/StructureCheck.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
 import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
 
-export function useStructure_check() {
-    const structure_checks = ref<Structure_check[]|null>(null);
-    const structure_check = ref<Structure_check|null>(null);
+export function useStructureCheck() {
+    const structure_checks = ref<StructureCheck[]|null>(null);
+    const structure_check = ref<StructureCheck|null>(null);
 
-    async function getStructure_checkByID(id: string) {
+    async function getStructureCheckByID(id: string) {
         const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id);
-        await get<Structure_check>(endpoint, structure_check, Structure_check.fromJSON);
+        await get<StructureCheck>(endpoint, structure_check, StructureCheck.fromJSON);
     }
 
-    async function getStructure_checkByProject(project_id: string) {
+    async function getStructureCheckByProject(project_id: string) {
         const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id);
-        await getList<Structure_check>(endpoint, structure_checks, Structure_check.fromJSON);
+        await getList<StructureCheck>(endpoint, structure_checks, StructureCheck.fromJSON);
     }
 
-    async function createStructure_check(structure_check_data: Structure_check, project_id: string) {
+    async function createStructureCheck(structure_check_data: StructureCheck, project_id: string) {
         const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id);
-        await create<Structure_check>(endpoint, 
+        await create<StructureCheck>(endpoint, 
             {
                 name: structure_check_data.name
             },
-        structure_check, Structure_check.fromJSON);
+        structure_check, StructureCheck.fromJSON);
     }
 
-    async function deleteStructure_check(id: string) {
+    async function deleteStructureCheck(id: string) {
         const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id);
-        await delete_id<Structure_check>(endpoint, structure_check, Structure_check.fromJSON);
+        await delete_id<StructureCheck>(endpoint, structure_check, StructureCheck.fromJSON);
     }
 
     return {
         structure_checks,
         structure_check,
-        getStructure_checkByID,
-        getStructure_checkByProject,
+        getStructureCheckByID,
+        getStructureCheckByProject,
 
-        createStructure_check,
-        deleteStructure_check
+        createStructureCheck,
+        deleteStructureCheck
     };
 }
