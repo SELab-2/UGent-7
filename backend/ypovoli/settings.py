@@ -10,11 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from django.utils.translation import gettext_lazy as _
 import os
 from datetime import timedelta
 from os import environ
 from pathlib import Path
+
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,6 +31,7 @@ SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
 DEBUG = environ.get("DJANGO_DEBUG", "False").lower() in ["true", "1", "t"]
 DOMAIN_NAME = environ.get("DJANGO_DOMAIN_NAME", "localhost")
 ALLOWED_HOSTS = [DOMAIN_NAME]
+CSRF_TRUSTED_ORIGINS = ["https://" + DOMAIN_NAME]
 
 
 # Application definition
@@ -40,12 +42,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "rest_framework_swagger",  # Swagger
     "rest_framework",  # Django rest framework
     "drf_yasg",  # Yet Another Swagger generator
     "sslserver",  # Used for local SSL support (needed by CAS)
-
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application
     "notifications",  # Ypovoli notifications
