@@ -112,6 +112,4 @@ describe("course", (): void => {
         expect(courses.value?.[6]?.assistants).toEqual([])
         expect(courses.value?.[6]?.projects).toEqual([])
     })
-
-    
 })

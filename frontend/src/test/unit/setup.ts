@@ -22,17 +22,32 @@ const groups = [
 const projects = [
     {
         id: "0",
+        course:"1",
         name: "sel2",
         description: "this is a test",
         visible: true,
         archived: false,
         locked_groups: false,
-        start_date: new Date(),
-        deadline: new Date(),
+        start_date: new Date("July 21, 2024 01:15:00"),
+        deadline: new Date("July 23, 2024 01:15:00"),
         max_score: 100,
         score_visible: true,
         group_size: 8
-    }
+    },
+    {
+        id: 1,
+        course: "1",
+        name: "sel3",
+        description: "make a project",
+        visible: true,
+        archived: false,
+        locked_groups: false,
+        start_date: new Date("July 21, 2024 01:15:00"),
+        deadline: new Date("July 23, 2024 01:15:00"),
+        max_score: 20,
+        score_visible: false,
+        group_size: 3
+      }
 ]
 
 const courses = [
@@ -126,16 +141,24 @@ export const restHandlers = [
             return HttpResponse.json(groups.find(x => x.id == params.id))
         }
     ),
-
+    http.get(baseUrl + endpoints.projects.retrieve.replace('{id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(projects.find(x => x.id == params.id))
+        }
+    ),
     http.get(baseUrl + endpoints.courses.retrieve.replace('{id}', ':id'),
     ({ params }) => {
         return HttpResponse.json(courses.find(x => x.id == params.id))
     }
     ),
-
     http.get(baseUrl + endpoints.groups.byProject.replace('{project_id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(groups.filter(x => x.project == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.projects.byCourse.replace('{course_id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(projects.filter(x => x.course == params.id))
         }
     ),
     http.get(baseUrl + endpoints.faculties.retrieve.replace('{name}', ':name'),
