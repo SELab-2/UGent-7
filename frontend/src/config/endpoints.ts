@@ -13,6 +13,7 @@ export const endpoints = {
         index: '/api/courses/',
         retrieve: '/api/courses/{id}/',
         byStudent: '/api/students/{student_id}/courses/',
+        byTeacher: '/api/teachers/{teacher_id}/courses/',
         clone: '/api/courses/{course_id}/clone/'
     },
     students: {

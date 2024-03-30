@@ -7,13 +7,14 @@ import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';
-import {onMounted} from 'vue';
+import {onMounted, watch} from 'vue';
 import {useCourses} from '@/composables/services/courses.service.ts';
 import {ref} from 'vue';
 import {Project} from "@/types/Projects.ts";
 import {useProject} from "@/composables/services/project.service.ts";
 import ProjectCard from "@/components/projects/ProjectCard.vue";
 import {useAuthStore} from '@/store/authentication.store.ts';
+import {storeToRefs} from 'pinia';
 
 /* Composable injections */
 const {t} = useI18n();
@@ -22,13 +23,28 @@ const {t} = useI18n();
 const allProjects = ref<Project[]>([]);
 
 /* Service injection */
-const { user } = useAuthStore();
+const {  user } = useAuthStore();
+const { view  }= storeToRefs(useAuthStore());
 const { projects, getProjectsByCourse } = useProject();
-const { courses, getCoursesByStudent } = useCourses();
+const { courses, getCoursesByStudent, getCoursesByTeacher } = useCourses();
 
-onMounted(async () => {
+onMounted(() => {
+    fetchDashboardData();
+});
+
+watch(view, () => {
+    fetchDashboardData();
+});
+
+/* Fetch the data for the dashboard */
+async function fetchDashboardData() {
     if (user !== null) {
-        await getCoursesByStudent(user.id);
+        // Get the courses, depending on the user's role
+        if (view.value === 'teacher') {
+            await getCoursesByTeacher(user.id);
+        } else {
+            await getCoursesByStudent(user.id);
+        }
 
         for (const course of courses.value ?? []) {
             await getProjectsByCourse(course.id);
@@ -40,7 +56,7 @@ onMounted(async () => {
             allProjects.value.concat(projects.value ?? []);
         }
     }
-});
+}
 
 </script>
 

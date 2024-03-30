@@ -22,6 +22,11 @@ export function useCourses() {
         await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
+    async function getCoursesByTeacher(teacher_id: string) {
+        const endpoint = endpoints.courses.byTeacher.replace('{teacher_id}', teacher_id);
+        await getList<Course>(endpoint, courses, Course.fromJSON);
+    }
+
     async function createCourse(course_data: Course) {
         const endpoint = endpoints.courses.index;
         await create<Course>(endpoint,
@@ -50,6 +55,7 @@ export function useCourses() {
         getCourseByID,
         getCourses,
         getCoursesByStudent,
+        getCoursesByTeacher,
 
         createCourse,
         cloneCourse,
