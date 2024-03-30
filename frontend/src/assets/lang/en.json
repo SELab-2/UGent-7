@@ -3,6 +3,7 @@
         "header": {
             "logo": "Ghent University logo",
             "login": "login",
+            "view": "View as {0}",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
@@ -62,6 +63,13 @@
         },
         "card": {
             "open": "details"
+        }
+    },
+    "types": {
+        "roles": {
+            "student": "Student",
+            "assistant": "Assistant",
+            "teacher": "Teacher"
         }
     },
     "toasts": {

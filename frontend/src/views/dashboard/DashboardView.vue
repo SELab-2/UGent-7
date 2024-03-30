@@ -36,7 +36,7 @@ watch(view, () => {
 });
 
 /* Fetch the data for the dashboard */
-async function fetchDashboardData() {
+const fetchDashboardData = async () => {
     if (user !== null) {
         // Get the courses, depending on the user's role
         if (view.value === 'teacher') {
@@ -74,7 +74,10 @@ async function fetchDashboardData() {
             <ButtonGroup>
                 <Button :label="t('components.buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN"
                         icon-pos="right" outlined/>
-                <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
+
+                <RouterLink :to="{ name: 'course-create' }" v-if="view === 'teacher'">
+                    <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
+                </RouterLink>
             </ButtonGroup>
         </div>
         <!-- Course list body -->
@@ -105,7 +108,11 @@ async function fetchDashboardData() {
             <ButtonGroup>
                 <Button :label="t('components.buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN"
                         icon-pos="right" outlined/>
-                <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
+
+                <!-- TODO: Set to create a project-->
+                <RouterLink :to="{ name: 'course-create' }" v-if="view !== 'student'">
+                    <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
+                </RouterLink>
             </ButtonGroup>
         </div>
         <!-- Project list body -->
