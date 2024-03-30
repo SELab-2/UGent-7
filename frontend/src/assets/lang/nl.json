@@ -39,7 +39,13 @@
             "deadline": "Deadline",
             "submissionStatus": "Indienstatus",
             "groupMembers": "Groepsleden"
-        }
+        },
+        "courses": {
+          "create": "Creëer vak",
+          "name": "Vaknaam",
+          "description": "Beschrijving",
+          "year": "Academiejaar"
+      }
     },
     "composables": {
       "helpers": {

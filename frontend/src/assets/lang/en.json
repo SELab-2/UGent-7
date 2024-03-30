@@ -39,6 +39,12 @@
           "deadline": "Deadline",
           "submissionStatus": "Indienstatus",
           "groupMembers": "Group members"
+        },
+        "courses": {
+            "create": "Create course",
+            "name": "Name",
+            "description": "Description",
+            "year": "Academic year"
         }
     },
     "composables": {

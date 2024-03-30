@@ -4,6 +4,7 @@
 
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
+import CreateCourseView from '@/views/courses/CreateCourseView.vue';
 import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
 import CalendarView from '@/views/calendar/CalendarView.vue';
@@ -27,7 +28,7 @@ const routes: RouteRecordRaw[] = [
     // Courses
     { path: '/courses', children: [
         { path: '', component: Dummy, name: 'courses' },
-        { path: 'create', component: Dummy, name: 'course-create' },
+        { path: 'create', component: CreateCourseView, name: 'course-create' },
         // Single course  
         { path: ':courseId', children: [
             { path: '', component: CourseView, name: 'course' },
