@@ -14,6 +14,7 @@ export const endpoints = {
         retrieve: '/api/courses/{id}/',
         byStudent: '/api/students/{student_id}/courses/',
         byTeacher: '/api/teachers/{teacher_id}/courses/',
+        byAssistant: '/api/assistants/{assistant_id}/courses/',
         clone: '/api/courses/{course_id}/clone/'
     },
     students: {

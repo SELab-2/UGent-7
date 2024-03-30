@@ -7,9 +7,8 @@ import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';
-import {onMounted, watch} from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import {useCourses} from '@/composables/services/courses.service.ts';
-import {ref} from 'vue';
 import {Project} from "@/types/Projects.ts";
 import {useProject} from "@/composables/services/project.service.ts";
 import ProjectCard from "@/components/projects/ProjectCard.vue";
@@ -23,10 +22,10 @@ const {t} = useI18n();
 const allProjects = ref<Project[]>([]);
 
 /* Service injection */
-const {  user } = useAuthStore();
-const { view  }= storeToRefs(useAuthStore());
+const { user } = useAuthStore();
+const { view } = storeToRefs(useAuthStore());
 const { projects, getProjectsByCourse } = useProject();
-const { courses, getCoursesByStudent, getCoursesByTeacher } = useCourses();
+const { courses, getCoursesByStudent, getCoursesByTeacher, getCourseByAssistant } = useCourses();
 
 onMounted(() => {
     fetchDashboardData();
@@ -42,9 +41,14 @@ async function fetchDashboardData() {
         // Get the courses, depending on the user's role
         if (view.value === 'teacher') {
             await getCoursesByTeacher(user.id);
-        } else {
+        } else if (view.value === 'student') {
             await getCoursesByStudent(user.id);
+        } else {
+            await getCourseByAssistant(user.id);
         }
+
+        // Clear the projects, so that the projects from another role are not displayed
+        allProjects.value = [];
 
         for (const course of courses.value ?? []) {
             await getProjectsByCourse(course.id);
@@ -53,7 +57,7 @@ async function fetchDashboardData() {
                 project.course = course;
             });
 
-            allProjects.value.concat(projects.value ?? []);
+            allProjects.value = allProjects.value.concat(projects.value ?? []);
         }
     }
 }
