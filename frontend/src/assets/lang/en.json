@@ -1,13 +1,14 @@
 {
     "layout": {
         "header": {
-            "logo": "University of Ghent logo",
+            "logo": "Ghent University logo",
+            "login": "login",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
-                "courses": "Courses",
-                "settings": "Preferences",
-                "help": "Help"
+                "courses": "courses",
+                "settings": "preferences",
+                "help": "help"
             },
             "language": {
                 "nl": "Dutch",
@@ -20,8 +21,39 @@
             "courses": "My courses",
             "projects": "Current projects"
         },
+        "login": {
+            "title": "Login",
+            "illustration": "Dare to think",
+            "subtitle": "Login is done with your UGent account. If you have problems logging in, please contact the administrator.",
+            "button": "UGent login",
+            "card": {
+                "title": "Ypovoli",
+                "subtitle": "The official submission platform of Ghent University."
+            }
+        },
         "calendar": {
             "title": "Calendar"
+        },
+        "projects": {
+          "deadline": "Deadline",
+          "submissionStatus": "Indienstatus",
+          "groupMembers": "Group members"
+        }
+    },
+    "composables": {
+        "helpers": {
+            "errors": {
+                "notFound": "Not found",
+                "notFoundDetail": "Source not found",
+                "unauthorized": "unauthorized",
+                "unauthorizedDetail": "You are not authorized to access this resource.",
+                "server": "Server Error",
+                "serverDetail": "An error occurred on the server.",
+                "network": "Network Error",
+                "networkDetail": "Unable to reach the server.",
+                "request": "request error",
+                "requestDetail": "An error occurred while creating the request."
+            }
         }
     },
     "components": {
@@ -29,10 +61,14 @@
             "academic_year": "Academic year {0}"
         },
         "card": {
-            "open": "Details"
+            "open": "details"
         }
     },
-
+    "toasts": {
+        "messages": {
+            "unknown": "An unknown error has occurred."
+        }
+    },
     "primevue": {
         "startsWith": "Starts with",
         "contains": "Contains",

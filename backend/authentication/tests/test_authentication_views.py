@@ -66,16 +66,12 @@ class TestLogoutView(APITestCase):
         access_token = AccessToken().for_user(self.user)
         self.token = f"Bearer {access_token}"
         self.client.credentials(HTTP_AUTHORIZATION=self.token)
-        response = self.client.get(reverse("cas-logout"))
-        self.assertEqual(response.status_code, 302)
-        url = "{server_url}/logout?service={service_url}".format(
-            server_url=settings.CAS_ENDPOINT, service_url=settings.API_ENDPOINT
-        )
-        self.assertEqual(response["Location"], url)
+        response = self.client.post(reverse("cas-logout"))
+        self.assertEqual(response.status_code, 200)
 
     def test_logout_view_not_authenticated_logout_url(self):
         """LogoutView should return a 401 error when trying to access it while not authenticated."""
-        response = self.client.get(reverse("cas-logout"))
+        response = self.client.post(reverse("cas-logout"))
         self.assertEqual(response.status_code, 401)
 
 

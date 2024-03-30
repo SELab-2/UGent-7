@@ -2,6 +2,8 @@
     "layout": {
         "header": {
             "logo": "Logo van de Universiteit Gent",
+            "login": "Login",
+            "view": "Bekijken als {0}",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
@@ -22,6 +24,7 @@
         },
         "login": {
             "title": "Inloggen",
+            "illustration": "Durf denken",
             "subtitle": "Inloggen gebeurt met je UGent-account. Bij problemen met het inloggen kan je de beheerder contacteren.",
             "button": "UGent login",
             "card": {
@@ -31,7 +34,29 @@
         },
         "calendar": {
             "title": "Kalender"
+        },
+        "projects": {
+            "deadline": "Deadline",
+            "submissionStatus": "Indienstatus",
+            "groupMembers": "Groepsleden"
         }
+    },
+    "composables": {
+      "helpers": {
+        "errors": {
+          "notFound": "Niet Gevonden",
+          "notFoundDetail": "Bron niet gevonden.",
+          "unauthorized": "Onbevoegd",
+          "unauthorizedDetail": "Je bent niet bevoegd om deze bron te bereiken.",
+          "server": "Server Fout",
+          "serverDetail": "Er vond een fout plaats op de server.",
+          "network": "Netwerk Fout",
+          "networkDetail": "Kan de server niet bereiken.",
+
+          "request": "Fout verzoek",
+          "requestDetail": "Een fout vond plaats tijdens het maken van het verzoek."
+        }
+      }
     },
     "components": {
         "buttons": {
@@ -41,7 +66,18 @@
             "open": "Details"
         }
     },
-    
+    "types": {
+        "roles": {
+            "student": "Student",
+            "assistant": "Assistent",
+            "teacher": "Professor"
+        }
+    },
+    "toasts": {
+        "messages": {
+            "unknown": "Er is een onbekende fout opgetreden."
+        }
+    },
     "primevue": {
         "accept": "Ja",
         "addRule": "Voeg regel toe",

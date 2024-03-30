@@ -1,5 +1,7 @@
 from datetime import MINYEAR
 from django.db import models
+from django.apps import apps
+from django.utils.functional import cached_property
 from django.db.models import CharField, EmailField, IntegerField, DateTimeField, BooleanField, Model
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
 
@@ -33,6 +35,26 @@ class User(AbstractBaseUser):
     """Model settings"""
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
+
+    def make_admin(self):
+        self.is_staff = True
+        self.save()
+
+    @cached_property
+    def roles(self):
+        """Return all roles associated with this user"""
+        return [
+            # Use the class' name in lower case...
+            model.__name__.lower()
+            # ...for each installed app that could define a role model...
+            for app_config in apps.get_app_configs()
+            # ...for each model in the app's models...
+            for model in app_config.get_models()
+            # ...that inherit the User class.
+            if model is not self.__class__
+            if issubclass(model, self.__class__)
+            if model.objects.filter(id=self.id).exists()
+        ]
 
     @staticmethod
     def get_dummy_admin():

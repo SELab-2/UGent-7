@@ -1,14 +1,14 @@
-import { File_extension } from "./File_extensions";
+import { File_extension } from "./FileExtension.ts";
 import { Project } from "./Projects";
 
-export class Structure_check {
+export class StructureCheck {
     constructor(
-        public id: number,
+        public id: string,
         public name: string,
         public obligated_extensions: File_extension[] = [],
         public blocked_extensions: File_extension[] = [],
         public project: Project = new Project(
-            0,
+            "0",
             "default",
             "this is a default project given in the service because it isnt initiated",
             false,
@@ -28,8 +28,8 @@ export class Structure_check {
      *
      * @param structure_check
      */
-    static fromJSON(structure_check: Structure_check): Structure_check {
-        return new Structure_check(
+    static fromJSON(structure_check: StructureCheck): StructureCheck {
+        return new StructureCheck(
             structure_check.id,
             structure_check.name
         )

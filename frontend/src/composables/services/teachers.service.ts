@@ -1,30 +1,68 @@
 import {Teacher} from '@/types/Teacher.ts';
+import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList } from '@/composables/services/helpers.ts';
-import { useToast } from 'primevue/usetoast';
+import { get, getList, create, delete_id, delete_id_with_data } from '@/composables/services/helpers.ts';
 
 export function useTeacher() {
     const teachers = ref<Teacher[]|null>(null);
     const teacher = ref<Teacher|null>(null);
-    const toast = useToast();
+    const response = ref<Response|null>(null);
 
-    async function getTeacherByID(id: number) {
-        const endpoint = endpoints.teachers.retrieve.replace('{id}', id.toString());
-        get<Teacher>(endpoint, teacher, Teacher.fromJSON, toast);
-        console.log(teacher)
+    async function getTeacherByID(id: string) {
+        const endpoint = endpoints.teachers.retrieve.replace('{id}', id);
+        await get<Teacher>(endpoint, teacher, Teacher.fromJSON);
+    }
+
+    async function getTeacherByCourse(course_id: string) {
+        const endpoint = endpoints.teachers.byCourse.replace('{course_id}', course_id);
+        await get<Teacher>(endpoint, teacher, Teacher.fromJSON);
     }
 
     async function getTeachers() {
         const endpoint = endpoints.teachers.index;
-        getList<Teacher>(endpoint, teachers, Teacher.fromJSON, toast);
-        console.log(teachers.value ? teachers.value.map((teacher, index) => `Teacher ${index + 1}: ${JSON.stringify(teacher)}`) : 'Teachers is null');
+        await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
+    }
+
+    async function teacherJoinCourse(course_id: string, teacher_id: string) {
+        const endpoint = endpoints.teachers.byCourse.replace('{course_id}', course_id);
+        await create<Response>(endpoint, {teacher_id: teacher_id}, response, Response.fromJSON);
+    }
+
+    async function teacherLeaveCourse(course_id: string, teacher_id: string) {
+        const endpoint = endpoints.teachers.byCourse.replace('{course_id}', course_id);
+        await delete_id_with_data<Response>(endpoint, {teacher_id: teacher_id}, response, Response.fromJSON);
+    }
+
+    async function createTeacher(teacher_data: Teacher) {
+        const endpoint = endpoints.teachers.index;
+        await create<Teacher>(endpoint, 
+            {
+                email:teacher_data.email,
+                first_name:teacher_data.first_name,
+                last_name: teacher_data.last_name
+            },
+        teacher, Teacher.fromJSON);
+    }
+
+    async function deleteTeacher(id: string) {
+        const endpoint = endpoints.students.retrieve.replace('{id}', id);
+        await delete_id<Teacher>(endpoint, teacher, Teacher.fromJSON);
     }
 
     return {
         teachers,
         teacher,
+        response,
+
         getTeacherByID,
-        getTeachers
+        getTeacherByCourse,
+        getTeachers,
+
+        createTeacher,
+        deleteTeacher,
+
+        teacherJoinCourse,
+        teacherLeaveCourse
     };
 }

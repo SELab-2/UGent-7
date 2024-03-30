@@ -1,24 +1,35 @@
 export const endpoints = {
     auth: {
+        whoami: '/api/auth/cas/whoami/',
         login: '/api/auth/cas/login/',
-        logout: '/api/auth/cas/logout/'
+        logout: '/api/auth/cas/logout/',
+        token: {
+            refresh: '/api/auth/token/refresh/',
+            verify: '/api/auth/token/verify/',
+            obtain: '/api/auth/token/'
+        }
     },
     courses: {
         index: '/api/courses/',
         retrieve: '/api/courses/{id}/',
-        byStudent: '/api/students/{student_id}/courses/'
+        byStudent: '/api/students/{student_id}/courses/',
+        clone: '/api/courses/{course_id}/clone/'
     },
     students: {
         index: '/api/students/',
-        retrieve: '/api/students/{id}/'
+        retrieve: '/api/students/{id}/',
+        byCourse: '/api/courses/{course_id}/students/',
+        byGroup: '/api/groups/{group_id}/students/'
     },
     teachers: {
         index: '/api/teachers/',
-        retrieve: '/api/teachers/{id}/'
+        retrieve: '/api/teachers/{id}/',
+        byCourse: '/api/courses/{course_id}/teachers/'
     },
     assistants: {
         index: '/api/assistants/',
-        retrieve: '/api/assistants/{id}/'
+        retrieve: '/api/assistants/{id}/',
+        byCourse: '/api/courses/{course_id}/assistants/'
     },
     admins: {
         index: '/api/admins/',
@@ -30,7 +41,8 @@ export const endpoints = {
     },
     groups: {
         retrieve: '/api/groups/{id}/',
-        byProject: '/api/projects/{project_id}/groups/'
+        byProject: '/api/projects/{project_id}/groups/',
+        byStudent: '/api/students/{student_id}/groups/'
     },
     projects: {
         retrieve: '/api/projects/{id}',

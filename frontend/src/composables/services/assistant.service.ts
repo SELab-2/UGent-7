@@ -1,30 +1,68 @@
 import {Assistant} from '@/types/Assistant.ts';
+import { Response } from '@/types/Response';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList } from '@/composables/services/helpers.ts';
-import { useToast } from 'primevue/usetoast';
+import { get, getList, create, delete_id, delete_id_with_data } from '@/composables/services/helpers.ts';
 
 export function useAssistant() {
     const assistants = ref<Assistant[]|null>(null);
     const assistant = ref<Assistant|null>(null);
-    const toast = useToast();
+    const response = ref<Response|null>(null);
 
-    async function getAssistantByID(id: number) {
-        const endpoint = endpoints.assistants.retrieve.replace('{id}', id.toString());
-        get<Assistant>(endpoint, assistant, Assistant.fromJSON, toast);
-        console.log(assistant)
+    async function getAssistantByID(id: string) {
+        const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
+        await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
+    }
+
+    async function getAssistantByCourse(course_id: string) {
+        const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
+        await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 
     async function getAssistants() {
         const endpoint = endpoints.assistants.index;
-        getList<Assistant>(endpoint, assistants, Assistant.fromJSON, toast);
-        console.log(assistants.value ? assistants.value.map((assistant, index) => `Assistant ${index + 1}: ${JSON.stringify(assistant)}`) : 'assistants is null');
+        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON);
+    }
+
+    async function assistantJoinCourse(course_id: string, assistant_id: string) {
+        const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
+        await create<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON);
+    }
+
+    async function assistantLeaveCourse(course_id: string, assistant_id: string) {
+        const endpoint = endpoints.assistants.byCourse.replace('{course_id}', course_id);
+        await delete_id_with_data<Response>(endpoint, {assistant_id: assistant_id}, response, Response.fromJSON);
+    }
+
+    async function createAssistant(assistant_data: Assistant) {
+        const endpoint = endpoints.assistants.index;
+        await create<Assistant>(endpoint, 
+            {
+                email:assistant_data.email,
+                first_name:assistant_data.first_name,
+                last_name: assistant_data.last_name
+            },
+        assistant, Assistant.fromJSON);
+    }
+
+    async function deleteAssistant(id: string) {
+        const endpoint = endpoints.admins.retrieve.replace('{id}', id);
+        await delete_id<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 
     return {
         assistants,
         assistant,
+        response,
+
         getAssistantByID,
-        getAssistants
+        getAssistantByCourse,
+        getAssistants,
+
+        createAssistant,
+        deleteAssistant,
+
+        assistantJoinCourse,
+        assistantLeaveCourse
     };
 }

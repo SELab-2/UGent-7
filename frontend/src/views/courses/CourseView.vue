@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import Calendar from 'primevue/calendar';
-import Skeleton from 'primevue/skeleton';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
-import Title from '@/components/Title.vue';
+import Title from '@/components/layout/Title.vue';
 import {onMounted} from 'vue';
 import {useCourses} from '@/composables/services/courses.service.ts';
 import {useRoute} from 'vue-router';
@@ -12,33 +11,30 @@ const { course, getCourseByID } = useCourses();
 
 onMounted(() => {
     getCourseByID(
-        parseInt(params.courseId as string)
+        params.courseId as string
     );
 });
 </script>
 
 <template>
     <BaseLayout>
-        <div class="grid">
+        <div class="grid fadein" v-if="course">
             <div class="col-12 md:col-6">
                 <div>
-                    <Title v-if="course">
+                    <Title>
                         {{ course.name }}
                     </Title>
-                    <Skeleton class="mb-4" height="3rem" width="30rem" v-else/>
                 </div>
 
                 <div>
-                    <p v-if="course">
+                    <p>
                         {{ course.description }}
                     </p>
-                    <Skeleton height="10rem" v-else/>
                 </div>
             </div>
             <div class="col-12 md:col-6">
                 <div>
-                    <Calendar v-if="course" class="w-full" inline/>
-                    <Skeleton height="30rem" v-else/>
+                    <Calendar class="w-full" inline/>
                 </div>
             </div>
         </div>

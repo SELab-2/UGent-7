@@ -1,30 +1,49 @@
 import {Group} from '@/types/Group.ts';
 import {ref} from 'vue';
 import {endpoints} from '@/config/endpoints.ts';
-import { get, getList } from '@/composables/services/helpers.ts';
-import { useToast } from 'primevue/usetoast';
+import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
 
 export function useGroup() {
     const groups = ref<Group[]|null>(null);
     const group = ref<Group|null>(null);
-    const toast = useToast();
 
-    async function getGroupByID(id: number) {
-        const endpoint = endpoints.groups.retrieve.replace('{id}', id.toString());
-        get<Group>(endpoint, group, Group.fromJSON, toast);
-        console.log(group)
+    async function getGroupByID(id: string) {
+        const endpoint = endpoints.groups.retrieve.replace('{id}', id);
+        await get<Group>(endpoint, group, Group.fromJSON);
     }
 
-    async function getGroupsByProject(project_id: number) {
-        const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id.toString());
-        getList<Group>(endpoint, groups, Group.fromJSON, toast);
-        console.log(groups.value ? groups.value.map((group, index) => `Group ${index + 1}: ${JSON.stringify(group)}`) : 'Groups is null');
+    async function getGroupsByProject(project_id: string) {
+        const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id);
+        await getList<Group>(endpoint, groups, Group.fromJSON);
+    }
+
+    async function getGroupsByStudent(student_id: string) {
+        const endpoint = endpoints.groups.byStudent.replace('{student_id}', student_id);
+        await getList<Group>(endpoint, groups, Group.fromJSON);
+    }
+
+    async function createGroup(group_data: Group, group_id: string) {
+        const endpoint = endpoints.groups.byProject.replace('{group_id}', group_id);
+        await create<Group>(endpoint,
+            {
+                score: group_data.score
+            },
+        group, Group.fromJSON);
+    }
+
+    async function deleteGroup(id: string) {
+        const endpoint = endpoints.groups.retrieve.replace('{id}', id);
+        await delete_id<Group>(endpoint, group, Group.fromJSON);
     }
 
     return {
         groups,
         group,
         getGroupByID,
-        getGroupsByProject
+        getGroupsByProject,
+        getGroupsByStudent,
+
+        createGroup,
+        deleteGroup
     };
 }

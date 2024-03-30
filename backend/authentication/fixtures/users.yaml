@@ -47,6 +47,18 @@
     faculties:
     - Geneeskunde_Gezondheidswetenschappen
 - model: authentication.user
+  pk: '3'
+  fields:
+    last_login: null
+    username: somtin
+    email: somtin.somtin@gmail.com
+    first_name: somtin
+    last_name: somtin
+    last_enrolled: 2023
+    create_time: 2024-03-27 20:35:45.691565+00:00
+    faculties:
+      - Geneeskunde_Gezondheidswetenschappen
+- model: authentication.user
   pk: '235'
   fields:
     last_login: null

@@ -36,7 +36,7 @@ class Course(models.Model):
         """Returns whether the course is from a past academic year"""
         return datetime(self.academic_startyear + 1, 10, 1) < datetime.now()
 
-    def clone(self, clone_assistants=True) -> Self:
+    def clone(self, clone_teachers=True, clone_assistants=True) -> Self:
         """Clone the course to the next academic start year"""
         course = Course.objects.create(
             name=self.name,
@@ -46,9 +46,14 @@ class Course(models.Model):
         )
 
         if clone_assistants:
-            # Add all the assistants of the current course to the follow up course
+            # Add all the assistants of the current course to the follow-up course
             for assistant in self.assistants.all():
                 course.assistants.add(assistant)
+
+        if clone_teachers:
+            # Add all the teachers of the current course to the follow up course
+            for teacher in self.teachers.all():
+                course.teachers.add(teacher)
 
         return course
 

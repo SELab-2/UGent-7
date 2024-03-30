@@ -1,4 +1,4 @@
-export class Extra_check {
+export class ExtraCheck {
     constructor(
     ) {
     }

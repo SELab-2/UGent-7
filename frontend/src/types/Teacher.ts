@@ -1,18 +1,19 @@
 import { Faculty } from "./Faculty";
+import {Role, User} from '@/types/User.ts';
 
-export class Teacher {
+export class Teacher extends User {
     constructor(
-        public id: number,
-        public last_login: Date |null,
+        public id: string,
         public username: string,
-        public is_staff: boolean,
         public email: string,
         public first_name: string,
         public last_name: string,
         public last_enrolled: number,
-        public create_time: Date,
+        public is_staff: boolean,
+        public roles: Role[] = [],
         public faculties: Faculty[] = []
     ) {
+        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles);
     }
 
     /**
@@ -24,14 +25,14 @@ export class Teacher {
     static fromJSON(teacher: Teacher): Teacher {
         return new Teacher(
             teacher.id,
-            teacher.last_login ? new Date(teacher.last_login) : null,
             teacher.username,
-            teacher.is_staff,
             teacher.email,
             teacher.first_name,
             teacher.last_name,
             teacher.last_enrolled,
-            new Date(teacher.create_time)
+            teacher.is_staff,
+            teacher.roles,
+            teacher.faculties
         );
     }
 }
