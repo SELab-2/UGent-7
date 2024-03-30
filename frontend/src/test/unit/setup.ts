@@ -53,10 +53,10 @@ const projects = [
 const courses = [
     {
     "id": "1",
-    "teachers": "https://localhost/api/courses/1/teachers/",
-    "assistants": "https://localhost/api/courses/1/assistants/",
-    "students": "https://localhost/api/courses/1/students/",
-    "projects": "https://localhost/api/courses/1/projects/",
+    "teachers": [],
+    "assistants": [],
+    "students": [],
+    "projects": [],
     "parent_course": null,
     "name": "Math",
     "academic_startyear": 2023,
@@ -135,10 +135,66 @@ const faculties = [
     {name: "voetbal"}
 ]
 
+const students = [
+    {
+        id: "1",
+        last_login: null,
+        username: "jdoe",
+        is_staff: false,
+        email: "John.Doe@hotmail.com",
+        first_name: "John",
+        last_name: "Doe",
+        last_enrolled: 2023,
+        create_time: new Date("July 21, 2024 01:15:00"),
+        student_id: null
+      },
+      {
+        id: "2",
+        last_login: null,
+        username: "bverhae",
+        is_staff: false,
+        email: "Bartje.Verhaege@gmail.com",
+        first_name: "Bartje",
+        last_name: "Verhaege",
+        last_enrolled: 2023,
+        create_time: new Date("July 21, 2024 01:15:00"),
+        student_id: null
+      },
+      {
+        id: "000201247011",
+        last_login: new Date("July 30, 2024 01:15:00"),
+        username: "tverslyp",
+        is_staff: true,
+        email: "Tybo.Verslype@UGent.be",
+        first_name: "Tybo",
+        last_name: "Verslype",
+        last_enrolled: 2023,
+        create_time: new Date("July 21, 2024 01:15:00"),
+        student_id: "02012470"
+      },
+      {
+        id: "3",
+        last_login: null,
+        username: "somtin",
+        is_staff: false,
+        email: "somtin.somtin@gmail.com",
+        first_name: "somtin",
+        last_name: "somtin",
+        last_enrolled: 2023,
+        create_time: new Date("July 21, 2024 01:15:00"),
+        student_id: null
+      }
+]
+
 export const restHandlers = [
     http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(groups.find(x => x.id == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.students.retrieve.replace('{id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(students.find(x => x.id == params.id))
         }
     ),
     http.get(baseUrl + endpoints.projects.retrieve.replace('{id}', ':id'),
@@ -174,6 +230,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.courses.index,
         ({}) => {
             return HttpResponse.json(courses)
+        }
+    ),
+    http.get(baseUrl + endpoints.students.index,
+        ({}) => {
+            return HttpResponse.json(students)
         }
     )
 
