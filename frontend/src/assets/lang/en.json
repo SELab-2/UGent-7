@@ -42,7 +42,7 @@
         },
         "courses": {
             "create": "Create course",
-            "name": "Name",
+            "name": "Course name",
             "description": "Description",
             "year": "Academic year"
         }
