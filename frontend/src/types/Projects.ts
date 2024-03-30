@@ -1,7 +1,7 @@
 import { Course } from "./Course";
-import { Extra_check } from "./Extra_check";
+import { ExtraCheck } from "./ExtraCheck.ts";
 import { Group } from "./Group";
-import { Structure_check } from "./Structure_check";
+import { StructureCheck } from "./StructureCheck.ts";
 import { Submission } from "./Submission";
 
 export class Project {
@@ -19,8 +19,8 @@ export class Project {
         public group_size: number,
 
         public course: Course|null = null,
-        public structure_checks: Structure_check[] = [],
-        public extra_checks: Extra_check[] = [],
+        public structure_checks: StructureCheck[] = [],
+        public extra_checks: ExtraCheck[] = [],
         public groups: Group[] = [],
         public submissions: Submission[] = []
     ) {

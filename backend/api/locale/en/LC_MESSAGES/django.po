@@ -52,12 +52,20 @@ msgid "courses.error.students.already_present"
 msgstr "The student is already present in the course."
 
 #: serializers/course_serializer.py:68 serializers/course_serializer.py:87
-msgid "courses.error.students.past_course"
+msgid "courses.error.past_course"
 msgstr "The course is from a past year, thus cannot be manipulated."
 
 #: serializers/course_serializer.py:83
 msgid "courses.error.students.not_present"
 msgstr "The student is not present in the course."
+
+#: serializers/course_serializer.py:97
+msgid "courses.error.teachers.already_present"
+msgstr "The teacher is already present in the course."
+
+#: serializers/course_serializer.py:116
+msgid "courses.error.teachers.not_present"
+msgstr "The teacher is not present in the course."
 
 #: serializers/group_serializer.py:47
 msgid "group.errors.score_exceeds_max"
@@ -126,6 +134,14 @@ msgstr "The student was successfully added to the course."
 #: views/course_view.py:131
 msgid "courses.success.students.remove"
 msgstr "The student was successfully removed from the course."
+
+#: views/course_view.py:172
+msgid "course.success.teachers.add"
+msgstr "The teacher was successfully added to the course."
+
+#: views/course_view.py:195
+msgid "course.success.teachers.remove"
+msgstr "The teacher was successfully removed from the course."
 
 #: views/course_view.py:186
 msgid "course.success.project.add"
