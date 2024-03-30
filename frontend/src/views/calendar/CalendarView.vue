@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import moment from 'moment';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
-import ProjectLink from '@/components/projects/ProjectLink.vue';
+import ProjectCard from '@/components/projects/ProjectCard.vue';
 import Calendar from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';
 import {useProject} from '@/composables/services/project.service';
@@ -81,10 +81,9 @@ onMounted(async () => {
                 <Title class="mb-6">{{ formattedDate }}</Title>
 
                 <!-- Listing projects with given deadline -->
-                <div>
-                    <div class="col-12" v-for="project in projectsWithDeadline" :key="project.id">
-                        <!-- Each ProjectLink card -->
-                        <ProjectLink class="h-100 mb-2" :project="project"/>
+                <div class="grid grid-cols-2 gap-4">
+                    <div v-for="project in projectsWithDeadline" :key="project.id">
+                        <ProjectCard class="h-100" :project="project"/>
                     </div>
                 </div>
             </div>
