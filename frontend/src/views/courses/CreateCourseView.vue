@@ -22,7 +22,7 @@ const courseName = ref<string>('');
 const courseDescription = ref<string>('');
 const courseYear = ref<Date>(new Date());
 
-const submit_course = async () => {
+const submitCourse = async () => {
     console.log('Creating course...');
     // Pass the course data to the service
     await createCourse(
@@ -48,7 +48,7 @@ const submit_course = async () => {
                 <Title class="mb-6">{{ t('views.courses.create') }}</Title>
 
                 <!-- Course form -->
-                <form @submit.prevent="submit_course">
+                <form @submit.prevent="submitCourse">
                     <!-- Course name -->
                     <div class="mb-4">
                         <label for="courseName">{{ t('views.courses.name') }}</label>
