@@ -240,10 +240,48 @@ const assistants = [
       }
 ]
 
+const admins = [
+    {
+        id: "300201547011",
+        faculties: [],
+        roles: [
+          "student"
+        ],
+        last_login: new Date("July 23, 2024 01:15:00"),
+        username: "tverslyp",
+        is_staff: true,
+        email: "Tybo.Verslype@UGent.be",
+        first_name: "Tybo",
+        last_name: "Verslype",
+        last_enrolled: 2023,
+        create_time: new Date("July 21, 2024 01:15:00")
+      },
+      {
+        id: "400251245031",
+        faculties: [],
+        roles: [
+          "student"
+        ],
+        last_login: new Date("July 23, 2024 01:15:00"),
+        username: "simmig",
+        is_staff: true,
+        email: "Simon.Mignolet@UGent.be",
+        first_name: "Simon",
+        last_name: "Mignolet",
+        last_enrolled: 2023,
+        create_time: new Date("July 21, 2024 01:15:00")
+      }
+]
+
 export const restHandlers = [
     http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(groups.find(x => x.id == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.admins.retrieve.replace('{id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(admins.find(x => x.id == params.id))
         }
     ),
     http.get(baseUrl + endpoints.teachers.retrieve.replace('{id}', ':id'),
@@ -294,6 +332,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.courses.index,
         ({}) => {
             return HttpResponse.json(courses)
+        }
+    ),
+    http.get(baseUrl + endpoints.admins.index,
+        ({}) => {
+            return HttpResponse.json(admins)
         }
     ),
     http.get(baseUrl + endpoints.students.index,
