@@ -3,13 +3,18 @@
 .venv
 .idea
 .vscode
+
 data/*
 data/nginx/ssl/*
 data/postres*
 data/redis/*
-backend/data/production/*
 
-/node_modules
+backend/data/production/*
 backend/staticfiles/*
+
+frontend/cypress/screenshots/*
+frontend/cypress/videos/*
+/node_modules
+
 
 !data/nginx/ssl/.gitkeep
