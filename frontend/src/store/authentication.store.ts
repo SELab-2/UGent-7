@@ -4,12 +4,12 @@ import {Role, User} from '@/types/User.ts';
 import {endpoints} from '@/config/endpoints.ts';
 import {useMessagesStore} from '@/store/messages.store.ts';
 import {client} from '@/composables/axios.ts';
-import {Teacher} from '@/types/Teacher.ts';
-import {Student} from '@/types/Student.ts';
-import {Assistant} from '@/types/Assistant.ts';
 import {useLocalStorage} from '@vueuse/core';
 import { useCourses } from '@/composables/services/courses.service';
 import {computed, ref, watch} from 'vue';
+import { useAssistant } from '@/composables/services/assistant.service';
+import { useStudents } from '@/composables/services/students.service';
+import { useTeacher } from '@/composables/services/teachers.service';
 
 export const useAuthStore = defineStore('auth', () => {
     /* Stores */
@@ -19,6 +19,9 @@ export const useAuthStore = defineStore('auth', () => {
 
     /* Services */
     const { courses, getCoursesByTeacher, getCoursesByStudent, getCourseByAssistant } = useCourses();
+    const { assistant, getAssistantByID } = useAssistant();
+    const { student, getStudentByID } = useStudents();
+    const { teacher, getTeacherByID } = useTeacher();
 
     /* Update the user object when the view changes. */
     watch(view, async () => {
@@ -28,56 +31,42 @@ export const useAuthStore = defineStore('auth', () => {
     const initUser = async () => {
         if (user.value !== null) {
             if (view.value === 'teacher') {
+                // Get the teacher information.
+                await getTeacherByID(user.value.id);
+
+                // Get the courses for the teacher.
                 await getCoursesByTeacher(user.value.id);
 
-                user.value = new Teacher(
-                    user.value.id,
-                    user.value.username,
-                    user.value.email,
-                    user.value.first_name,
-                    user.value.last_name,
-                    user.value.last_enrolled,
-                    user.value.is_staff,
-                    user.value.roles,
-                    [],
-                    courses.value ?? [],
-                    user.value.create_time,
-                    user.value.last_login
-                );
+                // Set the user object with the teacher information.
+                teacher.value ? teacher.value.courses = courses.value ?? [] : null;
+                teacher.value ? teacher.value.roles = user.value.roles : null;
+
+                user.value = teacher.value;
+
             }else if (view.value === 'student') {
+                // Get the student information.
+                await getStudentByID(user.value.id);
+
+                // Get the courses for the student.
                 await getCoursesByStudent(user.value.id);
 
-                user.value = new Student(
-                    user.value.id,
-                    user.value.username,
-                    user.value.email,
-                    user.value.first_name,
-                    user.value.last_name,
-                    user.value.is_staff,
-                    user.value.last_enrolled,
-                    user.value.create_time,
-                    user.value.last_login,
-                    user.value.id,
-                    user.value.roles,
-                    courses.value ?? []
-                );
+                // Set the user object with the student information.
+                student.value ? student.value.courses = courses.value ?? [] : null;
+                student.value ? student.value.roles = user.value.roles : null;
+
+                user.value = student.value;
             }else {
+                // Get the assistant information.
+                await getAssistantByID(user.value.id);
+
+                // Get the courses for the assistant.
                 await getCourseByAssistant(user.value.id);
 
-                user.value = new Assistant(
-                    user.value.id,
-                    user.value.username,
-                    user.value.email,
-                    user.value.first_name,
-                    user.value.last_name,
-                    user.value.last_enrolled,
-                    user.value.is_staff,
-                    user.value.roles,
-                    [],
-                    courses.value ?? [],
-                    user.value.create_time,
-                    user.value.last_login
-                );
+                // Set the user object with the assistant information.
+                assistant.value ? assistant.value.courses = courses.value ?? [] : null;
+                assistant.value ? assistant.value.roles = user.value.roles : null;
+                
+                user.value = assistant.value;                
             }
         }
     };
@@ -124,7 +113,7 @@ export const useAuthStore = defineStore('auth', () => {
             if (view.value === null) {
                 view.value = user.value.roles[0];
             }
-
+            
             // Init the user depending on the role selected.
             initUser();
 
