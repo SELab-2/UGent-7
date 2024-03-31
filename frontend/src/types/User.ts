@@ -1,4 +1,4 @@
-import { Course } from './Course';
+import { Faculty } from "./Faculty";
 
 export type Role = 'user' | 'student' | 'assistant' | 'teacher';
 
@@ -12,7 +12,9 @@ export class User {
         public last_enrolled: number,
         public is_staff: boolean,
         public roles: Role[] = [],
-        public courses: Course[] = [],
+        public faculties: Faculty[] = [],
+        public create_time: Date,
+        public last_login: Date |null
     ) {
     }
 
@@ -66,7 +68,10 @@ export class User {
             user.last_name,
             user.last_enrolled,
             user.is_staff,
-            user.roles
+            user.roles,
+            user.faculties,
+            new Date(user.create_time),
+            user.last_login ? new Date(user.last_login) : null
         );
     }
 }

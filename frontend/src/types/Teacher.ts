@@ -1,3 +1,4 @@
+import { Course } from "./Course";
 import { Faculty } from "./Faculty";
 import { Course } from "./Course";
 import {Role, User} from '@/types/User.ts';
@@ -13,9 +14,11 @@ export class Teacher extends User {
         public is_staff: boolean,
         public roles: Role[] = [],
         public faculties: Faculty[] = [],
-        public courses: Course[] = []
+        public courses: Course[] = [],
+        public create_time: Date,
+        public last_login: Date |null,
     ) {
-        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, courses);
+        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
     }
 
     /**
@@ -35,7 +38,9 @@ export class Teacher extends User {
             teacher.is_staff,
             teacher.roles,
             teacher.faculties,
-            teacher.courses
+            teacher.courses,
+            new Date(teacher.create_time),
+            teacher.last_login ? new Date(teacher.last_login) : null
         );
     }
 

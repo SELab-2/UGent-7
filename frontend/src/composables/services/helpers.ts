@@ -63,7 +63,6 @@ export async function getListMerged<T>(endpoints: string[], ref: Ref<T[]|null>, 
     const allData: T[] = [];
 
     for (const endpoint of endpoints){
-        console.log(endpoint)
         await client.get(endpoint).then(response => {
             const responseData: T[] = response.data.map((data: T) => fromJson(data));
             allData.push(...responseData); // Merge into the allData array
