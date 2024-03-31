@@ -6,7 +6,7 @@ export class Submission {
         public submission_number: number,
         public submission_time: Date,
         public structure_checks_passed: boolean,
-        public group: Group = new Group("0"),
+        public group: Group|null = null,
         public files: File[] = [], //TODO check
         public extra_checks_results : any[] = [], // TODO
 

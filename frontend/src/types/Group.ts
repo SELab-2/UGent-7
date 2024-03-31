@@ -6,7 +6,7 @@ export class Group {
     constructor(
         public id: string,
         public score: number = -1,
-        public projects: Project[] = [],
+        public project: Project|null = null,
         public students: Student[] = [],
         public submissions: Submission[] = []
     ) {
@@ -28,7 +28,7 @@ export class Group {
         return new Group(
             group.id,
             group.score,
-            group.projects,
+            group.project,
             group.students,
             group.submissions
         );

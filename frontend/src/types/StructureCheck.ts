@@ -7,18 +7,7 @@ export class StructureCheck {
         public name: string,
         public obligated_extensions: File_extension[] = [],
         public blocked_extensions: File_extension[] = [],
-        public project: Project = new Project(
-            "0",
-            "default",
-            "this is a default project given in the service because it isnt initiated",
-            false,
-            true,
-            true,
-            new Date(),
-            new Date(),
-            0,
-            false,
-            0) // TODO check
+        public project: Project|null = null
     ) {
     }
 

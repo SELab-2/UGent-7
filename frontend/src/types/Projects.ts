@@ -18,16 +18,11 @@ export class Project {
         public score_visible: boolean,
         public group_size: number,
 
-        public course: Course = new Course(
-            "-1",
-            "default",
-            "this is a default project given in the service because it isnt initiated",
-             0
-        ), //TODO check
+        public course: Course|null = null,
         public structure_checks: StructureCheck[] = [],
         public extra_checks: ExtraCheck[] = [],
         public groups: Group[] = [],
-        public submissions: Submission = new Submission("0",0,new Date(), false), //TODO check
+        public submissions: Submission[] = []
     ) {
     }
 

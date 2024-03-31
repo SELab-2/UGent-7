@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
@@ -24,5 +25,8 @@ export default defineConfig({
             path: "/hmr",
             port: 443
         }
+    },
+    test: {
+        setupFiles: "./src/test/unit/setup.ts"
     }
 });
