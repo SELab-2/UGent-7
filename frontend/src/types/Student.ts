@@ -12,13 +12,13 @@ export class Student extends User {
         public last_name: string,
         public is_staff: boolean,
         public last_enrolled: number,
-        public roles: Role[] = [],
+        public create_time: Date,
+        public last_login: Date |null,
         public student_id: string,
+        public roles: Role[] = [],
         public courses: Course[] = [],
         public groups: Group[] = [],
         public faculties: Faculty[] = [],
-        public create_time: Date,
-        public last_login: Date |null,
     ) {
         super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
     }
@@ -37,13 +37,9 @@ export class Student extends User {
             student.last_name,
             student.is_staff,
             student.last_enrolled,
-            student.roles,
-            student.student_id,
-            student.courses,
-            student.groups,
-            student.faculties,
             new Date(student.create_time),
-            student.last_login ? new Date(student.last_login) : null
+            student.last_login ? new Date(student.last_login) : null,
+            student.student_id
         );
     }
 }

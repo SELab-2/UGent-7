@@ -112,4 +112,38 @@ describe("course", (): void => {
         expect(courses.value?.[6]?.assistants).toEqual([])
         expect(courses.value?.[6]?.projects).toEqual([])
     })
+
+    it("gets courses data by student", async () => {
+        await getCoursesByStudent("1")
+        expect(courses).not.toBeNull()
+        expect(Array.isArray(courses.value)).toBe(true)
+        expect(courses.value?.length).toBe(3);
+
+        expect(courses.value?.[0]?.name).toBe("Math")
+        expect(courses.value?.[0]?.parent_course).toBeNull()
+        expect(courses.value?.[0]?.academic_startyear).toBe(2023)
+        expect(courses.value?.[0]?.description).toBe("Math course")
+        expect(courses.value?.[0]?.students).toEqual([])
+        expect(courses.value?.[0]?.teachers).toEqual([])
+        expect(courses.value?.[0]?.assistants).toEqual([])
+        expect(courses.value?.[0]?.projects).toEqual([])
+
+        expect(courses.value?.[1]?.name).toBe("Sel2")
+        expect(courses.value?.[1]?.parent_course).toBe("3")
+        expect(courses.value?.[1]?.academic_startyear).toBe(2023)
+        expect(courses.value?.[1]?.description).toBe("Software course")
+        expect(courses.value?.[1]?.students).toEqual([])
+        expect(courses.value?.[1]?.teachers).toEqual([])
+        expect(courses.value?.[1]?.assistants).toEqual([])
+        expect(courses.value?.[1]?.projects).toEqual([])
+
+        expect(courses.value?.[2]?.name).toBe("Sel1")
+        expect(courses.value?.[2]?.parent_course).toBeNull()
+        expect(courses.value?.[2]?.academic_startyear).toBe(2022)
+        expect(courses.value?.[2]?.description).toBe("Software course")
+        expect(courses.value?.[2]?.students).toEqual([])
+        expect(courses.value?.[2]?.teachers).toEqual([])
+        expect(courses.value?.[2]?.assistants).toEqual([])
+        expect(courses.value?.[2]?.projects).toEqual([])
+    })
 })

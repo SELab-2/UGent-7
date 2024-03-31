@@ -56,7 +56,7 @@ const courses = [
     {
     id: "1",
     teachers: [],
-    assistants: [],
+    assistants: ["235","236"],
     students: [],
     projects: [],
     parent_course: null,
@@ -148,7 +148,9 @@ const students = [
         last_name: "Doe",
         last_enrolled: 2023,
         create_time: new Date("July 21, 2024 01:15:00"),
-        student_id: null
+        student_id: null,
+        courses: ["1","2","3"],
+        groups: ["0"]
       },
       {
         id: "2",
@@ -160,7 +162,9 @@ const students = [
         last_name: "Verhaege",
         last_enrolled: 2023,
         create_time: new Date("July 21, 2024 01:15:00"),
-        student_id: null
+        student_id: null,
+        courses: [],
+        groups: []
       },
       {
         id: "000201247011",
@@ -172,7 +176,9 @@ const students = [
         last_name: "Verslype",
         last_enrolled: 2023,
         create_time: new Date("July 21, 2024 01:15:00"),
-        student_id: "02012470"
+        student_id: "02012470",
+        courses: [],
+        groups: []
       },
       {
         id: "3",
@@ -184,7 +190,9 @@ const students = [
         last_name: "somtin",
         last_enrolled: 2023,
         create_time: new Date("July 21, 2024 01:15:00"),
-        student_id: null
+        student_id: null,
+        courses: [],
+        groups: []
       }
 ]
 
@@ -403,6 +411,27 @@ export const restHandlers = [
             let project = projects.find(x => x.id == params.id)
             let submited_submissions = project ? project.submissions : []
             return HttpResponse.json(submissions.filter(x => submited_submissions.includes(x.id)))
+        }
+    ),
+    http.get(baseUrl + endpoints.assistants.byCourse.replace('{course_id}', ':id'),
+        ({ params }) => {
+            let course = courses.find(x => x.id == params.id)
+            let assistant_ids = course ? course.assistants : []
+            return HttpResponse.json(assistants.filter(x => assistant_ids.includes(x.id)))
+        }
+    ),
+    http.get(baseUrl + endpoints.courses.byStudent.replace('{student_id}', ':id'),
+        ({ params }) => {
+            let student = students.find(x => x.id == params.id)
+            let course_ids = student ? student.courses : []
+            return HttpResponse.json(courses.filter(x => course_ids.includes(x.id)))
+        }
+    ),
+    http.get(baseUrl + endpoints.groups.byStudent.replace('{student_id}', ':id'),
+        ({ params }) => {
+            let student = students.find(x => x.id == params.id)
+            let group_ids = student ? student.groups : []
+            return HttpResponse.json(groups.filter(x => group_ids.includes(x.id)))
         }
     ),
     http.get(baseUrl + endpoints.structure_checks.byProject.replace('{project_id}', ':id'),
