@@ -186,10 +186,42 @@ const students = [
       }
 ]
 
+const teachers = [
+    {
+    id: "123",
+    last_login: null,
+    username: "tboonen",
+    is_staff: false,
+    email: "Tom.Boonen@gmail.be",
+    first_name: "Tom",
+    last_name: "Boonen",
+    last_enrolled: 2023,
+    create_time:  new Date("July 21, 2024 01:15:00")
+  },
+  {
+    id: "124",
+    courses: [],
+    faculties: [],
+    last_login: null,
+    username: "psagan",
+    is_staff: false,
+    email: "Peter.Sagan@gmail.com",
+    first_name: "Peter",
+    last_name: "Sagan",
+    last_enrolled: 2023,
+    create_time:  new Date("July 21, 2024 01:15:00")
+  }
+]
+
 export const restHandlers = [
     http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(groups.find(x => x.id == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.teachers.retrieve.replace('{id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(teachers.find(x => x.id == params.id))
         }
     ),
     http.get(baseUrl + endpoints.students.retrieve.replace('{id}', ':id'),
@@ -235,6 +267,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.students.index,
         ({}) => {
             return HttpResponse.json(students)
+        }
+    ),
+    http.get(baseUrl + endpoints.teachers.index,
+        ({}) => {
+            return HttpResponse.json(teachers)
         }
     )
 
