@@ -22,8 +22,8 @@ export function useGroup() {
         await getList<Group>(endpoint, groups, Group.fromJSON);
     }
 
-    async function createGroup(group_data: Group, group_id: string) {
-        const endpoint = endpoints.groups.byProject.replace('{group_id}', group_id);
+    async function createGroup(group_data: Group, project_id: string) {
+        const endpoint = endpoints.groups.byProject.replace('{project_id}', project_id);
         await create<Group>(endpoint,
             {
                 score: group_data.score
