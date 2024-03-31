@@ -273,10 +273,66 @@ const admins = [
       }
 ]
 
+const structure_checks = [
+    {
+        id: "1",
+        project: "123456/",
+        obligated_extensions: [
+          
+        ],
+        blocked_extensions: [
+          
+        ],
+        name: "."
+      },
+      {
+        id: "2",
+        project: "123456",
+        obligated_extensions: [
+          {
+            extension: "pdf"
+          }
+        ],
+        blocked_extensions: [
+          
+        ],
+        name: "folder1"
+      },
+      {
+        id: "3",
+        project: "123456",
+        obligated_extensions: [
+          
+        ],
+        blocked_extensions: [
+          
+        ],
+        name: "folder3"
+      },
+      {
+        id: "4",
+        project: "123456",
+        obligated_extensions: [
+          {
+            extension: "gif"
+          }
+        ],
+        blocked_extensions: [
+          
+        ],
+        name: "folder3/folder3-1"
+      }
+]
+
 export const restHandlers = [
     http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(groups.find(x => x.id == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.structure_checks.retrieve.replace('{id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(structure_checks.find(x => x.id == params.id))
         }
     ),
     http.get(baseUrl + endpoints.admins.retrieve.replace('{id}', ':id'),
