@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import moment from 'moment';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Calendar, { type CalendarDateSlotOptions } from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';
 import { useProject } from '@/composables/services/project.service';
