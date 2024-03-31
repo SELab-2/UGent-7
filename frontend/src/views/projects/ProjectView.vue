@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseLayout from "@/components/layout/BaseLayout.vue";
+import BaseLayout from "@/components/layout/base/BaseLayout.vue";
 import {onMounted, ref} from "vue";
 import {useProject} from "@/composables/services/project.service.ts";
 import {useRoute} from "vue-router";

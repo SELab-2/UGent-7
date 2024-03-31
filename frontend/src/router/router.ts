@@ -12,6 +12,7 @@ import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 import {AuthenticationGuard} from '@/router/guards/authentication.guard.ts';
 import {LogoutGuard} from '@/router/guards/logout.guard.ts';
 import ProjectView from "@/views/projects/ProjectView.vue";
+import UsersView from '@/views/admins/UsersView.vue';
 
 const routes: RouteRecordRaw[] = [
 
@@ -82,6 +83,11 @@ const routes: RouteRecordRaw[] = [
     // Authentication
     { path: '/auth/', children: [
         { path: 'login', component: LoginView, name: 'login' },
+    ]},
+
+    // Admin
+    { path: '/admin/', children: [
+        { path: 'users', component: UsersView, name: 'admin-users' },
     ]},
 
     // Page not found: redirect to dashboard

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import moment from 'moment';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import ProjectCard from '@/components/projects/ProjectCard.vue';
 import Calendar from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';

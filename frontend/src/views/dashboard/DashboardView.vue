@@ -3,7 +3,7 @@ import Skeleton from 'primevue/skeleton';
 import ButtonGroup from 'primevue/buttongroup';
 import Button from 'primevue/button';
 import CourseCard from '@/components/courses/CourseCard.vue';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from '@/store/authentication.store.ts';
 import {onMounted} from 'vue';

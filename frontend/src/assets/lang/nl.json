@@ -78,6 +78,14 @@
             "unknown": "Er is een onbekende fout opgetreden."
         }
     },
+    "admin": {
+        "title": "Beheerder",
+        "users": {
+            "title": "Gebruikers",
+            "create": "Gebruiker aanmaken",
+            "edit": "Gebruiker bewerken"
+        }
+    },
     "primevue": {
         "accept": "Ja",
         "addRule": "Voeg regel toe",
