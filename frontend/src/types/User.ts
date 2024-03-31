@@ -1,3 +1,5 @@
+import { Course } from './Course';
+
 export type Role = 'user' | 'student' | 'assistant' | 'teacher';
 
 export class User {
@@ -9,7 +11,8 @@ export class User {
         public last_name: string,
         public last_enrolled: number,
         public is_staff: boolean,
-        public roles: Role[] = []
+        public roles: Role[] = [],
+        public courses: Course[] = [],
     ) {
     }
 
@@ -28,7 +31,7 @@ export class User {
      * @returns boolean
      */
     public isStudent(): boolean {
-        return this.roles.includes('student');
+        return false;
     }
 
     /**
@@ -37,7 +40,7 @@ export class User {
      * @returns boolean
      */
     public isAssistant(): boolean {
-        return this.roles.includes('assistant');
+        return false;
     }
 
     /**
@@ -46,7 +49,7 @@ export class User {
      * @returns boolean
      */
     public isTeacher(): boolean {
-        return this.roles.includes('teacher');
+        return false;
     }
 
     /**

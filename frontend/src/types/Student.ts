@@ -12,13 +12,13 @@ export class Student extends User {
         public last_name: string,
         public is_staff: boolean,
         public last_enrolled: number,
-        public roles: Role[] = [],
         public student_id: string,
+        public roles: Role[] = [],
         public courses: Course[] = [],
         public groups: Group[] = [],
         public faculties: Faculty[] = []
     ) {
-        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles);
+        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, courses);
     }
 
     /**
@@ -35,11 +35,20 @@ export class Student extends User {
             student.last_name,
             student.is_staff,
             student.last_enrolled,
-            student.roles,
             student.student_id,
+            student.roles,
             student.courses,
             student.groups,
             student.faculties
         );
+    }
+
+    /**
+     * Check if the user is a student.
+     *
+     * @returns boolean
+     */
+    public isStudent(): boolean {
+        return true;
     }
 }

@@ -9,7 +9,6 @@ import Title from '@/components/layout/Title.vue';
 import {useI18n} from 'vue-i18n';
 import {PrimeIcons} from 'primevue/api';
 import { ref, onMounted, watch } from 'vue';
-import {useCourses} from '@/composables/services/courses.service.ts';
 import {Project} from "@/types/Projects.ts";
 import {useProject} from "@/composables/services/project.service.ts";
 import ProjectCard from "@/components/projects/ProjectCard.vue";
@@ -27,10 +26,8 @@ const selectedCoursesYear = ref<string>();
 const selectedProjectsYear = ref<string>();
 
 /* Service injection */
-const { user } = useAuthStore();
-const { view } = storeToRefs(useAuthStore());
+const { user } = storeToRefs(useAuthStore());
 const { projects, getProjectsByCourse } = useProject();
-const { courses, getCoursesByStudent, getCoursesByTeacher, getCourseByAssistant } = useCourses();
 
 onMounted(async () => {
     await fetchDashboardData();
@@ -38,27 +35,20 @@ onMounted(async () => {
     selectedProjectsYear.value = getCurrentAcademicYear();
 });
 
-watch(view, () => {
-    fetchDashboardData();
+watch(user, async () => {
+    await fetchDashboardData();
+    selectedCoursesYear.value = getCurrentAcademicYear();
+    selectedProjectsYear.value = getCurrentAcademicYear();
 });
 
 /* Fetch the data for the dashboard */
 const fetchDashboardData = async () => {
-    if (user !== null) {
-        // Get the courses, depending on the user's role
-        if (view.value === 'teacher') {
-            await getCoursesByTeacher(user.id);
-        } else if (view.value === 'student') {
-            await getCoursesByStudent(user.id);
-        } else {
-            await getCourseByAssistant(user.id);
-        }
-
+    if (user.value !== null) {
         // Clear the old data, so that the data from another role is not displayed
         allProjects.value = [];
         academicYears.value = [];
 
-        for (const course of courses.value ?? []) {
+        for (const course of user.value.courses) {
             await getProjectsByCourse(course.id);
 
             projects.value?.forEach(project => {
@@ -80,7 +70,7 @@ const filteredProjects = computed(() => {
 });
 
 const filteredCourses = computed(() => {
-    return courses.value ? courses.value.filter(course => course.getCourseYear() === selectedCoursesYear.value) : [];
+    return user.value?.courses ? user.value?.courses.filter(course => course.getCourseYear() === selectedCoursesYear.value) : [];
 });
 
 // Method to get the current academic year
@@ -88,7 +78,7 @@ const getCurrentAcademicYear = () => {
     const today = new Date();
     const currentYear = today.getFullYear();
 
-    if (today.getMonth() >= 8) {
+    if (today.getMonth() >= 9) {
         return `${currentYear} - ${currentYear + 1}`;
     } else {
         return `${currentYear - 1} - ${currentYear}`;
@@ -107,7 +97,7 @@ const getCurrentAcademicYear = () => {
             <ButtonGroup>
                 <Dropdown v-model="selectedCoursesYear" :options="academicYears" />
 
-                <RouterLink :to="{ name: 'course-create' }" v-if="view === 'teacher'">
+                <RouterLink :to="{ name: 'course-create' }" v-if="user?.isTeacher()">
                     <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
                 </RouterLink>
             </ButtonGroup>
@@ -141,7 +131,7 @@ const getCurrentAcademicYear = () => {
                 <Dropdown v-model="selectedProjectsYear" :options="academicYears"/>
 
                 <!-- TODO: Set to create a project-->
-                <RouterLink :to="{ name: 'course-create' }" v-if="view !== 'student'">
+                <RouterLink :to="{ name: 'course-create' }" v-if="! user?.isStudent()">
                     <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
                 </RouterLink>
             </ButtonGroup>

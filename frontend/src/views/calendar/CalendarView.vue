@@ -5,11 +5,11 @@ import ProjectCard from '@/components/projects/ProjectCard.vue';
 import Calendar from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';
 import {useProject} from '@/composables/services/project.service';
-import {useCourses} from '@/composables/services/courses.service';
 import { computed, onMounted } from 'vue';
 import {useI18n} from 'vue-i18n';
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import {useAuthStore} from '@/store/authentication.store.ts';
+import {storeToRefs} from 'pinia';
 import {Project} from "@/types/Projects.ts";
 
 /* Composable injections */
@@ -20,8 +20,7 @@ const allProjects = ref<Project[]>([]);
 const selectedDate = ref(new Date());
 
 /* Service injection */
-const { user } = useAuthStore();
-const { courses, getCoursesByStudent } = useCourses();
+const { user } = storeToRefs(useAuthStore());
 const { projects, getProjectsByCourse } = useProject();
 
 const formattedDate = computed(() => {
@@ -30,12 +29,12 @@ const formattedDate = computed(() => {
 });
 
 const loadProjects = async () => {
-    if (user !== null) {
-        // Load the courses of the student
-        await getCoursesByStudent(user.id);
+    if (user.value !== null) {
+        // Clear the old data, so that the data from another role is not displayed
+        allProjects.value = [];
 
         // Load the projects of the courses
-        for (const course of courses.value ?? []) {
+        for (const course of user.value.courses) {
             await getProjectsByCourse(course.id);
 
             // Assign the course to the project
@@ -59,6 +58,10 @@ const projectsWithDeadline = computed(() => {
 
 /* Load the projects when the component is mounted */
 onMounted(async () => {
+    await loadProjects();
+});
+
+watch(user, async () => {
     await loadProjects();
 });
 
