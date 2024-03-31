@@ -1,6 +1,5 @@
 import { Course } from "./Course";
 import { Faculty } from "./Faculty";
-import { Course } from "./Course";
 import {Role, User} from '@/types/User.ts';
 
 export class Teacher extends User {
@@ -18,7 +17,7 @@ export class Teacher extends User {
         public create_time: Date,
         public last_login: Date |null,
     ) {
-        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
+        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login, courses);
     }
 
     /**

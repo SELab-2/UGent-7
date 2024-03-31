@@ -20,7 +20,7 @@ export class Student extends User {
         public groups: Group[] = [],
         public faculties: Faculty[] = [],
     ) {
-        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
+        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login, courses);
     }
 
     /**

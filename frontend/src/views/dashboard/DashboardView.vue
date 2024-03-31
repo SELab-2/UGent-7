@@ -15,12 +15,14 @@ import ProjectCard from "@/components/projects/ProjectCard.vue";
 import {useAuthStore} from '@/store/authentication.store.ts';
 import {storeToRefs} from 'pinia';
 import { computed } from 'vue';
+import { Course } from '@/types/Course';
 
 /* Composable injections */
 const {t} = useI18n();
 
 /* Component state */
 const allProjects = ref<Project[]>([]);
+const allCourses = ref<Course[]>([]);
 const academicYears = ref<{ label: string; value: number }[]>();
 const selectedCoursesYear = ref<number>();
 const selectedProjectsYear = ref<number>();

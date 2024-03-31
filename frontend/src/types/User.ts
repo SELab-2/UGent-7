@@ -1,3 +1,4 @@
+import { Course } from "./Course";
 import { Faculty } from "./Faculty";
 
 export type Role = 'user' | 'student' | 'assistant' | 'teacher';
@@ -14,7 +15,8 @@ export class User {
         public roles: Role[] = [],
         public faculties: Faculty[] = [],
         public create_time: Date,
-        public last_login: Date |null
+        public last_login: Date |null,
+        public courses: Course[] = []
     ) {
     }
 
