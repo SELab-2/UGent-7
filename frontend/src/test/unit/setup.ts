@@ -324,10 +324,36 @@ const structure_checks = [
       }
 ]
 
+const submissions = [
+    {
+        id: "1",
+        group: "1",
+        files: [],
+        extra_checks_results: [],
+        submission_number: 1,
+        submission_time: new Date("July 21, 2024 01:15:00"),
+        structure_checks_passed: true
+      },
+      {
+        id: "2",
+        group: "1",
+        files: [],
+        extra_checks_results: [],
+        submission_number: 2,
+        submission_time: new Date("July 21, 2024 01:15:00"),
+        structure_checks_passed: true
+      }
+]
+
 export const restHandlers = [
     http.get(baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(groups.find(x => x.id == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.submissions.retrieve.replace('{id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(submissions.find(x => x.id == params.id))
         }
     ),
     http.get(baseUrl + endpoints.structure_checks.retrieve.replace('{id}', ':id'),
@@ -378,6 +404,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.projects.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(projects.filter(x => x.course == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.submissions.byGroup.replace('{group_id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(submissions.filter(x => x.group == params.id))
         }
     ),
     http.get(baseUrl + endpoints.faculties.retrieve.replace('{name}', ':name'),

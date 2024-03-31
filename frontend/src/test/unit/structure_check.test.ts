@@ -21,7 +21,7 @@ describe("structure_check", (): void => {
         expect(structure_check.value?.name).toBe(".")
     })
 
-    it("gets admins data", async () => {
+    it("gets structure_check data", async () => {
         await getStructureCheckByProject("123456")
         expect(structure_checks).not.toBeNull()
         expect(Array.isArray(structure_checks.value)).toBe(true)
