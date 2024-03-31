@@ -1,30 +1,61 @@
 <script setup lang="ts">
 import moment from 'moment';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
+import ProjectCard from '@/components/projects/ProjectCard.vue';
 import Calendar from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';
-import { useProject } from '@/composables/services/project.service';
+import {useProject} from '@/composables/services/project.service';
+import {useCourses} from '@/composables/services/courses.service';
 import { computed, onMounted } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import {useI18n} from 'vue-i18n';
+import {ref} from 'vue';
+import {useAuthStore} from '@/store/authentication.store.ts';
+import {Project} from "@/types/Projects.ts";
 
+/* Composable injections */
 const { t, locale } = useI18n();
 
-/* Keeps track of the selected date */
+/* Component state */
+const allProjects = ref<Project[]>([]);
 const selectedDate = ref(new Date());
+
+/* Service injection */
+const { user } = useAuthStore();
+const { courses, getCoursesByStudent } = useCourses();
+const { projects, getProjectsByCourse } = useProject();
 
 const formattedDate = computed(() => {
     // Format the selected date using moment.js
     return moment(selectedDate.value).locale(locale.value).format('DD MMMM YYYY');
 });
 
-/* Load the projects of the current student */
-const { projects, getProjectsByStudent } = useProject();
-
-// TODO: Set correct user ID
 const loadProjects = async () => {
-    await getProjectsByStudent("1");
+    if (user !== null) {
+        // Load the courses of the student
+        await getCoursesByStudent(user.id);
+
+        // Load the projects of the courses
+        for (const course of courses.value ?? []) {
+            await getProjectsByCourse(course.id);
+
+            // Assign the course to the project
+            projects.value?.forEach(project => {
+                project.course = course;
+            });
+
+            // Concatenate the projects
+            allProjects.value = allProjects.value.concat(projects.value ?? []);
+        }
+    }
 };
+
+/* Filter the projects on the date selected on the calendar */
+const projectsWithDeadline = computed(() => {
+    // Filter the projects with the selected date
+    return allProjects.value?.filter(project => {
+        return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
+    });
+});
 
 /* Load the projects when the component is mounted */
 onMounted(async () => {
@@ -49,9 +80,11 @@ onMounted(async () => {
                 <!-- Selected date on the calendar -->
                 <Title class="mb-6">{{ formattedDate }}</Title>
 
-                <!-- List of projects -->
-                <div v-for="project in projects" :key="project.id">
-                    <p>{{ project.name }}</p>
+                <!-- Listing projects with given deadline -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div v-for="project in projectsWithDeadline" :key="project.id">
+                        <ProjectCard class="h-100" :project="project"/>
+                    </div>
                 </div>
             </div>
         </div>
