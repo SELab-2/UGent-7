@@ -160,7 +160,7 @@ const getCurrentAcademicYear : () => number = () => {
 
 <style scoped>
     .custom-dropdown, .custom-button {
-        border-radius: 0; /* Ensures no rounding */
-        height: 50px; /* Adjust the height as needed */
+        border-radius: 0;
+        height: 50px;
     }
 </style>
