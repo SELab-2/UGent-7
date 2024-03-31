@@ -17,12 +17,11 @@ const localeStorage = useLocalStorage('locale', locale.value);
  *
  * @param locale
  */
-function updateLocale(locale: Ref<string>) {
+function updateLocale(locale: string) {
     // Update saved locale
-    localeStorage.value = locale.value;
-
+    localeStorage.value = locale;
     // Update PrimeVue locale
-    config.locale = messages.value[locale.value]['primevue'] as PrimeVueLocaleOptions;
+    config.locale = messages.value[locale]['primevue'] as PrimeVueLocaleOptions;
 }
 
 /**
@@ -40,7 +39,7 @@ function getFlag(locale: string) {
 
 /* Hooks */
 onMounted(() => {
-    updateLocale(locale);
+    updateLocale(locale.value);
 });
 </script>
 
