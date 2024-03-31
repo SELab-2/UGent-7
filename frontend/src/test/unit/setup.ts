@@ -276,7 +276,7 @@ const admins = [
 const structure_checks = [
     {
         id: "1",
-        project: "123456/",
+        project: "123456",
         obligated_extensions: [
           
         ],
@@ -368,6 +368,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.groups.byProject.replace('{project_id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(groups.filter(x => x.project == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.structure_checks.byProject.replace('{project_id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(structure_checks.filter(x => x.project == params.id))
         }
     ),
     http.get(baseUrl + endpoints.projects.byCourse.replace('{course_id}', ':id'),
