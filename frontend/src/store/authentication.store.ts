@@ -40,7 +40,9 @@ export const useAuthStore = defineStore('auth', () => {
                     user.value.is_staff,
                     user.value.roles,
                     [],
-                    courses.value ?? []
+                    courses.value ?? [],
+                    user.value.create_time,
+                    user.value.last_login
                 );
             }else if (view.value === 'student') {
                 await getCoursesByStudent(user.value.id);
@@ -53,6 +55,8 @@ export const useAuthStore = defineStore('auth', () => {
                     user.value.last_name,
                     user.value.is_staff,
                     user.value.last_enrolled,
+                    user.value.create_time,
+                    user.value.last_login,
                     user.value.id,
                     user.value.roles,
                     courses.value ?? []
@@ -70,7 +74,9 @@ export const useAuthStore = defineStore('auth', () => {
                     user.value.is_staff,
                     user.value.roles,
                     [],
-                    courses.value ?? []
+                    courses.value ?? [],
+                    user.value.create_time,
+                    user.value.last_login
                 );
             }
         }
