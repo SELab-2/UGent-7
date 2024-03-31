@@ -196,12 +196,10 @@ const teachers = [
     first_name: "Tom",
     last_name: "Boonen",
     last_enrolled: 2023,
-    create_time:  new Date("July 21, 2024 01:15:00")
+    create_time: new Date("July 21, 2024 01:15:00")
   },
   {
     id: "124",
-    courses: [],
-    faculties: [],
     last_login: null,
     username: "psagan",
     is_staff: false,
@@ -209,8 +207,37 @@ const teachers = [
     first_name: "Peter",
     last_name: "Sagan",
     last_enrolled: 2023,
-    create_time:  new Date("July 21, 2024 01:15:00")
+    create_time: new Date("July 21, 2024 01:15:00")
   }
+]
+
+const assistants = [
+    {
+        id: "235",
+        courses: [],
+        faculties: [],
+        last_login: null,
+        username: "bsimpson",
+        is_staff: false,
+        email: "Bart.Simpson@gmail.be",
+        first_name: "Bart",
+        last_name: "Simpson",
+        last_enrolled: 2023,
+        create_time: new Date("July 21, 2024 01:15:00")
+      },
+      {
+        id: "236",
+        courses: [],
+        faculties: [],
+        last_login: null,
+        username: "kclijster",
+        is_staff: false,
+        email: "Kim.Clijsters@gmail.be",
+        first_name: "Kim",
+        last_name: "Clijsters",
+        last_enrolled: 2023,
+        create_time: new Date("July 21, 2024 01:15:00")
+      }
 ]
 
 export const restHandlers = [
@@ -222,6 +249,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.teachers.retrieve.replace('{id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(teachers.find(x => x.id == params.id))
+        }
+    ),
+    http.get(baseUrl + endpoints.assistants.retrieve.replace('{id}', ':id'),
+        ({ params }) => {
+            return HttpResponse.json(assistants.find(x => x.id == params.id))
         }
     ),
     http.get(baseUrl + endpoints.students.retrieve.replace('{id}', ':id'),
@@ -272,6 +304,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.teachers.index,
         ({}) => {
             return HttpResponse.json(teachers)
+        }
+    ),
+    http.get(baseUrl + endpoints.assistants.index,
+        ({}) => {
+            return HttpResponse.json(assistants)
         }
     )
 
