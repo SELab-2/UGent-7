@@ -23,7 +23,6 @@ const courseDescription = ref<string>('');
 const courseYear = ref<Date>(new Date());
 
 const submitCourse = async () => {
-    console.log('Creating course...');
     // Pass the course data to the service
     await createCourse(
         new Course(

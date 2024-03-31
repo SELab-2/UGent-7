@@ -21,9 +21,9 @@ const {t} = useI18n();
 
 /* Component state */
 const allProjects = ref<Project[]>([]);
-const academicYears = ref<string[]>();
-const selectedCoursesYear = ref<string>();
-const selectedProjectsYear = ref<string>();
+const academicYears = ref<{ label: string; value: number }[]>();
+const selectedCoursesYear = ref<number>();
+const selectedProjectsYear = ref<number>();
 
 /* Service injection */
 const { user } = storeToRefs(useAuthStore());
@@ -58,30 +58,34 @@ const fetchDashboardData = async () => {
             allProjects.value = allProjects.value.concat(projects.value ?? []);
 
             // Add the academic year to the list
-            if (!academicYears.value?.includes(course.getCourseYear())) {
-                academicYears.value = academicYears.value?.concat(course.getCourseYear());
+            const year = course.academic_startyear;
+            if (! academicYears.value?.some(el => el.value === year)) {
+                academicYears.value?.push({ label: `${year}-${year + 1}`, value: year });
             }
         }
+
+        // Sort the academic years in descending order
+        academicYears.value?.sort((a, b) => b.value - a.value);
     }
 }
 
 const filteredProjects = computed(() => {
-    return allProjects.value ? allProjects.value.filter(project => project.course?.getCourseYear() === selectedProjectsYear.value) : [];
+    return allProjects.value ? allProjects.value.filter(project => project.course?.academic_startyear === selectedProjectsYear.value) : [];
 });
 
 const filteredCourses = computed(() => {
-    return user.value?.courses ? user.value?.courses.filter(course => course.getCourseYear() === selectedCoursesYear.value) : [];
+    return user.value?.courses ? user.value?.courses.filter(course => course.academic_startyear === selectedCoursesYear.value) : [];
 });
 
 // Method to get the current academic year
-const getCurrentAcademicYear = () => {
+const getCurrentAcademicYear : () => number = () => {
     const today = new Date();
     const currentYear = today.getFullYear();
 
     if (today.getMonth() >= 9) {
-        return `${currentYear} - ${currentYear + 1}`;
+        return currentYear;
     } else {
-        return `${currentYear - 1} - ${currentYear}`;
+        return currentYear - 1;
     }
 };
 
@@ -95,10 +99,11 @@ const getCurrentAcademicYear = () => {
             <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
             <!-- Course list controls -->
             <ButtonGroup>
-                <Dropdown v-model="selectedCoursesYear" :options="academicYears" />
+                <Dropdown v-model="selectedCoursesYear" :options="academicYears" optionLabel="label" 
+                          optionValue="value" class="custom-dropdown"/>
 
                 <RouterLink :to="{ name: 'course-create' }" v-if="user?.isTeacher()">
-                    <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
+                    <Button :icon="PrimeIcons.PLUS" icon-pos="right" class="custom-button"/>
                 </RouterLink>
             </ButtonGroup>
         </div>
@@ -128,11 +133,12 @@ const getCurrentAcademicYear = () => {
             <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
             <!-- Project list controls -->
             <ButtonGroup>
-                <Dropdown v-model="selectedProjectsYear" :options="academicYears"/>
+                <Dropdown v-model="selectedProjectsYear" :options="academicYears" optionLabel="label" 
+                          optionValue="value"class="custom-dropdown"/>
 
                 <!-- TODO: Set to create a project-->
                 <RouterLink :to="{ name: 'course-create' }" v-if="! user?.isStudent()">
-                    <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
+                    <Button :icon="PrimeIcons.PLUS" icon-pos="right" class="custom-button"/>
                 </RouterLink>
             </ButtonGroup>
         </div>
@@ -153,5 +159,8 @@ const getCurrentAcademicYear = () => {
 </template>
 
 <style scoped>
-
+    .custom-dropdown, .custom-button {
+        border-radius: 0; /* Ensures no rounding */
+        height: 50px; /* Adjust the height as needed */
+    }
 </style>
