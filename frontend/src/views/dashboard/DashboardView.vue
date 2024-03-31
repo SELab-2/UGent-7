@@ -2,6 +2,7 @@
 import Skeleton from 'primevue/skeleton';
 import ButtonGroup from 'primevue/buttongroup';
 import Button from 'primevue/button';
+import Dropdown from 'primevue/dropdown';
 import CourseCard from '@/components/courses/CourseCard.vue';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
@@ -14,12 +15,16 @@ import {useProject} from "@/composables/services/project.service.ts";
 import ProjectCard from "@/components/projects/ProjectCard.vue";
 import {useAuthStore} from '@/store/authentication.store.ts';
 import {storeToRefs} from 'pinia';
+import { computed } from 'vue';
 
 /* Composable injections */
 const {t} = useI18n();
 
 /* Component state */
 const allProjects = ref<Project[]>([]);
+const academicYears = ref<string[]>();
+const selectedCoursesYear = ref<string>();
+const selectedProjectsYear = ref<string>();
 
 /* Service injection */
 const { user } = useAuthStore();
@@ -27,8 +32,10 @@ const { view } = storeToRefs(useAuthStore());
 const { projects, getProjectsByCourse } = useProject();
 const { courses, getCoursesByStudent, getCoursesByTeacher, getCourseByAssistant } = useCourses();
 
-onMounted(() => {
-    fetchDashboardData();
+onMounted(async () => {
+    await fetchDashboardData();
+    selectedCoursesYear.value = getCurrentAcademicYear();
+    selectedProjectsYear.value = getCurrentAcademicYear();
 });
 
 watch(view, () => {
@@ -47,8 +54,9 @@ const fetchDashboardData = async () => {
             await getCourseByAssistant(user.id);
         }
 
-        // Clear the projects, so that the projects from another role are not displayed
+        // Clear the old data, so that the data from another role is not displayed
         allProjects.value = [];
+        academicYears.value = [];
 
         for (const course of courses.value ?? []) {
             await getProjectsByCourse(course.id);
@@ -58,9 +66,34 @@ const fetchDashboardData = async () => {
             });
 
             allProjects.value = allProjects.value.concat(projects.value ?? []);
+
+            // Add the academic year to the list
+            if (!academicYears.value?.includes(course.getCourseYear())) {
+                academicYears.value = academicYears.value?.concat(course.getCourseYear());
+            }
         }
     }
 }
+
+const filteredProjects = computed(() => {
+    return allProjects.value ? allProjects.value.filter(project => project.course?.getCourseYear() === selectedProjectsYear.value) : [];
+});
+
+const filteredCourses = computed(() => {
+    return courses.value ? courses.value.filter(course => course.getCourseYear() === selectedCoursesYear.value) : [];
+});
+
+// Method to get the current academic year
+const getCurrentAcademicYear = () => {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+
+    if (today.getMonth() >= 8) {
+        return `${currentYear} - ${currentYear + 1}`;
+    } else {
+        return `${currentYear - 1} - ${currentYear}`;
+    }
+};
 
 </script>
 
@@ -72,8 +105,7 @@ const fetchDashboardData = async () => {
             <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
             <!-- Course list controls -->
             <ButtonGroup>
-                <Button :label="t('components.buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN"
-                        icon-pos="right" outlined/>
+                <Dropdown v-model="selectedCoursesYear" :options="academicYears" />
 
                 <RouterLink :to="{ name: 'course-create' }" v-if="view === 'teacher'">
                     <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
@@ -82,9 +114,9 @@ const fetchDashboardData = async () => {
         </div>
         <!-- Course list body -->
         <div class="grid align-items-stretch">
-            <template v-if="courses !== null">
-                <template v-if="courses.length > 0">
-                    <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in courses">
+            <template v-if="filteredCourses !== null">
+                <template v-if="filteredCourses.length > 0">
+                    <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in filteredCourses">
                         <CourseCard class="h-100" :course="course"/>
                     </div>
                 </template>
@@ -106,8 +138,7 @@ const fetchDashboardData = async () => {
             <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
             <!-- Project list controls -->
             <ButtonGroup>
-                <Button :label="t('components.buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN"
-                        icon-pos="right" outlined/>
+                <Dropdown v-model="selectedProjectsYear" :options="academicYears"/>
 
                 <!-- TODO: Set to create a project-->
                 <RouterLink :to="{ name: 'course-create' }" v-if="view !== 'student'">
@@ -117,8 +148,8 @@ const fetchDashboardData = async () => {
         </div>
         <!-- Project list body -->
         <div class="grid align-items-stretch">
-            <template v-if="allProjects.length > 0">
-                <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="project in allProjects">
+            <template v-if="filteredProjects.length > 0">
+                <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="project in filteredProjects">
                     <ProjectCard class="h-100" :project="project"/>
                 </div>
             </template>
