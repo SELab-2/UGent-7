@@ -11,11 +11,13 @@ const groups = [
         id: "0",
         score: 20,
         project:"0",
+        students: ["1", "2", "3", "000201247011"]
     },
     {
         id: "1",
         score: 18,
-        project:"0"
+        project:"0",
+        students: ["1", "2", "3", "000201247011"]
     }
 ]
 
@@ -33,7 +35,8 @@ const projects = [
         max_score: 100,
         score_visible: true,
         group_size: 8,
-        submissions: ["1", "2"]
+        submissions: ["1", "2"],
+        groups: ["0", "1"]
     },
     {
         id: 1,
@@ -48,17 +51,18 @@ const projects = [
         max_score: 20,
         score_visible: false,
         group_size: 3,
-        submissions: []
+        submissions: [],
+        groups: ["0", "1"]
       }
 ]
 
 const courses = [
     {
     id: "1",
-    teachers: [],
+    teachers: ["123", "124"],
     assistants: ["235","236"],
-    students: [],
-    projects: [],
+    students: ["1", "2", "3", "000201247011"],
+    projects: ["0","1"],
     parent_course: null,
     name: "Math",
     academic_startyear: 2023,
@@ -150,7 +154,7 @@ const students = [
         create_time: new Date("July 21, 2024 01:15:00"),
         student_id: null,
         courses: ["1","2","3"],
-        groups: ["0"]
+        groups: ["0"],
       },
       {
         id: "2",
@@ -413,6 +417,13 @@ export const restHandlers = [
             return HttpResponse.json(submissions.filter(x => submited_submissions.includes(x.id)))
         }
     ),
+    http.get(baseUrl + endpoints.teachers.byCourse.replace('{course_id}', ':id'),
+        ({ params }) => {
+            let course = courses.find(x => x.id == params.id)
+            let teacher_ids = course ? course.teachers : []
+            return HttpResponse.json(submissions.filter(x => teacher_ids.includes(x.id)))
+        }
+    ),
     http.get(baseUrl + endpoints.assistants.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
             let course = courses.find(x => x.id == params.id)
@@ -432,6 +443,46 @@ export const restHandlers = [
             let student = students.find(x => x.id == params.id)
             let group_ids = student ? student.groups : []
             return HttpResponse.json(groups.filter(x => group_ids.includes(x.id)))
+        }
+    ),
+    http.get(baseUrl + endpoints.students.byCourse.replace('{course_id}', ':id'),
+        ({ params }) => {
+            let course = courses.find(x => x.id == params.id)
+            let student_ids = course ? course.students : []
+            return HttpResponse.json(students.filter(x => student_ids.includes(x.id)))
+        }
+    ),
+    http.get(baseUrl + endpoints.students.byGroup.replace('{group_id}', ':id'),
+        ({ params }) => {
+            let group = groups.find(x => x.id == params.id)
+            let student_ids = group ? group.students : []
+            return HttpResponse.json(students.filter(x => student_ids.includes(x.id)))
+        }
+    ),
+    http.get(baseUrl + endpoints.submissions.status.replace('{project_id}', ':id'),
+        ({ params }) => {
+            let project = projects.find(x => x.id == params.id)
+            let group_ids = project ? project.groups : []
+            let submission_ids = project ? project.submissions : []
+            let subGroups_ids = Array.from(new Set(submissions.filter(x => submission_ids.includes(x.id)).map(x => x.group)))
+
+            // Filter submissions for each subgroup and get the submission with the highest number
+            let subgroupSubmissions = subGroups_ids.map(groupId => {
+                let submissionsForGroup = submissions.filter(submission => submission.group === groupId);
+                if (submissionsForGroup.length > 0) {
+                    return submissionsForGroup.reduce((maxSubmission, currentSubmission) => {
+                        return currentSubmission.submission_number > maxSubmission.submission_number ? currentSubmission : maxSubmission;
+                    });
+                } else {
+                    return null;
+                }
+            });
+            return HttpResponse.json(
+                {
+                    groups_submitted: new Set(submissions.filter(x => submission_ids.includes(x.id)).map(x => x.group)).size,
+                    non_empty_groups: groups.filter(x => group_ids.includes(x.id) && x.students.length > 0).length,
+                    submissions_passed: subgroupSubmissions.filter(x => x?.structure_checks_passed).length
+                })
         }
     ),
     http.get(baseUrl + endpoints.structure_checks.byProject.replace('{project_id}', ':id'),

@@ -61,4 +61,33 @@ describe("teachers", (): void => {
         expect(teachers.value?.[1]?.courses).toEqual([])
         expect(teachers.value?.[1]?.faculties).toEqual([])
     })
+
+    it("gets teacher data by course", async () => {
+        await getTeacherByCourse("1")
+        expect(teachers).not.toBeNull()
+        expect(Array.isArray(teachers.value)).toBe(true)
+        expect(teachers.value?.length).toBe(2);
+
+        expect(teachers.value?.[0]?.username).toBe("tboonen")
+        expect(teachers.value?.[0]?.is_staff).toBe(false)
+        expect(teachers.value?.[0]?.email).toBe("Tom.Boonen@gmail.be")
+        expect(teachers.value?.[0]?.first_name).toBe("Tom")
+        expect(teachers.value?.[0]?.last_name).toBe("Boonen")
+        expect(teachers.value?.[0]?.last_enrolled).toBe(2023)
+        expect(teachers.value?.[0]?.last_login).toBeNull()
+        expect(teachers.value?.[0]?.create_time).toEqual(new Date("July 21, 2024 01:15:00"))
+        expect(teachers.value?.[0]?.courses).toEqual([])
+        expect(teachers.value?.[0]?.faculties).toEqual([])
+
+        expect(teachers.value?.[1]?.username).toBe("psagan")
+        expect(teachers.value?.[1]?.is_staff).toBe(false)
+        expect(teachers.value?.[1]?.email).toBe("Peter.Sagan@gmail.com")
+        expect(teachers.value?.[1]?.first_name).toBe("Peter")
+        expect(teachers.value?.[1]?.last_name).toBe("Sagan")
+        expect(teachers.value?.[1]?.last_enrolled).toBe(2023)
+        expect(teachers.value?.[0]?.last_login).toBeNull()
+        expect(teachers.value?.[0]?.create_time).toEqual(new Date("July 21, 2024 01:15:00"))
+        expect(teachers.value?.[1]?.courses).toEqual([])
+        expect(teachers.value?.[1]?.faculties).toEqual([])
+    })
 })
