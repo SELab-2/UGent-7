@@ -137,7 +137,8 @@ const getCurrentAcademicYear: () => number = () => {
                 <template v-if="filteredCourses.length > 0">
                     <div
                         class="col-12 md:col-6 lg:col-4 xl:col-3"
-                        v-for="course in filteredCourses"
+                        v-for="course in filteredCourses"\
+                        :key="course.id"
                     >
                         <CourseCard class="h-100" :course="course" />
                     </div>
@@ -191,6 +192,7 @@ const getCurrentAcademicYear: () => number = () => {
                 <div
                     class="col-12 md:col-6 lg:col-4 xl:col-3"
                     v-for="project in filteredProjects"
+                    :key="project.id"
                 >
                     <ProjectCard class="h-100" :project="project" />
                 </div>
