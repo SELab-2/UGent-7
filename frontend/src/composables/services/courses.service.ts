@@ -61,10 +61,7 @@ export function useCourses() {
     }
 
     async function cloneCourse(courseId: string, cloneAssistants: boolean) {
-        const endpoint = endpoints.courses.clone.replace(
-            '{courseId}',
-            courseId
-        )
+        const endpoint = endpoints.courses.clone.replace('{courseId}', courseId)
         await create<Course>(
             endpoint,
             { cloneAssistants: cloneAssistants.toString() },

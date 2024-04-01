@@ -33,10 +33,7 @@ export function useAssistant() {
         await getList<Assistant>(endpoint, assistants, Assistant.fromJSON)
     }
 
-    async function assistantJoinCourse(
-        courseId: string,
-        assistantId: string
-    ) {
+    async function assistantJoinCourse(courseId: string, assistantId: string) {
         const endpoint = endpoints.assistants.byCourse.replace(
             '{courseId}',
             courseId
@@ -49,10 +46,7 @@ export function useAssistant() {
         )
     }
 
-    async function assistantLeaveCourse(
-        courseId: string,
-        assistantId: string
-    ) {
+    async function assistantLeaveCourse(courseId: string, assistantId: string) {
         const endpoint = endpoints.assistants.byCourse.replace(
             '{courseId}',
             courseId

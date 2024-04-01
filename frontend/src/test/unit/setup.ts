@@ -408,8 +408,7 @@ export const restHandlers = [
         }
     ),
     http.get(
-        baseUrl +
-            endpoints.submissions.byProject.replace('{projectId}', ':id'),
+        baseUrl + endpoints.submissions.byProject.replace('{projectId}', ':id'),
         ({ params }) => {
             const project = projects.find((x) => x.id === params.id)
             const submittedSubmissions =
