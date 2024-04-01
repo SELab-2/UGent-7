@@ -8,7 +8,7 @@ export async function LogoutGuard(
     _1: RouteLocationNormalized,
     _2: RouteLocationNormalized,
     next: NavigationGuardNext
-) {
+): Promise<void> {
     await useAuthStore().logout()
 
     next({ name: 'login' })

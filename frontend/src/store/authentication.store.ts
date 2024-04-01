@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
         initUser()
     })
 
-    const initUser = async () => {
+    const initUser = async (): Promise<void> => {
         if (user.value !== null) {
             if (view.value === 'teacher') {
                 // Get the teacher information.
@@ -86,7 +86,7 @@ export const useAuthStore = defineStore('auth', () => {
      *
      * @param ticket
      */
-    async function login(ticket: string) {
+    async function login(ticket: string): Promise<void> {
         // Display toast messages.
         const { add } = useMessagesStore()
 
@@ -114,7 +114,7 @@ export const useAuthStore = defineStore('auth', () => {
     /**
      * Refresh the user objects in the API endpoint.
      */
-    async function refresh() {
+    async function refresh(): Promise<void> {
         // Display toast messages.
         const { add } = useMessagesStore()
 
@@ -143,7 +143,7 @@ export const useAuthStore = defineStore('auth', () => {
     /**
      * Log out the user.
      */
-    async function logout() {
+    async function logout(): Promise<void> {
         await client.post(endpoints.auth.logout).catch()
         user.value = null
     }

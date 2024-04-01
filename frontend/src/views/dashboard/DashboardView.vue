@@ -41,7 +41,7 @@ watch(user, async () => {
 })
 
 /* Fetch the data for the dashboard */
-const fetchDashboardData = async () => {
+const fetchDashboardData = async (): Promise<void> => {
     if (user.value !== null) {
         // Clear the old data, so that the data from another role is not displayed
         allProjects.value = []

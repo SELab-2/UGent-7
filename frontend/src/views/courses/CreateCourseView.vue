@@ -22,7 +22,7 @@ const courseName = ref<string>('')
 const courseDescription = ref<string>('')
 const courseYear = ref<Date>(new Date())
 
-const submitCourse = async () => {
+const submitCourse = async (): Promise<void> => {
     // Pass the course data to the service
     await createCourse(
         new Course(

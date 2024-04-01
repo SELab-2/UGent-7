@@ -29,7 +29,7 @@ const formattedDate = computed(() => {
         .format('DD MMMM YYYY')
 })
 
-const loadProjects = async () => {
+const loadProjects = async (): Promise<void> => {
     if (user.value !== null) {
         // Clear the old data, so that the data from another role is not displayed
         allProjects.value = []
