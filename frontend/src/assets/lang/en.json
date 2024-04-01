@@ -39,9 +39,17 @@
             "title": "Calendar"
         },
         "projects": {
-          "deadline": "Deadline",
-          "submissionStatus": "Indienstatus",
-          "groupMembers": "Group members"
+            "deadline": "Deadline",
+            "submissionStatus": "Indienstatus",
+            "groupMembers": "Group members",
+            "create": "Create new project",
+            "name": "Project name",
+            "description": "Description",
+            "start_date": "Start project",
+            "group_size": "Number of students in a group (1 for an individual project)",
+            "max_score": "Maximum score that can be achieved",
+            "visibility": "Make project visible to students",
+            "score_visibility": "Make score automatically visible to students when uploaded"
         },
         "courses": {
             "create": "Create course",
