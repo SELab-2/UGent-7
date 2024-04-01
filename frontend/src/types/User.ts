@@ -72,7 +72,7 @@ export class User {
             user.roles,
             user.faculties,
             new Date(user.create_time),
-            user.last_login ? new Date(user.last_login) : null
+            user.last_login !== null ? new Date(user.last_login) : null
         )
     }
 }

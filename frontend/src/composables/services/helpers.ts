@@ -123,7 +123,7 @@ export function processError(error: AxiosError) {
     const { t } = i18n.global
     const { add } = useMessagesStore()
 
-    if (error.response) {
+    if (error.response !== undefined && error.response !== null) {
         // The request was made and the server responded with a status code
         if (error.response.status === 404) {
             add({
@@ -147,7 +147,7 @@ export function processError(error: AxiosError) {
                 life: lifeTime
             })
         }
-    } else if (error.request) {
+    } else if (error.request !== undefined && error.request !== null) {
         // The request was made but no response was received
         add({
             severity: 'error',

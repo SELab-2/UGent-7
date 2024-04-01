@@ -51,7 +51,7 @@ export class Student extends User {
             student.is_staff,
             student.last_enrolled,
             new Date(student.create_time),
-            student.last_login ? new Date(student.last_login) : null,
+            student.last_login !== null ? new Date(student.last_login) : null,
             student.student_id
         )
     }

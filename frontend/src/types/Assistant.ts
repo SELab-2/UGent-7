@@ -51,7 +51,7 @@ export class Assistant extends User {
             assistant.faculties,
             assistant.courses,
             new Date(assistant.create_time),
-            assistant.last_login ? new Date(assistant.last_login) : null
+            assistant.last_login !== null ? new Date(assistant.last_login) : null
         )
     }
 

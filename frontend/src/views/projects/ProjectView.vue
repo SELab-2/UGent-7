@@ -31,9 +31,9 @@ onMounted(async () => {
             (projectGroup) => projectGroup.id === group.id
         )
 
-        if (isCommonGroup) {
-            finalGroup.value = group
-            break
+        if (isCommonGroup != null && isCommonGroup) {
+            finalGroup.value = group;
+            break;
         }
     }
 })

@@ -72,23 +72,23 @@ const fetchDashboardData = async () => {
 }
 
 const filteredProjects = computed(() => {
-    return allProjects.value
+    return allProjects.value !== undefined && allProjects.value !== null
         ? allProjects.value.filter(
               (project) =>
                   project.course?.academic_startyear ===
                   selectedProjectsYear.value
           )
-        : []
-})
+        : [];
+});
 
 const filteredCourses = computed(() => {
-    return user.value?.courses
-        ? user.value?.courses.filter(
+    return user.value !== undefined && user.value !== null
+        ? user.value.courses?.filter(
               (course) =>
                   course.academic_startyear === selectedCoursesYear.value
           )
-        : []
-})
+        : [];
+});
 
 // Method to get the current academic year
 const getCurrentAcademicYear: () => number = () => {

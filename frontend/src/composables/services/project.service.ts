@@ -38,7 +38,11 @@ export function useProject() {
         await getList<Course>(endpoint, courses, Course.fromJSON)
 
         const endpList = []
-        for (const course of courses.value ? courses.value : []) {
+        let coursesValue = courses.value
+        if (coursesValue === null) {
+            coursesValue = []
+        }
+        for (const course of coursesValue) {
             endpList.push(
                 endpoints.projects.byCourse.replace(
                     '{course_id}',

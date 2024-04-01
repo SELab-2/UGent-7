@@ -52,7 +52,7 @@ export class Teacher extends User {
             teacher.faculties,
             teacher.courses,
             new Date(teacher.create_time),
-            teacher.last_login ? new Date(teacher.last_login) : null
+            teacher.last_login !== null ? new Date(teacher.last_login) : null
         )
     }
 

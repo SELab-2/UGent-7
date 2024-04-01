@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
                 await getCoursesByTeacher(user.value.id)
 
                 // Set the user object with the teacher information.
-                if (teacher.value) {
+                if (teacher.value !== undefined && teacher.value !== null) {
                     teacher.value.courses = courses.value ?? []
                     teacher.value.roles = user.value.roles
                 }
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
                 await getCoursesByStudent(user.value.id)
 
                 // Set the user object with the student information.
-                if (student.value) {
+                if (student.value !== undefined && student.value !== null) {
                     student.value.courses = courses.value ?? []
                     student.value.roles = user.value.roles
                 }
@@ -71,7 +71,7 @@ export const useAuthStore = defineStore('auth', () => {
                 await getCourseByAssistant(user.value.id)
 
                 // Set the user object with the assistant information.
-                if (assistant.value) {
+                if (assistant.value !== undefined && assistant.value !== null) {
                     assistant.value.courses = courses.value ?? []
                     assistant.value.roles = user.value.roles
                 }
