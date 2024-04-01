@@ -23,6 +23,9 @@
             "projects": "Lopende projecten",
             "no_projects": "Geen projecten gevonden.",
             "no_courses": "Geen vakken gevonden."
+            "no_projects": "Geen projecten beschikbaar voor dit academiejaar.",
+            "no_courses": "Geen vakken beschikbaar voor dit academiejaar.",
+            "select_course": "Selecteer het vak waarvoor je een project wil maken:"
         },
         "login": {
             "title": "Inloggen",

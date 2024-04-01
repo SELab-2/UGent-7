@@ -22,7 +22,8 @@
             "courses": "My courses",
             "projects": "Current projects",
             "no_projects": "No projects available for this academic year.",
-            "no_courses": "No courses available for this academic year."
+            "no_courses": "No courses available for this academic year.",
+            "select_course": "Select the course for which you want to create a project:"
         },
         "login": {
             "title": "Login",
