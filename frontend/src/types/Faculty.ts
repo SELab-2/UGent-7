@@ -1,8 +1,5 @@
 export class Faculty {
-    constructor(
-        public name: string,
-    ) {
-    }
+    constructor(public name: string) {}
 
     /**
      * Convert a faculty object to a faculty instance.
@@ -10,6 +7,6 @@ export class Faculty {
      * @param faculty
      */
     static fromJSON(faculty: Faculty): Faculty {
-        return new Faculty(faculty.name);
+        return new Faculty(faculty.name)
     }
 }

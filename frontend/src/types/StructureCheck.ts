@@ -1,5 +1,5 @@
-import { File_extension } from "./FileExtension.ts";
-import { Project } from "./Projects";
+import { type File_extension } from './FileExtension.ts'
+import { type Project } from './Projects'
 
 export class StructureCheck {
     constructor(
@@ -7,20 +7,15 @@ export class StructureCheck {
         public name: string,
         public obligated_extensions: File_extension[] = [],
         public blocked_extensions: File_extension[] = [],
-        public project: Project|null = null
-    ) {
-    }
-
+        public project: Project | null = null
+    ) {}
 
     /**
-     * Convert a structure_check object to a structure_check instance.
+     * Convert a structureCheck object to a structureCheck instance.
      *
-     * @param structure_check
+     * @param structureCheck
      */
-    static fromJSON(structure_check: StructureCheck): StructureCheck {
-        return new StructureCheck(
-            structure_check.id,
-            structure_check.name
-        )
+    static fromJSON(structureCheck: StructureCheck): StructureCheck {
+        return new StructureCheck(structureCheck.id, structureCheck.name)
     }
 }

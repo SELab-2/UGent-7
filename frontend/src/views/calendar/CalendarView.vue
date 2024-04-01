@@ -1,70 +1,73 @@
 <script setup lang="ts">
-import moment from 'moment';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
-import ProjectCard from '@/components/projects/ProjectCard.vue';
-import Calendar from 'primevue/calendar';
-import Title from '@/components/layout/Title.vue';
-import {useProject} from '@/composables/services/project.service';
-import { computed, onMounted } from 'vue';
-import {useI18n} from 'vue-i18n';
-import {ref, watch} from 'vue';
-import {useAuthStore} from '@/store/authentication.store.ts';
-import {storeToRefs} from 'pinia';
-import {Project} from "@/types/Projects.ts";
+import moment from 'moment'
+import BaseLayout from '@/components/layout/BaseLayout.vue'
+import ProjectCard from '@/components/projects/ProjectCard.vue'
+import Calendar from 'primevue/calendar'
+import Title from '@/components/layout/Title.vue'
+import { useProject } from '@/composables/services/project.service'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/store/authentication.store.ts'
+import { storeToRefs } from 'pinia'
+import { type Project } from '@/types/Projects.ts'
 
 /* Composable injections */
-const { t, locale } = useI18n();
+const { t, locale } = useI18n()
 
 /* Component state */
-const allProjects = ref<Project[]>([]);
-const selectedDate = ref(new Date());
+const allProjects = ref<Project[]>([])
+const selectedDate = ref(new Date())
 
 /* Service injection */
-const { user } = storeToRefs(useAuthStore());
-const { projects, getProjectsByCourse } = useProject();
+const { user } = storeToRefs(useAuthStore())
+const { projects, getProjectsByCourse } = useProject()
 
 const formattedDate = computed(() => {
     // Format the selected date using moment.js
-    return moment(selectedDate.value).locale(locale.value).format('DD MMMM YYYY');
-});
+    return moment(selectedDate.value)
+        .locale(locale.value)
+        .format('DD MMMM YYYY')
+})
 
-const loadProjects = async () => {
+const loadProjects = async (): Promise<void> => {
     if (user.value !== null) {
         // Clear the old data, so that the data from another role is not displayed
-        allProjects.value = [];
+        allProjects.value = []
 
         // Load the projects of the courses
         for (const course of user.value.courses) {
-            await getProjectsByCourse(course.id);
+            await getProjectsByCourse(course.id)
 
             // Assign the course to the project
-            projects.value?.forEach(project => {
-                project.course = course;
-            });
+            projects.value?.forEach((project) => {
+                project.course = course
+            })
 
             // Concatenate the projects
-            allProjects.value = allProjects.value.concat(projects.value ?? []);
+            allProjects.value = allProjects.value.concat(projects.value ?? [])
         }
     }
-};
+}
 
 /* Filter the projects on the date selected on the calendar */
 const projectsWithDeadline = computed(() => {
     // Filter the projects with the selected date
-    return allProjects.value?.filter(project => {
-        return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
-    });
-});
+    return allProjects.value?.filter((project) => {
+        return moment(project.deadline).isSame(
+            moment(selectedDate.value),
+            'day'
+        )
+    })
+})
 
 /* Load the projects when the component is mounted */
 onMounted(async () => {
-    await loadProjects();
-});
+    await loadProjects()
+})
 
 watch(user, async () => {
-    await loadProjects();
-});
-
+    await loadProjects()
+})
 </script>
 
 <template>
@@ -76,7 +79,7 @@ watch(user, async () => {
 
                 <div>
                     <!-- Calendar itself -->
-                    <Calendar class="w-full" v-model="selectedDate" inline/>
+                    <Calendar class="w-full" v-model="selectedDate" inline />
                 </div>
             </div>
             <div class="col-12 md:col-6">
@@ -85,8 +88,11 @@ watch(user, async () => {
 
                 <!-- Listing projects with given deadline -->
                 <div class="grid grid-cols-2 gap-4">
-                    <div v-for="project in projectsWithDeadline" :key="project.id">
-                        <ProjectCard class="h-100" :project="project"/>
+                    <div
+                        v-for="project in projectsWithDeadline"
+                        :key="project.id"
+                    >
+                        <ProjectCard class="h-100" :project="project" />
                     </div>
                 </div>
             </div>
@@ -94,6 +100,4 @@ watch(user, async () => {
     </BaseLayout>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

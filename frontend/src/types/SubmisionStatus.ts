@@ -3,9 +3,7 @@ export class SubmissionStatus {
         public non_empty_groups: number,
         public groups_submitted: number,
         public submissions_passed: number
-
-    ) {
-    }
+    ) {}
 
     /**
      * Convert a submissionStatus object to a submissionStatus instance.
