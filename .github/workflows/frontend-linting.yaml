@@ -1,0 +1,22 @@
+name: frontend-linting
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main, development]
+  workflow_dispatch:
+
+jobs:
+  linting-checks:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: cd frontend; npm install
+      - name: Run ESLint
+        run: cd frontend; npm run lint
