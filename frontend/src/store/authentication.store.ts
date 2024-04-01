@@ -43,10 +43,10 @@ export const useAuthStore = defineStore('auth', () => {
                 await getCoursesByTeacher(user.value.id)
 
                 // Set the user object with the teacher information.
-                teacher.value
-                    ? (teacher.value.courses = courses.value ?? [])
-                    : null
-                teacher.value ? (teacher.value.roles = user.value.roles) : null
+                if (teacher.value) {
+                    teacher.value.courses = courses.value ?? []
+                    teacher.value.roles = user.value.roles
+                }
 
                 user.value = teacher.value
             } else if (view.value === 'student') {
@@ -57,10 +57,10 @@ export const useAuthStore = defineStore('auth', () => {
                 await getCoursesByStudent(user.value.id)
 
                 // Set the user object with the student information.
-                student.value
-                    ? (student.value.courses = courses.value ?? [])
-                    : null
-                student.value ? (student.value.roles = user.value.roles) : null
+                if (student.value) {
+                    student.value.courses = courses.value ?? []
+                    student.value.roles = user.value.roles
+                }
 
                 user.value = student.value
             } else {
@@ -71,12 +71,10 @@ export const useAuthStore = defineStore('auth', () => {
                 await getCourseByAssistant(user.value.id)
 
                 // Set the user object with the assistant information.
-                assistant.value
-                    ? (assistant.value.courses = courses.value ?? [])
-                    : null
-                assistant.value
-                    ? (assistant.value.roles = user.value.roles)
-                    : null
+                if (assistant.value) {
+                    assistant.value.courses = courses.value ?? [];
+                    assistant.value.roles = user.value.roles;
+                }
 
                 user.value = assistant.value
             }
