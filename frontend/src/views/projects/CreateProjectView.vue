@@ -97,8 +97,11 @@ const submitProject = async (): Promise<void> => {
                         <Calendar
                             id="projectStartDate"
                             v-model="projectStartDate"
-                            view="date"
                             dateFormat="dd-mm-yy"
+                            showTime
+                            hourFormat="24"
+                            showIcon
+                            showButtonBar
                             required
                         />
                     </div>
@@ -111,8 +114,11 @@ const submitProject = async (): Promise<void> => {
                         <Calendar
                             id="projectDeadline"
                             v-model="projectDeadline"
-                            view="date"
                             dateFormat="dd-mm-yy"
+                            showTime
+                            hourFormat="24"
+                            showIcon
+                            showButtonBar
                             required
                         />
                     </div>
