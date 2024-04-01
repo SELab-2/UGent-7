@@ -556,22 +556,22 @@ export const restHandlers = [
             )
         }
     ),
-    http.get(baseUrl + endpoints.faculties.index, ({}) => {
+    http.get(baseUrl + endpoints.faculties.index, () => {
         return HttpResponse.json(faculties)
     }),
-    http.get(baseUrl + endpoints.courses.index, ({}) => {
+    http.get(baseUrl + endpoints.courses.index, () => {
         return HttpResponse.json(courses)
     }),
-    http.get(baseUrl + endpoints.admins.index, ({}) => {
+    http.get(baseUrl + endpoints.admins.index, () => {
         return HttpResponse.json(admins)
     }),
-    http.get(baseUrl + endpoints.students.index, ({}) => {
+    http.get(baseUrl + endpoints.students.index, () => {
         return HttpResponse.json(students)
     }),
-    http.get(baseUrl + endpoints.teachers.index, ({}) => {
+    http.get(baseUrl + endpoints.teachers.index, () => {
         return HttpResponse.json(teachers)
     }),
-    http.get(baseUrl + endpoints.assistants.index, ({}) => {
+    http.get(baseUrl + endpoints.assistants.index, () => {
         return HttpResponse.json(assistants)
     })
 
