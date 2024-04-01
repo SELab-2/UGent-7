@@ -1,3 +1,4 @@
+import { Course } from "./Course";
 import { Faculty } from "./Faculty";
 
 export type Role = 'user' | 'student' | 'assistant' | 'teacher';
@@ -15,6 +16,7 @@ export class User {
         public faculties: Faculty[] = [],
         public create_time: Date,
         public last_login: Date |null,
+        public courses: Course[] = []
     ) {
     }
 
@@ -33,7 +35,7 @@ export class User {
      * @returns boolean
      */
     public isStudent(): boolean {
-        return this.roles.includes('student');
+        return false;
     }
 
     /**
@@ -42,7 +44,7 @@ export class User {
      * @returns boolean
      */
     public isAssistant(): boolean {
-        return this.roles.includes('assistant');
+        return false;
     }
 
     /**
@@ -51,7 +53,7 @@ export class User {
      * @returns boolean
      */
     public isTeacher(): boolean {
-        return this.roles.includes('teacher');
+        return false;
     }
 
     /**

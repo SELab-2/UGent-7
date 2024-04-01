@@ -3,6 +3,7 @@
         "header": {
             "logo": "Ghent University logo",
             "login": "login",
+            "view": "View as {0}",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
@@ -19,7 +20,9 @@
     "views": {
         "dashboard": {
             "courses": "My courses",
-            "projects": "Current projects"
+            "projects": "Current projects",
+            "no_projects": "No projects available for this academic year.",
+            "no_courses": "No courses available for this academic year."
         },
         "login": {
             "title": "Login",
@@ -38,6 +41,12 @@
           "deadline": "Deadline",
           "submissionStatus": "Indienstatus",
           "groupMembers": "Group members"
+        },
+        "courses": {
+            "create": "Create course",
+            "name": "Course name",
+            "description": "Description",
+            "year": "Academic year"
         }
     },
     "composables": {
@@ -62,6 +71,13 @@
         },
         "card": {
             "open": "details"
+        }
+    },
+    "types": {
+        "roles": {
+            "student": "Student",
+            "assistant": "Assistant",
+            "teacher": "Teacher"
         }
     },
     "toasts": {

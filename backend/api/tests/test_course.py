@@ -866,6 +866,10 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertTrue(Course.objects.filter(name="Introduction to Computer Science").exists())
 
+        # Make sure the teacher is added to the course
+        course = Course.objects.get(name="Introduction to Computer Science")
+        self.assertTrue(course.teachers.filter(id=self.user.id).exists())
+
     def test_create_project(self):
         """
         Able to create a project for a course.

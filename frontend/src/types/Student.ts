@@ -20,7 +20,7 @@ export class Student extends User {
         public groups: Group[] = [],
         public faculties: Faculty[] = [],
     ) {
-        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
+        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login, courses);
     }
 
     /**
@@ -41,5 +41,14 @@ export class Student extends User {
             student.last_login ? new Date(student.last_login) : null,
             student.student_id
         );
+    }
+
+    /**
+     * Check if the user is a student.
+     *
+     * @returns boolean
+     */
+    public isStudent(): boolean {
+        return true;
     }
 }

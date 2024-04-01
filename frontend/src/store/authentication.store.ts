@@ -4,20 +4,73 @@ import {Role, User} from '@/types/User.ts';
 import {endpoints} from '@/config/endpoints.ts';
 import {useMessagesStore} from '@/store/messages.store.ts';
 import {client} from '@/composables/axios.ts';
-import {Teacher} from '@/types/Teacher.ts';
-import {Student} from '@/types/Student.ts';
-import {Assistant} from '@/types/Assistant.ts';
 import {useLocalStorage} from '@vueuse/core';
-import {computed, ref} from 'vue';
+import { useCourses } from '@/composables/services/courses.service';
+import {computed, ref, watch} from 'vue';
+import { useAssistant } from '@/composables/services/assistant.service';
+import { useStudents } from '@/composables/services/students.service';
+import { useTeacher } from '@/composables/services/teachers.service';
 
 export const useAuthStore = defineStore('auth', () => {
     /* Stores */
     const user = ref<User|null>(null);
-    const teacher = ref<Teacher|null>(null);
-    const student = ref<Student|null>(null);
-    const assistant = ref<Assistant|null>(null);
     const view = useLocalStorage<Role|null>('view', null);
     const intent = useLocalStorage<string>('intent', '/');
+
+    /* Services */
+    const { courses, getCoursesByTeacher, getCoursesByStudent, getCourseByAssistant } = useCourses();
+    const { assistant, getAssistantByID } = useAssistant();
+    const { student, getStudentByID } = useStudents();
+    const { teacher, getTeacherByID } = useTeacher();
+
+    /* Update the user object when the view changes. */
+    watch(view, async () => {
+        initUser();
+    });
+
+    const initUser = async () => {
+        if (user.value !== null) {
+            if (view.value === 'teacher') {
+                // Get the teacher information.
+                await getTeacherByID(user.value.id);
+
+                // Get the courses for the teacher.
+                await getCoursesByTeacher(user.value.id);
+
+                // Set the user object with the teacher information.
+                teacher.value ? teacher.value.courses = courses.value ?? [] : null;
+                teacher.value ? teacher.value.roles = user.value.roles : null;
+
+                user.value = teacher.value;
+
+            }else if (view.value === 'student') {
+                // Get the student information.
+                await getStudentByID(user.value.id);
+
+                // Get the courses for the student.
+                await getCoursesByStudent(user.value.id);
+
+                // Set the user object with the student information.
+                student.value ? student.value.courses = courses.value ?? [] : null;
+                student.value ? student.value.roles = user.value.roles : null;
+
+                user.value = student.value;
+            }else {
+                // Get the assistant information.
+                await getAssistantByID(user.value.id);
+
+                // Get the courses for the assistant.
+                await getCourseByAssistant(user.value.id);
+
+                // Set the user object with the assistant information.
+                assistant.value ? assistant.value.courses = courses.value ?? [] : null;
+                assistant.value ? assistant.value.roles = user.value.roles : null;
+                
+                user.value = assistant.value;                
+            }
+        }
+    };
+
 
     /**
      * Attempt to log in the user using a CAS ticket.
@@ -60,8 +113,9 @@ export const useAuthStore = defineStore('auth', () => {
             if (view.value === null) {
                 view.value = user.value.roles[0];
             }
-
-            // TODO: Get the teacher, student, and assistant information.
+            
+            // Init the user depending on the role selected.
+            initUser();
 
         }).catch((error) => {
             add({
@@ -86,7 +140,7 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
     return {
-        user, teacher, student, assistant, view, intent,
+        user, view, intent,
         login, refresh, logout,
         isAuthenticated
     }

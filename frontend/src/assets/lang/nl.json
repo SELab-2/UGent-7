@@ -20,7 +20,9 @@
     "views": {
         "dashboard": {
             "courses": "Mijn vakken",
-            "projects": "Lopende projecten"
+            "projects": "Lopende projecten",
+            "no_projects": "Geen projecten beschikbaar voor dit academiejaar.",
+            "no_courses": "Geen vakken beschikbaar voor dit academiejaar."
         },
         "login": {
             "title": "Inloggen",
@@ -39,7 +41,13 @@
             "deadline": "Deadline",
             "submissionStatus": "Indienstatus",
             "groupMembers": "Groepsleden"
-        }
+        },
+        "courses": {
+          "create": "Creëer vak",
+          "name": "Vaknaam",
+          "description": "Beschrijving",
+          "year": "Academiejaar"
+      }
     },
     "composables": {
       "helpers": {
