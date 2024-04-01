@@ -17,7 +17,7 @@ const localeStorage = useLocalStorage('locale', locale.value)
  *
  * @param locale
  */
-function updateLocale(locale: string) {
+function updateLocale(locale: string): void {
     // Update saved locale
     localeStorage.value = locale
     // Update PrimeVue locale
@@ -29,7 +29,7 @@ function updateLocale(locale: string) {
  *
  * @param locale
  */
-function getFlag(locale: string) {
+function getFlag(locale: string): string {
     if (locale === 'nl') {
         return nl
     }

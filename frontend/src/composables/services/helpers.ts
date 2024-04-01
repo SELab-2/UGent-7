@@ -119,7 +119,7 @@ export async function getListMerged<T>(
     ref.value = allData
 }
 
-export function processError(error: AxiosError) {
+export function processError(error: AxiosError): void {
     const { t } = i18n.global
     const { add } = useMessagesStore()
 

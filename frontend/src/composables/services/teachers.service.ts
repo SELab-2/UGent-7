@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Teacher } from '@/types/Teacher.ts'
 import { Response } from '@/types/Response'
-import { ref } from 'vue'
+import { type Ref, ref } from 'vue'
 import { endpoints } from '@/config/endpoints.ts'
 import {
     get,
@@ -11,17 +11,30 @@ import {
     deleteIdWithData
 } from '@/composables/services/helpers.ts'
 
-export function useTeacher() {
+interface TeacherState {
+    teachers: Ref<Teacher[] | null>
+    teacher: Ref<Teacher | null>
+    response: Ref<Response | null>
+    getTeacherByID: (id: string) => Promise<void>
+    getTeacherByCourse: (courseId: string) => Promise<void>
+    getTeachers: () => Promise<void>
+    teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>
+    teacherLeaveCourse: (courseId: string, teacherId: string) => Promise<void>
+    createTeacher: (teacherData: Teacher) => Promise<void>
+    deleteTeacher: (id: string) => Promise<void>
+}
+
+export function useTeacher(): TeacherState {
     const teachers = ref<Teacher[] | null>(null)
     const teacher = ref<Teacher | null>(null)
     const response = ref<Response | null>(null)
 
-    async function getTeacherByID(id: string) {
+    async function getTeacherByID(id: string): Promise<void> {
         const endpoint = endpoints.teachers.retrieve.replace('{id}', id)
         await get<Teacher>(endpoint, teacher, Teacher.fromJSON)
     }
 
-    async function getTeacherByCourse(courseId: string) {
+    async function getTeacherByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace(
             '{courseId}',
             courseId
@@ -29,12 +42,15 @@ export function useTeacher() {
         await get<Teacher>(endpoint, teacher, Teacher.fromJSON)
     }
 
-    async function getTeachers() {
+    async function getTeachers(): Promise<void> {
         const endpoint = endpoints.teachers.index
         await getList<Teacher>(endpoint, teachers, Teacher.fromJSON)
     }
 
-    async function teacherJoinCourse(courseId: string, teacherId: string) {
+    async function teacherJoinCourse(
+        courseId: string,
+        teacherId: string
+    ): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace(
             '{courseId}',
             courseId
@@ -47,7 +63,10 @@ export function useTeacher() {
         )
     }
 
-    async function teacherLeaveCourse(courseId: string, teacherId: string) {
+    async function teacherLeaveCourse(
+        courseId: string,
+        teacherId: string
+    ): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace(
             '{courseId}',
             courseId
@@ -60,7 +79,7 @@ export function useTeacher() {
         )
     }
 
-    async function createTeacher(teacherData: Teacher) {
+    async function createTeacher(teacherData: Teacher): Promise<void> {
         const endpoint = endpoints.teachers.index
         await create<Teacher>(
             endpoint,
@@ -74,7 +93,7 @@ export function useTeacher() {
         )
     }
 
-    async function deleteTeacher(id: string) {
+    async function deleteTeacher(id: string): Promise<void> {
         const endpoint = endpoints.students.retrieve.replace('{id}', id)
         await deleteId<Teacher>(endpoint, teacher, Teacher.fromJSON)
     }

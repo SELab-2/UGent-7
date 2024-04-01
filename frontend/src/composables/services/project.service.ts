@@ -1,6 +1,6 @@
 import { Project } from '@/types/Projects.ts'
 import { Course } from '@/types/Course'
-import { ref } from 'vue'
+import { type Ref, ref } from 'vue'
 import { endpoints } from '@/config/endpoints.ts'
 import axios from 'axios'
 import {
@@ -12,16 +12,30 @@ import {
     processError
 } from '@/composables/services/helpers.ts'
 
-export function useProject() {
+interface ProjectState {
+    projects: Ref<Project[] | null>
+    project: Ref<Project | null>
+    getProjectByID: (id: string) => Promise<void>
+    getProjectsByCourse: (courseId: string) => Promise<void>
+    getProjectsByStudent: (studentId: string) => Promise<void>
+    getProjectsByCourseAndDeadline: (
+        courseId: string,
+        deadlineDate: Date
+    ) => Promise<void>
+    createProject: (projectData: Project, courseId: string) => Promise<void>
+    deleteProject: (id: string) => Promise<void>
+}
+
+export function useProject(): ProjectState {
     const projects = ref<Project[] | null>(null)
     const project = ref<Project | null>(null)
 
-    async function getProjectByID(id: string) {
+    async function getProjectByID(id: string): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id)
         await get<Project>(endpoint, project, Project.fromJSON)
     }
 
-    async function getProjectsByCourse(courseId: string) {
+    async function getProjectsByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace(
             '{courseId}',
             courseId
@@ -29,7 +43,7 @@ export function useProject() {
         await getList<Project>(endpoint, projects, Project.fromJSON)
     }
 
-    async function getProjectsByStudent(studentId: string) {
+    async function getProjectsByStudent(studentId: string): Promise<void> {
         const endpoint = endpoints.courses.byStudent.replace(
             '{studentId}',
             studentId
@@ -38,7 +52,7 @@ export function useProject() {
         await getList<Course>(endpoint, courses, Course.fromJSON)
 
         const endpList = []
-        let coursesValue: Course[] = courses.value
+        let coursesValue: Course[] | null = courses.value
         if (coursesValue === null) {
             coursesValue = []
         }
@@ -57,7 +71,7 @@ export function useProject() {
     async function getProjectsByCourseAndDeadline(
         courseId: string,
         deadlineDate: Date
-    ) {
+    ): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace(
             '{courseId}',
             courseId
@@ -94,7 +108,10 @@ export function useProject() {
             })
     }
 
-    async function createProject(projectData: Project, courseId: string) {
+    async function createProject(
+        projectData: Project,
+        courseId: string
+    ): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace(
             '{courseId}',
             courseId
@@ -118,7 +135,7 @@ export function useProject() {
         )
     }
 
-    async function deleteProject(id: string) {
+    async function deleteProject(id: string): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id)
         await deleteId<Project>(endpoint, project, Project.fromJSON)
     }

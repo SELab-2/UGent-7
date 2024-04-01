@@ -1,5 +1,5 @@
 import { Group } from '@/types/Group.ts'
-import { ref } from 'vue'
+import { type Ref, ref } from 'vue'
 import { endpoints } from '@/config/endpoints.ts'
 import {
     get,
@@ -8,16 +8,26 @@ import {
     deleteId
 } from '@/composables/services/helpers.ts'
 
-export function useGroup() {
+interface GroupState {
+    groups: Ref<Group[] | null>
+    group: Ref<Group | null>
+    getGroupByID: (id: string) => Promise<void>
+    getGroupsByProject: (projectId: string) => Promise<void>
+    getGroupsByStudent: (studentId: string) => Promise<void>
+    createGroup: (groupData: Group, projectId: string) => Promise<void>
+    deleteGroup: (id: string) => Promise<void>
+}
+
+export function useGroup(): GroupState {
     const groups = ref<Group[] | null>(null)
     const group = ref<Group | null>(null)
 
-    async function getGroupByID(id: string) {
+    async function getGroupByID(id: string): Promise<void> {
         const endpoint = endpoints.groups.retrieve.replace('{id}', id)
         await get<Group>(endpoint, group, Group.fromJSON)
     }
 
-    async function getGroupsByProject(projectId: string) {
+    async function getGroupsByProject(projectId: string): Promise<void> {
         const endpoint = endpoints.groups.byProject.replace(
             '{projectId}',
             projectId
@@ -25,7 +35,7 @@ export function useGroup() {
         await getList<Group>(endpoint, groups, Group.fromJSON)
     }
 
-    async function getGroupsByStudent(studentId: string) {
+    async function getGroupsByStudent(studentId: string): Promise<void> {
         const endpoint = endpoints.groups.byStudent.replace(
             '{studentId}',
             studentId
@@ -33,7 +43,10 @@ export function useGroup() {
         await getList<Group>(endpoint, groups, Group.fromJSON)
     }
 
-    async function createGroup(groupData: Group, projectId: string) {
+    async function createGroup(
+        groupData: Group,
+        projectId: string
+    ): Promise<void> {
         const endpoint = endpoints.groups.byProject.replace(
             '{projectId}',
             projectId
@@ -48,7 +61,7 @@ export function useGroup() {
         )
     }
 
-    async function deleteGroup(id: string) {
+    async function deleteGroup(id: string): Promise<void> {
         const endpoint = endpoints.groups.retrieve.replace('{id}', id)
         await deleteId<Group>(endpoint, group, Group.fromJSON)
     }

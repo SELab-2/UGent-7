@@ -1,6 +1,6 @@
 import { Assistant } from '@/types/Assistant.ts'
 import { Response } from '@/types/Response'
-import { ref } from 'vue'
+import { type Ref, ref } from 'vue'
 import { endpoints } from '@/config/endpoints.ts'
 import {
     get,
@@ -10,17 +10,36 @@ import {
     deleteIdWithData
 } from '@/composables/services/helpers.ts'
 
-export function useAssistant() {
+interface AssistantState {
+    assistants: Ref<Assistant[] | null>
+    assistant: Ref<Assistant | null>
+    response: Ref<Response | null>
+    getAssistantByID: (id: string) => Promise<void>
+    getAssistantByCourse: (courseId: string) => Promise<void>
+    getAssistants: () => Promise<void>
+    assistantJoinCourse: (
+        courseId: string,
+        assistantId: string
+    ) => Promise<void>
+    assistantLeaveCourse: (
+        courseId: string,
+        assistantId: string
+    ) => Promise<void>
+    createAssistant: (assistantData: Assistant) => Promise<void>
+    deleteAssistant: (id: string) => Promise<void>
+}
+
+export function useAssistant(): AssistantState {
     const assistants = ref<Assistant[] | null>(null)
     const assistant = ref<Assistant | null>(null)
     const response = ref<Response | null>(null)
 
-    async function getAssistantByID(id: string) {
+    async function getAssistantByID(id: string): Promise<void> {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id)
         await get<Assistant>(endpoint, assistant, Assistant.fromJSON)
     }
 
-    async function getAssistantByCourse(courseId: string) {
+    async function getAssistantByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace(
             '{courseId}',
             courseId
@@ -28,12 +47,15 @@ export function useAssistant() {
         await get<Assistant>(endpoint, assistant, Assistant.fromJSON)
     }
 
-    async function getAssistants() {
+    async function getAssistants(): Promise<void> {
         const endpoint = endpoints.assistants.index
         await getList<Assistant>(endpoint, assistants, Assistant.fromJSON)
     }
 
-    async function assistantJoinCourse(courseId: string, assistantId: string) {
+    async function assistantJoinCourse(
+        courseId: string,
+        assistantId: string
+    ): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace(
             '{courseId}',
             courseId
@@ -46,7 +68,10 @@ export function useAssistant() {
         )
     }
 
-    async function assistantLeaveCourse(courseId: string, assistantId: string) {
+    async function assistantLeaveCourse(
+        courseId: string,
+        assistantId: string
+    ): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace(
             '{courseId}',
             courseId
@@ -59,7 +84,7 @@ export function useAssistant() {
         )
     }
 
-    async function createAssistant(assistantData: Assistant) {
+    async function createAssistant(assistantData: Assistant): Promise<void> {
         const endpoint = endpoints.assistants.index
         await create<Assistant>(
             endpoint,
@@ -73,7 +98,7 @@ export function useAssistant() {
         )
     }
 
-    async function deleteAssistant(id: string) {
+    async function deleteAssistant(id: string): Promise<void> {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id)
         await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON)
     }
