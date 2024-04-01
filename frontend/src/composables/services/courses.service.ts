@@ -5,7 +5,7 @@ import {
     get,
     getList,
     create,
-    delete_id
+    deleteId
 } from '@/composables/services/helpers.ts'
 
 export function useCourses() {
@@ -22,52 +22,52 @@ export function useCourses() {
         await getList<Course>(endpoint, courses, Course.fromJSON)
     }
 
-    async function getCoursesByStudent(student_id: string) {
+    async function getCoursesByStudent(studentId: string) {
         const endpoint = endpoints.courses.byStudent.replace(
-            '{student_id}',
-            student_id
+            '{studentId}',
+            studentId
         )
         await getList<Course>(endpoint, courses, Course.fromJSON)
     }
 
-    async function getCoursesByTeacher(teacher_id: string) {
+    async function getCoursesByTeacher(teacherId: string) {
         const endpoint = endpoints.courses.byTeacher.replace(
-            '{teacher_id}',
-            teacher_id
+            '{teacherId}',
+            teacherId
         )
         await getList<Course>(endpoint, courses, Course.fromJSON)
     }
 
-    async function getCourseByAssistant(assistant_id: string) {
+    async function getCourseByAssistant(assistantId: string) {
         const endpoint = endpoints.courses.byAssistant.replace(
-            '{assistant_id}',
-            assistant_id
+            '{assistantId}',
+            assistantId
         )
         await getList<Course>(endpoint, courses, Course.fromJSON)
     }
 
-    async function createCourse(course_data: Course) {
+    async function createCourse(courseData: Course) {
         const endpoint = endpoints.courses.index
         await create<Course>(
             endpoint,
             {
-                name: course_data.name,
-                description: course_data.description,
-                academic_startyear: course_data.academic_startyear
+                name: courseData.name,
+                description: courseData.description,
+                academic_startyear: courseData.academic_startyear
             },
             course,
             Course.fromJSON
         )
     }
 
-    async function cloneCourse(course_id: string, clone_assistants: boolean) {
+    async function cloneCourse(courseId: string, cloneAssistants: boolean) {
         const endpoint = endpoints.courses.clone.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await create<Course>(
             endpoint,
-            { clone_assistants: clone_assistants.toString() },
+            { cloneAssistants: cloneAssistants.toString() },
             course,
             Course.fromJSON
         )
@@ -75,7 +75,7 @@ export function useCourses() {
 
     async function deleteCourse(id: string) {
         const endpoint = endpoints.courses.retrieve.replace('{id}', id)
-        await delete_id<Course>(endpoint, course, Course.fromJSON)
+        await deleteId<Course>(endpoint, course, Course.fromJSON)
     }
 
     return {

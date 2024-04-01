@@ -6,8 +6,8 @@ import {
     get,
     getList,
     create,
-    delete_id,
-    delete_id_with_data
+    deleteId,
+    deleteIdWithData
 } from '@/composables/services/helpers.ts'
 
 export function useStudents() {
@@ -25,82 +25,82 @@ export function useStudents() {
         await getList<Student>(endpoint, students, Student.fromJSON)
     }
 
-    async function getStudentsByCourse(course_id: string) {
+    async function getStudentsByCourse(courseId: string) {
         const endpoint = endpoints.students.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await getList<Student>(endpoint, students, Student.fromJSON)
     }
 
-    async function getStudentsByGroup(group_id: string) {
+    async function getStudentsByGroup(groupId: string) {
         const endpoint = endpoints.students.byGroup.replace(
-            '{group_id}',
-            group_id
+            '{groupId}',
+            groupId
         )
         await getList<Student>(endpoint, students, Student.fromJSON)
     }
 
-    async function studentJoinCourse(course_id: string, student_id: string) {
+    async function studentJoinCourse(courseId: string, studentId: string) {
         const endpoint = endpoints.students.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await create<Response>(
             endpoint,
-            { student_id },
+            { studentId },
             response,
             Response.fromJSON
         )
     }
 
-    async function studentLeaveCourse(course_id: string, student_id: string) {
+    async function studentLeaveCourse(courseId: string, studentId: string) {
         const endpoint = endpoints.students.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
-        await delete_id_with_data<Response>(
+        await deleteIdWithData<Response>(
             endpoint,
-            { student_id },
+            { studentId },
             response,
             Response.fromJSON
         )
     }
 
-    async function studentJoinGroup(group_id: string, student_id: string) {
+    async function studentJoinGroup(groupId: string, studentId: string) {
         const endpoint = endpoints.students.byGroup.replace(
-            '{group_id}',
-            group_id
+            '{groupId}',
+            groupId
         )
         await create<Response>(
             endpoint,
-            { student_id },
+            { studentId },
             response,
             Response.fromJSON
         )
     }
 
-    async function studentLeaveGroup(group_id: string, student_id: string) {
+    async function studentLeaveGroup(groupId: string, studentId: string) {
         const endpoint = endpoints.students.byGroup.replace(
-            '{group_id}',
-            group_id
+            '{groupId}',
+            groupId
         )
-        await delete_id_with_data<Response>(
+        await deleteIdWithData<Response>(
             endpoint,
-            { student_id },
+            { studentId },
             response,
             Response.fromJSON
         )
     }
 
-    async function createStudent(student_data: Student) {
+    async function createStudent(studentData: Student) {
         const endpoint = endpoints.students.index
         await create<Student>(
             endpoint,
             {
-                email: student_data.email,
-                first_name: student_data.first_name,
-                last_name: student_data.last_name
+                email: studentData.email,
+                first_name: studentData.first_name,
+                last_name: studentData.last_name
             },
             student,
             Student.fromJSON
@@ -109,7 +109,7 @@ export function useStudents() {
 
     async function deleteStudent(id: string) {
         const endpoint = endpoints.students.retrieve.replace('{id}', id)
-        await delete_id<Student>(endpoint, student, Student.fromJSON)
+        await deleteId<Student>(endpoint, student, Student.fromJSON)
     }
 
     return {

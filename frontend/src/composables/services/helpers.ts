@@ -41,7 +41,7 @@ export async function create<T>(
         })
 }
 
-export async function delete_id<T>(
+export async function deleteId<T>(
     endpoint: string,
     ref: Ref<T | null>,
     fromJson: (data: any) => T
@@ -58,7 +58,7 @@ export async function delete_id<T>(
         })
 }
 
-export async function delete_id_with_data<T>(
+export async function deleteIdWithData<T>(
     endpoint: string,
     data: any,
     ref: Ref<T | null>,

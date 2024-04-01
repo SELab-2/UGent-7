@@ -11,11 +11,11 @@ export class StructureCheck {
     ) {}
 
     /**
-     * Convert a structure_check object to a structure_check instance.
+     * Convert a structureCheck object to a structureCheck instance.
      *
-     * @param structure_check
+     * @param structureCheck
      */
-    static fromJSON(structure_check: StructureCheck): StructureCheck {
-        return new StructureCheck(structure_check.id, structure_check.name)
+    static fromJSON(structureCheck: StructureCheck): StructureCheck {
+        return new StructureCheck(structureCheck.id, structureCheck.name)
     }
 }

@@ -19,7 +19,7 @@ export class Project {
         public group_size: number,
 
         public course: Course | null = null,
-        public structure_checks: StructureCheck[] = [],
+        public structureChecks: StructureCheck[] = [],
         public extra_checks: ExtraCheck[] = [],
         public groups: Group[] = [],
         public submissions: Submission[] = []

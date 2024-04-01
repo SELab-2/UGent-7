@@ -7,8 +7,8 @@ import {
     get,
     getList,
     create,
-    delete_id,
-    delete_id_with_data
+    deleteId,
+    deleteIdWithData
 } from '@/composables/services/helpers.ts'
 
 export function useTeacher() {
@@ -21,10 +21,10 @@ export function useTeacher() {
         await get<Teacher>(endpoint, teacher, Teacher.fromJSON)
     }
 
-    async function getTeacherByCourse(course_id: string) {
+    async function getTeacherByCourse(courseId: string) {
         const endpoint = endpoints.teachers.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await get<Teacher>(endpoint, teacher, Teacher.fromJSON)
     }
@@ -34,40 +34,40 @@ export function useTeacher() {
         await getList<Teacher>(endpoint, teachers, Teacher.fromJSON)
     }
 
-    async function teacherJoinCourse(course_id: string, teacher_id: string) {
+    async function teacherJoinCourse(courseId: string, teacherId: string) {
         const endpoint = endpoints.teachers.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await create<Response>(
             endpoint,
-            { teacher_id },
+            { teacherId },
             response,
             Response.fromJSON
         )
     }
 
-    async function teacherLeaveCourse(course_id: string, teacher_id: string) {
+    async function teacherLeaveCourse(courseId: string, teacherId: string) {
         const endpoint = endpoints.teachers.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
-        await delete_id_with_data<Response>(
+        await deleteIdWithData<Response>(
             endpoint,
-            { teacher_id },
+            { teacherId },
             response,
             Response.fromJSON
         )
     }
 
-    async function createTeacher(teacher_data: Teacher) {
+    async function createTeacher(teacherData: Teacher) {
         const endpoint = endpoints.teachers.index
         await create<Teacher>(
             endpoint,
             {
-                email: teacher_data.email,
-                first_name: teacher_data.first_name,
-                last_name: teacher_data.last_name
+                email: teacherData.email,
+                first_name: teacherData.first_name,
+                last_name: teacherData.last_name
             },
             teacher,
             Teacher.fromJSON
@@ -76,7 +76,7 @@ export function useTeacher() {
 
     async function deleteTeacher(id: string) {
         const endpoint = endpoints.students.retrieve.replace('{id}', id)
-        await delete_id<Teacher>(endpoint, teacher, Teacher.fromJSON)
+        await deleteId<Teacher>(endpoint, teacher, Teacher.fromJSON)
     }
 
     return {

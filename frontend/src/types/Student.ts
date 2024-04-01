@@ -14,7 +14,7 @@ export class Student extends User {
         public last_enrolled: number,
         public create_time: Date,
         public last_login: Date | null,
-        public student_id: string,
+        public studentId: string,
         public roles: Role[] = [],
         public courses: Course[] = [],
         public groups: Group[] = [],
@@ -52,7 +52,7 @@ export class Student extends User {
             student.last_enrolled,
             new Date(student.create_time),
             student.last_login !== null ? new Date(student.last_login) : null,
-            student.student_id
+            student.studentId
         )
     }
 

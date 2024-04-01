@@ -48,7 +48,7 @@ const { t } = useI18n()
                     class="mr-2"
                 ></i>
                 {{ t('views.projects.submissionStatus') }}:
-                {{ project.submissions.structure_checks_passed }}
+                {{ project.submissions.structureChecks_passed }}
             </div>
         </template>
         <template #footer>

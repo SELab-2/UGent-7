@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeEach } from 'vitest'
-import { useSubmission_status } from '@/composables/services/submissionStatus.service.ts'
+import { useSubmissionStatus } from '@/composables/services/submissionStatus.service.ts'
 
 const { submissionStatus, getSubmissionStatusByProject } =
-    useSubmission_status()
+    useSubmissionStatus()
 
 describe('submision_status', (): void => {
     it('gets submision status data by project', async () => {

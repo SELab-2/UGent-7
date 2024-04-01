@@ -5,7 +5,7 @@ import {
     get,
     getList,
     create,
-    delete_id
+    deleteId
 } from '@/composables/services/helpers.ts'
 
 export function useSubmission() {
@@ -17,34 +17,34 @@ export function useSubmission() {
         await get<Submission>(endpoint, submission, Submission.fromJSON)
     }
 
-    async function getSubmissionByProject(project_id: string) {
+    async function getSubmissionByProject(projectId: string) {
         const endpoint = endpoints.submissions.byProject.replace(
-            '{project_id}',
-            project_id
+            '{projectId}',
+            projectId
         )
         await getList<Submission>(endpoint, submissions, Submission.fromJSON)
     }
 
-    async function getSubmissionByGroup(group_id: string) {
+    async function getSubmissionByGroup(groupId: string) {
         const endpoint = endpoints.submissions.byGroup.replace(
-            '{group_id}',
-            group_id
+            '{groupId}',
+            groupId
         )
         await getList<Submission>(endpoint, submissions, Submission.fromJSON)
     }
 
     async function createSubmission(
-        submission_data: Submission,
-        group_id: string
+        submissionData: Submission,
+        groupId: string
     ) {
         const endpoint = endpoints.submissions.byGroup.replace(
-            '{group_id}',
-            group_id
+            '{groupId}',
+            groupId
         )
         await create<Submission>(
             endpoint,
             {
-                files: submission_data.files // TODO look how this will need to be given
+                files: submissionData.files // TODO look how this will need to be given
             },
             submission,
             Submission.fromJSON
@@ -53,7 +53,7 @@ export function useSubmission() {
 
     async function deleteSubmission(id: string) {
         const endpoint = endpoints.submissions.retrieve.replace('{id}', id)
-        await delete_id<Submission>(endpoint, submission, Submission.fromJSON)
+        await deleteId<Submission>(endpoint, submission, Submission.fromJSON)
     }
 
     return {

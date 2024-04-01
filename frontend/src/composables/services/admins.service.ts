@@ -4,7 +4,7 @@ import {
     get,
     getList,
     create,
-    delete_id
+    deleteId
 } from '@/composables/services/helpers.ts'
 import { User } from '@/types/User.ts'
 
@@ -22,14 +22,14 @@ export function useAdmin() {
         await getList<User>(endpoint, admins, User.fromJSON)
     }
 
-    async function createAdmin(admin_data: User) {
+    async function createAdmin(adminData: User) {
         const endpoint = endpoints.admins.index
         await create<User>(
             endpoint,
             {
-                email: admin_data.email,
-                first_name: admin_data.first_name,
-                last_name: admin_data.last_name
+                email: adminData.email,
+                first_name: adminData.first_name,
+                last_name: adminData.last_name
             },
             admin,
             User.fromJSON
@@ -38,7 +38,7 @@ export function useAdmin() {
 
     async function deleteAdmin(id: string) {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id)
-        await delete_id<User>(endpoint, admin, User.fromJSON)
+        await deleteId<User>(endpoint, admin, User.fromJSON)
     }
 
     return {

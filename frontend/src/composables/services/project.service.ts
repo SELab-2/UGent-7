@@ -8,7 +8,7 @@ import {
     getList,
     getListMerged,
     create,
-    delete_id,
+    deleteId,
     processError
 } from '@/composables/services/helpers.ts'
 
@@ -21,18 +21,18 @@ export function useProject() {
         await get<Project>(endpoint, project, Project.fromJSON)
     }
 
-    async function getProjectsByCourse(course_id: string) {
+    async function getProjectsByCourse(courseId: string) {
         const endpoint = endpoints.projects.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await getList<Project>(endpoint, projects, Project.fromJSON)
     }
 
-    async function getProjectsByStudent(student_id: string) {
+    async function getProjectsByStudent(studentId: string) {
         const endpoint = endpoints.courses.byStudent.replace(
-            '{student_id}',
-            student_id
+            '{studentId}',
+            studentId
         )
         const courses = ref<Course[] | null>(null)
         await getList<Course>(endpoint, courses, Course.fromJSON)
@@ -45,7 +45,7 @@ export function useProject() {
         for (const course of coursesValue) {
             endpList.push(
                 endpoints.projects.byCourse.replace(
-                    '{course_id}',
+                    '{courseId}',
                     course.id.toString()
                 )
             )
@@ -55,12 +55,12 @@ export function useProject() {
     }
 
     async function getProjectsByCourseAndDeadline(
-        course_id: string,
+        courseId: string,
         deadlineDate: Date
     ) {
         const endpoint = endpoints.projects.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
 
         await axios
@@ -94,24 +94,24 @@ export function useProject() {
             })
     }
 
-    async function createProject(project_data: Project, course_id: string) {
+    async function createProject(projectData: Project, courseId: string) {
         const endpoint = endpoints.projects.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await create<Project>(
             endpoint,
             {
-                name: project_data.name,
-                description: project_data.description,
-                visible: project_data.visible,
-                archived: project_data.archived,
-                locked_groups: project_data.locked_groups,
-                start_data: project_data.start_date,
-                deadline: project_data.deadline,
-                max_score: project_data.max_score,
-                score_visible: project_data.score_visible,
-                group_size: project_data.group_size
+                name: projectData.name,
+                description: projectData.description,
+                visible: projectData.visible,
+                archived: projectData.archived,
+                locked_groups: projectData.locked_groups,
+                start_data: projectData.start_date,
+                deadline: projectData.deadline,
+                max_score: projectData.max_score,
+                score_visible: projectData.score_visible,
+                group_size: projectData.group_size
             },
             project,
             Project.fromJSON
@@ -120,7 +120,7 @@ export function useProject() {
 
     async function deleteProject(id: string) {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id)
-        await delete_id<Project>(endpoint, project, Project.fromJSON)
+        await deleteId<Project>(endpoint, project, Project.fromJSON)
     }
 
     return {

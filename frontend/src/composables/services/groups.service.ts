@@ -5,7 +5,7 @@ import {
     get,
     getList,
     create,
-    delete_id
+    deleteId
 } from '@/composables/services/helpers.ts'
 
 export function useGroup() {
@@ -17,31 +17,31 @@ export function useGroup() {
         await get<Group>(endpoint, group, Group.fromJSON)
     }
 
-    async function getGroupsByProject(project_id: string) {
+    async function getGroupsByProject(projectId: string) {
         const endpoint = endpoints.groups.byProject.replace(
-            '{project_id}',
-            project_id
+            '{projectId}',
+            projectId
         )
         await getList<Group>(endpoint, groups, Group.fromJSON)
     }
 
-    async function getGroupsByStudent(student_id: string) {
+    async function getGroupsByStudent(studentId: string) {
         const endpoint = endpoints.groups.byStudent.replace(
-            '{student_id}',
-            student_id
+            '{studentId}',
+            studentId
         )
         await getList<Group>(endpoint, groups, Group.fromJSON)
     }
 
-    async function createGroup(group_data: Group, project_id: string) {
+    async function createGroup(groupData: Group, projectId: string) {
         const endpoint = endpoints.groups.byProject.replace(
-            '{project_id}',
-            project_id
+            '{projectId}',
+            projectId
         )
         await create<Group>(
             endpoint,
             {
-                score: group_data.score
+                score: groupData.score
             },
             group,
             Group.fromJSON
@@ -50,7 +50,7 @@ export function useGroup() {
 
     async function deleteGroup(id: string) {
         const endpoint = endpoints.groups.retrieve.replace('{id}', id)
-        await delete_id<Group>(endpoint, group, Group.fromJSON)
+        await deleteId<Group>(endpoint, group, Group.fromJSON)
     }
 
     return {

@@ -5,7 +5,7 @@ import {
     get,
     getList,
     create,
-    delete_id
+    deleteId
 } from '@/composables/services/helpers.ts'
 
 export function useFaculty() {
@@ -22,11 +22,11 @@ export function useFaculty() {
         await getList<Faculty>(endpoint, faculties, Faculty.fromJSON)
     }
 
-    async function createFaculty(faculty_data: Faculty) {
+    async function createFaculty(facultyData: Faculty) {
         const endpoint = endpoints.faculties.index
         await create<Faculty>(
             endpoint,
-            { name: faculty_data.name },
+            { name: facultyData.name },
             faculty,
             Faculty.fromJSON
         )
@@ -34,7 +34,7 @@ export function useFaculty() {
 
     async function deleteFaculty(id: string) {
         const endpoint = endpoints.faculties.retrieve.replace('{id}', id)
-        await delete_id<Faculty>(endpoint, faculty, Faculty.fromJSON)
+        await deleteId<Faculty>(endpoint, faculty, Faculty.fromJSON)
     }
 
     return {

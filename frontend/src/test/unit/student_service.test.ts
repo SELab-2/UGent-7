@@ -32,7 +32,7 @@ describe('students', (): void => {
         expect(student.value?.first_name).toBe('John')
         expect(student.value?.last_name).toBe('Doe')
         expect(student.value?.last_enrolled).toBe(2023)
-        expect(student.value?.student_id).toBeNull()
+        expect(student.value?.studentId).toBeNull()
         expect(student.value?.last_login).toBeNull()
         expect(student.value?.create_time.toISOString()).toEqual(
             '2024-07-20T23:15:00.000Z'
@@ -54,7 +54,7 @@ describe('students', (): void => {
         expect(students.value?.[0]?.first_name).toBe('John')
         expect(students.value?.[0]?.last_name).toBe('Doe')
         expect(students.value?.[0]?.last_enrolled).toBe(2023)
-        expect(students.value?.[0]?.student_id).toBeNull()
+        expect(students.value?.[0]?.studentId).toBeNull()
         expect(students.value?.[0]?.last_login).toBeNull()
         expect(students.value?.[0]?.create_time).toEqual(
             new Date('July 21, 2024 01:15:00')
@@ -69,7 +69,7 @@ describe('students', (): void => {
         expect(students.value?.[1]?.first_name).toBe('Bartje')
         expect(students.value?.[1]?.last_name).toBe('Verhaege')
         expect(students.value?.[1]?.last_enrolled).toBe(2023)
-        expect(students.value?.[1]?.student_id).toBeNull()
+        expect(students.value?.[1]?.studentId).toBeNull()
         expect(students.value?.[1]?.last_login).toBeNull()
         expect(students.value?.[1]?.create_time).toEqual(
             new Date('July 21, 2024 01:15:00')
@@ -84,7 +84,7 @@ describe('students', (): void => {
         expect(students.value?.[2]?.first_name).toBe('Tybo')
         expect(students.value?.[2]?.last_name).toBe('Verslype')
         expect(students.value?.[2]?.last_enrolled).toBe(2023)
-        expect(students.value?.[2]?.student_id).toBe('02012470')
+        expect(students.value?.[2]?.studentId).toBe('02012470')
         expect(students.value?.[2]?.last_login).toEqual(
             new Date('July 30, 2024 01:15:00')
         )
@@ -101,7 +101,7 @@ describe('students', (): void => {
         expect(students.value?.[3]?.first_name).toBe('somtin')
         expect(students.value?.[3]?.last_name).toBe('somtin')
         expect(students.value?.[3]?.last_enrolled).toBe(2023)
-        expect(students.value?.[3]?.student_id).toBeNull()
+        expect(students.value?.[3]?.studentId).toBeNull()
         expect(students.value?.[3]?.last_login).toBeNull()
         expect(students.value?.[3]?.create_time).toEqual(
             new Date('July 21, 2024 01:15:00')
@@ -123,7 +123,7 @@ describe('students', (): void => {
         expect(students.value?.[0]?.first_name).toBe('John')
         expect(students.value?.[0]?.last_name).toBe('Doe')
         expect(students.value?.[0]?.last_enrolled).toBe(2023)
-        expect(students.value?.[0]?.student_id).toBeNull()
+        expect(students.value?.[0]?.studentId).toBeNull()
         expect(students.value?.[0]?.last_login).toBeNull()
         expect(students.value?.[0]?.create_time).toEqual(
             new Date('July 21, 2024 01:15:00')
@@ -138,7 +138,7 @@ describe('students', (): void => {
         expect(students.value?.[1]?.first_name).toBe('Bartje')
         expect(students.value?.[1]?.last_name).toBe('Verhaege')
         expect(students.value?.[1]?.last_enrolled).toBe(2023)
-        expect(students.value?.[1]?.student_id).toBeNull()
+        expect(students.value?.[1]?.studentId).toBeNull()
         expect(students.value?.[1]?.last_login).toBeNull()
         expect(students.value?.[1]?.create_time).toEqual(
             new Date('July 21, 2024 01:15:00')
@@ -153,7 +153,7 @@ describe('students', (): void => {
         expect(students.value?.[2]?.first_name).toBe('Tybo')
         expect(students.value?.[2]?.last_name).toBe('Verslype')
         expect(students.value?.[2]?.last_enrolled).toBe(2023)
-        expect(students.value?.[2]?.student_id).toBe('02012470')
+        expect(students.value?.[2]?.studentId).toBe('02012470')
         expect(students.value?.[2]?.last_login).toEqual(
             new Date('July 30, 2024 01:15:00')
         )
@@ -170,7 +170,7 @@ describe('students', (): void => {
         expect(students.value?.[3]?.first_name).toBe('somtin')
         expect(students.value?.[3]?.last_name).toBe('somtin')
         expect(students.value?.[3]?.last_enrolled).toBe(2023)
-        expect(students.value?.[3]?.student_id).toBeNull()
+        expect(students.value?.[3]?.studentId).toBeNull()
         expect(students.value?.[3]?.last_login).toBeNull()
         expect(students.value?.[3]?.create_time).toEqual(
             new Date('July 21, 2024 01:15:00')

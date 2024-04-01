@@ -6,8 +6,8 @@ import {
     get,
     getList,
     create,
-    delete_id,
-    delete_id_with_data
+    deleteId,
+    deleteIdWithData
 } from '@/composables/services/helpers.ts'
 
 export function useAssistant() {
@@ -20,10 +20,10 @@ export function useAssistant() {
         await get<Assistant>(endpoint, assistant, Assistant.fromJSON)
     }
 
-    async function getAssistantByCourse(course_id: string) {
+    async function getAssistantByCourse(courseId: string) {
         const endpoint = endpoints.assistants.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await get<Assistant>(endpoint, assistant, Assistant.fromJSON)
     }
@@ -34,45 +34,45 @@ export function useAssistant() {
     }
 
     async function assistantJoinCourse(
-        course_id: string,
-        assistant_id: string
+        courseId: string,
+        assistantId: string
     ) {
         const endpoint = endpoints.assistants.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
         await create<Response>(
             endpoint,
-            { assistant_id },
+            { assistantId },
             response,
             Response.fromJSON
         )
     }
 
     async function assistantLeaveCourse(
-        course_id: string,
-        assistant_id: string
+        courseId: string,
+        assistantId: string
     ) {
         const endpoint = endpoints.assistants.byCourse.replace(
-            '{course_id}',
-            course_id
+            '{courseId}',
+            courseId
         )
-        await delete_id_with_data<Response>(
+        await deleteIdWithData<Response>(
             endpoint,
-            { assistant_id },
+            { assistantId },
             response,
             Response.fromJSON
         )
     }
 
-    async function createAssistant(assistant_data: Assistant) {
+    async function createAssistant(assistantData: Assistant) {
         const endpoint = endpoints.assistants.index
         await create<Assistant>(
             endpoint,
             {
-                email: assistant_data.email,
-                first_name: assistant_data.first_name,
-                last_name: assistant_data.last_name
+                email: assistantData.email,
+                first_name: assistantData.first_name,
+                last_name: assistantData.last_name
             },
             assistant,
             Assistant.fromJSON
@@ -81,7 +81,7 @@ export function useAssistant() {
 
     async function deleteAssistant(id: string) {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id)
-        await delete_id<Assistant>(endpoint, assistant, Assistant.fromJSON)
+        await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON)
     }
 
     return {
