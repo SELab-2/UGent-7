@@ -1,5 +1,3 @@
 export class ExtraCheck {
-    constructor(
-    ) {
-    }
+    constructor() {}
 }

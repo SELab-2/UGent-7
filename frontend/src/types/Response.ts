@@ -1,8 +1,5 @@
 export class Response {
-    constructor(
-        public message: string,
-    ) {
-    }
+    constructor(public message: string) {}
 
     /**
      * Convert a response object to a response instance.
@@ -10,6 +7,6 @@ export class Response {
      * @param response
      */
     static fromJSON(response: Response): Response {
-        return new Response(response.message);
+        return new Response(response.message)
     }
 }

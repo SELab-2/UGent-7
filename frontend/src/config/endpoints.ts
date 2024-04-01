@@ -48,7 +48,7 @@ export const endpoints = {
     },
     projects: {
         retrieve: '/api/projects/{id}',
-        byCourse : '/api/courses/{course_id}/projects/'
+        byCourse: '/api/courses/{course_id}/projects/'
     },
     submissions: {
         retrieve: '/api/submissions/{id}',
@@ -60,4 +60,4 @@ export const endpoints = {
         retrieve: '/api/structure_checks/{id}',
         byProject: '/api/projects/{project_id}/structure_checks/'
     }
-};
+}

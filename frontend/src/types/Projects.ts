@@ -1,8 +1,8 @@
-import { Course } from "./Course";
-import { ExtraCheck } from "./ExtraCheck.ts";
-import { Group } from "./Group";
-import { StructureCheck } from "./StructureCheck.ts";
-import { Submission } from "./Submission";
+import { type Course } from './Course'
+import { type ExtraCheck } from './ExtraCheck.ts'
+import { type Group } from './Group'
+import { type StructureCheck } from './StructureCheck.ts'
+import { type Submission } from './Submission'
 
 export class Project {
     constructor(
@@ -18,13 +18,12 @@ export class Project {
         public score_visible: boolean,
         public group_size: number,
 
-        public course: Course|null = null,
+        public course: Course | null = null,
         public structure_checks: StructureCheck[] = [],
         public extra_checks: ExtraCheck[] = [],
         public groups: Group[] = [],
         public submissions: Submission[] = []
-    ) {
-    }
+    ) {}
 
     /**
      * Convert a project object to a project instance.
@@ -44,6 +43,6 @@ export class Project {
             project.max_score,
             project.score_visible,
             project.group_size
-        );
+        )
     }
 }

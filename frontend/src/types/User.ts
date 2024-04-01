@@ -1,7 +1,7 @@
-import { Course } from "./Course";
-import { Faculty } from "./Faculty";
+import { type Course } from './Course'
+import { type Faculty } from './Faculty'
 
-export type Role = 'user' | 'student' | 'assistant' | 'teacher';
+export type Role = 'user' | 'student' | 'assistant' | 'teacher'
 
 export class User {
     constructor(
@@ -15,10 +15,9 @@ export class User {
         public roles: Role[] = [],
         public faculties: Faculty[] = [],
         public create_time: Date,
-        public last_login: Date |null,
+        public last_login: Date | null,
         public courses: Course[] = []
-    ) {
-    }
+    ) {}
 
     /**
      * Get the full name of the user.
@@ -26,7 +25,7 @@ export class User {
      * @returns string
      */
     public getFullName(): string {
-        return `${this.first_name} ${this.last_name}`;
+        return `${this.first_name} ${this.last_name}`
     }
 
     /**
@@ -35,7 +34,7 @@ export class User {
      * @returns boolean
      */
     public isStudent(): boolean {
-        return false;
+        return false
     }
 
     /**
@@ -44,7 +43,7 @@ export class User {
      * @returns boolean
      */
     public isAssistant(): boolean {
-        return false;
+        return false
     }
 
     /**
@@ -53,7 +52,7 @@ export class User {
      * @returns boolean
      */
     public isTeacher(): boolean {
-        return false;
+        return false
     }
 
     /**
@@ -74,6 +73,6 @@ export class User {
             user.faculties,
             new Date(user.create_time),
             user.last_login ? new Date(user.last_login) : null
-        );
+        )
     }
 }
