@@ -74,19 +74,19 @@ const fetchDashboardData = async () => {
 const filteredProjects = computed(() => {
     return allProjects.value
         ? allProjects.value.filter(
-            (project) =>
-                project.course?.academic_startyear ===
+              (project) =>
+                  project.course?.academic_startyear ===
                   selectedProjectsYear.value
-        )
+          )
         : []
 })
 
 const filteredCourses = computed(() => {
     return user.value?.courses
         ? user.value?.courses.filter(
-            (course) =>
-                course.academic_startyear === selectedCoursesYear.value
-        )
+              (course) =>
+                  course.academic_startyear === selectedCoursesYear.value
+          )
         : []
 })
 
@@ -137,7 +137,7 @@ const getCurrentAcademicYear: () => number = () => {
                 <template v-if="filteredCourses.length > 0">
                     <div
                         class="col-12 md:col-6 lg:col-4 xl:col-3"
-                        v-for="course in filteredCourses" 
+                        v-for="course in filteredCourses"
                         :key="course.id"
                     >
                         <CourseCard class="h-100" :course="course" />

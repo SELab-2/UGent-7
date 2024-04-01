@@ -37,7 +37,6 @@ module.exports = {
         "vue/multi-word-component-names": "off",  // Disable rule that requires multi-word component names in Vue files
         "@typescript-eslint/no-floating-promises": "off", // Disable rule that flags floating promises in .ts files
         "@typescript-eslint/no-extraneous-class": "off", // Disable rule that flags usage of unnecessary classes in the codebase
-        "indent": ["error", 4],
         "prettier/prettier": "error"
     }
 }

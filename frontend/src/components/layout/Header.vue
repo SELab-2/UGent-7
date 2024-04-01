@@ -96,7 +96,7 @@ const items = computed(() => [
                 <template v-if="isAuthenticated">
                     <RouterLink
                         :to="{ name: item.route }"
-                        v-for="item in items" 
+                        v-for="item in items"
                         :key="item.route"
                         class="nav-item"
                     >

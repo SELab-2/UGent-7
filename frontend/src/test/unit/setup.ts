@@ -350,7 +350,9 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.submissions.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(submissions.find((x) => x.id === params.id))
+            return HttpResponse.json(
+                submissions.find((x) => x.id === params.id)
+            )
         }
     ),
     http.get(

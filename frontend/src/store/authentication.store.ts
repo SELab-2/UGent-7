@@ -72,8 +72,8 @@ export const useAuthStore = defineStore('auth', () => {
 
                 // Set the user object with the assistant information.
                 if (assistant.value) {
-                    assistant.value.courses = courses.value ?? [];
-                    assistant.value.roles = user.value.roles;
+                    assistant.value.courses = courses.value ?? []
+                    assistant.value.roles = user.value.roles
                 }
 
                 user.value = assistant.value
