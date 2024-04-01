@@ -3,7 +3,7 @@ import nl from '@/assets/img/flags/nl-flag.svg'
 import en from '@/assets/img/flags/en-flag.svg'
 import Dropdown from 'primevue/dropdown'
 import { useI18n } from 'vue-i18n'
-import { onMounted, Ref } from 'vue'
+import { onMounted } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { type PrimeVueLocaleOptions, usePrimeVue } from 'primevue/config'
 

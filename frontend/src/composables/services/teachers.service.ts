@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Teacher } from '@/types/Teacher.ts'
 import { Response } from '@/types/Response'
 import { ref } from 'vue'

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useStudents } from '@/composables/services/students.service.ts'
 

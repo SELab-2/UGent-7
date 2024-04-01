@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useStructureCheck } from '@/composables/services/structure_check.service.ts'
 
