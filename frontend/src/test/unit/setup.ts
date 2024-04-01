@@ -412,7 +412,10 @@ export const restHandlers = [
             endpoints.submissions.byProject.replace('{project_id}', ':id'),
         ({ params }) => {
             const project = projects.find((x) => x.id === params.id)
-            const submited_submissions = project !== null && project !== undefined ? project.submissions : []
+            const submited_submissions =
+                project !== null && project !== undefined
+                    ? project.submissions
+                    : []
             return HttpResponse.json(
                 submissions.filter((x) => submited_submissions.includes(x.id))
             )
@@ -422,7 +425,8 @@ export const restHandlers = [
         baseUrl + endpoints.teachers.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
             const course = courses.find((x) => x.id === params.id)
-            const teacher_ids = course !== null && course !== undefined ? course.teachers : []
+            const teacher_ids =
+                course !== null && course !== undefined ? course.teachers : []
             return HttpResponse.json(
                 submissions.filter((x) => teacher_ids.includes(x.id))
             )
@@ -432,7 +436,8 @@ export const restHandlers = [
         baseUrl + endpoints.assistants.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
             const course = courses.find((x) => x.id === params.id)
-            const assistant_ids = course !== null && course !== undefined ? course.assistants : []
+            const assistant_ids =
+                course !== null && course !== undefined ? course.assistants : []
             return HttpResponse.json(
                 assistants.filter((x) => assistant_ids.includes(x.id))
             )
@@ -442,7 +447,8 @@ export const restHandlers = [
         baseUrl + endpoints.courses.byStudent.replace('{student_id}', ':id'),
         ({ params }) => {
             const student = students.find((x) => x.id === params.id)
-            const course_ids = student !== null && student !== undefined ? student.courses : []
+            const course_ids =
+                student !== null && student !== undefined ? student.courses : []
             return HttpResponse.json(
                 courses.filter((x) => course_ids.includes(x.id))
             )
@@ -452,7 +458,8 @@ export const restHandlers = [
         baseUrl + endpoints.groups.byStudent.replace('{student_id}', ':id'),
         ({ params }) => {
             const student = students.find((x) => x.id === params.id)
-            const group_ids = student !== null && student !== undefined ? student.groups : []
+            const group_ids =
+                student !== null && student !== undefined ? student.groups : []
             return HttpResponse.json(
                 groups.filter((x) => group_ids.includes(x.id))
             )
@@ -462,7 +469,8 @@ export const restHandlers = [
         baseUrl + endpoints.students.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
             const course = courses.find((x) => x.id === params.id)
-            const student_ids = course !== null && course !== undefined ? course.students : []
+            const student_ids =
+                course !== null && course !== undefined ? course.students : []
             return HttpResponse.json(
                 students.filter((x) => student_ids.includes(x.id))
             )
@@ -472,7 +480,8 @@ export const restHandlers = [
         baseUrl + endpoints.students.byGroup.replace('{group_id}', ':id'),
         ({ params }) => {
             const group = groups.find((x) => x.id === params.id)
-            const student_ids = group !== null && group !== undefined ? group.students : []
+            const student_ids =
+                group !== null && group !== undefined ? group.students : []
             return HttpResponse.json(
                 students.filter((x) => student_ids.includes(x.id))
             )
@@ -482,8 +491,12 @@ export const restHandlers = [
         baseUrl + endpoints.submissions.status.replace('{project_id}', ':id'),
         ({ params }) => {
             const project = projects.find((x) => x.id === params.id)
-            const group_ids = project !== null && project !== undefined ? project.groups : []
-            const submission_ids = project !== null && project !== undefined ? project.submissions : []
+            const group_ids =
+                project !== null && project !== undefined ? project.groups : []
+            const submission_ids =
+                project !== null && project !== undefined
+                    ? project.submissions
+                    : []
             const subGroups_ids = Array.from(
                 new Set(
                     submissions

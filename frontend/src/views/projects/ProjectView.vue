@@ -32,8 +32,8 @@ onMounted(async () => {
         )
 
         if (isCommonGroup != null && isCommonGroup) {
-            finalGroup.value = group;
-            break;
+            finalGroup.value = group
+            break
         }
     }
 })

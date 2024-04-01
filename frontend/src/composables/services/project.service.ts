@@ -38,7 +38,7 @@ export function useProject() {
         await getList<Course>(endpoint, courses, Course.fromJSON)
 
         const endpList = []
-        let coursesValue = courses.value
+        let coursesValue: Course[] = courses.value
         if (coursesValue === null) {
             coursesValue = []
         }
@@ -85,8 +85,12 @@ export function useProject() {
                 projects.value = projectsWithMatchingDeadline
             })
             .catch((error) => {
-                processError(error)
-                console.log(error.data)
+                if (axios.isAxiosError(error)) {
+                    processError(error)
+                    console.log(error.response?.data)
+                } else {
+                    console.error('An unexpected error ocurred: ', error)
+                }
             })
     }
 

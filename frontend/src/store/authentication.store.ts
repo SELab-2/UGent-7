@@ -122,7 +122,7 @@ export const useAuthStore = defineStore('auth', () => {
         await axios
             .get(endpoints.auth.whoami)
             .then((response) => {
-                user.value = User.fromJSON(response.data)
+                user.value = User.fromJSON(response.data as User)
 
                 if (view.value === null) {
                     view.value = user.value.roles[0]

@@ -8,6 +8,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 /* Create the application */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 const app = createApp(App)
 
 /* Bind application plugins */

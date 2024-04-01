@@ -78,8 +78,8 @@ const filteredProjects = computed(() => {
                   project.course?.academic_startyear ===
                   selectedProjectsYear.value
           )
-        : [];
-});
+        : []
+})
 
 const filteredCourses = computed(() => {
     return user.value !== undefined && user.value !== null
@@ -87,8 +87,8 @@ const filteredCourses = computed(() => {
               (course) =>
                   course.academic_startyear === selectedCoursesYear.value
           )
-        : [];
-});
+        : []
+})
 
 // Method to get the current academic year
 const getCurrentAcademicYear: () => number = () => {
