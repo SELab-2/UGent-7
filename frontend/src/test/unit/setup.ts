@@ -344,64 +344,64 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.groups.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(groups.find((x) => x.id == params.id))
+            return HttpResponse.json(groups.find((x) => x.id === params.id))
         }
     ),
     http.get(
         baseUrl + endpoints.submissions.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(submissions.find((x) => x.id == params.id))
+            return HttpResponse.json(submissions.find((x) => x.id === params.id))
         }
     ),
     http.get(
         baseUrl + endpoints.structure_checks.retrieve.replace('{id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(
-                structure_checks.find((x) => x.id == params.id)
+                structure_checks.find((x) => x.id === params.id)
             )
         }
     ),
     http.get(
         baseUrl + endpoints.admins.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(admins.find((x) => x.id == params.id))
+            return HttpResponse.json(admins.find((x) => x.id === params.id))
         }
     ),
     http.get(
         baseUrl + endpoints.teachers.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(teachers.find((x) => x.id == params.id))
+            return HttpResponse.json(teachers.find((x) => x.id === params.id))
         }
     ),
     http.get(
         baseUrl + endpoints.assistants.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(assistants.find((x) => x.id == params.id))
+            return HttpResponse.json(assistants.find((x) => x.id === params.id))
         }
     ),
     http.get(
         baseUrl + endpoints.students.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(students.find((x) => x.id == params.id))
+            return HttpResponse.json(students.find((x) => x.id === params.id))
         }
     ),
     http.get(
         baseUrl + endpoints.projects.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(projects.find((x) => x.id == params.id))
+            return HttpResponse.json(projects.find((x) => x.id === params.id))
         }
     ),
     http.get(
         baseUrl + endpoints.courses.retrieve.replace('{id}', ':id'),
         ({ params }) => {
-            return HttpResponse.json(courses.find((x) => x.id == params.id))
+            return HttpResponse.json(courses.find((x) => x.id === params.id))
         }
     ),
     http.get(
         baseUrl + endpoints.groups.byProject.replace('{project_id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(
-                groups.filter((x) => x.project == params.id)
+                groups.filter((x) => x.project === params.id)
             )
         }
     ),
@@ -409,7 +409,7 @@ export const restHandlers = [
         baseUrl +
             endpoints.submissions.byProject.replace('{project_id}', ':id'),
         ({ params }) => {
-            const project = projects.find((x) => x.id == params.id)
+            const project = projects.find((x) => x.id === params.id)
             const submited_submissions = project ? project.submissions : []
             return HttpResponse.json(
                 submissions.filter((x) => submited_submissions.includes(x.id))
@@ -419,7 +419,7 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.teachers.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
-            const course = courses.find((x) => x.id == params.id)
+            const course = courses.find((x) => x.id === params.id)
             const teacher_ids = course ? course.teachers : []
             return HttpResponse.json(
                 submissions.filter((x) => teacher_ids.includes(x.id))
@@ -429,7 +429,7 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.assistants.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
-            const course = courses.find((x) => x.id == params.id)
+            const course = courses.find((x) => x.id === params.id)
             const assistant_ids = course ? course.assistants : []
             return HttpResponse.json(
                 assistants.filter((x) => assistant_ids.includes(x.id))
@@ -439,7 +439,7 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.courses.byStudent.replace('{student_id}', ':id'),
         ({ params }) => {
-            const student = students.find((x) => x.id == params.id)
+            const student = students.find((x) => x.id === params.id)
             const course_ids = student ? student.courses : []
             return HttpResponse.json(
                 courses.filter((x) => course_ids.includes(x.id))
@@ -449,7 +449,7 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.groups.byStudent.replace('{student_id}', ':id'),
         ({ params }) => {
-            const student = students.find((x) => x.id == params.id)
+            const student = students.find((x) => x.id === params.id)
             const group_ids = student ? student.groups : []
             return HttpResponse.json(
                 groups.filter((x) => group_ids.includes(x.id))
@@ -459,7 +459,7 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.students.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
-            const course = courses.find((x) => x.id == params.id)
+            const course = courses.find((x) => x.id === params.id)
             const student_ids = course ? course.students : []
             return HttpResponse.json(
                 students.filter((x) => student_ids.includes(x.id))
@@ -469,7 +469,7 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.students.byGroup.replace('{group_id}', ':id'),
         ({ params }) => {
-            const group = groups.find((x) => x.id == params.id)
+            const group = groups.find((x) => x.id === params.id)
             const student_ids = group ? group.students : []
             return HttpResponse.json(
                 students.filter((x) => student_ids.includes(x.id))
@@ -479,7 +479,7 @@ export const restHandlers = [
     http.get(
         baseUrl + endpoints.submissions.status.replace('{project_id}', ':id'),
         ({ params }) => {
-            const project = projects.find((x) => x.id == params.id)
+            const project = projects.find((x) => x.id === params.id)
             const group_ids = project ? project.groups : []
             const submission_ids = project ? project.submissions : []
             const subGroups_ids = Array.from(
@@ -528,7 +528,7 @@ export const restHandlers = [
             endpoints.structure_checks.byProject.replace('{project_id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(
-                structure_checks.filter((x) => x.project == params.id)
+                structure_checks.filter((x) => x.project === params.id)
             )
         }
     ),
@@ -536,7 +536,7 @@ export const restHandlers = [
         baseUrl + endpoints.projects.byCourse.replace('{course_id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(
-                projects.filter((x) => x.course == params.id)
+                projects.filter((x) => x.course === params.id)
             )
         }
     ),
@@ -544,7 +544,7 @@ export const restHandlers = [
         baseUrl + endpoints.submissions.byGroup.replace('{group_id}', ':id'),
         ({ params }) => {
             return HttpResponse.json(
-                submissions.filter((x) => x.group == params.id)
+                submissions.filter((x) => x.group === params.id)
             )
         }
     ),
@@ -552,7 +552,7 @@ export const restHandlers = [
         baseUrl + endpoints.faculties.retrieve.replace('{name}', ':name'),
         ({ params }) => {
             return HttpResponse.json(
-                faculties.find((x) => x.name == params.name)
+                faculties.find((x) => x.name === params.name)
             )
         }
     ),
