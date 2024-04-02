@@ -98,6 +98,13 @@ def get_assistant():
     return create_assistant(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmail.com")
 
 
+def get_teacher():
+    """
+    Return a random teacher to use in tests.
+    """
+    return create_teacher(id=5, first_name="Sinan", last_name="Bolat", email="Sinan.Bolat@gmail.com")
+
+
 def get_student():
     """
     Return a random student to use in tests.
@@ -532,6 +539,22 @@ class CourseModelTestsAsStudent(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(course.students.filter(id=self.user.id).exists())
 
+    def test_try_add_self_as_teacher_to_course(self):
+        """
+        Students should not be able to add themselves as teachers to a course.
+        """
+        course = get_course()
+
+        response = self.client.post(
+            reverse("course-teachers", args=[str(course.id)]),
+            data={"teacher_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure that the student has not been added as a teacher
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(course.teachers.filter(id=self.user.id).exists())
+
     def test_remove_self_from_course(self):
         """
         Able to remove self from a course.
@@ -702,6 +725,54 @@ class CourseModelTestsAsTeacher(APITestCase):
             self.user
         )
 
+    def test_add_self(self):
+        """
+        Teacher should be able to add him/herself to a course.
+        """
+        course = get_course()
+
+        response = self.client.post(
+            reverse("course-teachers", args=[str(course.id)]),
+            data={"teacher_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure the current logged in teacher was added correctly
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(course.teachers.filter(id=self.user.id).exists())
+
+    def test_remove_self(self):
+        """
+        Teacher should be able to remove him/herself from a course.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        response = self.client.delete(
+            reverse("course-teachers", args=[str(course.id)]),
+            data={"teacher_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure the current logged in teacher was removed correctly
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(course.teachers.filter(id=self.user.id).exists())
+
+    def test_try_remove_self_when_not_part_of(self):
+        """
+        Teacher should not be able to remove him/herself from a course he/she is not part of.
+        """
+        course = get_course()
+
+        response = self.client.delete(
+            reverse("course-teachers", args=[str(course.id)]),
+            data={"teacher_id": self.user.id},
+            follow=True,
+        )
+
+        # Make sure the check was successful
+        self.assertEqual(response.status_code, 400)
+
     def test_add_assistant(self):
         """
         Able to add an assistant to a course.
@@ -794,6 +865,10 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertTrue(Course.objects.filter(name="Introduction to Computer Science").exists())
+
+        # Make sure the teacher is added to the course
+        course = Course.objects.get(name="Introduction to Computer Science")
+        self.assertTrue(course.teachers.filter(id=self.user.id).exists())
 
     def test_create_project(self):
         """
@@ -908,7 +983,7 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         response = self.client.post(
             reverse("course-clone", args=[str(course.id)]),
-            data={"clone_assistants": False},
+            data={"clone_assistants": False, "clone_teachers": False},
             follow=True,
         )
 
@@ -916,16 +991,31 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.assertTrue(Course.objects.filter(name=course.name,
                                               academic_startyear=course.academic_startyear + 1).exists())
 
-        # Make sure there are no assistants in the cloned course
+        # Make sure the returned course is the cloned course
+        retrieved_course = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(retrieved_course["name"], course.name)
+        self.assertEqual(retrieved_course["academic_startyear"], course.academic_startyear + 1)
+
+        # Get the cloned course
         cloned_course = Course.objects.get(name=course.name, academic_startyear=course.academic_startyear + 1)
+
+        # Make sure there are no assistants in the cloned course
         self.assertFalse(cloned_course.assistants.exists())
 
-    def test_clone_with_assistants(self):
+        # Make sure there are no teachers in the cloned course
+        self.assertFalse(cloned_course.teachers.exists())
+
+    def test_clone_with_assistants_and_teachers(self):
         """
-        Able to clone a course with assistants.
+        Able to clone a course with assistants and teachers.
         """
         course = get_course()
         course.teachers.add(self.user)
+
+        # Add another teacher to the course
+        teacher = get_teacher()
+        course.teachers.add(teacher)
 
         # Create an assistant and add it to the course
         assistant = get_assistant()
@@ -934,7 +1024,7 @@ class CourseModelTestsAsTeacher(APITestCase):
         # Clone the course with the assistants
         response = self.client.post(
             reverse("course-clone", args=[str(course.id)]),
-            data={"clone_assistants": True},
+            data={"clone_assistants": True, "clone_teachers": True},
             follow=True,
         )
 
@@ -942,6 +1032,40 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.assertTrue(Course.objects.filter(name=course.name,
                                               academic_startyear=course.academic_startyear + 1).exists())
 
-        # Make sure the assistant is also cloned
         cloned_course = Course.objects.get(name=course.name, academic_startyear=course.academic_startyear + 1)
+
+        # Make sure the assistant is also cloned
         self.assertTrue(cloned_course.assistants.filter(id=assistant.id).exists())
+        self.assertEqual(cloned_course.assistants.count(), 1)
+
+        # Make sure the two teachers are also cloned
+        self.assertTrue(cloned_course.teachers.filter(id=self.user.id).exists())
+        self.assertTrue(cloned_course.teachers.filter(id=teacher.id).exists())
+        self.assertEqual(cloned_course.teachers.count(), 2)
+
+    def test_clone_course_that_already_has_child_course(self):
+        """
+        Course that has already a child course should not be cloned, but the child course should be returned.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        # Create a child course
+        child_course = create_course(name="Chemistry 101", academic_startyear=2024,
+                                     description="An introductory chemistry course.", parent_course=course)
+
+        # Clone the course
+        response = self.client.post(
+            reverse("course-clone", args=[str(course.id)]),
+            data={"clone_assistants": False, "clone_teachers": False},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Make sure the returned course is just the child course
+        retrieved_course = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(retrieved_course["id"], child_course.id)
+        self.assertEqual(retrieved_course["name"], child_course.name)
+        self.assertEqual(retrieved_course["academic_startyear"], child_course.academic_startyear)

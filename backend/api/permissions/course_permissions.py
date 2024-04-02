@@ -65,3 +65,16 @@ class CourseStudentPermission(CoursePermission):
 
         # Teachers and assistants can add and remove any student.
         return super().has_object_permission(request, view, course)
+
+
+class CourseTeacherPermission(CoursePermission):
+    """Permission class for teacher related endpoints."""
+    def has_object_permission(self, request: Request, view: ViewSet, course: Course):
+        user: User = request.user
+
+        # Logged-in users can fetch course teachers.
+        if request.method in SAFE_METHODS:
+            return user.is_authenticated
+
+        # Only teachers can add or remove themselves from a course.
+        return is_teacher(user) and request.data.get("teacher_id") == user.id

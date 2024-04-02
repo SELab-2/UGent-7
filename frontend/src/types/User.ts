@@ -1,12 +1,23 @@
+import { type Course } from './Course'
+import { type Faculty } from './Faculty'
+
+export type Role = 'user' | 'student' | 'assistant' | 'teacher'
+
 export class User {
     constructor(
         public id: string,
         public username: string,
+        public email: string,
         public first_name: string,
         public last_name: string,
-        public last_enrolled: number
-    ) {
-    }
+        public last_enrolled: number,
+        public is_staff: boolean,
+        public roles: Role[] = [],
+        public faculties: Faculty[] = [],
+        public create_time: Date,
+        public last_login: Date | null,
+        public courses: Course[] = []
+    ) {}
 
     /**
      * Get the full name of the user.
@@ -14,7 +25,34 @@ export class User {
      * @returns string
      */
     public getFullName(): string {
-        return `${this.first_name} ${this.last_name}`;
+        return `${this.first_name} ${this.last_name}`
+    }
+
+    /**
+     * Check if the user is a student.
+     *
+     * @returns boolean
+     */
+    public isStudent(): boolean {
+        return false
+    }
+
+    /**
+     * Check if the user is an assistant.
+     *
+     * @returns boolean
+     */
+    public isAssistant(): boolean {
+        return false
+    }
+
+    /**
+     * Check if the user is a teacher.
+     *
+     * @returns boolean
+     */
+    public isTeacher(): boolean {
+        return false
     }
 
     /**
@@ -26,9 +64,15 @@ export class User {
         return new User(
             user.id,
             user.username,
+            user.email,
             user.first_name,
             user.last_name,
-            user.last_enrolled
-        );
+            user.last_enrolled,
+            user.is_staff,
+            user.roles,
+            user.faculties,
+            new Date(user.create_time),
+            user.last_login !== null ? new Date(user.last_login) : null
+        )
     }
 }

@@ -11,7 +11,7 @@ class AssistantPermission(BasePermission):
         """Check if user has permission to view a general assistant endpoint."""
         user = request.user
 
-        if view.action == "list":
+        if view.action in ['list', 'create', 'destroy']:
             # Only teachers can query the assistant list.
             return user.is_authenticated and is_teacher(user)
 

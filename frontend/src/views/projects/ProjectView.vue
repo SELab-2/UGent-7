@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import BaseLayout from "@/components/layout/BaseLayout.vue";
-import {useI18n} from 'vue-i18n';
 import {onMounted, ref} from "vue";
 import {useProject} from "@/composables/services/project.service.ts";
 import {useRoute} from "vue-router";
@@ -16,12 +15,12 @@ import SubmissionCard from "@/components/projects/SubmissionCard.vue";
  */
 
 /* Composable injections */
-const { t } = useI18n();
-/* Service injections */
-const route = useRoute();
-const { project, getProjectByID } = useProject();
-const { groups, getGroupsByProject, getGroupsByStudent } = useGroup();
-const finalGroup = ref<Group>(new Group("-1"));
+const route = useRoute()
+const { project, getProjectByID } = useProject()
+const { groups, getGroupsByProject, getGroupsByStudent } = useGroup()
+
+/* Component state */
+const finalGroup = ref<Group>(new Group('-1'))
 
 onMounted(async () => {
   const projectId = route.params.projectId;
@@ -35,40 +34,40 @@ onMounted(async () => {
   for (const group of groups.value ?? []) {
     const isCommonGroup = projectGroups?.some(projectGroup => projectGroup.id === group.id);
 
-    if (isCommonGroup) {
-      finalGroup.value = group;
-      break;
+        if (isCommonGroup) {
+            finalGroup.value = group
+            break
+        }
     }
-  }
-});
-
+})
 </script>
 
 <template>
-  <BaseLayout>
-    <div class="grid">
-      <div class="col-12 md:col-8">
-        <div>
-          <Title v-if="project">
-            {{ project.name }}
-          </Title>
-          <Skeleton class="mb-4" height="3rem" width="30rem" v-else/>
+    <BaseLayout>
+        <div class="grid">
+            <div class="col-12 md:col-8">
+                <div>
+                    <Title v-if="project">
+                        {{ project.name }}
+                    </Title>
+                    <Skeleton class="mb-4" height="3rem" width="30rem" v-else />
+                </div>
+                <div>
+                    <p v-if="project">
+                        {{ project.description }}
+                    </p>
+                    <Skeleton height="10rem" v-else />
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+              <SubmissionCard v-if="project" :project="project" style="margin-bottom: 20px;"></SubmissionCard>
+              <GroupCard
+                    v-if="finalGroup.id !== '-1'"
+                    :group-id="finalGroup.id"
+                ></GroupCard>
+            </div>
         </div>
-        <div>
-          <p v-if="project">
-            {{ project.description }}
-          </p>
-          <Skeleton height="10rem" v-else/>
-        </div>
-      </div>
-      <div class="col-12 md:col-4">
-        <SubmissionCard v-if="project" :project="project" style="margin-bottom: 20px;"></SubmissionCard>
-        <GroupCard v-if="finalGroup.id !== '-1'" :group-id="finalGroup.id"></GroupCard>
-      </div>
-    </div>
-  </BaseLayout>
+    </BaseLayout>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

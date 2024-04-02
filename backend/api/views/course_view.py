@@ -5,16 +5,18 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
 from api.models.course import Course
-from api.models.group import Group
 from api.permissions.course_permissions import (
     CoursePermission,
     CourseAssistantPermission,
-    CourseStudentPermission
+    CourseStudentPermission,
+    CourseTeacherPermission
 )
-from api.permissions.role_permissions import IsTeacher
+from api.permissions.role_permissions import IsTeacher, is_teacher
 from api.serializers.course_serializer import (
-    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer
+    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer,
+    TeacherJoinSerializer, TeacherLeaveSerializer
 )
 from api.serializers.teacher_serializer import TeacherSerializer
 from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
@@ -27,6 +29,22 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsAdminUser | CoursePermission]
+
+    def create(self, request: Request, *_):
+        """Override the create method to add the teacher to the course"""
+        serializer = CourseSerializer(data=request.data, context={"request": request})
+
+        if serializer.is_valid(raise_exception=True):
+            course = serializer.save()
+
+            # If it was a teacher who created the course, add them as a teacher
+            if is_teacher(request.user):
+                course.teachers.add(request.user.id)
+
+        return Response(
+            {"message": gettext("courses.success.create")},
+            status=status.HTTP_201_CREATED
+        )
 
     @action(detail=True, permission_classes=[IsAdminUser | CourseAssistantPermission])
     def assistants(self, request: Request, **_):
@@ -124,7 +142,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         # Get the course
         course = self.get_object()
 
-        # Add student to course
+        # Remove the student from the course
         serializer = StudentLeaveSerializer(data=request.data, context={
             "course": course
         })
@@ -138,7 +156,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             "message": gettext("courses.success.students.remove")
         })
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | CourseTeacherPermission])
     def teachers(self, request, **_):
         """Returns a list of teachers for the given course"""
         course = self.get_object()
@@ -150,6 +168,49 @@ class CourseViewSet(viewsets.ModelViewSet):
         )
 
         return Response(serializer.data)
+
+    @teachers.mapping.post
+    @teachers.mapping.put
+    @swagger_auto_schema(request_body=TeacherJoinSerializer)
+    def _add_teacher(self, request, **_):
+        """Add a teacher to the course"""
+        # Get the course
+        course = self.get_object()
+
+        # Add teacher to course
+        serializer = TeacherJoinSerializer(data=request.data, context={
+            "course": course
+        })
+
+        if serializer.is_valid(raise_exception=True):
+            course.teachers.add(
+                serializer.validated_data["teacher_id"]
+            )
+
+        return Response({
+            "message": gettext("courses.success.teachers.add")
+        })
+
+    @teachers.mapping.delete
+    @swagger_auto_schema(request_body=TeacherLeaveSerializer)
+    def _remove_teacher(self, request, **_):
+        """Remove a teacher from the course"""
+        # Get the course
+        course = self.get_object()
+
+        # Remove the teacher from the course
+        serializer = TeacherLeaveSerializer(data=request.data, context={
+            "course": course
+        })
+
+        if serializer.is_valid(raise_exception=True):
+            course.teachers.remove(
+                serializer.validated_data["teacher_id"]
+            )
+
+        return Response({
+            "message": gettext("courses.success.teachers.remove")
+        })
 
     @action(detail=True, methods=["get"])
     def projects(self, request, **_):
@@ -204,7 +265,8 @@ class CourseViewSet(viewsets.ModelViewSet):
 
             except Course.DoesNotExist:
                 # Else, we clone the course
-                course.clone(
+                course = course.clone(
+                    clone_teachers=serializer.validated_data["clone_teachers"],
                     clone_assistants=serializer.validated_data["clone_assistants"]
                 )
 

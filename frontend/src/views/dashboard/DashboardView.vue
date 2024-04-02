@@ -1,75 +1,106 @@
 <script setup lang="ts">
-import ButtonGroup from 'primevue/buttongroup';
-import Button from 'primevue/button';
-import CourseCard from '@/components/courses/CourseCard.vue';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
-import Title from '@/components/Title.vue';
-import { useI18n } from 'vue-i18n';
-import { PrimeIcons } from 'primevue/api';
-import { onMounted } from 'vue';
-import { useCourses } from '@/composables/services/courses.service.ts';
-import { useStudents } from '@/composables/services/students.service.ts';
-import {ref} from 'vue';
-import {Project} from "@/types/Projects.ts";
-import {useProject} from "@/composables/services/project.service.ts";
-import ProjectCard from "@/components/projects/ProjectCard.vue";
+import Skeleton from 'primevue/skeleton'
+import ButtonGroup from 'primevue/buttongroup'
+import Button from 'primevue/button'
+import Dropdown from 'primevue/dropdown'
+import CourseCard from '@/components/courses/CourseCard.vue'
+import BaseLayout from '@/components/layout/BaseLayout.vue'
+import Title from '@/components/layout/Title.vue'
+import { useI18n } from 'vue-i18n'
+import { PrimeIcons } from 'primevue/api'
+import { ref, onMounted, watch, computed } from 'vue'
+import { type Project } from '@/types/Projects.ts'
+import { useProject } from '@/composables/services/project.service.ts'
+import ProjectCard from '@/components/projects/ProjectCard.vue'
+import { useAuthStore } from '@/store/authentication.store.ts'
+import { storeToRefs } from 'pinia'
 
 /* Composable injections */
-const { t } = useI18n();
+const { t } = useI18n()
 
-const allProjects= ref<Project[]>([]);
+/* Component state */
+const allProjects = ref<Project[]>([])
+const academicYears = ref<Array<{ label: string; value: number }>>()
+const selectedCoursesYear = ref<number>()
+const selectedProjectsYear = ref<number>()
 
 /* Service injection */
-const { projects, getProjectsByCourse } = useProject();
-const { courses, getCoursesByStudent, createCourse, deleteCourse } = useCourses();
-const { studentJoinCourse } = useStudents();
-
+const { user } = storeToRefs(useAuthStore())
+const { projects, getProjectsByCourse } = useProject()
 
 onMounted(async () => {
-  console.log("fetching courses");
-  await getCoursesByStudent("1", t);  // TODO make this the id of the logged in user
-  // loop through courses and fetch all projects
-  let tempProjects: Project[] = [];
-  for (const course of courses.value ?? []) {
-    await getProjectsByCourse(course.id, t);
-    const projectsWithCourse = projects.value?.map(project => ({
-      ...project,
-      course: course // Voeg de huidige cursus toe aan elk project
-    }));
-    // Add current course to the received projects
-    tempProjects = tempProjects.concat(projectsWithCourse ?? []);
-  }
-  allProjects.value = tempProjects;
-});
+    await fetchDashboardData()
+    selectedCoursesYear.value = getCurrentAcademicYear()
+    selectedProjectsYear.value = getCurrentAcademicYear()
+})
 
-// test code vvvv
+watch(user, async () => {
+    await fetchDashboardData()
+    selectedCoursesYear.value = getCurrentAcademicYear()
+    selectedProjectsYear.value = getCurrentAcademicYear()
+})
 
-const idValue = ref('');
-const vaknaam = ref('');
+/* Fetch the data for the dashboard */
+const fetchDashboardData = async (): Promise<void> => {
+    if (user.value !== null) {
+        // Clear the old data, so that the data from another role is not displayed
+        allProjects.value = []
+        academicYears.value = []
 
-// Method to execute when the button is clicked
-const executeCode = () => {
-  // Put your code here that you want to execute
-  console.log('Button clicked! Code executed.');
-  createCourse({name: vaknaam.value, academic_startyear:2023}, t);
-};
+        for (const course of user.value.courses) {
+            await getProjectsByCourse(course.id)
 
-// Function to handle form submission
-const handleSubmit = () => {
-  // Perform actions here, such as sending the input value to a backend API
-  console.log('Submitted value:', idValue.value);
-  studentJoinCourse(idValue.value, "1", t);
-};
+            projects.value?.forEach((project) => {
+                project.course = course
+            })
 
-// Function to handle form submission
-const handleDelete = () => {
-  // Perform actions here, such as sending the input value to a backend API
-  console.log('Submitted value:', idValue.value);
-  deleteCourse(idValue.value, t);
-};
+            allProjects.value = allProjects.value.concat(projects.value ?? [])
 
-// test code ^^^^
+            // Add the academic year to the list
+            const year = course.academic_startyear
+            if (!academicYears.value?.some((el) => el.value === year)) {
+                academicYears.value?.push({
+                    label: `${year}-${year + 1}`,
+                    value: year
+                })
+            }
+        }
 
+        // Sort the academic years in descending order
+        academicYears.value?.sort((a, b) => b.value - a.value)
+    }
+}
+
+const filteredProjects = computed(() => {
+    return allProjects.value !== undefined && allProjects.value !== null
+        ? allProjects.value.filter(
+              (project) =>
+                  project.course?.academic_startyear ===
+                  selectedProjectsYear.value
+          )
+        : []
+})
+
+const filteredCourses = computed(() => {
+    return user.value !== undefined && user.value !== null
+        ? user.value.courses?.filter(
+              (course) =>
+                  course.academic_startyear === selectedCoursesYear.value
+          )
+        : []
+})
+
+// Method to get the current academic year
+const getCurrentAcademicYear: () => number = () => {
+    const today = new Date()
+    const currentYear = today.getFullYear()
+
+    if (today.getMonth() >= 9) {
+        return currentYear
+    } else {
+        return currentYear - 1
+    }
+}
 </script>
 
 <template>
@@ -80,24 +111,36 @@ const handleDelete = () => {
             <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
             <!-- Course list controls -->
             <ButtonGroup>
-                <Button :label="t('components.buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN" icon-pos="right" outlined/>
-                <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
+                <Dropdown
+                    v-model="selectedCoursesYear"
+                    :options="academicYears"
+                    optionLabel="label"
+                    optionValue="value"
+                    class="custom-dropdown"
+                />
+
+                <RouterLink
+                    :to="{ name: 'course-create' }"
+                    v-if="user?.isTeacher()"
+                >
+                    <Button
+                        :icon="PrimeIcons.PLUS"
+                        icon-pos="right"
+                        class="custom-button"
+                    />
+                </RouterLink>
             </ButtonGroup>
         </div>
-        <!--extra code to test -->
-        <input type="text" v-model="vaknaam" placeholder="vaknaam" />
-        <button @click="executeCode">create course with vaknaam</button>
-        <input type="text" v-model="idValue" placeholder="ID" />
-        <button @click="handleSubmit">join course with id</button>
-        <button @click="handleDelete">delete course with id</button>
-        <!--extra code to test -->
-
         <!-- Course list body -->
         <div class="grid align-items-stretch">
-            <template v-if="courses !== null">
-                <template v-if="courses.length > 0">
-                    <div class="col-12 md:col-6 lg:col-4 xl:col-3 fadein" v-for="course in courses">
-                        <CourseCard class="h-100" :course="course"/>
+            <template v-if="filteredCourses !== null">
+                <template v-if="filteredCourses.length > 0">
+                    <div
+                        class="col-12 md:col-6 lg:col-4 xl:col-3"
+                        v-for="course in filteredCourses"
+                        :key="course.id"
+                    >
+                        <CourseCard class="h-100" :course="course" />
                     </div>
                 </template>
                 <template v-else>
@@ -107,8 +150,12 @@ const handleDelete = () => {
                 </template>
             </template>
             <template v-else>
-                <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="index in 4" :key="index">
-                    <Skeleton height="25rem" style="visibility: hidden;"/>
+                <div
+                    class="col-12 md:col-6 lg:col-4 xl:col-3"
+                    v-for="index in 4"
+                    :key="index"
+                >
+                    <Skeleton height="25rem" style="visibility: hidden" />
                 </div>
             </template>
         </div>
@@ -118,20 +165,51 @@ const handleDelete = () => {
             <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
             <!-- Project list controls -->
             <ButtonGroup>
-                <Button :label="t('components.buttons.academic_year', ['2023-2024'])" :icon="PrimeIcons.CHEVRON_DOWN" icon-pos="right" outlined/>
-                <Button :icon="PrimeIcons.PLUS" icon-pos="right"/>
+                <Dropdown
+                    v-model="selectedProjectsYear"
+                    :options="academicYears"
+                    optionLabel="label"
+                    optionValue="value"
+                    class="custom-dropdown"
+                />
+
+                <!-- TODO: Set to create a project-->
+                <RouterLink
+                    :to="{ name: 'course-create' }"
+                    v-if="!user?.isStudent()"
+                >
+                    <Button
+                        :icon="PrimeIcons.PLUS"
+                        icon-pos="right"
+                        class="custom-button"
+                    />
+                </RouterLink>
             </ButtonGroup>
         </div>
         <!-- Project list body -->
         <div class="grid align-items-stretch">
-           <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="project in allProjects">
-                <ProjectCard class="h-100" :project="project"/>
-            </div>
-
+            <template v-if="filteredProjects.length > 0">
+                <div
+                    class="col-12 md:col-6 lg:col-4 xl:col-3"
+                    v-for="project in filteredProjects"
+                    :key="project.id"
+                >
+                    <ProjectCard class="h-100" :project="project" />
+                </div>
+            </template>
+            <template v-else>
+                <div class="col-12">
+                    <p>{{ t('views.dashboard.no_projects') }}</p>
+                </div>
+            </template>
         </div>
     </BaseLayout>
 </template>
 
 <style scoped>
-
+.custom-dropdown,
+.custom-button {
+    border-radius: 0;
+    height: 50px;
+}
 </style>

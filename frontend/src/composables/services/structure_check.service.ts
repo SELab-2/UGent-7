@@ -1,43 +1,86 @@
-import {Structure_check} from '@/types/Structure_check.ts';
-import {ref} from 'vue';
-import {endpoints} from '@/config/endpoints.ts';
-import { get, getList, create, delete_id } from '@/composables/services/helpers.ts';
+import { StructureCheck } from '@/types/StructureCheck.ts'
+import { type Ref, ref } from 'vue'
+import { endpoints } from '@/config/endpoints.ts'
+import {
+    get,
+    getList,
+    create,
+    deleteId
+} from '@/composables/services/helpers.ts'
 
-export function useStructure_check() {
-    const structure_checks = ref<Structure_check[]|null>(null);
-    const structure_check = ref<Structure_check|null>(null);
+interface StructureCheckState {
+    structureChecks: Ref<StructureCheck[] | null>
+    structureCheck: Ref<StructureCheck | null>
+    getStructureCheckByID: (id: string) => Promise<void>
+    getStructureCheckByProject: (projectId: string) => Promise<void>
+    createStructureCheck: (
+        structureCheckData: StructureCheck,
+        projectId: string
+    ) => Promise<void>
+    deleteStructureCheck: (id: string) => Promise<void>
+}
 
-    async function getStructure_checkByID(id: string) {
-        const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id);
-        await get<Structure_check>(endpoint, structure_check, Structure_check.fromJSON);
+export function useStructureCheck(): StructureCheckState {
+    const structureChecks = ref<StructureCheck[] | null>(null)
+    const structureCheck = ref<StructureCheck | null>(null)
+
+    async function getStructureCheckByID(id: string): Promise<void> {
+        const endpoint = endpoints.structureChecks.retrieve.replace('{id}', id)
+        await get<StructureCheck>(
+            endpoint,
+            structureCheck,
+            StructureCheck.fromJSON
+        )
     }
 
-    async function getStructure_checkByProject(project_id: string) {
-        const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id);
-        await getList<Structure_check>(endpoint, structure_checks, Structure_check.fromJSON);
+    async function getStructureCheckByProject(
+        projectId: string
+    ): Promise<void> {
+        const endpoint = endpoints.structureChecks.byProject.replace(
+            '{projectId}',
+            projectId
+        )
+        await getList<StructureCheck>(
+            endpoint,
+            structureChecks,
+            StructureCheck.fromJSON
+        )
     }
 
-    async function createStructure_check(structure_check_data: Structure_check, project_id: string) {
-        const endpoint = endpoints.structure_checks.byProject.replace('{project_id}', project_id);
-        await create<Structure_check>(endpoint, 
+    async function createStructureCheck(
+        structureCheckData: StructureCheck,
+        projectId: string
+    ): Promise<void> {
+        const endpoint = endpoints.structureChecks.byProject.replace(
+            '{projectId}',
+            projectId
+        )
+        await create<StructureCheck>(
+            endpoint,
             {
-                name: structure_check_data.name
+                name: structureCheckData.name
             },
-        structure_check, Structure_check.fromJSON);
+            structureCheck,
+            StructureCheck.fromJSON
+        )
     }
 
-    async function deleteStructure_check(id: string) {
-        const endpoint = endpoints.structure_checks.retrieve.replace('{id}', id);
-        await delete_id<Structure_check>(endpoint, structure_check, Structure_check.fromJSON);
+    async function deleteStructureCheck(id: string): Promise<void> {
+        const endpoint = endpoints.structureChecks.retrieve.replace('{id}', id)
+        await deleteId<StructureCheck>(
+            endpoint,
+            structureCheck,
+            StructureCheck.fromJSON
+        )
     }
 
     return {
-        structure_checks,
-        structure_check,
-        getStructure_checkByID,
-        getStructure_checkByProject,
+        structureChecks,
+        structureCheck,
+        getStructureCheckByID,
+        getStructureCheckByProject,
 
-        createStructure_check,
-        deleteStructure_check
-    };
+        createStructureCheck,
+        deleteStructureCheck
+    }
 }
