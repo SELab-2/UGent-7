@@ -3,107 +3,106 @@ version: "3.9"
 ############################# NETWORKS
 
 networks:
-  selab_network:
-    name: selab_network
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.90.0/24
+    selab_network:
+        name: selab_network
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.168.90.0/24
 
 ############################# EXTENSIONS
 
 x-common-keys-selab: &common-keys-selab
-  networks:
-    - selab_network
-  security_opt:
-    - no-new-privileges:true
-  restart: unless-stopped
-  environment:
-    TZ: $TZ
-    PUID: $PUID
-    PGID: $PGID
-  env_file:
-    - .env
+    networks:
+        - selab_network
+    security_opt:
+        - no-new-privileges:true
+    restart: unless-stopped
+    environment:
+        TZ: $TZ
+        PUID: $PUID
+        PGID: $PGID
+    env_file:
+        - .env
 
 ############################# SERVICES
 
 services:
+    nginx:
+        <<: *common-keys-selab
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ${DATA_DIR}/nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+            - ${SSL_DIR}:/etc/nginx/ssl:ro
+        depends_on:
+            - backend
+            - frontend
 
-  nginx:
-    <<: *common-keys-selab
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ${DATA_DIR}/nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
-      - ${SSL_DIR}:/etc/nginx/ssl:ro
-    depends_on:
-      - backend
-      - frontend
+    postgres:
+        <<: *common-keys-selab
+        image: postgres:15.2
+        container_name: postgres
+        networks:
+            selab_network:
+                ipv4_address: $POSTGRES_IP
+        environment:
+            POSTGRES_DB: $POSTGRES_DB
+            POSTGRES_USER: $POSTGRES_USER
+            POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+        expose:
+            - $POSTGRES_PORT
+        volumes:
+            - ${DATA_DIR}/postgres:/var/lib/postgresql/data
 
-  postgres:
-    <<: *common-keys-selab
-    image: postgres:15.2
-    container_name: postgres
-    networks:
-      selab_network:
-        ipv4_address: $POSTGRES_IP
-    environment:
-      POSTGRES_DB: $POSTGRES_DB
-      POSTGRES_USER: $POSTGRES_USER
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-    expose:
-      - $POSTGRES_PORT
-    volumes:
-      - ${DATA_DIR}/postgres:/var/lib/postgresql/data
+    backend:
+        <<: *common-keys-selab
+        container_name: backend
+        build:
+            context: $BACKEND_DIR
+            dockerfile: Dockerfile
+        command: bash -c "./setup.sh && gunicorn --config gunicorn_config.py ypovoli.wsgi:application"
+        expose:
+            - 8080
+        depends_on:
+            - postgres
 
-  backend:
-    <<: *common-keys-selab
-    container_name: backend
-    build:
-      context: $BACKEND_DIR
-      dockerfile: Dockerfile.prod
-    command: bash -c "./setup.sh && gunicorn --config gunicorn_config.py ypovoli.wsgi:application"
-    expose:
-      - 8080
-    depends_on:
-      - postgres
+    redis:
+        <<: *common-keys-selab
+        container_name: redis
+        image: redis:latest
+        networks:
+            selab_network:
+                ipv4_address: $REDIS_IP
+        expose:
+            - $REDIS_PORT
+        entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+        volumes:
+            - ${DATA_DIR}/redis:/data
 
-  redis:
-    <<: *common-keys-selab
-    container_name: redis
-    image: redis:latest
-    networks:
-      selab_network:
-        ipv4_address: $REDIS_IP
-    expose:
-      - $REDIS_PORT
-    entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
-    volumes:
-      - ${DATA_DIR}/redis:/data
+    celery:
+        <<: *common-keys-selab
+        container_name: celery
+        build:
+            context: $BACKEND_DIR
+            dockerfile: Dockerfile.prod
+        command: celery -A ypovoli worker -l ERROR
+        volumes:
+            - ${BACKEND_DIR}:/code
+        depends_on:
+            - backend
+            - redis
 
-  celery:
-    <<: *common-keys-selab
-    container_name: celery
-    build:
-      context: $BACKEND_DIR
-      dockerfile: Dockerfile.prod
-    command: celery -A ypovoli worker -l ERROR
-    volumes:
-      - ${BACKEND_DIR}:/code
-    depends_on:
-      - backend
-      - redis
-
-  frontend:
-    <<: *common-keys-selab
-    container_name: frontend
-    build:
-      context: $FRONTEND_DIR
-      dockerfile: Dockerfile.prod
-    expose:
-      - 3000
-    depends_on:
-      - backend
+    frontend:
+        <<: *common-keys-selab
+        container_name: frontend
+        build:
+            context: $FRONTEND_DIR
+            dockerfile: Dockerfile.prod
+        expose:
+            - 3000
+        depends_on:
+            - backend
