@@ -42,7 +42,7 @@ export class User {
      * @param date
      * @returns number
      */
-    public getAcademicYear(date: Date = new Date): number {
+    public getAcademicYear(date: Date = new Date()): number {
         const year = date.getFullYear();
 
         if (date.getMonth() >= 9) {

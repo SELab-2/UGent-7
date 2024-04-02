@@ -6,6 +6,7 @@
 	"singleQuote": true,
 	"arrowParens": "always",
 	"wrapParens": "avoid",
+	"endOfLine": "auto",
 	"jsxBracketSameLine": true,
 	"bracketSameLine": true
 }

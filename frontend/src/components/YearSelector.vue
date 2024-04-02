@@ -13,8 +13,8 @@ const props = defineProps<{ years: number[] }>();
 const years = computed(() =>
     props.years.map((year) => ({
         label: `${year} - ${year + 1}`,
-        value: year
-    }))
+        value: year,
+    })),
 );
 
 /* Models */
