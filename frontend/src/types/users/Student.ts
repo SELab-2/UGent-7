@@ -18,7 +18,7 @@ export class Student extends User {
         public roles: Role[] = [],
         public courses: Course[] = [],
         public groups: Group[] = [],
-        public faculties: Faculty[] = []
+        public faculties: Faculty[] = [],
     ) {
         super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
     }

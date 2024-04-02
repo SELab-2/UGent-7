@@ -76,8 +76,8 @@ export function useTeacher(): TeacherState {
         await deleteId<Teacher>(endpoint, teacher, Teacher.fromJSON);
     }
 
-    async function initTeacher(teacher: Teacher|null) {
-        if (teacher !== null)  {
+    async function initTeacher(teacher: Teacher | null): Promise<void> {
+        if (teacher !== null) {
             await getCoursesByTeacher(teacher.id);
             teacher.courses = courses.value ?? [];
         }

@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import Dropdown from 'primevue/dropdown';
 import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 
 /* Composable injections */
 const { t } = useI18n();
 
 /* Props */
-defineProps<{ years: string[] }>();
+const props = defineProps<{ years: number[] }>();
+
+/* State */
+const years = computed(() =>
+    props.years.map((year) => ({
+        label: `${year} - ${year + 1}`,
+        value: year
+    }))
+);
 
 /* Models */
 const year = defineModel();

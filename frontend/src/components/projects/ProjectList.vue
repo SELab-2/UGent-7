@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { Course } from '@/types/Course.ts';
+import { type Course } from '@/types/Course.ts';
 import { watch } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import ProjectCard from '@/components/projects/ProjectCard.vue';
 import { useI18n } from 'vue-i18n';
 
 /* Props */
-const props = withDefaults(defineProps<{
-    courses: Course[];
-}>(), {
-    courses: []
-});
+const props = withDefaults(
+    defineProps<{
+        courses: Course[];
+    }>(),
+    {
+        courses: () => [],
+    },
+);
 
 /* Composables */
 const { t } = useI18n();
@@ -44,8 +47,7 @@ watch(
             <div
                 class="col-12 md:col-6 lg:col-4 xl:col-3"
                 v-for="project in courses.flatMap((course) => course.projects)"
-                :key="project.id"
-            >
+                :key="project.id">
                 <ProjectCard class="h-100" :project="project" :course="project.course" />
             </div>
         </div>
@@ -57,6 +59,4 @@ watch(
     </template>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

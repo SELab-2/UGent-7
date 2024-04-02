@@ -93,8 +93,8 @@ export function useStudents(): StudentsState {
         await deleteId<Student>(endpoint, student, Student.fromJSON);
     }
 
-    async function initStudent(student: Student|null) {
-        if (student !== null)  {
+    async function initStudent(student: Student | null): Promise<void> {
+        if (student !== null) {
             await getCoursesByStudent(student.id);
             student.courses = courses.value ?? [];
         }

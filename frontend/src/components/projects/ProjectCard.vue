@@ -6,7 +6,7 @@ import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 import moment from 'moment';
-import { Course } from '@/types/Course.ts';
+import { type Course } from '@/types/Course.ts';
 
 /**
  * TODO
@@ -20,7 +20,7 @@ const props = defineProps<{
 }>();
 
 const formattedDeadline = computed(() => {
-    return moment(props.project.deadline).format("DD MMMM YYYY")
+    return moment(props.project.deadline).format('DD MMMM YYYY');
 });
 
 /* Composable injections */
@@ -30,9 +30,7 @@ const { t } = useI18n();
 <template>
     <Card class="border-round project-card">
         <template #header>
-            <h2 class="text-primary m-0 text-2xl">
-                <span class="pi pi-book text-xl mr-2"/> {{ course.name }}
-            </h2>
+            <h2 class="text-primary m-0 text-2xl"><span class="pi pi-book text-xl mr-2" /> {{ course.name }}</h2>
         </template>
         <template #subtitle>
             {{ project.name }}

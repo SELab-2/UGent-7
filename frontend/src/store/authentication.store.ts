@@ -142,7 +142,10 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
     return {
-        user, student, teacher, assistant,
+        user,
+        student,
+        teacher,
+        assistant,
         view,
         intent,
         login,

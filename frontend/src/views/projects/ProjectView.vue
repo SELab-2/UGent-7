@@ -7,18 +7,18 @@ import Title from '@/components/layout/Title.vue';
 import Skeleton from 'primevue/skeleton';
 import GroupCard from '@/components/projects/GroupCard.vue';
 import { useGroup } from '@/composables/services/groups.service.ts';
-import { Group } from '@/types/Group.ts';
+import { type Group } from '@/types/Group.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 
 /* Composable injections */
 const route = useRoute();
-const { user, student } = storeToRefs(useAuthStore());
+const { student } = storeToRefs(useAuthStore());
 const { project, getProjectByID } = useProject();
 const { groups, getGroupsByProject, getGroupsByStudent } = useGroup();
 
 /* Component state */
-const group = ref<Group|null>(null);
+const group = ref<Group | null>(null);
 
 watch(
     student,
@@ -30,12 +30,12 @@ watch(
 
             // Check if the student is in a group for the project
             const projectGroups = groups.value;
-            await getGroupsByStudent("1");
+            await getGroupsByStudent('1');
 
             for (const studentGroup of groups.value ?? []) {
                 const isCommonGroup = projectGroups?.some((projectGroup) => projectGroup.id === studentGroup.id);
 
-                if (isCommonGroup) {
+                if (isCommonGroup === true) {
                     group.value = studentGroup;
                     break;
                 }
@@ -44,7 +44,7 @@ watch(
     },
     {
         immediate: true,
-    }
+    },
 );
 </script>
 

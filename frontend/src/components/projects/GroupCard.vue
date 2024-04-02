@@ -2,7 +2,7 @@
 import { useStudents } from '@/composables/services/students.service.ts';
 import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Group } from '@/types/Group.ts';
+import { type Group } from '@/types/Group.ts';
 
 /* Props */
 const props = defineProps<{

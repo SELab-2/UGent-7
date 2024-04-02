@@ -75,8 +75,8 @@ export function useAssistant(): AssistantState {
         await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 
-    async function initAssistant(assistant: Assistant|null) {
-        if (assistant !== null)  {
+    async function initAssistant(assistant: Assistant | null): Promise<void> {
+        if (assistant !== null) {
             await getCourseByAssistant(assistant.id);
             assistant.courses = courses.value ?? [];
         }
