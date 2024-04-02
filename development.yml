@@ -3,96 +3,94 @@ version: "3.9"
 ############################# NETWORKS
 
 networks:
-  selab_network:
-    name: selab_network
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.90.0/24
+    selab_network:
+        name: selab_network
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.168.90.0/24
 
 ############################# EXTENSIONS
 
 x-common-keys-selab: &common-keys-selab
-  networks:
-    - selab_network
-  security_opt:
-    - no-new-privileges:true
-  restart: unless-stopped
-  environment:
-    TZ: $TZ
-    PUID: $PUID
-    PGID: $PGID
-  env_file:
-    - .env
+    networks:
+        - selab_network
+    security_opt:
+        - no-new-privileges:true
+    restart: unless-stopped
+    environment:
+        TZ: $TZ
+        PUID: $PUID
+        PGID: $PGID
+    env_file:
+        - .env
 
 ############################# SERVICES
 
 services:
+    nginx:
+        <<: *common-keys-selab
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - 80:80
+            - 443:443
+            - 8080:8080
+        volumes:
+            - ${DATA_DIR}/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+            - ${SSL_DIR}:/etc/nginx/ssl:ro
+        depends_on:
+            - backend
+            - frontend
 
-  nginx:
-    <<: *common-keys-selab
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - 80:80
-      - 443:443
-      - 8080:8080
-    volumes:
-      - ${DATA_DIR}/nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
-      - ${SSL_DIR}:/etc/nginx/ssl:ro
-    depends_on:
-      - backend
-      - frontend
+    backend:
+        <<: *common-keys-selab
+        container_name: backend
+        build:
+            context: $BACKEND_DIR
+            dockerfile: Dockerfile
+        command: /bin/bash -c "./setup.sh && python manage.py runsslserver 192.168.90.2:8080"
+        expose:
+            - 8080
+        volumes:
+            - ${BACKEND_DIR}:/code
 
-  backend:
-    <<: *common-keys-selab
-    container_name: backend
-    build:
-      context: $BACKEND_DIR
-      dockerfile: Dockerfile.dev
-    command: /bin/bash -c "./setup.sh && python manage.py runsslserver 192.168.90.2:8080"
-    expose:
-      - 8080
-    volumes:
-      - ${BACKEND_DIR}:/code
+    celery:
+        <<: *common-keys-selab
+        container_name: celery
+        build:
+            context: $BACKEND_DIR
+            dockerfile: Dockerfile.dev
+        command: celery -A ypovoli worker -l DEBUG
+        volumes:
+            - ${BACKEND_DIR}:/code
+        depends_on:
+            - backend
+            - redis
 
-  celery:
-    <<: *common-keys-selab
-    container_name: celery
-    build:
-      context: $BACKEND_DIR
-      dockerfile: Dockerfile.dev
-    command: celery -A ypovoli worker -l DEBUG
-    volumes:
-      - ${BACKEND_DIR}:/code
-    depends_on:
-      - backend
-      - redis
+    frontend:
+        <<: *common-keys-selab
+        container_name: frontend
+        build:
+            context: $FRONTEND_DIR
+            dockerfile: Dockerfile.dev
+        command: bash -c "npm install && npm run host"
+        expose:
+            - 5173
+        volumes:
+            - ${FRONTEND_DIR}:/app
+        depends_on:
+            - backend
 
-  frontend:
-    <<: *common-keys-selab
-    container_name: frontend
-    build:
-      context: $FRONTEND_DIR
-      dockerfile: Dockerfile.dev
-    command: bash -c "npm install && npm run host"
-    expose:
-      - 5173
-    volumes:
-      - ${FRONTEND_DIR}:/app
-    depends_on:
-      - backend
-
-  redis:
-    <<: *common-keys-selab
-    container_name: redis
-    image: redis:latest
-    networks:
-      selab_network:
-        ipv4_address: $REDIS_IP
-    expose:
-      - $REDIS_PORT
-    entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
-    volumes:
-      - ${DATA_DIR}/redis:/data
-     
+    redis:
+        <<: *common-keys-selab
+        container_name: redis
+        image: redis:latest
+        networks:
+            selab_network:
+                ipv4_address: $REDIS_IP
+        expose:
+            - $REDIS_PORT
+        entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+        volumes:
+            - ${DATA_DIR}/redis:/data
