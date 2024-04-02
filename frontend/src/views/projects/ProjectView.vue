@@ -3,19 +3,18 @@ import BaseLayout from "@/components/layout/BaseLayout.vue";
 import {onMounted, ref} from "vue";
 import {useProject} from "@/composables/services/project.service.ts";
 import {useRoute} from "vue-router";
-import Title from "@/components/Title.vue";
+import Title from "@/components/layout/Title.vue";
 import Skeleton from "primevue/skeleton";
 import GroupCard from "@/components/projects/GroupCard.vue";
 import {useGroup} from "@/composables/services/groups.service.ts";
 import {Group} from "@/types/Group.ts";
 import SubmissionCard from "@/components/projects/SubmissionCard.vue";
-
-/**
- * Todo change all static id's to user.id
- */
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "@/store/authentication.store.ts";
 
 /* Composable injections */
 const route = useRoute()
+const { user } = storeToRefs(useAuthStore())
 const { project, getProjectByID } = useProject()
 const { groups, getGroupsByProject, getGroupsByStudent } = useGroup()
 
@@ -30,7 +29,7 @@ onMounted(async () => {
   await getGroupsByProject(projectId as string);
   const projectGroups = groups.value;
   // get all groups from the user
-  await getGroupsByStudent("1");
+  await getGroupsByStudent(user.value?.id);
   for (const group of groups.value ?? []) {
     const isCommonGroup = projectGroups?.some(projectGroup => projectGroup.id === group.id);
 

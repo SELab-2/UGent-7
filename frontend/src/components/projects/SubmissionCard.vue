@@ -33,12 +33,12 @@ const formattedDeadline = computed(() => {
       </div>
       <div>
         <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-        {{t('views.projects.submissionStatus')}}: {{ project.submissions.structure_checks_passed }}
+        {{t('views.projects.submissionStatus')}}: {{ project.submissions.at(-1)?.structureChecks_passed }}
       </div>
      </div>
     </template>
     <template #footer>
-      <RouterLink :to="{ name: 'submission', params: { submissionId: project.submissions.id } }">
+      <RouterLink :to="{ name: 'submission', params: { submissionId: project.submissions.at(-1)?.id } }" v-if="project.submissions.at(-1)?.id">
         <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.submission')" icon-pos="right" outlined/>
       </RouterLink>
     </template>
