@@ -1,7 +1,7 @@
-import { type Assistant } from './Assistant'
-import { type Project } from './Projects'
-import { type Student } from './Student'
-import { type Teacher } from './Teacher'
+import { type Assistant } from './users/Assistant.ts';
+import { type Project } from './Projects';
+import { type Student } from './users/Student.ts';
+import { type Teacher } from './users/Teacher.ts';
 
 export class Course {
     constructor(
@@ -13,7 +13,7 @@ export class Course {
         public teachers: Teacher[] = [],
         public assistants: Assistant[] = [],
         public students: Student[] = [],
-        public projects: Project[] = []
+        public projects: Project[] = [],
     ) {}
 
     /**
@@ -21,7 +21,7 @@ export class Course {
      * @returns string
      */
     public getCourseYear(): string {
-        return `${this.academic_startyear} - ${this.academic_startyear + 1}`
+        return `${this.academic_startyear} - ${this.academic_startyear + 1}`;
     }
 
     /**
@@ -30,12 +30,6 @@ export class Course {
      * @param course
      */
     static fromJSON(course: Course): Course {
-        return new Course(
-            course.id,
-            course.name,
-            course.description,
-            course.academic_startyear,
-            course.parent_course
-        )
+        return new Course(course.id, course.name, course.description, course.academic_startyear, course.parent_course);
     }
 }

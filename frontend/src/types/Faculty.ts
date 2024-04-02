@@ -7,6 +7,6 @@ export class Faculty {
      * @param faculty
      */
     static fromJSON(faculty: Faculty): Faculty {
-        return new Faculty(faculty.name)
+        return new Faculty(faculty.name);
     }
 }

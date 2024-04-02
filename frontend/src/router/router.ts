@@ -1,17 +1,17 @@
 // import { useUserStore } from '@/stores/userStore';
 // TODO: after pinia setup is done
 
-import DashboardView from '@/views/dashboard/DashboardView.vue'
-import CourseView from '@/views/courses/CourseView.vue'
-import CreateCourseView from '@/views/courses/CreateCourseView.vue'
-import Dummy from '@/components/Dummy.vue'
-import LoginView from '@/views/authentication/LoginView.vue'
-import CalendarView from '@/views/calendar/CalendarView.vue'
-import VerifyView from '@/views/authentication/VerifyView.vue'
-import { type RouteRecordRaw, createWebHistory, createRouter } from 'vue-router'
-import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts'
-import { LogoutGuard } from '@/router/guards/logout.guard.ts'
-import ProjectView from '@/views/projects/ProjectView.vue'
+import DashboardView from '@/views/dashboard/DashboardView.vue';
+import CourseView from '@/views/courses/CourseView.vue';
+import CreateCourseView from '@/views/courses/CreateCourseView.vue';
+import Dummy from '@/components/Dummy.vue';
+import LoginView from '@/views/authentication/LoginView.vue';
+import CalendarView from '@/views/calendar/CalendarView.vue';
+import VerifyView from '@/views/authentication/VerifyView.vue';
+import { type RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
+import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts';
+import { LogoutGuard } from '@/router/guards/logout.guard.ts';
+import ProjectView from '@/views/projects/ProjectView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -23,9 +23,9 @@ const routes: RouteRecordRaw[] = [
             {
                 path: 'logout',
                 component: { beforeRouteEnter: LogoutGuard },
-                name: 'logout'
-            }
-        ]
+                name: 'logout',
+            },
+        ],
     },
 
     { path: '/', component: DashboardView, name: 'dashboard' },
@@ -38,7 +38,7 @@ const routes: RouteRecordRaw[] = [
             {
                 path: 'create',
                 component: CreateCourseView,
-                name: 'course-create'
+                name: 'course-create',
             },
             // Single course
             {
@@ -54,7 +54,7 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: 'create',
                                 component: Dummy,
-                                name: 'project-create'
+                                name: 'project-create',
                             },
                             // Single project
                             {
@@ -63,30 +63,30 @@ const routes: RouteRecordRaw[] = [
                                     {
                                         path: '',
                                         component: ProjectView,
-                                        name: 'project'
+                                        name: 'project',
                                     },
                                     {
                                         path: 'edit',
                                         component: Dummy,
-                                        name: 'project-edit'
+                                        name: 'project-edit',
                                     },
                                     {
                                         path: 'groups',
                                         component: Dummy,
-                                        name: 'project-groups'
+                                        name: 'project-groups',
                                     },
                                     {
                                         path: 'submit',
                                         component: Dummy,
-                                        name: 'project-submit'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
+                                        name: 'project-submit',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
     },
 
     // Calendar
@@ -101,31 +101,31 @@ const routes: RouteRecordRaw[] = [
                 path: 'students',
                 children: [
                     { path: '', component: Dummy, name: 'students' },
-                    { path: ':id', component: Dummy, name: 'student' }
-                ]
+                    { path: ':id', component: Dummy, name: 'student' },
+                ],
             },
             {
                 path: 'admins',
                 children: [
                     { path: '', component: Dummy, name: 'admins' },
-                    { path: ':id', component: Dummy, name: 'admin' }
-                ]
+                    { path: ':id', component: Dummy, name: 'admin' },
+                ],
             },
             {
                 path: 'teachers',
                 children: [
                     { path: '', component: Dummy, name: 'teachers' },
-                    { path: ':id', component: Dummy, name: 'teacher' }
-                ]
+                    { path: ':id', component: Dummy, name: 'teacher' },
+                ],
             },
             {
                 path: 'assistants',
                 children: [
                     { path: '', component: Dummy, name: 'assistants' },
-                    { path: ':id', component: Dummy, name: 'assistant' }
-                ]
-            }
-        ]
+                    { path: ':id', component: Dummy, name: 'assistant' },
+                ],
+            },
+        ],
     },
 
     // Faculties
@@ -139,19 +139,19 @@ const routes: RouteRecordRaw[] = [
     // Authentication
     {
         path: '/auth/',
-        children: [{ path: 'login', component: LoginView, name: 'login' }]
+        children: [{ path: 'login', component: LoginView, name: 'login' }],
     },
 
     // Page not found: redirect to dashboard
-    { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } }
-]
+    { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } },
+];
 
 const router = createRouter({
     history: createWebHistory(),
     linkActiveClass: 'active',
-    routes
-})
+    routes,
+});
 
-router.beforeEach(AuthenticationGuard)
+router.beforeEach(AuthenticationGuard);
 
-export default router
+export default router;

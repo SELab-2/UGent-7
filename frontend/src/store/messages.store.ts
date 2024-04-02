@@ -1,10 +1,10 @@
-import { ref } from 'vue'
-import { type ToastMessageOptions } from 'primevue/toast'
-import { defineStore } from 'pinia'
+import { ref } from 'vue';
+import { type ToastMessageOptions } from 'primevue/toast';
+import { defineStore } from 'pinia';
 
 export const useMessagesStore = defineStore('messages', () => {
     /* State */
-    const message = ref<ToastMessageOptions | null>(null)
+    const message = ref<ToastMessageOptions | null>(null);
 
     /**
      * Update the toast message.
@@ -12,11 +12,11 @@ export const useMessagesStore = defineStore('messages', () => {
      * @param newMessage
      */
     function add(newMessage: ToastMessageOptions): void {
-        message.value = newMessage
+        message.value = newMessage;
     }
 
     return {
         message,
-        add
-    }
-})
+        add,
+    };
+});
