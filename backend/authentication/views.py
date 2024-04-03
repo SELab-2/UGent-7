@@ -18,8 +18,13 @@ class CASViewSet(ViewSet):
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET'], permission_classes=[AllowAny])
-    def login(self, _: Request) -> Response:
+    def login(self, request: Request) -> Response:
         """Attempt to log in. Redirect to our single CAS endpoint."""
+        should_echo = request.query_params.get('echo', False)
+
+        if should_echo and settings.DEBUG:
+            client._service_url = 'https://localhost:8080/api/auth/cas/echo'
+
         return redirect(client.get_login_url())
 
     @action(detail=False, methods=['POST'])
