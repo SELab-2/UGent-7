@@ -10,7 +10,8 @@ const items = ref([
         label: t('admin.users.title'),
         items: [
             {
-                label: t('admin.users.title')
+                label: t('admin.users.title'),
+                route: 'admin-users'
             },
             {
                 label: t('admin.assistants.title')
@@ -50,10 +51,12 @@ const items = ref([
     <div class="card flex">
         <Menu :model="items" class="w-full md:w-15rem">
             <template #item="{ item, props }">
-                <a v-ripple class="flex align-items-center" v-bind="props.action">
-                    <span class="ml-2">{{ item.label }}</span>
-                    <span v-if="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{ item.shortcut }}</span>
-                </a>
+                <RouterLink :to="{ name: item.route }">
+                    <a v-ripple class="flex align-items-center" v-bind="props.action">
+                        <span class="ml-2">{{ item.label }}</span>
+                        <span v-if="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{ item.shortcut }}</span>
+                    </a>
+                </RouterLink>
             </template>
         </Menu>
     </div>
