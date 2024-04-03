@@ -98,8 +98,7 @@ const submitProject = async (): Promise<void> => {
                             id="projectStartDate"
                             v-model="projectStartDate"
                             dateFormat="dd-mm-yy"
-                            showTime
-                            hourFormat="24"
+                            :min-date="new Date()"
                             showIcon
                             showButtonBar
                             required
@@ -115,6 +114,7 @@ const submitProject = async (): Promise<void> => {
                             id="projectDeadline"
                             v-model="projectDeadline"
                             dateFormat="dd-mm-yy"
+                            :min-date="projectStartDate"
                             showTime
                             hourFormat="24"
                             showIcon
