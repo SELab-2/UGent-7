@@ -5,6 +5,7 @@
     academic_startyear: 2023
     description: Math course
     parent_course: null
+    faculty: "Letteren_Wijsbegeerte"
 - model: api.course
   pk: 2
   fields:
@@ -12,6 +13,7 @@
     academic_startyear: 2023
     description: Software course
     parent_course: 3
+    faculty: "Ingenieurswetenschappen_Architectuur"
 - model: api.course
   pk: 3
   fields:
@@ -19,3 +21,4 @@
     academic_startyear: 2022
     description: Software course
     parent_course: null
+    faculty: "Wetenschappen"
