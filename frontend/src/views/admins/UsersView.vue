@@ -9,7 +9,10 @@ import DataTable, {
     DataTableSelectAllChangeEvent,
     DataTableSortEvent,
 } from "primevue/datatable";
-import Column from "primevue/column"
+import Column from "primevue/column";
+import Dialog from "primevue/dialog";
+import InputText from "primevue/inputtext";
+import InputSwitch from "primevue/inputswitch";
 
 import {useI18n} from 'vue-i18n';
 
@@ -36,6 +39,8 @@ const loading = ref(false);
 const totalRecords = ref(0);
 const selectedStudents = ref();
 const selectAll = ref(false);
+const editItem: ref<null> = ref(null);
+const popup: ref<boolean> = ref(false);
 const first = ref(0);
 const filters = ref({
     'name': {value: '', matchMode: 'contains'},
@@ -50,6 +55,11 @@ const columns = ref([
     {field: 'email', header: 'Email'},
     {field: 'roles', header: 'Roles'},
 ]);
+const roles = ref([
+    "student",
+    "assistant",
+    "teacher"
+])
 
 const loadLazyData = (event?: DataTablePageEvent | DataTableSortEvent | DataTableFilterEvent) => {
     loading.value = true;
@@ -94,6 +104,11 @@ const onRowUnselect = () => {
     selectAll.value = false;
 };
 
+const showPopup = (data: any) => {
+    editItem.value = data;
+    popup.value = true;
+}
+
 </script>
 
 <template>
@@ -107,12 +122,34 @@ const onRowUnselect = () => {
                     v-model:selection="selectedStudents" :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-select="onRowSelect" @row-unselect="onRowUnselect" tableStyle="min-width: 75rem">
                     <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
                     <Column v-for="column in columns" :field="column.field" :header="column.header"></Column>
+                    <Column>
+                        <template #body="{ data }">
+                            <Button @click="() => showPopup(data)">Edit</Button>
+                        </template>
+                    </Column>
                 </DataTable>
             </div>
         </Title>
     </AdminLayout>
+    <Dialog v-model:visible="popup" header="Edit user" :style="{ width: '25rem' }" class="flex">
+        <div v-for="data in columns.toSpliced(columns.length - 1, 1)" class="flex align-items-center">
+            <label>{{ data.header }}</label>
+            <InputText type="text"/>
+        </div>
+        <div v-for="role in roles" class="flex align-items-center">
+            <label>{{ role }}</label>
+            <InputSwitch :model-value="editItem.roles.includes(role)"/>
+        </div>
+    </Dialog>
 </template>
 
 <style scoped lang="scss">
+.flex {
+    -ms-flex: 1;
+    flex: 1;
+}
 
+.align-items-center {
+    align-items: center;
+}
 </style>
