@@ -1,4 +1,4 @@
-import { type Group } from './Group'
+import { type Group } from './Group';
 
 export class Submission {
     constructor(
@@ -8,7 +8,7 @@ export class Submission {
         public structureChecks_passed: boolean,
         public group: Group | null = null,
         public files: File[] = [], // TODO check
-        public extra_checks_results: any[] = [] // TODO
+        public extra_checks_results: any[] = [], // TODO
     ) {}
 
     /**
@@ -21,7 +21,7 @@ export class Submission {
             submission.id,
             submission.submission_number,
             new Date(submission.submission_time),
-            submission.structureChecks_passed
-        )
+            submission.structureChecks_passed,
+        );
     }
 }

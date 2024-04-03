@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import Card from 'primevue/card'
-import Button from 'primevue/button'
-import { type Project } from '@/types/Projects.ts'
-import { PrimeIcons } from 'primevue/api'
-import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
+import Card from 'primevue/card';
+import Button from 'primevue/button';
+import { type Project } from '@/types/Projects.ts';
+import { PrimeIcons } from 'primevue/api';
+import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
+import moment from 'moment';
+import { type Course } from '@/types/Course.ts';
 
 /**
  * TODO
@@ -13,42 +15,34 @@ import { computed } from 'vue'
 
 /* Component props */
 const props = defineProps<{
-    project: Project
-}>()
+    project: Project;
+    course: Course;
+}>();
 
 const formattedDeadline = computed(() => {
-    // changes deadline format to dd/mm.yyyy
-    const date = new Date(props.project.deadline)
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-})
+    return moment(props.project.deadline).format('DD MMMM YYYY');
+});
 
 /* Composable injections */
-const { t } = useI18n()
+const { t } = useI18n();
 </script>
 
 <template>
     <Card class="border-round project-card">
         <template #header>
-            <h2 class="text-primary m-0 text-2xl">
-                {{ project.name }} - {{ project.course.name }}
-            </h2>
+            <h2 class="text-primary m-0 text-2xl"><span class="pi pi-book text-xl mr-2" /> {{ course.name }}</h2>
+        </template>
+        <template #subtitle>
+            {{ project.name }}
         </template>
         <template #content>
-            <div>
-                <i
-                    :class="['pi', PrimeIcons.CALENDAR_PLUS, 'icon-color']"
-                    class="mr-2"
-                ></i>
-                {{ t('views.projects.deadline') }}: {{ formattedDeadline
-                }}<br />
+            <div class="mb-2">
+                <i :class="['pi', PrimeIcons.CALENDAR_PLUS, 'icon-color']" class="mr-2"></i>
+                {{ t('views.projects.deadline') }}: {{ formattedDeadline }}<br />
             </div>
             <div>
-                <i
-                    :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']"
-                    class="mr-2"
-                ></i>
-                {{ t('views.projects.submissionStatus') }}:
-                {{ project.submissions.structureChecks_passed }}
+                <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
+                {{ t('views.projects.submissionStatus') }}: ok
             </div>
         </template>
         <template #footer>
@@ -56,17 +50,11 @@ const { t } = useI18n()
                 :to="{
                     name: 'project',
                     params: {
-                        courseId: project.course.id,
-                        projectId: project.id
-                    }
-                }"
-            >
-                <Button
-                    :icon="PrimeIcons.ARROW_RIGHT"
-                    :label="t('components.card.open')"
-                    icon-pos="right"
-                    outlined
-                />
+                        courseId: course.id,
+                        projectId: project.id,
+                    },
+                }">
+                <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
             </RouterLink>
         </template>
     </Card>

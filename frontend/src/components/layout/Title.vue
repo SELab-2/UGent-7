@@ -1,7 +1,7 @@
 <script setup lang="ts">
 withDefaults(defineProps<{ color?: 'primary' | 'contrast' }>(), {
-    color: 'primary'
-})
+    color: 'primary',
+});
 </script>
 
 <template>

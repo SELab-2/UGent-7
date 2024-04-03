@@ -1,6 +1,6 @@
-import { type Course } from './Course'
-import { type Faculty } from './Faculty'
-import { type Role, User } from '@/types/User.ts'
+import { type Course } from '../Course.ts';
+import { type Faculty } from '../Faculty.ts';
+import { type Role, User } from '@/types/users/User.ts';
 
 export class Teacher extends User {
     constructor(
@@ -15,22 +15,9 @@ export class Teacher extends User {
         public faculties: Faculty[] = [],
         public courses: Course[] = [],
         public create_time: Date,
-        public last_login: Date | null
+        public last_login: Date | null,
     ) {
-        super(
-            id,
-            username,
-            email,
-            first_name,
-            last_name,
-            last_enrolled,
-            is_staff,
-            roles,
-            faculties,
-            create_time,
-            last_login,
-            courses
-        )
+        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
     }
 
     /**
@@ -52,8 +39,8 @@ export class Teacher extends User {
             teacher.faculties,
             teacher.courses,
             new Date(teacher.create_time),
-            teacher.last_login !== null ? new Date(teacher.last_login) : null
-        )
+            teacher.last_login !== null ? new Date(teacher.last_login) : null,
+        );
     }
 
     /**
@@ -62,6 +49,6 @@ export class Teacher extends User {
      * @returns boolean
      */
     public isTeacher(): boolean {
-        return true
+        return true;
     }
 }

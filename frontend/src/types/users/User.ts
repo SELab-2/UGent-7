@@ -1,7 +1,6 @@
-import { type Course } from './Course'
-import { type Faculty } from './Faculty'
+import { type Faculty } from '../Faculty.ts';
 
-export type Role = 'user' | 'student' | 'assistant' | 'teacher'
+export type Role = 'user' | 'student' | 'assistant' | 'teacher';
 
 export class User {
     constructor(
@@ -16,8 +15,17 @@ export class User {
         public faculties: Faculty[] = [],
         public create_time: Date,
         public last_login: Date | null,
-        public courses: Course[] = []
     ) {}
+
+    /**
+     * Get the academic years of the user.
+     */
+    get academic_years(): number[] {
+        const startYear = this.getAcademicYear(this.create_time);
+        const endYear = this.getAcademicYear(new Date());
+
+        return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+    }
 
     /**
      * Get the full name of the user.
@@ -25,7 +33,23 @@ export class User {
      * @returns string
      */
     public getFullName(): string {
-        return `${this.first_name} ${this.last_name}`
+        return `${this.first_name} ${this.last_name}`;
+    }
+
+    /**
+     * Get the academic year of a date.
+     *
+     * @param date
+     * @returns number
+     */
+    public getAcademicYear(date: Date = new Date()): number {
+        const year = date.getFullYear();
+
+        if (date.getMonth() >= 9) {
+            return year;
+        }
+
+        return year - 1;
     }
 
     /**
@@ -34,7 +58,7 @@ export class User {
      * @returns boolean
      */
     public isStudent(): boolean {
-        return false
+        return false;
     }
 
     /**
@@ -43,7 +67,7 @@ export class User {
      * @returns boolean
      */
     public isAssistant(): boolean {
-        return false
+        return false;
     }
 
     /**
@@ -52,7 +76,16 @@ export class User {
      * @returns boolean
      */
     public isTeacher(): boolean {
-        return false
+        return false;
+    }
+
+    /**
+     * Check if the user is a specific role.
+     *
+     * @returns boolean
+     */
+    public isSpecificRole(): boolean {
+        return this.isStudent() || this.isAssistant() || this.isTeacher();
     }
 
     /**
@@ -72,7 +105,7 @@ export class User {
             user.roles,
             user.faculties,
             new Date(user.create_time),
-            user.last_login !== null ? new Date(user.last_login) : null
-        )
+            user.last_login !== null ? new Date(user.last_login) : null,
+        );
     }
 }

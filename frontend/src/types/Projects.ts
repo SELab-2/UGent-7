@@ -1,8 +1,8 @@
-import { type Course } from './Course'
-import { type ExtraCheck } from './ExtraCheck.ts'
-import { type Group } from './Group'
-import { type StructureCheck } from './StructureCheck.ts'
-import { type Submission } from './Submission'
+import { type Course } from './Course';
+import { type ExtraCheck } from './ExtraCheck.ts';
+import { type Group } from './Group';
+import { type StructureCheck } from './StructureCheck.ts';
+import { type Submission } from './Submission';
 
 export class Project {
     constructor(
@@ -22,7 +22,7 @@ export class Project {
         public structureChecks: StructureCheck[] = [],
         public extra_checks: ExtraCheck[] = [],
         public groups: Group[] = [],
-        public submissions: Submission[] = []
+        public submissions: Submission[] = [],
     ) {}
 
     /**
@@ -42,7 +42,7 @@ export class Project {
             new Date(project.deadline),
             project.max_score,
             project.score_visible,
-            project.group_size
-        )
+            project.group_size,
+        );
     }
 }

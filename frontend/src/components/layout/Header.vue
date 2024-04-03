@@ -1,91 +1,73 @@
 <script setup lang="ts">
-import en from '@/assets/img/logo-en.png'
-import nl from '@/assets/img/logo-nl.png'
-import Button from 'primevue/button'
-import LanguageSelector from '@/components/LanguageSelector.vue'
-import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
-import { useAuthStore } from '@/store/authentication.store.ts'
-import { storeToRefs } from 'pinia'
-import RoleSelector from '@/components/RoleSelector.vue'
+import en from '@/assets/img/logo-en.png';
+import nl from '@/assets/img/logo-nl.png';
+import Button from 'primevue/button';
+import LanguageSelector from '@/components/LanguageSelector.vue';
+import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { storeToRefs } from 'pinia';
+import RoleSelector from '@/components/RoleSelector.vue';
 
 /* Composables */
-const { user, isAuthenticated } = storeToRefs(useAuthStore())
-const { t, locale } = useI18n()
+const { user, isAuthenticated } = storeToRefs(useAuthStore());
+const { t, locale } = useI18n();
 
 /* Localization variables */
 const logo = computed(() => {
     if (locale.value === 'nl') {
-        return nl
+        return nl;
     }
 
-    return en
-})
+    return en;
+});
 
 /* Navigation items */
 const items = computed(() => [
     {
         icon: 'home',
         label: t('layout.header.navigation.dashboard'),
-        route: 'dashboard'
+        route: 'dashboard',
     },
     {
         icon: 'calendar',
         label: t('layout.header.navigation.calendar'),
-        route: 'calendar'
+        route: 'calendar',
     },
     {
         icon: 'book',
         label: t('layout.header.navigation.courses'),
-        route: 'courses'
-    }
-])
+        route: 'courses',
+    },
+]);
 </script>
 
 <template>
     <div class="flex w-full">
         <div class="w-full lg:w-2 flex align-items-center p-3 lg:pl-0">
-            <img
-                class="w-full max-w-9rem"
-                :src="logo"
-                :alt="t('layout.header.logo')"
-            />
+            <img class="w-full max-w-9rem" :src="logo" :alt="t('layout.header.logo')" />
         </div>
         <div class="flex flex-column w-full lg:w-10">
             <div id="header" class="w-full flex text-white p-4">
                 <div class="flex align-items-end">
                     <h1 class="text-white m-0">Ypovoli</h1>
                 </div>
-                <div
-                    class="text-right ml-auto text-sm flex flex-column align-items-end gap-3"
-                >
+                <div class="text-right ml-auto text-sm flex flex-column align-items-end gap-3">
                     <div class="flex align-items-center gap-3">
                         <!-- Role selector -->
-                        <RoleSelector
-                            v-if="user !== null && user.roles.length > 1"
-                        />
+                        <RoleSelector v-if="user !== null && user.roles.length > 1" />
                         <!-- Language selector -->
                         <LanguageSelector />
                     </div>
                     <div>
                         <!-- User information -->
                         <template v-if="isAuthenticated && user">
-                            <RouterLink
-                                :to="{ name: 'logout' }"
-                                class="text-white"
-                            >
-                                Ingelogd als {{ user.getFullName() }}
-                            </RouterLink>
+                            <RouterLink :to="{ name: 'logout' }" class="text-white"> Ingelogd als {{ user.getFullName() }} </RouterLink>
                         </template>
                         <!-- Login button -->
                         <template v-else>
                             <RouterLink :to="{ name: 'login' }">
-                                <Button
-                                    icon="pi pi-unlock"
-                                    :label="t('layout.header.login')"
-                                    severity="secondary"
-                                    class="text-sm"
-                                />
+                                <Button icon="pi pi-unlock" :label="t('layout.header.login')" severity="secondary" class="text-sm" />
                             </RouterLink>
                         </template>
                     </div>
@@ -94,15 +76,9 @@ const items = computed(() => [
             <!-- Navigation -->
             <div id="navigation" class="w-full h-full flex">
                 <template v-if="isAuthenticated">
-                    <RouterLink
-                        :to="{ name: item.route }"
-                        v-for="item in items"
-                        :key="item.route"
-                        class="nav-item"
-                    >
+                    <RouterLink :to="{ name: item.route }" v-for="item in items" :key="item.route" class="nav-item">
                         <div
-                            class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium"
-                        >
+                            class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium">
                             <span class="mr-2" :class="'pi pi-' + item.icon" />
                             {{ item.label }}
                         </div>

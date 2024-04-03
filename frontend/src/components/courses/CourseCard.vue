@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import Card from 'primevue/card'
-import Button from 'primevue/button'
-import { type Course } from '@/types/Course.ts'
-import { PrimeIcons } from 'primevue/api'
-import { useI18n } from 'vue-i18n'
+import Card from 'primevue/card';
+import Button from 'primevue/button';
+import { type Course } from '@/types/Course.ts';
+import { PrimeIcons } from 'primevue/api';
+import { useI18n } from 'vue-i18n';
 
 /* Component props */
 defineProps<{
-    course: Course
-}>()
+    course: Course;
+}>();
 
 /* Composable injections */
-const { t } = useI18n()
+const { t } = useI18n();
 
 /* Default image thumbnails */
 const images = Object.keys(
     import.meta.glob('@/assets/img/placeholders/*', {
-        eager: true
-    })
-)
+        eager: true,
+    }),
+);
 </script>
 
 <template>
@@ -28,8 +28,7 @@ const images = Object.keys(
                 class="w-full h-12rem border-round-top"
                 style="object-fit: cover; margin-bottom: -4px"
                 :alt="course.description"
-                :src="images[course.name.length % images.length]"
-            />
+                :src="images[course.name.length % images.length]" />
         </template>
         <template #title>
             <h2 class="text-primary m-0 text-2xl">{{ course.name }}</h2>
@@ -41,15 +40,8 @@ const images = Object.keys(
             {{ course.description }}
         </template>
         <template #footer>
-            <RouterLink
-                :to="{ name: 'course', params: { courseId: course.id } }"
-            >
-                <Button
-                    :icon="PrimeIcons.ARROW_RIGHT"
-                    :label="t('components.card.open')"
-                    icon-pos="right"
-                    outlined
-                />
+            <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">
+                <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
             </RouterLink>
         </template>
     </Card>

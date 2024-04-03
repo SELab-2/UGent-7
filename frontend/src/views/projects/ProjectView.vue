@@ -1,42 +1,51 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue'
-import { onMounted, ref } from 'vue'
-import { useProject } from '@/composables/services/project.service.ts'
-import { useRoute } from 'vue-router'
-import Title from '@/components/layout/Title.vue'
-import Skeleton from 'primevue/skeleton'
-import GroupCard from '@/components/projects/GroupCard.vue'
-import { useGroup } from '@/composables/services/groups.service.ts'
-import { Group } from '@/types/Group.ts'
+import BaseLayout from '@/components/layout/BaseLayout.vue';
+import { ref, watch } from 'vue';
+import { useProject } from '@/composables/services/project.service.ts';
+import { useRoute } from 'vue-router';
+import Title from '@/components/layout/Title.vue';
+import Skeleton from 'primevue/skeleton';
+import GroupCard from '@/components/projects/GroupCard.vue';
+import { useGroup } from '@/composables/services/groups.service.ts';
+import { type Group } from '@/types/Group.ts';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { storeToRefs } from 'pinia';
 
 /* Composable injections */
-const route = useRoute()
-const { project, getProjectByID } = useProject()
-const { groups, getGroupsByProject, getGroupsByStudent } = useGroup()
+const route = useRoute();
+const { student } = storeToRefs(useAuthStore());
+const { project, getProjectByID } = useProject();
+const { groups, getGroupsByProject, getGroupsByStudent } = useGroup();
 
 /* Component state */
-const finalGroup = ref<Group>(new Group('-1'))
+const group = ref<Group | null>(null);
 
-onMounted(async () => {
-    const projectId = route.params.projectId
-    await getProjectByID(projectId as string)
-    console.log('fetching groups')
-    // Get id group from project by comparing the users groups and the project groups
-    await getGroupsByProject(projectId as string)
-    const projectGroups = groups.value
-    // get all groups from the user
-    await getGroupsByStudent('1')
-    for (const group of groups.value ?? []) {
-        const isCommonGroup = projectGroups?.some(
-            (projectGroup) => projectGroup.id === group.id
-        )
+watch(
+    student,
+    async () => {
+        if (student.value !== null) {
+            const projectId = route.params.projectId as string;
+            await getProjectByID(projectId.toString());
+            await getGroupsByProject(projectId.toString());
 
-        if (isCommonGroup != null && isCommonGroup) {
-            finalGroup.value = group
-            break
+            // Check if the student is in a group for the project
+            const projectGroups = groups.value;
+            await getGroupsByStudent('1');
+
+            for (const studentGroup of groups.value ?? []) {
+                const isCommonGroup = projectGroups?.some((projectGroup) => projectGroup.id === studentGroup.id);
+
+                if (isCommonGroup === true) {
+                    group.value = studentGroup;
+                    break;
+                }
+            }
         }
-    }
-})
+    },
+    {
+        immediate: true,
+    },
+);
 </script>
 
 <template>
@@ -57,10 +66,9 @@ onMounted(async () => {
                 </div>
             </div>
             <div class="col-12 md:col-4">
-                <GroupCard
-                    v-if="finalGroup.id !== '-1'"
-                    :group-id="finalGroup.id"
-                ></GroupCard>
+                <GroupCard :group="group" v-if="group"></GroupCard>
+
+                <Skeleton height="20rem" v-else />
             </div>
         </div>
     </BaseLayout>
