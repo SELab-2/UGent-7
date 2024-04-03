@@ -156,23 +156,6 @@
             "title": "Leerkrachten"
         }
     },
-    "admin": {
-        "title": "Beheerder",
-        "users": {
-            "title": "Gebruikers",
-            "create": "Gebruiker aanmaken",
-            "edit": "Gebruiker bewerken"
-        },
-        "assistants": {
-            "title": "Assistenten"
-        },
-        "students": {
-            "title": "Studenten"
-        },
-        "teachers": {
-            "title": "Leerkrachten"
-        }
-    },
     "primevue": {
         "accept": "Ja",
         "addRule": "Voeg regel toe",
