@@ -6,7 +6,6 @@ import { createPinia } from 'pinia';
 
 import { endpoints } from '@/config/endpoints.ts';
 import { JSDOM } from 'jsdom';
-import { prototype } from 'events';
 
 const baseUrl = 'http://localhost';
 
@@ -463,7 +462,11 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.assistants.index, () => {
         return HttpResponse.json(assistants);
     }),
-    http.post(baseUrl + endpoints.admins.index, () => {
+    http.post(baseUrl + endpoints.admins.index, async ({ request }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newAdmin = JSON.parse(requestBody);
+        admins.push(newAdmin);
         return HttpResponse.json(admins);
     }),
 

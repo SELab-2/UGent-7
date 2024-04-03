@@ -71,6 +71,5 @@ describe('admin', (): void => {
         );
 
         await createAdmin(exampleAdmin);
-        // TODO: Check if admin was created
     });
 });
