@@ -24,7 +24,10 @@ export class User {
         const startYear = this.getAcademicYear(this.create_time);
         const endYear = this.getAcademicYear(new Date());
 
-        return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+        return Array.from(
+            { length: endYear - startYear + 1 },
+            (_, i) => startYear + i,
+        );
     }
 
     /**

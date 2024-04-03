@@ -2,7 +2,13 @@ import { Assistant } from '@/types/users/Assistant.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
+import {
+    get,
+    getList,
+    create,
+    deleteId,
+    deleteIdWithData,
+} from '@/composables/services/helpers.ts';
 import { useCourses } from '@/composables/services/courses.service.ts';
 
 interface AssistantState {
@@ -12,8 +18,14 @@ interface AssistantState {
     getAssistantByID: (id: string, init: boolean) => Promise<void>;
     getAssistantByCourse: (courseId: string) => Promise<void>;
     getAssistants: () => Promise<void>;
-    assistantJoinCourse: (courseId: string, assistantId: string) => Promise<void>;
-    assistantLeaveCourse: (courseId: string, assistantId: string) => Promise<void>;
+    assistantJoinCourse: (
+        courseId: string,
+        assistantId: string,
+    ) => Promise<void>;
+    assistantLeaveCourse: (
+        courseId: string,
+        assistantId: string,
+    ) => Promise<void>;
     createAssistant: (assistantData: Assistant) => Promise<void>;
     deleteAssistant: (id: string) => Promise<void>;
 }
@@ -27,7 +39,10 @@ export function useAssistant(): AssistantState {
     /* Nested state */
     const { courses, getCourseByAssistant } = useCourses();
 
-    async function getAssistantByID(id: string, init: boolean = false): Promise<void> {
+    async function getAssistantByID(
+        id: string,
+        init: boolean = false,
+    ): Promise<void> {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
         await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
 
@@ -37,7 +52,10 @@ export function useAssistant(): AssistantState {
     }
 
     async function getAssistantByCourse(courseId: string): Promise<void> {
-        const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
+        const endpoint = endpoints.assistants.byCourse.replace(
+            '{courseId}',
+            courseId,
+        );
         await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 
@@ -46,14 +64,36 @@ export function useAssistant(): AssistantState {
         await getList<Assistant>(endpoint, assistants, Assistant.fromJSON);
     }
 
-    async function assistantJoinCourse(courseId: string, assistantId: string): Promise<void> {
-        const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await create<Response>(endpoint, { assistantId }, response, Response.fromJSON);
+    async function assistantJoinCourse(
+        courseId: string,
+        assistantId: string,
+    ): Promise<void> {
+        const endpoint = endpoints.assistants.byCourse.replace(
+            '{courseId}',
+            courseId,
+        );
+        await create<Response>(
+            endpoint,
+            { assistantId },
+            response,
+            Response.fromJSON,
+        );
     }
 
-    async function assistantLeaveCourse(courseId: string, assistantId: string): Promise<void> {
-        const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await deleteIdWithData<Response>(endpoint, { assistantId }, response, Response.fromJSON);
+    async function assistantLeaveCourse(
+        courseId: string,
+        assistantId: string,
+    ): Promise<void> {
+        const endpoint = endpoints.assistants.byCourse.replace(
+            '{courseId}',
+            courseId,
+        );
+        await deleteIdWithData<Response>(
+            endpoint,
+            { assistantId },
+            response,
+            Response.fromJSON,
+        );
     }
 
     async function createAssistant(assistantData: Assistant): Promise<void> {

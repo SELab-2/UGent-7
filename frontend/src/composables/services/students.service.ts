@@ -2,7 +2,13 @@ import { Student } from '@/types/users/Student.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
+import {
+    get,
+    getList,
+    create,
+    deleteId,
+    deleteIdWithData,
+} from '@/composables/services/helpers.ts';
 import { useCourses } from '@/composables/services/courses.service.ts';
 
 interface StudentsState {
@@ -30,7 +36,10 @@ export function useStudents(): StudentsState {
     /* Nested state */
     const { courses, getCoursesByStudent } = useCourses();
 
-    async function getStudentByID(id: string, init: boolean = false): Promise<void> {
+    async function getStudentByID(
+        id: string,
+        init: boolean = false,
+    ): Promise<void> {
         const endpoint = endpoints.students.retrieve.replace('{id}', id);
         await get<Student>(endpoint, student, Student.fromJSON);
 
@@ -45,33 +54,83 @@ export function useStudents(): StudentsState {
     }
 
     async function getStudentsByCourse(courseId: string): Promise<void> {
-        const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
+        const endpoint = endpoints.students.byCourse.replace(
+            '{courseId}',
+            courseId,
+        );
         await getList<Student>(endpoint, students, Student.fromJSON);
     }
 
     async function getStudentsByGroup(groupId: string): Promise<void> {
-        const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
+        const endpoint = endpoints.students.byGroup.replace(
+            '{groupId}',
+            groupId,
+        );
         await getList<Student>(endpoint, students, Student.fromJSON);
     }
 
-    async function studentJoinCourse(courseId: string, studentId: string): Promise<void> {
-        const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
-        await create<Response>(endpoint, { studentId }, response, Response.fromJSON);
+    async function studentJoinCourse(
+        courseId: string,
+        studentId: string,
+    ): Promise<void> {
+        const endpoint = endpoints.students.byCourse.replace(
+            '{courseId}',
+            courseId,
+        );
+        await create<Response>(
+            endpoint,
+            { student_id: studentId },
+            response,
+            Response.fromJSON,
+        );
     }
 
-    async function studentLeaveCourse(courseId: string, studentId: string): Promise<void> {
-        const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
-        await deleteIdWithData<Response>(endpoint, { studentId }, response, Response.fromJSON);
+    async function studentLeaveCourse(
+        courseId: string,
+        studentId: string,
+    ): Promise<void> {
+        const endpoint = endpoints.students.byCourse.replace(
+            '{courseId}',
+            courseId,
+        );
+        await deleteIdWithData<Response>(
+            endpoint,
+            { student_id: studentId },
+            response,
+            Response.fromJSON,
+        );
     }
 
-    async function studentJoinGroup(groupId: string, studentId: string): Promise<void> {
-        const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
-        await create<Response>(endpoint, { studentId }, response, Response.fromJSON);
+    async function studentJoinGroup(
+        groupId: string,
+        studentId: string,
+    ): Promise<void> {
+        const endpoint = endpoints.students.byGroup.replace(
+            '{groupId}',
+            groupId,
+        );
+        await create<Response>(
+            endpoint,
+            { student_id: studentId },
+            response,
+            Response.fromJSON,
+        );
     }
 
-    async function studentLeaveGroup(groupId: string, studentId: string): Promise<void> {
-        const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
-        await deleteIdWithData<Response>(endpoint, { studentId }, response, Response.fromJSON);
+    async function studentLeaveGroup(
+        groupId: string,
+        studentId: string,
+    ): Promise<void> {
+        const endpoint = endpoints.students.byGroup.replace(
+            '{groupId}',
+            groupId,
+        );
+        await deleteIdWithData<Response>(
+            endpoint,
+            { student_id: studentId },
+            response,
+            Response.fromJSON,
+        );
     }
 
     async function createStudent(studentData: Student): Promise<void> {

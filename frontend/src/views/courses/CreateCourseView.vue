@@ -49,25 +49,49 @@ const submitCourse = async (): Promise<void> => {
                 <form @submit.prevent="submitCourse">
                     <!-- Course name -->
                     <div class="mb-4">
-                        <label for="courseName">{{ t('views.courses.name') }}</label>
-                        <InputText id="courseName" v-model="courseName" required />
+                        <label for="courseName">{{
+                            t('views.courses.name')
+                        }}</label>
+                        <InputText
+                            id="courseName"
+                            v-model="courseName"
+                            required />
                     </div>
 
                     <!-- Course description -->
                     <div class="mb-4">
-                        <label for="courseDescription">{{ t('views.courses.description') }}</label>
-                        <Textarea id="courseDescription" v-model="courseDescription" autoResize rows="5" cols="30" />
+                        <label for="courseDescription">{{
+                            t('views.courses.description')
+                        }}</label>
+                        <Textarea
+                            id="courseDescription"
+                            v-model="courseDescription"
+                            autoResize
+                            rows="5"
+                            cols="30" />
                     </div>
 
                     <!-- Course academic year -->
                     <div class="mb-4">
-                        <label for="courseYear">{{ t('views.courses.year') }}</label>
-                        <Calendar id="courseYear" v-model="courseYear" view="year" dateFormat="yy" required />
+                        <label for="courseYear">{{
+                            t('views.courses.year')
+                        }}</label>
+                        <Calendar
+                            id="courseYear"
+                            v-model="courseYear"
+                            view="year"
+                            dateFormat="yy"
+                            required />
                     </div>
 
                     <!-- Submit button -->
                     <div class="flex justify-end">
-                        <Button :label="t('views.courses.create')" type="submit" icon="pi pi-check" iconPos="right" rounded />
+                        <Button
+                            :label="t('views.courses.create')"
+                            type="submit"
+                            icon="pi pi-check"
+                            iconPos="right"
+                            rounded />
                     </div>
                 </form>
             </div>

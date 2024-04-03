@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { type Course } from '@/types/Course.ts';
-import CourseCard from '@/components/courses/CourseCard.vue';
 import Skeleton from 'primevue/skeleton';
+import CourseDetailCard from '@/components/courses/CourseDetailCard.vue';
+import CourseGeneralCard from '@/components/courses/CourseGeneralCard.vue';
+import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 
 /* Props */
-defineProps<{ courses: Course[] | null }>();
+type Props = {
+    detail: boolean;
+    courses: Course[] | null;
+    cols?: number;
+};
+
+withDefaults(defineProps<Props>(), {
+    cols: 4,
+    detail: true
+});
 
 /* Composable injections */
 const { t } = useI18n();
@@ -15,8 +25,13 @@ const { t } = useI18n();
     <div class="grid align-items-stretch">
         <template v-if="courses !== null">
             <template v-if="courses.length > 0">
-                <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="course in courses" :key="course.id">
-                    <CourseCard class="h-100" :course="course" />
+                <div
+                    class="col-12 md:col-6 lg:col-4"
+                    :class="'xl:col-' + 12 / cols"
+                    v-for="course in courses"
+                    :key="course.id">
+                    <CourseDetailCard :course="course" v-if="detail" />
+                    <CourseGeneralCard class="h-full" :course="course" v-else />
                 </div>
             </template>
             <template v-else>
@@ -26,8 +41,12 @@ const { t } = useI18n();
             </template>
         </template>
         <template v-else>
-            <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="index in 4" :key="index">
-                <Skeleton height="25rem" style="visibility: hidden" />
+            <div
+                class="col-12 md:col-6 lg:col-4"
+                :class="'xl:col-' + 12 / cols"
+                v-for="index in cols"
+                :key="index">
+                <Skeleton :height="detail ? '25rem' : '10rem'" />
             </div>
         </template>
     </div>

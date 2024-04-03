@@ -48,7 +48,10 @@ watch(
                 class="col-12 md:col-6 lg:col-4 xl:col-3"
                 v-for="project in courses.flatMap((course) => course.projects)"
                 :key="project.id">
-                <ProjectCard class="h-100" :project="project" :course="project.course" v-if="project.course" />
+                <ProjectCard
+                    class="h-100"
+                    :project="project"
+                    :course="project.course" />
             </div>
         </div>
     </template>

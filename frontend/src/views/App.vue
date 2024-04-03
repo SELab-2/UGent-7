@@ -16,7 +16,10 @@ watch(message, () => {
     // Check if the message is not null or undefined.
     if (message.value !== null && message.value !== undefined) {
         // Check if the message has a detail.
-        if (message.value.detail === null || message.value.detail === undefined) {
+        if (
+            message.value.detail === null ||
+            message.value.detail === undefined
+        ) {
             message.value.detail = t('toasts.messages.unknown');
         }
 

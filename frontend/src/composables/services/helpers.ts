@@ -3,10 +3,15 @@ import { client } from '@/composables/axios.ts';
 import { type Ref } from 'vue';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { i18n } from '../i18n';
+import { Filters, PaginationResponse } from '@/types/Pagination.ts';
 
 const lifeTime = 3000;
 
-export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
+export async function get<T>(
+    endpoint: string,
+    ref: Ref<T | null>,
+    fromJson: (data: any) => T,
+): Promise<void> {
     await client
         .get(endpoint)
         .then((response: AxiosResponse) => {
@@ -18,7 +23,12 @@ export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (da
         });
 }
 
-export async function create<T>(endpoint: string, data: any, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
+export async function create<T>(
+    endpoint: string,
+    data: any,
+    ref: Ref<T | null>,
+    fromJson: (data: any) => T,
+): Promise<void> {
     await client
         .post(endpoint, data)
         .then((response: AxiosResponse) => {
@@ -30,12 +40,15 @@ export async function create<T>(endpoint: string, data: any, ref: Ref<T | null>,
         });
 }
 
-export async function deleteId<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
+export async function deleteId<T>(
+    endpoint: string,
+    ref: Ref<T | null>,
+    fromJson: (data: any) => T,
+): Promise<void> {
     await client
         .delete(endpoint)
         .then((response: AxiosResponse) => {
             ref.value = fromJson(response.data);
-            // add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
         })
         .catch((error: AxiosError) => {
             processError(error);
@@ -43,12 +56,16 @@ export async function deleteId<T>(endpoint: string, ref: Ref<T | null>, fromJson
         });
 }
 
-export async function deleteIdWithData<T>(endpoint: string, data: any, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
+export async function deleteIdWithData<T>(
+    endpoint: string,
+    data: any,
+    ref: Ref<T | null>,
+    fromJson: (data: any) => T,
+): Promise<void> {
     await client
         .delete(endpoint, { data })
         .then((response: AxiosResponse) => {
             ref.value = fromJson(response.data);
-            // add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
         })
         .catch((error: AxiosError) => {
             processError(error);
@@ -56,12 +73,15 @@ export async function deleteIdWithData<T>(endpoint: string, data: any, ref: Ref<
         });
 }
 
-export async function getList<T>(endpoint: string, ref: Ref<T[] | null>, fromJson: (data: any) => T): Promise<void> {
+export async function getList<T>(
+    endpoint: string,
+    ref: Ref<T[] | null>,
+    fromJson: (data: any) => T,
+): Promise<void> {
     await client
         .get(endpoint)
         .then((response) => {
             ref.value = response.data.map((data: T) => fromJson(data));
-            // add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
         })
         .catch((error: AxiosError) => {
             processError(error);
@@ -69,7 +89,34 @@ export async function getList<T>(endpoint: string, ref: Ref<T[] | null>, fromJso
         });
 }
 
-export async function getListMerged<T>(endpoints: string[], ref: Ref<T[] | null>, fromJson: (data: any) => T): Promise<void> {
+export async function getPaginatedList<T>(
+    endpoint: string,
+    params: Filters,
+    pagination: Ref<PaginationResponse<T> | null>,
+    fromJson: (data: any) => T
+): Promise<void> {
+    await client
+        .get(endpoint, {
+            params
+        })
+        .then((response) => {
+            pagination.value = {
+                ...response.data,
+                results: response.data.results.map((data: T) =>
+                    fromJson(data)
+                ),
+            };
+        }).catch((error: AxiosError) => {
+            processError(error);
+            console.error(error); // Log the error for debugging
+        });
+}
+
+export async function getListMerged<T>(
+    endpoints: string[],
+    ref: Ref<T[] | null>,
+    fromJson: (data: any) => T,
+): Promise<void> {
     // Create an array to accumulate all response data
     const allData: T[] = [];
 
@@ -77,7 +124,9 @@ export async function getListMerged<T>(endpoints: string[], ref: Ref<T[] | null>
         await client
             .get(endpoint)
             .then((response) => {
-                const responseData: T[] = response.data.map((data: T) => fromJson(data));
+                const responseData: T[] = response.data.map((data: T) =>
+                    fromJson(data),
+                );
                 allData.push(...responseData); // Merge into the allData array
                 // add({severity: "success", summary: "Success Message", detail: "Order submitted", life: lifeTime});
             })
@@ -95,14 +144,16 @@ export function processError(error: AxiosError): void {
 
     if (error.response !== undefined && error.response !== null) {
         // The request was made and the server responded with a status code
-        if (error.response.status === 404) {
+        const status = error.response.status;
+
+        if (status === 404) {
             add({
                 severity: 'error',
                 summary: t('composables.helpers.errors.notFound'),
                 detail: t('composables.helpers.errors.notFoundDetail'),
                 life: lifeTime,
             });
-        } else if (error.response.status === 401) {
+        } else if (error.response.status === 401 || error.response.status === 403) {
             add({
                 severity: 'error',
                 summary: t('composables.helpers.errors.unauthorized'),

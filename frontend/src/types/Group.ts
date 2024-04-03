@@ -21,6 +21,12 @@ export class Group {
     }
 
     static fromJSONFullObject(group: Group): Group {
-        return new Group(group.id, group.score, group.project, group.students, group.submissions);
+        return new Group(
+            group.id,
+            group.score,
+            group.project,
+            group.students,
+            group.submissions,
+        );
     }
 }

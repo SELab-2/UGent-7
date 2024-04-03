@@ -17,7 +17,20 @@ export class Assistant extends User {
         public create_time: Date,
         public last_login: Date | null,
     ) {
-        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
+        super(
+            id,
+            username,
+            email,
+            first_name,
+            last_name,
+            last_enrolled,
+            is_staff,
+            roles,
+            faculties,
+            create_time,
+            last_login,
+            courses,
+        );
     }
 
     /**
@@ -38,7 +51,9 @@ export class Assistant extends User {
             assistant.faculties,
             assistant.courses,
             new Date(assistant.create_time),
-            assistant.last_login !== null ? new Date(assistant.last_login) : null,
+            assistant.last_login !== null
+                ? new Date(assistant.last_login)
+                : null,
         );
     }
 

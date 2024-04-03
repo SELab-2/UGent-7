@@ -53,7 +53,10 @@ onMounted(() => {
         variant="outlined">
         <template #option="{ option }">
             <div class="flex align-items-center">
-                <img :alt="t('layout.header.language.' + option)" :src="getFlag(option)" class="h-1rem mr-2" />
+                <img
+                    :alt="t('layout.header.language.' + option)"
+                    :src="getFlag(option)"
+                    class="h-1rem mr-2" />
                 <span>{{ t('layout.header.language.' + option) }}</span>
             </div>
         </template>

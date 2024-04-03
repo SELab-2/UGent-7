@@ -2,7 +2,9 @@ import { type RouteLocationNormalized } from 'vue-router';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 
-export async function AuthenticationGuard(to: RouteLocationNormalized): Promise<{ name: string } | undefined> {
+export async function AuthenticationGuard(
+    to: RouteLocationNormalized,
+): Promise<{ name: string } | undefined> {
     const { refresh } = useAuthStore();
     const { intent } = storeToRefs(useAuthStore());
 

@@ -24,8 +24,12 @@ describe('project', (): void => {
         expect(project.value?.visible).toBe(true);
         expect(project.value?.archived).toBe(false);
         expect(project.value?.locked_groups).toBe(false);
-        expect(project.value?.start_date).toStrictEqual(new Date('July 21, 2024 01:15:00'));
-        expect(project.value?.deadline).toStrictEqual(new Date('July 23, 2024 01:15:00'));
+        expect(project.value?.start_date).toStrictEqual(
+            new Date('July 21, 2024 01:15:00'),
+        );
+        expect(project.value?.deadline).toStrictEqual(
+            new Date('July 23, 2024 01:15:00'),
+        );
         expect(project.value?.max_score).toBe(100);
         expect(project.value?.score_visible).toBe(true);
         expect(project.value?.group_size).toBe(8);
@@ -48,8 +52,12 @@ describe('project', (): void => {
         expect(projects.value?.[0]?.visible).toBe(true);
         expect(projects.value?.[0]?.archived).toBe(false);
         expect(projects.value?.[0]?.locked_groups).toBe(false);
-        expect(projects.value?.[0]?.start_date).toStrictEqual(new Date('July 21, 2024 01:15:00'));
-        expect(projects.value?.[0]?.deadline).toStrictEqual(new Date('July 23, 2024 01:15:00'));
+        expect(projects.value?.[0]?.start_date).toStrictEqual(
+            new Date('July 21, 2024 01:15:00'),
+        );
+        expect(projects.value?.[0]?.deadline).toStrictEqual(
+            new Date('July 23, 2024 01:15:00'),
+        );
         expect(projects.value?.[0]?.max_score).toBe(100);
         expect(projects.value?.[0]?.score_visible).toBe(true);
         expect(projects.value?.[0]?.group_size).toBe(8);
@@ -65,8 +73,12 @@ describe('project', (): void => {
         expect(projects.value?.[1]?.visible).toBe(true);
         expect(projects.value?.[1]?.archived).toBe(false);
         expect(projects.value?.[1]?.locked_groups).toBe(false);
-        expect(projects.value?.[1]?.start_date).toStrictEqual(new Date('July 21, 2024 01:15:00'));
-        expect(projects.value?.[1]?.deadline).toStrictEqual(new Date('July 23, 2024 01:15:00'));
+        expect(projects.value?.[1]?.start_date).toStrictEqual(
+            new Date('July 21, 2024 01:15:00'),
+        );
+        expect(projects.value?.[1]?.deadline).toStrictEqual(
+            new Date('July 23, 2024 01:15:00'),
+        );
         expect(projects.value?.[1]?.max_score).toBe(20);
         expect(projects.value?.[1]?.score_visible).toBe(false);
         expect(projects.value?.[1]?.group_size).toBe(3);
@@ -89,8 +101,12 @@ describe('project', (): void => {
         expect(projects.value?.[0]?.visible).toBe(true);
         expect(projects.value?.[0]?.archived).toBe(false);
         expect(projects.value?.[0]?.locked_groups).toBe(false);
-        expect(projects.value?.[0]?.start_date).toStrictEqual(new Date('July 21, 2024 01:15:00'));
-        expect(projects.value?.[0]?.deadline).toStrictEqual(new Date('July 23, 2024 01:15:00'));
+        expect(projects.value?.[0]?.start_date).toStrictEqual(
+            new Date('July 21, 2024 01:15:00'),
+        );
+        expect(projects.value?.[0]?.deadline).toStrictEqual(
+            new Date('July 23, 2024 01:15:00'),
+        );
         expect(projects.value?.[0]?.max_score).toBe(100);
         expect(projects.value?.[0]?.score_visible).toBe(true);
         expect(projects.value?.[0]?.group_size).toBe(8);
@@ -106,8 +122,12 @@ describe('project', (): void => {
         expect(projects.value?.[1]?.visible).toBe(true);
         expect(projects.value?.[1]?.archived).toBe(false);
         expect(projects.value?.[1]?.locked_groups).toBe(false);
-        expect(projects.value?.[1]?.start_date).toStrictEqual(new Date('July 21, 2024 01:15:00'));
-        expect(projects.value?.[1]?.deadline).toStrictEqual(new Date('July 23, 2024 01:15:00'));
+        expect(projects.value?.[1]?.start_date).toStrictEqual(
+            new Date('July 21, 2024 01:15:00'),
+        );
+        expect(projects.value?.[1]?.deadline).toStrictEqual(
+            new Date('July 23, 2024 01:15:00'),
+        );
         expect(projects.value?.[1]?.max_score).toBe(20);
         expect(projects.value?.[1]?.score_visible).toBe(false);
         expect(projects.value?.[1]?.group_size).toBe(3);
