@@ -15,7 +15,7 @@ import { type Filters, type PaginationResponse } from '@/types/Pagination.ts';
 export async function get<T>(
     endpoint: string,
     ref: Ref<T | null>,
-    fromJson: (data: any) => T
+    fromJson: (data: any) => T,
 ): Promise<void> {
     try {
         const response = await client.get(endpoint);
@@ -39,7 +39,7 @@ export async function create<T>(
     endpoint: string,
     data: any,
     ref: Ref<T | null>,
-    fromJson: (data: any) => T
+    fromJson: (data: any) => T,
 ): Promise<void> {
     try {
         const response = await client.post(endpoint, data);
@@ -61,7 +61,7 @@ export async function create<T>(
 export async function deleteId<T>(
     endpoint: string,
     ref: Ref<T | null>,
-    fromJson: (data: any) => T
+    fromJson: (data: any) => T,
 ): Promise<void> {
     try {
         const response = await client.delete(endpoint);
@@ -85,7 +85,7 @@ export async function deleteIdWithData<T>(
     endpoint: string,
     data: any,
     ref: Ref<T | null>,
-    fromJson: (data: any) => T
+    fromJson: (data: any) => T,
 ): Promise<void> {
     try {
         const response = await client.delete(endpoint, { data });
@@ -107,7 +107,7 @@ export async function deleteIdWithData<T>(
 export async function getList<T>(
     endpoint: string,
     ref: Ref<T[] | null>,
-    fromJson: (data: any) => T
+    fromJson: (data: any) => T,
 ): Promise<void> {
     try {
         const response = await client.get(endpoint);
@@ -131,16 +131,16 @@ export async function getPaginatedList<T>(
     endpoint: string,
     params: Filters,
     pagination: Ref<PaginationResponse<T> | null>,
-    fromJson: (data: any) => T
+    fromJson: (data: any) => T,
 ): Promise<void> {
     try {
         const response = await client.get(endpoint, {
-            params
+            params,
         });
 
         pagination.value = {
             ...response.data,
-            results: response.data.results.map((data: T) => fromJson(data))
+            results: response.data.results.map((data: T) => fromJson(data)),
         };
     } catch (error: any) {
         processError(error);
@@ -159,7 +159,7 @@ export async function getPaginatedList<T>(
 export async function getListMerged<T>(
     endpoints: string[],
     ref: Ref<T[] | null>,
-    fromJson: (data: any) => T
+    fromJson: (data: any) => T,
 ): Promise<void> {
     // Create an array to accumulate all response data
     const allData: T[] = [];
@@ -168,7 +168,7 @@ export async function getListMerged<T>(
         try {
             const response = await client.get(endpoint);
             const responseData: T[] = response.data.map((data: T) =>
-                fromJson(data)
+                fromJson(data),
             );
             allData.push(...responseData); // Merge into the allData array
         } catch (error: any) {
@@ -186,29 +186,57 @@ export async function getListMerged<T>(
  *
  * @param error
  */
-export function processError(error: AxiosError): void {
+export function processError(error: any): void {
     const { t } = i18n.global;
     const { addErrorMessage } = useMessagesStore();
+
+    // Cast the error to an AxiosError
+    error = error as AxiosError;
 
     if (error.response !== undefined && error.response !== null) {
         // The request was made and the server responded with a status code
         const status = error.response.status;
 
         if (status === 404) {
-            addErrorMessage(t('composables.helpers.errors.notFound'), t('composables.helpers.errors.notFoundDetail'));
+            addErrorMessage(
+                t('composables.helpers.errors.notFound'),
+                t('composables.helpers.errors.notFoundDetail'),
+            );
         } else if (
             error.response.status === 401 ||
             error.response.status === 403
         ) {
-            addErrorMessage(t('composables.helpers.errors.unauthorized'), t('composables.helpers.errors.unauthorizedDetail'));
+            addErrorMessage(
+                t('composables.helpers.errors.unauthorized'),
+                t('composables.helpers.errors.unauthorizedDetail'),
+            );
         } else {
-            addErrorMessage(t('composables.helpers.errors.server'), t('composables.helpers.errors.serverDetail'));
+            const response = error.response.data;
+
+            for (const key in response) {
+                let message: string = response[key];
+
+                if (Array.isArray(response[key])) {
+                    message = response[key].join(', ');
+                }
+
+                addErrorMessage(
+                    t('composables.helpers.errors.server'),
+                    message,
+                );
+            }
         }
     } else if (error.request !== undefined && error.request !== null) {
         // The request was made but no response was received
-        addErrorMessage(t('composables.helpers.errors.network'), t('composables.helpers.errors.networkDetail'));
+        addErrorMessage(
+            t('composables.helpers.errors.network'),
+            t('composables.helpers.errors.networkDetail'),
+        );
     } else {
         // Something happened in setting up the request that triggered an error
-        addErrorMessage(t('composables.helpers.errors.request'), t('composables.helpers.errors.requestDetail'));
+        addErrorMessage(
+            t('composables.helpers.errors.request'),
+            t('composables.helpers.errors.requestDetail'),
+        );
     }
 }

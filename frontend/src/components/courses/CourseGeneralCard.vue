@@ -46,7 +46,7 @@ function getFacultyIcon(faculty: Faculty): string {
                 </div>
             </div>
             <div v-if="user && user.isStudent()">
-                <StudentCourseJoinButton :student="student" :course="course"/>
+                <StudentCourseJoinButton :student="student" :course="course" />
             </div>
         </div>
     </div>

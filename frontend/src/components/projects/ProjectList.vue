@@ -21,7 +21,7 @@ const { projects, getProjectsByCourse } = useProject();
 
 /* State */
 const allProjects = computed(() =>
-    props.courses.flatMap((course) => course.projects)
+    props.courses.flatMap((course) => course.projects),
 );
 
 watch(

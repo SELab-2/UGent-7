@@ -14,7 +14,7 @@ const { message } = storeToRefs(useMessagesStore());
 /* Show a toast message when a new message is added */
 watch(message, () => {
     // Check if the message is not null or undefined.
-    if (message.value !== null && message.value !== undefined) {
+    if (message.value !== null) {
         // Check if the message has a detail.
         if (
             message.value.detail === null ||

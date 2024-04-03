@@ -17,7 +17,7 @@ export const useMessagesStore = defineStore('messages', () => {
         message.value = {
             severity: 'success',
             summary: title,
-            detail: description
+            detail: description,
         };
     }
 
@@ -31,7 +31,7 @@ export const useMessagesStore = defineStore('messages', () => {
         message.value = {
             severity: 'error',
             summary: title,
-            detail: description
+            detail: description,
         };
     }
 
@@ -44,7 +44,7 @@ export const useMessagesStore = defineStore('messages', () => {
         message.value = {
             severity: 'info',
             summary: title,
-            detail: description
+            detail: description,
         };
     }
 
@@ -53,6 +53,6 @@ export const useMessagesStore = defineStore('messages', () => {
 
         addSuccessMessage,
         addErrorMessage,
-        addInfoMessage
+        addInfoMessage,
     };
 });
