@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useAdmin } from '@/composables/services/admins.service.ts';
-import { User } from '../../types/users/User'
+import { User } from '../../types/users/User';
 
 const {
     admins,
@@ -67,7 +67,7 @@ describe('admin', (): void => {
             ['user'], // roles
             [], // faculties
             new Date('April 2, 2023 01:15:00'), // create_time
-            new Date('April 2, 2024 01:15:00') // last_login
+            new Date('April 2, 2024 01:15:00'), // last_login
         );
 
         await createAdmin(exampleAdmin);
