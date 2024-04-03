@@ -28,7 +28,6 @@ x-common-keys-selab: &common-keys-selab
 ############################# SERVICES
 
 services:
-
   nginx:
     <<: *common-keys-selab
     image: nginx:latest
@@ -49,7 +48,7 @@ services:
     container_name: backend
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     command: /bin/bash -c "./setup.sh && python manage.py runsslserver 192.168.90.2:8080"
     expose:
       - 8080
@@ -95,4 +94,3 @@ services:
     entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
       - ${DATA_DIR}/redis:/data
-     
