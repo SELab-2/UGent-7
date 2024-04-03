@@ -12,6 +12,7 @@ import { RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 import {AuthenticationGuard} from '@/router/guards/authentication.guard.ts';
 import {LogoutGuard} from '@/router/guards/logout.guard.ts';
 import ProjectView from "@/views/projects/ProjectView.vue";
+import AdminView from '@/views/admins/AdminView.vue';
 import UsersView from '@/views/admins/UsersView.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -87,6 +88,7 @@ const routes: RouteRecordRaw[] = [
 
     // Admin
     { path: '/admin/', children: [
+        { path: '', component: AdminView, name: 'admin' },
         { path: 'users', component: UsersView, name: 'admin-users' },
     ]},
 
