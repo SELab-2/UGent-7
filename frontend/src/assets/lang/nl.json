@@ -129,6 +129,15 @@
             "title": "Gebruikers",
             "create": "Gebruiker aanmaken",
             "edit": "Gebruiker bewerken"
+        },
+        "assistants": {
+            "title": "Assistenten"
+        },
+        "students": {
+            "title": "Studenten"
+        },
+        "teachers": {
+            "title": "Leerkrachten"
         }
     },
     "primevue": {
