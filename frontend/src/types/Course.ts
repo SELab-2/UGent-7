@@ -33,11 +33,9 @@ export class Course {
      * @returns string
      */
     public getExcerpt(maxLength: number = 100): string {
-        if (this.description === null)
-            return '';
+        if (this.description === null) return '';
 
-        if (this.description.length < maxLength)
-            return this.description;
+        if (this.description.length < maxLength) return this.description;
 
         return this.description.substring(0, maxLength) + '...';
     }

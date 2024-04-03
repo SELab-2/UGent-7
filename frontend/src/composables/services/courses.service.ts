@@ -5,9 +5,10 @@ import {
     get,
     getList,
     create,
-    deleteId, getPaginatedList
+    deleteId,
+    getPaginatedList,
 } from '@/composables/services/helpers.ts';
-import { Filters, PaginationResponse } from '@/types/Pagination.ts';
+import { type Filters, type PaginationResponse } from '@/types/Pagination.ts';
 
 interface CoursesState {
     pagination: Ref<PaginationResponse<Course> | null>;
@@ -41,7 +42,12 @@ export function useCourses(): CoursesState {
 
     async function searchCourses(filters: Filters): Promise<void> {
         const endpoint = endpoints.courses.search;
-        await getPaginatedList<Course>(endpoint, filters, pagination, Course.fromJSON);
+        await getPaginatedList<Course>(
+            endpoint,
+            filters,
+            pagination,
+            Course.fromJSON,
+        );
     }
 
     async function getCoursesByStudent(studentId: string): Promise<void> {
@@ -117,6 +123,6 @@ export function useCourses(): CoursesState {
 
         createCourse,
         cloneCourse,
-        deleteCourse
+        deleteCourse,
     };
 }

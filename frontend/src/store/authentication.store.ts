@@ -12,6 +12,7 @@ import { useTeacher } from '@/composables/services/teachers.service';
 import { type Teacher } from '@/types/users/Teacher.ts';
 import { type Student } from '@/types/users/Student.ts';
 import { type Assistant } from '@/types/users/Assistant.ts';
+import { useI18n } from 'vue-i18n';
 
 export const useAuthStore = defineStore('auth', () => {
     /* Stores */
@@ -31,7 +32,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     /**
      * Initialize the user object depending on the role.
-     *
      */
     async function initUser(): Promise<void> {
         if (user.value !== null) {
@@ -70,69 +70,58 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     /**
+     * Refresh the user objects in the API endpoint.
+     */
+    async function refreshUser(): Promise<void> {
+        // Display toast messages.
+        const { addErrorMessage } = useMessagesStore();
+
+        // Get the user information (using a cookie).
+        try {
+            // Get the user information when it is not set.
+            if (user.value === null) {
+                const response = await axios.get(endpoints.auth.whoami);
+                user.value = User.fromJSON(response.data as User);
+            }
+
+            if (view.value === null) {
+                view.value = user.value.roles[0];
+            }
+
+            // Get the role information.
+            await initUser();
+        } catch (error: any) {
+            addErrorMessage(error.response.statusText, error.response.data.detail);
+        }
+    }
+
+    /**
      * Attempt to log in the user using a CAS ticket.
      *
      * @param ticket
      */
     async function login(ticket: string): Promise<void> {
         // Display toast messages.
-        const { add } = useMessagesStore();
+        const { t } = useI18n();
+        const { addSuccessMessage, addErrorMessage } = useMessagesStore();
 
         // Attempt to log in the user using the ticket.
-        await axios
-            .post(endpoints.auth.token.obtain, {
-                ticket,
-            })
-            .then(() => {
-                add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'You have successfully logged in.',
-                });
-            })
-            .catch((error) => {
-                add({
-                    severity: 'error',
-                    summary: error.response.statusText,
-                    detail: error.response.data.detail,
-                });
+        try {
+            await axios.post(endpoints.auth.token.obtain, {
+                ticket
             });
-    }
 
-    /**
-     * Refresh the user objects in the API endpoint.
-     */
-    async function refresh(): Promise<void> {
-        // Display toast messages.
-        const { add } = useMessagesStore();
-
-        // Get the user information (using a cookie).
-        await axios
-            .get(endpoints.auth.whoami)
-            .then(async (response) => {
-                user.value = User.fromJSON(response.data as User);
-
-                if (view.value === null) {
-                    view.value = user.value.roles[0];
-                }
-
-                // Init the user depending on the role selected.
-                await initUser();
-            })
-            .catch((error) => {
-                add({
-                    severity: 'error',
-                    summary: error.response.statusText,
-                    detail: error.response.data.detail,
-                });
-            });
+            addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.login.success'));
+        } catch (error: any) {
+            addErrorMessage(t('toasts.messages.error'), error.response.data.detail);
+        }
     }
 
     /**
      * Log out the user.
      */
     async function logout(): Promise<void> {
-        await client.post(endpoints.auth.logout).catch();
+        await client.post(endpoints.auth.logout);
         user.value = null;
     }
 
@@ -149,7 +138,7 @@ export const useAuthStore = defineStore('auth', () => {
         view,
         intent,
         login,
-        refresh,
+        refreshUser,
         logout,
         isAuthenticated,
     };

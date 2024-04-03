@@ -135,6 +135,7 @@ export function useStudents(): StudentsState {
 
     async function createStudent(studentData: Student): Promise<void> {
         const endpoint = endpoints.students.index;
+
         await create<Student>(
             endpoint,
             {

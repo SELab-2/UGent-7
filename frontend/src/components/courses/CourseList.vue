@@ -6,15 +6,15 @@ import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 
 /* Props */
-type Props = {
-    detail: boolean;
+interface Props {
+    detail?: boolean;
     courses: Course[] | null;
     cols?: number;
-};
+}
 
 withDefaults(defineProps<Props>(), {
     cols: 4,
-    detail: true
+    detail: true,
 });
 
 /* Composable injections */

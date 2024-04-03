@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type Course } from '@/types/Course.ts';
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import ProjectCard from '@/components/projects/ProjectCard.vue';
 import { useI18n } from 'vue-i18n';
@@ -18,6 +18,11 @@ const props = withDefaults(
 /* Composables */
 const { t } = useI18n();
 const { projects, getProjectsByCourse } = useProject();
+
+/* State */
+const allProjects = computed(() =>
+    props.courses.flatMap((course) => course.projects)
+);
 
 watch(
     () => props.courses,
@@ -42,11 +47,11 @@ watch(
 </script>
 
 <template>
-    <template v-if="courses.length > 0">
+    <template v-if="allProjects.length > 0">
         <div class="grid align-items-stretch">
             <div
                 class="col-12 md:col-6 lg:col-4 xl:col-3"
-                v-for="project in courses.flatMap((course) => course.projects)"
+                v-for="project in allProjects"
                 :key="project.id">
                 <ProjectCard
                     class="h-100"

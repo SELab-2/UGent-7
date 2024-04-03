@@ -46,7 +46,10 @@
           "create": "Creëer vak",
           "name": "Vaknaam",
           "description": "Beschrijving",
-          "year": "Academiejaar"
+          "year": "Academiejaar",
+          "search": {
+
+          }
       }
     },
     "composables": {
@@ -83,7 +86,23 @@
     },
     "toasts": {
         "messages": {
-            "unknown": "Er is een onbekende fout opgetreden."
+            "success": "Succes",
+            "error": "Fout",
+            "unknown": "Er is een onbekende fout opgetreden.",
+            "courses": {
+                "enrollment": {
+                    "success": "Je bent succesvol ingeschreven voor het vak '{0}'.",
+                    "error": "Er is een fout opgetreden tijdens het inschrijven voor het vak '{0}'."
+                },
+                "leave": {
+                    "success": "Je bent succesvol uitgeschreven voor het vak '{0}'.",
+                    "error": "Er is een fout opgetreden tijdens het uitschrijven voor het vak '{0}'."
+                }
+            },
+            "login": {
+                "success": "Je bent succesvol ingelogd.",
+                "error": "Er is een fout opgetreden tijdens het inloggen."
+            }
         }
     },
     "primevue": {
