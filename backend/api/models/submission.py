@@ -49,6 +49,7 @@ class SubmissionFile(models.Model):
         null=False,
     )
 
+    # TODO: Set upload_to (use ypovoli.settings)
     file = models.FileField(blank=False, null=False)
 
 
@@ -77,7 +78,7 @@ class ExtraChecksResult(models.Model):
         on_delete=models.CASCADE,
         related_name="extra_checks_results",
         blank=False,
-        null=False,
+        null=False
     )
 
     # Link to the extra checks that were performed
@@ -86,7 +87,7 @@ class ExtraChecksResult(models.Model):
         on_delete=models.CASCADE,
         related_name="results",
         blank=False,
-        null=False,
+        null=False
     )
 
     # True if the submission passed the extra checks
@@ -102,7 +103,7 @@ class ExtraChecksResult(models.Model):
         on_delete=models.CASCADE,
         related_name="extra_checks_results",
         blank=True,
-        null=True,
+        null=True
     )
 
     # File path for the log file of the extra checks

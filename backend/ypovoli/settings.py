@@ -171,5 +171,5 @@ CELERY_BROKER_URL = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{RE
 CELERY_RESULT_BACKEND = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
 
 FILE_PATHS = {
-    "docker_images": os.path.join(BASE_DIR, "data/docker_images"),
+    "docker_images": "../data/docker_images/",
 }

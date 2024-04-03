@@ -107,15 +107,8 @@ class ExtraCheck(models.Model):
     )
 
     # Whether the log files should be kept and made available to the user
-    log_file = models.BooleanField(
+    show_log = models.BooleanField(
         default=True,
-        blank=False,
-        null=False
-    )
-
-    # Run script
-    # TODO set upload_to
-    run_script = models.FileField(
         blank=False,
         null=False
     )
