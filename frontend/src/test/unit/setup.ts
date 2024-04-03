@@ -6,6 +6,7 @@ import { createPinia } from 'pinia';
 
 import { endpoints } from '@/config/endpoints.ts';
 import { JSDOM } from 'jsdom';
+import { prototype } from 'events';
 
 const baseUrl = 'http://localhost';
 
@@ -493,7 +494,6 @@ beforeAll(() => {
         template: '<p>App</p>',
     });
     app.use(pinia);
-    app.mount('#app');
 });
 
 afterAll(() => {
