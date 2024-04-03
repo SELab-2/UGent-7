@@ -1,5 +1,5 @@
 echo "Installing dependencies..."
-pip install poetry > /dev/null
+pip install poetry > /dev/null 2>&1
 poetry install > /dev/null
 
 echo "Migrating database..."
