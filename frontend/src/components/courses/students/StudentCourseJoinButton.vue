@@ -29,6 +29,8 @@ async function joinCourse(): Promise<void> {
                 props.course.name,
             ]),
         );
+
+        await refreshUser();
     } catch (error) {
         addErrorMessage(
             t('toasts.messages.error'),
