@@ -1,6 +1,9 @@
 import { afterAll, afterEach, beforeAll } from 'vitest';
 import { setupServer } from 'msw/node';
 import { HttpResponse, http } from 'msw';
+const jsdom = require("jsdom");
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
 import { endpoints } from '@/config/endpoints.ts';
 
@@ -459,6 +462,12 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.assistants.index, () => {
         return HttpResponse.json(assistants);
     }),
+    http.post(
+        baseUrl + endpoints.admins.index,
+        () => {
+            return HttpResponse.json(admins);
+        },
+      )
 
     /*
     http.post(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'),
@@ -475,6 +484,20 @@ const server = setupServer(...restHandlers);
 
 beforeAll(() => {
     server.listen({ onUnhandledRequest: 'error' });
+
+    // Set up jdom
+    const { JSDOM } = jsdom;
+    const dom = new JSDOM(`<!DOCTYPE html><div id="ap"></div>`);
+    global.document = dom.window.document;
+    global.window = dom.window;
+
+    // Set up the app with pinia
+    const pinia = createPinia();
+    const app = createApp({
+        template: '<p>App</p>'
+    });
+    app.use(pinia);
+    app.mount('#app');
 });
 
 afterAll(() => {

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useAdmin } from '@/composables/services/admins.service.ts';
+import { User } from '../../types/users/User'
 
 const {
     admins,
@@ -52,5 +53,24 @@ describe('admin', (): void => {
         expect(admins.value?.[0]?.last_login).toEqual(new Date('July 23, 2024 01:15:00'));
         expect(admins.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(admins.value?.[1]?.faculties).toEqual([]);
+    });
+
+    it('create admin', async () => {
+        const exampleAdmin = new User(
+            '101', // id
+            'sample_admin', // username
+            'sample.admin@UGent.be', // email
+            'Sample', // first_name
+            'Admin', // last_name
+            2024, // last_enrolled
+            true, // is_staff
+            ['user'], // roles
+            [], // faculties
+            new Date('April 2, 2023 01:15:00'), // create_time
+            new Date('April 2, 2024 01:15:00') // last_login
+        );
+
+        await createAdmin(exampleAdmin);
+        // TODO: Check if admin was created
     });
 });
