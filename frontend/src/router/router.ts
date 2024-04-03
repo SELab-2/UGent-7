@@ -17,6 +17,7 @@ import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from '@/views/submissions/submissionView.vue';
 import SingleProjectView from '@/views/projects/SingleProjectView.vue';
+import UsersView from '@/views/admins/UsersView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -126,6 +127,7 @@ const routes: RouteRecordRaw[] = [
 
     // Admin
     { path: '/admin/', children: [
+        { path: '', component: AdminView, name: 'admin' },
         { path: 'users', component: UsersView, name: 'admin-users' },
     ]},
 
