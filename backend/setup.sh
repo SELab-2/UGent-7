@@ -1,5 +1,6 @@
-echo "Installing requirements..."
-pip install -r requirements.txt > /dev/null
+echo "Installing dependencies..."
+pip install poetry > /dev/null
+poetry install > /dev/null
 
 echo "Migrating database..."
 python manage.py migrate > /dev/null
