@@ -48,6 +48,7 @@ class DockerImage(models.Model):
     """
 
     # ID should be generated automatically
+    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
 
     # Name of the docker image
     name = models.CharField(
