@@ -22,7 +22,7 @@ class CASViewSet(ViewSet):
         """Attempt to log in. Redirect to our single CAS endpoint."""
         should_echo = request.query_params.get('echo', False)
 
-        if should_echo and settings.DEBUG:
+        if should_echo == "1" and settings.DEBUG:
             client._service_url = 'https://localhost:8080/api/auth/cas/echo'
 
         return redirect(client.get_login_url())
