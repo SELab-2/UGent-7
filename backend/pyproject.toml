@@ -6,7 +6,7 @@ authors = ["Topvennie <vincent@vallaeys.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11.4"
 django = "^5.0.3"
 django-sslserver = "^0.22"
 djangorestframework = "^3.15.1"
@@ -20,6 +20,8 @@ celery = {extras = ["redis"], version = "^5.3.6"}
 django-redis = "^5.4.0"
 gunicorn = "^21.2.0"
 whitenoise = "^6.6.0"
+flake8 = "^7.0.0"
+celery-types = "^0.22.0"
 
 
 [build-system]
