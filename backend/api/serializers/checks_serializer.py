@@ -1,6 +1,7 @@
 from rest_framework import serializers
+
+from ..models.checks import ExtraCheck, StructureCheck
 from ..models.extension import FileExtension
-from ..models.checks import StructureCheck, ExtraCheck
 
 
 class FileExtensionSerializer(serializers.ModelSerializer):
@@ -36,6 +37,5 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
         model = ExtraCheck
         fields = [
             "id",
-            "project",
-            "run_script"
+            "project"
         ]
