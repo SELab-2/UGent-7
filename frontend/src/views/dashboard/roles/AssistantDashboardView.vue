@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ButtonGroup from 'primevue/buttongroup';
 import Title from '@/components/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
 import CourseList from '@/components/courses/CourseList.vue';
@@ -41,11 +40,9 @@ watch(
     <div class="flex justify-content-between align-items-center mb-6">
         <!-- Course list title -->
         <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
-        <!-- Course list controls -->
-        <ButtonGroup class="flex align-items-center">
-            <!-- Academic year selector -->
-            <YearSelector :years="assistant.academic_years" v-model="selectedYear" />
-        </ButtonGroup>
+
+        <!-- Academic year selector -->
+        <YearSelector :years="assistant.academic_years" v-model="selectedYear" />
     </div>
     <!-- Course list body -->
     <CourseList :courses="filteredCourses" />

@@ -94,6 +94,10 @@
             "unknown": "An unknown error has occurred."
         }
     },
+    "validations": {
+        "required": "This field is required",
+        "deadline": "The deadline must be after the start date"
+    },
     "primevue": {
         "startsWith": "Starts with",
         "contains": "Contains",

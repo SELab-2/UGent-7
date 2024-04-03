@@ -61,7 +61,7 @@ watch(
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
-        <!-- Add project button -->
+        <!-- Create project button -->
         <ProjectCreateButton :courses="filteredCourses" />
     </div>
     <!-- Project list body -->

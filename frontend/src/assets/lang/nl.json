@@ -119,6 +119,10 @@
             }
         }
     },
+    "validations": {
+        "required": "Dit veld is verplicht",
+        "deadline": "De deadline moet na de startdatum liggen"
+    },
     "primevue": {
         "accept": "Ja",
         "addRule": "Voeg regel toe",
