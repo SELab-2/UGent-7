@@ -1,6 +1,6 @@
-from django.db import models
-from api.models.group import Group
 from api.models.checks import ExtraCheck
+from api.models.group import Group
+from django.db import models
 
 
 class Submission(models.Model):
@@ -52,6 +52,21 @@ class SubmissionFile(models.Model):
     file = models.FileField(blank=False, null=False)
 
 
+class ErrorTemplates(models.Model):
+    """
+        Model possible error templates for a submission checks result.
+    """
+
+    # ID should be generated automatically
+
+    # Key of the error template message
+    message_key = models.CharField(
+        max_length=256,
+        blank=False,
+        null=False
+    )
+
+
 class ExtraChecksResult(models.Model):
     """Model for the result of extra checks on a submission."""
 
@@ -79,4 +94,20 @@ class ExtraChecksResult(models.Model):
         blank=False,
         null=False,
         default=False
+    )
+
+    # Error message if the submission failed the extra checks
+    error_message = models.ForeignKey(
+        ErrorTemplates,
+        on_delete=models.CASCADE,
+        related_name="extra_checks_results",
+        blank=True,
+        null=True,
+    )
+
+    # File path for the log file of the extra checks
+    log_file = models.CharField(
+        max_length=256,
+        blank=False,
+        null=True
     )
