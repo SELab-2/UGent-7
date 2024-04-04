@@ -1,4 +1,5 @@
-export type Role = 'user' | 'student' | 'assistant' | 'teacher';
+export const roles = ['user', 'student', 'assistant', 'teacher'] as const;
+export type Role = typeof roles[number];
 
 export class User {
     constructor(
@@ -65,5 +66,18 @@ export class User {
             user.is_staff,
             user.roles
         );
+    }
+
+    static blankUser(): User {
+        return new User(
+            '',
+            '',
+            '',
+            '',
+            '',
+            0,
+            false,
+            []
+        )
     }
 }
