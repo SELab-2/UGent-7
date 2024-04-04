@@ -6,6 +6,7 @@ import { createPinia } from 'pinia';
 
 import { endpoints } from '@/config/endpoints.ts';
 import { JSDOM } from 'jsdom';
+import { Student } from '@/types/users/Student';
 
 const baseUrl = 'http://localhost';
 
@@ -153,6 +154,7 @@ const students = [
         last_enrolled: 2023,
         create_time: new Date('July 21, 2024 01:15:00'),
         studentId: null,
+        roles: ['student'],
         courses: ['1', '2', '3'],
         groups: ['0'],
     },
@@ -167,6 +169,7 @@ const students = [
         last_enrolled: 2023,
         create_time: new Date('July 21, 2024 01:15:00'),
         studentId: null,
+        roles: ['student'],
         courses: [],
         groups: [],
     },
@@ -181,6 +184,7 @@ const students = [
         last_enrolled: 2023,
         create_time: new Date('July 21, 2024 01:15:00'),
         studentId: '02012470',
+        roles: ['student'],
         courses: [],
         groups: [],
     },
@@ -195,6 +199,7 @@ const students = [
         last_enrolled: 2023,
         create_time: new Date('July 21, 2024 01:15:00'),
         studentId: null,
+        roles: ['student'],
         courses: [],
         groups: [],
     },
@@ -477,6 +482,13 @@ export const restHandlers = [
         newAssistant.roles = ['assistant']
         assistants.push(newAssistant);
         return HttpResponse.json(assistants);
+    }),
+    http.post(baseUrl + endpoints.students.index, async ({ request }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newStudent = JSON.parse(requestBody);
+        students.push(newStudent);
+        return HttpResponse.json(students);
     }),
 
     /*
