@@ -98,7 +98,10 @@ watch(
                     <div
                         v-for="project in projectsWithDeadline"
                         :key="project.id">
-                        <ProjectCard class="h-100" :project="project" :course="project.course" />
+                        <ProjectCard
+                            class="h-100"
+                            :project="project"
+                            :course="project.course" />
                     </div>
                 </div>
             </div>
