@@ -70,6 +70,21 @@ describe('admin', (): void => {
             new Date('April 2, 2024 01:15:00'), // last_login
         );
 
+        await getAdmins();
+        expect(admins).not.toBeNull();
+        expect(Array.isArray(admins.value)).toBe(true);
+        const prevLength = admins.value?.length || 0;
+
         await createAdmin(exampleAdmin);
+        await getAdmins()
+
+        expect(admins).not.toBeNull();
+        expect(Array.isArray(admins.value)).toBe(true);
+        expect(admins.value?.length).toBe(prevLength + 1);
+
+        expect(admins.value?.[prevLength]?.first_name).toBe('Sample');
+        expect(admins.value?.[prevLength]?.last_name).toBe('Admin');
+        expect(admins.value?.[prevLength]?.email).toBe('sample.admin@UGent.be');
+        expect(admins.value?.[prevLength]?.is_staff).toBe(true);
     });
 });
