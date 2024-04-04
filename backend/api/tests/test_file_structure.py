@@ -1,15 +1,16 @@
-import os
 import json
-from django.utils import timezone
-from django.urls import reverse
-from rest_framework.test import APITestCase
-from api.helpers.check_folder_structure import check_zip_file, parse_zip_file
+import os
+
+from api.logic.check_folder_structure import check_zip_file, parse_zip_file
 from api.models.checks import StructureCheck
-from api.models.extension import FileExtension
 from api.models.course import Course
+from api.models.extension import FileExtension
 from api.models.project import Project
 from authentication.models import User
 from django.conf import settings
+from django.urls import reverse
+from django.utils import timezone
+from rest_framework.test import APITestCase
 
 
 def create_course(id, name, academic_startyear):

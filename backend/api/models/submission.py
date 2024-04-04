@@ -1,7 +1,8 @@
+from api.logic.get_file_path import (get_extra_check_result_file_path,
+                                     get_submission_file_path)
 from api.models.checks import ExtraCheck
 from api.models.group import Group
 from django.db import models
-from ypovoli.settings import FILE_PATHS
 
 
 class Submission(models.Model):
@@ -51,10 +52,12 @@ class SubmissionFile(models.Model):
         null=False,
     )
 
-    # TODO: Set upload_to (use ypovoli.settings)
-    # Better yet set it to a function that moes it to the right space
-    # https://docs.djangoproject.com/en/5.0/ref/models/fields/
-    file = models.FileField(blank=False, null=False)
+    file = models.FileField(
+        upload_to=get_submission_file_path,
+        max_length=265,
+        blank=False,
+        null=False
+    )
 
 
 class ErrorTemplate(models.Model):
@@ -112,7 +115,7 @@ class ExtraChecksResult(models.Model):
 
     # File path for the log file of the extra checks
     log_file = models.FileField(
-        upload_to=FILE_PATHS["log_file"],
+        upload_to=get_extra_check_result_file_path,
         max_length=256,
         blank=False,
         null=True

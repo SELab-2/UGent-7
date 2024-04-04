@@ -1,8 +1,8 @@
+from api.logic.get_file_path import get_extra_check_file_path
 from api.models.docker import DockerImage
 from api.models.extension import FileExtension
 from api.models.project import Project
 from django.db import models
-from ypovoli.settings import FILE_PATHS
 
 
 class StructureCheck(models.Model):
@@ -65,7 +65,7 @@ class ExtraCheck(models.Model):
 
     # File path of the script that runs the checks
     file_path = models.FileField(
-        upload_to=FILE_PATHS["extra_checks"],
+        upload_to=get_extra_check_file_path,
         max_length=256,
         blank=False,
         null=False

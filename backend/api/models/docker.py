@@ -1,6 +1,6 @@
+from api.logic.get_file_path import get_docker_image_file_path
 from authentication.models import User
 from django.db import models
-from ypovoli.settings import FILE_PATHS
 
 
 class DockerImage(models.Model):
@@ -19,7 +19,7 @@ class DockerImage(models.Model):
 
     # File path of the docker image
     file = models.FileField(
-        upload_to=FILE_PATHS["docker_images"],
+        upload_to=get_docker_image_file_path,
         max_length=256,
         blank=False,
         null=False
