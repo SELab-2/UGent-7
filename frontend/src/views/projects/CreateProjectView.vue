@@ -108,7 +108,13 @@ const submitProject = async (): Promise<void> => {
                     <!-- Start date of the project -->
                     <div class="mb-4">
                         <label for="projectStartDate">{{ t('views.projects.start_date') }}</label>
-                        <Calendar id="projectStartDate" v-model="form.startDate" dateFormat="dd-mm-yy" :min-date="new Date()" showIcon />
+                        <Calendar
+                            id="projectStartDate"
+                            v-model="form.startDate"
+                            dateFormat="dd-mm-yy"
+                            :min-date="new Date()"
+                            showIcon
+                        />
                         <ErrorMessage :field="v$.startDate" />
                     </div>
 
@@ -122,7 +128,8 @@ const submitProject = async (): Promise<void> => {
                             :min-date="form.startDate"
                             showTime
                             hourFormat="24"
-                            showIcon />
+                            showIcon
+                        />
                         <ErrorMessage :field="v$.deadline" />
                     </div>
 
@@ -154,7 +161,13 @@ const submitProject = async (): Promise<void> => {
 
                     <!-- Submit button -->
                     <div class="flex justify-end">
-                        <Button :label="t('views.projects.create')" type="submit" icon="pi pi-check" iconPos="right" rounded />
+                        <Button
+                            :label="t('views.projects.create')"
+                            type="submit"
+                            icon="pi pi-check"
+                            iconPos="right"
+                            rounded
+                        />
                     </div>
                 </form>
             </div>

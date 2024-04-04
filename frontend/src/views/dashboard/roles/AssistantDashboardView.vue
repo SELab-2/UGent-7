@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 import { type Assistant } from '@/types/users/Assistant';
+import { User } from '@/types/users/User.ts';
 
 /* Props */
 const props = defineProps<{
@@ -19,9 +20,11 @@ const { t } = useI18n();
 const { courses, getCourseByAssistant } = useCourses();
 
 /* State */
-const selectedYear = ref<number>(props.assistant.getAcademicYear());
+const selectedYear = ref<number>(User.getAcademicYear());
 
-const filteredCourses = computed(() => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? []);
+const filteredCourses = computed(
+    () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
+);
 
 /* Watchers */
 watch(

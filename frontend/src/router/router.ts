@@ -30,51 +30,78 @@ const routes: RouteRecordRaw[] = [
     { path: '/', component: DashboardView, name: 'dashboard' },
 
     // Courses
-    { path: '/courses', children: [
-        { path: '', component: SearchCourseView, name: 'courses' },
-        { path: 'create', component: CreateCourseView, name: 'course-create' },
-        // Single course  
-        { path: ':courseId', children: [
-            { path: '', component: CourseView, name: 'course' },
-            { path: 'edit', component: Dummy, name: 'course-edit' },
-            // Projects
-            { path: 'projects', children: [
-                { path: '', component: Dummy, name: 'projects' },
-                { path: 'create', component: CreateProjectView, name: 'project-create' },
-                // Single project
-                { path: ':projectId', children: [
-                    { path: '', component: ProjectView, name: 'project'},
-                    { path: 'edit', component: Dummy, name: 'project-edit' },
-                    { path: 'groups', component: Dummy, name: 'project-groups' },
-                    { path: 'submit', component: Dummy, name: 'project-submit' },
-                ]}
-            ]},
-        ]},
-    ]},
+    {
+        path: '/courses',
+        children: [
+            { path: '', component: SearchCourseView, name: 'courses' },
+            { path: 'create', component: CreateCourseView, name: 'course-create' },
+            // Single course
+            {
+                path: ':courseId',
+                children: [
+                    { path: '', component: CourseView, name: 'course' },
+                    { path: 'edit', component: Dummy, name: 'course-edit' },
+                    // Projects
+                    {
+                        path: 'projects',
+                        children: [
+                            { path: '', component: Dummy, name: 'projects' },
+                            { path: 'create', component: CreateProjectView, name: 'project-create' },
+                            // Single project
+                            {
+                                path: ':projectId',
+                                children: [
+                                    { path: '', component: ProjectView, name: 'project' },
+                                    { path: 'edit', component: Dummy, name: 'project-edit' },
+                                    { path: 'groups', component: Dummy, name: 'project-groups' },
+                                    { path: 'submit', component: Dummy, name: 'project-submit' },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
 
     // Calendar
     { path: '/calendar', component: CalendarView, name: 'calendar' },
 
     // Users
-    { path: '/users', children: [
-        { path: ':id', component: Dummy, name: 'user' },
-        { path: 'students', children: [
-            { path: '', component: Dummy, name: 'students' },
-            { path: ':id', component: Dummy, name: 'student' },
-        ]},
-        { path: 'admins', children: [
-            { path: '', component: Dummy, name: 'admins' },
-            { path: ':id', component: Dummy, name: 'admin' },
-        ]},
-        { path: 'teachers', children: [
-            { path: '', component: Dummy, name: 'teachers' },
-            { path: ':id', component: Dummy, name: 'teacher' },
-        ]},
-        { path: 'assistants', children: [
-            { path: '', component: Dummy, name: 'assistants' },
-            { path: ':id', component: Dummy, name: 'assistant' },
-        ]},
-    ]},
+    {
+        path: '/users',
+        children: [
+            { path: ':id', component: Dummy, name: 'user' },
+            {
+                path: 'students',
+                children: [
+                    { path: '', component: Dummy, name: 'students' },
+                    { path: ':id', component: Dummy, name: 'student' },
+                ],
+            },
+            {
+                path: 'admins',
+                children: [
+                    { path: '', component: Dummy, name: 'admins' },
+                    { path: ':id', component: Dummy, name: 'admin' },
+                ],
+            },
+            {
+                path: 'teachers',
+                children: [
+                    { path: '', component: Dummy, name: 'teachers' },
+                    { path: ':id', component: Dummy, name: 'teacher' },
+                ],
+            },
+            {
+                path: 'assistants',
+                children: [
+                    { path: '', component: Dummy, name: 'assistants' },
+                    { path: ':id', component: Dummy, name: 'assistant' },
+                ],
+            },
+        ],
+    },
 
     // Faculties
     { path: '/faculties', component: Dummy, name: 'faculties' },
@@ -85,12 +112,10 @@ const routes: RouteRecordRaw[] = [
     { path: '/notifications/:id', component: Dummy, name: 'notification' },
 
     // Authentication
-    { path: '/auth/', children: [
-        { path: 'login', component: LoginView, name: 'login' },
-    ]},
+    { path: '/auth/', children: [{ path: 'login', component: LoginView, name: 'login' }] },
 
     // Page not found: redirect to dashboard
-    { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } }
+    { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } },
 ];
 
 const router = createRouter({

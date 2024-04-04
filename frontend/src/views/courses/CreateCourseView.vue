@@ -15,6 +15,7 @@ import { useCourses } from '@/composables/services/courses.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
+import { User } from '@/types/users/User.ts';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -28,7 +29,7 @@ const { createCourse } = useCourses();
 const form = reactive({
     name: '',
     description: '',
-    year: user.value !== null && user.value !== undefined ? new Date(user.value.getAcademicYear(new Date()), 0, 1) : new Date(),
+    year: user.value !== null ? new Date(User.getAcademicYear(new Date()), 0, 1) : new Date(),
 });
 
 // Define validation rules for each form field
@@ -91,7 +92,9 @@ const submitCourse = async (): Promise<void> => {
                         <label for="courseYear">{{ t('views.courses.year') }}</label>
                         <Calendar id="courseYear" v-model="form.year" view="year" dateFormat="yy" showIcon>
                             <template #footer>
-                                <div style="text-align: center">{{ form.year.getFullYear() }} - {{ form.year.getFullYear() + 1 }}</div>
+                                <div style="text-align: center">
+                                    {{ form.year.getFullYear() }} - {{ form.year.getFullYear() + 1 }}
+                                </div>
                             </template>
                         </Calendar>
                         <ErrorMessage :field="v$.year" />
@@ -99,7 +102,13 @@ const submitCourse = async (): Promise<void> => {
 
                     <!-- Submit button -->
                     <div class="flex justify-end">
-                        <Button :label="t('views.courses.create')" type="submit" icon="pi pi-check" iconPos="right" rounded />
+                        <Button
+                            :label="t('views.courses.create')"
+                            type="submit"
+                            icon="pi pi-check"
+                            iconPos="right"
+                            rounded
+                        />
                     </div>
                 </form>
             </div>

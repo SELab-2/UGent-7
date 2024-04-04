@@ -11,6 +11,7 @@ import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
+import { User } from '@/types/users/User.ts';
 
 /* Props */
 const props = defineProps<{
@@ -22,9 +23,11 @@ const { t } = useI18n();
 const { courses, getCoursesByTeacher } = useCourses();
 
 /* State */
-const selectedYear = ref<number>(props.teacher.getAcademicYear());
+const selectedYear = ref<number>(User.getAcademicYear());
 
-const filteredCourses = computed(() => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? []);
+const filteredCourses = computed(
+    () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
+);
 
 /* Watchers */
 watch(
@@ -50,7 +53,12 @@ watch(
 
             <!-- Create course button -->
             <RouterLink :to="{ name: 'course-create' }">
-                <Button :icon="PrimeIcons.PLUS" icon-pos="right" class="custom-button" style="height: 51px; width: 51px" />
+                <Button
+                    :icon="PrimeIcons.PLUS"
+                    icon-pos="right"
+                    class="custom-button"
+                    style="height: 51px; width: 51px"
+                />
             </RouterLink>
         </ButtonGroup>
     </div>

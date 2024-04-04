@@ -31,17 +31,24 @@ const createProjectForCourse = (courseId: string): void => {
         :icon="PrimeIcons.PLUS"
         icon-pos="right"
         class="custom-button"
-        @click="displayCourseSelection = true" />
+        @click="displayCourseSelection = true"
+    />
     <!-- Dialog to select the course you want to create a project for -->
     <Dialog
         v-model:visible="displayCourseSelection"
         modal
         :draggable="false"
         :contentStyle="{ width: '50vw' }"
-        :header="t('views.dashboard.select_course')">
+        :header="t('views.dashboard.select_course')"
+    >
         <!-- List of courses to select from-->
         <div v-if="props.courses && props.courses.length > 0">
-            <div v-for="course in props.courses" :key="course.id" class="course-item" @click="createProjectForCourse(course.id)">
+            <div
+                v-for="course in props.courses"
+                :key="course.id"
+                class="course-item"
+                @click="createProjectForCourse(course.id)"
+            >
                 <span class="course-name">{{ course.name }}</span>
             </div>
         </div>
