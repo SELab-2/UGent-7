@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useAssistant } from '@/composables/services/assistant.service.ts';
+import { User } from '../../types/users/User';
+import { Assistant } from '@/types/users/Assistant';
 
 const {
     assistants,
@@ -90,5 +92,39 @@ describe('assistant', (): void => {
         expect(assistants.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(assistants.value?.[1]?.courses).toEqual([]);
         expect(assistants.value?.[1]?.faculties).toEqual([]);
+    });
+
+    it('create assistant', async () => {
+        const exampleAssistant = new Assistant(
+            '102',
+            'sample_assistant',
+            'sample.assistant@UGent.be',
+            'Sample',
+            'Assistant',
+            2023,
+            true,
+            [],
+            [],
+            [],
+            new Date('April 2, 2023 01:15:00'),
+            new Date('April 2, 2024 01:15:00')
+        );
+
+        await getAssistants();
+        expect(assistants).not.toBeNull();
+        expect(Array.isArray(assistants.value)).toBe(true);
+        const prevLength = assistants.value?.length || 0;
+
+        await createAssistant(exampleAssistant);
+        await getAssistants()
+
+        expect(assistants).not.toBeNull();
+        expect(Array.isArray(assistants.value)).toBe(true);
+        expect(assistants.value?.length).toBe(prevLength + 1);
+
+        expect(assistants.value?.[prevLength]?.first_name).toBe('Sample');
+        expect(assistants.value?.[prevLength]?.last_name).toBe('Assistant');
+        expect(assistants.value?.[prevLength]?.email).toBe('sample.assistant@UGent.be');
+        expect(assistants.value?.[prevLength]?.roles).toContain('assistant');
     });
 });
