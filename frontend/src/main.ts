@@ -3,7 +3,7 @@ import router from '@/router/router';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import Ripple from 'primevue/ripple';
-import { i18n } from '@/composables/i18n';
+import { i18n } from '@/config/i18n.ts';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 

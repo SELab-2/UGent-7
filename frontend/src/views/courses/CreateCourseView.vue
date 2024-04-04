@@ -67,7 +67,13 @@ const submitCourse = async (): Promise<void> => {
 
                     <!-- Submit button -->
                     <div class="flex justify-end">
-                        <Button :label="t('views.courses.create')" type="submit" icon="pi pi-check" iconPos="right" rounded />
+                        <Button
+                            :label="t('views.courses.create')"
+                            type="submit"
+                            icon="pi pi-check"
+                            iconPos="right"
+                            rounded
+                        />
                     </div>
                 </form>
             </div>

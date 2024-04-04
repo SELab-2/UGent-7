@@ -6,7 +6,7 @@ const {
     faculties,
     faculty,
     getFacultyByID,
-    getFacultys,
+    getFaculties,
 
     createFaculty,
     deleteFaculty,
@@ -20,7 +20,7 @@ describe('faculty', (): void => {
     });
 
     it('gets faculties data', async () => {
-        await getFacultys();
+        await getFaculties();
         expect(faculties).not.toBeNull();
         expect(Array.isArray(faculties.value)).toBe(true);
         expect(faculties.value?.length).toBe(2);

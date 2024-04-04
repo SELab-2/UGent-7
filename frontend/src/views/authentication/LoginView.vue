@@ -21,12 +21,20 @@ const { t } = useI18n();
                     {{ t('views.login.subtitle') }}
                 </div>
                 <a :href="endpoints.auth.login">
-                    <Button icon-pos="right" :icon="PrimeIcons.ARROW_RIGHT" :label="t('views.login.button')" severity="secondary" />
+                    <Button
+                        icon-pos="right"
+                        :icon="PrimeIcons.ARROW_RIGHT"
+                        :label="t('views.login.button')"
+                        severity="secondary"
+                    />
                 </a>
             </div>
             <div class="w-7 relative surface-100 p-4">
                 <img :src="Illustration" :alt="t('views.login.illustration')" class="w-15rem" />
-                <div class="absolute bottom-0 right-0 bg-primary text-white p-4 w-20rem" style="transform: translateY(50%)">
+                <div
+                    class="absolute bottom-0 right-0 bg-primary text-white p-4 w-20rem"
+                    style="transform: translateY(50%)"
+                >
                     <h1 class="mt-0">
                         {{ t('views.login.card.title') }}
                     </h1>

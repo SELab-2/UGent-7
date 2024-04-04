@@ -410,14 +410,18 @@ export const restHandlers = [
         const project = projects.find((x) => x.id === params.id);
         const groupIds = project !== null && project !== undefined ? project.groups : [];
         const submissionIds = project !== null && project !== undefined ? project.submissions : [];
-        const subGroupIds = Array.from(new Set(submissions.filter((x) => submissionIds.includes(x.id)).map((x) => x.group)));
+        const subGroupIds = Array.from(
+            new Set(submissions.filter((x) => submissionIds.includes(x.id)).map((x) => x.group)),
+        );
 
         // Filter submissions for each subgroup and get the submission with the highest number
         const subgroupSubmissions = subGroupIds.map((groupId) => {
             const submissionsForGroup = submissions.filter((submission) => submission.group === groupId);
             if (submissionsForGroup.length > 0) {
                 return submissionsForGroup.reduce((maxSubmission, currentSubmission) => {
-                    return currentSubmission.submission_number > maxSubmission.submission_number ? currentSubmission : maxSubmission;
+                    return currentSubmission.submission_number > maxSubmission.submission_number
+                        ? currentSubmission
+                        : maxSubmission;
                 });
             } else {
                 return null;

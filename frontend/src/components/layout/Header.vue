@@ -62,12 +62,19 @@ const items = computed(() => [
                     <div>
                         <!-- User information -->
                         <template v-if="isAuthenticated && user">
-                            <RouterLink :to="{ name: 'logout' }" class="text-white"> Ingelogd als {{ user.getFullName() }} </RouterLink>
+                            <RouterLink :to="{ name: 'logout' }" class="text-white">
+                                Ingelogd als {{ user.getFullName() }}
+                            </RouterLink>
                         </template>
                         <!-- Login button -->
                         <template v-else>
                             <RouterLink :to="{ name: 'login' }">
-                                <Button icon="pi pi-unlock" :label="t('layout.header.login')" severity="secondary" class="text-sm" />
+                                <Button
+                                    icon="pi pi-unlock"
+                                    :label="t('layout.header.login')"
+                                    severity="secondary"
+                                    class="text-sm"
+                                />
                             </RouterLink>
                         </template>
                     </div>
@@ -78,7 +85,8 @@ const items = computed(() => [
                 <template v-if="isAuthenticated">
                     <RouterLink :to="{ name: item.route }" v-for="item in items" :key="item.route" class="nav-item">
                         <div
-                            class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium">
+                            class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium"
+                        >
                             <span class="mr-2" :class="'pi pi-' + item.icon" />
                             {{ item.label }}
                         </div>

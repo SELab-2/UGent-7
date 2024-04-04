@@ -1,13 +1,17 @@
 import { Course } from '@/types/Course.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId } from '@/composables/services/helpers.ts';
+import { get, getList, create, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
+import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
+import { type Filter } from '@/types/filter/Filter.ts';
 
 interface CoursesState {
+    pagination: Ref<PaginatorResponse<Course> | null>;
     courses: Ref<Course[] | null>;
     course: Ref<Course | null>;
     getCourseByID: (id: string) => Promise<void>;
     getCourses: () => Promise<void>;
+    searchCourses: (filters: Filter, page: number, pageSize: number) => Promise<void>;
     getCoursesByStudent: (studentId: string) => Promise<void>;
     getCoursesByTeacher: (teacherId: string) => Promise<void>;
     getCourseByAssistant: (assistantId: string) => Promise<void>;
@@ -17,6 +21,7 @@ interface CoursesState {
 }
 
 export function useCourses(): CoursesState {
+    const pagination = ref<PaginatorResponse<Course> | null>(null);
     const courses = ref<Course[] | null>(null);
     const course = ref<Course | null>(null);
 
@@ -28,6 +33,11 @@ export function useCourses(): CoursesState {
     async function getCourses(): Promise<void> {
         const endpoint = endpoints.courses.index;
         await getList<Course>(endpoint, courses, Course.fromJSON);
+    }
+
+    async function searchCourses(filters: Filter, page: number, pageSize: number): Promise<void> {
+        const endpoint = endpoints.courses.search;
+        await getPaginatedList<Course>(endpoint, filters, page, pageSize, pagination, Course.fromJSON);
     }
 
     async function getCoursesByStudent(studentId: string): Promise<void> {
@@ -70,10 +80,12 @@ export function useCourses(): CoursesState {
     }
 
     return {
+        pagination,
         courses,
         course,
 
         getCourseByID,
+        searchCourses,
         getCourses,
         getCoursesByStudent,
         getCoursesByTeacher,

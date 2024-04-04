@@ -12,6 +12,7 @@ import { type RouteRecordRaw, createWebHistory, createRouter } from 'vue-router'
 import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts';
 import { LogoutGuard } from '@/router/guards/logout.guard.ts';
 import ProjectView from '@/views/projects/ProjectView.vue';
+import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -34,7 +35,7 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/courses',
         children: [
-            { path: '', component: Dummy, name: 'courses' },
+            { path: '', component: SearchCourseView, name: 'courses' },
             {
                 path: 'create',
                 component: CreateCourseView,
