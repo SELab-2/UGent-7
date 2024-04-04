@@ -29,7 +29,6 @@ class CourseViewSet(viewsets.ModelViewSet):
     """Actions for general course logic"""
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    pagination_class = BasicPagination
     permission_classes = [IsAdminUser | CoursePermission]
 
     def create(self, request: Request, *_):
@@ -50,6 +49,8 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     @action(detail=False)
     def search(self, request: Request) -> Response:
+        self.pagination_class = BasicPagination
+
         # Extract filter params
         search = request.query_params.get("search", "")
         years = request.query_params.getlist("years[]")
