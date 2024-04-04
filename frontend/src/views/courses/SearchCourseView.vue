@@ -5,45 +5,56 @@ import InputText from 'primevue/inputtext';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import Checkbox from 'primevue/checkbox';
+import Paginator from 'primevue/paginator';
 import Title from '@/components/layout/Title.vue';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import CourseList from '@/components/courses/CourseList.vue';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useFaculty } from '@/composables/services/faculties.service.ts';
-import { type Filters } from '@/types/Pagination.ts';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
+import { useFilter } from '@/composables/filters/filter.ts';
+import { usePaginator } from '@/composables/filters/paginator.ts';
 import { watchDebounced } from '@vueuse/core';
-import { User } from '@/types/users/User.ts';
+import { COURSE_FILTER } from '@/types/filter/Filter.ts';
 
 /* Composable injections */
+const { t } = useI18n();
 const { user } = storeToRefs(useAuthStore());
 const { faculties, getFaculties } = useFaculty();
 const { pagination, searchCourses } = useCourses();
-
-/* State */
-const filters = ref<Filters>({
-    search: '',
-    faculties: [],
-    years: [User.getAcademicYear()],
-});
-
-/* Watch the filters to reset the data */
-watch(filters, () => (pagination.value = null), { deep: true });
-
-/* Watch the filters to search for courses */
-watchDebounced(
-    filters,
-    async () => {
-        await searchCourses(filters.value);
-    },
-    { deep: true, immediate: true, debounce: 500 },
-);
+const { paginate, page, first, pageSize } = usePaginator();
+const { filter } = useFilter(COURSE_FILTER);
 
 /* Fetch the faculties */
 onMounted(async () => {
     await getFaculties();
+
+    /* Reset current page on filter changes */
+    watch(
+        filter,
+        () => {
+            paginate(0);
+            pagination.value = null;
+        },
+        { deep: true },
+    );
+
+    /* Search courses on page change */
+    watch(page, async () => {
+        await searchCourses(filter.value, page.value, pageSize.value);
+    });
+
+    /* Search courses on filter change */
+    watchDebounced(
+        filter,
+        async () => {
+            await searchCourses(filter.value, page.value, pageSize.value);
+        },
+        { debounce: 500, immediate: true, deep: true },
+    );
 });
 </script>
 
@@ -56,7 +67,7 @@ onMounted(async () => {
                         <IconField iconPosition="left">
                             <InputText
                                 placeholder="Zoek een vak op naam"
-                                v-model="filters.search"
+                                v-model="filter.search"
                                 class="w-full" />
                             <InputIcon class="pi pi-search"></InputIcon>
                         </IconField>
@@ -67,7 +78,7 @@ onMounted(async () => {
                             :key="faculty.id"
                             class="flex align-items-center mb-2">
                             <Checkbox
-                                v-model="filters.faculties"
+                                v-model="filter.faculties"
                                 :inputId="faculty.id"
                                 name="faculties"
                                 :value="faculty.id" />
@@ -82,7 +93,7 @@ onMounted(async () => {
                             :key="year"
                             class="flex align-items-center mb-2">
                             <Checkbox
-                                v-model="filters.years"
+                                v-model="filter.years"
                                 :inputId="year.toString()"
                                 name="faculties"
                                 :value="year" />
@@ -94,11 +105,22 @@ onMounted(async () => {
                 </Accordion>
             </div>
             <div class="col-12 xl:col-9">
-                <Title class="mb-5"> Zoek een vak </Title>
+                <Title>
+                    {{ t('views.courses.search.title') }}
+                </Title>
+                <p class="mt-3" v-if="pagination">
+                    {{ t('views.courses.search.results', [pagination.count]) }}
+                </p>
                 <CourseList
+                    class="mt-3"
                     :courses="pagination?.results ?? null"
                     :cols="3"
                     :detail="false" />
+                <Paginator
+                    :rows="pageSize"
+                    :total-records="pagination?.count"
+                    :first="first"
+                    @update:first="paginate($event)" />
             </div>
         </div>
     </BaseLayout>

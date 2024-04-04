@@ -1,9 +1,10 @@
 import { type AxiosError } from 'axios';
-import { client } from '@/composables/axios.ts';
+import { client } from '@/config/axios.ts';
 import { type Ref } from 'vue';
 import { useMessagesStore } from '@/store/messages.store.ts';
-import { i18n } from '../i18n';
-import { type Filters, type PaginationResponse } from '@/types/Pagination.ts';
+import { i18n } from '@/config/i18n.ts';
+import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
+import { type Filter } from '@/types/filter/Filter.ts';
 
 /**
  * Get an item given its ID.
@@ -115,6 +116,7 @@ export async function getList<T>(
     } catch (error: any) {
         processError(error);
         console.error(error); // Log the error for debugging
+        ref.value = []; // Set the ref to an empty array
         throw error; // Re-throw the error to the caller
     }
 }
@@ -123,19 +125,27 @@ export async function getList<T>(
  * Get a paginated list of items.
  *
  * @param endpoint
- * @param params
+ * @param filters
+ * @param page
+ * @param pageSize
  * @param pagination
  * @param fromJson
  */
 export async function getPaginatedList<T>(
     endpoint: string,
-    params: Filters,
-    pagination: Ref<PaginationResponse<T> | null>,
+    filters: Filter,
+    page: number,
+    pageSize: number,
+    pagination: Ref<PaginatorResponse<T> | null>,
     fromJson: (data: any) => T,
 ): Promise<void> {
     try {
         const response = await client.get(endpoint, {
-            params,
+            params: {
+                ...filters,
+                page,
+                page_size: pageSize,
+            },
         });
 
         pagination.value = {
@@ -145,6 +155,14 @@ export async function getPaginatedList<T>(
     } catch (error: any) {
         processError(error);
         console.error(error); // Log the error for debugging
+
+        pagination.value = {
+            // Set the ref to an empty array
+            ...error.data,
+            count: 0,
+            results: [],
+        };
+
         throw error; // Re-throw the error to the caller
     }
 }
@@ -174,6 +192,7 @@ export async function getListMerged<T>(
         } catch (error: any) {
             processError(error);
             console.error(error); // Log the error for debugging
+            ref.value = []; // Set the ref to an empty array
             throw error; // Re-throw the error to the caller
         }
     }

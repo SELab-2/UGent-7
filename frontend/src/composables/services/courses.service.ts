@@ -8,15 +8,20 @@ import {
     deleteId,
     getPaginatedList,
 } from '@/composables/services/helpers.ts';
-import { type Filters, type PaginationResponse } from '@/types/Pagination.ts';
+import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
+import { type Filter } from '@/types/filter/Filter.ts';
 
 interface CoursesState {
-    pagination: Ref<PaginationResponse<Course> | null>;
+    pagination: Ref<PaginatorResponse<Course> | null>;
     courses: Ref<Course[] | null>;
     course: Ref<Course | null>;
     getCourseByID: (id: string) => Promise<void>;
     getCourses: () => Promise<void>;
-    searchCourses: (filters: Filters) => Promise<void>;
+    searchCourses: (
+        filters: Filter,
+        page: number,
+        pageSize: number,
+    ) => Promise<void>;
     getCoursesByStudent: (studentId: string) => Promise<void>;
     getCoursesByTeacher: (teacherId: string) => Promise<void>;
     getCourseByAssistant: (assistantId: string) => Promise<void>;
@@ -26,7 +31,7 @@ interface CoursesState {
 }
 
 export function useCourses(): CoursesState {
-    const pagination = ref<PaginationResponse<Course> | null>(null);
+    const pagination = ref<PaginatorResponse<Course> | null>(null);
     const courses = ref<Course[] | null>(null);
     const course = ref<Course | null>(null);
 
@@ -40,11 +45,17 @@ export function useCourses(): CoursesState {
         await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
-    async function searchCourses(filters: Filters): Promise<void> {
+    async function searchCourses(
+        filters: Filter,
+        page: number,
+        pageSize: number,
+    ): Promise<void> {
         const endpoint = endpoints.courses.search;
         await getPaginatedList<Course>(
             endpoint,
             filters,
+            page,
+            pageSize,
             pagination,
             Course.fromJSON,
         );

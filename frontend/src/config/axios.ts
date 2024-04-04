@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookie from 'js-cookie';
-import { i18n } from '@/composables/i18n';
+import { i18n } from '@/config/i18n.ts';
 
 const { locale } = i18n.global;
 

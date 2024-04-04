@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { type Role, User } from '@/types/users/User.ts';
 import { endpoints } from '@/config/endpoints.ts';
 import { useMessagesStore } from '@/store/messages.store.ts';
-import { client } from '@/composables/axios.ts';
+import { client } from '@/config/axios.ts';
 import { useLocalStorage } from '@vueuse/core';
 import { computed, ref, watch } from 'vue';
 import { useAssistant } from '@/composables/services/assistant.service';
