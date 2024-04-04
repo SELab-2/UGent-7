@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
 
 const {
@@ -7,11 +7,8 @@ const {
     project,
     getProjectByID,
     getProjectsByCourse,
-    getProjectsByCourseAndDeadline,
     getProjectsByStudent,
 
-    createProject,
-    deleteProject,
 } = useProject();
 
 describe('project', (): void => {

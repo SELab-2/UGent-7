@@ -48,6 +48,10 @@
           "description": "Beschrijving",
           "year": "Academiejaar",
           "search": {
+              "search": "Zoeken",
+              "faculty": "Faculteit",
+              "year": "Academiejaar",
+              "placeholder": "Zoek een vak op naam",
               "title": "Zoek een vak",
               "results": "{0} vakken gevonden voor ingestelde filters"
           }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useStructureCheck } from '@/composables/services/structure_check.service.ts';
 
 const {
@@ -8,8 +8,6 @@ const {
     getStructureCheckByID,
     getStructureCheckByProject,
 
-    createStructureCheck,
-    deleteStructureCheck,
 } = useStructureCheck();
 
 describe('structureCheck', (): void => {

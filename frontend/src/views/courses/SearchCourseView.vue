@@ -63,13 +63,13 @@ onMounted(async () => {
         <div class="grid">
             <div class="col-12 xl:col-3">
                 <Accordion :active-index="[0]" multiple>
-                    <AccordionTab header="Zoeken">
+                    <AccordionTab :header="t('views.courses.search.search')">
                         <IconField iconPosition="left">
-                            <InputText placeholder="Zoek een vak op naam" v-model="filter.search" class="w-full" />
+                            <InputText :placeholder="t('views.courses.search.placeholder')" v-model="filter.search" class="w-full" />
                             <InputIcon class="pi pi-search"></InputIcon>
                         </IconField>
                     </AccordionTab>
-                    <AccordionTab header="Faculteit" v-if="faculties">
+                    <AccordionTab :header="t('views.courses.search.faculty')" v-if="faculties">
                         <div v-for="faculty in faculties" :key="faculty.id" class="flex align-items-center mb-2">
                             <Checkbox
                                 v-model="filter.faculties"
@@ -80,7 +80,7 @@ onMounted(async () => {
                             <label :for="faculty.id" class="ml-2 text-sm">{{ faculty.name }}</label>
                         </div>
                     </AccordionTab>
-                    <AccordionTab header="Academiejaar" v-if="user">
+                    <AccordionTab :header="t('views.courses.search.year')" v-if="user">
                         <div v-for="year in user.academic_years" :key="year" class="flex align-items-center mb-2">
                             <Checkbox
                                 v-model="filter.years"
