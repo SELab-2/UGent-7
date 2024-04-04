@@ -11,18 +11,9 @@ interface SubmissionStatusState {
 export function useSubmissionStatus(): SubmissionStatusState {
     const submissionStatus = ref<SubmissionStatus | null>(null);
 
-    async function getSubmissionStatusByProject(
-        projectId: string,
-    ): Promise<void> {
-        const endpoint = endpoints.submissions.status.replace(
-            '{projectId}',
-            projectId,
-        );
-        await get<SubmissionStatus>(
-            endpoint,
-            submissionStatus,
-            SubmissionStatus.fromJSON,
-        );
+    async function getSubmissionStatusByProject(projectId: string): Promise<void> {
+        const endpoint = endpoints.submissions.status.replace('{projectId}', projectId);
+        await get<SubmissionStatus>(endpoint, submissionStatus, SubmissionStatus.fromJSON);
     }
 
     return {

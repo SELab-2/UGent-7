@@ -25,17 +25,12 @@ async function joinCourse(): Promise<void> {
 
         addSuccessMessage(
             t('toasts.messages.success'),
-            t('toasts.messages.courses.enrollment.success', [
-                props.course.name,
-            ]),
+            t('toasts.messages.courses.enrollment.success', [props.course.name]),
         );
 
         await refreshUser();
     } catch (error) {
-        addErrorMessage(
-            t('toasts.messages.error'),
-            t('toasts.messages.courses.enrollment.error', [props.course.name]),
-        );
+        addErrorMessage(t('toasts.messages.error'), t('toasts.messages.courses.enrollment.error', [props.course.name]));
     }
 }
 
@@ -53,10 +48,7 @@ async function leaveCourse(): Promise<void> {
 
         await refreshUser();
     } catch (error) {
-        addErrorMessage(
-            t('toasts.messages.error'),
-            t('toasts.messages.courses.leave.error', [props.course.name]),
-        );
+        addErrorMessage(t('toasts.messages.error'), t('toasts.messages.courses.leave.error', [props.course.name]));
     }
 }
 </script>
@@ -69,7 +61,8 @@ async function leaveCourse(): Promise<void> {
         icon="pi pi-arrow-right"
         @click="joinCourse"
         v-if="!student.hasCourse(course)"
-        link />
+        link
+    />
     <Button
         class="text-sm p-0"
         label="Uitschrijven"
@@ -77,7 +70,8 @@ async function leaveCourse(): Promise<void> {
         icon="pi pi-arrow-right"
         @click="leaveCourse"
         v-else
-        link />
+        link
+    />
 </template>
 
 <style scoped lang="scss"></style>

@@ -25,10 +25,7 @@ const { courses, getCoursesByStudent } = useCourses();
 const selectedYear = ref<number>(User.getAcademicYear());
 
 const filteredCourses = computed(
-    () =>
-        courses.value?.filter(
-            (course) => course.academic_startyear === selectedYear.value,
-        ) ?? [],
+    () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
 );
 
 /* Watchers */
@@ -50,15 +47,14 @@ watch(
         <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
         <!-- Course list controls -->
         <ButtonGroup class="flex align-items-center">
-            <YearSelector
-                :years="student.academic_years"
-                v-model="selectedYear" />
+            <YearSelector :years="student.academic_years" v-model="selectedYear" />
             <RouterLink :to="{ name: 'courses' }">
                 <Button
                     :icon="PrimeIcons.PLUS"
                     icon-pos="right"
                     class="custom-button"
-                    style="height: 51px; width: 51px" />
+                    style="height: 51px; width: 51px"
+                />
             </RouterLink>
         </ButtonGroup>
     </div>
@@ -70,9 +66,7 @@ watch(
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
         <!-- Project list controls -->
         <ButtonGroup>
-            <YearSelector
-                :years="student.academic_years"
-                v-model="selectedYear" />
+            <YearSelector :years="student.academic_years" v-model="selectedYear" />
         </ButtonGroup>
     </div>
     <!-- Project list body -->

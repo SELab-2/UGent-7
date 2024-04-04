@@ -22,12 +22,8 @@ describe('admin', (): void => {
         expect(admin.value?.first_name).toBe('Tybo');
         expect(admin.value?.last_name).toBe('Verslype');
         expect(admin.value?.last_enrolled).toBe(2023);
-        expect(admin.value?.last_login).toEqual(
-            new Date('July 23, 2024 01:15:00'),
-        );
-        expect(admin.value?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(admin.value?.last_login).toEqual(new Date('July 23, 2024 01:15:00'));
+        expect(admin.value?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(admin.value?.faculties).toEqual([]);
     });
 
@@ -43,12 +39,8 @@ describe('admin', (): void => {
         expect(admins.value?.[0]?.first_name).toBe('Tybo');
         expect(admins.value?.[0]?.last_name).toBe('Verslype');
         expect(admins.value?.[0]?.last_enrolled).toBe(2023);
-        expect(admins.value?.[0]?.last_login).toEqual(
-            new Date('July 23, 2024 01:15:00'),
-        );
-        expect(admins.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(admins.value?.[0]?.last_login).toEqual(new Date('July 23, 2024 01:15:00'));
+        expect(admins.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(admins.value?.[0]?.faculties).toEqual([]);
 
         expect(admins.value?.[1]?.username).toBe('simmig');
@@ -57,12 +49,8 @@ describe('admin', (): void => {
         expect(admins.value?.[1]?.first_name).toBe('Simon');
         expect(admins.value?.[1]?.last_name).toBe('Mignolet');
         expect(admins.value?.[1]?.last_enrolled).toBe(2023);
-        expect(admins.value?.[0]?.last_login).toEqual(
-            new Date('July 23, 2024 01:15:00'),
-        );
-        expect(admins.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(admins.value?.[0]?.last_login).toEqual(new Date('July 23, 2024 01:15:00'));
+        expect(admins.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(admins.value?.[1]?.faculties).toEqual([]);
     });
 });

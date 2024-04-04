@@ -13,11 +13,7 @@ import { type Filter } from '@/types/filter/Filter.ts';
  * @param ref
  * @param fromJson
  */
-export async function get<T>(
-    endpoint: string,
-    ref: Ref<T | null>,
-    fromJson: (data: any) => T,
-): Promise<void> {
+export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
     try {
         const response = await client.get(endpoint);
         ref.value = fromJson(response.data);
@@ -59,11 +55,7 @@ export async function create<T>(
  * @param ref
  * @param fromJson
  */
-export async function deleteId<T>(
-    endpoint: string,
-    ref: Ref<T | null>,
-    fromJson: (data: any) => T,
-): Promise<void> {
+export async function deleteId<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
     try {
         const response = await client.delete(endpoint);
         ref.value = fromJson(response.data);
@@ -105,11 +97,7 @@ export async function deleteIdWithData<T>(
  * @param ref
  * @param fromJson
  */
-export async function getList<T>(
-    endpoint: string,
-    ref: Ref<T[] | null>,
-    fromJson: (data: any) => T,
-): Promise<void> {
+export async function getList<T>(endpoint: string, ref: Ref<T[] | null>, fromJson: (data: any) => T): Promise<void> {
     try {
         const response = await client.get(endpoint);
         ref.value = response.data.map((data: T) => fromJson(data));
@@ -185,9 +173,7 @@ export async function getListMerged<T>(
     for (const endpoint of endpoints) {
         try {
             const response = await client.get(endpoint);
-            const responseData: T[] = response.data.map((data: T) =>
-                fromJson(data),
-            );
+            const responseData: T[] = response.data.map((data: T) => fromJson(data));
             allData.push(...responseData); // Merge into the allData array
         } catch (error: any) {
             processError(error);
@@ -217,14 +203,8 @@ export function processError(error: any): void {
         const status = error.response.status;
 
         if (status === 404) {
-            addErrorMessage(
-                t('composables.helpers.errors.notFound'),
-                t('composables.helpers.errors.notFoundDetail'),
-            );
-        } else if (
-            error.response.status === 401 ||
-            error.response.status === 403
-        ) {
+            addErrorMessage(t('composables.helpers.errors.notFound'), t('composables.helpers.errors.notFoundDetail'));
+        } else if (error.response.status === 401 || error.response.status === 403) {
             addErrorMessage(
                 t('composables.helpers.errors.unauthorized'),
                 t('composables.helpers.errors.unauthorizedDetail'),
@@ -239,23 +219,14 @@ export function processError(error: any): void {
                     message = response[key].join(', ');
                 }
 
-                addErrorMessage(
-                    t('composables.helpers.errors.server'),
-                    message,
-                );
+                addErrorMessage(t('composables.helpers.errors.server'), message);
             }
         }
     } else if (error.request !== undefined && error.request !== null) {
         // The request was made but no response was received
-        addErrorMessage(
-            t('composables.helpers.errors.network'),
-            t('composables.helpers.errors.networkDetail'),
-        );
+        addErrorMessage(t('composables.helpers.errors.network'), t('composables.helpers.errors.networkDetail'));
     } else {
         // Something happened in setting up the request that triggered an error
-        addErrorMessage(
-            t('composables.helpers.errors.request'),
-            t('composables.helpers.errors.requestDetail'),
-        );
+        addErrorMessage(t('composables.helpers.errors.request'), t('composables.helpers.errors.requestDetail'));
     }
 }

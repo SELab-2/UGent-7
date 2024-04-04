@@ -28,11 +28,8 @@ const images = Object.keys(
                 class="w-full h-12rem border-round-top"
                 style="object-fit: cover; margin-bottom: -4px"
                 :alt="course.name ?? ''"
-                :src="
-                    images[
-                        Math.ceil(Math.random() * images.length) % images.length
-                    ]
-                " />
+                :src="images[Math.ceil(Math.random() * images.length) % images.length]"
+            />
         </template>
         <template #title>
             <h2 class="text-primary m-0 text-xl">{{ course.name }}</h2>
@@ -44,13 +41,8 @@ const images = Object.keys(
             {{ course.getExcerpt() }}
         </template>
         <template #footer>
-            <RouterLink
-                :to="{ name: 'course', params: { courseId: course.id } }">
-                <Button
-                    :icon="PrimeIcons.ARROW_RIGHT"
-                    :label="t('components.card.open')"
-                    icon-pos="right"
-                    outlined />
+            <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">
+                <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
             </RouterLink>
         </template>
     </Card>

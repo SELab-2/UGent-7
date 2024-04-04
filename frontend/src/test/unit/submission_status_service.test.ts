@@ -2,8 +2,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
 
-const { submissionStatus, getSubmissionStatusByProject } =
-    useSubmissionStatus();
+const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus();
 
 describe('submision_status', (): void => {
     it('gets submision status data by project', async () => {

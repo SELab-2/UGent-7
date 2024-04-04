@@ -1,12 +1,7 @@
 import { Submission } from '@/types/Submission.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import {
-    get,
-    getList,
-    create,
-    deleteId,
-} from '@/composables/services/helpers.ts';
+import { get, getList, create, deleteId } from '@/composables/services/helpers.ts';
 
 interface SubmissionState {
     submissions: Ref<Submission[] | null>;
@@ -14,10 +9,7 @@ interface SubmissionState {
     getSubmissionByID: (id: string) => Promise<void>;
     getSubmissionByProject: (projectId: string) => Promise<void>;
     getSubmissionByGroup: (groupId: string) => Promise<void>;
-    createSubmission: (
-        submissionData: Submission,
-        groupId: string,
-    ) => Promise<void>;
+    createSubmission: (submissionData: Submission, groupId: string) => Promise<void>;
     deleteSubmission: (id: string) => Promise<void>;
 }
 
@@ -31,29 +23,17 @@ export function useSubmission(): SubmissionState {
     }
 
     async function getSubmissionByProject(projectId: string): Promise<void> {
-        const endpoint = endpoints.submissions.byProject.replace(
-            '{projectId}',
-            projectId,
-        );
+        const endpoint = endpoints.submissions.byProject.replace('{projectId}', projectId);
         await getList<Submission>(endpoint, submissions, Submission.fromJSON);
     }
 
     async function getSubmissionByGroup(groupId: string): Promise<void> {
-        const endpoint = endpoints.submissions.byGroup.replace(
-            '{groupId}',
-            groupId,
-        );
+        const endpoint = endpoints.submissions.byGroup.replace('{groupId}', groupId);
         await getList<Submission>(endpoint, submissions, Submission.fromJSON);
     }
 
-    async function createSubmission(
-        submissionData: Submission,
-        groupId: string,
-    ): Promise<void> {
-        const endpoint = endpoints.submissions.byGroup.replace(
-            '{groupId}',
-            groupId,
-        );
+    async function createSubmission(submissionData: Submission, groupId: string): Promise<void> {
+        const endpoint = endpoints.submissions.byGroup.replace('{groupId}', groupId);
         await create<Submission>(
             endpoint,
             {

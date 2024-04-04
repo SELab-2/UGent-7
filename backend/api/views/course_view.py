@@ -61,8 +61,6 @@ class CourseViewSet(viewsets.ModelViewSet):
             name__icontains=search
         )
 
-        print(years, faculties)
-
         # Filter the queryset based on selected years
         if years:
             queryset = queryset.filter(academic_startyear__in=years)

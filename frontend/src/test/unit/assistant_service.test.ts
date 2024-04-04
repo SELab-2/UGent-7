@@ -29,9 +29,7 @@ describe('assistant', (): void => {
         expect(assistant.value?.last_name).toBe('Simpson');
         expect(assistant.value?.last_enrolled).toBe(2023);
         expect(assistant.value?.last_login).toBeNull();
-        expect(assistant.value?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(assistant.value?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(assistant.value?.courses).toEqual([]);
         expect(assistant.value?.faculties).toEqual([]);
     });
@@ -49,9 +47,7 @@ describe('assistant', (): void => {
         expect(assistants.value?.[0]?.last_name).toBe('Simpson');
         expect(assistants.value?.[0]?.last_enrolled).toBe(2023);
         expect(assistants.value?.[0]?.last_login).toBeNull();
-        expect(assistants.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(assistants.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(assistants.value?.[0]?.courses).toEqual([]);
         expect(assistants.value?.[0]?.faculties).toEqual([]);
 
@@ -62,9 +58,7 @@ describe('assistant', (): void => {
         expect(assistants.value?.[1]?.last_name).toBe('Clijsters');
         expect(assistants.value?.[1]?.last_enrolled).toBe(2023);
         expect(assistants.value?.[0]?.last_login).toBeNull();
-        expect(assistants.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(assistants.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(assistants.value?.[1]?.courses).toEqual([]);
         expect(assistants.value?.[1]?.faculties).toEqual([]);
     });
@@ -82,9 +76,7 @@ describe('assistant', (): void => {
         expect(assistants.value?.[0]?.last_name).toBe('Simpson');
         expect(assistants.value?.[0]?.last_enrolled).toBe(2023);
         expect(assistants.value?.[0]?.last_login).toBeNull();
-        expect(assistants.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(assistants.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(assistants.value?.[0]?.courses).toEqual([]);
         expect(assistants.value?.[0]?.faculties).toEqual([]);
 
@@ -95,9 +87,7 @@ describe('assistant', (): void => {
         expect(assistants.value?.[1]?.last_name).toBe('Clijsters');
         expect(assistants.value?.[1]?.last_enrolled).toBe(2023);
         expect(assistants.value?.[0]?.last_login).toBeNull();
-        expect(assistants.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(assistants.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(assistants.value?.[1]?.courses).toEqual([]);
         expect(assistants.value?.[1]?.faculties).toEqual([]);
     });

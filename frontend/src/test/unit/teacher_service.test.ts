@@ -29,9 +29,7 @@ describe('teachers', (): void => {
         expect(teacher.value?.last_name).toBe('Boonen');
         expect(teacher.value?.last_enrolled).toBe(2023);
         expect(teacher.value?.last_login).toBeNull();
-        expect(teacher.value?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(teacher.value?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(teacher.value?.courses).toEqual([]);
         expect(teacher.value?.faculties).toEqual([]);
     });
@@ -49,9 +47,7 @@ describe('teachers', (): void => {
         expect(teachers.value?.[0]?.last_name).toBe('Boonen');
         expect(teachers.value?.[0]?.last_enrolled).toBe(2023);
         expect(teachers.value?.[0]?.last_login).toBeNull();
-        expect(teachers.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(teachers.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(teachers.value?.[0]?.courses).toEqual([]);
         expect(teachers.value?.[0]?.faculties).toEqual([]);
 
@@ -62,9 +58,7 @@ describe('teachers', (): void => {
         expect(teachers.value?.[1]?.last_name).toBe('Sagan');
         expect(teachers.value?.[1]?.last_enrolled).toBe(2023);
         expect(teachers.value?.[0]?.last_login).toBeNull();
-        expect(teachers.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(teachers.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(teachers.value?.[1]?.courses).toEqual([]);
         expect(teachers.value?.[1]?.faculties).toEqual([]);
     });
@@ -82,9 +76,7 @@ describe('teachers', (): void => {
         expect(teachers.value?.[0]?.last_name).toBe('Boonen');
         expect(teachers.value?.[0]?.last_enrolled).toBe(2023);
         expect(teachers.value?.[0]?.last_login).toBeNull();
-        expect(teachers.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(teachers.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(teachers.value?.[0]?.courses).toEqual([]);
         expect(teachers.value?.[0]?.faculties).toEqual([]);
 
@@ -95,9 +87,7 @@ describe('teachers', (): void => {
         expect(teachers.value?.[1]?.last_name).toBe('Sagan');
         expect(teachers.value?.[1]?.last_enrolled).toBe(2023);
         expect(teachers.value?.[0]?.last_login).toBeNull();
-        expect(teachers.value?.[0]?.create_time).toEqual(
-            new Date('July 21, 2024 01:15:00'),
-        );
+        expect(teachers.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(teachers.value?.[1]?.courses).toEqual([]);
         expect(teachers.value?.[1]?.faculties).toEqual([]);
     });

@@ -23,9 +23,7 @@ onMounted(async () => {
         <div class="groupcard">
             <h2>{{ t('views.projects.groupMembers') }}</h2>
             <div>
-                <p v-for="student in students" :key="student.id">
-                    {{ student.first_name }} {{ student.last_name }}
-                </p>
+                <p v-for="student in students" :key="student.id">{{ student.first_name }} {{ student.last_name }}</p>
             </div>
         </div>
     </div>

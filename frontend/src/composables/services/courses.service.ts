@@ -1,13 +1,7 @@
 import { Course } from '@/types/Course.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import {
-    get,
-    getList,
-    create,
-    deleteId,
-    getPaginatedList,
-} from '@/composables/services/helpers.ts';
+import { get, getList, create, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
@@ -17,11 +11,7 @@ interface CoursesState {
     course: Ref<Course | null>;
     getCourseByID: (id: string) => Promise<void>;
     getCourses: () => Promise<void>;
-    searchCourses: (
-        filters: Filter,
-        page: number,
-        pageSize: number,
-    ) => Promise<void>;
+    searchCourses: (filters: Filter, page: number, pageSize: number) => Promise<void>;
     getCoursesByStudent: (studentId: string) => Promise<void>;
     getCoursesByTeacher: (teacherId: string) => Promise<void>;
     getCourseByAssistant: (assistantId: string) => Promise<void>;
@@ -45,43 +35,23 @@ export function useCourses(): CoursesState {
         await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
-    async function searchCourses(
-        filters: Filter,
-        page: number,
-        pageSize: number,
-    ): Promise<void> {
+    async function searchCourses(filters: Filter, page: number, pageSize: number): Promise<void> {
         const endpoint = endpoints.courses.search;
-        await getPaginatedList<Course>(
-            endpoint,
-            filters,
-            page,
-            pageSize,
-            pagination,
-            Course.fromJSON,
-        );
+        await getPaginatedList<Course>(endpoint, filters, page, pageSize, pagination, Course.fromJSON);
     }
 
     async function getCoursesByStudent(studentId: string): Promise<void> {
-        const endpoint = endpoints.courses.byStudent.replace(
-            '{studentId}',
-            studentId,
-        );
+        const endpoint = endpoints.courses.byStudent.replace('{studentId}', studentId);
         await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
     async function getCoursesByTeacher(teacherId: string): Promise<void> {
-        const endpoint = endpoints.courses.byTeacher.replace(
-            '{teacherId}',
-            teacherId,
-        );
+        const endpoint = endpoints.courses.byTeacher.replace('{teacherId}', teacherId);
         await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
     async function getCourseByAssistant(assistantId: string): Promise<void> {
-        const endpoint = endpoints.courses.byAssistant.replace(
-            '{assistantId}',
-            assistantId,
-        );
+        const endpoint = endpoints.courses.byAssistant.replace('{assistantId}', assistantId);
         await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
@@ -99,20 +69,9 @@ export function useCourses(): CoursesState {
         );
     }
 
-    async function cloneCourse(
-        courseId: string,
-        cloneAssistants: boolean,
-    ): Promise<void> {
-        const endpoint = endpoints.courses.clone.replace(
-            '{courseId}',
-            courseId,
-        );
-        await create<Course>(
-            endpoint,
-            { cloneAssistants: cloneAssistants.toString() },
-            course,
-            Course.fromJSON,
-        );
+    async function cloneCourse(courseId: string, cloneAssistants: boolean): Promise<void> {
+        const endpoint = endpoints.courses.clone.replace('{courseId}', courseId);
+        await create<Course>(endpoint, { cloneAssistants: cloneAssistants.toString() }, course, Course.fromJSON);
     }
 
     async function deleteCourse(id: string): Promise<void> {

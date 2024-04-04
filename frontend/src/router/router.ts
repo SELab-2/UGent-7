@@ -8,11 +8,7 @@ import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
 import CalendarView from '@/views/calendar/CalendarView.vue';
 import VerifyView from '@/views/authentication/VerifyView.vue';
-import {
-    type RouteRecordRaw,
-    createWebHistory,
-    createRouter,
-} from 'vue-router';
+import { type RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts';
 import { LogoutGuard } from '@/router/guards/logout.guard.ts';
 import ProjectView from '@/views/projects/ProjectView.vue';

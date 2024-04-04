@@ -11,9 +11,7 @@ const { user } = storeToRefs(useAuthStore());
 
 <template>
     <BaseLayout>
-        <StudentDashboardView
-            v-if="user?.isStudent()"
-            :student="user as Student" />
+        <StudentDashboardView v-if="user?.isStudent()" :student="user as Student" />
     </BaseLayout>
 </template>
 

@@ -35,7 +35,8 @@ function getFacultyIcon(faculty: Faculty): string {
             :src="getFacultyIcon(course.faculty)"
             :alt="course.faculty.name"
             class="absolute top-0 left-0 w-3rem"
-            v-if="course.faculty !== null" />
+            v-if="course.faculty !== null"
+        />
         <div class="h-full flex flex-column justify-content-between">
             <div>
                 <div class="text-primary font-semibold text-lg">

@@ -65,41 +65,30 @@ onMounted(async () => {
                 <Accordion :active-index="[0]" multiple>
                     <AccordionTab header="Zoeken">
                         <IconField iconPosition="left">
-                            <InputText
-                                placeholder="Zoek een vak op naam"
-                                v-model="filter.search"
-                                class="w-full" />
+                            <InputText placeholder="Zoek een vak op naam" v-model="filter.search" class="w-full" />
                             <InputIcon class="pi pi-search"></InputIcon>
                         </IconField>
                     </AccordionTab>
                     <AccordionTab header="Faculteit" v-if="faculties">
-                        <div
-                            v-for="faculty in faculties"
-                            :key="faculty.id"
-                            class="flex align-items-center mb-2">
+                        <div v-for="faculty in faculties" :key="faculty.id" class="flex align-items-center mb-2">
                             <Checkbox
                                 v-model="filter.faculties"
                                 :inputId="faculty.id"
                                 name="faculties"
-                                :value="faculty.id" />
-                            <label :for="faculty.id" class="ml-2 text-sm">{{
-                                faculty.name
-                            }}</label>
+                                :value="faculty.id"
+                            />
+                            <label :for="faculty.id" class="ml-2 text-sm">{{ faculty.name }}</label>
                         </div>
                     </AccordionTab>
                     <AccordionTab header="Academiejaar" v-if="user">
-                        <div
-                            v-for="year in user.academic_years"
-                            :key="year"
-                            class="flex align-items-center mb-2">
+                        <div v-for="year in user.academic_years" :key="year" class="flex align-items-center mb-2">
                             <Checkbox
                                 v-model="filter.years"
                                 :inputId="year.toString()"
                                 name="faculties"
-                                :value="year" />
-                            <label :for="year.toString()" class="ml-2 text-sm"
-                                >{{ year }} - {{ year + 1 }}</label
-                            >
+                                :value="year"
+                            />
+                            <label :for="year.toString()" class="ml-2 text-sm">{{ year }} - {{ year + 1 }}</label>
                         </div>
                     </AccordionTab>
                 </Accordion>
@@ -111,16 +100,13 @@ onMounted(async () => {
                 <p class="mt-3" v-if="pagination">
                     {{ t('views.courses.search.results', [pagination.count]) }}
                 </p>
-                <CourseList
-                    class="mt-3"
-                    :courses="pagination?.results ?? null"
-                    :cols="3"
-                    :detail="false" />
+                <CourseList class="mt-3" :courses="pagination?.results ?? null" :cols="3" :detail="false" />
                 <Paginator
                     :rows="pageSize"
                     :total-records="pagination?.count"
                     :first="first"
-                    @update:first="paginate($event)" />
+                    @update:first="paginate($event)"
+                />
             </div>
         </div>
     </BaseLayout>

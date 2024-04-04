@@ -8,10 +8,7 @@ export interface PaginatorState {
     paginate: (newFirst: number) => Promise<void>;
 }
 
-export function usePaginator(
-    initialPage: number = 1,
-    initialPageSize: number = 20,
-): PaginatorState {
+export function usePaginator(initialPage: number = 1, initialPageSize: number = 20): PaginatorState {
     /* Composables */
     const { query } = useRoute();
     const { push } = useRouter();
@@ -38,8 +35,7 @@ export function usePaginator(
     /* Computed */
     const first = computed({
         get: () => (page.value - 1) * pageSize.value,
-        set: (value: number) =>
-            (page.value = Math.floor(value / pageSize.value) + 1),
+        set: (value: number) => (page.value = Math.floor(value / pageSize.value) + 1),
     });
 
     /**

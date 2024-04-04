@@ -20,9 +20,7 @@ const { t } = useI18n();
 const { projects, getProjectsByCourse } = useProject();
 
 /* State */
-const allProjects = computed(() =>
-    props.courses.flatMap((course) => course.projects),
-);
+const allProjects = computed(() => props.courses.flatMap((course) => course.projects));
 
 watch(
     () => props.courses,
@@ -49,14 +47,8 @@ watch(
 <template>
     <template v-if="allProjects.length > 0">
         <div class="grid align-items-stretch">
-            <div
-                class="col-12 md:col-6 lg:col-4 xl:col-3"
-                v-for="project in allProjects"
-                :key="project.id">
-                <ProjectCard
-                    class="h-100"
-                    :project="project"
-                    :course="project.course" />
+            <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="project in allProjects" :key="project.id">
+                <ProjectCard class="h-100" :project="project" :course="project.course" />
             </div>
         </div>
     </template>

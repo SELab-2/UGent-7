@@ -30,25 +30,18 @@ const { t } = useI18n();
 <template>
     <Card class="border-round project-card">
         <template #header>
-            <h2 class="text-primary m-0 text-xl">
-                <span class="pi pi-book text-xl mr-2" /> {{ course.name }}
-            </h2>
+            <h2 class="text-primary m-0 text-xl"><span class="pi pi-book text-xl mr-2" /> {{ course.name }}</h2>
         </template>
         <template #subtitle>
             {{ project.name }}
         </template>
         <template #content>
             <div class="mb-2">
-                <i
-                    :class="['pi', PrimeIcons.CALENDAR_PLUS, 'icon-color']"
-                    class="mr-2"></i>
-                {{ t('views.projects.deadline') }}: {{ formattedDeadline
-                }}<br />
+                <i :class="['pi', PrimeIcons.CALENDAR_PLUS, 'icon-color']" class="mr-2"></i>
+                {{ t('views.projects.deadline') }}: {{ formattedDeadline }}<br />
             </div>
             <div>
-                <i
-                    :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']"
-                    class="mr-2"></i>
+                <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
                 {{ t('views.projects.submissionStatus') }}: ok
             </div>
         </template>
@@ -60,12 +53,9 @@ const { t } = useI18n();
                         courseId: course.id,
                         projectId: project.id,
                     },
-                }">
-                <Button
-                    :icon="PrimeIcons.ARROW_RIGHT"
-                    :label="t('components.card.open')"
-                    icon-pos="right"
-                    outlined />
+                }"
+            >
+                <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
             </RouterLink>
         </template>
     </Card>

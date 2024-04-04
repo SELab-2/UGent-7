@@ -29,7 +29,8 @@ const { t } = useI18n();
                     class="col-12 md:col-6 lg:col-4"
                     :class="'xl:col-' + 12 / cols"
                     v-for="course in courses"
-                    :key="course.id">
+                    :key="course.id"
+                >
                     <CourseDetailCard :course="course" v-if="detail" />
                     <CourseGeneralCard class="h-full" :course="course" v-else />
                 </div>
@@ -41,11 +42,7 @@ const { t } = useI18n();
             </template>
         </template>
         <template v-else>
-            <div
-                class="col-12 md:col-6 lg:col-4"
-                :class="'xl:col-' + 12 / cols"
-                v-for="index in cols"
-                :key="index">
+            <div class="col-12 md:col-6 lg:col-4" :class="'xl:col-' + 12 / cols" v-for="index in cols" :key="index">
                 <Skeleton :height="detail ? '25rem' : '10rem'" />
             </div>
         </template>

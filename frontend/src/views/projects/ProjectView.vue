@@ -33,9 +33,7 @@ watch(
             await getGroupsByStudent('1');
 
             for (const studentGroup of groups.value ?? []) {
-                const isCommonGroup = projectGroups?.some(
-                    (projectGroup) => projectGroup.id === studentGroup.id,
-                );
+                const isCommonGroup = projectGroups?.some((projectGroup) => projectGroup.id === studentGroup.id);
 
                 if (isCommonGroup === true) {
                     group.value = studentGroup;

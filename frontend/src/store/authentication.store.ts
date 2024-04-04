@@ -91,10 +91,7 @@ export const useAuthStore = defineStore('auth', () => {
             // Get the role information.
             await initUser();
         } catch (error: any) {
-            addErrorMessage(
-                error.response.statusText as string,
-                error.response.data.detail as string,
-            );
+            addErrorMessage(error.response.statusText as string, error.response.data.detail as string);
         }
     }
 
@@ -114,15 +111,9 @@ export const useAuthStore = defineStore('auth', () => {
                 ticket,
             });
 
-            addSuccessMessage(
-                t('toasts.messages.success'),
-                t('toasts.messages.login.success'),
-            );
+            addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.login.success'));
         } catch (error: any) {
-            addErrorMessage(
-                t('toasts.messages.error'),
-                error.response.data.detail as string,
-            );
+            addErrorMessage(t('toasts.messages.error'), error.response.data.detail as string);
         }
     }
 

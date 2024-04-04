@@ -1,7 +1,4 @@
-import {
-    type NavigationGuardNext,
-    type RouteLocationNormalized,
-} from 'vue-router';
+import { type NavigationGuardNext, type RouteLocationNormalized } from 'vue-router';
 import { useAuthStore } from '@/store/authentication.store.ts';
 
 export async function LogoutGuard(

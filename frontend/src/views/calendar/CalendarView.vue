@@ -25,9 +25,7 @@ const { projects, getProjectsByCourse } = useProject();
 
 const formattedDate = computed(() => {
     // Format the selected date using moment.js
-    return moment(selectedDate.value)
-        .locale(locale.value)
-        .format('DD MMMM YYYY');
+    return moment(selectedDate.value).locale(locale.value).format('DD MMMM YYYY');
 });
 
 const loadProjects = async (): Promise<void> => {
@@ -49,9 +47,7 @@ const loadProjects = async (): Promise<void> => {
                 });
 
                 // Concatenate the projects
-                allProjects.value = allProjects.value.concat(
-                    projects.value ?? [],
-                );
+                allProjects.value = allProjects.value.concat(projects.value ?? []);
             }
         }
     }
@@ -61,10 +57,7 @@ const loadProjects = async (): Promise<void> => {
 const projectsWithDeadline = computed(() => {
     // Filter the projects with the selected date
     return allProjects.value?.filter((project) => {
-        return moment(project.deadline).isSame(
-            moment(selectedDate.value),
-            'day',
-        );
+        return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
     });
 });
 
@@ -95,13 +88,8 @@ watch(
 
                 <!-- Listing projects with given deadline -->
                 <div class="grid grid-cols-2 gap-4">
-                    <div
-                        v-for="project in projectsWithDeadline"
-                        :key="project.id">
-                        <ProjectCard
-                            class="h-100"
-                            :project="project"
-                            :course="project.course" />
+                    <div v-for="project in projectsWithDeadline" :key="project.id">
+                        <ProjectCard class="h-100" :project="project" :course="project.course" />
                     </div>
                 </div>
             </div>

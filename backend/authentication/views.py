@@ -23,7 +23,7 @@ class CASViewSet(ViewSet):
         should_echo = request.query_params.get('echo', False)
 
         if should_echo == "1" and settings.DEBUG:
-            client._service_url = 'https://localhost:8080/api/auth/cas/echo'
+            client._service_url = settings.CAS_DEBUG_RESPONSE
 
         return redirect(client.get_login_url())
 
