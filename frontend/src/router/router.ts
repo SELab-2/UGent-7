@@ -1,9 +1,7 @@
-// import { useUserStore } from '@/stores/userStore';
-// TODO: after pinia setup is done
-
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import CreateCourseView from '@/views/courses/CreateCourseView.vue';
+import CreateProjectView from '@/views/projects/CreateProjectView.vue';
 import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
 import CalendarView from '@/views/calendar/CalendarView.vue';
@@ -36,11 +34,7 @@ const routes: RouteRecordRaw[] = [
         path: '/courses',
         children: [
             { path: '', component: SearchCourseView, name: 'courses' },
-            {
-                path: 'create',
-                component: CreateCourseView,
-                name: 'course-create',
-            },
+            { path: 'create', component: CreateCourseView, name: 'course-create' },
             // Single course
             {
                 path: ':courseId',
@@ -52,35 +46,15 @@ const routes: RouteRecordRaw[] = [
                         path: 'projects',
                         children: [
                             { path: '', component: Dummy, name: 'projects' },
-                            {
-                                path: 'create',
-                                component: Dummy,
-                                name: 'project-create',
-                            },
+                            { path: 'create', component: CreateProjectView, name: 'project-create' },
                             // Single project
                             {
                                 path: ':projectId',
                                 children: [
-                                    {
-                                        path: '',
-                                        component: ProjectView,
-                                        name: 'project',
-                                    },
-                                    {
-                                        path: 'edit',
-                                        component: Dummy,
-                                        name: 'project-edit',
-                                    },
-                                    {
-                                        path: 'groups',
-                                        component: Dummy,
-                                        name: 'project-groups',
-                                    },
-                                    {
-                                        path: 'submit',
-                                        component: Dummy,
-                                        name: 'project-submit',
-                                    },
+                                    { path: '', component: ProjectView, name: 'project' },
+                                    { path: 'edit', component: Dummy, name: 'project-edit' },
+                                    { path: 'groups', component: Dummy, name: 'project-groups' },
+                                    { path: 'submit', component: Dummy, name: 'project-submit' },
                                 ],
                             },
                         ],
@@ -138,10 +112,7 @@ const routes: RouteRecordRaw[] = [
     { path: '/notifications/:id', component: Dummy, name: 'notification' },
 
     // Authentication
-    {
-        path: '/auth/',
-        children: [{ path: 'login', component: LoginView, name: 'login' }],
-    },
+    { path: '/auth/', children: [{ path: 'login', component: LoginView, name: 'login' }] },
 
     // Page not found: redirect to dashboard
     { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } },
