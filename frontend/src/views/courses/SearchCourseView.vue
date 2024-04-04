@@ -65,7 +65,11 @@ onMounted(async () => {
                 <Accordion :active-index="[0]" multiple>
                     <AccordionTab :header="t('views.courses.search.search')">
                         <IconField iconPosition="left">
-                            <InputText :placeholder="t('views.courses.search.placeholder')" v-model="filter.search" class="w-full" />
+                            <InputText
+                                :placeholder="t('views.courses.search.placeholder')"
+                                v-model="filter.search"
+                                class="w-full"
+                            />
                             <InputIcon class="pi pi-search"></InputIcon>
                         </IconField>
                     </AccordionTab>

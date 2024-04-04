@@ -11,7 +11,6 @@ const {
     getCourseByID,
     getCourses,
     getCoursesByStudent,
-
 } = useCourses();
 
 // "describe" bundles tests about 1 specific thing; here we're testing course

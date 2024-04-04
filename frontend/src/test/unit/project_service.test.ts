@@ -2,14 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
 
-const {
-    projects,
-    project,
-    getProjectByID,
-    getProjectsByCourse,
-    getProjectsByStudent,
-
-} = useProject();
+const { projects, project, getProjectByID, getProjectsByCourse, getProjectsByStudent } = useProject();
 
 describe('project', (): void => {
     it('gets project data by id', async () => {
