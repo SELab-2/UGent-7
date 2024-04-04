@@ -8,10 +8,11 @@ class DockerImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DockerImage
-        fields = "__all__"
+        fields: str = "__all__"
 
-    def validate(self, data):
-        data = super().validate(data)
+    # TODO: Test if valid docker image (or not and trust the user)
+    def validate(self, attrs):
+        data = super().validate(attrs=attrs)
 
         if "user" not in self.context:
             raise ValidationError(_("docker.errors.context"))

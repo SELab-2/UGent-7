@@ -106,7 +106,6 @@ class ProjectViewSet(CreateModelMixin,
 
         project: Project = self.get_object()
 
-        # Add submission to course
         serializer = StructureCheckAddSerializer(
             data=request.data,
             context={
@@ -117,6 +116,7 @@ class ProjectViewSet(CreateModelMixin,
             }
         )
 
+        # TODO: Raise exception gaat hier geen response geven smh
         if serializer.is_valid(raise_exception=True):
             serializer.save(project=project)
 
@@ -135,6 +135,30 @@ class ProjectViewSet(CreateModelMixin,
             checks, many=True, context={"request": request}
         )
         return Response(serializer.data)
+
+    # TODO: Run all docker checks and send notification to submissions guys if not success
+    # TODO: Set result to invalid for all submission but the newest
+    @extra_checks.mapping.post
+    @swagger_auto_schema(request_body=ExtraCheckSerializer)
+    def _add_extra_check(self, request: Request, **_):
+        """Add an extra_check to the project"""
+
+        project: Project = self.get_object()
+
+        serializer = ExtraCheckSerializer(
+            data=request.data,
+            context={
+                "project": project,
+                "request": request
+            }
+        )
+
+        if serializer.is_valid():
+            serializer.save(project=project)
+
+        return Response({
+            "message": gettext("project.success.extra_check.add")
+        })
 
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | ProjectGroupPermission])
     def submission_status(self, request, **_):

@@ -16,7 +16,9 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=256, blank=False, null=False)),
                 ('file_path', models.FileField(upload_to=FILE_PATHS["docker_images"], max_length=256, blank=False, null=False)),
-                ('custom', models.BooleanField(default=False, blank=False, null=False)),
+                ('owner', models.ForeignKey(to="authentication.user", on_delete=models.SET_NULL,
+                 related_name="docker_images", blank=False, null=True)),
+                ('public', models.BooleanField(default=False, blank=False, null=False)),
             ]
         ),
         migrations.CreateModel(
@@ -38,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="extracheck",
             name="file_path",
-            field=models.CharField(max_length=256, blank=False, null=False)
+            field=models.FileField(upload_to=FILE_PATHS["extra_checks"], max_length=256, blank=False, null=False)
         ),
         migrations.AddField(
             model_name="extracheck",
@@ -59,6 +61,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="extrachecksresult",
             name="log_file",
-            field=models.CharField(max_length=256, blank=False, null=True)
-        )
+            field=models.FileField(upload_to=FILE_PATHS["log_file"], max_length=256, blank=False, null=True)
+        ),
+        migrations.AddField(
+            model_name="extrachecksresult",
+            name="is_valid",
+            field=models.BooleanField(default=True, blank=False, null=False)
+        ),
     ]

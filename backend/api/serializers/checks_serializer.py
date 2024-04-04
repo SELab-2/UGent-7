@@ -27,6 +27,16 @@ class StructureCheckSerializer(serializers.ModelSerializer):
 
 class ExtraCheckSerializer(serializers.ModelSerializer):
 
+    project = serializers.HyperlinkedRelatedField(
+        view_name="project-detail",
+        read_only=True
+    )
+
+    docker_image = serializers.HyperlinkedRelatedField(
+        view_name="docker-image-detail",
+        read_only=True
+    )
+
     class Meta:
         model = ExtraCheck
         fields = "__all__"

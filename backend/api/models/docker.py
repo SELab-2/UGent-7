@@ -25,9 +25,11 @@ class DockerImage(models.Model):
         null=False
     )
 
+    # User who added the image
+    # TODO: Periodically remove images with user = null and public = false
     owner = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name="docker_images",
         blank=False,
         null=True,
@@ -35,7 +37,7 @@ class DockerImage(models.Model):
 
     # Whether the image can be used by everyone
     public = models.BooleanField(
-        default=True,
+        default=False,
         blank=False,
         null=False
     )

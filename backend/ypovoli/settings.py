@@ -19,6 +19,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# TODO: Change
 MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, "data/production"))
 
 
@@ -174,4 +175,6 @@ CELERY_RESULT_BACKEND = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}
 
 FILE_PATHS = {
     "docker_images": "../data/docker_images/",
+    "extra_checks": "../data/extra_checks/",
+    "log_file": "../data/log_files/"
 }
