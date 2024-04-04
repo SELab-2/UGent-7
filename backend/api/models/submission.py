@@ -53,7 +53,7 @@ class SubmissionFile(models.Model):
     file = models.FileField(blank=False, null=False)
 
 
-class ErrorTemplates(models.Model):
+class ErrorTemplate(models.Model):
     """
         Model possible error templates for a submission checks result.
     """
@@ -99,7 +99,7 @@ class ExtraChecksResult(models.Model):
 
     # Error message if the submission failed the extra checks
     error_message = models.ForeignKey(
-        ErrorTemplates,
+        ErrorTemplate,
         on_delete=models.CASCADE,
         related_name="extra_checks_results",
         blank=True,
@@ -111,4 +111,12 @@ class ExtraChecksResult(models.Model):
         max_length=256,
         blank=False,
         null=True
+    )
+
+    # Whether the pass result is still valid
+    # Becomes invalid after changing / adding a check
+    is_valid = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False
     )

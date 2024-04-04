@@ -42,6 +42,14 @@ msgstr ""
 "There was a directory found in the submitted zip file, which was not asked "
 "for."
 
+#: serializers/docker_serializer.py:15
+msgid "docker.errors.context"
+mgstr "The user is not supplied in the context"
+
+#: serializers/docker_serializer.py:20
+msgid "docker.errors.custom"
+mgstr "User is not allowed to create public images"
+
 #: serializers/course_serializer.py:58 serializers/course_serializer.py:77
 msgid "courses.error.context"
 msgstr "The course is not supplied in the context."

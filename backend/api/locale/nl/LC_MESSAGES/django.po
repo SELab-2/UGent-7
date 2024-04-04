@@ -42,6 +42,14 @@ msgstr "Een verplichte map is niet aanwezig in het ingediende zip-bestand."
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
 msgstr "Het ingediende zip-bestand bevat een map die niet gevraagd is."
 
+#: serializers/docker_serializer.py:20
+msgid "docker.errors.custom"
+mgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"
+
+#: serializers/docker_serializer.py:15
+msgid "docker.errors.context"
+mgstr "De gebruiker is niet meegeleverd als context"
+
 #: serializers/course_serializer.py:58 serializers/course_serializer.py:77
 msgid "courses.error.context"
 msgstr "De opleiding is niet meegeleverd als context."

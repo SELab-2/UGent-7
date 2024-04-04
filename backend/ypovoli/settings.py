@@ -90,7 +90,8 @@ AUTH_USER_MODEL = "authentication.User"
 # Application endpoints
 PORT = environ.get("DJANGO_CAS_PORT", "8080")
 CAS_ENDPOINT = "https://login.ugent.be"
-CAS_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}/auth/verify"
+# TODO: Change back (remove api)
+CAS_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}/api/auth/verify"
 CAS_DEBUG_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}/api/auth/cas/echo"
 API_ENDPOINT = f"https://{DOMAIN_NAME}/api"
 

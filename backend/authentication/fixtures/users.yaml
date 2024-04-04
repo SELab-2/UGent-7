@@ -1,5 +1,5 @@
 - model: authentication.user
-  pk: '1'
+  pk: "1"
   fields:
     last_login: null
     username: jdoe
@@ -9,9 +9,9 @@
     last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.690556+00:00
     faculties:
-    - Wetenschappen
+      - Wetenschappen
 - model: authentication.user
-  pk: '123'
+  pk: "123"
   fields:
     last_login: null
     username: tboonen
@@ -21,9 +21,9 @@
     last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.686541+00:00
     faculties:
-    - Psychologie_PedagogischeWetenschappen
+      - Psychologie_PedagogischeWetenschappen
 - model: authentication.user
-  pk: '124'
+  pk: "124"
   fields:
     last_login: null
     username: psagan
@@ -33,9 +33,9 @@
     last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.689543+00:00
     faculties:
-    - Psychologie_PedagogischeWetenschappen
+      - Psychologie_PedagogischeWetenschappen
 - model: authentication.user
-  pk: '2'
+  pk: "2"
   fields:
     last_login: null
     username: bverhae
@@ -45,9 +45,9 @@
     last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.691565+00:00
     faculties:
-    - Geneeskunde_Gezondheidswetenschappen
+      - Geneeskunde_Gezondheidswetenschappen
 - model: authentication.user
-  pk: '3'
+  pk: "3"
   fields:
     last_login: null
     username: somtin
@@ -59,7 +59,7 @@
     faculties:
       - Geneeskunde_Gezondheidswetenschappen
 - model: authentication.user
-  pk: '235'
+  pk: "235"
   fields:
     last_login: null
     username: bsimpson
@@ -69,9 +69,9 @@
     last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.687541+00:00
     faculties:
-    - Wetenschappen
+      - Wetenschappen
 - model: authentication.user
-  pk: '236'
+  pk: "236"
   fields:
     last_login: null
     username: kclijster
@@ -81,4 +81,4 @@
     last_enrolled: 2023
     create_time: 2024-02-29 20:35:45.688545+00:00
     faculties:
-    - Psychologie_PedagogischeWetenschappen
+      - Psychologie_PedagogischeWetenschappen

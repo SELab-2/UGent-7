@@ -1,7 +1,6 @@
+from api.models.checks import ExtraCheck, StructureCheck
+from api.models.extension import FileExtension
 from rest_framework import serializers
-
-from ..models.checks import ExtraCheck, StructureCheck
-from ..models.extension import FileExtension
 
 
 class FileExtensionSerializer(serializers.ModelSerializer):
@@ -28,14 +27,6 @@ class StructureCheckSerializer(serializers.ModelSerializer):
 
 class ExtraCheckSerializer(serializers.ModelSerializer):
 
-    project = serializers.HyperlinkedRelatedField(
-        view_name="project-detail",
-        read_only=True
-    )
-
     class Meta:
         model = ExtraCheck
-        fields = [
-            "id",
-            "project"
-        ]
+        fields = "__all__"

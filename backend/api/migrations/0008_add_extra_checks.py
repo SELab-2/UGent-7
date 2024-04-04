@@ -1,9 +1,8 @@
-from api.models.checks import DockerImage
-from api.models.submission import ErrorTemplates
 from django.db import migrations, models
 from ypovoli.settings import FILE_PATHS
 
 
+# TODO: Incorperate new model changes
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -33,7 +32,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="extracheck",
-            name="docker_image_id",
+            name="docker_image",
             field=models.ForeignKey(to="api.dockerimage", on_delete=models.CASCADE, related_name="extra_checks"),
         ),
         migrations.AddField(

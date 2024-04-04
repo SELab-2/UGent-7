@@ -1,9 +1,10 @@
 from rest_framework import viewsets
+
+from ..models.checks import ExtraCheck, StructureCheck
 from ..models.extension import FileExtension
-from ..models.checks import StructureCheck, ExtraCheck
-from ..serializers.checks_serializer import (
-    StructureCheckSerializer, ExtraCheckSerializer, FileExtensionSerializer
-)
+from ..serializers.checks_serializer import (ExtraCheckSerializer,
+                                             FileExtensionSerializer,
+                                             StructureCheckSerializer)
 
 
 class StructureCheckViewSet(viewsets.ModelViewSet):
