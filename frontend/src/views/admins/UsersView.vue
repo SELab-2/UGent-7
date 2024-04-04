@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useUser } from '@/composables/services/users.service.ts';
 import DataTable, {
     DataTableFilterEvent,
@@ -13,6 +13,9 @@ import Column from "primevue/column";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import InputSwitch from "primevue/inputswitch";
+import Button from "primevue/button";
+
+import User from "@/types/User.ts";
 
 import {useI18n} from 'vue-i18n';
 
@@ -39,8 +42,8 @@ const loading = ref(false);
 const totalRecords = ref(0);
 const selectedStudents = ref();
 const selectAll = ref(false);
-const editItem: ref<null> = ref(null);
-const popup: ref<boolean> = ref(false);
+const editItem = ref<User|null>(null);
+const popup = ref<boolean>(false);
 const first = ref(0);
 const filters = ref({
     'name': {value: '', matchMode: 'contains'},
@@ -81,7 +84,7 @@ const onSort = (event: DataTableSortEvent) => {
     loadLazyData(event);
 };
 const onFilter = (event: DataTableFilterEvent) => {
-    lazyParams.value.filters = filters.value ;
+    lazyParams.value.filters = filters.value;
     loadLazyData(event);
 };
 const onSelectAllChange = (event: DataTableSelectAllChangeEvent) => {
@@ -105,8 +108,27 @@ const onRowUnselect = () => {
 };
 
 const showPopup = (data: any) => {
-    editItem.value = data;
+    editItem.value = JSON.parse(JSON.stringify(data)); // I do this to get a deep copy of the role array
     popup.value = true;
+}
+
+const updateRole = (role: string) => {
+    const index = editItem.value.roles.findIndex((role2: string) => role == role2);
+    if (index != -1) { // if role is in role list of user
+        editItem.value.roles.splice(index, 1);
+    } else { // role is NOT in role list of user
+        editItem.value.roles.push(role);
+    }
+}
+
+const saveItem = () => {
+    if (users.value != null) {
+        const index = users.value.findIndex(row => row.id == editItem.value.id);
+        users.value.splice(index, 1, { ...editItem.value });
+    } else {
+        // raise error TODO
+    }
+    popup.value = false;
 }
 
 </script>
@@ -132,24 +154,26 @@ const showPopup = (data: any) => {
         </Title>
     </AdminLayout>
     <Dialog v-model:visible="popup" header="Edit user" :style="{ width: '25rem' }" class="flex">
-        <div v-for="data in columns.toSpliced(columns.length - 1, 1)" class="flex align-items-center">
-            <label>{{ data.header }}</label>
-            <InputText type="text"/>
+        <div class="flex align-items-center gap-3 mb-3">
+            <label class="font-semibold w-6rem">{{ columns[0].header }}</label>
+            <span>{{ editItem.id }}</span>
+        </div>
+        <div v-for="data in columns.toSpliced(columns.length - 1, 1).toSpliced(0, 1)"
+             class="flex align-items-center gap-3 mb-3">
+            <label class="font-semibold w-6rem">{{ data.header }}</label>
+            <InputText type="text" class="flex-auto" v-model="editItem[data.field]"/>
         </div>
         <div v-for="role in roles" class="flex align-items-center">
-            <label>{{ role }}</label>
-            <InputSwitch :model-value="editItem.roles.includes(role)"/>
+            <label class="font-semibold w-6rem">{{ role }}</label>
+            <InputSwitch :model-value="editItem.roles.includes(role)" @click="() => updateRole(role)"/>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <Button type="button" label="Cancel" severity="secondary" @click="popup = false"></Button>
+            <Button type="button" label="Save" @click="saveItem"></Button>
         </div>
     </Dialog>
 </template>
 
 <style scoped lang="scss">
-.flex {
-    -ms-flex: 1;
-    flex: 1;
-}
 
-.align-items-center {
-    align-items: center;
-}
 </style>
