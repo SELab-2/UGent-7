@@ -17,7 +17,7 @@ const props = defineProps<{ courses: Course[] }>();
 /* Dialog state to select the course you want to create a project for */
 const displayCourseSelection = ref(false);
 
-/* Method to create a project for the selected course */
+/* Method to route to the project creation view */
 const createProjectForCourse = (courseId: string): void => {
     push({ name: 'project-create', params: { courseId } });
     displayCourseSelection.value = false;
@@ -32,7 +32,7 @@ const createProjectForCourse = (courseId: string): void => {
         icon-pos="right"
         class="custom-button"
         @click="displayCourseSelection = true" />
-    <!-- Dialog to select the course for the project -->
+    <!-- Dialog to select the course you want to create a project for -->
     <Dialog
         v-model:visible="displayCourseSelection"
         modal

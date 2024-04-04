@@ -14,6 +14,7 @@ import { Project } from '@/types/Projects';
 import { useProject } from '@/composables/services/project.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -35,7 +36,7 @@ const form = reactive({
     scoreVisibility: false,
 });
 
-// Define validation rules for each form field using "computed"
+// Define validation rules for each form field
 const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
@@ -49,7 +50,7 @@ const rules = computed(() => {
     };
 });
 
-// Use the "useVuelidate" function to perform form validation
+// useVuelidate function to perform form validation
 const v$ = useVuelidate(rules, form);
 
 const submitProject = async (): Promise<void> => {
@@ -95,7 +96,7 @@ const submitProject = async (): Promise<void> => {
                     <div class="mb-4">
                         <label for="projectName">{{ t('views.projects.name') }}</label>
                         <InputText id="projectName" v-model="form.name" />
-                        <span v-if="v$.name.$error" class="p-error">{{ v$.name.$errors[0].$message }}</span>
+                        <ErrorMessage :field="v$.name" />
                     </div>
 
                     <!-- Project description -->
@@ -108,7 +109,7 @@ const submitProject = async (): Promise<void> => {
                     <div class="mb-4">
                         <label for="projectStartDate">{{ t('views.projects.start_date') }}</label>
                         <Calendar id="projectStartDate" v-model="form.startDate" dateFormat="dd-mm-yy" :min-date="new Date()" showIcon />
-                        <span v-if="v$.startDate.$error" class="p-error">{{ v$.startDate.$errors[0].$message }}</span>
+                        <ErrorMessage :field="v$.startDate" />
                     </div>
 
                     <!-- Deadline of the project -->
@@ -122,21 +123,21 @@ const submitProject = async (): Promise<void> => {
                             showTime
                             hourFormat="24"
                             showIcon />
-                        <span v-if="v$.deadline.$error" class="p-error">{{ v$.deadline.$errors[0].$message }}</span>
+                        <ErrorMessage :field="v$.deadline" />
                     </div>
 
                     <!-- Group size for the project -->
                     <div class="mb-4">
                         <label for="groupSize">{{ t('views.projects.group_size') }}</label>
                         <InputNumber id="groupSize" v-model="form.groupSize" :min="1" />
-                        <span v-if="v$.groupSize.$error" class="p-error">{{ v$.groupSize.$errors[0].$message }}</span>
+                        <ErrorMessage :field="v$.groupSize" />
                     </div>
 
                     <!-- Max score for the project -->
                     <div class="mb-4">
                         <label for="maxScore">{{ t('views.projects.max_score') }}</label>
                         <InputNumber id="maxScore" v-model="form.maxScore" :min="1" />
-                        <span v-if="v$.maxScore.$error" class="p-error">{{ v$.maxScore.$errors[0].$message }}</span>
+                        <ErrorMessage :field="v$.maxScore" />
                     </div>
 
                     <!-- Visibility of the project -->
@@ -171,9 +172,5 @@ const submitProject = async (): Promise<void> => {
 /* Add margin between label and input */
 label {
     margin-bottom: 0.5rem;
-}
-
-.p-error {
-    display: block;
 }
 </style>

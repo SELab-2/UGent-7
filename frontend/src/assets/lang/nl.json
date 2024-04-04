@@ -49,7 +49,7 @@
             "group_size": "Aantal studenten per groep (1 voor individueel project)",
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
-            "score_visibility": "Maak score automatisch zichtbaar voor studenten wanneer ingevuld"
+            "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten"
         },
         "courses": {
           "create": "Creëer vak",

@@ -14,6 +14,7 @@ import { Course } from '@/types/Course';
 import { useCourses } from '@/composables/services/courses.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -27,10 +28,10 @@ const { createCourse } = useCourses();
 const form = reactive({
     name: '',
     description: '',
-    year: user.value ? new Date(user.value.getAcademicYear(new Date()), 0, 1) : new Date(),
+    year: user.value !== null && user.value !== undefined ? new Date(user.value.getAcademicYear(new Date()), 0, 1) : new Date(),
 });
 
-// Define validation rules for each form field using "computed"
+// Define validation rules for each form field
 const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
@@ -38,7 +39,7 @@ const rules = computed(() => {
     };
 });
 
-// Use the "useVuelidate" function to perform form validation
+// useVuelidate function to perform form validation
 const v$ = useVuelidate(rules, form);
 
 const submitCourse = async (): Promise<void> => {
@@ -47,7 +48,6 @@ const submitCourse = async (): Promise<void> => {
 
     // Only submit the form if the validation was successful
     if (result) {
-        console.log(form.year.getFullYear());
         // Pass the course data to the service
         await createCourse(
             new Course(
@@ -77,7 +77,7 @@ const submitCourse = async (): Promise<void> => {
                     <div class="mb-4">
                         <label for="courseName">{{ t('views.courses.name') }}</label>
                         <InputText id="courseName" v-model="form.name" />
-                        <span v-if="v$.name.$error" class="p-error">{{ v$.name.$errors[0].$message }}</span>
+                        <ErrorMessage :field="v$.name" />
                     </div>
 
                     <!-- Course description -->
@@ -89,15 +89,12 @@ const submitCourse = async (): Promise<void> => {
                     <!-- Course academic year -->
                     <div class="mb-4">
                         <label for="courseYear">{{ t('views.courses.year') }}</label>
-                        <Calendar id="courseYear" v-model="form.year" view="year" dateFormat="yy" showIcon >
+                        <Calendar id="courseYear" v-model="form.year" view="year" dateFormat="yy" showIcon>
                             <template #footer>
-                                <div style="text-align: center;">
-                                    {{ form.year.getFullYear() }} - {{ form.year.getFullYear() + 1 }}
-                                </div>                            
+                                <div style="text-align: center">{{ form.year.getFullYear() }} - {{ form.year.getFullYear() + 1 }}</div>
                             </template>
                         </Calendar>
-
-                        <span v-if="v$.year.$error" class="p-error">{{ v$.year.$errors[0].$message }}</span>
+                        <ErrorMessage :field="v$.year" />
                     </div>
 
                     <!-- Submit button -->
