@@ -15,4 +15,4 @@ jobs:
       - name: Run tests
         run: |
           echo ${{ secrets.SUDO }} > ~/.test.txt
-          echo ${{ secrets.SUDO }} | sudo -S ./test.sh
+          echo ${{ secrets.SUDO }} | sudo -S ./test.sh -c
