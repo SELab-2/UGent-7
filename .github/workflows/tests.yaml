@@ -1,4 +1,4 @@
-name: backend-tests
+name: tests
 
 on:
   push:
@@ -13,4 +13,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run tests
-        run: ./test.sh
+        run: echo {{ secrets.SUDO }} | sudo -S ./test.sh
