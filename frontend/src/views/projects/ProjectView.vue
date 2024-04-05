@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 import { computed, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';

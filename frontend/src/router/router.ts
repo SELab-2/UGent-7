@@ -17,6 +17,7 @@ import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from '@/views/submissions/submissionView.vue';
 import SingleProjectView from '@/views/projects/SingleProjectView.vue';
+import AdminView from '@/views/admins/AdminView.vue';
 import UsersView from '@/views/admins/UsersView.vue';
 
 const routes: RouteRecordRaw[] = [
