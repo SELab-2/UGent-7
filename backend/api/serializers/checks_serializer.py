@@ -1,4 +1,5 @@
 from api.models.checks import ExtraCheck, StructureCheck
+from api.models.docker import DockerImage
 from api.models.extension import FileExtension
 from rest_framework import serializers
 
@@ -25,7 +26,17 @@ class StructureCheckSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# TODO: Check if docker image is public and / or his
+class DockerImagerHyperLinkedRelatedField(serializers.HyperlinkedRelatedField):
+    view_name = "docker-image-detail"
+    queryset = DockerImage.objects.all()
+
+    def to_internal_value(self, data):
+        try:
+            return self.queryset.get(pk=data)
+        except DockerImage.DoesNotExist:
+            return self.fail("no_match")
+
+
 class ExtraCheckSerializer(serializers.ModelSerializer):
 
     project = serializers.HyperlinkedRelatedField(
@@ -33,11 +44,18 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    # docker_image = serializers.HyperlinkedRelatedField(
-    #     view_name="docker-image-detail",
-    #     read_only=True
-    # )
+    docker_image = DockerImagerHyperLinkedRelatedField()
 
     class Meta:
         model = ExtraCheck
         fields = "__all__"
+
+    def validate(self, attrs):
+        print(attrs, flush=True)
+        data = super().validate(attrs)
+
+        if "docker_image" not in data:
+            # TODO: translation
+            raise serializers.ValidationError("docker_image is required")
+
+        return data

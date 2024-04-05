@@ -41,7 +41,3 @@ class DockerImage(models.Model):
         blank=False,
         null=False
     )
-
-    timestamp = models.DateTimeField(
-        auto_now_add=True
-    )

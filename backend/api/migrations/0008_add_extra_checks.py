@@ -22,7 +22,6 @@ class Migration(migrations.Migration):
                 ('owner', models.ForeignKey(to="authentication.user", on_delete=models.SET_NULL,
                  related_name="docker_images", blank=False, null=True)),
                 ('public', models.BooleanField(default=False, blank=False, null=False)),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
             ]
         ),
         migrations.CreateModel(

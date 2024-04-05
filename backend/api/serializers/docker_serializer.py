@@ -5,7 +5,6 @@ from rest_framework.exceptions import ValidationError
 
 
 class DockerImageSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = DockerImage
         fields: str = "__all__"
@@ -16,7 +15,7 @@ class DockerImageSerializer(serializers.ModelSerializer):
 
         data["owner"] = self.context["request"].user
 
-        if data["public"] and not data["owner"].is_staff:
+        if "public" in data and data["public"] and not data["owner"].is_staff:
             raise ValidationError(_("docker.errors.custom"))
 
         return data
