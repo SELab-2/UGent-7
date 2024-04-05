@@ -87,9 +87,9 @@ watch(
                 <Title class="mb-6">{{ formattedDate }}</Title>
 
                 <!-- Listing projects with given deadline -->
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-4">
                     <div v-for="project in projectsWithDeadline" :key="project.id">
-                        <ProjectCard class="h-100" :project="project" :course="project.course" v-if="project.course" />
+                        <ProjectCard class="h-100" :project="project" :course="project.course" />
                     </div>
                 </div>
             </div>

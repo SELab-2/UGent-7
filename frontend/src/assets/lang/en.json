@@ -22,7 +22,8 @@
             "courses": "My courses",
             "projects": "Current projects",
             "no_projects": "No projects available for this academic year.",
-            "no_courses": "No courses available for this academic year."
+            "no_courses": "No courses available for this academic year.",
+            "select_course": "Select the course for which you want to create a project:"
         },
         "login": {
             "title": "Login",
@@ -38,9 +39,17 @@
             "title": "Calendar"
         },
         "projects": {
-          "deadline": "Deadline",
-          "submissionStatus": "Indienstatus",
-          "groupMembers": "Group members"
+            "deadline": "Deadline",
+            "submissionStatus": "Indienstatus",
+            "groupMembers": "Group members",
+            "create": "Create new project",
+            "name": "Project name",
+            "description": "Description",
+            "start_date": "Start project",
+            "group_size": "Number of students in a group (1 for an individual project)",
+            "max_score": "Maximum score that can be achieved",
+            "visibility": "Make project visible to students",
+            "score_visibility": "Make score, when uploaded, automatically visible to students"
         },
         "courses": {
             "create": "Create course",
@@ -84,6 +93,10 @@
         "messages": {
             "unknown": "An unknown error has occurred."
         }
+    },
+    "validations": {
+        "required": "This field is required",
+        "deadline": "The deadline must be after the start date"
     },
     "primevue": {
         "startsWith": "Starts with",

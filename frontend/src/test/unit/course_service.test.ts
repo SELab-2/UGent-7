@@ -11,10 +11,6 @@ const {
     getCourseByID,
     getCourses,
     getCoursesByStudent,
-
-    createCourse,
-    cloneCourse,
-    deleteCourse,
 } = useCourses();
 
 // "describe" bundles tests about 1 specific thing; here we're testing course

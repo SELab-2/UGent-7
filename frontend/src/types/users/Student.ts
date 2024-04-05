@@ -20,7 +20,36 @@ export class Student extends User {
         public groups: Group[] = [],
         public faculties: Faculty[] = [],
     ) {
-        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
+        super(
+            id,
+            username,
+            email,
+            first_name,
+            last_name,
+            last_enrolled,
+            is_staff,
+            roles,
+            faculties,
+            create_time,
+            last_login,
+        );
+    }
+
+    /**
+     * Check if the student has a course.
+     * @param course
+     */
+    public hasCourse(course: Course): boolean {
+        return this.courses.some((c) => c.id === course.id);
+    }
+
+    /**
+     * Check if the user is a student.
+     *
+     * @returns boolean
+     */
+    public isStudent(): boolean {
+        return true;
     }
 
     /**
@@ -41,14 +70,5 @@ export class Student extends User {
             student.last_login !== null ? new Date(student.last_login) : null,
             student.studentId,
         );
-    }
-
-    /**
-     * Check if the user is a student.
-     *
-     * @returns boolean
-     */
-    public isStudent(): boolean {
-        return true;
     }
 }

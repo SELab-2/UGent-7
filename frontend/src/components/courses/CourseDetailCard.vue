@@ -27,17 +27,18 @@ const images = Object.keys(
             <img
                 class="w-full h-12rem border-round-top"
                 style="object-fit: cover; margin-bottom: -4px"
-                :alt="course.description"
-                :src="images[course.name.length % images.length]" />
+                :alt="course.name ?? ''"
+                :src="images[Math.ceil(Math.random() * images.length) % images.length]"
+            />
         </template>
         <template #title>
-            <h2 class="text-primary m-0 text-2xl">{{ course.name }}</h2>
+            <h2 class="text-primary m-0 text-xl">{{ course.name }}</h2>
         </template>
         <template #subtitle>
             <span class="text-sm">{{ course.getCourseYear() }}</span>
         </template>
         <template #content>
-            {{ course.description }}
+            {{ course.getExcerpt() }}
         </template>
         <template #footer>
             <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">

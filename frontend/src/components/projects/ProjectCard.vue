@@ -30,7 +30,7 @@ const { t } = useI18n();
 <template>
     <Card class="border-round project-card">
         <template #header>
-            <h2 class="text-primary m-0 text-2xl"><span class="pi pi-book text-xl mr-2" /> {{ course.name }}</h2>
+            <h2 class="text-primary m-0 text-xl"><span class="pi pi-book text-xl mr-2" /> {{ course.name }}</h2>
         </template>
         <template #subtitle>
             {{ project.name }}
@@ -53,7 +53,8 @@ const { t } = useI18n();
                         courseId: course.id,
                         projectId: project.id,
                     },
-                }">
+                }"
+            >
                 <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
             </RouterLink>
         </template>

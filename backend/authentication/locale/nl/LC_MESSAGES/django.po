@@ -1,0 +1,32 @@
+msgid "faculties.bioscience_engineering"
+msgstr "Bio-ingenieurswetenschappen"
+
+msgid "faculties.veterinary_medicine"
+msgstr "Diergeneeskunde"
+
+msgid "faculties.economics_business_administration"
+msgstr "Economie en Bedrijfskunde"
+
+msgid "faculties.pharmaceutical_sciences"
+msgstr "Farmaceutische Wetenschappen"
+
+msgid "faculties.medicine_health_sciences"
+msgstr "Geneeskunde en Gezondheidswetenschappen"
+
+msgid "faculties.engineering_architecture"
+msgstr "Ingenieurswetenschappen en Architectuur"
+
+msgid "faculties.arts_philosophy"
+msgstr "Letteren en Wijsbegeerte"
+
+msgid "faculties.political_social_sciences"
+msgstr "Politieke en Sociale Wetenschappen"
+
+msgid "faculties.psychology_educational_sciences"
+msgstr "Psychologie en Pedagogische Wetenschappen"
+
+msgid "faculties.law_criminology"
+msgstr "Recht en Criminologie"
+
+msgid "faculties.science"
+msgstr "Wetenschappen"

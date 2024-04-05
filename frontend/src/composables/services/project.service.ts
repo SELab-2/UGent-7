@@ -84,7 +84,7 @@ export function useProject(): ProjectState {
                 visible: projectData.visible,
                 archived: projectData.archived,
                 locked_groups: projectData.locked_groups,
-                start_data: projectData.start_date,
+                start_date: projectData.start_date,
                 deadline: projectData.deadline,
                 max_score: projectData.max_score,
                 score_visible: projectData.score_visible,

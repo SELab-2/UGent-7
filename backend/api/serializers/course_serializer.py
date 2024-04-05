@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from api.serializers.student_serializer import StudentIDSerializer
 from api.serializers.teacher_serializer import TeacherIDSerializer
+from api.serializers.faculty_serializer import FacultySerializer
 from api.models.course import Course
 
 
@@ -29,6 +30,10 @@ class CourseSerializer(serializers.ModelSerializer):
 
     parent_course = serializers.HyperlinkedRelatedField(
         many=False, read_only=True, view_name="course-detail"
+    )
+
+    faculty = FacultySerializer(
+        read_only=True
     )
 
     class Meta:

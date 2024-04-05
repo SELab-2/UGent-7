@@ -1,0 +1,32 @@
+msgid "faculties.bioscience_engineering"
+msgstr "Bioscience Engineering"
+
+msgid "faculties.veterinary_medicine"
+msgstr "Veterinary Medicine"
+
+msgid "faculties.economics_business_administration"
+msgstr "Economics and Business Administration"
+
+msgid "faculties.pharmaceutical_sciences"
+msgstr "Pharmaceutical Sciences"
+
+msgid "faculties.medicine_health_sciences"
+msgstr "Medicine and Health Sciences"
+
+msgid "faculties.engineering_architecture"
+msgstr "Engineering and Architecture"
+
+msgid "faculties.arts_philosophy"
+msgstr "Arts and Philosophy"
+
+msgid "faculties.political_social_sciences"
+msgstr "Political and Social Sciences"
+
+msgid "faculties.psychology_educational_sciences"
+msgstr "Psychology and Educational Sciences"
+
+msgid "faculties.law_criminology"
+msgstr "Law and Criminology"
+
+msgid "faculties.sciences"
+msgstr "Sciences"

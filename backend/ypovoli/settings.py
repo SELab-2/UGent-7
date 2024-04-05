@@ -91,6 +91,7 @@ AUTH_USER_MODEL = "authentication.User"
 PORT = environ.get("DJANGO_CAS_PORT", "8080")
 CAS_ENDPOINT = "https://login.ugent.be"
 CAS_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}/auth/verify"
+CAS_DEBUG_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}/api/auth/cas/echo"
 API_ENDPOINT = f"https://{DOMAIN_NAME}/api"
 
 # Database
@@ -169,3 +170,7 @@ CACHES = {
 
 CELERY_BROKER_URL = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
 CELERY_RESULT_BACKEND = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
+
+FILE_PATHS = {
+    "docker_images": "../data/docker_images/",
+}

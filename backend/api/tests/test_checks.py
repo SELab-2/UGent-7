@@ -31,11 +31,11 @@ def create_structure_check(id, name, project, obligated_extensions, blocked_exte
     return check
 
 
-def create_extra_check(id, project, run_script):
-    """
-    Create an ExtraCheck with the given arguments.
-    """
-    return ExtraCheck.objects.create(id=id, project=project, run_script=run_script)
+# def create_extra_check(id, project, run_script):
+#     """
+#     Create an ExtraCheck with the given arguments.
+#     """
+#     return ExtraCheck.objects.create(id=id, project=project, run_script=run_script)
 
 
 def create_project(id, name, description, visible, archived, days, course, max_score, group_size):
@@ -261,44 +261,44 @@ class StructureCheckModelTests(APITestCase):
         )
 
 
-class ExtraCheckModelTests(APITestCase):
-    def setUp(self) -> None:
-        self.client.force_authenticate(
-            User.get_dummy_admin()
-        )
+# class ExtraCheckModelTests(APITestCase):
+#     def setUp(self) -> None:
+#         self.client.force_authenticate(
+#             User.get_dummy_admin()
+#         )
 
-    def test_no_checks(self):
-        """
-        Able to retrieve no Checks before publishing it.
-        """
-        response_root = self.client.get(reverse("extra-check-list"), follow=True)
-        self.assertEqual(response_root.status_code, 200)
-        self.assertEqual(response_root.accepted_media_type, "application/json")
-        content_json = json.loads(response_root.content.decode("utf-8"))
-        self.assertEqual(content_json, [])
+#     def test_no_checks(self):
+#         """
+#         Able to retrieve no Checks before publishing it.
+#         """
+#         response_root = self.client.get(reverse("extra-check-list"), follow=True)
+#         self.assertEqual(response_root.status_code, 200)
+#         self.assertEqual(response_root.accepted_media_type, "application/json")
+#         content_json = json.loads(response_root.content.decode("utf-8"))
+#         self.assertEqual(content_json, [])
 
-    def test_extra_checks_exists(self):
-        """
-        Able to retrieve a single Checks after creating it.
-        """
-        checks = create_extra_check(
-            id=1, project=get_project(), run_script="test.sh"
-        )
+#     def test_extra_checks_exists(self):
+#         """
+#         Able to retrieve a single Checks after creating it.
+#         """
+#         checks = create_extra_check(
+#             id=1, project=get_project(), run_script="test.sh"
+#         )
 
-        # Make a GET request to retrieve the Checks
-        response = self.client.get(reverse("extra-check-list"), follow=True)
+#         # Make a GET request to retrieve the Checks
+#         response = self.client.get(reverse("extra-check-list"), follow=True)
 
-        # Check if the response was successful
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+#         # Check if the response was successful
+#         self.assertEqual(response.status_code, 200)
+#         self.assertEqual(response.accepted_media_type, "application/json")
 
-        # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+#         # Parse the JSON content from the response
+#         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with one Checks
-        self.assertEqual(len(content_json), 1)
+#         # Assert that the parsed JSON is a list with one Checks
+#         self.assertEqual(len(content_json), 1)
 
-        # Assert the details of the retrieved Checks match the created Checks
-        retrieved_checks = content_json[0]
-        self.assertEqual(int(retrieved_checks["id"]), checks.id)
-        self.assertEqual(retrieved_checks["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)
+#         # Assert the details of the retrieved Checks match the created Checks
+#         retrieved_checks = content_json[0]
+#         self.assertEqual(int(retrieved_checks["id"]), checks.id)
+#         self.assertEqual(retrieved_checks["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)

@@ -17,7 +17,20 @@ export class Teacher extends User {
         public create_time: Date,
         public last_login: Date | null,
     ) {
-        super(id, username, email, first_name, last_name, last_enrolled, is_staff, roles, faculties, create_time, last_login);
+        super(
+            id,
+            username,
+            email,
+            first_name,
+            last_name,
+            last_enrolled,
+            is_staff,
+            roles,
+            faculties,
+            create_time,
+            last_login,
+            courses,
+        );
     }
 
     /**

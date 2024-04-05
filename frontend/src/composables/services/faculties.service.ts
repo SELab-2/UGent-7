@@ -7,7 +7,7 @@ interface FacultyState {
     faculties: Ref<Faculty[] | null>;
     faculty: Ref<Faculty | null>;
     getFacultyByID: (name: string) => Promise<void>;
-    getFacultys: () => Promise<void>;
+    getFaculties: () => Promise<void>;
     createFaculty: (facultyData: Faculty) => Promise<void>;
     deleteFaculty: (id: string) => Promise<void>;
 }
@@ -21,7 +21,7 @@ export function useFaculty(): FacultyState {
         await get<Faculty>(endpoint, faculty, Faculty.fromJSON);
     }
 
-    async function getFacultys(): Promise<void> {
+    async function getFaculties(): Promise<void> {
         const endpoint = endpoints.faculties.index;
         await getList<Faculty>(endpoint, faculties, Faculty.fromJSON);
     }
@@ -40,7 +40,7 @@ export function useFaculty(): FacultyState {
         faculties,
         faculty,
         getFacultyByID,
-        getFacultys,
+        getFaculties,
 
         createFaculty,
         deleteFaculty,

@@ -1,18 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
 
-const {
-    projects,
-    project,
-    getProjectByID,
-    getProjectsByCourse,
-    getProjectsByCourseAndDeadline,
-    getProjectsByStudent,
-
-    createProject,
-    deleteProject,
-} = useProject();
+const { projects, project, getProjectByID, getProjectsByCourse, getProjectsByStudent } = useProject();
 
 describe('project', (): void => {
     it('gets project data by id', async () => {

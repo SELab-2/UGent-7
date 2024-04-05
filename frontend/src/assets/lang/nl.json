@@ -21,8 +21,9 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
-            "no_projects": "Geen projecten beschikbaar voor dit academiejaar.",
-            "no_courses": "Geen vakken beschikbaar voor dit academiejaar."
+            "no_projects": "Geen projecten gevonden.",
+            "no_courses": "Geen vakken gevonden.",
+            "select_course": "Selecteer het vak waarvoor je een project wil maken:"
         },
         "login": {
             "title": "Inloggen",
@@ -40,13 +41,29 @@
         "projects": {
             "deadline": "Deadline",
             "submissionStatus": "Indienstatus",
-            "groupMembers": "Groepsleden"
+            "groupMembers": "Groepsleden",
+            "create": "Creëer nieuw project",
+            "name": "Projectnaam",
+            "description": "Beschrijving",
+            "start_date": "Start project",
+            "group_size": "Aantal studenten per groep (1 voor individueel project)",
+            "max_score": "Maximale te behalen score",
+            "visibility": "Project zichtbaar maken voor studenten",
+            "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten"
         },
         "courses": {
           "create": "Creëer vak",
           "name": "Vaknaam",
           "description": "Beschrijving",
-          "year": "Academiejaar"
+          "year": "Academiejaar",
+          "search": {
+              "search": "Zoeken",
+              "faculty": "Faculteit",
+              "year": "Academiejaar",
+              "placeholder": "Zoek een vak op naam",
+              "title": "Zoek een vak",
+              "results": "{0} vakken gevonden voor ingestelde filters"
+          }
       }
     },
     "composables": {
@@ -83,8 +100,28 @@
     },
     "toasts": {
         "messages": {
-            "unknown": "Er is een onbekende fout opgetreden."
+            "success": "Succes",
+            "error": "Fout",
+            "unknown": "Er is een onbekende fout opgetreden.",
+            "courses": {
+                "enrollment": {
+                    "success": "Je bent succesvol ingeschreven voor het vak '{0}'.",
+                    "error": "Er is een fout opgetreden tijdens het inschrijven voor het vak '{0}'."
+                },
+                "leave": {
+                    "success": "Je bent succesvol uitgeschreven voor het vak '{0}'.",
+                    "error": "Er is een fout opgetreden tijdens het uitschrijven voor het vak '{0}'."
+                }
+            },
+            "login": {
+                "success": "Je bent succesvol ingelogd.",
+                "error": "Er is een fout opgetreden tijdens het inloggen."
+            }
         }
+    },
+    "validations": {
+        "required": "Dit veld is verplicht",
+        "deadline": "De deadline moet na de startdatum liggen"
     },
     "primevue": {
         "accept": "Ja",

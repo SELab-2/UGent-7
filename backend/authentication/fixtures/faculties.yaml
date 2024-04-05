@@ -1,33 +1,44 @@
 - model: authentication.faculty
   pk: Bio-ingenieurswetenschappen
-  fields: {}
+  fields:
+    name: "faculties.bioscience_engineering"
 - model: authentication.faculty
   pk: Diergeneeskunde
-  fields: {}
+  fields:
+    name: "faculties.veterinary_medicine"
 - model: authentication.faculty
   pk: Economie_Bedrijfskunde
-  fields: {}
+  fields:
+    name: "faculties.economics_business_administration"
 - model: authentication.faculty
   pk: Farmaceutische_Wetenschappen
-  fields: {}
+  fields:
+    name: "faculties.pharmaceutical_sciences"
 - model: authentication.faculty
   pk: Geneeskunde_Gezondheidswetenschappen
-  fields: {}
+  fields:
+    name: "faculties.medicine_health_sciences"
 - model: authentication.faculty
   pk: Ingenieurswetenschappen_Architectuur
-  fields: {}
+  fields:
+    name: "faculties.engineering_architecture"
 - model: authentication.faculty
   pk: Letteren_Wijsbegeerte
-  fields: {}
+  fields:
+    name: "faculties.arts_philosophy"
 - model: authentication.faculty
   pk: Politieke_Sociale_Wetenschappen
-  fields: {}
+  fields:
+    name: "faculties.political_social_sciences"
 - model: authentication.faculty
   pk: Psychologie_PedagogischeWetenschappen
-  fields: {}
+  fields:
+    name: "faculties.psychology_educational_sciences"
 - model: authentication.faculty
   pk: Recht_Criminologie
-  fields: {}
+  fields:
+    name: "faculties.law_criminology"
 - model: authentication.faculty
   pk: Wetenschappen
-  fields: {}
+  fields:
+    name: "faculties.sciences"

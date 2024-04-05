@@ -18,6 +18,7 @@ from api.serializers.course_serializer import (
     CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer,
     TeacherJoinSerializer, TeacherLeaveSerializer
 )
+from api.views.pagination.basic_pagination import BasicPagination
 from api.serializers.teacher_serializer import TeacherSerializer
 from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
 from api.serializers.student_serializer import StudentSerializer
@@ -45,6 +46,35 @@ class CourseViewSet(viewsets.ModelViewSet):
             {"message": gettext("courses.success.create")},
             status=status.HTTP_201_CREATED
         )
+
+    @action(detail=False)
+    def search(self, request: Request) -> Response:
+        self.pagination_class = BasicPagination
+
+        # Extract filter params
+        search = request.query_params.get("search", "")
+        years = request.query_params.getlist("years[]")
+        faculties = request.query_params.getlist("faculties[]")
+
+        # Filter the queryset based on the search term
+        queryset = self.get_queryset().filter(
+            name__icontains=search
+        )
+
+        # Filter the queryset based on selected years
+        if years:
+            queryset = queryset.filter(academic_startyear__in=years)
+
+        # Filter the queryset based on selected faculties
+        if faculties:
+            queryset = queryset.filter(faculty__in=faculties)
+
+        # Serialize the resulting queryset
+        serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+            "request": request
+        })
+
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=True, permission_classes=[IsAdminUser | CourseAssistantPermission])
     def assistants(self, request: Request, **_):

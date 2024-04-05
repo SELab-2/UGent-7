@@ -21,8 +21,8 @@ export class User {
      * Get the academic years of the user.
      */
     get academic_years(): number[] {
-        const startYear = this.getAcademicYear(this.create_time);
-        const endYear = this.getAcademicYear(new Date());
+        const startYear = User.getAcademicYear(this.create_time);
+        const endYear = User.getAcademicYear(new Date());
 
         return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
     }
@@ -42,7 +42,7 @@ export class User {
      * @param date
      * @returns number
      */
-    public getAcademicYear(date: Date = new Date()): number {
+    public static getAcademicYear(date: Date = new Date()): number {
         const year = date.getFullYear();
 
         if (date.getMonth() >= 9) {
