@@ -32,7 +32,7 @@ describe('admin', (): void => {
         await getAdmins();
         expect(admins).not.toBeNull();
         expect(Array.isArray(admins.value)).toBe(true);
-        expect(admins.value?.length).toBe(2);
+        expect(admins.value?.length).toBe(3);
 
         expect(admins.value?.[0]?.username).toBe('tverslyp');
         expect(admins.value?.[0]?.is_staff).toBe(true);
