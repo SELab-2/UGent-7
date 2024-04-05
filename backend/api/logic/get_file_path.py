@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 def get_project_file_path(instance: Project) -> str:
-    return f"projects/{instance.id}"
+    return f"projects/{instance.course.id}/{instance.id}"
 
 
 def get_submission_file_path(instance: Submission, _: str) -> str:

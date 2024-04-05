@@ -15,7 +15,7 @@ class StructureCheckViewSet(viewsets.ModelViewSet):
     serializer_class = StructureCheckSerializer
 
 
-# TODO: Run all checks again and send message to submissions guys if not success. Both update and delete
+# TODO: Run all checks again and send message to submissions guys if not success (just in general send mail when project checks failed). Both update and delete
 # TODO: Set result to invalid for all submission but the newest
 class ExtraCheckView(UpdateModelMixin, DestroyModelMixin):
 

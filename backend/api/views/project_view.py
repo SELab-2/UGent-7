@@ -22,6 +22,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 
+# TODO: Error message when creating a project with wrongly formatted date is weird
 class ProjectViewSet(CreateModelMixin,
                      RetrieveModelMixin,
                      UpdateModelMixin,
@@ -153,7 +154,7 @@ class ProjectViewSet(CreateModelMixin,
             }
         )
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save(project=project)
 
         return Response({

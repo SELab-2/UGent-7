@@ -25,6 +25,7 @@ class StructureCheckSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# TODO: Check if docker image is public and / or his
 class ExtraCheckSerializer(serializers.ModelSerializer):
 
     project = serializers.HyperlinkedRelatedField(
@@ -32,10 +33,10 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    docker_image = serializers.HyperlinkedRelatedField(
-        view_name="docker-image-detail",
-        read_only=True
-    )
+    # docker_image = serializers.HyperlinkedRelatedField(
+    #     view_name="docker-image-detail",
+    #     read_only=True
+    # )
 
     class Meta:
         model = ExtraCheck

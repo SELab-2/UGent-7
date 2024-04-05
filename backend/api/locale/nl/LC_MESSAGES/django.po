@@ -69,10 +69,6 @@ msgstr "De lesgever bevindt zich al in de opleiding."
 msgid "courses.error.teachers.not_present"
 msgstr "De lesgever bevindt zich niet in de opleiding."
 
-#: serializers/docker_serializer.py:18
-msgid "docker.errors.context"
-msgstr "De gebruiker is niet meegeleverd als context"
-
 #: serializers/docker_serializer.py:21
 msgid "docker.errors.custom"
 msgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"

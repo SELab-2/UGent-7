@@ -53,18 +53,22 @@ class ExtraCheck(models.Model):
     project = models.ForeignKey(
         Project,
         on_delete=models.CASCADE,
-        related_name="extra_checks"
+        related_name="extra_checks",
+        blank=False,
+        null=False
     )
 
     # Link to the docker image that runs the checks
     docker_image = models.ForeignKey(
         DockerImage,
         on_delete=models.CASCADE,
-        related_name="extra_checks"
+        related_name="extra_checks",
+        blank=False,
+        null=False
     )
 
     # File path of the script that runs the checks
-    file_path = models.FileField(
+    file = models.FileField(
         upload_to=get_extra_check_file_path,
         max_length=256,
         blank=False,
