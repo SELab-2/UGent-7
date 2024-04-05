@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import StudentCourseView from './roles/StudentCourseView.vue';
 import TeacherCourseView from './roles/TeacherCourseView.vue';
 import AssistantCourseView from './roles/AssistantCourseView.vue';
