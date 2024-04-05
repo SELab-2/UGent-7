@@ -6,58 +6,59 @@ export const endpoints = {
         token: {
             refresh: '/api/auth/token/refresh/',
             verify: '/api/auth/token/verify/',
-            obtain: '/api/auth/token/'
-        }
+            obtain: '/api/auth/token/',
+        },
     },
     courses: {
         index: '/api/courses/',
+        search: '/api/courses/search/',
         retrieve: '/api/courses/{id}/',
         byStudent: '/api/students/{studentId}/courses/',
         byTeacher: '/api/teachers/{teacherId}/courses/',
         byAssistant: '/api/assistants/{assistantId}/courses/',
-        clone: '/api/courses/{courseId}/clone/'
+        clone: '/api/courses/{courseId}/clone/',
     },
     students: {
         index: '/api/students/',
         retrieve: '/api/students/{id}/',
         byCourse: '/api/courses/{courseId}/students/',
-        byGroup: '/api/groups/{groupId}/students/'
+        byGroup: '/api/groups/{groupId}/students/',
     },
     teachers: {
         index: '/api/teachers/',
         retrieve: '/api/teachers/{id}/',
-        byCourse: '/api/courses/{courseId}/teachers/'
+        byCourse: '/api/courses/{courseId}/teachers/',
     },
     assistants: {
         index: '/api/assistants/',
         retrieve: '/api/assistants/{id}/',
-        byCourse: '/api/courses/{courseId}/assistants/'
+        byCourse: '/api/courses/{courseId}/assistants/',
     },
     admins: {
         index: '/api/admins/',
-        retrieve: '/api/admins/{id}/'
+        retrieve: '/api/admins/{id}/',
     },
     faculties: {
         index: '/api/faculties/',
-        retrieve: '/api/faculties/{name}'
+        retrieve: '/api/faculties/{name}',
     },
     groups: {
         retrieve: '/api/groups/{id}/',
         byProject: '/api/projects/{projectId}/groups/',
-        byStudent: '/api/students/{studentId}/groups/'
+        byStudent: '/api/students/{studentId}/groups/',
     },
     projects: {
         retrieve: '/api/projects/{id}',
-        byCourse: '/api/courses/{courseId}/projects/'
+        byCourse: '/api/courses/{courseId}/projects/',
     },
     submissions: {
         retrieve: '/api/submissions/{id}',
         byProject: '/api/projects/{projectId}/submissions/',
         byGroup: '/api/groups/{groupId}/submissions/',
-        status: '/api/projects/{projectId}/submission_status/'
+        status: '/api/projects/{projectId}/submission_status/',
     },
     structureChecks: {
         retrieve: '/api/structureChecks/{id}',
-        byProject: '/api/projects/{projectId}/structureChecks/'
-    }
-}
+        byProject: '/api/projects/{projectId}/structureChecks/',
+    },
+};

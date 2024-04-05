@@ -7,6 +7,6 @@ export class Response {
      * @param response
      */
     static fromJSON(response: Response): Response {
-        return new Response(response.message)
+        return new Response(response.message);
     }
 }

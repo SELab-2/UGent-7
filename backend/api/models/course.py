@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import Self
 from django.db import models
 
+from authentication.models import Faculty
+
 
 class Course(models.Model):
     """This model represents a single course.
@@ -14,7 +16,15 @@ class Course(models.Model):
     # Begin year of the academic year
     academic_startyear = models.IntegerField(blank=False, null=False)
 
+    # The description of the course
     description = models.TextField(blank=True, null=True)
+
+    # The faculty this course belongs to
+    faculty = models.ForeignKey(
+        Faculty,
+        null=True,
+        on_delete=models.SET_NULL
+    )
 
     # OneToOneField is used to represent a one-to-one relationship
     # with the course of the previous academic year

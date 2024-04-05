@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import Calendar from 'primevue/calendar'
-import BaseLayout from '@/components/layout/BaseLayout.vue'
-import Title from '@/components/layout/Title.vue'
-import { onMounted } from 'vue'
-import { useCourses } from '@/composables/services/courses.service.ts'
-import { useRoute } from 'vue-router'
+import Calendar from 'primevue/calendar';
+import BaseLayout from '@/components/layout/BaseLayout.vue';
+import Title from '@/components/layout/Title.vue';
+import { onMounted } from 'vue';
+import { useCourses } from '@/composables/services/courses.service.ts';
+import { useRoute } from 'vue-router';
 
-const { params } = useRoute()
-const { course, getCourseByID } = useCourses()
+const { params } = useRoute();
+const { course, getCourseByID } = useCourses();
 
 onMounted(() => {
-    getCourseByID(params.courseId as string)
-})
+    getCourseByID(params.courseId as string);
+});
 </script>
 
 <template>

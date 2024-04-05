@@ -8,7 +8,7 @@ from authentication.models import Faculty, User
 def create_faculty(name):
     """
     Create a Faculty with the given arguments."""
-    return Faculty.objects.create(name=name)
+    return Faculty.objects.create(id=name, name=name)
 
 
 def create_admin(id, first_name, last_name, email, faculty=None):

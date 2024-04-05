@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { useStudents } from '@/composables/services/students.service.ts'
-import { onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useStudents } from '@/composables/services/students.service.ts';
+import { onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { type Group } from '@/types/Group.ts';
 
-/**
- * This card lists all users in the group of a project
- */
-const { students, getStudentsByGroup } = useStudents()
-const { t } = useI18n()
-
-/* Component props */
-
+/* Props */
 const props = defineProps<{
-    groupId: string
-}>()
+    group: Group;
+}>();
+
+/* Composable injections */
+const { students, getStudentsByGroup } = useStudents();
+const { t } = useI18n();
 
 onMounted(async () => {
-    await getStudentsByGroup(props.groupId)
-})
+    await getStudentsByGroup(props.group.id);
+});
 </script>
 
 <template>
@@ -25,9 +23,7 @@ onMounted(async () => {
         <div class="groupcard">
             <h2>{{ t('views.projects.groupMembers') }}</h2>
             <div>
-                <p v-for="student in students" :key="student.id">
-                    {{ student.first_name }} {{ student.last_name }}
-                </p>
+                <p v-for="student in students" :key="student.id">{{ student.first_name }} {{ student.last_name }}</p>
             </div>
         </div>
     </div>

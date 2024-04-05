@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import Button from 'primevue/button'
-import BaseLayout from '@/components/layout/BaseLayout.vue'
-import Title from '@/components/layout/Title.vue'
-import Illustration from '@/assets/img/auth/illustration.png'
-import { useI18n } from 'vue-i18n'
-import { PrimeIcons } from 'primevue/api'
-import { endpoints } from '@/config/endpoints.ts'
+import Button from 'primevue/button';
+import BaseLayout from '@/components/layout/BaseLayout.vue';
+import Title from '@/components/layout/Title.vue';
+import Illustration from '@/assets/img/auth/illustration.png';
+import { useI18n } from 'vue-i18n';
+import { PrimeIcons } from 'primevue/api';
+import { endpoints } from '@/config/endpoints.ts';
 
-const { t } = useI18n()
+const { t } = useI18n();
 </script>
 
 <template>
@@ -30,11 +30,7 @@ const { t } = useI18n()
                 </a>
             </div>
             <div class="w-7 relative surface-100 p-4">
-                <img
-                    :src="Illustration"
-                    :alt="t('views.login.illustration')"
-                    class="w-15rem"
-                />
+                <img :src="Illustration" :alt="t('views.login.illustration')" class="w-15rem" />
                 <div
                     class="absolute bottom-0 right-0 bg-primary text-white p-4 w-20rem"
                     style="transform: translateY(50%)"

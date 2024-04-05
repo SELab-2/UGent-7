@@ -22,7 +22,7 @@ def create_course(name, academic_startyear, description=None, parent_course=None
 
 def create_faculty(name):
     """Create a Faculty with the given arguments."""
-    return Faculty.objects.create(name=name)
+    return Faculty.objects.create(id=name, name=name)
 
 
 def create_assistant(id, first_name, last_name, email, faculty=None, courses=None):
