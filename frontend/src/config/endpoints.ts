@@ -40,7 +40,7 @@ export const endpoints = {
     },
     faculties: {
         index: '/api/faculties/',
-        retrieve: '/api/faculties/{name}',
+        retrieve: '/api/faculties/{id}',
     },
     groups: {
         retrieve: '/api/groups/{id}/',

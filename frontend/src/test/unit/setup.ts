@@ -68,6 +68,7 @@ const courses = [
         students: ['1', '2', '3', '000201247011'],
         projects: ['0', '1'],
         parent_course: null,
+        faculty: null,
         name: 'Math',
         academic_startyear: 2023,
         description: 'Math course',
@@ -79,6 +80,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: '3',
+        faculty: null,
         name: 'Sel2',
         academic_startyear: 2023,
         description: 'Software course',
@@ -90,6 +92,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: null,
+        faculty: null,
         name: 'Sel1',
         academic_startyear: 2022,
         description: 'Software course',
@@ -101,6 +104,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: '1',
+        faculty: null,
         name: 'Math',
         academic_startyear: 2024,
         description: 'Math course',
@@ -112,6 +116,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: '12',
+        faculty: null,
         name: 'Math',
         academic_startyear: 2025,
         description: 'Math course',
@@ -123,6 +128,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: null,
+        faculty: null,
         name: 'Club brugge',
         academic_startyear: 2023,
         description: null,
@@ -134,13 +140,14 @@ const courses = [
         students: [],
         projects: [],
         parent_course: null,
+        faculty: null,
         name: 'vergeet barbara',
         academic_startyear: 2023,
         description: null,
     },
 ];
 
-const faculties = [{ name: 'wetenschappen' }, { name: 'voetbal' }];
+const faculties = [{ id: 'sciences', name: 'wetenschappen' }, { id:'football', name: 'voetbal' }];
 
 const students = [
     {
@@ -157,6 +164,7 @@ const students = [
         roles: ['student'],
         courses: ['1', '2', '3'],
         groups: ['0'],
+        faculties: [],
     },
     {
         id: '2',
@@ -172,6 +180,7 @@ const students = [
         roles: ['student'],
         courses: [],
         groups: [],
+        faculties: [],
     },
     {
         id: '000201247011',
@@ -187,6 +196,7 @@ const students = [
         roles: ['student'],
         courses: [],
         groups: [],
+        faculties: [],
     },
     {
         id: '3',
@@ -202,6 +212,7 @@ const students = [
         roles: ['student'],
         courses: [],
         groups: [],
+        faculties: [],
     },
 ];
 
@@ -450,8 +461,8 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.submissions.byGroup.replace('{groupId}', ':id'), ({ params }) => {
         return HttpResponse.json(submissions.filter((x) => x.group === params.id));
     }),
-    http.get(baseUrl + endpoints.faculties.retrieve.replace('{name}', ':name'), ({ params }) => {
-        return HttpResponse.json(faculties.find((x) => x.name === params.name));
+    http.get(baseUrl + endpoints.faculties.retrieve.replace('{id}', ':id'), ({ params }) => {
+        return HttpResponse.json(faculties.find((x) => x.id === params.id));
     }),
     http.get(baseUrl + endpoints.faculties.index, () => {
         return HttpResponse.json(faculties);

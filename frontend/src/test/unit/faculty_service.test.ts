@@ -14,7 +14,7 @@ const {
 
 describe('faculty', (): void => {
     it('gets faculty data by id', async () => {
-        await getFacultyByID('wetenschappen');
+        await getFacultyByID('sciences');
         expect(faculty.value).not.toBeNull();
         expect(faculty.value?.name).toBe('wetenschappen');
     });
