@@ -107,16 +107,16 @@ describe('assistant', (): void => {
             [],
             [],
             new Date('April 2, 2023 01:15:00'),
-            new Date('April 2, 2024 01:15:00')
+            new Date('April 2, 2024 01:15:00'),
         );
 
         await getAssistants();
         expect(assistants).not.toBeNull();
         expect(Array.isArray(assistants.value)).toBe(true);
-        const prevLength = assistants.value?.length || 0;
+        const prevLength = assistants.value?.length ?? 0;
 
         await createAssistant(exampleAssistant);
-        await getAssistants()
+        await getAssistants();
 
         expect(assistants).not.toBeNull();
         expect(Array.isArray(assistants.value)).toBe(true);

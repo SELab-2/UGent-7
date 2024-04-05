@@ -11,8 +11,6 @@ jobs:
   linting-checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Add permission to remove contents of previous action script
-        run: echo ${{ secrets.SUDO }} | sudo -S chown -R $USER:$USER /home/selab2/actions-runner/_work/UGent-7/
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: cd frontend; npm install

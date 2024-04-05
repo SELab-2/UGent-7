@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { afterAll, afterEach, beforeAll } from 'vitest';
 import { setupServer } from 'msw/node';
 import { HttpResponse, http } from 'msw';
@@ -6,7 +7,6 @@ import { createPinia } from 'pinia';
 
 import { endpoints } from '@/config/endpoints.ts';
 import { JSDOM } from 'jsdom';
-import { Student } from '@/types/users/Student';
 
 const baseUrl = 'http://localhost';
 
@@ -147,7 +147,10 @@ const courses = [
     },
 ];
 
-const faculties = [{ id: 'sciences', name: 'wetenschappen' }, { id:'football', name: 'voetbal' }];
+const faculties = [
+    { id: 'sciences', name: 'wetenschappen' },
+    { id: 'football', name: 'voetbal' },
+];
 
 const students = [
     {
@@ -494,7 +497,7 @@ export const restHandlers = [
         const buffer = await request.arrayBuffer();
         const requestBody = new TextDecoder().decode(buffer);
         const newAssistant = JSON.parse(requestBody);
-        newAssistant.roles = ['assistant']
+        newAssistant.roles = ['assistant'];
         assistants.push(newAssistant);
         return HttpResponse.json(assistants);
     }),

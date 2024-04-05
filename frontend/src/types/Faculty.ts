@@ -10,7 +10,6 @@ export class Faculty {
      * @param faculty
      */
     static fromJSON(faculty: Faculty): Faculty {
-        console.log(JSON.stringify(faculty))
         return new Faculty(faculty.id, faculty.name);
     }
 }

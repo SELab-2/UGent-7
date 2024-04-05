@@ -161,29 +161,29 @@ describe('students', (): void => {
 
     it('create student', async () => {
         const exampleStudent = new Student(
-            "103",
-            "sample_student",
-            "sample.student@UGent.be",
-            "Sample",
-            "Student",
+            '103',
+            'sample_student',
+            'sample.student@UGent.be',
+            'Sample',
+            'Student',
             false,
             2024,
             new Date('April 2, 2023 01:15:00'),
             new Date('April 2, 2024 01:15:00'),
-            "12345",
+            '12345',
             ['student'],
             [],
             [],
-            []
+            [],
         );
 
         await getStudents();
         expect(students).not.toBeNull();
         expect(Array.isArray(students.value)).toBe(true);
-        const prevLength = students.value?.length || 0;
+        const prevLength = students.value?.length ?? 0;
 
         await createStudent(exampleStudent);
-        await getStudents()
+        await getStudents();
 
         expect(students).not.toBeNull();
         expect(Array.isArray(students.value)).toBe(true);
