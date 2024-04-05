@@ -41,7 +41,9 @@
         "projects": {
             "deadline": "Deadline",
             "submissionStatus": "Indienstatus",
+            "group": "Group",
             "groupMembers": "Group members",
+            "chooseGroup": "Choose a group",
             "create": "Create new project",
             "name": "Project name",
             "description": "Description",

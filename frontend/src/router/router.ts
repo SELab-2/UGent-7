@@ -12,6 +12,8 @@ import { type RouteRecordRaw, createWebHistory, createRouter } from 'vue-router'
 import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts'
 import { LogoutGuard } from '@/router/guards/logout.guard.ts'
 import ProjectView from '@/views/projects/ProjectView.vue'
+import CreateProjectView from "@/views/projects/CreateProjectView.vue";
+import SearchCourseView from "@/views/courses/SearchCourseView.vue";
 
 const routes: RouteRecordRaw[] = [
     // Authentication
