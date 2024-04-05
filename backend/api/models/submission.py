@@ -2,7 +2,10 @@ from api.logic.get_file_path import (get_extra_check_result_file_path,
                                      get_submission_file_path)
 from api.models.checks import ExtraCheck
 from api.models.group import Group
+from api.signals import run_extra_checks
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Submission(models.Model):
@@ -38,6 +41,12 @@ class Submission(models.Model):
         unique_together = ("group", "submission_number")
 
 
+@receiver(post_save, sender=Submission)
+def run_checks(sender, instance: Submission, **kwargs):
+    run_extra_checks.send(sender=Submission, submission=instance)
+
+
+# TODO: Why a different class?
 class SubmissionFile(models.Model):
     """Model for a file that is part of a submission."""
 

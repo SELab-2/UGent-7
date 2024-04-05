@@ -51,7 +51,6 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate(self, attrs):
-        print(attrs, flush=True)
         data = super().validate(attrs)
 
         if "docker_image" not in data:

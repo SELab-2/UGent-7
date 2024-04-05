@@ -2,7 +2,10 @@ from api.logic.get_file_path import get_extra_check_file_path
 from api.models.docker import DockerImage
 from api.models.extension import FileExtension
 from api.models.project import Project
+from api.signals import run_extra_checks
 from django.db import models
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
 
 
 class StructureCheck(models.Model):
@@ -89,3 +92,18 @@ class ExtraCheck(models.Model):
         blank=False,
         null=False
     )
+
+
+@receiver(post_save, sender=ExtraCheck)
+@receiver(pre_delete, sender=ExtraCheck)
+def run_checks(sender, instance: ExtraCheck, **kwargs):
+    print("Hoi", flush=True)
+    # TODO: Use querysets
+    for group in instance.project.groups.all():
+        submissions = group.submissions.order_by("submission_time")
+        if submissions:
+            run_extra_checks.send(sender=ExtraCheck, submission=submissions[0])
+
+            for submission in submissions[1:]:
+                submission.is_valid = False
+                submission.save()

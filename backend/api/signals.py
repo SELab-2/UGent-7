@@ -1,5 +1,4 @@
 from api.models.student import Student
-from api.models.submission import Submission
 from authentication.models import User
 from django.dispatch import Signal, receiver
 
@@ -15,6 +14,10 @@ def user_creation(user: User, attributes: dict, **_):
 
 run_extra_checks = Signal()
 
+
 @receiver(run_extra_checks)
-def _run_extra_checks(submission: Submission, **kwargs):
+def _run_extra_checks(submission, **kwargs):
+    # TODO: Set all previous submissions to invalid
+    # TODO: Run extra checks
     print("Running extra checks", flush=True)
+    return True
