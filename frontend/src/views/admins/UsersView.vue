@@ -15,7 +15,7 @@ import InputText from "primevue/inputtext";
 import InputSwitch from "primevue/inputswitch";
 import Button from "primevue/button";
 
-import {roles, Role, User} from "@/types/User.ts";
+import {roles, Role, User} from "@/types/users/User.ts";
 
 import {useI18n} from 'vue-i18n';
 
