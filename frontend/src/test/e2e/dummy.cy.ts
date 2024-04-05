@@ -1,3 +1,1 @@
-describe('dummy e2e test', () => {
-
-});
+describe('dummy e2e test', () => {});
