@@ -1,0 +1,16 @@
+name: backend-tests
+
+on:
+  push:
+    branches: [main, development, services]
+  pull_request:
+    branches: [main, development]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: ./test.sh
