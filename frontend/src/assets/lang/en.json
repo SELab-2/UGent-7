@@ -49,7 +49,8 @@
             "group_size": "Number of students in a group (1 for an individual project)",
             "max_score": "Maximum score that can be achieved",
             "visibility": "Make project visible to students",
-            "score_visibility": "Make score, when uploaded, automatically visible to students"
+            "score_visibility": "Make score, when uploaded, automatically visible to students",
+            "docker_upload": "Upload a Dockerfile"
         },
         "courses": {
             "create": "Create course",

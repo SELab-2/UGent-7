@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Calendar from 'primevue/calendar';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
+import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
 import { reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -34,6 +35,7 @@ const form = reactive({
     maxScore: 10,
     visibility: true,
     scoreVisibility: false,
+    dockerScript: null,
 });
 
 // Define validation rules for each form field
@@ -49,6 +51,13 @@ const rules = computed(() => {
         maxScore: { required: helpers.withMessage(t('validations.required'), required) },
     };
 });
+
+// Function to handle the file upload
+const onDockerScriptUpload = (event: any) => {
+    form.dockerScript = event.files[0];
+
+    console.log(form.dockerScript);
+};
 
 // useVuelidate function to perform form validation
 const v$ = useVuelidate(rules, form);
@@ -85,13 +94,13 @@ const submitProject = async (): Promise<void> => {
 
 <template>
     <BaseLayout>
-        <div class="grid fadein">
-            <div class="col-12 md:col-6">
-                <!-- Create project heading -->
-                <Title class="mb-6">{{ t('views.projects.create') }}</Title>
+        <!-- Project form -->
+        <form @submit.prevent="submitProject">
+            <div class="grid fadein">
+                <div class="col-12 md:col-10">
+                    <!-- Create project heading -->
+                    <Title class="mb-6">{{ t('views.projects.create') }}</Title>
 
-                <!-- Project form -->
-                <form @submit.prevent="submitProject">
                     <!-- Project name -->
                     <div class="mb-4">
                         <label for="projectName">{{ t('views.projects.name') }}</label>
@@ -169,9 +178,17 @@ const submitProject = async (): Promise<void> => {
                             rounded
                         />
                     </div>
-                </form>
+                </div>
+
+                <div class="col-12 md:col-10">
+                    <!-- Upload field for docker script -->
+                    <div class="mt-7 mb-4">
+                        <label for="dockerScript">{{ t('views.projects.docker_upload') }}</label>
+                        <FileUpload id="dockerScript" mode="basic" accept=".sh" :multiple="false" @upload="onDockerScriptUpload"/>
+                    </div>
+                </div>
             </div>
-        </div>
+        </form>
     </BaseLayout>
 </template>
 
@@ -186,4 +203,11 @@ const submitProject = async (): Promise<void> => {
 label {
     margin-bottom: 0.5rem;
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equally sized columns */
+    gap: 1rem; /* Space between columns */
+}
+
 </style>
