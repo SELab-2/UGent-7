@@ -1,10 +1,13 @@
 import {ref} from "vue";
-import {User} from "@/types/User.ts";
+import {User} from "@/types/users/User.ts";
+import {PaginatorResponse} from "@/types/filter/Paginator.ts";
 import {endpoints} from "@/config/endpoints.ts";
-import {create, get, getList} from "@/composables/services/helpers.ts";
+import {create, get, getList, getPaginatedList} from "@/composables/services/helpers.ts";
+import {Filter} from "@/types/filter/Filter.ts";
 
 
 export function useUser() {
+    const pagination = ref<PaginatorResponse<User> | null>(null);
     const users = ref<User[]|null>(null);
     const user = ref<User|null>(null);
 
@@ -16,6 +19,11 @@ export function useUser() {
     async function getUsers() {
         const endpoint = endpoints.users.index;
         await getList<User>(endpoint, users, User.fromJSON);
+    }
+
+    async function searchUsers(filters: Filter, page: number, pageSize: number) {
+        const endpoint = endpoints.users.search;
+        await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON);
     }
 
     async function createUser(user_data: User) {
@@ -32,11 +40,13 @@ export function useUser() {
     }
 
     return {
+        pagination,
         users,
         user,
 
         getUserByID,
         getUsers,
+        searchUsers,
         createUser
     }
 }

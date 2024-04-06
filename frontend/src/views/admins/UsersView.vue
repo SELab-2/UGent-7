@@ -1,40 +1,59 @@
 <script setup lang="ts">
-import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
-import Title from '@/components/layout/Title.vue';
-import { ref, onMounted } from 'vue';
-import { useUser } from '@/composables/services/users.service.ts';
 import DataTable, {
     DataTableFilterEvent,
     DataTablePageEvent,
     DataTableSelectAllChangeEvent,
     DataTableSortEvent,
-} from "primevue/datatable";
-import Column from "primevue/column";
-import Dialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
-import InputSwitch from "primevue/inputswitch";
-import Button from "primevue/button";
+} from 'primevue/datatable';
+import Column from 'primevue/column';
+import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import InputSwitch from 'primevue/inputswitch';
+import Button from 'primevue/button';
+import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
+import Title from '@/components/layout/Title.vue';
+import { ref, onMounted, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { watchDebounced } from '@vueuse/core'
+import { useUser } from '@/composables/services/users.service.ts';
+import { useFilter } from '@/composables/filters/filter.ts';
+import { usePaginator } from '@/composables/filters/paginator.ts';
 
-import {roles, Role, User} from "@/types/users/User.ts";
+import { roles, Role, User } from '@/types/users/User.ts';
+import { USER_FILTER } from '@/types/filter/Filter.ts';
 
-import {useI18n} from 'vue-i18n';
-
-const { users, getUsers, createUser } = useUser();
+/* Composable injections */
 const { t } = useI18n();
+const { pagination, users, getUsers, searchUsers, createUser } = useUser();
+const { filter } = useFilter(USER_FILTER);
+const { paginate, page, first, pageSize } = usePaginator();
 
+onMounted(async () => {
+    await getUsers()
 
-onMounted(() => {
-    loading.value = true;
+    watch(
+        filter,
+        () => {
+            paginate(0);
+            pagination.value = null;
+        },
+        { deep: true },
+    );
 
-    lazyParams.value = {
-        first: 0,
-        rows: 10,
-        sortField: null,
-        sortOrder: null,
-        filters: filters.value
-    };
+    watch(
+        page,
+        async () => {
+            await searchUsers(filter.value, page.value, pageSize.value)
+        }
+    )
 
-    loadLazyData();
+    watchDebounced(
+        filter,
+        async () => {
+            await searchUsers(filter.value, page.value, pageSize.value)
+        },
+        { debounce: 500, immediate: true, deep: true}
+    );
 });
 
 const dt = ref();
@@ -44,7 +63,6 @@ const selectedStudents = ref();
 const selectAll = ref(false);
 const editItem = ref<User>(User.blankUser());
 const popupEdit = ref<boolean>(false);
-const first = ref(0);
 const filters = ref({
     'name': {value: '', matchMode: 'contains'},
     'country.name': {value: '', matchMode: 'contains'},
@@ -81,10 +99,6 @@ const loadLazyData = (event?: DataTablePageEvent | DataTableSortEvent | DataTabl
             totalRecords.value = users.value?.length ?? 0
         });
     }, Math.random() * 1000 + 250);
-};
-const onPage = (event: DataTablePageEvent) => {
-    lazyParams.value = event;
-    loadLazyData(event);
 };
 const onSort = (event: DataTableSortEvent) => {
     lazyParams.value = event;
@@ -134,7 +148,7 @@ const saveItem = () => {
             // this is not allowed TODO
         } else {
             // update locally
-            const index = users.value.findIndex(row => row.id == editItem.value.id);
+            const index = users.value.findIndex((row: User) => row.id == editItem.value.id);
             users.value.splice(index, 1, {...editItem.value});
             // update remotely TODO
         }
@@ -165,8 +179,8 @@ const addAdmin = () => {
         <Title>
             <div class="gap-3 mb-3">{{ t('admin.users.title') }}</div>
             <div class="card p-fluid">
-                <DataTable :value="users" lazy paginator :first="first" :rows="10" v-model:filters="filters" ref="dt" dataKey="id"
-                    :totalRecords="totalRecords" :loading="loading" @page="onPage($event)" @sort="onSort($event)" @filter="onFilter($event)" filterDisplay="row"
+                <DataTable :value="users" lazy paginator :first="first" :rows="pageSize" v-model:filters="filters" ref="dt" dataKey="id"
+                    :totalRecords="pagination?.count" :loading="loading" @update:first="paginate($event)" @sort="onSort($event)" @filter="onFilter($event)" filterDisplay="row"
                     :globalFilterFields="['name','country.name', 'company', 'representative.name']"
                     v-model:selection="selectedStudents" :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-select="onRowSelect" @row-unselect="onRowUnselect" tableStyle="min-width: 75rem">
                     <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
@@ -182,14 +196,10 @@ const addAdmin = () => {
         </Title>
     </AdminLayout>
     <Dialog v-model:visible="popupEdit" header="Edit user" :style="{ width: '25rem' }" class="flex" id="editDialog">
-        <div class="flex align-items-center gap-3 mb-3">
-            <label class="font-semibold w-6rem">{{ columns[0].header }}</label>
-            <span>{{ editItem.id }}</span>
-        </div>
-        <div v-for="data in columns.toSpliced(columns.length - 1, 1).toSpliced(0, 1)"
+        <div v-for="data in columns.toSpliced(columns.length - 1, 1)"
              class="flex align-items-center gap-3 mb-3">
             <label class="font-semibold w-6rem">{{ data.header }}</label>
-            <InputText type="text" class="flex-auto" v-model="editItem[data.field]"/>
+            <span>{{ editItem[data.field] }}</span>
         </div>
         <div v-for="role in roles" class="flex align-items-center gap-3 mb-3">
             <label class="font-semibold w-6rem">{{ role }}</label>
@@ -198,16 +208,6 @@ const addAdmin = () => {
         <div class="flex justify-content-end gap-2">
             <Button type="button" label="Cancel" severity="secondary" @click="popupEdit = false"></Button>
             <Button type="button" label="Save" @click="saveItem"></Button>
-        </div>
-    </Dialog>
-    <Dialog v-model:visible="popupAdd" header="Add admin" :style="{ width: '25rem' }" class="flex" id="addAdminDialog">
-        <div v-for="data in adminColumns" class="flex align-items-center gap-3 mb-3">
-            <label class="font-semibold w-6rem">{{ data.header }}</label>
-            <InputText type="text" class="flex-auto" v-model="admin[data.field]"/>
-        </div>
-        <div class="flex justify-content-end gap-2">
-            <Button type="button" label="Cancel" severity="secondary" @click="popupAdd = false"></Button>
-            <Button type="button" label="Save" @click="addAdmin"></Button>
         </div>
     </Dialog>
 </template>

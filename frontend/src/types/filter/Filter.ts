@@ -1,5 +1,11 @@
 import { type LocationQuery } from 'vue-router';
 
+export const USER_FILTER = {
+    search: '',
+    username: '',
+    email: ''
+};
+
 export type CourseFilter = {
     faculties: string[];
     years: string[];
