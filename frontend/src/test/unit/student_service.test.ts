@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useStudents } from '@/composables/services/students.service.ts';
+import { Student } from '@/types/users/Student';
 
 const {
     students,
@@ -156,5 +157,40 @@ describe('students', (): void => {
         expect(students.value?.[3]?.courses).toEqual([]);
         expect(students.value?.[3]?.groups).toEqual([]);
         expect(students.value?.[3]?.faculties).toEqual([]);
+    });
+
+    it('create student', async () => {
+        const exampleStudent = new Student(
+            '103',
+            'sample_student',
+            'sample.student@UGent.be',
+            'Sample',
+            'Student',
+            false,
+            2024,
+            new Date('April 2, 2023 01:15:00'),
+            new Date('April 2, 2024 01:15:00'),
+            '12345',
+            ['student'],
+            [],
+            [],
+            [],
+        );
+
+        await getStudents();
+        expect(students).not.toBeNull();
+        expect(Array.isArray(students.value)).toBe(true);
+        const prevLength = students.value?.length ?? 0;
+
+        await createStudent(exampleStudent);
+        await getStudents();
+
+        expect(students).not.toBeNull();
+        expect(Array.isArray(students.value)).toBe(true);
+        expect(students.value?.length).toBe(prevLength + 1);
+
+        expect(students.value?.[prevLength]?.first_name).toBe('Sample');
+        expect(students.value?.[prevLength]?.last_name).toBe('Student');
+        expect(students.value?.[prevLength]?.email).toBe('sample.student@UGent.be');
     });
 });

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useAdmin } from '@/composables/services/admins.service.ts';
+import { User } from '../../types/users/User';
 
 const {
     admins,
@@ -52,5 +53,38 @@ describe('admin', (): void => {
         expect(admins.value?.[0]?.last_login).toEqual(new Date('July 23, 2024 01:15:00'));
         expect(admins.value?.[0]?.create_time).toEqual(new Date('July 21, 2024 01:15:00'));
         expect(admins.value?.[1]?.faculties).toEqual([]);
+    });
+
+    it('create admin', async () => {
+        const exampleAdmin = new User(
+            '101', // id
+            'sample_admin', // username
+            'sample.admin@UGent.be', // email
+            'Sample', // first_name
+            'Admin', // last_name
+            2024, // last_enrolled
+            true, // is_staff
+            ['user'], // roles
+            [], // faculties
+            new Date('April 2, 2023 01:15:00'), // create_time
+            new Date('April 2, 2024 01:15:00'), // last_login
+        );
+
+        await getAdmins();
+        expect(admins).not.toBeNull();
+        expect(Array.isArray(admins.value)).toBe(true);
+        const prevLength = admins.value?.length ?? 0;
+
+        await createAdmin(exampleAdmin);
+        await getAdmins();
+
+        expect(admins).not.toBeNull();
+        expect(Array.isArray(admins.value)).toBe(true);
+        expect(admins.value?.length).toBe(prevLength + 1);
+
+        expect(admins.value?.[prevLength]?.first_name).toBe('Sample');
+        expect(admins.value?.[prevLength]?.last_name).toBe('Admin');
+        expect(admins.value?.[prevLength]?.email).toBe('sample.admin@UGent.be');
+        expect(admins.value?.[prevLength]?.is_staff).toBe(true);
     });
 });

@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { afterAll, afterEach, beforeAll } from 'vitest';
 import { setupServer } from 'msw/node';
 import { HttpResponse, http } from 'msw';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
 import { endpoints } from '@/config/endpoints.ts';
+import { JSDOM } from 'jsdom';
 
 const baseUrl = 'http://localhost';
 
@@ -64,6 +68,7 @@ const courses = [
         students: ['1', '2', '3', '000201247011'],
         projects: ['0', '1'],
         parent_course: null,
+        faculty: null,
         name: 'Math',
         academic_startyear: 2023,
         description: 'Math course',
@@ -75,6 +80,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: '3',
+        faculty: null,
         name: 'Sel2',
         academic_startyear: 2023,
         description: 'Software course',
@@ -86,6 +92,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: null,
+        faculty: null,
         name: 'Sel1',
         academic_startyear: 2022,
         description: 'Software course',
@@ -97,6 +104,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: '1',
+        faculty: null,
         name: 'Math',
         academic_startyear: 2024,
         description: 'Math course',
@@ -108,6 +116,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: '12',
+        faculty: null,
         name: 'Math',
         academic_startyear: 2025,
         description: 'Math course',
@@ -119,6 +128,7 @@ const courses = [
         students: [],
         projects: [],
         parent_course: null,
+        faculty: null,
         name: 'Club brugge',
         academic_startyear: 2023,
         description: null,
@@ -130,13 +140,17 @@ const courses = [
         students: [],
         projects: [],
         parent_course: null,
+        faculty: null,
         name: 'vergeet barbara',
         academic_startyear: 2023,
         description: null,
     },
 ];
 
-const faculties = [{ name: 'wetenschappen' }, { name: 'voetbal' }];
+const faculties = [
+    { id: 'sciences', name: 'wetenschappen' },
+    { id: 'football', name: 'voetbal' },
+];
 
 const students = [
     {
@@ -150,8 +164,10 @@ const students = [
         last_enrolled: 2023,
         create_time: new Date('July 21, 2024 01:15:00'),
         studentId: null,
+        roles: ['student'],
         courses: ['1', '2', '3'],
         groups: ['0'],
+        faculties: [],
     },
     {
         id: '2',
@@ -164,8 +180,10 @@ const students = [
         last_enrolled: 2023,
         create_time: new Date('July 21, 2024 01:15:00'),
         studentId: null,
+        roles: ['student'],
         courses: [],
         groups: [],
+        faculties: [],
     },
     {
         id: '000201247011',
@@ -178,8 +196,10 @@ const students = [
         last_enrolled: 2023,
         create_time: new Date('July 21, 2024 01:15:00'),
         studentId: '02012470',
+        roles: ['student'],
         courses: [],
         groups: [],
+        faculties: [],
     },
     {
         id: '3',
@@ -192,8 +212,10 @@ const students = [
         last_enrolled: 2023,
         create_time: new Date('July 21, 2024 01:15:00'),
         studentId: null,
+        roles: ['student'],
         courses: [],
         groups: [],
+        faculties: [],
     },
 ];
 
@@ -442,8 +464,8 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.submissions.byGroup.replace('{groupId}', ':id'), ({ params }) => {
         return HttpResponse.json(submissions.filter((x) => x.group === params.id));
     }),
-    http.get(baseUrl + endpoints.faculties.retrieve.replace('{name}', ':name'), ({ params }) => {
-        return HttpResponse.json(faculties.find((x) => x.name === params.name));
+    http.get(baseUrl + endpoints.faculties.retrieve.replace('{id}', ':id'), ({ params }) => {
+        return HttpResponse.json(faculties.find((x) => x.id === params.id));
     }),
     http.get(baseUrl + endpoints.faculties.index, () => {
         return HttpResponse.json(faculties);
@@ -463,6 +485,29 @@ export const restHandlers = [
     http.get(baseUrl + endpoints.assistants.index, () => {
         return HttpResponse.json(assistants);
     }),
+    http.post(baseUrl + endpoints.admins.index, async ({ request }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newAdmin = JSON.parse(requestBody);
+        newAdmin.is_staff = true;
+        admins.push(newAdmin);
+        return HttpResponse.json(admins);
+    }),
+    http.post(baseUrl + endpoints.assistants.index, async ({ request }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newAssistant = JSON.parse(requestBody);
+        newAssistant.roles = ['assistant'];
+        assistants.push(newAssistant);
+        return HttpResponse.json(assistants);
+    }),
+    http.post(baseUrl + endpoints.students.index, async ({ request }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newStudent = JSON.parse(requestBody);
+        students.push(newStudent);
+        return HttpResponse.json(students);
+    }),
 
     /*
     http.post(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'),
@@ -479,6 +524,18 @@ const server = setupServer(...restHandlers);
 
 beforeAll(() => {
     server.listen({ onUnhandledRequest: 'error' });
+
+    // Set up jdom
+    const dom = new JSDOM(`<div></div>`);
+    global.document = dom.window.document;
+    global.window = dom.window as unknown as Window & typeof globalThis;
+
+    // Set up the app with pinia
+    const pinia = createPinia();
+    const app = createApp({
+        template: '<p>App</p>',
+    });
+    app.use(pinia);
 });
 
 afterAll(() => {

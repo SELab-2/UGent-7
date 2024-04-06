@@ -6,7 +6,7 @@ import { get, getList, create, deleteId } from '@/composables/services/helpers.t
 interface FacultyState {
     faculties: Ref<Faculty[] | null>;
     faculty: Ref<Faculty | null>;
-    getFacultyByID: (name: string) => Promise<void>;
+    getFacultyByID: (id: string) => Promise<void>;
     getFaculties: () => Promise<void>;
     createFaculty: (facultyData: Faculty) => Promise<void>;
     deleteFaculty: (id: string) => Promise<void>;
@@ -16,8 +16,8 @@ export function useFaculty(): FacultyState {
     const faculties = ref<Faculty[] | null>(null);
     const faculty = ref<Faculty | null>(null);
 
-    async function getFacultyByID(name: string): Promise<void> {
-        const endpoint = endpoints.faculties.retrieve.replace('{name}', name);
+    async function getFacultyByID(id: string): Promise<void> {
+        const endpoint = endpoints.faculties.retrieve.replace('{id}', id);
         await get<Faculty>(endpoint, faculty, Faculty.fromJSON);
     }
 
