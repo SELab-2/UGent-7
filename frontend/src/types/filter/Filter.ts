@@ -1,3 +1,9 @@
+export const USER_FILTER = {
+    search: '',
+    username: '',
+    email: ''
+};
+
 export const COURSE_FILTER = {
     search: '',
     faculties: [],
