@@ -8,6 +8,7 @@ from api.models.teacher import Teacher
 from api.models.assistant import Assistant
 from api.models.student import Student
 from api.models.project import Project
+from authentication.models import Faculty
 
 
 def create_project(name, description, visible, archived, days, course):
@@ -70,6 +71,16 @@ def create_teacher(id, first_name, last_name, email):
         create_time=timezone.now(),
     )
     return teacher
+
+
+def create_faculty(id, name):
+    """
+    Create a faculty with the given arguments.
+    """
+    return Faculty.objects.create(
+        id=id,
+        name=name,
+    )
 
 
 def create_course(name, academic_startyear, description=None, parent_course=None):
@@ -853,12 +864,15 @@ class CourseModelTestsAsTeacher(APITestCase):
         """
         Able to create a course.
         """
+        faculty = create_faculty(id="Engineering", name="Engineering")
+
         response = self.client.post(
             reverse("course-list"),
             data={
                 "name": "Introduction to Computer Science",
                 "academic_startyear": 2022,
                 "description": "An introductory course on computer science.",
+                "faculty": faculty.id,
             },
             follow=True,
         )
@@ -869,6 +883,9 @@ class CourseModelTestsAsTeacher(APITestCase):
         # Make sure the teacher is added to the course
         course = Course.objects.get(name="Introduction to Computer Science")
         self.assertTrue(course.teachers.filter(id=self.user.id).exists())
+
+        # Make sure the course is linked to the faculty
+        self.assertEqual(course.faculty.id, faculty.id)
 
     def test_create_project(self):
         """

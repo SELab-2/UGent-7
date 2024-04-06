@@ -16,7 +16,7 @@ from api.permissions.course_permissions import (
 from api.permissions.role_permissions import IsTeacher, is_teacher
 from api.serializers.course_serializer import (
     CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer,
-    TeacherJoinSerializer, TeacherLeaveSerializer
+    TeacherJoinSerializer, TeacherLeaveSerializer, CreateCourseSerializer
 )
 from api.views.pagination.basic_pagination import BasicPagination
 from api.serializers.teacher_serializer import TeacherSerializer
@@ -33,7 +33,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def create(self, request: Request, *_):
         """Override the create method to add the teacher to the course"""
-        serializer = CourseSerializer(data=request.data, context={"request": request})
+        serializer = CreateCourseSerializer(data=request.data, context={"request": request})
 
         if serializer.is_valid(raise_exception=True):
             course = serializer.save()
