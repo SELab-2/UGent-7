@@ -44,6 +44,8 @@
             "group": "Groep",
             "groupMembers": "Groepsleden",
             "chooseGroup": "Kies een groep",
+            "joinGroup": "Kies groep",
+            "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
             "name": "Projectnaam",
             "description": "Beschrijving",

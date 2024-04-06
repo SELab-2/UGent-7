@@ -44,6 +44,8 @@
             "group": "Group",
             "groupMembers": "Group members",
             "chooseGroup": "Choose a group",
+            "joinGroup": "Join group",
+            "leaveGroup": "Leave group",
             "create": "Create new project",
             "name": "Project name",
             "description": "Description",
