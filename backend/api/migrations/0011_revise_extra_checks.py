@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0009_merge_0008_add_extra_checks_0008_course_faculty'),
+        ('api', '0010_rename_errortemplate_errortemplates_and_more'),
     ]
 
     operations = [
@@ -36,11 +36,7 @@ class Migration(migrations.Migration):
             name="public",
             field=models.BooleanField(default=False, blank=False, null=False)
         ),
-        migrations.RemoveField(
-            model_name="extracheck",
-            name="docker_image_id"
-        ),
-        migrations.AddField(
+        migrations.AlterField(
             model_name="extracheck",
             name="docker_image",
             field=models.ForeignKey(to="api.dockerimage", on_delete=models.CASCADE,
@@ -63,7 +59,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="extrachecksresult",
             name="error_message",
-            field=models.ForeignKey(to="api.errortemplate", on_delete=models.SET_NULL,
+            field=models.ForeignKey(to="api.ErrorTemplates", on_delete=models.SET_NULL,
                                     related_name="extra_checks_results", blank=True, null=True)
         ),
         migrations.AlterField(
