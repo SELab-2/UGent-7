@@ -135,13 +135,13 @@ class Command(BaseCommand):
 
         update_providers()
 
-        for _ in range(0,amountOfCourses):
-            fake.provide_course()
+        for _ in range(0,amountOfAssistants):
+            fake.provide_assistant()
 
         update_providers()
 
-        for _ in range(0,amountOfAssistants):
-            fake.provide_assistant()
+        for _ in range(0,amountOfCourses):
+            fake.provide_course()
 
         update_providers()
 
