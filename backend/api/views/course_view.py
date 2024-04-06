@@ -32,7 +32,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     permission_classes = [IsAdminUser | CoursePermission]
 
-    # TODO: Creating should return the info of the new object and now a message "created"
+    # TODO: Creating should return the info of the new object and not a message "created" (General TODO)
     def create(self, request: Request, *_):
         """Override the create method to add the teacher to the course"""
         serializer = CourseSerializer(data=request.data, context={"request": request})

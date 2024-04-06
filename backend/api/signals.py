@@ -3,7 +3,7 @@ from authentication.models import User
 from django.dispatch import Signal, receiver
 
 
-# TODO: Signal?
+# TODO: Is this a signal?
 def user_creation(user: User, attributes: dict, **_):
     """Upon user creation, auto-populate additional properties"""
     student_id: str = attributes.get("ugentStudentID")
@@ -17,7 +17,6 @@ run_extra_checks = Signal()
 
 @receiver(run_extra_checks)
 def _run_extra_checks(submission, **kwargs):
-    # TODO: Set all previous submissions to invalid
-    # TODO: Run extra checks
+    # TODO: Actually run the checks
     print("Running extra checks", flush=True)
     return True

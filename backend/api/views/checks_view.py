@@ -16,7 +16,6 @@ class StructureCheckViewSet(viewsets.ModelViewSet):
     serializer_class = StructureCheckSerializer
 
 
-# TODO: Set result to invalid for all submission but the newest
 class ExtraCheckViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, viewsets.GenericViewSet):
     queryset = ExtraCheck.objects.all()
     serializer_class = ExtraCheckSerializer

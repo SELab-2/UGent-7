@@ -9,7 +9,6 @@ class SubmissionFileViewSet(viewsets.ModelViewSet):
     queryset = SubmissionFile.objects.all()
     serializer_class = SubmissionFileSerializer
 
-# TODO: Run docker tests when new submission if extra checks
 
 class SubmissionViewSet(viewsets.ModelViewSet):
     queryset = Submission.objects.all()

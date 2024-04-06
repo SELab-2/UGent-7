@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 
-# TODO: Error message when creating a project with wrongly formatted date is weird
+# TODO: Error message when creating a project with wrongly formatted date looks a bit weird
 class ProjectViewSet(CreateModelMixin,
                      RetrieveModelMixin,
                      UpdateModelMixin,
@@ -117,7 +117,6 @@ class ProjectViewSet(CreateModelMixin,
             }
         )
 
-        # TODO: Raise exception gaat hier geen response geven smh
         if serializer.is_valid(raise_exception=True):
             serializer.save(project=project)
 
@@ -137,8 +136,6 @@ class ProjectViewSet(CreateModelMixin,
         )
         return Response(serializer.data)
 
-    # TODO: Run all docker checks and send notification to submissions guys if not success
-    # TODO: Set result to invalid for all submission but the newest
     @extra_checks.mapping.post
     @swagger_auto_schema(request_body=ExtraCheckSerializer)
     def _add_extra_check(self, request: Request, **_):

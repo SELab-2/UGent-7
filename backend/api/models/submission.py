@@ -35,7 +35,6 @@ class Submission(models.Model):
         default=False
     )
 
-    # TODO: Does this matter? Submission number should be assigned in the backend
     class Meta:
         # A group can only have one submission with a specific number
         unique_together = ("group", "submission_number")
@@ -46,7 +45,7 @@ def run_checks(sender, instance: Submission, **kwargs):
     run_extra_checks.send(sender=Submission, submission=instance)
 
 
-# TODO: Why a different class?
+# TODO: We can use a FilePathField for this with allow_files = False and allow_folders = True and include it in Submission
 class SubmissionFile(models.Model):
     """Model for a file that is part of a submission."""
 

@@ -1,6 +1,7 @@
 from api.models.checks import ExtraCheck, StructureCheck
 from api.models.docker import DockerImage
 from api.models.extension import FileExtension
+from django.utils.translation import gettext as _
 from rest_framework import serializers
 
 
@@ -53,9 +54,12 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        # TODO: Doesn't allow PATCH
-        if "docker_image" not in data:
-            # TODO: translation
-            raise serializers.ValidationError("docker_image is required")
+        # Only check if docker image is present when it is not a partial update
+        if not self.partial:
+            if "docker_image" not in data:
+                raise serializers.ValidationError(_("extra_check.error.docker_image"))
+
+        if "timeout" in data and data["timeout"] > 1000:
+            raise serializers.ValidationError(_("extra_check.error.timeout"))
 
         return data

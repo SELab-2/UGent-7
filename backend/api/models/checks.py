@@ -79,9 +79,8 @@ class ExtraCheck(models.Model):
     )
 
     # Maximum time the script can run for
-    # TODO: Set a max of 1000 seconds
-    timeout = models.SmallIntegerField(
-        default=300,
+    timeout = models.PositiveSmallIntegerField(
+        default=60,
         blank=False,
         null=False
     )
@@ -97,7 +96,6 @@ class ExtraCheck(models.Model):
 @receiver(post_save, sender=ExtraCheck)
 @receiver(pre_delete, sender=ExtraCheck)
 def run_checks(sender, instance: ExtraCheck, **kwargs):
-    # TODO: Use querysets
     for group in instance.project.groups.all():
         submissions = group.submissions.order_by("submission_time")
         if submissions:

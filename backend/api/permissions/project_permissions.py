@@ -13,7 +13,7 @@ class ProjectPermission(BasePermission):
         """Check if user has permission to view a general project endpoint."""
         user: User = request.user
 
-        # TODO: but you return true
+        # TODO: Sure return True corresponds with the comments made above
         # The general project endpoint that lists all projects is not accessible for any role.
         if request.method in SAFE_METHODS:
             return True

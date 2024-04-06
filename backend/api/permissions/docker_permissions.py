@@ -6,7 +6,6 @@ from rest_framework.request import Request
 from rest_framework.viewsets import ViewSet
 
 
-# TODO: Types
 class DockerPermission(BasePermission):
     def has_permission(self, request: Request, view: ViewSet) -> bool:
         user: User = request.user
