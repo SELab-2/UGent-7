@@ -23,8 +23,10 @@ gunicorn = "^21.2.0"
 whitenoise = "^6.6.0"
 flake8 = "^7.0.0"
 celery-types = "^0.22.0"
+faker = "^24.7.1"
+django-seed = "^0.3.1"
 
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
