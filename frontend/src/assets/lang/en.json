@@ -55,7 +55,7 @@
             "create": "Create course",
             "name": "Course name",
             "description": "Description",
-            "year": "Academic year"
+            "faculty": "Faculty"
         }
     },
     "composables": {

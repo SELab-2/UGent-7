@@ -55,7 +55,7 @@
           "create": "Creëer vak",
           "name": "Vaknaam",
           "description": "Beschrijving",
-          "year": "Academiejaar",
+          "faculty": "Faculteit",
           "search": {
               "search": "Zoeken",
               "faculty": "Faculteit",
