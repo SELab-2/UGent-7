@@ -97,7 +97,6 @@ class ExtraCheck(models.Model):
 @receiver(post_save, sender=ExtraCheck)
 @receiver(pre_delete, sender=ExtraCheck)
 def run_checks(sender, instance: ExtraCheck, **kwargs):
-    print("Hoi", flush=True)
     # TODO: Use querysets
     for group in instance.project.groups.all():
         submissions = group.submissions.order_by("submission_time")

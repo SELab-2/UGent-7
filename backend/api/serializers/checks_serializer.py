@@ -53,6 +53,7 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
+        # TODO: Doesn't allow PATCH
         if "docker_image" not in data:
             # TODO: translation
             raise serializers.ValidationError("docker_image is required")
