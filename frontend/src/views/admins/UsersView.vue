@@ -190,7 +190,11 @@ const searchText = (header: string) => {
         </Title>
     </AdminLayout>
     <Dialog v-model:visible="popupEdit" header="Edit user" :style="{ width: '25rem' }" class="flex" id="editDialog">
-        <div v-for="data in columns.toSpliced(columns.length - 1, 1)"
+        <div class="flex align-items-center gap-3 mb-3">
+            <label class="font-semibold w-6rem">{{ columns[0].header }}</label>
+            <span>{{ editItem.id }}</span>
+        </div>
+        <div v-for="data in columns.toSpliced(columns.length - 1, 1).toSpliced(0, 1)"
              class="flex align-items-center gap-3 mb-3">
             <label class="font-semibold w-6rem">{{ data.header }}</label>
             <span>{{ editItem[data.field] }}</span>
