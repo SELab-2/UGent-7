@@ -2,21 +2,30 @@
 /* Component props */
 import { type Project } from '@/types/Projects.ts';
 import { PrimeIcons } from 'primevue/api';
-import Button from 'primevue/button';
 import Card from 'primevue/card';
 import { useI18n } from 'vue-i18n';
-import { computed } from 'vue';
+import {computed, onMounted} from 'vue';
+import {useSubmission} from "@/composables/services/submission.service.ts";
+import {Group} from "@/types/Group.ts";
+import Button from "primevue/button";
 
 const { t } = useI18n();
+const { submissions, getSubmissionByGroup } = useSubmission();
 
 const props = defineProps<{
     project: Project;
+    group: Group;
 }>();
+
+onMounted(() => {
+    getSubmissionByGroup(props.group.id);
+});
 
 const formattedDeadline = computed(() => {
     // changes deadline format to dd/mm.yyyy
     const date = new Date(props.project.deadline);
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
 });
 </script>
 
@@ -30,16 +39,15 @@ const formattedDeadline = computed(() => {
                 </div>
                 <div>
                     <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-                    {{ t('views.projects.submissionStatus') }}: {{ project.submissions.at(-1)?.structureChecks_passed }}
+                    {{ t('views.projects.submissionStatus') }}: {{ submissions? submissions.at(-1)?.structure_checks_passed: "false"}}
                 </div>
             </div>
         </template>
-        <template #footer>
+        <template #footer v-if="submissions?.at(-1)?.id">
             <RouterLink
-                :to="{ name: 'submission', params: { submissionId: project.submissions.at(-1)?.id } }"
-                v-if="project.submissions.at(-1)?.id"
+                :to="{name: 'submission'}"
             >
-                <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.submission')" icon-pos="right" outlined />
+              <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.submission')" icon-pos="right" outlined />
             </RouterLink>
         </template>
     </Card>

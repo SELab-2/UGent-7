@@ -14,6 +14,7 @@ import { LogoutGuard } from '@/router/guards/logout.guard.ts';
 import ProjectView from '@/views/projects/ProjectView.vue';
 import CreateProjectView from '@/views/projects/CreateProjectView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
+import SubmissionView from "@/views/submissions/submissionView.vue";
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -58,6 +59,7 @@ const routes: RouteRecordRaw[] = [
                                     { path: 'edit', component: Dummy, name: 'project-edit' },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },
+                                    { path: 'submission', component: SubmissionView, name: 'submission'}
                                 ],
                             },
                         ],
