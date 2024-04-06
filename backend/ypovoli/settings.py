@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application
     "notifications",  # Ypovoli notifications
-    "django_seed",  # seeding the database
 ]
 
 MIDDLEWARE = [
