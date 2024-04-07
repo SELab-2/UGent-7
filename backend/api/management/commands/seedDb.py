@@ -6,6 +6,7 @@ from faker.providers import DynamicProvider
 
 from api.models.student import Student
 from api.models.assistant import Assistant
+from api.models.teacher import Teacher
 from api.models.course import Course
 from authentication.models import Faculty
 
@@ -33,6 +34,36 @@ course_provider = DynamicProvider(
 
 # create new provider class
 class Providers(BaseProvider):
+    def provide_teacher(self, courses=None):
+        """
+        Create a teacher with the given arguments.
+        """
+        first = fake.first_name()
+        last = fake.last_name()
+        id = fake.unique.random_int(min=1, max = 9999999999999999999999)
+        faculty = [fake.faculty_provider().id for _ in range(0,fake.random_int(min=1, max = 2))] # generate 1 or 2 facultys
+        username = f"{first}_{last}_{fake.unique.random_int(min=1, max = 9999999999999999999999)}"
+        teacher = Teacher.objects.create(
+            id=id,
+            first_name=first,
+            last_name=last,
+            username=username,
+            email=username+"@example.com",
+            create_time=timezone.now(),
+            last_enrolled= timezone.now().year,
+            is_staff=fake.boolean(chance_of_getting_true=0.01)
+        )
+
+        if faculty is not None:
+            for fac in faculty:
+                teacher.faculties.add(fac)
+
+        if courses is not None:
+            for cours in courses:
+                teacher.courses.add(cours)
+
+        return teacher
+
     def provide_assistant(self, courses=None):
         """
         Create a assistant with the given arguments.
@@ -128,6 +159,7 @@ class Command(BaseCommand):
 
         amountOfStudents = 1
         amountOfAssistants = 1
+        amountOfTeachers = 1
         amountOfCourses = 1
 
         for _ in range(0,amountOfStudents):
@@ -137,6 +169,11 @@ class Command(BaseCommand):
 
         for _ in range(0,amountOfAssistants):
             fake.provide_assistant()
+
+        update_providers()
+
+        for _ in range(0,amountOfTeachers):
+            fake.provide_teacher()
 
         update_providers()
 
