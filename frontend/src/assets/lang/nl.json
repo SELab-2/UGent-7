@@ -55,6 +55,12 @@
             "visibility": "Project zichtbaar maken voor studenten",
             "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten"
         },
+        "submissions": {
+            "title": "Inzendingen",
+            "submit": "Indienen",
+            "course": "Vak",
+            "chooseFile": "Kies bestand(en)"
+        },
         "courses": {
           "create": "Creëer vak",
           "name": "Vaknaam",

@@ -17,16 +17,16 @@ const props = defineProps<{
     group: Group;
 }>();
 
-onMounted(() => {
-    getSubmissionByGroup(props.group.id);
+onMounted(async () => {
+    await getSubmissionByGroup(props.group.id);
 });
 
 const formattedDeadline = computed(() => {
     // changes deadline format to dd/mm.yyyy
     const date = new Date(props.project.deadline);
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-
 });
+
 </script>
 
 <template>
@@ -43,7 +43,7 @@ const formattedDeadline = computed(() => {
                 </div>
             </div>
         </template>
-        <template #footer v-if="submissions?.at(-1)?.id">
+        <template #footer>
             <RouterLink
                 :to="{name: 'submission'}"
             >
