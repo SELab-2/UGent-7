@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref } from 'vue';
 import Menu from 'primevue/menu';
-import {useI18n} from "vue-i18n";
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
+const { t } = useI18n();
 
 const items = ref([
     {
@@ -11,18 +11,18 @@ const items = ref([
         items: [
             {
                 label: t('admin.users.title'),
-                route: 'admin-users'
+                route: 'admin-users',
             },
             {
-                label: t('admin.assistants.title')
+                label: t('admin.assistants.title'),
             },
             {
-                label: t('admin.students.title')
+                label: t('admin.students.title'),
             },
             {
-                label: t('admin.teachers.title')
-            }
-        ]
+                label: t('admin.teachers.title'),
+            },
+        ],
     },
     {
         label: 'Profile',
@@ -30,19 +30,19 @@ const items = ref([
             {
                 label: 'Settings',
                 icon: 'pi pi-cog',
-                shortcut: '⌘+O'
+                shortcut: '⌘+O',
             },
             {
                 label: 'Messages',
                 icon: 'pi pi-inbox',
-                badge: 2
+                badge: 2,
             },
             {
                 label: 'Logout',
                 icon: 'pi pi-sign-out',
-                shortcut: '⌘+Q'
-            }
-        ]
+                shortcut: '⌘+Q',
+            },
+        ],
     },
 ]);
 </script>
@@ -54,7 +54,11 @@ const items = ref([
                 <RouterLink :to="{ name: item.route }">
                     <a v-ripple class="flex align-items-center" v-bind="props.action">
                         <span class="ml-2">{{ item.label }}</span>
-                        <span v-if="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{ item.shortcut }}</span>
+                        <span
+                            v-if="item.shortcut"
+                            class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1"
+                            >{{ item.shortcut }}</span
+                        >
                     </a>
                 </RouterLink>
             </template>

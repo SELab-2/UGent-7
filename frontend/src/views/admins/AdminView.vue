@@ -6,6 +6,4 @@ import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
     <AdminLayout />
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

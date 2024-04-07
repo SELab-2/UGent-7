@@ -7,20 +7,20 @@ import AdminSidebar from '@/components/layout/admin/AdminSidebar.vue';
 
 <template>
     <div id="layout" class="w-12 lg:w-9 mx-auto">
-        <AdminHeader/>
+        <AdminHeader />
 
         <Body id="body">
             <div class="grid">
                 <div class="w-3">
-                    <AdminSidebar/>
+                    <AdminSidebar />
                 </div>
                 <div class="w-9">
-                    <slot/>
+                    <slot />
                 </div>
             </div>
         </Body>
 
-        <Footer/>
+        <Footer />
     </div>
 </template>
 

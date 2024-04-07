@@ -4,7 +4,7 @@ export const USER_FILTER = {
     search: '',
     id: '',
     username: '',
-    email: ''
+    email: '',
 };
 
 export type CourseFilter = {

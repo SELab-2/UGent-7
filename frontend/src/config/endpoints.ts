@@ -41,7 +41,7 @@ export const endpoints = {
     users: {
         index: '/api/users/',
         search: '/api/users/search/',
-        retrieve: '/api/users/{id}/'
+        retrieve: '/api/users/{id}/',
     },
     faculties: {
         index: '/api/faculties/',
