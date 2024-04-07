@@ -1,16 +1,19 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 from django.utils import timezone
-from faker.providers import BaseProvider
-from faker.providers import DynamicProvider
+from faker.providers import BaseProvider, DynamicProvider
 
+from authentication.models import Faculty
 from api.models.student import Student
 from api.models.assistant import Assistant
 from api.models.teacher import Teacher
 from api.models.course import Course
-from authentication.models import Faculty
+from api.models.group import Group
+from api.models.project import Project
 
 fake = Faker()
+
+# Faker.seed(4321) # set to make data same each time
 
 faculty_provider = DynamicProvider(
      provider_name="faculty_provider",
@@ -27,9 +30,19 @@ assistant_provider = DynamicProvider(
      elements=Assistant.objects.all(),
 )
 
+teacher_provider = DynamicProvider(
+     provider_name="teacher_provider",
+     elements=Teacher.objects.all(),
+)
+
 course_provider = DynamicProvider(
      provider_name="course_provider",
      elements=Course.objects.all(),
+)
+
+project_provider = DynamicProvider(
+     provider_name="project_provider",
+     elements=Project.objects.all(),
 )
 
 # create new provider class
@@ -94,19 +107,6 @@ class Providers(BaseProvider):
 
         return assistant
 
-    def provide_course(description=None, parent_course=None):
-        """
-        Create a Course with the given arguments.
-        """
-        course_name = fake.catch_phrase()
-        return Course.objects.create(
-            name=course_name,
-            academic_startyear=timezone.now().year,
-            faculty=fake.faculty_provider(),
-            description=fake.paragraph(),
-            parent_course=parent_course,
-        )
-
     def provide_student(self, courses=None):
         """
         Create a student with the given arguments.
@@ -138,11 +138,50 @@ class Providers(BaseProvider):
 
         return student
 
+    def provide_course(description=None, parent_course=None):
+        """
+        Create a Course with the given arguments.
+        """
+        course_name = fake.catch_phrase()
+        return Course.objects.create(
+            name=course_name,
+            academic_startyear=timezone.now().year,
+            faculty=fake.faculty_provider(),
+            description=fake.paragraph(),
+            parent_course=parent_course,
+        )
+
+    def provide_project(self):
+        """Create a Project with the given arguments."""
+        start_date = timezone.now() + timezone.timedelta(days=fake.random_int(min=-100, max = 100))
+        deadline = start_date + timezone.timedelta(days=fake.random_int(min=1, max = 100))
+        course = fake.course_provider()
+        print(course.name)
+        return Project.objects.create(
+            name=fake.catch_phrase(),
+            description=fake.paragraph(),
+            visible=fake.boolean(chance_of_getting_true=80),
+            archived=fake.boolean(chance_of_getting_true=10),
+            score_visible=fake.boolean(chance_of_getting_true=30),
+            locked_groups=fake.boolean(chance_of_getting_true=30),
+            deadline=deadline,
+            course=course,
+            start_date=start_date,
+            max_score=fake.random_int(min=1, max = 100),
+            group_size=fake.random_int(min=1, max = 8)
+        )
+
+    # def provide_group(project, score):
+    #     """Create a Group with the given arguments."""
+    #     return Group.objects.create(project=project, score=score)
+
 def update_providers():
     faculty_provider.elements = Faculty.objects.all()
     student_provider.elements = Student.objects.all()
     assistant_provider.elements = Assistant.objects.all()
+    teacher_provider.elements = Teacher.objects.all()
     course_provider.elements = Course.objects.all()
+    project_provider.elements = Project.objects.all()
 
 
     # then add new provider to faker instance
@@ -157,10 +196,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        amountOfStudents = 1
-        amountOfAssistants = 1
-        amountOfTeachers = 1
-        amountOfCourses = 1
+        amountOfStudents = 0
+        amountOfAssistants = 0
+        amountOfTeachers = 0
+        amountOfCourses = 0
+        amountOfProjects = 1
 
         for _ in range(0,amountOfStudents):
             fake.provide_student()
@@ -179,6 +219,11 @@ class Command(BaseCommand):
 
         for _ in range(0,amountOfCourses):
             fake.provide_course()
+
+        update_providers()
+
+        for _ in range(0,amountOfProjects):
+            fake.provide_project()
 
         update_providers()
 
