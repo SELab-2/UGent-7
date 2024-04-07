@@ -50,7 +50,8 @@
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
             "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
-            "docker_upload": "Upload een Dockerfile"
+            "docker_upload": "Upload een Dockerfile",
+            "submission_structure": "Structuur van hoe de indiening moet gebeuren"
         },
         "courses": {
           "create": "Creëer vak",

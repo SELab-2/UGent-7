@@ -3,6 +3,7 @@ import Calendar from 'primevue/calendar';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
+import Tree from 'primevue/tree';
 import { reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -23,7 +24,7 @@ const { push } = useRouter();
 const { params } = useRoute();
 
 /* Service injection */
-const { createProject } = useProject();
+const { createProject, uploadSubmissionStructure } = useProject();
 
 /* Form content */
 const form = reactive({
@@ -36,6 +37,7 @@ const form = reactive({
     visibility: true,
     scoreVisibility: false,
     dockerScript: null,
+    submissionStructure: null,
 });
 
 // Define validation rules for each form field
@@ -52,12 +54,18 @@ const rules = computed(() => {
     };
 });
 
-// Function to handle the file upload
+// Function to handle the file upload of a docker script
 const onDockerScriptUpload = (event: any) => {
     form.dockerScript = event.files[0];
-
     console.log(form.dockerScript);
 };
+
+// Function to handle the file upload of a zip file containing the submission structure
+const onZipStructureUpload = (event: any) => {
+    form.submissionStructure = event.files[0];
+    console.log(form.submissionStructure);
+};
+
 
 // useVuelidate function to perform form validation
 const v$ = useVuelidate(rules, form);
@@ -85,6 +93,11 @@ const submitProject = async (): Promise<void> => {
             ),
             params.courseId as string,
         );
+
+        // Upload the zip file containing the submission structure
+        if (form.submissionStructure) {
+            // TODO: Get on some way the project id
+        }
 
         // Redirect to the dashboard overview
         push({ name: 'dashboard' });
@@ -184,7 +197,13 @@ const submitProject = async (): Promise<void> => {
                     <!-- Upload field for docker script -->
                     <div class="mt-7 mb-4">
                         <label for="dockerScript">{{ t('views.projects.docker_upload') }}</label>
-                        <FileUpload id="dockerScript" mode="basic" accept=".sh" :multiple="false" @upload="onDockerScriptUpload"/>
+                        <FileUpload id="dockerScript" mode="basic" accept=".sh" :multiple="false" customUpload @upload="onDockerScriptUpload"/>
+                    </div>
+
+                    <!-- Upload field for a zip file that contains the submission structure -->
+                    <div class="mb-4">
+                        <label for="submissionStructure">{{ t('views.projects.submission_structure') }}</label>
+                        <FileUpload id="submissionStructure" mode="basic" accept=".zip" :multiple="false" customUpload @upload="onZipStructureUpload"/>
                     </div>
                 </div>
             </div>

@@ -138,3 +138,7 @@ class StructureCheckAddSerializer(StructureCheckSerializer):
         data["blocked_extensions"] = block_ext
 
         return data
+
+
+class ParseZipStructureSerializer(serializers.Serializer):
+    zip_file = serializers.FileField()

@@ -12,11 +12,12 @@ from api.models.project import Project
 from api.serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
 from api.serializers.project_serializer import (
     StructureCheckAddSerializer, SubmissionStatusSerializer,
-    ProjectSerializer, TeacherCreateGroupSerializer
+    ProjectSerializer, TeacherCreateGroupSerializer, ParseZipStructureSerializer
 )
 
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
+from api.helpers.check_folder_structure import parse_zip_file
 from rest_framework.request import Request
 
 
@@ -117,6 +118,22 @@ class ProjectViewSet(CreateModelMixin,
 
         if serializer.is_valid(raise_exception=True):
             serializer.save(project=project)
+
+        return Response({
+            "message": gettext("project.success.structure_check.add")
+        })
+
+    @action(detail=True, methods=["post"])
+    def parse_zip_structure(self, request, **_):
+        """Parses the zip structure for the given project"""
+        project: Project = self.get_object()
+
+        serializer = ParseZipStructureSerializer(
+            data=request.data, context={"request": request}
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            parse_zip_file(project, serializer.validated_data["zip_file"])
 
         return Response({
             "message": gettext("project.success.structure_check.add")

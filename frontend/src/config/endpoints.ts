@@ -50,6 +50,7 @@ export const endpoints = {
     projects: {
         retrieve: '/api/projects/{id}',
         byCourse: '/api/courses/{courseId}/projects/',
+        uploadSubmissionStructure: '/api/projects/{id}/parse_zip_structure/',
     },
     submissions: {
         retrieve: '/api/submissions/{id}',

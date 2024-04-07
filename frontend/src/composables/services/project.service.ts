@@ -3,6 +3,7 @@ import { Course } from '@/types/Course';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import axios from 'axios';
+import { client } from '@/config/axios.ts';
 import { get, getList, getListMerged, create, deleteId, processError } from '@/composables/services/helpers.ts';
 
 interface ProjectState {
@@ -14,6 +15,7 @@ interface ProjectState {
     getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date) => Promise<void>;
     createProject: (projectData: Project, courseId: string) => Promise<void>;
     deleteProject: (id: string) => Promise<void>;
+    uploadSubmissionStructure: (id: string, file: File) => Promise<void>;
 }
 
 export function useProject(): ProjectState {
@@ -100,6 +102,20 @@ export function useProject(): ProjectState {
         await deleteId<Project>(endpoint, project, Project.fromJSON);
     }
 
+    async function uploadSubmissionStructure(id: string, file: File): Promise<void> {
+        const endpoint = endpoints.projects.uploadSubmissionStructure.replace('{id}', id);
+        const data = new FormData();
+        data.append('zip_file', file);
+
+        try {
+            await client.post(endpoint, data);
+        } catch (error: any) {
+            processError(error);
+            console.error(error); // Log the error for debugging
+            throw error; // Re-throw the error to the caller
+        }
+    }
+
     return {
         projects,
         project,
@@ -110,5 +126,7 @@ export function useProject(): ProjectState {
 
         createProject,
         deleteProject,
+
+        uploadSubmissionStructure,
     };
 }
