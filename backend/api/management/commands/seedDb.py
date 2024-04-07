@@ -1,7 +1,9 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
 from django.utils import timezone
+from django.db.models import Max
 from faker.providers import BaseProvider, DynamicProvider
+import random
 
 from authentication.models import Faculty
 from api.models.student import Student
@@ -10,6 +12,7 @@ from api.models.teacher import Teacher
 from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
+from api.models.submission import Submission
 
 fake = Faker()
 
@@ -48,6 +51,11 @@ project_provider = DynamicProvider(
 group_provider = DynamicProvider(
      provider_name="group_provider",
      elements=Group.objects.all(),
+)
+
+Submission_provider = DynamicProvider(
+     provider_name="Submission_provider",
+     elements=Submission.objects.all(),
 )
 
 # create new provider class
@@ -181,6 +189,27 @@ class Providers(BaseProvider):
         return Group.objects.create(
             project=project, score=fake.random_int(min=0, max = project.max_score))
 
+    def provide_submission(self):
+        """Create an Submission with the given arguments."""
+        group:Group = fake.group_provider()
+        # Generate a random timestamp between start and end timestamps
+        random_timestamp = random.uniform(group.project.start_date.timestamp(), group.project.deadline.timestamp())
+
+        # Convert the random timestamp back to a datetime object
+        random_datetime = timezone.make_aware(timezone.datetime.fromtimestamp(random_timestamp))
+
+        # get all submisions of this group
+        max_submission_number = Submission.objects.filter(
+            group=group
+        ).aggregate(Max('submission_number'))['submission_number__max'] or 0
+
+        return Submission.objects.create( # TODO add fake files
+            group=group,
+            submission_time=random_datetime,
+            structure_checks_passed=fake.boolean(chance_of_getting_true=70),
+            submission_number=max_submission_number + 1
+        )
+
 def update_providers():
     faculty_provider.elements = Faculty.objects.all()
     student_provider.elements = Student.objects.all()
@@ -189,6 +218,7 @@ def update_providers():
     course_provider.elements = Course.objects.all()
     project_provider.elements = Project.objects.all()
     group_provider.elements = Group.objects.all()
+    Submission_provider.elements = Submission.objects.all()
 
 
     # then add new provider to faker instance
@@ -200,6 +230,7 @@ fake.add_provider(teacher_provider)
 fake.add_provider(course_provider)
 fake.add_provider(project_provider)
 fake.add_provider(group_provider)
+fake.add_provider(Submission_provider)
 
 class Command(BaseCommand):
     help = 'seed the db with data'
@@ -211,7 +242,8 @@ class Command(BaseCommand):
         amountOfTeachers = 0
         amountOfCourses = 0
         amountOfProjects = 0
-        amountOfGroups = 1
+        amountOfGroups = 0
+        amountOfSubmissions = 1
 
         for _ in range(0,amountOfStudents):
             fake.provide_student()
@@ -240,6 +272,11 @@ class Command(BaseCommand):
 
         for _ in range(0,amountOfGroups):
             fake.provide_group()
+
+        update_providers()
+
+        for _ in range(0,amountOfSubmissions):
+            fake.provide_submission()
 
         update_providers()
 
