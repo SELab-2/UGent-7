@@ -1,5 +1,6 @@
 export const USER_FILTER = {
     search: '',
+    id: '',
     username: '',
     email: ''
 };
