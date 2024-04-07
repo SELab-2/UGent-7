@@ -45,6 +45,11 @@ project_provider = DynamicProvider(
      elements=Project.objects.all(),
 )
 
+group_provider = DynamicProvider(
+     provider_name="group_provider",
+     elements=Group.objects.all(),
+)
+
 # create new provider class
 class Providers(BaseProvider):
     def provide_teacher(self, courses=None):
@@ -156,7 +161,6 @@ class Providers(BaseProvider):
         start_date = timezone.now() + timezone.timedelta(days=fake.random_int(min=-100, max = 100))
         deadline = start_date + timezone.timedelta(days=fake.random_int(min=1, max = 100))
         course = fake.course_provider()
-        print(course.name)
         return Project.objects.create(
             name=fake.catch_phrase(),
             description=fake.paragraph(),
@@ -171,9 +175,11 @@ class Providers(BaseProvider):
             group_size=fake.random_int(min=1, max = 8)
         )
 
-    # def provide_group(project, score):
-    #     """Create a Group with the given arguments."""
-    #     return Group.objects.create(project=project, score=score)
+    def provide_group(score):
+        """Create a Group with the given arguments."""
+        project: Project = fake.project_provider()
+        return Group.objects.create(
+            project=project, score=fake.random_int(min=0, max = project.max_score))
 
 def update_providers():
     faculty_provider.elements = Faculty.objects.all()
@@ -182,14 +188,18 @@ def update_providers():
     teacher_provider.elements = Teacher.objects.all()
     course_provider.elements = Course.objects.all()
     project_provider.elements = Project.objects.all()
+    group_provider.elements = Group.objects.all()
 
 
     # then add new provider to faker instance
 fake.add_provider(Providers)
 fake.add_provider(faculty_provider)
 fake.add_provider(student_provider)
-fake.add_provider(course_provider)
 fake.add_provider(assistant_provider)
+fake.add_provider(teacher_provider)
+fake.add_provider(course_provider)
+fake.add_provider(project_provider)
+fake.add_provider(group_provider)
 
 class Command(BaseCommand):
     help = 'seed the db with data'
@@ -200,7 +210,8 @@ class Command(BaseCommand):
         amountOfAssistants = 0
         amountOfTeachers = 0
         amountOfCourses = 0
-        amountOfProjects = 1
+        amountOfProjects = 0
+        amountOfGroups = 1
 
         for _ in range(0,amountOfStudents):
             fake.provide_student()
@@ -224,6 +235,11 @@ class Command(BaseCommand):
 
         for _ in range(0,amountOfProjects):
             fake.provide_project()
+
+        update_providers()
+
+        for _ in range(0,amountOfGroups):
+            fake.provide_group()
 
         update_providers()
 
