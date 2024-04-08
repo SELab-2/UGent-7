@@ -524,7 +524,7 @@ class ProjectModelTests(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.accepted_media_type, "application/json")
-        self.assertEqual(json.loads(response.content), {'message': 'project.success.structure_check.add'})
+        self.assertEqual(json.loads(response.content), {'message': gettext('project.success.structure_check.add')})
 
         upd: StructureCheck = project.structure_checks.all()[0]
         retrieved_obligated_extensions = upd.obligated_extensions.all()

@@ -21,7 +21,7 @@ from django.utils.translation import gettext_lazy as _
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, "data/production"))
 
-
+# TODO: What does this do?
 TESTING_BASE_LINK = "http://testserver"
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -32,7 +32,6 @@ DEBUG = environ.get("DJANGO_DEBUG", "False").lower() in ["true", "1", "t"]
 DOMAIN_NAME = environ.get("DJANGO_DOMAIN_NAME", "localhost")
 ALLOWED_HOSTS = [DOMAIN_NAME]
 CSRF_TRUSTED_ORIGINS = ["https://" + DOMAIN_NAME]
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -173,4 +172,6 @@ CELERY_RESULT_BACKEND = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}
 
 FILE_PATHS = {
     "docker_images": "../data/docker_images/",
+    "extra_checks": "../data/extra_checks/",
+    "log_file": "../data/log_files/"
 }

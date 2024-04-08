@@ -1,9 +1,14 @@
+import re
+
+from api.models.checks import ExtraCheck, StructureCheck
+from api.models.extension import FileExtension
+from api.permissions.check_permission import ExtraCheckPermission
+from api.serializers.checks_serializer import (ExtraCheckSerializer,
+                                               FileExtensionSerializer,
+                                               StructureCheckSerializer)
 from rest_framework import viewsets
-from ..models.extension import FileExtension
-from ..models.checks import StructureCheck, ExtraCheck
-from ..serializers.checks_serializer import (
-    StructureCheckSerializer, ExtraCheckSerializer, FileExtensionSerializer
-)
+from rest_framework.mixins import (DestroyModelMixin, RetrieveModelMixin,
+                                   UpdateModelMixin)
 
 
 class StructureCheckViewSet(viewsets.ModelViewSet):
@@ -11,9 +16,10 @@ class StructureCheckViewSet(viewsets.ModelViewSet):
     serializer_class = StructureCheckSerializer
 
 
-class ExtraCheckViewSet(viewsets.ModelViewSet):
+class ExtraCheckViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, viewsets.GenericViewSet):
     queryset = ExtraCheck.objects.all()
     serializer_class = ExtraCheckSerializer
+    permission_classes = [ExtraCheckPermission]
 
 
 class FileExtensionViewSet(viewsets.ModelViewSet):

@@ -1,9 +1,10 @@
-import zipfile
 import os
+import zipfile
+
 from api.models.checks import StructureCheck
 from api.models.extension import FileExtension
-from django.utils.translation import gettext
 from django.conf import settings
+from django.utils.translation import gettext
 
 
 def parse_zip_file(project, dir_path):  # TODO block paths that start with ..

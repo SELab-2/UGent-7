@@ -1,3 +1,5 @@
+from api.logic.get_file_path import (get_extra_check_result_file_path,
+                                     get_submission_file_path)
 from api.models.checks import ExtraCheck
 from api.models.group import Group
 from django.db import models
@@ -34,6 +36,8 @@ class Submission(models.Model):
         # A group can only have one submission with a specific number
         unique_together = ("group", "submission_number")
 
+# TODO: We can use a FilePathField for this with allow_files = False and allow_folders = True and include it in Submission
+
 
 class SubmissionFile(models.Model):
     """Model for a file that is part of a submission."""
@@ -49,11 +53,15 @@ class SubmissionFile(models.Model):
         null=False,
     )
 
-    # TODO: Set upload_to (use ypovoli.settings)
-    file = models.FileField(blank=False, null=False)
+    file = models.FileField(
+        upload_to=get_submission_file_path,
+        max_length=265,
+        blank=False,
+        null=False
+    )
 
 
-class ErrorTemplates(models.Model):
+class ErrorTemplate(models.Model):
     """
         Model possible error templates for a submission checks result.
     """
@@ -99,7 +107,7 @@ class ExtraChecksResult(models.Model):
 
     # Error message if the submission failed the extra checks
     error_message = models.ForeignKey(
-        ErrorTemplates,
+        ErrorTemplate,
         on_delete=models.CASCADE,
         related_name="extra_checks_results",
         blank=True,
@@ -107,8 +115,17 @@ class ExtraChecksResult(models.Model):
     )
 
     # File path for the log file of the extra checks
-    log_file = models.CharField(
+    log_file = models.FileField(
+        upload_to=get_extra_check_result_file_path,
         max_length=256,
         blank=False,
         null=True
+    )
+
+    # Whether the pass result is still valid
+    # Becomes invalid after changing / adding a check
+    is_valid = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False
     )

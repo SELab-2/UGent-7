@@ -1,11 +1,11 @@
-from django.utils.translation import gettext
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.response import Response
-from rest_framework.request import Request
-from rest_framework.permissions import IsAdminUser
-from drf_yasg.utils import swagger_auto_schema
-from authentication.serializers import UserSerializer, UserIDSerializer
 from authentication.models import User
+from authentication.serializers import UserIDSerializer, UserSerializer
+from django.utils.translation import gettext
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.permissions import IsAdminUser
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 
 class AdminViewSet(ReadOnlyModelViewSet):

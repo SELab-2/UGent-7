@@ -1,25 +1,28 @@
-from django.utils.translation import gettext
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
-from rest_framework.permissions import IsAdminUser
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
-from api.permissions.project_permissions import ProjectGroupPermission, ProjectPermission
 from api.models.group import Group
-from api.models.submission import Submission
 from api.models.project import Project
-from api.serializers.checks_serializer import StructureCheckSerializer, ExtraCheckSerializer
-from api.serializers.project_serializer import (
-    StructureCheckAddSerializer, SubmissionStatusSerializer,
-    ProjectSerializer, TeacherCreateGroupSerializer
-)
-
+from api.models.submission import Submission
+from api.permissions.project_permissions import (ProjectGroupPermission,
+                                                 ProjectPermission)
+from api.serializers.checks_serializer import (ExtraCheckSerializer,
+                                               StructureCheckSerializer)
 from api.serializers.group_serializer import GroupSerializer
+from api.serializers.project_serializer import (ProjectSerializer,
+                                                StructureCheckAddSerializer,
+                                                SubmissionStatusSerializer,
+                                                TeacherCreateGroupSerializer)
 from api.serializers.submission_serializer import SubmissionSerializer
+from django.utils.translation import gettext
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   RetrieveModelMixin, UpdateModelMixin)
+from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 
+# TODO: Error message when creating a project with wrongly formatted date looks a bit weird
 class ProjectViewSet(CreateModelMixin,
                      RetrieveModelMixin,
                      UpdateModelMixin,
@@ -104,7 +107,6 @@ class ProjectViewSet(CreateModelMixin,
 
         project: Project = self.get_object()
 
-        # Add submission to course
         serializer = StructureCheckAddSerializer(
             data=request.data,
             context={
@@ -133,6 +135,28 @@ class ProjectViewSet(CreateModelMixin,
             checks, many=True, context={"request": request}
         )
         return Response(serializer.data)
+
+    @extra_checks.mapping.post
+    @swagger_auto_schema(request_body=ExtraCheckSerializer)
+    def _add_extra_check(self, request: Request, **_):
+        """Add an extra_check to the project"""
+
+        project: Project = self.get_object()
+
+        serializer = ExtraCheckSerializer(
+            data=request.data,
+            context={
+                "project": project,
+                "request": request
+            }
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(project=project)
+
+        return Response({
+            "message": gettext("project.success.extra_check.add")
+        })
 
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | ProjectGroupPermission])
     def submission_status(self, request, **_):

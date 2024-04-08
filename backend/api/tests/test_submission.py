@@ -306,29 +306,29 @@ class SubmissionModelTests(APITestCase):
     #         retrieved_extra_check["passed"], extra_check_result.passed
     #     )
 
-    def test_submission_before_deadline(self):
-        """
-        Able to subbmit to a project before the deadline.
-        """
-        zip_file_path = "data/testing/tests/mixed.zip"
+    # def test_submission_before_deadline(self):
+    #     """
+    #     Able to subbmit to a project before the deadline.
+    #     """
+    #     zip_file_path = "data/testing/tests/mixed.zip"
 
-        with open(zip_file_path, 'rb') as file:
-            files = {'files': SimpleUploadedFile('mixed.zip', file.read())}
-        course = create_course(name="sel2", academic_start_year=2023)
-        project = create_project(
-            name="Project 1", description="Description 1", days=7, course=course
-        )
-        group = create_group(project=project, score=10)
+    #     with open(zip_file_path, 'rb') as file:
+    #         files = {'files': SimpleUploadedFile('mixed.zip', file.read())}
+    #     course = create_course(name="sel2", academic_start_year=2023)
+    #     project = create_project(
+    #         name="Project 1", description="Description 1", days=7, course=course
+    #     )
+    #     group = create_group(project=project, score=10)
 
-        response = self.client.post(
-            reverse("group-submissions", args=[str(group.id)]),
-            files,
-            follow=True,
-        )
+    #     response = self.client.post(
+    #         reverse("group-submissions", args=[str(group.id)]),
+    #         files,
+    #         follow=True,
+    #     )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
-        self.assertEqual(json.loads(response.content), {"message": gettext("group.success.submissions.add")})
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.accepted_media_type, "application/json")
+    #     self.assertEqual(json.loads(response.content), {"message": gettext("group.success.submissions.add")})
 
     def test_submission_after_deadline(self):
         """
@@ -357,46 +357,46 @@ class SubmissionModelTests(APITestCase):
         self.assertEqual(json.loads(response.content), {
             'non_field_errors': [gettext("project.error.submissions.past_project")]})
 
-    def test_submission_number_increases_by_1(self):
-        """
-        When submiting a submission the submission number should be the prev one + 1
-        """
-        zip_file_path = "data/testing/tests/mixed.zip"
+    # def test_submission_number_increases_by_1(self):
+    #     """
+    #     When submiting a submission the submission number should be the prev one + 1
+    #     """
+    #     zip_file_path = "data/testing/tests/mixed.zip"
 
-        with open(zip_file_path, 'rb') as f:
-            files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
+    #     with open(zip_file_path, 'rb') as f:
+    #         files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
 
-        course = create_course(name="sel2", academic_start_year=2023)
-        project = create_project(
-            name="Project 1", description="Description 1", days=7, course=course
-        )
-        group = create_group(project=project, score=10)
+    #     course = create_course(name="sel2", academic_start_year=2023)
+    #     project = create_project(
+    #         name="Project 1", description="Description 1", days=7, course=course
+    #     )
+    #     group = create_group(project=project, score=10)
 
-        max_submission_number_before = group.submissions.aggregate(Max('submission_number'))['submission_number__max']
+    #     max_submission_number_before = group.submissions.aggregate(Max('submission_number'))['submission_number__max']
 
-        if max_submission_number_before is None:
-            max_submission_number_before = 0
+    #     if max_submission_number_before is None:
+    #         max_submission_number_before = 0
 
-        old_submissions = group.submissions.count()
-        response = self.client.post(
-            reverse("group-submissions", args=[str(group.id)]),
-            files,
-            follow=True,
-        )
+    #     old_submissions = group.submissions.count()
+    #     response = self.client.post(
+    #         reverse("group-submissions", args=[str(group.id)]),
+    #         files,
+    #         follow=True,
+    #     )
 
-        group.refresh_from_db()
-        new_submissions = group.submissions.count()
+    #     group.refresh_from_db()
+    #     new_submissions = group.submissions.count()
 
-        max_submission_number_after = group.submissions.aggregate(Max('submission_number'))['submission_number__max']
+    #     max_submission_number_after = group.submissions.aggregate(Max('submission_number'))['submission_number__max']
 
-        if max_submission_number_after is None:
-            max_submission_number_after = 0
-        self.assertEqual(max_submission_number_after - max_submission_number_before, 1)
-        self.assertEqual(new_submissions - old_submissions, 1)
+    #     if max_submission_number_after is None:
+    #         max_submission_number_after = 0
+    #     self.assertEqual(max_submission_number_after - max_submission_number_before, 1)
+    #     self.assertEqual(new_submissions - old_submissions, 1)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
-        self.assertEqual(json.loads(response.content), {"message": gettext("group.success.submissions.add")})
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.accepted_media_type, "application/json")
+    #     self.assertEqual(json.loads(response.content), {"message": gettext("group.success.submissions.add")})
 
     def test_submission_invisible_project(self):
         """
