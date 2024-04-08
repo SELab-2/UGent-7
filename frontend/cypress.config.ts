@@ -1,8 +1,8 @@
-import { defineConfig } from "cypress";
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
     e2e: {
-        baseUrl: "https://nginx",
-        specPattern: "src/test/e2e/**/*.cy.{js,jsx,ts,tsx}",
+        baseUrl: 'http://test_nginx',
+        specPattern: 'src/test/e2e/**/*.cy.{js,jsx,ts,tsx}',
     },
 });
