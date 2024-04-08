@@ -1,13 +1,14 @@
 from django.core.management.base import BaseCommand
 from api.models.student import Student
+from api.models.teacher import Teacher
 
 
 class Command(BaseCommand):
 
-    help = 'make yourself admin'
+    help = 'make yourself teacher'
 
     def add_arguments(self, parser):
-        parser.add_argument('username', type=str, help='The username of the student user to make admin')
+        parser.add_argument('username', type=str, help='The username of the student user to make teacher')
 
     def handle(self, *args, **options):
         username = options['username']
@@ -16,6 +17,5 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR('User not found, first log in !'))
             return
         student = student.get()
-        student.is_staff = True
-        student.save()
-        self.stdout.write(self.style.SUCCESS('Successfully made the user admin!'))
+        Teacher.objects.create(id=student.id, create_time=student.create_time)
+        self.stdout.write(self.style.SUCCESS('Successfully made the user teacher!'))
