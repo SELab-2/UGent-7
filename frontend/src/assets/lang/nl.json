@@ -8,6 +8,7 @@
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
                 "courses": "Vakken",
+                "projects": "Projecten",
                 "settings": "Voorkeuren",
                 "help": "Help"
             },
@@ -41,7 +42,11 @@
         "projects": {
             "deadline": "Deadline",
             "submissionStatus": "Indienstatus",
+            "group": "Groep",
             "groupMembers": "Groepsleden",
+            "chooseGroup": "Kies een groep",
+            "joinGroup": "Kies groep",
+            "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
             "name": "Projectnaam",
             "description": "Beschrijving",
@@ -52,6 +57,12 @@
             "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
             "docker_upload": "Upload een Dockerfile",
             "submission_structure": "Structuur van hoe de indiening moet gebeuren"
+        },
+        "submissions": {
+            "title": "Inzendingen",
+            "submit": "Indienen",
+            "course": "Vak",
+            "chooseFile": "Kies bestand(en)"
         },
         "courses": {
           "create": "Creëer vak",
@@ -91,7 +102,8 @@
         },
         "card": {
             "open": "Details"
-        }
+        },
+        "submission" : "Indienen"
     },
     "types": {
         "roles": {

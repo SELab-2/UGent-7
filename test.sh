@@ -54,7 +54,7 @@ if [ "$build" = true ]; then
 fi
 
 echo "Starting services..."
-docker-compose -f test.yml up -d --scale cypress=0
+docker-compose -f test.yml up -d --scale test_cypress=0
 
 cypress_exit=0
 vitest_exit=0
@@ -63,25 +63,25 @@ django_exit=0
 if [ "$frontend" = true ]; then
     echo "Running frontend tests..."
     echo "Running Cypress tests..."
-    docker-compose -f test.yml up --exit-code-from cypress --abort-on-container-exit  cypress
+    docker-compose -f test.yml up --exit-code-from test_cypress --abort-on-container-exit  test_cypress
     cypress_exit=$?
     echo "Running Vitest tests..."
-    docker exec frontend npm run test
+    docker exec test_frontend npm run test
     vitest_exit=$?
 elif [ "$backend" = true ]; then
     echo "Running backend tests..."
-    docker exec backend python manage.py test
+    docker exec test_backend python manage.py test
     django_exit=$?
 else
     echo "Running backend tests..."
-    docker exec backend python manage.py test
+    docker exec test_backend python manage.py test
     django_exit=$?
     echo "Running frontend tests..."
     echo "Running Cypress tests..."
-    docker-compose -f test.yml up --exit-code-from cypress --abort-on-container-exit  cypress
+    docker-compose -f test.yml up --exit-code-from test_cypress --abort-on-container-exit  test_cypress
     cypress_exit=$?
     echo "Running Vitest tests..."
-    docker exec frontend npm run test
+    docker exec test_frontend npm run test
     vitest_exit=$?
 fi
 
@@ -98,6 +98,9 @@ if [ $cypress_exit -ne 0 ] || [ $vitest_exit -ne 0 ] || [ $django_exit -ne 0 ]; 
         echo "  - Django"
     fi
     echo "-----------------"
+    echo "Cleaning up..."
+    docker-compose -f test.yml down
+    echo "Done."
     exit 1
 else
     echo "All tests passed!"
