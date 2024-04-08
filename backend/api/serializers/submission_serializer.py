@@ -59,7 +59,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
         # Get the maximum submission number for the group's project
         max_submission_number = Submission.objects.filter(
-            group_project=project
+            group__project=project
         ).aggregate(Max('submission_number'))['submission_number__max'] or 0
 
         # Set the new submission number to the maximum value plus 1
