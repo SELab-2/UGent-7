@@ -73,8 +73,13 @@ structureCheck_provider = DynamicProvider(
 class Providers(BaseProvider):
 
     MAX_TRIES = 1000
+    min_id = 1
+    max_id = 9_999_999_999_999_999_999_999
 
-    def provide_teacher(self, errHandler, courses=None):
+    min_salt = 1
+    max_salt = 100_000
+
+    def provide_teacher(self, errHandler, min_faculty=1, max_faculty=2, staf_prob=0.1):
         """
         Create a teacher with the given arguments.
         """
@@ -83,9 +88,9 @@ class Providers(BaseProvider):
             try:
                 first = fake.first_name()
                 last = fake.last_name()
-                id = fake.unique.random_int(min=1, max = 9999999999999999999999)
-                faculty = [fake.faculty_provider().id for _ in range(0,fake.random_int(min=1, max = 2))] # generate 1 or 2 facultys
-                username = f"{first}_{last}_{fake.unique.random_int(min=1, max = 9999999999999999999999)}"
+                id = fake.unique.random_int(min=self.min_id, max = self.max_id)
+                faculty = [fake.faculty_provider().id for _ in range(0,fake.random_int(min=min_faculty, max = max_faculty))] # generate 1 or 2 facultys
+                username = f"{first}_{last}_{fake.random_int(min=self.min_salt, max = self.max_salt)}"
                 teacher = Teacher.objects.create(
                     id=id,
                     first_name=first,
@@ -94,23 +99,23 @@ class Providers(BaseProvider):
                     email=username+"@example.com",
                     create_time=timezone.now(),
                     last_enrolled= timezone.now().year,
-                    is_staff=fake.boolean(chance_of_getting_true=0.01)
+                    is_staff=fake.boolean(chance_of_getting_true=staf_prob)
                 )
 
                 if faculty is not None:
                     for fac in faculty:
                         teacher.faculties.add(fac)
 
-                if courses is not None:
-                    for cours in courses:
-                        teacher.courses.add(cours)
+                # if courses is not None:
+                #     for cours in courses:
+                #         teacher.courses.add(cours)
 
                 return teacher
             except:
                 tries += 1
         errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique teacher."))
 
-    def provide_assistant(self, errHandler, courses=None):
+    def provide_assistant(self, errHandler, min_faculty=1, max_faculty=3, staf_prob=0.01):
         """
         Create a assistant with the given arguments.
         """
@@ -119,9 +124,9 @@ class Providers(BaseProvider):
             try:
                 first = fake.first_name()
                 last = fake.last_name()
-                id = fake.unique.random_int(min=1, max = 9999999999999999999999)
-                faculty = [fake.faculty_provider().id for _ in range(0,fake.random_int(min=1, max = 3))] # generate 1 or 2 or 3 facultys
-                username = f"{first}_{last}_{fake.unique.random_int(min=1, max = 9999999999999999999999)}"
+                id = fake.unique.random_int(min=self.min_id, max = self.max_id)
+                faculty = [fake.faculty_provider().id for _ in range(0,fake.random_int(min=min_faculty, max = max_faculty))] # generate 1 or 2 or 3 facultys
+                username = f"{first}_{last}_{fake.random_int(min=self.min_salt, max = self.max_salt)}"
                 assistant = Assistant.objects.create(
                     id=id,
                     first_name=first,
@@ -130,23 +135,23 @@ class Providers(BaseProvider):
                     email=username+"@example.com",
                     create_time=timezone.now(),
                     last_enrolled= timezone.now().year,
-                    is_staff=fake.boolean(chance_of_getting_true=0.01)
+                    is_staff=fake.boolean(chance_of_getting_true=staf_prob)
                 )
 
                 if faculty is not None:
                     for fac in faculty:
                         assistant.faculties.add(fac)
 
-                if courses is not None:
-                    for cours in courses:
-                        assistant.courses.add(cours)
+                # if courses is not None:
+                #     for cours in courses:
+                #         assistant.courses.add(cours)
 
                 return assistant
             except:
                 tries += 1
         errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique assistant."))
 
-    def provide_student(self, errHandler, courses=None):
+    def provide_student(self, errHandler, min_faculty=1, max_faculty=3, staf_prob=0.01):
         """
         Create a student with the given arguments.
         """
@@ -155,9 +160,9 @@ class Providers(BaseProvider):
             try:
                 first = fake.first_name()
                 last = fake.last_name()
-                id = fake.unique.random_int(min=1, max = 9999999999999999999999)
-                faculty = [fake.faculty_provider().id for _ in range(0,fake.random_int(min=1, max = 3))] # generate 1 or 2 or 3 facultys
-                username = f"{first}_{last}_{fake.unique.random_int(min=1, max = 9999999999999999999999)}"
+                id = fake.unique.random_int(min=self.min_id, max = self.max_id)
+                faculty = [fake.faculty_provider().id for _ in range(0,fake.random_int(min=min_faculty, max = max_faculty))] # generate 1 or 2 or 3 facultys
+                username = f"{first}_{last}_{fake.random_int(min=self.min_salt, max = self.max_salt)}"
                 student = Student.objects.create(
                     id=id,
                     first_name=first,
@@ -167,23 +172,34 @@ class Providers(BaseProvider):
                     create_time=timezone.now(),
                     last_enrolled= timezone.now().year,
                     student_id=id,
-                    is_staff=fake.boolean(chance_of_getting_true=0.01)
+                    is_staff=fake.boolean(chance_of_getting_true=staf_prob)
                 )
 
                 if faculty is not None:
                     for fac in faculty:
                         student.faculties.add(fac)
 
-                if courses is not None:
-                    for cours in courses:
-                        student.courses.add(cours)
+                # if courses is not None:
+                #     for cours in courses:
+                #         student.courses.add(cours)
 
                 return student
             except:
                 tries += 1
         errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique student."))
 
-    def provide_course(self, errHandler):
+    def provide_course(
+            self,
+            errHandler,
+            min_year_passed=0,
+            max_year_passed=3,
+            min_students=1,
+            max_students=100,
+            min_teachers=1,
+            max_teachers=5,
+            min_assistants=0,
+            max_assistants=5
+            ):
         """
         Create a Course with the given arguments.
         """
@@ -192,57 +208,120 @@ class Providers(BaseProvider):
             try:
                 parent_course = None # TODO make this sometimes a course
                 course_name = fake.catch_phrase()
-                return Course.objects.create(
+                course: Course = Course.objects.create(
                     name=course_name,
-                    academic_startyear=timezone.now().year - fake.random_int(min=0, max = 3) ,
+                    academic_startyear=timezone.now().year - fake.random_int(min=min_year_passed, max = max_year_passed) ,
                     faculty=fake.faculty_provider(),
                     description=fake.paragraph(),
-                    parent_course=parent_course,
+                    parent_course=parent_course
                 )
+
+                # add students
+                student_count = fake.random_int(min=min_students, max = max_students)
+                while course.students.count() < student_count:
+                    student = fake.student_provider()
+                    if student not in course.students.all():
+                        course.students.add(student)
+
+                # add teachers
+                teacher_count = fake.random_int(min=min_teachers, max = max_teachers)
+                while course.teachers.count() < teacher_count:
+                    teacher = fake.teacher_provider()
+                    if teacher not in course.teachers.all():
+                        course.teachers.add(teacher)
+
+                # add assistants
+                assistant_count = fake.random_int(min=min_assistants, max = max_assistants)
+                while course.assistants.count() < assistant_count:
+                    assistant = fake.assistant_provider()
+                    if assistant not in course.assistants.all():
+                        course.assistants.add(assistant)
+
+                # print(course_name)
+                return course
             except:
                 tries += 1
         errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique Course."))
 
-    def provide_project(self, errHandler):
+    def provide_project(
+            self,
+            errHandler,
+            min_start_date_dev = -100,
+            max_start_date_dev = 100,
+            min_deadline_dev = 1,
+            max_deadline_dev = 100,
+            visible_prob = 80,
+            archived_prob = 10,
+            score_visible_prob = 30,
+            locked_groups_prob = 30,
+            min_max_score = 1,
+            max_max_score = 100,
+            min_group_size = 1,
+            max_group_size = 15
+            ):
         """Create a Project with the given arguments."""
         tries = 0
         while tries < self.MAX_TRIES:
             try:
-                start_date = timezone.now() + timezone.timedelta(days=fake.random_int(min=-100, max = 100))
-                deadline = start_date + timezone.timedelta(days=fake.random_int(min=1, max = 100))
+                start_date = timezone.now() + timezone.timedelta(days=fake.random_int(min=min_start_date_dev, max = max_start_date_dev))
+                deadline = start_date + timezone.timedelta(days=fake.random_int(min=min_deadline_dev, max = max_deadline_dev))
                 course = fake.course_provider()
                 return Project.objects.create(
                     name=fake.catch_phrase(),
                     description=fake.paragraph(),
-                    visible=fake.boolean(chance_of_getting_true=80),
-                    archived=fake.boolean(chance_of_getting_true=10),
-                    score_visible=fake.boolean(chance_of_getting_true=30),
-                    locked_groups=fake.boolean(chance_of_getting_true=30),
+                    visible=fake.boolean(chance_of_getting_true=visible_prob),
+                    archived=fake.boolean(chance_of_getting_true=archived_prob),
+                    score_visible=fake.boolean(chance_of_getting_true=score_visible_prob),
+                    locked_groups=fake.boolean(chance_of_getting_true=locked_groups_prob),
                     deadline=deadline,
                     course=course,
                     start_date=start_date,
-                    max_score=fake.random_int(min=1, max = 100),
-                    group_size=fake.random_int(min=1, max = 8)
+                    max_score=fake.random_int(min=min_max_score, max = max_max_score),
+                    group_size=fake.random_int(min=min_group_size, max = max_group_size)
                 )
             except:
                 tries += 1
         errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique project."))
 
-    def provide_group(self, errHandler):
+    def provide_group(self, errHandler, min_score=0):
         """Create a Group with the given arguments."""
         tries = 0
         while tries < self.MAX_TRIES:
             try:
                 project: Project = fake.project_provider()
-                return Group.objects.create(
+                group:Group = Group.objects.create(
                     project=project,
-                    score=fake.random_int(min=0, max = project.max_score)
+                    score=fake.random_int(min=min_score, max = project.max_score)
                 )
+
+                max_group_size = group.project.group_size
+
+
+                students = group.project.course.students.all()
+                groups = group.project.groups.all()
+                joined_students = []
+
+                for groupStudents in groups:
+                    joined_students.extend(groupStudents.students.all())
+
+                students_not_in_group = [student for student in students if student not in joined_students]
+
+                if len(students_not_in_group) == 0:
+                    pass
+                elif len(students_not_in_group) < max_group_size:
+                    group.students.extend(students_not_in_group)
+                else:
+                    for _ in range(0, max_group_size):
+                        random_student = students_not_in_group[fake.random_int(min=0,max=len(students_not_in_group))]
+                        group.students.add(random_student)
+                        students_not_in_group.remove(random_student)
+
+                return group
             except:
                 tries += 1
         errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique group."))
 
-    def provide_submission(self, errHandler):
+    def provide_submission(self, errHandler, struct_check_passed_prob=70):
         """Create an Submission with the given arguments."""
         tries = 0
         while tries < self.MAX_TRIES:
@@ -263,7 +342,7 @@ class Providers(BaseProvider):
                 return Submission.objects.create( # TODO add fake files
                     group=group,
                     submission_time=random_datetime,
-                    structure_checks_passed=fake.boolean(chance_of_getting_true=70),
+                    structure_checks_passed=fake.boolean(chance_of_getting_true=struct_check_passed_prob),
                     submission_number=max_submission_number + 1
                 )
             except:
@@ -351,59 +430,70 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        amountOfStudents = 5
-        amountOfAssistants = 5
-        amountOfTeachers = 5
-        amountOfCourses = 10
-        amountOfProjects = 10
-        amountOfGroups = 20
-        amountOfSubmissions = 50
-        amountOfFileExtensions = 5
-        amountOfStructureChecks = 50
+        #TODO maybey take as option
+        amountOfStudents = 10_000
+        amountOfAssistants = 1_000
+        amountOfTeachers = 1_000
+        amountOfCourses = 1_000
+        amountOfProjects = 5_000
+        amountOfGroups = 20_000
+        amountOfSubmissions = 50_000
+        amountOfFileExtensions = 20
+        amountOfStructureChecks = 10_000
+
+        # amountOfStudents = 0
+        # amountOfAssistants = 0
+        # amountOfTeachers = 0
+        # amountOfCourses = 0
+        # amountOfProjects = 0
+        # amountOfGroups = 1
+        # amountOfSubmissions = 0
+        # amountOfFileExtensions = 0
+        # amountOfStructureChecks = 0
 
         for _ in range(0,amountOfStudents):
             fake.provide_student(self)
 
-        update_providers()
+        if amountOfStudents: update_providers()
 
         for _ in range(0,amountOfAssistants):
             fake.provide_assistant(self)
 
-        update_providers()
+        if amountOfAssistants: update_providers()
 
         for _ in range(0,amountOfTeachers):
             fake.provide_teacher(self)
 
-        update_providers()
+        if amountOfTeachers: update_providers()
 
         for _ in range(0,amountOfCourses):
             fake.provide_course(self)
 
-        update_providers()
+        if amountOfCourses: update_providers()
 
         for _ in range(0,amountOfProjects):
             fake.provide_project(self)
 
-        update_providers()
+        if amountOfProjects: update_providers()
 
         for _ in range(0,amountOfGroups):
             fake.provide_group(self)
 
-        update_providers()
+        if amountOfGroups: update_providers()
 
         for _ in range(0,amountOfSubmissions):
             fake.provide_submission(self)
 
-        update_providers()
+        if amountOfSubmissions: update_providers()
 
         for _ in range(0,amountOfFileExtensions):
             fake.provide_fileExtension(self)
 
-        update_providers()
+        if amountOfFileExtensions: update_providers()
 
         for _ in range(0,amountOfStructureChecks):
             fake.provide_structure_check(self)
 
-        update_providers()
+        if amountOfStructureChecks: update_providers()
 
         self.stdout.write(self.style.SUCCESS('Successfully seeded db!'))
