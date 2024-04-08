@@ -22,7 +22,6 @@ export function useProject(): ProjectState {
 
     async function getProjectByID(id: string): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
-        console.log(id);
         await get<Project>(endpoint, project, Project.fromJSON);
     }
 
