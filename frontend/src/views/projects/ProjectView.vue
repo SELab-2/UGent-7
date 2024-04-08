@@ -1,76 +1,42 @@
 <script setup lang="ts">
 import BaseLayout from '@/components/layout/BaseLayout.vue';
-import { ref, watch } from 'vue';
-import { useProject } from '@/composables/services/project.service.ts';
-import { useRoute } from 'vue-router';
-import Title from '@/components/layout/Title.vue';
-import Skeleton from 'primevue/skeleton';
-import GroupCard from '@/components/projects/GroupCard.vue';
-import { useGroup } from '@/composables/services/groups.service.ts';
-import { type Group } from '@/types/Group.ts';
-import { useAuthStore } from '@/store/authentication.store.ts';
+import { useCourses } from '@/composables/services/courses.service.ts';
+import { computed, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import ProjectList from '@/components/projects/ProjectList.vue';
+import Title from '@/components/layout/Title.vue';
+import { useI18n } from 'vue-i18n';
+import YearSelector from '@/components/YearSelector.vue';
+import { User } from '@/types/users/User.ts';
 
-/* Composable injections */
-const route = useRoute();
-const { student } = storeToRefs(useAuthStore());
-const { project, getProjectByID } = useProject();
-const { groups, getGroupsByProject, getGroupsByStudent } = useGroup();
+const { t } = useI18n();
+const { user } = storeToRefs(useAuthStore());
+const { courses, getCoursesByStudent } = useCourses();
 
-/* Component state */
-const group = ref<Group | null>(null);
+const selectedYear = ref<number>(User.getAcademicYear());
 
-watch(
-    student,
-    async () => {
-        if (student.value !== null) {
-            const projectId = route.params.projectId as string;
-            await getProjectByID(projectId.toString());
-            await getGroupsByProject(projectId.toString());
+onMounted(async () => {
+    if (user.value?.id != null) {
+        await getCoursesByStudent(user.value.id);
+    }
+});
 
-            // Check if the student is in a group for the project
-            const projectGroups = groups.value;
-            await getGroupsByStudent('1');
-
-            for (const studentGroup of groups.value ?? []) {
-                const isCommonGroup = projectGroups?.some((projectGroup) => projectGroup.id === studentGroup.id);
-
-                if (isCommonGroup === true) {
-                    group.value = studentGroup;
-                    break;
-                }
-            }
-        }
-    },
-    {
-        immediate: true,
-    },
+const filteredCourses = computed(
+    () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
 );
 </script>
 
 <template>
     <BaseLayout>
-        <div class="grid">
-            <div class="col-12 md:col-8">
-                <div>
-                    <Title v-if="project">
-                        {{ project.name }}
-                    </Title>
-                    <Skeleton class="mb-4" height="3rem" width="30rem" v-else />
-                </div>
-                <div>
-                    <p v-if="project">
-                        {{ project.description }}
-                    </p>
-                    <Skeleton height="10rem" v-else />
-                </div>
-            </div>
-            <div class="col-12 md:col-4">
-                <GroupCard :group="group" v-if="group"></GroupCard>
-
-                <Skeleton height="20rem" v-else />
-            </div>
+        <!-- Project heading -->
+        <div class="flex justify-content-between align-items-center mb-6">
+            <!-- Project list title -->
+            <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
+            <YearSelector :years="user?.academic_years" v-model="selectedYear" />
         </div>
+
+        <ProjectList v-if="filteredCourses" :courses="filteredCourses" />
     </BaseLayout>
 </template>
 

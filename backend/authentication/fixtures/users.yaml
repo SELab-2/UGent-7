@@ -82,3 +82,15 @@
     create_time: 2024-02-29 20:35:45.688545+00:00
     faculties:
     - Psychologie_PedagogischeWetenschappen
+- model: authentication.user
+  pk: '000200694919'
+  fields:
+    last_login: null
+    username: landmaes
+    email: lander.maes@ugent.be
+    first_name: Lander
+    last_name: Maes
+    last_enrolled: 2023
+    create_time: 2024-02-29 20:35:45.688545+00:00
+    faculties:
+      - Wetenschappen

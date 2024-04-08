@@ -8,6 +8,7 @@
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
                 "courses": "Vakken",
+                "projects": "Projecten",
                 "settings": "Voorkeuren",
                 "help": "Help"
             },
@@ -41,7 +42,11 @@
         "projects": {
             "deadline": "Deadline",
             "submissionStatus": "Indienstatus",
+            "group": "Groep",
             "groupMembers": "Groepsleden",
+            "chooseGroup": "Kies een groep",
+            "joinGroup": "Kies groep",
+            "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
             "name": "Projectnaam",
             "description": "Beschrijving",
@@ -50,6 +55,12 @@
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
             "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten"
+        },
+        "submissions": {
+            "title": "Inzendingen",
+            "submit": "Indienen",
+            "course": "Vak",
+            "chooseFile": "Kies bestand(en)"
         },
         "courses": {
           "create": "Creëer vak",
@@ -89,7 +100,8 @@
         },
         "card": {
             "open": "Details"
-        }
+        },
+        "submission" : "Indienen"
     },
     "types": {
         "roles": {
