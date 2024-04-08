@@ -6,8 +6,8 @@ import { useStudents } from '@/composables/services/students.service.ts';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { type Group } from '@/types/Group.ts';
-import {PrimeIcons} from "primevue/api";
-import Button from "primevue/button";
+import { PrimeIcons } from 'primevue/api';
+import Button from 'primevue/button';
 
 /* Props */
 defineProps<{
@@ -55,7 +55,12 @@ async function joinSelectedGroup(): Promise<void> {
         <div class="groupcard">
             <h2>{{ t('views.projects.chooseGroup') }}</h2>
             <div v-if="groups">
-                <button class="groupSelectionButton p-3" v-for="group in groups" :key="group.id" @click="showGroupDialog(group)">
+                <button
+                    class="groupSelectionButton p-3"
+                    v-for="group in groups"
+                    :key="group.id"
+                    @click="showGroupDialog(group)"
+                >
                     {{ t('views.projects.group') }} {{ group.id }}
                 </button>
             </div>
@@ -70,7 +75,14 @@ async function joinSelectedGroup(): Promise<void> {
                         {{ student.first_name }} {{ student.last_name }}
                     </li>
                 </ul>
-              <Button class="mt-3" @click="joinSelectedGroup" :icon="PrimeIcons.ARROW_RIGHT" :label="t('views.projects.joinGroup')" icon-pos="right" outlined/>
+                <Button
+                    class="mt-3"
+                    @click="joinSelectedGroup"
+                    :icon="PrimeIcons.ARROW_RIGHT"
+                    :label="t('views.projects.joinGroup')"
+                    icon-pos="right"
+                    outlined
+                />
             </Dialog>
         </div>
     </div>
@@ -90,10 +102,10 @@ async function joinSelectedGroup(): Promise<void> {
     margin-bottom: 0.5rem;
     border-bottom: 1px solid #e0e0e0;
     :last-child {
-      border-bottom: none;
+        border-bottom: none;
     }
 }
 .groupSelectionButton:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 </style>

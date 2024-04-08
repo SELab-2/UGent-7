@@ -11,7 +11,7 @@ import { type Group } from '@/types/Group.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { type Student } from '@/types/users/Student.ts';
-import SubmissionCard from "@/components/projects/SubmissionCard.vue";
+import SubmissionCard from '@/components/projects/SubmissionCard.vue';
 
 /* Composable injections */
 const route = useRoute();
@@ -68,7 +68,7 @@ onMounted(async () => {
             </div>
         </div>
         <div class="col-12 md:col-3">
-            <SubmissionCard v-if="group && project" :project="project" :group="group"/>
+            <SubmissionCard v-if="group && project" :project="project" :group="group" />
             <JoinedGroupCard v-if="group" :group="group" @group-left="handleGroupChanged"></JoinedGroupCard>
             <ChooseGroupCard v-else :groups="projectGroups" @group-joined="handleGroupChanged"></ChooseGroupCard>
         </div>

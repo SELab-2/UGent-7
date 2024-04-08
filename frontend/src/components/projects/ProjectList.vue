@@ -25,8 +25,8 @@ const allProjects = computed(() => props.courses.flatMap((course) => course.proj
 /**
  * Sorts the projects by deadline
  */
-const sortedProjects = computed(
-    () => allProjects.value.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
+const sortedProjects = computed(() =>
+    [...allProjects.value].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
 );
 
 watch(
@@ -49,7 +49,6 @@ watch(
         immediate: true,
     },
 );
-
 </script>
 
 <template>

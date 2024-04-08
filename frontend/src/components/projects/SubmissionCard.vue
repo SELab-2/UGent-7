@@ -4,10 +4,10 @@ import { type Project } from '@/types/Projects.ts';
 import { PrimeIcons } from 'primevue/api';
 import Card from 'primevue/card';
 import { useI18n } from 'vue-i18n';
-import {computed, onMounted} from 'vue';
-import {useSubmission} from "@/composables/services/submission.service.ts";
-import {Group} from "@/types/Group.ts";
-import Button from "primevue/button";
+import { computed, onMounted } from 'vue';
+import { useSubmission } from '@/composables/services/submission.service.ts';
+import { type Group } from '@/types/Group.ts';
+import Button from 'primevue/button';
 
 const { t } = useI18n();
 const { submissions, getSubmissionByGroup } = useSubmission();
@@ -26,7 +26,6 @@ const formattedDeadline = computed(() => {
     const date = new Date(props.project.deadline);
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 });
-
 </script>
 
 <template>
@@ -39,15 +38,14 @@ const formattedDeadline = computed(() => {
                 </div>
                 <div>
                     <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-                    {{ t('views.projects.submissionStatus') }}: {{ submissions? submissions.at(-1)?.structure_checks_passed: "false"}}
+                    {{ t('views.projects.submissionStatus') }}:
+                    {{ submissions ? submissions.at(-1)?.structure_checks_passed : 'false' }}
                 </div>
             </div>
         </template>
         <template #footer>
-            <RouterLink
-                :to="{name: 'submission'}"
-            >
-              <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.submission')" icon-pos="right" outlined />
+            <RouterLink :to="{ name: 'submission' }">
+                <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.submission')" icon-pos="right" outlined />
             </RouterLink>
         </template>
     </Card>

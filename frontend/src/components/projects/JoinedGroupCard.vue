@@ -5,8 +5,8 @@ import { useI18n } from 'vue-i18n';
 import { type Group } from '@/types/Group.ts';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
-import {PrimeIcons} from "primevue/api";
-import Button from "primevue/button";
+import { PrimeIcons } from 'primevue/api';
+import Button from 'primevue/button';
 
 /* Props */
 const props = defineProps<{
@@ -48,11 +48,16 @@ onMounted(async () => {
     <div class="groupcard">
         <h2>{{ t('views.projects.groupMembers') }}</h2>
         <div class="mt-4">
-            <p v-for="student in students" :key="student.id">
-                {{ student.first_name }} {{ student.last_name }}
-            </p>
+            <p v-for="student in students" :key="student.id">{{ student.first_name }} {{ student.last_name }}</p>
         </div>
-      <Button class="mt-3" @click="leaveSelectedGroup" :icon="PrimeIcons.ARROW_RIGHT" :label="t('views.projects.leaveGroup')" icon-pos="right" outlined/>
+        <Button
+            class="mt-3"
+            @click="leaveSelectedGroup"
+            :icon="PrimeIcons.ARROW_RIGHT"
+            :label="t('views.projects.leaveGroup')"
+            icon-pos="right"
+            outlined
+        />
     </div>
 </template>
 
@@ -68,19 +73,19 @@ onMounted(async () => {
     border-width: $borderWidth;
     color: $primaryColor;
 
-  div {
-    p {
-      color: $textSecondaryColor;
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid #e0e0e0;
-    }
+    div {
+        p {
+            color: $textSecondaryColor;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
 
-    /* Zorgt ervoor dat er geen lijn onder de laatste naam staat */
-    p:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+        /* Zorgt ervoor dat er geen lijn onder de laatste naam staat */
+        p:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
     }
-  }
 }
 </style>
