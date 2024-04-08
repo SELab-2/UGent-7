@@ -1,9 +1,11 @@
 from api.models.student import Student
 from authentication.models import User
+from authentication.signals import user_created
 from django.dispatch import Signal, receiver
 
 
 # TODO: Is this a signal?
+@receiver(user_created)
 def user_creation(user: User, attributes: dict, **_):
     """Upon user creation, auto-populate additional properties"""
     student_id: str = attributes.get("ugentStudentID")
