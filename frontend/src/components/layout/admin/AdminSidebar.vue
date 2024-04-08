@@ -7,20 +7,20 @@ const { t } = useI18n();
 
 const items = ref([
     {
-        label: t('admin.users.title'),
+        label: 'admin.users.title',
         items: [
             {
-                label: t('admin.users.title'),
+                label: 'admin.users.title',
                 route: 'admin-users',
             },
             {
-                label: t('admin.assistants.title'),
+                label: 'admin.assistants.title',
             },
             {
-                label: t('admin.students.title'),
+                label: 'admin.students.title',
             },
             {
-                label: t('admin.teachers.title'),
+                label: 'admin.teachers.title',
             },
         ],
     },
@@ -53,7 +53,7 @@ const items = ref([
             <template #item="{ item, props }">
                 <RouterLink :to="{ name: item.route }">
                     <a v-ripple class="flex align-items-center" v-bind="props.action">
-                        <span class="ml-2">{{ item.label }}</span>
+                        <span class="ml-2">{{ t(item.label) }}</span>
                         <span
                             v-if="item.shortcut"
                             class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1"

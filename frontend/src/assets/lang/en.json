@@ -113,6 +113,34 @@
         "required": "This field is required",
         "deadline": "The deadline must be after the start date"
     },
+    "admin": {
+        "title": "Admin",
+        "keyword": "Keyword",
+        "search": "Search",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "users": {
+            "title": "Users",
+            "id": "ID",
+            "username": "Username",
+            "email": "Email",
+            "roles": "Roles"
+        },
+        "user": "User",
+        "assistants": {
+            "title": "Assistants"
+        },
+        "assistant": "Assistant",
+        "students": {
+            "title": "Students"
+        },
+        "student": "Student",
+        "teachers": {
+            "title": "Teachers"
+        },
+        "teacher": "Teacher"
+    },
     "primevue": {
         "startsWith": "Starts with",
         "contains": "Contains",
