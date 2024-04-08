@@ -39,6 +39,11 @@ const items = computed(() => [
         label: t('layout.header.navigation.courses'),
         route: 'courses',
     },
+    {
+        icon: 'file-plus',
+        label: t('layout.header.navigation.projects'),
+        route: 'projects',
+    },
 ]);
 </script>
 

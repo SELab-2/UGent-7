@@ -22,6 +22,13 @@ const { projects, getProjectsByCourse } = useProject();
 /* State */
 const allProjects = computed(() => props.courses.flatMap((course) => course.projects));
 
+/**
+ * Sorts the projects by deadline
+ */
+const sortedProjects = computed(
+    () => allProjects.value.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
+);
+
 watch(
     () => props.courses,
     async (courses: Course[]) => {
@@ -42,12 +49,13 @@ watch(
         immediate: true,
     },
 );
+
 </script>
 
 <template>
     <template v-if="allProjects.length > 0">
         <div class="grid align-items-stretch">
-            <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="project in allProjects" :key="project.id">
+            <div class="col-12 md:col-6 lg:col-4 xl:col-3" v-for="project in sortedProjects" :key="project.id">
                 <ProjectCard class="h-100" :project="project" :course="project.course" />
             </div>
         </div>

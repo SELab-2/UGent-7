@@ -15,6 +15,7 @@ import ProjectView from '@/views/projects/ProjectView.vue';
 import CreateProjectView from '@/views/projects/CreateProjectView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from "@/views/submissions/submissionView.vue";
+import SingleProjectView from "@/views/projects/SingleProjectView.vue";
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -47,15 +48,15 @@ const routes: RouteRecordRaw[] = [
                     { path: 'edit', component: Dummy, name: 'course-edit' },
                     // Projects
                     {
-                        path: 'projects',
+                        path: 'courseProjects',
                         children: [
-                            { path: '', component: Dummy, name: 'projects' },
+                            { path: '', component: Dummy, name: 'courseProjects' },
                             { path: 'create', component: CreateProjectView, name: 'project-create' },
                             // Single project
                             {
                                 path: ':projectId',
                                 children: [
-                                    { path: '', component: ProjectView, name: 'project' },
+                                    { path: '', component: SingleProjectView, name: 'courseProject' },
                                     { path: 'edit', component: Dummy, name: 'project-edit' },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },
@@ -71,6 +72,9 @@ const routes: RouteRecordRaw[] = [
 
     // Calendar
     { path: '/calendar', component: CalendarView, name: 'calendar' },
+
+    // Projects
+    { path: '/projects', component: ProjectView, name: 'projects' },
 
     // Users
     {

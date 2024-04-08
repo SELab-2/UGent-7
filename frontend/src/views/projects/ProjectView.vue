@@ -1,24 +1,45 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue';
-import { useAuthStore } from '@/store/authentication.store.ts';
-import { storeToRefs } from 'pinia';
-import { type Student } from '@/types/users/Student';
-import { type Teacher } from '@/types/users/Teacher';
-import { type Assistant } from '@/types/users/Assistant';
-import StudentProjectView from '@/views/projects/roles/StudentProjectView.vue';
-import TeacherProjectView from '@/views/projects/roles/TeacherProjectView.vue';
-import AssistantProjectView from '@/views/projects/roles/AssistantProjectView.vue';
 
-/* Service injection */
+import BaseLayout from "@/components/layout/BaseLayout.vue";
+import {useCourses} from "@/composables/services/courses.service.ts";
+import {computed, onMounted, ref} from "vue";
+import {storeToRefs} from "pinia";
+import {useAuthStore} from "@/store/authentication.store.ts";
+import ProjectList from "@/components/projects/ProjectList.vue";
+import Title from "@/components/layout/Title.vue";
+import {useI18n} from "vue-i18n";
+import YearSelector from "@/components/YearSelector.vue";
+import {User} from "@/types/users/User.ts";
+
+const { t } = useI18n();
 const { user } = storeToRefs(useAuthStore());
+const { courses, getCoursesByStudent } = useCourses();
+
+const selectedYear = ref<number>(User.getAcademicYear());
+
+onMounted(async () => {
+  await getCoursesByStudent(user.value?.id as string);
+});
+
+const filteredCourses = computed(
+    () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
+);
+
 </script>
 
 <template>
-    <BaseLayout>
-        <StudentProjectView v-if="user?.isStudent()" :student="user as Student" />
-        <TeacherProjectView v-else-if="user?.isTeacher()" :teacher="user as Teacher" />
-        <AssistantProjectView v-else-if="user?.isAssistant()" :assistant="user as Assistant" />
-    </BaseLayout>
+  <BaseLayout>
+    <!-- Project heading -->
+    <div class="flex justify-content-between align-items-center mb-6">
+      <!-- Project list title -->
+      <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
+      <YearSelector :years="user?.academic_years" v-model="selectedYear" />
+    </div>
+
+    <ProjectList v-if="filteredCourses" :courses="filteredCourses" />
+  </BaseLayout>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+
+</style>

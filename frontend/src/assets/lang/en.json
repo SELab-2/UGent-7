@@ -8,6 +8,7 @@
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
                 "courses": "courses",
+                "projects": "projects",
                 "settings": "preferences",
                 "help": "help"
             },
