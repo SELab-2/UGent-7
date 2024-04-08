@@ -7,6 +7,7 @@ from django.utils import timezone
 from api.models.checks import FileExtension
 from api.serializers.submission_serializer import SubmissionSerializer
 from api.serializers.checks_serializer import StructureCheckSerializer
+from api.helpers.check_folder_structure import parse_zip_file
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -59,10 +60,17 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class CreateProjectSerializer(ProjectSerializer):
     number_groups = serializers.IntegerField(min_value=1, required=False)
+    zip_structure = serializers.FileField(write_only=True, required=False)
 
-    def create(self, validated_data):
+    def create(self, validated_data):        
         # Pop the 'number_groups' field from validated_data
         number_groups = validated_data.pop('number_groups', None)
+
+        # Get the zip structure file from the request
+        request = self.context.get('request')
+        zip_structure = request.FILES.get('zip_structure')
+
+        print(zip_structure)
 
         # Create the project object without passing 'number_groups' field
         project = super().create(validated_data)
@@ -80,6 +88,10 @@ class CreateProjectSerializer(ProjectSerializer):
             for student in students:
                 group = Group.objects.create(project=project)
                 group.students.add(student)
+
+        # If a zip_structure is provided, extract the contents
+        if zip_structure is not None:
+            parse_zip_file(project, zip_structure)
 
         return project
 
@@ -138,7 +150,3 @@ class StructureCheckAddSerializer(StructureCheckSerializer):
         data["blocked_extensions"] = block_ext
 
         return data
-
-
-class ParseZipStructureSerializer(serializers.Serializer):
-    zip_file = serializers.FileField()

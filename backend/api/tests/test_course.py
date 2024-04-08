@@ -9,6 +9,7 @@ from api.models.assistant import Assistant
 from api.models.student import Student
 from api.models.project import Project
 from authentication.models import Faculty
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 def create_project(name, description, visible, archived, days, course):
@@ -915,6 +916,43 @@ class CourseModelTestsAsTeacher(APITestCase):
         # Make sure there are no groups automatically made
         project = course.projects.get(name="become champions")
         self.assertEqual(project.groups.count(), 0)
+
+    def test_create_project_with_zip_file_as_structure(self):
+        """
+        Able to create a project for a course with a zip file as structure.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        with open("data/testing/structures/root.zip", "rb") as zip_file:
+
+            uploaded_file = SimpleUploadedFile("root.zip", zip_file.read(), content_type="application/zip")
+
+            response = self.client.post(
+                reverse("course-projects", args=[str(course.id)]),
+                data={
+                    "name": "become champions",
+                    "description": "win the jpl",
+                    "visible": True,
+                    "archived": False,
+                    "days": 50,
+                    "deadline": timezone.now() + timezone.timedelta(days=50),
+                    "start_date": timezone.now(),
+                    "group_size": 2,
+                },
+                files={
+                    "zip_structure": uploaded_file
+                },
+                follow=True,
+            )
+
+            # Debugging print statements
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(course.projects.filter(name="become champions").exists())
+
+            # Make sure there are structure checks added to the project
+            project = course.projects.get(name="become champions")
+            self.assertTrue(project.structure_checks.exists())
 
     def test_create_project_with_number_groups(self):
         """

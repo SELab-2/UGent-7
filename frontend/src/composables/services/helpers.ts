@@ -39,7 +39,11 @@ export async function create<T>(
     fromJson: (data: any) => T,
 ): Promise<void> {
     try {
-        const response = await client.post(endpoint, data);
+        const response = await client.post(endpoint, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
         ref.value = fromJson(response.data);
     } catch (error: any) {
         processError(error);
