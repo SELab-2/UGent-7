@@ -22,52 +22,52 @@ fake = Faker()
 faculty_provider = DynamicProvider(
      provider_name="faculty_provider",
      elements=Faculty.objects.all(),
-)
+    )
 
 student_provider = DynamicProvider(
      provider_name="student_provider",
      elements=Student.objects.all(),
-)
+    )
 
 assistant_provider = DynamicProvider(
      provider_name="assistant_provider",
      elements=Assistant.objects.all(),
-)
+    )
 
 teacher_provider = DynamicProvider(
      provider_name="teacher_provider",
      elements=Teacher.objects.all(),
-)
+    )
 
 course_provider = DynamicProvider(
      provider_name="course_provider",
      elements=Course.objects.all(),
-)
+    )
 
 project_provider = DynamicProvider(
      provider_name="project_provider",
      elements=Project.objects.all(),
-)
+    )
 
 group_provider = DynamicProvider(
      provider_name="group_provider",
      elements=Group.objects.all(),
-)
+    )
 
 Submission_provider = DynamicProvider(
      provider_name="Submission_provider",
      elements=Submission.objects.all(),
-)
+    )
 
 fileExtension_provider = DynamicProvider(
      provider_name="fileExtension_provider",
      elements=FileExtension.objects.all(),
-)
+    )
 
 structureCheck_provider = DynamicProvider(
      provider_name="structureCheck_provider",
      elements=StructureCheck.objects.all(),
-)
+    )
 
 # create new provider class
 class Providers(BaseProvider):
