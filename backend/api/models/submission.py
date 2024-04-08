@@ -2,10 +2,7 @@ from api.logic.get_file_path import (get_extra_check_result_file_path,
                                      get_submission_file_path)
 from api.models.checks import ExtraCheck
 from api.models.group import Group
-from api.signals import run_extra_checks
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 class Submission(models.Model):
@@ -39,13 +36,9 @@ class Submission(models.Model):
         # A group can only have one submission with a specific number
         unique_together = ("group", "submission_number")
 
-
-@receiver(post_save, sender=Submission)
-def run_checks(sender, instance: Submission, **kwargs):
-    run_extra_checks.send(sender=Submission, submission=instance)
-
-
 # TODO: We can use a FilePathField for this with allow_files = False and allow_folders = True and include it in Submission
+
+
 class SubmissionFile(models.Model):
     """Model for a file that is part of a submission."""
 
