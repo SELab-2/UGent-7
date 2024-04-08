@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 from api.models.student import Student
 
-class Command(BaseCommand):
 
+class Command(BaseCommand):
 
     help = 'seed the db with data'
 
