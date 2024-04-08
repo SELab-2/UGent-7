@@ -13,7 +13,7 @@ from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import Submission
-from api.models.checks import FileExtension
+from api.models.checks import FileExtension, StructureCheck
 
 fake = Faker()
 
@@ -62,6 +62,11 @@ Submission_provider = DynamicProvider(
 fileExtension_provider = DynamicProvider(
      provider_name="fileExtension_provider",
      elements=FileExtension.objects.all(),
+)
+
+structureCheck_provider = DynamicProvider(
+     provider_name="structureCheck_provider",
+     elements=StructureCheck.objects.all(),
 )
 
 # create new provider class
@@ -189,7 +194,7 @@ class Providers(BaseProvider):
                 course_name = fake.catch_phrase()
                 return Course.objects.create(
                     name=course_name,
-                    academic_startyear=timezone.now().year,
+                    academic_startyear=timezone.now().year - fake.random_int(min=0, max = 3) ,
                     faculty=fake.faculty_provider(),
                     description=fake.paragraph(),
                     parent_course=parent_course,
@@ -278,6 +283,43 @@ class Providers(BaseProvider):
                 tries += 1
         errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique file extension."))
 
+    def provide_structure_check(self, errHandler, min_extensions=1, max_extensions = 5, min_path_depth=1, max_path_depth=10):
+        """
+        Create a StructureCheck with the given arguments.
+        """
+        tries = 0
+        while tries < self.MAX_TRIES:
+            try:
+                check = StructureCheck.objects.create(
+                    name=fake.file_path(extension="", depth=fake.random_int(min=min_path_depth, max=max_path_depth)),
+                    project=fake.project_provider()
+                )
+
+                obligated_extensions = []
+                obl_amount = fake.random_int(min=min_extensions, max=max_extensions)
+                while len(obligated_extensions) < obl_amount:
+                    extension = fake.fileExtension_provider()
+                    if extension not in obligated_extensions:
+                        obligated_extensions.append(extension)
+
+                blocked_extensions = []
+                blo_amount = fake.random_int(min=min_extensions, max=max_extensions)
+                while len(blocked_extensions) < blo_amount:
+                    extension = fake.fileExtension_provider()
+                    if extension not in blocked_extensions and extension not in obligated_extensions:
+                        blocked_extensions.append(extension)
+                # print([x.extension for x in obligated_extensions])
+                # print([x.extension for x in blocked_extensions])
+
+                for ext in obligated_extensions:
+                    check.obligated_extensions.add(ext)
+                for ext in blocked_extensions:
+                    check.blocked_extensions.add(ext)
+                return check
+            except:
+                tries += 1
+        errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique structure check."))
+
 def update_providers():
     faculty_provider.elements = Faculty.objects.all()
     student_provider.elements = Student.objects.all()
@@ -288,6 +330,7 @@ def update_providers():
     group_provider.elements = Group.objects.all()
     Submission_provider.elements = Submission.objects.all()
     fileExtension_provider.elements = FileExtension.objects.all()
+    structureCheck_provider.elements = StructureCheck.objects.all()
 
 
     # then add new provider to faker instance
@@ -301,6 +344,7 @@ fake.add_provider(project_provider)
 fake.add_provider(group_provider)
 fake.add_provider(Submission_provider)
 fake.add_provider(fileExtension_provider)
+fake.add_provider(structureCheck_provider)
 
 class Command(BaseCommand):
     help = 'seed the db with data'
@@ -315,6 +359,7 @@ class Command(BaseCommand):
         amountOfGroups = 20
         amountOfSubmissions = 50
         amountOfFileExtensions = 5
+        amountOfStructureChecks = 50
 
         for _ in range(0,amountOfStudents):
             fake.provide_student(self)
@@ -353,6 +398,11 @@ class Command(BaseCommand):
 
         for _ in range(0,amountOfFileExtensions):
             fake.provide_fileExtension(self)
+
+        update_providers()
+
+        for _ in range(0,amountOfStructureChecks):
+            fake.provide_structure_check(self)
 
         update_providers()
 
