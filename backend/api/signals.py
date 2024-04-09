@@ -9,6 +9,7 @@ from django.dispatch import Signal, receiver
 # Signals
 run_extra_checks = Signal()
 
+
 # Receivers
 @receiver(user_created)
 def _user_creation(user: User, attributes: dict, **_):
