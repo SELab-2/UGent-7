@@ -1,52 +1,8 @@
 import json
-from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
-from api.models.teacher import Teacher
-from api.models.course import Course
-from authentication.models import Faculty, User
-
-
-def create_course(name, academic_startyear, description=None, parent_course=None):
-    """
-    Create a Course with the given arguments.
-    """
-    return Course.objects.create(
-        name=name,
-        academic_startyear=academic_startyear,
-        description=description,
-        parent_course=parent_course,
-    )
-
-
-def create_faculty(name):
-    """Create a Faculty with the given arguments."""
-    return Faculty.objects.create(name=name)
-
-
-def create_teacher(id, first_name, last_name, email, faculty=None, courses=None):
-    """
-    Create a teacher with the given arguments.
-    """
-    username = f"{first_name}_{last_name}"
-    teacher = Teacher.objects.create(
-        id=id,
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        create_time=timezone.now(),
-    )
-
-    if faculty is not None:
-        for fac in faculty:
-            teacher.faculties.add(fac)
-
-    if courses is not None:
-        for cours in courses:
-            teacher.courses.add(cours)
-
-    return teacher
+from api.tests.helpers import create_teacher, create_course, create_faculty
+from authentication.models import User
 
 
 class TeacherModelTests(APITestCase):
@@ -171,7 +127,7 @@ class TeacherModelTests(APITestCase):
         """
         Able to retrieve faculty details of a single teacher.
         """
-        # Create an teacher for testing with the name "Bob Peeters"
+        # Create a teacher for testing with the name "Bob Peeters"
         faculty = create_faculty(name="testing faculty")
         teacher = create_teacher(
             id=5,

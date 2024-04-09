@@ -1,13 +1,13 @@
 // core
 .p-fileupload-content {
     position: relative;
-}
-
-.p-fileupload-content .p-progressbar {
     width: 100%;
-    position: absolute;
     top: 0;
     left: 0;
+}
+
+.p-progressbar {
+    display: none;
 }
 
 .p-button.p-fileupload-choose {
@@ -46,6 +46,7 @@
 // theme
 .p-fileupload {
     .p-fileupload-buttonbar {
+        justify-content: space-between;
         background: $panelHeaderBg;
         padding: $panelHeaderPadding;
         border: $panelHeaderBorder;

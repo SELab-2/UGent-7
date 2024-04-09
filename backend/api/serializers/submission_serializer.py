@@ -1,7 +1,8 @@
-from rest_framework import serializers
-from ..models.submission import Submission, SubmissionFile, ExtraChecksResult
-from api.helpers.check_folder_structure import check_zip_file  # , parse_zip_file
+from api.logic.check_folder_structure import check_zip_file  # , parse_zip_file
+from api.models.submission import (ErrorTemplate, ExtraChecksResult,
+                                   Submission, SubmissionFile)
 from django.db.models import Max
+from rest_framework import serializers
 
 
 class SubmissionFileSerializer(serializers.ModelSerializer):
@@ -10,20 +11,17 @@ class SubmissionFileSerializer(serializers.ModelSerializer):
         fields = ["file"]
 
 
-class ExtraChecksResultSerializer(serializers.ModelSerializer):
+class ErrorTemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ErrorTemplate
+        fields = "__all__"
 
-    extra_check = serializers.HyperlinkedRelatedField(
-        many=False,
-        read_only=True,
-        view_name="extra-check-detail"
-    )
+
+class ExtraChecksResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExtraChecksResult
-        fields = [
-            "extra_check",
-            "passed"
-        ]
+        exclude = ["log_file"]
 
 
 class SubmissionSerializer(serializers.ModelSerializer):

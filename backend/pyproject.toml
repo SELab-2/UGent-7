@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = ["Topvennie <vincent@vallaeys.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11.4"
+django = "^5.0.3"
+django-sslserver = "^0.22"
+djangorestframework = "^3.15.1"
+django-rest-swagger = "^2.2.0"
+drf-yasg = "^1.21.7"
+requests = "^2.31.0"
+cas-client = "^1.0.0"
+psycopg2-binary = "^2.9.9"
+djangorestframework-simplejwt = "^5.3.1"
+celery = {extras = ["redis"], version = "^5.3.6"}
+django-redis = "^5.4.0"
+gunicorn = "^21.2.0"
+whitenoise = "^6.6.0"
+flake8 = "^7.0.0"
+celery-types = "^0.22.0"
+docker = "^7.0.0"
+faker = "^24.7.1"
+django-seed = "^0.3.1"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

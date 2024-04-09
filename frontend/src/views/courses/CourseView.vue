@@ -1,46 +1,32 @@
 <script setup lang="ts">
-import Calendar from 'primevue/calendar';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
-import Title from '@/components/layout/Title.vue';
-import {onMounted} from 'vue';
-import {useCourses} from '@/composables/services/courses.service.ts';
-import {useRoute} from 'vue-router';
+import StudentCourseView from './roles/StudentCourseView.vue';
+import TeacherCourseView from './roles/TeacherCourseView.vue';
+import AssistantCourseView from './roles/AssistantCourseView.vue';
+import { onMounted } from 'vue';
+import { useCourses } from '@/composables/services/courses.service.ts';
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { storeToRefs } from 'pinia';
 
+/* Service injection */
+const { user } = storeToRefs(useAuthStore());
 const { params } = useRoute();
 const { course, getCourseByID } = useCourses();
 
 onMounted(() => {
-    getCourseByID(
-        params.courseId as string
-    );
+    getCourseByID(params.courseId as string);
 });
 </script>
 
 <template>
     <BaseLayout>
-        <div class="grid fadein" v-if="course">
-            <div class="col-12 md:col-6">
-                <div>
-                    <Title>
-                        {{ course.name }}
-                    </Title>
-                </div>
-
-                <div>
-                    <p>
-                        {{ course.description }}
-                    </p>
-                </div>
-            </div>
-            <div class="col-12 md:col-6">
-                <div>
-                    <Calendar class="w-full" inline/>
-                </div>
-            </div>
+        <div v-if="course">
+            <StudentCourseView v-if="user?.isStudent()" :course="course" />
+            <TeacherCourseView v-else-if="user?.isTeacher()" :course="course" />
+            <AssistantCourseView v-else-if="user?.isAssistant()" :course="course" />
         </div>
     </BaseLayout>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

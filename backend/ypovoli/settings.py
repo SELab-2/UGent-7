@@ -21,7 +21,7 @@ from django.utils.translation import gettext_lazy as _
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, "data/production"))
 
-
+# TODO: What does this do?
 TESTING_BASE_LINK = "http://testserver"
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -32,7 +32,6 @@ DEBUG = environ.get("DJANGO_DEBUG", "False").lower() in ["true", "1", "t"]
 DOMAIN_NAME = environ.get("DJANGO_DOMAIN_NAME", "localhost")
 ALLOWED_HOSTS = [DOMAIN_NAME]
 CSRF_TRUSTED_ORIGINS = ["https://" + DOMAIN_NAME]
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -91,6 +90,7 @@ AUTH_USER_MODEL = "authentication.User"
 PORT = environ.get("DJANGO_CAS_PORT", "8080")
 CAS_ENDPOINT = "https://login.ugent.be"
 CAS_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}/auth/verify"
+CAS_DEBUG_RESPONSE = f"https://{DOMAIN_NAME}:{PORT}/api/auth/cas/echo"
 API_ENDPOINT = f"https://{DOMAIN_NAME}/api"
 
 # Database
@@ -169,3 +169,9 @@ CACHES = {
 
 CELERY_BROKER_URL = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
 CELERY_RESULT_BACKEND = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
+
+FILE_PATHS = {
+    "docker_images": "../data/docker_images/",
+    "extra_checks": "../data/extra_checks/",
+    "log_file": "../data/log_files/"
+}

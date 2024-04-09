@@ -6,13 +6,13 @@ import Footer from '@/components/layout/Footer.vue';
 
 <template>
     <div id="layout" class="w-12 lg:w-9 mx-auto">
-        <Header/>
+        <Header />
 
         <Body id="body">
-            <slot/>
+            <slot />
         </Body>
 
-        <Footer/>
+        <Footer />
     </div>
 </template>
 

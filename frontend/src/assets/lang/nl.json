@@ -4,10 +4,12 @@
             "logo": "Logo van de Universiteit Gent",
             "login": "Login",
             "view": "Bekijken als {0}",
+            "user": "Ingelogd als {0}",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
                 "courses": "Vakken",
+                "projects": "Projecten",
                 "settings": "Voorkeuren",
                 "help": "Help"
             },
@@ -20,7 +22,9 @@
     "views": {
         "dashboard": {
             "courses": "Mijn vakken",
-            "projects": "Lopende projecten"
+            "projects": "Lopende projecten",
+            "select_course": "Selecteer het vak waarvoor je een project wil maken:",
+            "showPastProjects": "Projecten met verstreken deadline"
         },
         "login": {
             "title": "Inloggen",
@@ -33,13 +37,49 @@
             }
         },
         "calendar": {
-            "title": "Kalender"
+            "title": "Kalender",
+            "noProjects": "Geen projecten op geselecteerde datum."
         },
         "projects": {
             "deadline": "Deadline",
             "submissionStatus": "Indienstatus",
-            "groupMembers": "Groepsleden"
-        }
+            "group": "Groep",
+            "groupMembers": "Groepsleden",
+            "chooseGroup": "Kies een groep",
+            "joinGroup": "Kies groep",
+            "leaveGroup": "Verlaat groep",
+            "create": "Creëer nieuw project",
+            "name": "Projectnaam",
+            "description": "Beschrijving",
+            "start_date": "Start project",
+            "group_size": "Aantal studenten per groep (1 voor individueel project)",
+            "max_score": "Maximale te behalen score",
+            "visibility": "Project zichtbaar maken voor studenten",
+            "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
+            "docker_upload": "Upload een Dockerfile",
+            "submission_structure": "Structuur van hoe de indiening moet gebeuren"
+        },
+        "submissions": {
+            "title": "Inzendingen",
+            "submit": "Indienen",
+            "course": "Vak",
+            "chooseFile": "Kies bestand(en)"
+        },
+        "courses": {
+          "create": "Creëer vak",
+          "edit": "Bewerk vak",
+          "name": "Vaknaam",
+          "description": "Beschrijving",
+          "faculty": "Faculteit",
+          "search": {
+              "search": "Zoeken",
+              "faculty": "Faculteit",
+              "year": "Academiejaar",
+              "placeholder": "Zoek een vak op naam",
+              "title": "Zoek een vak",
+              "results": "{0} vakken gevonden voor ingestelde filters"
+          }
+      }
     },
     "composables": {
       "helpers": {
@@ -64,7 +104,8 @@
         },
         "card": {
             "open": "Details"
-        }
+        },
+        "submission" : "Indienen"
     },
     "types": {
         "roles": {
@@ -75,8 +116,28 @@
     },
     "toasts": {
         "messages": {
-            "unknown": "Er is een onbekende fout opgetreden."
+            "success": "Succes",
+            "error": "Fout",
+            "unknown": "Er is een onbekende fout opgetreden.",
+            "courses": {
+                "enrollment": {
+                    "success": "Je bent succesvol ingeschreven voor het vak '{0}'.",
+                    "error": "Er is een fout opgetreden tijdens het inschrijven voor het vak '{0}'."
+                },
+                "leave": {
+                    "success": "Je bent succesvol uitgeschreven voor het vak '{0}'.",
+                    "error": "Er is een fout opgetreden tijdens het uitschrijven voor het vak '{0}'."
+                }
+            },
+            "login": {
+                "success": "Je bent succesvol ingelogd.",
+                "error": "Er is een fout opgetreden tijdens het inloggen."
+            }
         }
+    },
+    "validations": {
+        "required": "Dit veld is verplicht",
+        "deadline": "De deadline moet na de startdatum liggen"
     },
     "primevue": {
         "accept": "Ja",

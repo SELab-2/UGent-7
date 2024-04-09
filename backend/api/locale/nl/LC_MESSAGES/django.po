@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-13 23:07+0100\n"
+"POT-Creation-Date: 2024-04-06 10:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,54 +18,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: helpers/check_folder_structure.py:141
+#: logic/check_folder_structure.py:142
 msgid "zip.errors.invalid_structure.blocked_extension_found"
 msgstr ""
 "Bestanden met een verboden extensie zijn gevonden in het ingediende zip-"
 "bestand."
 
-#: helpers/check_folder_structure.py:145 helpers/check_folder_structure.py:196
+#: logic/check_folder_structure.py:146 logic/check_folder_structure.py:197
 msgid "zip.success"
 msgstr "Het zip-bestand van de indiening bevat alle benodigde bestanden."
 
-#: helpers/check_folder_structure.py:148
+#: logic/check_folder_structure.py:149
 msgid "zip.errors.invalid_structure.obligated_extension_not_found"
 msgstr ""
 "Er is geen enkel bestand met een bepaalde extensie die verplicht is in het "
 "ingediende zip-bestand."
 
-#: helpers/check_folder_structure.py:175
+#: logic/check_folder_structure.py:176
 msgid "zip.errors.invalid_structure.directory_not_defined"
 msgstr "Een verplichte map is niet aanwezig in het ingediende zip-bestand."
 
-#: helpers/check_folder_structure.py:195
+#: logic/check_folder_structure.py:196
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
 msgstr "Het ingediende zip-bestand bevat een map die niet gevraagd is."
 
-#: serializers/course_serializer.py:58 serializers/course_serializer.py:77
+#: serializers/checks_serializer.py:61
+msgid "extra_check.error.docker_image"
+msgstr "Het veld 'docker_image' is vereist."
+
+#: serializers/checks_serializer.py:65
+msgid "extra_check.error.timeout"
+msgstr "Het veld 'timeout' mag niet groter zijn dan 1000"
+
+#: serializers/course_serializer.py:59 serializers/course_serializer.py:78
+#: serializers/course_serializer.py:97 serializers/course_serializer.py:116
 msgid "courses.error.context"
 msgstr "De opleiding is niet meegeleverd als context."
 
-#: serializers/course_serializer.py:64 tests/test_locale.py:28
+#: serializers/course_serializer.py:65 tests/test_locale.py:28
 #: tests/test_locale.py:38
 msgid "courses.error.students.already_present"
 msgstr "De student bevindt zich al in de opleiding."
 
-#: serializers/course_serializer.py:68 serializers/course_serializer.py:87
+#: serializers/course_serializer.py:69 serializers/course_serializer.py:88
+#: serializers/course_serializer.py:107 serializers/course_serializer.py:126
 msgid "courses.error.past_course"
 msgstr "De opleiding die men probeert te manipuleren is van een vorig jaar."
 
-#: serializers/course_serializer.py:83
+#: serializers/course_serializer.py:84
 msgid "courses.error.students.not_present"
 msgstr "De student bevindt zich niet in de opleiding."
 
-#: serializers/course_serializer.py:97
+#: serializers/course_serializer.py:103
 msgid "courses.error.teachers.already_present"
 msgstr "De lesgever bevindt zich al in de opleiding."
 
-#: serializers/course_serializer.py:116
+#: serializers/course_serializer.py:122
 msgid "courses.error.teachers.not_present"
 msgstr "De lesgever bevindt zich niet in de opleiding."
+
+#: serializers/docker_serializer.py:19
+msgid "docker.errors.custom"
+msgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"
 
 #: serializers/group_serializer.py:47
 msgid "group.errors.score_exceeds_max"
@@ -96,70 +110,95 @@ msgstr "De student bevindt zich al in de groep."
 msgid "group.errors.not_present"
 msgstr "De student bevindt zich niet in de groep."
 
-#: serializers/project_serializer.py:56
+#: serializers/project_serializer.py:47
 msgid "project.errors.context"
 msgstr "Het project is niet meegegeven als context waar dat nodig is."
 
-#: serializers/project_serializer.py:60
+#: serializers/project_serializer.py:51
 msgid "project.errors.start_date_in_past"
 msgstr "De startdatum van het project ligt in het verleden."
 
-#: serializers/project_serializer.py:64
+#: serializers/project_serializer.py:55
 msgid "project.errors.deadline_before_start_date"
 msgstr "De uiterste inleverdatum voor het project ligt voor de startdatum."
 
-#: serializers/project_serializer.py:89
+#: serializers/project_serializer.py:105 tests/test_submission.py:358
 msgid "project.error.submissions.past_project"
 msgstr "De uiterste inleverdatum voor het project is gepasseerd."
 
-#: serializers/project_serializer.py:92
+#: serializers/project_serializer.py:108 tests/test_submission.py:429
 msgid "project.error.submissions.non_visible_project"
 msgstr "Het project is niet zichtbaar."
 
-#: serializers/project_serializer.py:95
+#: serializers/project_serializer.py:111 tests/test_submission.py:459
 msgid "project.error.submissions.archived_project"
 msgstr "Het project is gearchiveerd."
 
-#: views/course_view.py:58
-msgid "courses.success.assistants.add"
-msgstr "De assistent is succesvol toegevoegd aan de opleiding."
+#: serializers/project_serializer.py:120 tests/test_project.py:590
+msgid "project.error.structure_checks.already_existing"
+msgstr "De structuur check was al aanwezig."
 
-#: views/course_view.py:77
-msgid "courses.success.assistants.remove"
-msgstr "De assistent is succesvol verwijderd uit de opleiding."
+#: serializers/project_serializer.py:136 tests/test_project.py:623
+msgid "project.error.structure_checks.extension_blocked_and_obligated"
+msgstr ""
 
-#: views/course_view.py:111
-msgid "courses.success.students.add"
-msgstr "De student is succesvol toegevoegd aan de opleiding."
-
-#: views/course_view.py:131
-msgid "courses.success.students.remove"
-msgstr "De student is succesvol verwijderd uit de opleiding."
-
-#: views/course_view.py:172
-msgid "course.success.teachers.add"
-msgstr "De lesgever is succesvol toegevoegd aan de opleiding."
-
-#: views/course_view.py:195
-msgid "course.success.teachers.remove"
-msgstr "De lesgever is succesvol verwijderd uit de opleiding."
-
-#: views/course_view.py:186
-msgid "course.success.project.add"
-msgstr "Het project is succesvol toegevoegd aan de opleiding."
-
-#: views/group_view.py:73
-msgid "group.success.students.add"
-msgstr "De student is succesvol toegevoegd aan de groep."
-
-#: views/group_view.py:92
-msgid "group.success.students.remove"
-msgstr "De student is succesvol verwijderd uit de groep."
-
-#: views/group_view.py:111
+#: tests/test_submission.py:331 tests/test_submission.py:399
+#: views/group_view.py:110
 msgid "group.success.submissions.add"
 msgstr "De indiening is succesvol toegevoegd aan de groep."
 
-#: views/project_view.py:80
+#: views/admin_view.py:29
+msgid "admins.success.add"
+msgstr "De admin is successvol toegevoegd."
+
+#: views/course_view.py:48
+msgid "courses.success.create"
+msgstr "het vak is succesvol aangemaakt."
+
+#: views/course_view.py:112
+msgid "courses.success.assistants.add"
+msgstr "De assistent is succesvol toegevoegd aan de opleiding."
+
+#: views/course_view.py:132
+msgid "courses.success.assistants.remove"
+msgstr "De assistent is succesvol verwijderd uit de opleiding."
+
+#: views/course_view.py:167
+msgid "courses.success.students.add"
+msgstr "De student is succesvol toegevoegd aan de opleiding."
+
+#: views/course_view.py:188
+msgid "courses.success.students.remove"
+msgstr "De student is succesvol verwijderd uit de opleiding."
+
+#: views/course_view.py:223
+msgid "courses.success.teachers.add"
+msgstr "De lesgever is succesvol toegevoegd aan de opleiding."
+
+#: views/course_view.py:244
+msgid "courses.success.teachers.remove"
+msgstr "De lesgever is succesvol verwijderd uit de opleiding."
+
+#: views/course_view.py:280
+msgid "course.success.project.add"
+msgstr "Het project is succesvol toegevoegd aan de opleiding."
+
+#: views/group_view.py:71
+msgid "group.success.students.add"
+msgstr "De student is succesvol toegevoegd aan de groep."
+
+#: views/group_view.py:91
+msgid "group.success.students.remove"
+msgstr "De student is succesvol verwijderd uit de groep."
+
+#: views/project_view.py:87
 msgid "project.success.groups.created"
 msgstr "De groep is succesvol toegevoegd aan het project."
+
+#: views/project_view.py:125
+msgid "project.success.structure_check.add"
+msgstr "De structuur check is succesvol toegevoegd aan het project."
+
+#: views/project_view.py:161
+msgid "project.success.extra_check.add"
+msgstr "De extra check is succesvol toegevoegd aan het project."

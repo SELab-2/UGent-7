@@ -1,8 +1,8 @@
-import { Course } from "./Course";
-import { ExtraCheck } from "./ExtraCheck.ts";
-import { Group } from "./Group";
-import { StructureCheck } from "./StructureCheck.ts";
-import { Submission } from "./Submission";
+import { type Course } from './Course';
+import { type ExtraCheck } from './ExtraCheck.ts';
+import { type Group } from './Group';
+import { type StructureCheck } from './StructureCheck.ts';
+import { type Submission } from './Submission';
 
 export class Project {
     constructor(
@@ -18,18 +18,13 @@ export class Project {
         public score_visible: boolean,
         public group_size: number,
 
-        public course: Course = new Course(
-            "-1",
-            "default",
-            "this is a default project given in the service because it isnt initiated",
-             0
-        ), //TODO check
-        public structure_checks: StructureCheck[] = [],
+        public structure_file: File | null = null,
+        public course: Course | null = null,
+        public structureChecks: StructureCheck[] = [],
         public extra_checks: ExtraCheck[] = [],
         public groups: Group[] = [],
-        public submissions: Submission = new Submission("0",0,new Date(), false), //TODO check
-    ) {
-    }
+        public submissions: Submission[] = [],
+    ) {}
 
     /**
      * Convert a project object to a project instance.
@@ -48,7 +43,7 @@ export class Project {
             new Date(project.deadline),
             project.max_score,
             project.score_visible,
-            project.group_size
+            project.group_size,
         );
     }
 }

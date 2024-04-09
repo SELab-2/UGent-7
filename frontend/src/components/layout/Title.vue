@@ -1,12 +1,12 @@
 <script setup lang="ts">
-withDefaults(defineProps<{color?: 'primary'|'contrast'}>(), {
-    color: 'primary'
+withDefaults(defineProps<{ color?: 'primary' | 'contrast' }>(), {
+    color: 'primary',
 });
 </script>
 
 <template>
     <h1 class="title" :class="color">
-        <slot/>
+        <slot />
     </h1>
 </template>
 

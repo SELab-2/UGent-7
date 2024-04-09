@@ -1,16 +1,16 @@
-import {RouteLocationNormalized} from 'vue-router';
-import {useAuthStore} from '@/store/authentication.store.ts';
-import {storeToRefs} from 'pinia';
+import { type RouteLocationNormalized } from 'vue-router';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { storeToRefs } from 'pinia';
 
-export async function AuthenticationGuard(to: RouteLocationNormalized) {
-    const { refresh } = useAuthStore();
+export async function AuthenticationGuard(to: RouteLocationNormalized): Promise<{ name: string } | undefined> {
+    const { refreshUser } = useAuthStore();
     const { intent } = storeToRefs(useAuthStore());
 
-    const { isAuthenticated} = storeToRefs(useAuthStore());
+    const { isAuthenticated } = storeToRefs(useAuthStore());
 
     if (!['login', 'verify'].includes(to.name as string)) {
         if (!isAuthenticated.value) {
-            await refresh();
+            await refreshUser();
 
             if (!isAuthenticated.value) {
                 intent.value = to.fullPath;

@@ -32,6 +32,7 @@ $fontWeight:normal !default;
 $textColor:$shade700 !default;
 $textSecondaryColor:$shade600 !default;
 $borderRadius:6px !default;
+$borderWidth:2px !default;
 $transitionDuration:.2s !default;
 $formElementTransition:background-color $transitionDuration, color $transitionDuration, border-color $transitionDuration, box-shadow $transitionDuration !default;
 $actionIconTransition:background-color $transitionDuration, color $transitionDuration, box-shadow $transitionDuration !default;
@@ -73,7 +74,7 @@ $inputTextFontSize:1rem !default;
 $inputBg:$shade000 !default;
 $inputTextColor:$shade700 !default;
 $inputIconColor:$shade600 !default;
-$inputBorder:1px solid $primaryColor !default;
+$inputBorder:1px solid $shade400 !default;
 $inputHoverBorderColor:$primaryColor !default;
 $inputFocusBorderColor:$primaryColor !default;
 $inputErrorBorderColor:$errorColor !default;
@@ -95,10 +96,10 @@ $inputListPadding:0 0 !default;
 $inputListItemPadding:.75rem 1.25rem !default;
 $inputListItemBg:transparent !default;
 $inputListItemTextColor:$shade700 !default;
-$inputListItemHoverBg:$shade200 !default;
-$inputListItemTextHoverColor:$shade700 !default;
+$inputListItemHoverBg:$highlightBg !default;
+$inputListItemTextHoverColor:$primaryColor !default;
 $inputListItemFocusBg:$shade300 !default;
-$inputListItemTextFocusColor:$shade700 !default;
+$inputListItemTextFocusColor: red !default;
 $inputListItemBorder:0 none !default;
 $inputListItemBorderRadius:0 !default;
 $inputListItemMargin:0 !default;
@@ -112,8 +113,8 @@ $inputListHeaderBorder:1px solid $shade300 !default;
 //inputs with overlays (e.g. autocomplete, dropdown, multiselect)
 $inputOverlayBg:$inputListBg !default;
 $inputOverlayHeaderBg:$inputListHeaderBg !default;
-$inputOverlayBorder:0 none !default;
-$inputOverlayShadow:0 2px 12px 0 rgba(0,0,0,.1) !default;
+$inputOverlayBorder: 1px solid $highlightBg !default;
+$inputOverlayShadow: none !default;
 
 //password
 $passwordMeterBg:$shade300 !default;
@@ -231,12 +232,12 @@ $checkboxWidth:22px !default;
 $checkboxHeight:22px !default;
 $checkboxBorder:2px solid $shade400 !default;
 $checkboxIconFontSize:14px !default;
-$checkboxActiveBorderColor:$primaryColor !default;
-$checkboxActiveBg:$primaryColor !default;
-$checkboxIconActiveColor:$primaryTextColor !default;
-$checkboxActiveHoverBg:$primaryDarkerColor !default;
-$checkboxIconActiveHoverColor:$primaryTextColor !default;
-$checkboxActiveHoverBorderColor:$primaryDarkerColor !default;
+$checkboxActiveBorderColor:$secondaryColor !default;
+$checkboxActiveBg:$secondaryColor !default;
+$checkboxIconActiveColor:$secondaryTextColor !default;
+$checkboxActiveHoverBg:$secondaryDarkColor !default;
+$checkboxIconActiveHoverColor:$secondaryTextColor !default;
+$checkboxActiveHoverBorderColor:$secondaryDarkColor !default;
 
 //radiobutton
 $radiobuttonWidth:22px !default;
@@ -356,15 +357,15 @@ $inputSwitchHandleOnBg:$shade000 !default;
 //panel
 $panelHeaderBorderColor:$shade300 !default;
 $panelHeaderBorder:1px solid $shade300 !default;
-$panelHeaderBg:$shade100 !default;
-$panelHeaderTextColor:$shade800 !default;
+$panelHeaderBg:$primaryLightColor !default;
+$panelHeaderTextColor:$primaryColor !default;
 $panelHeaderFontWeight:700 !default;
 $panelHeaderPadding:1.25rem !default;
 $panelToggleableHeaderPadding:.75rem 1.25rem !default;
 
-$panelHeaderHoverBg:$shade200 !default;
+$panelHeaderHoverBg:$primaryLightColor !default;
 $panelHeaderHoverBorderColor:$shade300 !default;
-$panelHeaderTextHoverColor:$shade800 !default;
+$panelHeaderTextHoverColor:$primaryColor !default;
 
 $panelContentBorderColor: $shade300 !default;
 $panelContentBorder:1px solid $shade300 !default;
@@ -382,21 +383,21 @@ $panelFooterPadding:0.75rem 1.25rem !default;
 $accordionSpacing:4px !default;
 $accordionHeaderBorder:$panelHeaderBorder !default;
 $accordionHeaderBg:$panelHeaderBg !default;
-$accordionHeaderTextColor:$shade600 !default;
+$accordionHeaderTextColor:$panelHeaderTextColor !default;
 $accordionHeaderFontWeight:$panelHeaderFontWeight !default;
 $accordionHeaderPadding:$panelHeaderPadding !default;
 
-$accordionHeaderHoverBg:$shade200 !default;
+$accordionHeaderHoverBg:$panelHeaderBg !default;
 $accordionHeaderHoverBorderColor:$shade300 !default;
-$accordionHeaderTextHoverColor:$shade800 !default;
+$accordionHeaderTextHoverColor:$panelHeaderTextColor !default;
 
 $accordionHeaderActiveBg:$panelHeaderBg !default;
 $accordionHeaderActiveBorderColor:$shade300 !default;
-$accordionHeaderTextActiveColor:$shade800 !default;
+$accordionHeaderTextActiveColor:$panelHeaderTextColor !default;
 
-$accordionHeaderActiveHoverBg:$shade200 !default;
+$accordionHeaderActiveHoverBg:$panelHeaderBg !default;
 $accordionHeaderActiveHoverBorderColor:$shade300 !default;
-$accordionHeaderTextActiveHoverColor:$shade800 !default;
+$accordionHeaderTextActiveHoverColor:$panelHeaderTextColor !default;
 
 $accordionContentBorder:$panelContentBorder !default;
 $accordionContentBg:$panelContentBg !default;
@@ -875,10 +876,10 @@ $imagePreviewActionIconBorderRadius:50% !default;
     --secondary-color:#{$secondaryColor};
     --secondary-color-text:#{$secondaryTextColor};
     --surface-0: #ffffff;
-    --surface-50: #{$primaryLightColor}50;
-    --surface-100: #{$primaryLightColor};
-    --surface-200: #e5e7eb;
-    --surface-300: #d1d5db;
+    --surface-50: #{$primaryLightColor}55;
+    --surface-100: #{$primaryLightColor}70;
+    --surface-200: #{$primaryLightColor}85;
+    --surface-300: #{$primaryLightColor};
     --surface-400: #{$primaryColor}25;
     --surface-500: #{$primaryColor}40;
     --surface-600: #{$primaryColor}55;

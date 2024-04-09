@@ -1,8 +1,5 @@
 export class Response {
-    constructor(
-        public message: string,
-    ) {
-    }
+    constructor(public message: string) {}
 
     /**
      * Convert a response object to a response instance.

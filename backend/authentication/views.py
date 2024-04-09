@@ -1,14 +1,14 @@
-from django.shortcuts import redirect
+from authentication.cas.client import client
+from authentication.permissions import IsDebug
+from authentication.serializers import CASTokenObtainSerializer, UserSerializer
 from django.contrib.auth import logout
+from django.shortcuts import redirect
 from rest_framework.decorators import action
-from rest_framework.viewsets import ViewSet
-from rest_framework.request import Request
-from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from authentication.permissions import IsDebug
-from authentication.serializers import UserSerializer, CASTokenObtainSerializer
-from authentication.cas.client import client
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.viewsets import ViewSet
 from ypovoli import settings
 
 
@@ -18,8 +18,13 @@ class CASViewSet(ViewSet):
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET'], permission_classes=[AllowAny])
-    def login(self, _: Request) -> Response:
+    def login(self, request: Request) -> Response:
         """Attempt to log in. Redirect to our single CAS endpoint."""
+        should_echo = request.query_params.get('echo', False)
+
+        if should_echo == "1" and settings.DEBUG:
+            client._service_url = settings.CAS_DEBUG_RESPONSE
+
         return redirect(client.get_login_url())
 
     @action(detail=False, methods=['POST'])

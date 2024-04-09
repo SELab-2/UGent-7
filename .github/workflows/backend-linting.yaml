@@ -11,6 +11,8 @@ jobs:
   test:
     runs-on: self-hosted
     steps:
+      - name: Add permission to remove contents of previous action script
+        run: echo ${{ secrets.SUDO }} | sudo -S chown -R $USER:$USER /home/selab2/actions-runner/_work/UGent-7/
       - uses: actions/checkout@v4
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
@@ -19,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8
-          pip install -r ./backend/requirements.txt
+          pip install poetry
+          poetry install --directory=./backend
       - name: Execute linting checks
         run: flake8 --config ./backend/.flake8 ./backend

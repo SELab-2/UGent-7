@@ -1,29 +1,44 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
-    "types": ["cypress"],
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "paths": {
-        "@/*": ["./src/*"]
+    "compilerOptions": {
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "skipLibCheck": true,
+        "types": [
+            "cypress"
+        ],
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "preserve",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowSyntheticDefaultImports": true
     },
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue"
+    ],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ]
 }

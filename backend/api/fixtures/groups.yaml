@@ -9,9 +9,32 @@
 - model: api.group
   pk: 3
   fields:
-    project: 123456
+    project: 2
     score: 8
     students: []
+- model: api.group
+  pk: 4
+  fields:
+    project: 2
+    score: 8
+    students:
+      - '1'
+- model: api.group
+  pk: 5
+  fields:
+    project: 2
+    score: 8
+    students:
+      - '2'
+
+- model: api.group
+  pk: 6
+  fields:
+    project: 2
+    score: 8
+    students:
+        - '3'
+
 - model: api.group
   pk: 2
   fields:

@@ -1,15 +1,9 @@
-# Prerequisites 
+# Prerequisites
 
-- python 3.11.8
+-   python 3.11.8
 
-__Django doesn't support python 3.12__
+**Django doesn't support python 3.12**
 
 # Install instructions
 
-- Create a virtual environment `python -m venv .venv` (make sure to use the right python version)
-
-- Activate the virtual environment `source .venv/bin/activate`
-
-- Run `setup.sh`
-
-- Run the server `python manage.py runsslserver localhost:8080`
+-   See [wiki](https://github.com/SELab-2/UGent-7/wiki/Setup-and-deployment#development)

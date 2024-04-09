@@ -1,8 +1,9 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from api.permissions.role_permissions import (is_assistant, is_student,
+                                              is_teacher)
+from authentication.models import User
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 from rest_framework.request import Request
 from rest_framework.viewsets import ViewSet
-from authentication.models import User
-from api.permissions.role_permissions import is_student, is_assistant, is_teacher
 
 
 class ProjectPermission(BasePermission):
@@ -12,6 +13,7 @@ class ProjectPermission(BasePermission):
         """Check if user has permission to view a general project endpoint."""
         user: User = request.user
 
+        # TODO: Sure return True corresponds with the comments made above
         # The general project endpoint that lists all projects is not accessible for any role.
         if request.method in SAFE_METHODS:
             return True

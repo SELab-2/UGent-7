@@ -7,16 +7,19 @@ from api.models.assistant import Assistant
 from api.models.teacher import Teacher
 
 
-def is_student(user: User):
-    return Student.objects.filter(id=user.id).exists()
+def is_student(user: User) -> bool:
+    """Check whether the user is a student"""
+    return Student.objects.filter(id=user.id, is_active=True).exists()
 
 
-def is_assistant(user: User):
-    return Assistant.objects.filter(id=user.id).exists()
+def is_assistant(user: User) -> bool:
+    """Check whether the user is an assistant"""
+    return Assistant.objects.filter(id=user.id, is_active=True).exists()
 
 
-def is_teacher(user: User):
-    return Teacher.objects.filter(id=user.id).exists()
+def is_teacher(user: User) -> bool:
+    """Check whether the user is a teacher"""
+    return Teacher.objects.filter(id=user.id, is_active=True).exists()
 
 
 class IsStudent(IsAuthenticated):
@@ -42,7 +45,7 @@ class IsAssistant(IsAuthenticated):
 
 class IsSameUser(IsAuthenticated):
     def has_permission(self, request, view):
-        return False
+        return super().has_permission(request, view)
 
     def has_object_permission(self, request: Request, view: ViewSet, user: User):
         """Returns true if the request's user is the same as the given user"""

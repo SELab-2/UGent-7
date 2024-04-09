@@ -1,26 +1,30 @@
-from django.utils.translation import gettext
-from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.request import Request
-from drf_yasg.utils import swagger_auto_schema
 from api.models.course import Course
-from api.permissions.course_permissions import (
-    CoursePermission,
-    CourseAssistantPermission,
-    CourseStudentPermission,
-    CourseTeacherPermission
-)
-from api.permissions.role_permissions import IsTeacher
-from api.serializers.course_serializer import (
-    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer,
-    TeacherJoinSerializer, TeacherLeaveSerializer
-)
-from api.serializers.teacher_serializer import TeacherSerializer
-from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
+from api.permissions.course_permissions import (CourseAssistantPermission,
+                                                CoursePermission,
+                                                CourseStudentPermission,
+                                                CourseTeacherPermission)
+from api.permissions.role_permissions import IsTeacher, is_teacher
+from api.serializers.assistant_serializer import (AssistantIDSerializer,
+                                                  AssistantSerializer)
+from api.serializers.course_serializer import (CourseCloneSerializer,
+                                               CourseSerializer,
+                                               StudentJoinSerializer,
+                                               StudentLeaveSerializer,
+                                               TeacherJoinSerializer,
+                                               TeacherLeaveSerializer,
+                                               CreateCourseSerializer)
+from api.serializers.project_serializer import (CreateProjectSerializer,
+                                                ProjectSerializer)
 from api.serializers.student_serializer import StudentSerializer
-from api.serializers.project_serializer import ProjectSerializer, CreateProjectSerializer
+from api.serializers.teacher_serializer import TeacherSerializer
+from api.views.pagination.basic_pagination import BasicPagination
+from django.utils.translation import gettext
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -28,6 +32,49 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsAdminUser | CoursePermission]
+
+    # TODO: Creating should return the info of the new object and not a message "created" (General TODO)
+    def create(self, request: Request, *_):
+        """Override the create method to add the teacher to the course"""
+        serializer = CreateCourseSerializer(data=request.data, context={"request": request})
+
+        if serializer.is_valid(raise_exception=True):
+            course = serializer.save()
+
+            # If it was a teacher who created the course, add them as a teacher
+            if is_teacher(request.user):
+                course.teachers.add(request.user.id)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False)
+    def search(self, request: Request) -> Response:
+        self.pagination_class = BasicPagination
+
+        # Extract filter params
+        search = request.query_params.get("search", "")
+        years = request.query_params.getlist("years[]")
+        faculties = request.query_params.getlist("faculties[]")
+
+        # Filter the queryset based on the search term
+        queryset = self.get_queryset().filter(
+            name__icontains=search
+        ).order_by('faculty')
+
+        # Filter the queryset based on selected years
+        if years:
+            queryset = queryset.filter(academic_startyear__in=years)
+
+        # Filter the queryset based on selected faculties
+        if faculties:
+            queryset = queryset.filter(faculty__in=faculties)
+
+        # Serialize the resulting queryset
+        serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+            "request": request
+        })
+
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=True, permission_classes=[IsAdminUser | CourseAssistantPermission])
     def assistants(self, request: Request, **_):
@@ -111,7 +158,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.students.add(
-                serializer.validated_data["student_id"]
+                serializer.validated_data["student"]
             )
 
         return Response({
@@ -132,7 +179,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.students.remove(
-                serializer.validated_data["student_id"]
+                serializer.validated_data["student"]
             )
 
         return Response({
@@ -167,7 +214,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.teachers.add(
-                serializer.validated_data["teacher_id"]
+                serializer.validated_data["teacher"]
             )
 
         return Response({
@@ -188,7 +235,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.teachers.remove(
-                serializer.validated_data["teacher_id"]
+                serializer.validated_data["teacher"]
             )
 
         return Response({

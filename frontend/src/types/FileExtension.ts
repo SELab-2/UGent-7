@@ -1,6 +1,4 @@
 export class File_extension {
-    constructor(
-
-    ) {
-    }
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+    constructor() {}
 }
