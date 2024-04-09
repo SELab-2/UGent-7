@@ -49,7 +49,7 @@ services:
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
-    command: /bin/bash -c "./setup.sh && python manage.py runsslserver 192.168.90.2:8080"
+    command: sh -c "./setup.sh && python manage.py runsslserver 192.168.90.2:8080"
     expose:
       - 8080
     volumes:
@@ -60,7 +60,7 @@ services:
     container_name: celery
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     command: celery -A ypovoli worker -l DEBUG
     volumes:
       - ${BACKEND_DIR}:/code
@@ -74,7 +74,7 @@ services:
     build:
       context: $FRONTEND_DIR
       dockerfile: Dockerfile.dev
-    command: bash -c "npm install && npm run host"
+    command: sh -c "npm install && npm run host"
     expose:
       - 5173
     volumes:
