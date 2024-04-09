@@ -1,17 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 
-const {
-    submissions,
-    submission,
-    getSubmissionByID,
-    getSubmissionByProject,
-    getSubmissionByGroup,
-
-    createSubmission,
-    deleteSubmission,
-} = useSubmission();
+const { submissions, submission, getSubmissionByID, getSubmissionByProject, getSubmissionByGroup } = useSubmission();
 
 describe('submissions', (): void => {
     it('gets submissions data by id', async () => {

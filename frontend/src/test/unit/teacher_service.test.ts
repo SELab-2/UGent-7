@@ -1,21 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useTeacher } from '@/composables/services/teachers.service.ts';
 
 const {
     teachers,
     teacher,
-    response,
 
     getTeacherByID,
     getTeacherByCourse,
     getTeachers,
-
-    createTeacher,
-    deleteTeacher,
-
-    teacherJoinCourse,
-    teacherLeaveCourse,
 } = useTeacher();
 
 describe('teachers', (): void => {

@@ -9,7 +9,7 @@ interface AssistantState {
     assistants: Ref<Assistant[] | null>;
     assistant: Ref<Assistant | null>;
     response: Ref<Response | null>;
-    getAssistantByID: (id: string, init: boolean) => Promise<void>;
+    getAssistantByID: (id: string, init?: boolean) => Promise<void>;
     getAssistantByCourse: (courseId: string) => Promise<void>;
     getAssistants: () => Promise<void>;
     assistantJoinCourse: (courseId: string, assistantId: string) => Promise<void>;

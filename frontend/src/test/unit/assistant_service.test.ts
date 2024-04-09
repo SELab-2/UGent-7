@@ -1,23 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useAssistant } from '@/composables/services/assistant.service.ts';
-import { User } from '../../types/users/User';
 import { Assistant } from '@/types/users/Assistant';
 
 const {
     assistants,
     assistant,
-    response,
 
     getAssistantByID,
     getAssistantByCourse,
     getAssistants,
 
     createAssistant,
-    deleteAssistant,
-
-    assistantJoinCourse,
-    assistantLeaveCourse,
 } = useAssistant();
 
 describe('assistant', (): void => {

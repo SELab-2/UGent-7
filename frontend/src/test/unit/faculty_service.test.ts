@@ -1,16 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useFaculty } from '@/composables/services/faculties.service.ts';
 
-const {
-    faculties,
-    faculty,
-    getFacultyByID,
-    getFaculties,
-
-    createFaculty,
-    deleteFaculty,
-} = useFaculty();
+const { faculties, faculty, getFacultyByID, getFaculties } = useFaculty();
 
 describe('faculty', (): void => {
     it('gets faculty data by id', async () => {

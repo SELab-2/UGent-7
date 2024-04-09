@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useAdmin } from '@/composables/services/admins.service.ts';
-import { User } from '../../types/users/User';
+import { User } from '@/types/users/User.ts';
 
 const {
     admins,
@@ -10,7 +10,6 @@ const {
     getAdmins,
 
     createAdmin,
-    deleteAdmin,
 } = useAdmin();
 
 describe('admin', (): void => {

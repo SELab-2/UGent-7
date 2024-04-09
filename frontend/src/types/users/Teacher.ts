@@ -29,7 +29,6 @@ export class Teacher extends User {
             faculties,
             create_time,
             last_login,
-            courses,
         );
     }
 
