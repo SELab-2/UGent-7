@@ -19,6 +19,6 @@ jobs:
           script: |
             cd UGent-7
             docker-compose -f production.yml down
-            git pull
+            git pull --force
             docker-compose -f production.yml build --no-cache
             docker-compose -f production.yml up -d
