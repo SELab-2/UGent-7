@@ -4,6 +4,7 @@
             "logo": "Logo van de Universiteit Gent",
             "login": "Login",
             "view": "Bekijken als {0}",
+            "user": "Ingelogd als {0}",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
@@ -37,7 +38,8 @@
             }
         },
         "calendar": {
-            "title": "Kalender"
+            "title": "Kalender",
+            "noProjects": "Geen projecten op geselecteerde datum."
         },
         "projects": {
             "deadline": "Deadline",
