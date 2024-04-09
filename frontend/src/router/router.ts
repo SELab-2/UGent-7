@@ -13,6 +13,7 @@ import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts';
 import { LogoutGuard } from '@/router/guards/logout.guard.ts';
 import ProjectView from '@/views/projects/ProjectView.vue';
 import CreateProjectView from '@/views/projects/CreateProjectView.vue';
+import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from '@/views/submissions/submissionView.vue';
 import SingleProjectView from '@/views/projects/SingleProjectView.vue';
@@ -45,7 +46,7 @@ const routes: RouteRecordRaw[] = [
                 path: ':courseId',
                 children: [
                     { path: '', component: CourseView, name: 'course' },
-                    { path: 'edit', component: Dummy, name: 'course-edit' },
+                    { path: 'edit', component: UpdateCourseView, name: 'course-edit' },
                     // Projects
                     {
                         path: 'courseProjects',

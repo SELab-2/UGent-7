@@ -64,6 +64,7 @@
         },
         "courses": {
             "create": "Create course",
+            "edit": "Edit course",
             "name": "Course name",
             "description": "Description",
             "year": "Academic year"
