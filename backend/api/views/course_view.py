@@ -160,7 +160,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.students.add(
-                serializer.validated_data["student_id"]
+                serializer.validated_data["student"]
             )
 
         return Response({
@@ -181,7 +181,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.students.remove(
-                serializer.validated_data["student_id"]
+                serializer.validated_data["student"]
             )
 
         return Response({
@@ -216,7 +216,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.teachers.add(
-                serializer.validated_data["teacher_id"]
+                serializer.validated_data["teacher"]
             )
 
         return Response({
@@ -237,7 +237,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.teachers.remove(
-                serializer.validated_data["teacher_id"]
+                serializer.validated_data["teacher"]
             )
 
         return Response({

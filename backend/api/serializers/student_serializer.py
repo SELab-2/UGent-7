@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api.models.student import Student
+from authentication.models import User
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -22,7 +23,14 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CreateStudentSerializer(serializers.Serializer):
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all()
+    )
+    student_id = serializers.CharField()
+
+
 class StudentIDSerializer(serializers.Serializer):
-    student_id = serializers.PrimaryKeyRelatedField(
+    student = serializers.PrimaryKeyRelatedField(
         queryset=Student.objects.all()
     )

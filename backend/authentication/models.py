@@ -53,7 +53,7 @@ class User(AbstractBaseUser):
             # ...that inherit the User class.
             if model is not self.__class__
             if issubclass(model, self.__class__)
-            if model.objects.filter(id=self.id).exists()
+            if model.objects.filter(id=self.id, is_active=True).exists()
         ]
 
     @staticmethod

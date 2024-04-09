@@ -1,63 +1,37 @@
 import json
 from datetime import timedelta
-
-from api.models.checks import ExtraCheck
-from api.models.course import Course
-from api.models.group import Group
-from api.models.project import Project
-from api.models.submission import ExtraChecksResult, Submission, SubmissionFile
-from authentication.models import User
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db.models import Max
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext
 from rest_framework.test import APITestCase
-
-
-def create_course(name, academic_start_year, description=None, parent_course=None):
-    """
-    Create a Course with the given arguments.
-    """
-    return Course.objects.create(
-        name=name,
-        academic_startyear=academic_start_year,
-        description=description,
-        parent_course=parent_course,
-    )
-
-
-def create_project(name, description, days, course):
-    """Create a Project with the given arguments."""
-    deadline = timezone.now() + timedelta(days=days)
-    return Project.objects.create(
-        name=name, description=description, deadline=deadline, course=course, score_visible=True
-    )
+from api.models.course import Course
+from api.models.group import Group
+from api.models.project import Project
+from api.models.submission import Submission, SubmissionFile
+from api.tests.helpers import create_course, create_project, create_group
+from authentication.models import User
 
 
 def create_past_project(name, description, days, course, days_start_date):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timedelta(days=days)
-    startDate = timezone.now() + timedelta(days=days_start_date)
+    start_date = timezone.now() + timedelta(days=days_start_date)
+
     return Project.objects.create(
-        name=name, description=description, deadline=deadline, course=course, score_visible=True, start_date=startDate
+        name=name, description=description, deadline=deadline, course=course, score_visible=True, start_date=start_date
     )
 
 
-def create_group(project, score):
-    """Create a Group with the given arguments."""
-    return Group.objects.create(project=project, score=score)
-
-
 def create_submission(group, submission_number):
-    """Create an Submission with the given arguments."""
+    """Create a Submission with the given arguments."""
     return Submission.objects.create(
         group=group, submission_number=submission_number, submission_time=timezone.now(), structure_checks_passed=True
     )
 
 
-def create_submissionFile(submission, file):
+def create_submission_file(submission, file):
     """Create an SubmissionFile with the given arguments."""
     return SubmissionFile.objects.create(submission=submission, file=file)
 
@@ -87,7 +61,7 @@ class SubmissionModelTests(APITestCase):
         """
         Able to retrieve a single submission after creating it.
         """
-        course = create_course(name="sel2", academic_start_year=2023)
+        course = create_course(name="sel2", academic_startyear=2023)
         project = create_project(
             name="Project 1", description="Description 1", days=7, course=course
         )
@@ -126,7 +100,7 @@ class SubmissionModelTests(APITestCase):
         """
         Able to retrieve multiple submissions after creating them.
         """
-        course = create_course(name="sel2", academic_start_year=2023)
+        course = create_course(name="sel2", academic_startyear=2023)
         project = create_project(
             name="Project 1", description="Description 1", days=7, course=course
         )
@@ -178,7 +152,7 @@ class SubmissionModelTests(APITestCase):
         """
         Able to retrieve details of a single submission.
         """
-        course = create_course(name="sel2", academic_start_year=2023)
+        course = create_course(name="sel2", academic_startyear=2023)
         project = create_project(
             name="Project 1", description="Description 1", days=7, course=course
         )
@@ -215,7 +189,7 @@ class SubmissionModelTests(APITestCase):
         """
         Able to retrieve group of a single submission.
         """
-        course = create_course(name="sel2", academic_start_year=2023)
+        course = create_course(name="sel2", academic_startyear=2023)
         project = create_project(
             name="Project 1", description="Description 1", days=7, course=course
         )
@@ -267,7 +241,7 @@ class SubmissionModelTests(APITestCase):
     #     """
     #     Able to retrieve extra checks of a single submission.
     #     """
-    #     course = create_course(name="sel2", academic_start_year=2023)
+    #     course = create_course(name="sel2", academic_startyear=2023)
     #     project = create_project(
     #         name="Project 1", description="Description 1", days=7, course=course
     #     )
@@ -314,7 +288,7 @@ class SubmissionModelTests(APITestCase):
 
     #     with open(zip_file_path, 'rb') as file:
     #         files = {'files': SimpleUploadedFile('mixed.zip', file.read())}
-    #     course = create_course(name="sel2", academic_start_year=2023)
+    #     course = create_course(name="sel2", academic_startyear=2023)
     #     project = create_project(
     #         name="Project 1", description="Description 1", days=7, course=course
     #     )
@@ -339,7 +313,7 @@ class SubmissionModelTests(APITestCase):
         with open(zip_file_path, 'rb') as f:
             files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
 
-        course = create_course(name="sel2", academic_start_year=2023)
+        course = create_course(name="sel2", academic_startyear=2023)
         project = create_past_project(
             name="Project 1", description="Description 1", days=-7, course=course, days_start_date=-84
         )
@@ -366,7 +340,7 @@ class SubmissionModelTests(APITestCase):
     #     with open(zip_file_path, 'rb') as f:
     #         files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
 
-    #     course = create_course(name="sel2", academic_start_year=2023)
+    #     course = create_course(name="sel2", academic_startyear=2023)
     #     project = create_project(
     #         name="Project 1", description="Description 1", days=7, course=course
     #     )
@@ -407,7 +381,7 @@ class SubmissionModelTests(APITestCase):
         with open(zip_file_path, 'rb') as f:
             files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
 
-        course = create_course(name="sel2", academic_start_year=2023)
+        course = create_course(name="sel2", academic_startyear=2023)
         project = create_project(
             name="Project 1", description="Description 1", days=7, course=course
         )
@@ -437,7 +411,7 @@ class SubmissionModelTests(APITestCase):
         with open(zip_file_path, 'rb') as f:
             files = {'files': SimpleUploadedFile('mixed.zip', f.read())}
 
-        course = create_course(name="sel2", academic_start_year=2023)
+        course = create_course(name="sel2", academic_startyear=2023)
         project = create_project(
             name="Project 1", description="Description 1", days=7, course=course
         )

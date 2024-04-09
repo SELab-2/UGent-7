@@ -58,7 +58,7 @@ class StudentJoinGroupSerializer(StudentIDSerializer):
 
         # Get the group and student
         group: Group = self.context["group"]
-        student: Student = data["student_id"]
+        student: Student = data["student"]
 
         # Make sure a student can't join if groups are locked
         if group.project.is_groups_locked():
@@ -88,7 +88,7 @@ class StudentLeaveGroupSerializer(StudentIDSerializer):
 
         # Get the group and student
         group: Group = self.context["group"]
-        student: Student = data["student_id"]
+        student: Student = data["student"]
 
         # Make sure the student was in the group
         if not group.students.filter(id=student.id).exists():

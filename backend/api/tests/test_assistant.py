@@ -1,53 +1,10 @@
 import json
-from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from api.models.assistant import Assistant
 from api.models.teacher import Teacher
-from api.models.course import Course
-from authentication.models import Faculty, User
-
-
-def create_course(name, academic_startyear, description=None, parent_course=None):
-    """
-    Create a Course with the given arguments.
-    """
-    return Course.objects.create(
-        name=name,
-        academic_startyear=academic_startyear,
-        description=description,
-        parent_course=parent_course,
-    )
-
-
-def create_faculty(name):
-    """Create a Faculty with the given arguments."""
-    return Faculty.objects.create(id=name, name=name)
-
-
-def create_assistant(id, first_name, last_name, email, faculty=None, courses=None):
-    """
-    Create a assistant with the given arguments.
-    """
-    username = f"{first_name}_{last_name}"
-    assistant = Assistant.objects.create(
-        id=id,
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        create_time=timezone.now(),
-    )
-
-    if faculty is not None:
-        for fac in faculty:
-            assistant.faculties.add(fac)
-
-    if courses is not None:
-        for cours in courses:
-            assistant.courses.add(cours)
-
-    return assistant
+from api.tests.helpers import create_faculty, create_course, create_assistant, create_user
+from authentication.models import User
 
 
 class AssistantModelTests(APITestCase):
@@ -55,6 +12,60 @@ class AssistantModelTests(APITestCase):
         self.client.force_authenticate(
             User.get_dummy_admin()
         )
+
+    def test_activate_new(self):
+        """Able to add a new student role to a user"""
+        # Create the initial user
+        user = create_user("1", "Saul", "Goodman", "saul@goodman.com")
+
+        # Attempt to add the student role to the user
+        response_root = self.client.post(
+            reverse("assistant-list"),
+            data={"user": user.id},
+            follow=True
+        )
+
+        # Assert a 200 status code
+        self.assertEqual(response_root.status_code, 200)
+
+        # Assert that an active student exists with the user ID
+        self.assertTrue(Assistant.objects.filter(id=user.id, is_active=True).exists())
+
+    def test_activate_old(self):
+        """Able to re-activate an existing student role"""
+        # Create the initial student, but don't activate
+        assistant = create_assistant("1", "Saul", "Goodman", "saul@goodman.com", False)
+
+        # Attempt to add the student role to the user
+        response_root = self.client.post(
+            reverse("assistant-list"),
+            data={"user": assistant.id},
+            follow=True
+        )
+
+        # Assert a 200 status code
+        self.assertEqual(response_root.status_code, 200)
+
+        # Assert that an active student exists with the user ID
+        self.assertTrue(Assistant.objects.filter(id=assistant.id, is_active=True).exists())
+
+    def test_deactivate(self):
+        """Able to deactivate an existing student role"""
+        # Create the initial student
+        assistant = create_assistant("1", "Saul", "Goodman", "saul@goodman.com", True)
+
+        # Attempt to remove the student role from the user
+        response_root = self.client.delete(
+            reverse("assistant-detail", args=[assistant.id]),
+            data={"user": assistant.id},
+            follow=True
+        )
+
+        # Assert a 200 status code
+        self.assertEqual(response_root.status_code, 200)
+
+        # Assert that an active student with the user ID no longer exists
+        self.assertFalse(Assistant.objects.filter(id=assistant.id, is_active=True).exists())
 
     def test_no_assistant(self):
         """
