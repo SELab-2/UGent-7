@@ -66,9 +66,12 @@ class ProjectSerializer(serializers.ModelSerializer):
             start_date = data["start_date"]
 
         # Check if deadline of the project is before the start date
+<<<<<<< HEAD
 
         # Data will always contain start_date if it's not a partial update. Same goes for deadline
         start_date = data["start_date"] if "start_date" in data else self.instance.start_date
+=======
+>>>>>>> a3fe0c4 (chore: support patch for project 2)
         if "deadline" in data and data["deadline"] < start_date:
             raise ValidationError(gettext("project.errors.deadline_before_start_date"))
 
