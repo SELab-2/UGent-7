@@ -3,6 +3,7 @@ import Title from '@/components/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
 import CourseList from '@/components/courses/CourseList.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
+import InputSwitch from 'primevue/inputswitch';
 import { type Student } from '@/types/users/Student.ts';
 import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
@@ -19,7 +20,8 @@ const { t } = useI18n();
 const { courses, getCoursesByStudent } = useCourses();
 
 /* State */
-const selectedYear = ref<number>(User.getAcademicYear());
+const selectedYear = ref(User.getAcademicYear());
+const showPast = ref(false);
 
 const filteredCourses = computed(
     () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
@@ -53,8 +55,16 @@ watch(
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
     </div>
+
+    <!-- Show past projects switch -->
+    <div class="flex gap-3 align-items-center mb-5">
+        <InputSwitch input-id="show-past" v-model="showPast" />
+        <label for="show-past">
+            {{ t('views.dashboard.showPastProjects') }}
+        </label>
+    </div>
     <!-- Project list body -->
-    <ProjectList :courses="filteredCourses" />
+    <ProjectList :courses="filteredCourses" :show-past="showPast" />
 </template>
 
 <style scoped lang="scss"></style>

@@ -4,14 +4,17 @@ import { computed, watch } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import ProjectCard from '@/components/projects/ProjectCard.vue';
 import { useI18n } from 'vue-i18n';
+import moment from 'moment';
 
 /* Props */
 const props = withDefaults(
     defineProps<{
         courses: Course[];
+        showPast?: boolean;
     }>(),
     {
         courses: () => [],
+        showPast: false
     },
 );
 
@@ -20,15 +23,26 @@ const { t } = useI18n();
 const { projects, getProjectsByCourse } = useProject();
 
 /* State */
-const allProjects = computed(() => props.courses.flatMap((course) => course.projects));
+
+// The merged projects from all courses
+const allProjects = computed(() =>
+    props.courses.flatMap((course) => course.projects)
+);
 
 /**
  * Sorts the projects by deadline
  */
-const sortedProjects = computed(() =>
-    [...allProjects.value].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime()),
-);
+const sortedProjects = computed(() => {
+    const projects = allProjects.value.filter((project) =>
+        !props.showPast ? moment(project.deadline).isAfter() : true
+    );
 
+    return [...projects].sort((a, b) =>
+        new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    )
+});
+
+/* Watchers */
 watch(
     () => props.courses,
     async (courses: Course[]) => {

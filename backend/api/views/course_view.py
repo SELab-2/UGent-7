@@ -61,7 +61,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         # Filter the queryset based on the search term
         queryset = self.get_queryset().filter(
             name__icontains=search
-        )
+        ).order_by('faculty')
 
         # Filter the queryset based on selected years
         if years:
