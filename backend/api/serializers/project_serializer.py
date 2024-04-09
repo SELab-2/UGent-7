@@ -1,15 +1,16 @@
-from django.core.files.storage import FileSystemStorage
+
+from api.logic.check_folder_structure import parse_zip_file
+from api.models.checks import FileExtension
+from api.models.group import Group
+from api.models.project import Project
+from api.serializers.checks_serializer import StructureCheckSerializer
+from api.serializers.submission_serializer import SubmissionSerializer
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.utils import timezone
 from django.utils.translation import gettext
 from rest_framework import serializers
-from api.models.project import Project
-from api.models.group import Group
 from rest_framework.exceptions import ValidationError
-from django.utils import timezone
-from api.models.checks import FileExtension
-from api.serializers.submission_serializer import SubmissionSerializer
-from api.serializers.checks_serializer import StructureCheckSerializer
-from api.logic.check_folder_structure import parse_zip_file
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -44,17 +45,21 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate(self, data):
-        if "course" in self.context:
-            data["course_id"] = self.context["course"].id
-        else:
-            raise ValidationError(gettext("project.errors.context"))
+        if not self.partial:
+            # Only reauire course if it is not a partial update
+            if "course" in self.context:
+                data["course_id"] = self.context["course"].id
+            else:
+                raise ValidationError(gettext("project.errors.context"))
 
         # Check if start date of the project is not in the past
-        if data["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
+        if "start_date" in data and data["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
             raise ValidationError(gettext("project.errors.start_date_in_past"))
 
         # Check if deadline of the project is before the start date
-        if data["deadline"] < data["start_date"]:
+        # Data will always contain start_date if it's not a partial update. Same goes for deadline
+        start_date = data["start_date"] if "start_date" in data else self.instance.start_date
+        if "deadline" in data and data["deadline"] < start_date:
             raise ValidationError(gettext("project.errors.deadline_before_start_date"))
 
         return data
