@@ -5,95 +5,14 @@ from rest_framework.test import APITestCase
 from authentication.models import User
 from api.models.course import Course
 from api.models.teacher import Teacher
-from api.models.assistant import Assistant
 from api.models.student import Student
-from api.models.project import Project
-from authentication.models import Faculty
+from api.tests.helpers import (create_course,
+                               create_assistant,
+                               create_student,
+                               create_teacher,
+                               create_project,
+                               create_faculty)
 from django.core.files.uploadedfile import SimpleUploadedFile
-
-
-def create_project(name, description, visible, archived, days, course):
-    """Create a Project with the given arguments."""
-    deadline = timezone.now() + timezone.timedelta(days=days)
-
-    return Project.objects.create(
-        name=name,
-        description=description,
-        visible=visible,
-        archived=archived,
-        deadline=deadline,
-        course=course,
-    )
-
-
-def create_student(id, first_name, last_name, email):
-    """
-    Create a student with the given arguments.
-    """
-    username = f"{first_name}_{last_name}"
-    student = Student.objects.create(
-        id=id,
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        create_time=timezone.now(),
-    )
-    return student
-
-
-def create_assistant(id, first_name, last_name, email):
-    """
-    Create a assistant with the given arguments.
-    """
-    username = f"{first_name}_{last_name}"
-    assistant = Assistant.objects.create(
-        id=id,
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        create_time=timezone.now(),
-    )
-    return assistant
-
-
-def create_teacher(id, first_name, last_name, email):
-    """
-    Create a teacher with the given arguments.
-    """
-    username = f"{first_name}_{last_name}"
-    teacher = Teacher.objects.create(
-        id=id,
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        create_time=timezone.now(),
-    )
-    return teacher
-
-
-def create_faculty(id, name):
-    """
-    Create a faculty with the given arguments.
-    """
-    return Faculty.objects.create(
-        id=id,
-        name=name,
-    )
-
-
-def create_course(name, academic_startyear, description=None, parent_course=None):
-    """
-    Create a Course with the given arguments.
-    """
-    return Course.objects.create(
-        name=name,
-        academic_startyear=academic_startyear,
-        description=description,
-        parent_course=parent_course,
-    )
 
 
 def get_course():
@@ -121,7 +40,9 @@ def get_student():
     """
     Return a random student to use in tests.
     """
-    return create_student(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmai.com")
+    return create_student(
+        id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmai.com", student_id="02000341"
+    )
 
 
 class CourseModelTests(APITestCase):
@@ -359,10 +280,11 @@ class CourseModelTests(APITestCase):
             first_name="Simon",
             last_name="Mignolet",
             email="simon.mignolet@ugent.be",
+            student_id="0100"
         )
 
         student2 = create_student(
-            id=6, first_name="Ronny", last_name="Deila", email="ronny.deila@brugge.be"
+            id=6, first_name="Ronny", last_name="Deila", email="ronny.deila@brugge.be", student_id="0200"
         )
 
         course = create_course(
@@ -423,6 +345,8 @@ class CourseModelTests(APITestCase):
         )
 
         project1 = create_project(
+            max_score=10,
+            group_size=5,
             name="become champions",
             description="win the jpl",
             visible=True,
@@ -432,6 +356,8 @@ class CourseModelTests(APITestCase):
         )
 
         project2 = create_project(
+            max_score=10,
+            group_size=5,
             name="become european champion",
             description="win the cfl",
             visible=True,
@@ -544,7 +470,7 @@ class CourseModelTestsAsStudent(APITestCase):
 
         response = self.client.post(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": self.user.id},
+            data={"student": self.user.id},
             follow=True,
         )
 
@@ -559,7 +485,7 @@ class CourseModelTestsAsStudent(APITestCase):
 
         response = self.client.post(
             reverse("course-teachers", args=[str(course.id)]),
-            data={"teacher_id": self.user.id},
+            data={"teacher": self.user.id},
             follow=True,
         )
 
@@ -576,7 +502,7 @@ class CourseModelTestsAsStudent(APITestCase):
 
         response = self.client.delete(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": self.user.id},
+            data={"student": self.user.id},
             follow=True,
         )
 
@@ -594,7 +520,7 @@ class CourseModelTestsAsStudent(APITestCase):
 
         response = self.client.post(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": other_student.id},
+            data={"student": other_student.id},
             follow=True,
         )
 
@@ -615,7 +541,7 @@ class CourseModelTestsAsStudent(APITestCase):
 
         response = self.client.delete(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": other_student.id},
+            data={"student": other_student.id},
             follow=True,
         )
 
@@ -678,7 +604,7 @@ class CourseModelTestsAsStudent(APITestCase):
 
         response = self.client.post(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": self.user.id},
+            data={"student": self.user.id},
             follow=True,
         )
 
@@ -698,7 +624,7 @@ class CourseModelTestsAsStudent(APITestCase):
 
         response = self.client.delete(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": self.user.id},
+            data={"student": self.user.id},
             follow=True,
         )
 
@@ -714,7 +640,7 @@ class CourseModelTestsAsStudent(APITestCase):
 
         response = self.client.delete(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": self.user.id},
+            data={"student": self.user.id},
             follow=True,
         )
 
@@ -745,7 +671,7 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         response = self.client.post(
             reverse("course-teachers", args=[str(course.id)]),
-            data={"teacher_id": self.user.id},
+            data={"teacher": self.user.id},
             follow=True,
         )
 
@@ -762,7 +688,7 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         response = self.client.delete(
             reverse("course-teachers", args=[str(course.id)]),
-            data={"teacher_id": self.user.id},
+            data={"teacher": self.user.id},
             follow=True,
         )
 
@@ -778,7 +704,7 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         response = self.client.delete(
             reverse("course-teachers", args=[str(course.id)]),
-            data={"teacher_id": self.user.id},
+            data={"teacher": self.user.id},
             follow=True,
         )
 
@@ -834,7 +760,7 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         response = self.client.post(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": student.id},
+            data={"student": student.id},
             follow=True,
         )
 
@@ -854,7 +780,7 @@ class CourseModelTestsAsTeacher(APITestCase):
 
         response = self.client.delete(
             reverse("course-students", args=[str(course.id)]),
-            data={"student_id": student.id},
+            data={"student": student.id},
             follow=True,
         )
 
@@ -865,7 +791,7 @@ class CourseModelTestsAsTeacher(APITestCase):
         """
         Able to create a course.
         """
-        faculty = create_faculty(id="Engineering", name="Engineering")
+        faculty = create_faculty(name="Engineering")
 
         response = self.client.post(
             reverse("course-list"),
@@ -986,9 +912,15 @@ class CourseModelTestsAsTeacher(APITestCase):
         course.teachers.add(self.user)
 
         # Create some students
-        student1 = create_student(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmail.com")
-        student2 = create_student(id=6, first_name="Ronny", last_name="Deila", email="Ronny.Deila@gmail.com")
-        student3 = create_student(id=7, first_name="Karel", last_name="Geraerts", email="Karel.Geraerts@gmail.com")
+        student1 = create_student(
+            id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmail.com", student_id="0100"
+        )
+        student2 = create_student(
+            id=6, first_name="Ronny", last_name="Deila", email="Ronny.Deila@gmail.com", student_id="0200"
+        )
+        student3 = create_student(
+            id=7, first_name="Karel", last_name="Geraerts", email="Karel.Geraerts@gmail.com", student_id="0300"
+        )
 
         # Add the students to the course
         course.students.add(student1)

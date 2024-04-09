@@ -1,62 +1,12 @@
 import json
 import os
-
-from api.logic.check_folder_structure import check_zip_file, parse_zip_file
-from api.models.checks import StructureCheck
-from api.models.course import Course
-from api.models.extension import FileExtension
-from api.models.project import Project
-from authentication.models import User
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework.test import APITestCase
-
-
-def create_course(id, name, academic_startyear):
-    """
-    Create a Course with the given arguments.
-    """
-    return Course.objects.create(
-        id=id, name=name, academic_startyear=academic_startyear
-    )
-
-
-def create_file_extension(extension):
-    """
-    Create a FileExtension with the given arguments.
-    """
-    return FileExtension.objects.create(extension=extension)
-
-
-def create_project(name, description, visible, archived, days, course):
-    """Create a Project with the given arguments."""
-    deadline = timezone.now() + timezone.timedelta(days=days)
-
-    return Project.objects.create(
-        name=name,
-        description=description,
-        visible=visible,
-        archived=archived,
-        deadline=deadline,
-        course=course,
-    )
-
-
-def create_structure_check(name, project, obligated, blocked):
-    """
-    Create a StructureCheck with the given arguments.
-    """
-    structure_check = StructureCheck.objects.create(
-        name=name,
-        project=project,
-    )
-    for ch in obligated:
-        structure_check.obligated_extensions.add(ch)
-    for ch in blocked:
-        structure_check.blocked_extensions.add(ch)
-
-    return structure_check
+from api.logic.check_folder_structure import check_zip_file, parse_zip_file
+from api.tests.helpers import create_course, create_file_extension, create_project, create_structure_check
+from authentication.models import User
 
 
 class FileTestsTests(APITestCase):
@@ -73,8 +23,10 @@ class FileTestsTests(APITestCase):
         settings.MEDIA_ROOT = self.old_media_root
 
     def test_parsing(self):
-        course = create_course(id=3, name="test course", academic_startyear=2024)
+        course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
+            group_size=5,
+            max_score=10,
             name="test",
             description="descr",
             visible=True,
@@ -150,8 +102,10 @@ class FileTestsTests(APITestCase):
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
     def test_checking(self):
-        course = create_course(id=3, name="test course", academic_startyear=2024)
+        course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
+            max_score=10,
+            group_size=5,
             name="test",
             description="descr",
             visible=True,
@@ -174,50 +128,52 @@ class FileTestsTests(APITestCase):
         create_structure_check(
             name=".",
             project=project,
-            obligated=[],
-            blocked=[])
+            obligated_extensions=[],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1",
             project=project,
-            obligated=[fileExtensionHS],
-            blocked=[])
+            obligated_extensions=[fileExtensionHS],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1",
             project=project,
-            obligated=[fileExtensionPDF, fileExtensionDOCX],
-            blocked=[])
+            obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1/templates",
             project=project,
-            obligated=[fileExtensionLATEX],
-            blocked=[])
+            obligated_extensions=[fileExtensionLATEX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2",
             project=project,
-            obligated=[fileExtensionMD],
-            blocked=[])
+            obligated_extensions=[fileExtensionMD],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2/src",
             project=project,
-            obligated=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked=[])
+            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap3",
             project=project,
-            obligated=[fileExtensionTS, fileExtensionTSX],
-            blocked=[])
+            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+            blocked_extensions=[])
 
         self.assertTrue(check_zip_file(project=project, dir_path="structures/zip_struct1.zip")[0])
 
     def test_checking_obligated_not_found(self):
-        course = create_course(id=3, name="test course", academic_startyear=2024)
+        course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
+            group_size=5,
+            max_score=10,
             name="test",
             description="descr",
             visible=True,
@@ -240,49 +196,51 @@ class FileTestsTests(APITestCase):
         create_structure_check(
             name=".",
             project=project,
-            obligated=[],
-            blocked=[fileExtensionDOCX])
+            obligated_extensions=[],
+            blocked_extensions=[fileExtensionDOCX])
 
         create_structure_check(
             name="folder_struct1",
             project=project,
-            obligated=[fileExtensionHS],
-            blocked=[])
+            obligated_extensions=[fileExtensionHS],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1",
             project=project,
-            obligated=[fileExtensionPDF, fileExtensionDOCX],
-            blocked=[])
+            obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1/templates",
             project=project,
-            obligated=[fileExtensionLATEX],
-            blocked=[])
+            obligated_extensions=[fileExtensionLATEX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2",
             project=project,
-            obligated=[fileExtensionMD],
-            blocked=[])
+            obligated_extensions=[fileExtensionMD],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2/src",
             project=project,
-            obligated=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked=[])
+            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap3",
             project=project,
-            obligated=[fileExtensionTS, fileExtensionTSX],
-            blocked=[])
+            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+            blocked_extensions=[])
         self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip2struct1.zip")[0])
 
     def test_checking_obligated_directory_not_found(self):
-        course = create_course(id=3, name="test course", academic_startyear=2024)
+        course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
+            group_size=5,
+            max_score=10,
             name="test",
             description="descr",
             visible=True,
@@ -305,49 +263,51 @@ class FileTestsTests(APITestCase):
         create_structure_check(
             name=".",
             project=project,
-            obligated=[],
-            blocked=[fileExtensionDOCX])
+            obligated_extensions=[],
+            blocked_extensions=[fileExtensionDOCX])
 
         create_structure_check(
             name="folder_struct1",
             project=project,
-            obligated=[fileExtensionHS],
-            blocked=[])
+            obligated_extensions=[fileExtensionHS],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1",
             project=project,
-            obligated=[fileExtensionPDF, fileExtensionDOCX],
-            blocked=[])
+            obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1/templates",
             project=project,
-            obligated=[fileExtensionLATEX],
-            blocked=[])
+            obligated_extensions=[fileExtensionLATEX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2",
             project=project,
-            obligated=[fileExtensionMD],
-            blocked=[])
+            obligated_extensions=[fileExtensionMD],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2/src",
             project=project,
-            obligated=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked=[])
+            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap3",
             project=project,
-            obligated=[fileExtensionTS, fileExtensionTSX],
-            blocked=[])
+            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+            blocked_extensions=[])
         self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip4struct1.zip")[0])
 
     def test_checking_blocked_extension_found(self):
-        course = create_course(id=3, name="test course", academic_startyear=2024)
+        course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
+            group_size=5,
+            max_score=10,
             name="test",
             description="descr",
             visible=True,
@@ -370,50 +330,52 @@ class FileTestsTests(APITestCase):
         create_structure_check(
             name=".",
             project=project,
-            obligated=[],
-            blocked=[fileExtensionDOCX])
+            obligated_extensions=[],
+            blocked_extensions=[fileExtensionDOCX])
 
         create_structure_check(
             name="folder_struct1",
             project=project,
-            obligated=[fileExtensionHS],
-            blocked=[])
+            obligated_extensions=[fileExtensionHS],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1",
             project=project,
-            obligated=[fileExtensionDOCX],
-            blocked=[fileExtensionPDF])
+            obligated_extensions=[fileExtensionDOCX],
+            blocked_extensions=[fileExtensionPDF])
 
         create_structure_check(
             name="folder_struct1/submap1/templates",
             project=project,
-            obligated=[fileExtensionLATEX],
-            blocked=[])
+            obligated_extensions=[fileExtensionLATEX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2",
             project=project,
-            obligated=[fileExtensionMD],
-            blocked=[])
+            obligated_extensions=[fileExtensionMD],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2/src",
             project=project,
-            obligated=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked=[])
+            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap3",
             project=project,
-            obligated=[fileExtensionTS, fileExtensionTSX],
-            blocked=[])
+            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+            blocked_extensions=[])
 
         self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip1struct1.zip")[0])
 
     def test_checking_extra_directory_found(self):
-        course = create_course(id=3, name="test course", academic_startyear=2024)
+        course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
+            group_size=5,
+            max_score=10,
             name="test",
             description="descr",
             visible=True,
@@ -436,44 +398,44 @@ class FileTestsTests(APITestCase):
         create_structure_check(
             name=".",
             project=project,
-            obligated=[],
-            blocked=[fileExtensionDOCX])
+            obligated_extensions=[],
+            blocked_extensions=[fileExtensionDOCX])
 
         create_structure_check(
             name="folder_struct1",
             project=project,
-            obligated=[fileExtensionHS],
-            blocked=[])
+            obligated_extensions=[fileExtensionHS],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1",
             project=project,
-            obligated=[fileExtensionPDF, fileExtensionDOCX],
-            blocked=[])
+            obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap1/templates",
             project=project,
-            obligated=[fileExtensionLATEX],
-            blocked=[])
+            obligated_extensions=[fileExtensionLATEX],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2",
             project=project,
-            obligated=[fileExtensionMD],
-            blocked=[])
+            obligated_extensions=[fileExtensionMD],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap2/src",
             project=project,
-            obligated=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked=[])
+            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+            blocked_extensions=[])
 
         create_structure_check(
             name="folder_struct1/submap3",
             project=project,
-            obligated=[fileExtensionTS, fileExtensionTSX],
-            blocked=[])
+            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+            blocked_extensions=[])
 
         self.assertFalse(
             check_zip_file(project=project, dir_path="tests/test_zip3struct1.zip", restrict_extra_folders=True)[0])

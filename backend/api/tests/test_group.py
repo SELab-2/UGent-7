@@ -1,53 +1,11 @@
 import json
-from datetime import timedelta
 from django.urls import reverse
-from django.utils import timezone
-from rest_framework.test import APITestCase
-from authentication.models import User
-from api.models.project import Project
-from api.models.student import Student
-from api.models.group import Group
-from api.models.course import Course
 from django.conf import settings
+from rest_framework.test import APITestCase
+from api.models.student import Student
 from api.models.teacher import Teacher
-
-
-def create_course(name, academic_startyear, description=None, parent_course=None):
-    """
-    Create a Course with the given arguments.
-    """
-    return Course.objects.create(
-        name=name,
-        academic_startyear=academic_startyear,
-        description=description,
-        parent_course=parent_course,
-    )
-
-
-def create_project(name, description, days, course, group_size=2, max_score=20, score_visible=True):
-    """Create a Project with the given arguments."""
-    deadline = timezone.now() + timedelta(days=days)
-    return Project.objects.create(
-        name=name, description=description, deadline=deadline, course=course,
-        group_size=group_size, max_score=max_score, score_visible=score_visible
-    )
-
-
-def create_student(id, first_name, last_name, email):
-    """Create a Student with the given arguments."""
-    username = f"{first_name}_{last_name}"
-    return Student.objects.create(
-        id=id,
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-    )
-
-
-def create_group(project, score):
-    """Create a Group with the given arguments."""
-    return Group.objects.create(project=project, score=score)
+from api.tests.helpers import create_course, create_project, create_student, create_group
+from authentication.models import User
 
 
 class GroupModelTests(APITestCase):
@@ -140,11 +98,11 @@ class GroupModelTests(APITestCase):
             name="Project 1", description="Description 1", days=7, course=course
         )
         student1 = create_student(
-            id=5, first_name="John", last_name="Doe", email="john.doe@example.com"
+            id=5, first_name="John", last_name="Doe", email="john.doe@example.com", student_id="0200"
         )
 
         student2 = create_student(
-            id=6, first_name="kom", last_name="mor_up", email="kom.mor_up@example.com"
+            id=6, first_name="kom", last_name="mor_up", email="kom.mor_up@example.com", student_id="0300"
         )
 
         group = create_group(project=project, score=10)
@@ -220,7 +178,7 @@ class GroupModelTestsAsTeacher(APITestCase):
 
         response = self.client.post(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": student.id},
+            {"student": student.id},
             follow=True,
         )
 
@@ -249,7 +207,7 @@ class GroupModelTestsAsTeacher(APITestCase):
 
         response = self.client.delete(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": student.id},
+            {"student": student.id},
             follow=True,
         )
 
@@ -324,7 +282,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Try to join a group that is part of a course the student is not enrolled in
         response = self.client.post(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": self.user.id},
+            {"student": self.user.id},
             follow=True,
         )
 
@@ -337,7 +295,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Join the group now that the student is enrolled in the course
         response = self.client.post(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": self.user.id},
+            {"student": self.user.id},
             follow=True,
         )
 
@@ -351,7 +309,7 @@ class GroupModelTestsAsStudent(APITestCase):
 
         response = self.client.post(
             reverse("group-students", args=[str(group2.id)]),
-            {"student_id": self.user.id},
+            {"student": self.user.id},
             follow=True,
         )
 
@@ -376,7 +334,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Join the group
         response = self.client.post(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": self.user.id},
+            {"student": self.user.id},
             follow=True,
         )
 
@@ -396,7 +354,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Join the group
         response = self.client.post(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": self.user.id},
+            {"student": self.user.id},
             follow=True,
         )
 
@@ -408,7 +366,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Leave the group
         response = self.client.delete(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": self.user.id},
+            {"student": self.user.id},
             follow=True,
         )
 
@@ -434,7 +392,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Try to leave the group
         response = self.client.delete(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": self.user.id},
+            {"student": self.user.id},
             follow=True,
         )
 
@@ -455,7 +413,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Try to leave the group
         response = self.client.delete(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": self.user.id},
+            {"student": self.user.id},
             follow=True,
         )
 
@@ -481,7 +439,7 @@ class GroupModelTestsAsStudent(APITestCase):
 
         response = self.client.post(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": student.id},
+            {"student": student.id},
             follow=True,
         )
 
@@ -509,7 +467,7 @@ class GroupModelTestsAsStudent(APITestCase):
 
         response = self.client.delete(
             reverse("group-students", args=[str(group.id)]),
-            {"student_id": student.id},
+            {"student": student.id},
             follow=True,
         )
 
@@ -547,7 +505,7 @@ class GroupModelTestsAsStudent(APITestCase):
         course = create_course(name="sel2", academic_startyear=2023)
 
         project = create_project(
-            name="Project 1", description="Description 1", days=7, course=course, score_visible=True
+            name="Project 1", description="Description 1", days=7, course=course, visible=True
         )
         group = create_group(project=project, score=10)
         course.students.add(self.user)
@@ -566,7 +524,7 @@ class GroupModelTestsAsStudent(APITestCase):
         # Add the student to the group
         group.students.add(self.user)
 
-        # Set the visibility of the score to False, to make sure the score is not included if it is not visible
+        # Set the visibility of the score to False, in order to make sure the score is not included if it is not visible
         project.score_visible = False
         project.save()
 

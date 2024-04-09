@@ -1,46 +1,8 @@
 import json
-from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
-from authentication.models import Faculty, User
-
-
-def create_faculty(name):
-    """
-    Create a Faculty with the given arguments."""
-    return Faculty.objects.create(id=name, name=name)
-
-
-def create_admin(id, first_name, last_name, email, faculty=None):
-    """
-    Create a Admin with the given arguments.
-    """
-    username = f"{first_name}_{last_name}"
-    if faculty is None:
-        return User.objects.create(
-            id=id,
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            email=email,
-            is_staff=True,
-            create_time=timezone.now(),
-        )
-    else:
-        admin = User.objects.create(
-            id=id,
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            email=email,
-            is_staff=True,
-            create_time=timezone.now(),
-        )
-
-        for fac in faculty:
-            admin.faculties.add(fac)
-
-        return admin
+from api.tests.helpers import create_admin, create_faculty
+from authentication.models import User
 
 
 class AdminModelTests(APITestCase):
@@ -99,10 +61,11 @@ class AdminModelTests(APITestCase):
         """
         # Create multiple admins
         admin1 = create_admin(
-            id=1, first_name="Johny", last_name="Doeg", email="john.doe@example.com"
+            id=1, first_name="Saul", last_name="Goodman", email="john.doe@example.com"
         )
+
         admin2 = create_admin(
-            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com"
+            id=2, first_name="Liv", last_name="Doe", email="jane.doe@example.com"
         )
 
         # Make a GET request to retrieve the admins

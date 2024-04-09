@@ -20,7 +20,7 @@ class TestLocaleAddAlreadyPresentStudentToCourse(APITestCase):
 
     def test_default_locale(self):
         response = self.client.post(reverse("course-students", args=["1"]),
-                                    {"student_id": 1})
+                                    {"student": 1})
 
         self.assertEqual(response.status_code, 400)
         body = json.loads(response.content.decode('utf-8'))
@@ -29,7 +29,7 @@ class TestLocaleAddAlreadyPresentStudentToCourse(APITestCase):
 
     def test_nl_locale(self):
         response = self.client.post(reverse("course-students", args=["1"]),
-                                    {"student_id": 1},
+                                    {"student": 1},
                                     headers={"accept-language": "nl"})
 
         self.assertEqual(response.status_code, 400)
