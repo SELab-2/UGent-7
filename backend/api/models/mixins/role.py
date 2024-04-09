@@ -11,10 +11,11 @@ class RoleMixin(models.Model):
     @classmethod
     def create(cls, user: User, **attributes) -> None:
         """Create a model role for the given user"""
-        model: cls = cls.objects.filter(id=user.id).first()
+        model = cls.objects.filter(id=user.id).first()
 
         if model is not None:
             model.activate()
+            return model
 
         return cls(user_ptr=user, **attributes).save_base(raw=True)
 

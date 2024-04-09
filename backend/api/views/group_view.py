@@ -64,7 +64,7 @@ class GroupViewSet(CreateModelMixin,
         # Validate the serializer
         if serializer.is_valid(raise_exception=True):
             group.students.add(
-                serializer.validated_data["student_id"]
+                serializer.validated_data["student"]
             )
 
         return Response({
@@ -84,7 +84,7 @@ class GroupViewSet(CreateModelMixin,
         # Validate the serializer
         if serializer.is_valid(raise_exception=True):
             group.students.remove(
-                serializer.validated_data["student_id"]
+                serializer.validated_data["student"]
             )
 
         return Response({

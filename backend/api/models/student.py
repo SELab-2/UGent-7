@@ -1,10 +1,10 @@
 from django.db import models
 from authentication.models import User
 from api.models.course import Course
-from api.models.generics.role import RoleMixin
+from api.models.mixins.role import RoleMixin
 
 
-class Student(User, RoleMixin):
+class Student(RoleMixin, User):
     """This model represents a single student.
     It extends the User model from the authentication app with
     student-specific attributes.

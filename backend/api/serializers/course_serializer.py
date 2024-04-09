@@ -61,7 +61,7 @@ class StudentJoinSerializer(StudentIDSerializer):
         course: Course = self.context["course"]
 
         # Check if the student isn't already enrolled.
-        if course.students.contains(data["student_id"]):
+        if course.students.contains(data["student"]):
             raise ValidationError(gettext("courses.error.students.already_present"))
 
         # Check if the course is not from a past academic year.
@@ -80,7 +80,7 @@ class StudentLeaveSerializer(StudentIDSerializer):
         course: Course = self.context["course"]
 
         # Make sure the student is enrolled.
-        if not course.students.contains(data["student_id"]):
+        if not course.students.contains(data["student"]):
             raise ValidationError(gettext("courses.error.students.not_present"))
 
         # Check if the course is not from a past academic year.
@@ -99,7 +99,7 @@ class TeacherJoinSerializer(TeacherIDSerializer):
         course: Course = self.context["course"]
 
         # Check if the teacher isn't already enrolled.
-        if course.teachers.contains(data["teacher_id"]):
+        if course.teachers.contains(data["teacher"]):
             raise ValidationError(gettext("courses.error.teachers.already_present"))
 
         # Check if the course is not from a past academic year.
@@ -118,7 +118,7 @@ class TeacherLeaveSerializer(TeacherIDSerializer):
         course: Course = self.context["course"]
 
         # Make sure the teacher is enrolled.
-        if not course.teachers.contains(data["teacher_id"]):
+        if not course.teachers.contains(data["teacher"]):
             raise ValidationError(gettext("courses.error.teachers.not_present"))
 
         # Check if the course is not from a past academic year.
