@@ -6,7 +6,6 @@ import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
-import { onMounted } from 'vue';
 
 /* Props */
 const props = defineProps<{
@@ -15,7 +14,6 @@ const props = defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
-
 </script>
 
 <template>

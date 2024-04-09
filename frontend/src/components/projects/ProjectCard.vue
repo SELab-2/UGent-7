@@ -40,11 +40,13 @@ const { t } = useI18n();
         <template #content>
             <div class="mb-2">
                 <i :class="['pi', PrimeIcons.CALENDAR_PLUS, 'icon-color']" class="mr-2"></i>
-                <b>{{ t('views.projects.deadline') }}</b>: {{ formattedDeadline }}<br />
+                <b>{{ t('views.projects.deadline') }}</b
+                >: {{ formattedDeadline }}<br />
             </div>
             <div>
                 <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-                <b>{{ t('views.projects.submissionStatus') }}</b>: ok
+                <b>{{ t('views.projects.submissionStatus') }}</b
+                >: ok
             </div>
         </template>
         <template #footer>
@@ -57,7 +59,13 @@ const { t } = useI18n();
                     },
                 }"
             >
-                <Button class="align-self-end" :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
+                <Button
+                    class="align-self-end"
+                    :icon="PrimeIcons.ARROW_RIGHT"
+                    :label="t('components.card.open')"
+                    icon-pos="right"
+                    outlined
+                />
             </RouterLink>
         </template>
     </Card>

@@ -14,7 +14,7 @@ const props = withDefaults(
     }>(),
     {
         courses: () => [],
-        showPast: false
+        showPast: false,
     },
 );
 
@@ -25,21 +25,17 @@ const { projects, getProjectsByCourse } = useProject();
 /* State */
 
 // The merged projects from all courses
-const allProjects = computed(() =>
-    props.courses.flatMap((course) => course.projects)
-);
+const allProjects = computed(() => props.courses.flatMap((course) => course.projects));
 
 /**
  * Sorts the projects by deadline
  */
 const sortedProjects = computed(() => {
     const projects = allProjects.value.filter((project) =>
-        !props.showPast ? moment(project.deadline).isAfter() : true
+        !props.showPast ? moment(project.deadline).isAfter() : true,
     );
 
-    return [...projects].sort((a, b) =>
-        new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-    )
+    return [...projects].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
 });
 
 /* Watchers */

@@ -23,10 +23,10 @@ onMounted(async () => {
     await getCourseByID(params.courseId as string);
 
     /* Set the form values */
-    if (course.value !== null){
+    if (course.value !== null) {
         form.name = course.value.name;
         form.description = course.value.description ?? '';
-        form.year = `${course.value.academic_startyear} - ${course.value.academic_startyear + 1}`
+        form.year = `${course.value.academic_startyear} - ${course.value.academic_startyear + 1}`;
     }
 });
 
@@ -95,7 +95,7 @@ const submitCourse = async (): Promise<void> => {
                     <!-- Course academic year, not editable -->
                     <div class="mb-4">
                         <label for="courseYear">{{ t('views.courses.year') }}</label>
-                        <InputText id="courseYear" v-model="form.year" readonly class="readonly-input" />                   
+                        <InputText id="courseYear" v-model="form.year" readonly class="readonly-input" />
                     </div>
 
                     <!-- Submit button -->
