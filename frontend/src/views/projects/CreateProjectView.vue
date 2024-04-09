@@ -3,7 +3,6 @@ import Calendar from 'primevue/calendar';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
-import Tree from 'primevue/tree';
 import { reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -55,15 +54,14 @@ const rules = computed(() => {
 });
 
 // Function to handle the file upload of a docker script
-const onDockerScriptUpload = (event: any) => {
+const onDockerScriptUpload = (event: any): void => {
     form.dockerScript = event.files[0];
 };
 
 // Function to handle the file upload of a zip file containing the submission structure
-const onZipStructureUpload = (event: any) => {
+const onZipStructureUpload = (event: any): void => {
     form.submissionStructure = event.files[0];
 };
-
 
 // useVuelidate function to perform form validation
 const v$ = useVuelidate(rules, form);
@@ -88,7 +86,7 @@ const submitProject = async (): Promise<void> => {
                 form.maxScore,
                 form.scoreVisibility,
                 form.groupSize,
-                form.submissionStructure
+                form.submissionStructure,
             ),
             params.courseId as string,
         );
@@ -191,13 +189,25 @@ const submitProject = async (): Promise<void> => {
                     <!-- Upload field for docker script -->
                     <div class="mt-7 mb-4">
                         <label for="dockerScript">{{ t('views.projects.docker_upload') }}</label>
-                        <FileUpload id="dockerScript" mode="basic" accept=".sh" :multiple="false" @select="onDockerScriptUpload"/>
+                        <FileUpload
+                            id="dockerScript"
+                            mode="basic"
+                            accept=".sh"
+                            :multiple="false"
+                            @select="onDockerScriptUpload"
+                        />
                     </div>
 
                     <!-- Upload field for a zip file that contains the submission structure -->
                     <div class="mb-4">
                         <label for="submissionStructure">{{ t('views.projects.submission_structure') }}</label>
-                        <FileUpload id="submissionStructure" mode="basic" accept=".zip" :multiple="false" @select="onZipStructureUpload"/>
+                        <FileUpload
+                            id="submissionStructure"
+                            mode="basic"
+                            accept=".zip"
+                            :multiple="false"
+                            @select="onZipStructureUpload"
+                        />
                     </div>
                 </div>
             </div>
@@ -222,5 +232,4 @@ label {
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
-
 </style>

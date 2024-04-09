@@ -70,7 +70,7 @@ const submitCourse = async (): Promise<void> => {
 };
 
 /* Get the current academic year */
-const currentAcademicYear = () => {
+const currentAcademicYear = (): number => {
     if (new Date().getMonth() < 9) {
         return new Date().getFullYear() - 1;
     } else {
@@ -104,7 +104,13 @@ const currentAcademicYear = () => {
                     <!-- Course faculty -->
                     <div class="mb-4">
                         <label for="courseFaculty">{{ t('views.courses.faculty') }}</label>
-                        <Dropdown id="courseFaculty" v-model="form.faculty" :options="faculties" optionLabel="name" v-if="faculties" />
+                        <Dropdown
+                            id="courseFaculty"
+                            v-model="form.faculty"
+                            :options="faculties"
+                            optionLabel="name"
+                            v-if="faculties"
+                        />
                         <ErrorMessage :field="v$.faculty" />
                     </div>
 

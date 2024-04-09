@@ -4,7 +4,6 @@ import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
-import { Response } from '@/types/Response.ts';
 
 interface CoursesState {
     pagination: Ref<PaginatorResponse<Course> | null>;
@@ -25,7 +24,6 @@ export function useCourses(): CoursesState {
     const pagination = ref<PaginatorResponse<Course> | null>(null);
     const courses = ref<Course[] | null>(null);
     const course = ref<Course | null>(null);
-    const response = ref<Response | null>(null);
 
     async function getCourseByID(id: string): Promise<void> {
         const endpoint = endpoints.courses.retrieve.replace('{id}', id);
