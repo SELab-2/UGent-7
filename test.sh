@@ -85,6 +85,8 @@ else
     vitest_exit=$?
 fi
 
+exit_code=0
+
 echo "-----------------"
 if [ $cypress_exit -ne 0 ] || [ $vitest_exit -ne 0 ] || [ $django_exit -ne 0 ]; then
     echo "Tests failed:"
@@ -97,11 +99,7 @@ if [ $cypress_exit -ne 0 ] || [ $vitest_exit -ne 0 ] || [ $django_exit -ne 0 ]; 
     if [ $django_exit -ne 0 ]; then
         echo "  - Django"
     fi
-    echo "-----------------"
-    echo "Cleaning up..."
-    docker-compose -f test.yml down
-    echo "Done."
-    exit 1
+    exit_code=1
 else
     echo "All tests passed!"
 fi
@@ -109,8 +107,8 @@ echo "-----------------"
 
 echo "Cleaning up..."
 
-docker-compose -f test.yml down
+docker-compose -f test.yml down --rmi all
 
 echo "Done."
 
-exit 0
+exit $exit_code
