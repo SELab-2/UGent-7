@@ -25,10 +25,12 @@ const images = Object.keys(
  * @param faculty
  */
 function getFacultyIcon(faculty: Faculty): string {
-    return images.find((image) => {
-        image = image.replace('/src/assets/img/faculties/', '');
-        return image === faculty.id + '.png';
-    }) ?? '';
+    return (
+        images.find((image) => {
+            image = image.replace('/src/assets/img/faculties/', '');
+            return image === faculty.id + '.png';
+        }) ?? ''
+    );
 }
 </script>
 
