@@ -46,7 +46,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if not self.partial:
-            # Only reauire course if it is not a partial update
+            # Only require course if it is not a partial update
             if "course" in self.context:
                 data["course_id"] = self.context["course"].id
             else:
@@ -56,9 +56,16 @@ class ProjectSerializer(serializers.ModelSerializer):
         if "start_date" in data and data["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
             raise ValidationError(gettext("project.errors.start_date_in_past"))
 
+        # Set the start date depending if it is a partial update and whether it was given by the user
+        if "start_date" not in data:
+            if self.partial:
+                start_date = self.instance.start_date
+            else:
+                start_date = timezone.now()
+        else:
+            start_date = data["start_date"]
+
         # Check if deadline of the project is before the start date
-        # Data will always contain start_date if it's not a partial update. Same goes for deadline
-        start_date = data["start_date"] if "start_date" in data else self.instance.start_date
         if "deadline" in data and data["deadline"] < start_date:
             raise ValidationError(gettext("project.errors.deadline_before_start_date"))
 
