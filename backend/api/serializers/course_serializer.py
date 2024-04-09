@@ -5,6 +5,7 @@ from api.serializers.student_serializer import StudentIDSerializer
 from api.serializers.teacher_serializer import TeacherIDSerializer
 from api.serializers.faculty_serializer import FacultySerializer
 from api.models.course import Course
+from authentication.models import Faculty
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -39,6 +40,27 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = "__all__"
+
+
+class CreateCourseSerializer(CourseSerializer):
+    faculty = serializers.PrimaryKeyRelatedField(
+        queryset=Faculty.objects.all(),
+        required=False,
+        allow_null=True,
+    )
+
+    def create(self, validated_data):
+        faculty = validated_data.pop('faculty', None)
+
+        # Create the course
+        course = super().create(validated_data)
+
+        # Link the faculty, if specified
+        if faculty is not None:
+            course.faculty = faculty
+            course.save()
+
+        return course
 
 
 class CourseIDSerializer(serializers.Serializer):

@@ -1,5 +1,3 @@
-from typing import Any
-
 from api.logic.check_folder_structure import check_zip_file  # , parse_zip_file
 from api.models.submission import (ErrorTemplate, ExtraChecksResult,
                                    Submission, SubmissionFile)

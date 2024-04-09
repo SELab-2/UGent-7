@@ -6,7 +6,13 @@ from authentication.models import User
 from api.models.course import Course
 from api.models.teacher import Teacher
 from api.models.student import Student
-from api.tests.helpers import create_course, create_assistant, create_student, create_teacher, create_project
+from api.tests.helpers import (create_course,
+                               create_assistant,
+                               create_student,
+                               create_teacher,
+                               create_project,
+                               create_faculty)
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 def get_course():
@@ -785,12 +791,15 @@ class CourseModelTestsAsTeacher(APITestCase):
         """
         Able to create a course.
         """
+        faculty = create_faculty(name="Engineering")
+
         response = self.client.post(
             reverse("course-list"),
             data={
                 "name": "Introduction to Computer Science",
                 "academic_startyear": 2022,
                 "description": "An introductory course on computer science.",
+                "faculty": faculty.id,
             },
             follow=True,
         )
@@ -801,6 +810,9 @@ class CourseModelTestsAsTeacher(APITestCase):
         # Make sure the teacher is added to the course
         course = Course.objects.get(name="Introduction to Computer Science")
         self.assertTrue(course.teachers.filter(id=self.user.id).exists())
+
+        # Make sure the course is linked to the faculty
+        self.assertEqual(course.faculty.id, faculty.id)
 
     def test_create_project(self):
         """
@@ -830,6 +842,37 @@ class CourseModelTestsAsTeacher(APITestCase):
         # Make sure there are no groups automatically made
         project = course.projects.get(name="become champions")
         self.assertEqual(project.groups.count(), 0)
+
+    def test_create_project_with_zip_file_as_structure(self):
+        """
+        Able to create a project for a course with a zip file as structure.
+        """
+        course = get_course()
+        course.teachers.add(self.user)
+
+        with open("data/testing/structures/zip_struct1.zip", "rb") as f:
+            response = self.client.post(
+                reverse("course-projects", args=[str(course.id)]),
+                data={
+                    "name": "become champions",
+                    "description": "win the jpl",
+                    "visible": True,
+                    "archived": False,
+                    "days": 50,
+                    "deadline": timezone.now() + timezone.timedelta(days=50),
+                    "start_date": timezone.now(),
+                    "group_size": 2,
+                    "zip_structure": SimpleUploadedFile('zip_struct1.zip', f.read(), content_type='application/zip'),
+                },
+                follow=True,
+            )
+
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(course.projects.filter(name="become champions").exists())
+
+            # Make sure there are structure checks added to the project
+            project = course.projects.get(name="become champions")
+            self.assertTrue(project.structure_checks.exists())
 
     def test_create_project_with_number_groups(self):
         """

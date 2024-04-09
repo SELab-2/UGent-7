@@ -63,6 +63,7 @@ export function useCourses(): CoursesState {
                 name: courseData.name,
                 description: courseData.description,
                 academic_startyear: courseData.academic_startyear,
+                faculty: courseData.faculty?.id,
             },
             course,
             Course.fromJSON,

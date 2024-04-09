@@ -11,7 +11,8 @@ from api.serializers.course_serializer import (CourseCloneSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
                                                TeacherJoinSerializer,
-                                               TeacherLeaveSerializer)
+                                               TeacherLeaveSerializer,
+                                               CreateCourseSerializer)
 from api.serializers.project_serializer import (CreateProjectSerializer,
                                                 ProjectSerializer)
 from api.serializers.student_serializer import StudentSerializer
@@ -35,7 +36,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     # TODO: Creating should return the info of the new object and not a message "created" (General TODO)
     def create(self, request: Request, *_):
         """Override the create method to add the teacher to the course"""
-        serializer = CourseSerializer(data=request.data, context={"request": request})
+        serializer = CreateCourseSerializer(data=request.data, context={"request": request})
 
         if serializer.is_valid(raise_exception=True):
             course = serializer.save()
@@ -44,10 +45,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             if is_teacher(request.user):
                 course.teachers.add(request.user.id)
 
-        return Response(
-            {"message": gettext("courses.success.create")},
-            status=status.HTTP_201_CREATED
-        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=False)
     def search(self, request: Request) -> Response:

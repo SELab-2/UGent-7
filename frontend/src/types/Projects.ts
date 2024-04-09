@@ -18,6 +18,7 @@ export class Project {
         public score_visible: boolean,
         public group_size: number,
 
+        public structure_file: File | null = null,
         public course: Course | null = null,
         public structureChecks: StructureCheck[] = [],
         public extra_checks: ExtraCheck[] = [],
