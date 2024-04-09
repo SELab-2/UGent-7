@@ -10,10 +10,9 @@ from django.dispatch import Signal, receiver
 run_extra_checks = Signal()
 
 # Receivers
-
-
 @receiver(user_created)
 def _user_creation(user: User, attributes: dict, **_):
+    print(user)
     """Upon user creation, auto-populate additional properties"""
     student_id: str = attributes.get("ugentStudentID")
 
