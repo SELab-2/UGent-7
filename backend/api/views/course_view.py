@@ -1,28 +1,30 @@
-from django.utils.translation import gettext
-from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.request import Request
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
 from api.models.course import Course
-from api.permissions.course_permissions import (
-    CoursePermission,
-    CourseAssistantPermission,
-    CourseStudentPermission,
-    CourseTeacherPermission
-)
+from api.permissions.course_permissions import (CourseAssistantPermission,
+                                                CoursePermission,
+                                                CourseStudentPermission,
+                                                CourseTeacherPermission)
 from api.permissions.role_permissions import IsTeacher, is_teacher
-from api.serializers.course_serializer import (
-    CourseSerializer, StudentJoinSerializer, StudentLeaveSerializer, CourseCloneSerializer,
-    TeacherJoinSerializer, TeacherLeaveSerializer, CreateCourseSerializer
-)
-from api.views.pagination.basic_pagination import BasicPagination
-from api.serializers.teacher_serializer import TeacherSerializer
-from api.serializers.assistant_serializer import AssistantSerializer, AssistantIDSerializer
+from api.serializers.assistant_serializer import (AssistantIDSerializer,
+                                                  AssistantSerializer)
+from api.serializers.course_serializer import (CourseCloneSerializer,
+                                               CourseSerializer,
+                                               StudentJoinSerializer,
+                                               StudentLeaveSerializer,
+                                               TeacherJoinSerializer,
+                                               TeacherLeaveSerializer,
+                                               CreateCourseSerializer)
+from api.serializers.project_serializer import (CreateProjectSerializer,
+                                                ProjectSerializer)
 from api.serializers.student_serializer import StudentSerializer
-from api.serializers.project_serializer import ProjectSerializer, CreateProjectSerializer
+from api.serializers.teacher_serializer import TeacherSerializer
+from api.views.pagination.basic_pagination import BasicPagination
+from django.utils.translation import gettext
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -31,6 +33,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     permission_classes = [IsAdminUser | CoursePermission]
 
+    # TODO: Creating should return the info of the new object and not a message "created" (General TODO)
     def create(self, request: Request, *_):
         """Override the create method to add the teacher to the course"""
         serializer = CreateCourseSerializer(data=request.data, context={"request": request})
@@ -42,10 +45,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             if is_teacher(request.user):
                 course.teachers.add(request.user.id)
 
-        return Response(
-            {"message": gettext("courses.success.create")},
-            status=status.HTTP_201_CREATED
-        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=False)
     def search(self, request: Request) -> Response:

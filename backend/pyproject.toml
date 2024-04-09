@@ -23,6 +23,7 @@ gunicorn = "^21.2.0"
 whitenoise = "^6.6.0"
 flake8 = "^7.0.0"
 celery-types = "^0.22.0"
+docker = "^7.0.0"
 faker = "^24.7.1"
 django-seed = "^0.3.1"
 

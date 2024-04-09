@@ -1,7 +1,4 @@
-from api.models.checks import DockerImage
-from api.models.submission import ErrorTemplates
 from django.db import migrations, models
-from ypovoli.settings import FILE_PATHS
 
 
 class Migration(migrations.Migration):
@@ -16,7 +13,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=256, blank=False, null=False)),
-                ('file_path', models.FileField(upload_to=FILE_PATHS["docker_images"], max_length=256, blank=False, null=False)),
+                ('file_path', models.FileField(upload_to="docker_images", max_length=256, blank=False, null=False)),
                 ('custom', models.BooleanField(default=False, blank=False, null=False)),
             ]
         ),
