@@ -65,6 +65,7 @@
         "courses": {
             "create": "Create course",
             "edit": "Edit course",
+            "clone": "Clone course",
             "name": "Course name",
             "description": "Description",
             "year": "Academic year"

@@ -17,6 +17,18 @@ const props = defineProps<{ courses: Course[] }>();
 /* Dialog state to select the course you want to create a project for */
 const displayCourseSelection = ref(false);
 
+/* Method that handles the click on the create button. Displays the dialog if more than 1 course available,
+otherwise directly routes to the create page for the given course. */
+const handleCreateButton = (): void => {
+    // If more then 1 course available, display the dialog
+    if (props.courses && props.courses.length > 1) {
+        displayCourseSelection.value = true;
+    } else if (props.courses && props.courses.length === 1) {
+        // Only one course available, directly route to the project creation view
+        createProjectForCourse(props.courses[0].id);
+    }
+};
+
 /* Method to route to the project creation view */
 const createProjectForCourse = (courseId: string): void => {
     push({ name: 'project-create', params: { courseId } });
@@ -31,7 +43,7 @@ const createProjectForCourse = (courseId: string): void => {
         :icon="PrimeIcons.PLUS"
         icon-pos="right"
         class="custom-button"
-        @click="displayCourseSelection = true"
+        @click="handleCreateButton"
     />
     <!-- Dialog to select the course you want to create a project for -->
     <Dialog

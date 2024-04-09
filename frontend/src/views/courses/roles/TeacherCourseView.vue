@@ -6,7 +6,7 @@ import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
-import { onMounted } from 'vue';
+import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 
 /* Props */
 const props = defineProps<{
@@ -24,16 +24,32 @@ const { t } = useI18n();
         <!-- Course title -->
         <Title class="m-0">{{ props.course.name }}</Title>
 
-        <!-- Update course button -->
-        <RouterLink :to="{ name: 'course-edit', params: { courseId: props.course.id } }">
-            <Button
-                :icon="PrimeIcons.PENCIL"
-                icon-pos="right"
-                class="custom-button"
-                style="height: 51px; width: 51px"
-                aria-label="Update Course"
-            />
-        </RouterLink>
+        <ButtonGroup class="flex align-items-center space-x-2">
+            <!-- Update course button -->
+            <div class="tooltip">
+                <RouterLink :to="{ name: 'course-edit', params: { courseId: props.course.id } }">
+                    <Button
+                        :icon="PrimeIcons.PENCIL"
+                        icon-pos="right"
+                        class="custom-button"
+                        style="height: 51px; width: 51px; margin-right: 10px"
+                    />
+                </RouterLink>
+                <span class="tooltiptext"> {{ t('views.courses.edit') }}</span>
+            </div>
+            
+            <!-- Clone button to clone the course -->
+            <div class="tooltip">
+                <Button
+                    :icon="PrimeIcons.CLONE"
+                    icon-pos="right"
+                    class="custom-button"
+                    style="height: 51px; width: 51px"
+                    aria-label="Clone Course"
+                />
+                <span class="tooltiptext">{{ t('views.courses.clone') }}</span>
+            </div>
+        </ButtonGroup>
     </div>
     <!-- Description -->
     <p>{{ props.course.description }}</p>
@@ -41,9 +57,39 @@ const { t } = useI18n();
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
+
+        <!-- Create project button -->
+        <ProjectCreateButton :courses="[course]" />
     </div>
     <!-- Project list body -->
     <ProjectList :courses="[course]" />
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+</style>

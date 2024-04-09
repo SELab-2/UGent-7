@@ -67,6 +67,7 @@
         "courses": {
           "create": "Creëer vak",
           "edit": "Bewerk vak",
+          "clone": "Kloon vak",
           "name": "Vaknaam",
           "description": "Beschrijving",
           "year": "Academiejaar",

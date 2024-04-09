@@ -3,6 +3,7 @@ import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
+import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 
 /* Props */
 const props = defineProps<{
@@ -26,6 +27,9 @@ const { t } = useI18n();
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
+
+        <!-- Create project button -->
+        <ProjectCreateButton :courses="[course]" />
     </div>
     <!-- Project list body -->
     <ProjectList :courses="[course]" />
