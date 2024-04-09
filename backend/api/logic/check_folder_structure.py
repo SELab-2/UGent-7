@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils.translation import gettext
 
 
+# TODO: Move all to tasks module
 def parse_zip_file(project, dir_path):  # TODO block paths that start with ..
     dir_path = os.path.normpath(os.path.join(settings.MEDIA_ROOT, dir_path))
     struct = get_zip_structure(dir_path)

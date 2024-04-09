@@ -1,6 +1,5 @@
 import threading
 from collections import defaultdict
-from os import error
 from smtplib import SMTPException
 from typing import DefaultDict, Dict, List
 
@@ -37,8 +36,12 @@ def _send_mail(mail: mail.EmailMessage, result: List[bool]):
         result[0] = False
 
 
+# TODO: Maybe convert to a bunch of celery tasks
+# TODO: Move to tasks module
+# TODO: Retry 3
+# https://docs.celeryq.dev/en/v5.3.6/getting-started/next-steps.html#next-steps
 # Send all unsent emails
-@shared_task
+@shared_task(ignore_result=True)
 def _send_mails():
     # All notifications that need to be sent
     notifications = Notification.objects.filter(is_sent=False)

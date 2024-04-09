@@ -26,6 +26,7 @@ celery-types = "^0.22.0"
 docker = "^7.0.0"
 faker = "^24.7.1"
 django-seed = "^0.3.1"
+django-celery-results = "^2.5.1"
 
 
 [build-system]

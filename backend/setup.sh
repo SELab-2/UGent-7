@@ -4,6 +4,7 @@ poetry install > /dev/null
 
 echo "Migrating database..."
 python manage.py migrate > /dev/null
+python manage.py migrate django_celery_results > /dev/null
 
 echo "Populating database..."
 python manage.py loaddata */fixtures/* > /dev/null
