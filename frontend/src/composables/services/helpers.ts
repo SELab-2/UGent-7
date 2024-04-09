@@ -37,11 +37,12 @@ export async function create<T>(
     data: any,
     ref: Ref<T | null>,
     fromJson: (data: any) => T,
+    content_type: string = 'application/json',
 ): Promise<void> {
     try {
         const response = await client.post(endpoint, data, {
             headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': content_type,
             },
         });
         ref.value = fromJson(response.data);

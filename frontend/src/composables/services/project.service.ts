@@ -93,6 +93,7 @@ export function useProject(): ProjectState {
             },
             project,
             Project.fromJSON,
+            'multipart/form-data'
         );
     }
 
