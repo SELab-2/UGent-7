@@ -66,6 +66,7 @@
         },
         "courses": {
             "create": "Create course",
+            "edit": "Edit course",
             "name": "Course name",
             "description": "Description",
             "faculty": "Faculty"

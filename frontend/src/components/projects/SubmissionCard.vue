@@ -29,7 +29,7 @@ const formattedDeadline = computed(() => {
 </script>
 
 <template>
-    <Card class="border-round project-card">
+    <Card class="border-round">
         <template #content>
             <div>
                 <div class="mb-3">

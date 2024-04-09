@@ -22,7 +22,7 @@ const images = Object.keys(
 </script>
 
 <template>
-    <Card class="border-round">
+    <Card class="border-round course-card">
         <template #header>
             <img
                 class="w-full h-12rem border-round-top"
@@ -48,4 +48,10 @@ const images = Object.keys(
     </Card>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.course-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+</style>

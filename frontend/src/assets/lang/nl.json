@@ -23,9 +23,8 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
-            "no_projects": "Geen projecten gevonden.",
-            "no_courses": "Geen vakken gevonden.",
-            "select_course": "Selecteer het vak waarvoor je een project wil maken:"
+            "select_course": "Selecteer het vak waarvoor je een project wil maken:",
+            "showPastProjects": "Projecten met verstreken deadline"
         },
         "login": {
             "title": "Inloggen",
@@ -68,6 +67,7 @@
         },
         "courses": {
           "create": "Creëer vak",
+          "edit": "Bewerk vak",
           "name": "Vaknaam",
           "description": "Beschrijving",
           "faculty": "Faculteit",
