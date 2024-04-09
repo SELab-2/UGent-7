@@ -139,6 +139,9 @@
         "required": "Dit veld is verplicht",
         "deadline": "De deadline moet na de startdatum liggen"
     },
+    "confirmations": {
+        "clone_course": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar."
+    },
     "primevue": {
         "accept": "Ja",
         "addRule": "Voeg regel toe",

@@ -2,6 +2,7 @@ import App from '@/views/App.vue';
 import router from '@/router/router';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 import Ripple from 'primevue/ripple';
 import { i18n } from '@/config/i18n.ts';
 import { createApp } from 'vue';
@@ -17,6 +18,7 @@ app.use(i18n);
 app.use(router);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
+app.use(ConfirmationService);
 
 /* Bind app directives */
 app.directive('ripple', Ripple);

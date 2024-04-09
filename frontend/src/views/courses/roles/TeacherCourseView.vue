@@ -2,11 +2,17 @@
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import Button from 'primevue/button';
+import ButtonGroup from 'primevue/buttongroup';
+import InputSwitch from 'primevue/inputswitch';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
+import { useCourses } from '@/composables/services/courses.service';
+import { ref } from 'vue';
 
 /* Props */
 const props = defineProps<{
@@ -15,6 +21,25 @@ const props = defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
+const { cloneCourse } = useCourses();
+const confirm = useConfirm();
+
+/* State for the confirm dialog to clone a course */
+const cloneAssistants = ref<boolean>(false);
+
+/* Methods */
+const handleClone = async () => {
+    console.log('Cloning course');
+    // Show a confirmation dialog before cloning the course
+    confirm.require({
+        message: t('confirmations.clone_course'),
+        header: t('views.courses.clone'),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => cloneCourse(props.course.id, cloneAssistants.value),
+        reject: () => { }
+    });
+};
+
 
 </script>
 
@@ -40,12 +65,28 @@ const { t } = useI18n();
             
             <!-- Clone button to clone the course -->
             <div class="tooltip">
+                <ConfirmDialog>
+                    <template #container="{ message, acceptCallback, rejectCallback }">
+                        <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px;">
+                            <span class="font-bold text-2xl">{{ message.header }}</span>
+                            <p class="mb-4">{{ message.message }}</p>
+                            <div class="flex items-center mb-4">
+                                <label for="cloneAssistants" class="mr-2">Clone assistants:</label>
+                                <InputSwitch v-model="cloneAssistants" id="cloneAssistants" class="p-inputswitch-sm" />
+                            </div>
+                            <div class="flex gap-2 justify-content-end">
+                                <Button label="Cancel" outlined rounded @click="rejectCallback"></Button>
+                                <Button label="Save" @click="acceptCallback" rounded></Button>
+                            </div>
+                        </div>
+                    </template>
+                </ConfirmDialog>
                 <Button
                     :icon="PrimeIcons.CLONE"
                     icon-pos="right"
                     class="custom-button"
                     style="height: 51px; width: 51px"
-                    aria-label="Clone Course"
+                    @click="handleClone()"
                 />
                 <span class="tooltiptext">{{ t('views.courses.clone') }}</span>
             </div>
