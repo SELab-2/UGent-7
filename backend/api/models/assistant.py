@@ -1,9 +1,10 @@
 from django.db import models
 from authentication.models import User
 from api.models.course import Course
+from api.models.generics.role import RoleMixin
 
 
-class Assistant(User):
+class Assistant(User, RoleMixin):
     """This model represents a single assistant.
     It extends the User model from the authentication app with
     assistant-specific attributes.

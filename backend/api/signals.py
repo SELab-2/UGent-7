@@ -13,12 +13,12 @@ run_extra_checks = Signal()
 
 
 @receiver(user_created)
-def user_creation(user: User, attributes: dict, **_):
+def _user_creation(user: User, attributes: dict, **_):
     """Upon user creation, auto-populate additional properties"""
     student_id: str = attributes.get("ugentStudentID")
 
     if student_id is not None:
-        Student(user_ptr=user, student_id=student_id).save_base(raw=True)
+        Student.create(user, student_id=student_id)
 
 
 @receiver(run_extra_checks)
