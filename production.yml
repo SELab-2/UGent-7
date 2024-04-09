@@ -64,7 +64,7 @@ services:
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
-    command: bash -c "./setup.sh && gunicorn --config gunicorn_config.py ypovoli.wsgi:application"
+    command: sh -c "./setup.sh && gunicorn --config gunicorn_config.py ypovoli.wsgi:application"
     expose:
       - 8080
     depends_on:
