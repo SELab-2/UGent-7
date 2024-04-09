@@ -55,40 +55,34 @@ const { t } = useI18n();
                     },
                 }"
             >
-                <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
+                <Button class="align-self-end" :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
             </RouterLink>
         </template>
     </Card>
 </template>
 
 <style lang="scss">
-@import '@/assets/scss/theme/theme.scss';
-.icon-color {
-    color: $primaryColor;
-    font-size: $fontSize;
-}
-
-.border-round {
-    border-radius: $borderRadius;
-}
-
 .project-card {
     border-style: solid;
-    border-width: $borderWidth;
-    border-color: $primaryLightColor;
+    border-width: 1px;
+    border-color: var(--primary-color-light);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
     .p-card-body {
         background: white;
     }
+
     .p-card-header {
-        padding: $cardBodyPadding;
-        background: $primaryLightColor;
+        padding: var(--content-padding);
+        background: var(--primary-color-light);
     }
+
     .p-card-content {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 100%;
     }
 }
 </style>
