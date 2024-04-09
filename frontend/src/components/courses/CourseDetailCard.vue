@@ -16,7 +16,7 @@ const { t } = useI18n();
 /* Default image thumbnails */
 const images = Object.keys(
     import.meta.glob('@/assets/img/placeholders/*', {
-        eager: true,
+        eager: true, query: 'url'
     }),
 );
 </script>
