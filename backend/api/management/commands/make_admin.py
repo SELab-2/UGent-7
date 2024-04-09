@@ -16,6 +16,5 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR('User not found, first log in !'))
             return
         student = student.get()
-        student.is_staff = True
-        student.save()
+        student.make_admin()
         self.stdout.write(self.style.SUCCESS('Successfully made the user admin!'))

@@ -84,7 +84,7 @@ export const useAuthStore = defineStore('auth', () => {
                 user.value = User.fromJSON(response.data as User);
             }
 
-            if (view.value === null) {
+            if (view.value === null || !user.value.hasRoles(view.value)) {
                 view.value = user.value.roles[0];
             }
 
