@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import moment from 'moment';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
-import Button from 'primevue/button';
 import Calendar, { type CalendarDateSlotOptions } from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';
 import { useProject } from '@/composables/services/project.service';
@@ -76,7 +75,7 @@ async function loadProjects(): Promise<void> {
 function getQueryDate(): Date {
     const queryDate = query.date as string;
 
-    if (queryDate) {
+    if (queryDate != null) {
         const date = moment(queryDate);
 
         if (date.isValid()) {
@@ -126,12 +125,9 @@ watch(
     { immediate: true },
 );
 
-watch(
-    selectedDate,
-    (date) => {
-        push({ query: { date: moment(date).format('YYYY-MM-DD') } });
-    }
-);
+watch(selectedDate, (date) => {
+    push({ query: { date: moment(date).format('YYYY-MM-DD') } });
+});
 </script>
 
 <template>
@@ -201,7 +197,7 @@ watch(
 
                     <template v-if="user?.isTeacher() || user?.isAssistant()">
                         <!-- Add project button -->
-                        <ProjectCreateButton :courses="(user as RoleUser).courses"/>
+                        <ProjectCreateButton :courses="(user as RoleUser).courses" />
                     </template>
                 </div>
             </div>

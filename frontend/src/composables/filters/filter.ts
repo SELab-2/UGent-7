@@ -19,14 +19,14 @@ export function useFilter(initial: Filter): FilterState {
      *
      * @param callback
      */
-    function onFilter(callback: () => Promise<void>) {
+    function onFilter(callback: () => Promise<void>): void {
         watchDebounced(
             filter,
             async () => {
                 await push({
                     query: {
                         ...query,
-                        ...filter.value
+                        ...filter.value,
                     },
                 });
 
@@ -37,6 +37,7 @@ export function useFilter(initial: Filter): FilterState {
     }
 
     return {
-        filter, onFilter
+        filter,
+        onFilter,
     };
 }

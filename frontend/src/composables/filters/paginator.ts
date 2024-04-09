@@ -15,8 +15,8 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
     const { push } = useRouter();
 
     /* State */
-    const page = ref<number>(parseInt(query.page as string) || initialPage);
-    const pageSize = ref<number>(parseInt(query.pageSize as string) || initialPageSize);
+    const page = ref<number>(initialPage);
+    const pageSize = ref<number>(initialPageSize);
 
     /* Watchers */
     watch(
@@ -60,7 +60,7 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
      *
      * @param callback
      */
-    async function onPaginate(callback: () => Promise<void>) {
+    function onPaginate(callback: () => Promise<void>): void {
         watch(page, async () => {
             await callback();
         });

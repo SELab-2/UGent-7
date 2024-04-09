@@ -1,4 +1,4 @@
-import { LocationQuery } from 'vue-router';
+import { type LocationQuery } from 'vue-router';
 
 export type CourseFilter = {
     faculties: string[];
@@ -7,7 +7,7 @@ export type CourseFilter = {
 
 export interface Filter {
     search: string;
-    [key: string]: string|string[];
+    [key: string]: string | string[];
 }
 
 /**
@@ -17,17 +17,17 @@ export interface Filter {
  */
 export function getCourseFilters(query: LocationQuery): CourseFilter {
     const filters: CourseFilter = {
-        search: query.search?.toString() || '',
+        search: query.search?.toString() ?? '',
         faculties: [],
         years: [],
     };
 
-    if (query.faculties) {
-        filters.faculties = getQueryList(query.faculties as string|string[]);
+    if (query.faculties !== undefined) {
+        filters.faculties = getQueryList(query.faculties as string | string[]);
     }
 
-    if (query.years) {
-        filters.years = getQueryList(query.years as string|string[]);
+    if (query.years !== undefined) {
+        filters.years = getQueryList(query.years as string | string[]);
     }
 
     return filters;

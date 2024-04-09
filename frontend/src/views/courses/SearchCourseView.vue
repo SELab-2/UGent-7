@@ -17,7 +17,7 @@ import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { getCourseFilters } from '@/types/filter/Filter.ts';
 
 /* Composable injections */
