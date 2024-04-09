@@ -17,6 +17,7 @@ const { t } = useI18n();
 const images = Object.keys(
     import.meta.glob('@/assets/img/placeholders/*', {
         eager: true,
+        query: 'url',
     }),
 );
 </script>

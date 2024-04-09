@@ -7,3 +7,5 @@ WORKDIR /code
 
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --only main
+
+COPY . ./
