@@ -59,7 +59,7 @@ export function useCourses(): CoursesState {
 
     async function createCourse(courseData: Course): Promise<void> {
         const endpoint = endpoints.courses.index;
-        await create<Response>(
+        await create<Course>(
             endpoint,
             {
                 name: courseData.name,
@@ -67,8 +67,8 @@ export function useCourses(): CoursesState {
                 academic_startyear: courseData.academic_startyear,
                 faculty: courseData.faculty?.id,
             },
-            response,
-            Response.fromJSON,
+            course,
+            Course.fromJSON,
         );
     }
 

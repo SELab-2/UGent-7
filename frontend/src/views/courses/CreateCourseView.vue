@@ -69,6 +69,7 @@ const submitCourse = async (): Promise<void> => {
     }
 };
 
+/* Get the current academic year */
 const currentAcademicYear = () => {
     if (new Date().getMonth() < 9) {
         return new Date().getFullYear() - 1;

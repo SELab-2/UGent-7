@@ -867,7 +867,6 @@ class CourseModelTestsAsTeacher(APITestCase):
                 follow=True,
             )
 
-            # Debugging print statements
             self.assertEqual(response.status_code, 200)
             self.assertTrue(course.projects.filter(name="become champions").exists())
 
