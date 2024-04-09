@@ -16,9 +16,3 @@
     student_id: null
     courses:
       - 1
-- model: api.student
-  pk: '000200694919'
-  fields:
-    student_id: null
-    courses:
-      - 1

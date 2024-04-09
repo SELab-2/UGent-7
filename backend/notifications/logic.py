@@ -54,6 +54,7 @@ def _send_mails():
     # Connection with the mail server
     connection = mail.get_connection()
 
+    # Construct and send each mail
     for notification in notifications:
         message = get_message_dict(notification)
         content = _("Email %(name)s %(title)s %(description)s") % {

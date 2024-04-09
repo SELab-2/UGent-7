@@ -1,6 +1,8 @@
 from rest_framework import viewsets
+
 from ..models.submission import Submission, SubmissionFile
-from ..serializers.submission_serializer import SubmissionSerializer, SubmissionFileSerializer
+from ..serializers.submission_serializer import (SubmissionFileSerializer,
+                                                 SubmissionSerializer)
 
 
 class SubmissionFileViewSet(viewsets.ModelViewSet):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-13 23:12+0100\n"
+"POT-Creation-Date: 2024-04-06 10:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,54 +18,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: helpers/check_folder_structure.py:141
+#: logic/check_folder_structure.py:142
 msgid "zip.errors.invalid_structure.blocked_extension_found"
 msgstr "The submitted zip file contains a file with a non-allowed extension."
 
-#: helpers/check_folder_structure.py:145 helpers/check_folder_structure.py:196
+#: logic/check_folder_structure.py:146 logic/check_folder_structure.py:197
 msgid "zip.success"
 msgstr "The submitted zip file succeeds in all checks."
 
-#: helpers/check_folder_structure.py:148
+#: logic/check_folder_structure.py:149
 msgid "zip.errors.invalid_structure.obligated_extension_not_found"
 msgstr ""
 "The submitted zip file doesn't have any file with a certain file extension "
 "that's obligated."
 
-#: helpers/check_folder_structure.py:175
+#: logic/check_folder_structure.py:176
 msgid "zip.errors.invalid_structure.directory_not_defined"
 msgstr "An obligated directory was not found in the submitted zip file."
 
-#: helpers/check_folder_structure.py:195
+#: logic/check_folder_structure.py:196
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
 msgstr ""
 "There was a directory found in the submitted zip file, which was not asked "
 "for."
 
-#: serializers/course_serializer.py:58 serializers/course_serializer.py:77
+#: serializers/checks_serializer.py:61
+msgid "extra_check.error.docker_image"
+msgstr "The field 'docker_image' is required."
+
+#: serializers/checks_serializer.py:65
+msgid "extra_check.error.timeout"
+msgstr "The field 'timeout' cannot be greater than 1000."
+
+#: serializers/course_serializer.py:59 serializers/course_serializer.py:78
+#: serializers/course_serializer.py:97 serializers/course_serializer.py:116
 msgid "courses.error.context"
 msgstr "The course is not supplied in the context."
 
-#: serializers/course_serializer.py:64 tests/test_locale.py:28
+#: serializers/course_serializer.py:65 tests/test_locale.py:28
 #: tests/test_locale.py:38
 msgid "courses.error.students.already_present"
 msgstr "The student is already present in the course."
 
-#: serializers/course_serializer.py:68 serializers/course_serializer.py:87
+#: serializers/course_serializer.py:69 serializers/course_serializer.py:88
+#: serializers/course_serializer.py:107 serializers/course_serializer.py:126
 msgid "courses.error.past_course"
 msgstr "The course is from a past year, thus cannot be manipulated."
 
-#: serializers/course_serializer.py:83
+#: serializers/course_serializer.py:84
 msgid "courses.error.students.not_present"
 msgstr "The student is not present in the course."
 
-#: serializers/course_serializer.py:97
+#: serializers/course_serializer.py:103
 msgid "courses.error.teachers.already_present"
 msgstr "The teacher is already present in the course."
 
-#: serializers/course_serializer.py:116
+#: serializers/course_serializer.py:122
 msgid "courses.error.teachers.not_present"
 msgstr "The teacher is not present in the course."
+
+#: serializers/docker_serializer.py:19
+msgid "docker.errors.custom"
+msgstr "User is not allowed to create public images"
 
 #: serializers/group_serializer.py:47
 msgid "group.errors.score_exceeds_max"
@@ -95,70 +109,95 @@ msgstr "The student is already in the group."
 msgid "group.errors.not_present"
 msgstr "The student is currently not in the group."
 
-#: serializers/project_serializer.py:56
+#: serializers/project_serializer.py:47
 msgid "project.errors.context"
 msgstr "The project is not supplied in the context."
 
-#: serializers/project_serializer.py:60
+#: serializers/project_serializer.py:51
 msgid "project.errors.start_date_in_past"
 msgstr "The start date of the project lies in the past."
 
-#: serializers/project_serializer.py:64
+#: serializers/project_serializer.py:55
 msgid "project.errors.deadline_before_start_date"
 msgstr "The deadline of the project lies before the start date of the project."
 
-#: serializers/project_serializer.py:89
+#: serializers/project_serializer.py:105 tests/test_submission.py:358
 msgid "project.error.submissions.past_project"
 msgstr "The deadline of the project has already passed."
 
-#: serializers/project_serializer.py:92
+#: serializers/project_serializer.py:108 tests/test_submission.py:429
 msgid "project.error.submissions.non_visible_project"
 msgstr "The project is currently in a non-visible state."
 
-#: serializers/project_serializer.py:95
+#: serializers/project_serializer.py:111 tests/test_submission.py:459
 msgid "project.error.submissions.archived_project"
 msgstr "The project is archived."
 
-#: views/course_view.py:58
-msgid "courses.success.assistants.add"
-msgstr "The assistant was successfully added to the course."
+#: serializers/project_serializer.py:120 tests/test_project.py:590
+msgid "project.error.structure_checks.already_existing"
+msgstr "The structure check is already present in the project."
 
-#: views/course_view.py:77
-msgid "courses.success.assistants.remove"
-msgstr "The assistant was successfully removed from the course."
+#: serializers/project_serializer.py:136 tests/test_project.py:623
+msgid "project.error.structure_checks.extension_blocked_and_obligated"
+msgstr ""
 
-#: views/course_view.py:111
-msgid "courses.success.students.add"
-msgstr "The student was successfully added to the course."
-
-#: views/course_view.py:131
-msgid "courses.success.students.remove"
-msgstr "The student was successfully removed from the course."
-
-#: views/course_view.py:172
-msgid "course.success.teachers.add"
-msgstr "The teacher was successfully added to the course."
-
-#: views/course_view.py:195
-msgid "course.success.teachers.remove"
-msgstr "The teacher was successfully removed from the course."
-
-#: views/course_view.py:186
-msgid "course.success.project.add"
-msgstr "The project was successfully added to the course."
-
-#: views/group_view.py:73
-msgid "group.success.students.add"
-msgstr "The student was successfully added to the group."
-
-#: views/group_view.py:92
-msgid "group.success.students.remove"
-msgstr "The student was successfully removed from the group."
-
-#: views/group_view.py:111
+#: tests/test_submission.py:331 tests/test_submission.py:399
+#: views/group_view.py:110
 msgid "group.success.submissions.add"
 msgstr "The submission was successfully added to the group."
 
-#: views/project_view.py:80
+#: views/admin_view.py:29
+msgid "admins.success.add"
+msgstr "The admin was successfully added."
+
+#: views/course_view.py:48
+msgid "courses.success.create"
+msgstr "The course was successfully created."
+
+#: views/course_view.py:112
+msgid "courses.success.assistants.add"
+msgstr "The assistant was successfully added to the course."
+
+#: views/course_view.py:132
+msgid "courses.success.assistants.remove"
+msgstr "The assistant was successfully removed from the course."
+
+#: views/course_view.py:167
+msgid "courses.success.students.add"
+msgstr "The student was successfully added to the course."
+
+#: views/course_view.py:188
+msgid "courses.success.students.remove"
+msgstr "The student was successfully removed from the course."
+
+#: views/course_view.py:223
+msgid "courses.success.teachers.add"
+msgstr "The teacher was successfully added to the course."
+
+#: views/course_view.py:244
+msgid "courses.success.teachers.remove"
+msgstr "The teacher was successfully removed from the course."
+
+#: views/course_view.py:280
+msgid "course.success.project.add"
+msgstr "The project was successfully added to the course."
+
+#: views/group_view.py:71
+msgid "group.success.students.add"
+msgstr "The student was successfully added to the group."
+
+#: views/group_view.py:91
+msgid "group.success.students.remove"
+msgstr "The student was successfully removed from the group."
+
+#: views/project_view.py:87
 msgid "project.success.groups.created"
 msgstr "A group was successfully created for the project."
+
+#: views/project_view.py:125
+msgid "project.success.structure_check.add"
+msgstr "A strucure check was successfully created for the project."
+
+#: views/project_view.py:161
+msgid "project.success.extra_check.add"
+msgstr "The extra check check was successfully added to the project."
