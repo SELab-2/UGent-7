@@ -60,7 +60,7 @@ class CourseStudentPermission(CoursePermission):
             return user.is_authenticated
 
         # Only students can add or remove themselves from a course.
-        if is_student(user) and request.data.get("student_id") == user.id:
+        if is_student(user) and request.data.get("student") == user.id:
             return True
 
         # Teachers and assistants can add and remove any student.
@@ -77,4 +77,4 @@ class CourseTeacherPermission(CoursePermission):
             return user.is_authenticated
 
         # Only teachers can add or remove themselves from a course.
-        return is_teacher(user) and request.data.get("teacher_id") == user.id
+        return is_teacher(user) and request.data.get("teacher") == user.id

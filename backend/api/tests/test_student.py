@@ -1,52 +1,9 @@
 import json
-from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from api.models.student import Student
-from api.models.course import Course
-from authentication.models import Faculty, User
-
-
-def create_course(name, academic_startyear, description=None, parent_course=None):
-    """
-    Create a Course with the given arguments.
-    """
-    return Course.objects.create(
-        name=name,
-        academic_startyear=academic_startyear,
-        description=description,
-        parent_course=parent_course,
-    )
-
-
-def create_faculty(name):
-    """Create a Faculty with the given arguments."""
-    return Faculty.objects.create(id=name, name=name)
-
-
-def create_student(id, first_name, last_name, email, faculty=None, courses=None):
-    """
-    Create a student with the given arguments.
-    """
-    username = f"{first_name}_{last_name}"
-    student = Student.objects.create(
-        id=id,
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        create_time=timezone.now(),
-    )
-
-    if faculty is not None:
-        for fac in faculty:
-            student.faculties.add(fac)
-
-    if courses is not None:
-        for cours in courses:
-            student.courses.add(cours)
-
-    return student
+from api.tests.helpers import create_student, create_course, create_faculty, create_user
+from authentication.models import User
 
 
 class StudentModelTests(APITestCase):
@@ -58,7 +15,7 @@ class StudentModelTests(APITestCase):
 
     def test_no_student(self):
         """
-        able to retrieve no student before publishing it.
+        Able to retrieve no student before publishing it.
         """
 
         response_root = self.client.get(reverse("student-list"), follow=True)
@@ -69,6 +26,63 @@ class StudentModelTests(APITestCase):
         content_json = json.loads(response_root.content.decode("utf-8"))
         # Assert that the parsed JSON is an empty list
         self.assertEqual(content_json, [])
+
+    def test_activate_new(self):
+        """Able to add a new student role to a user"""
+        # Create the initial user
+        user = create_user("1", "Saul", "Goodman", "saul@goodman.com")
+
+        # Attempt to add the student role to the user
+        response_root = self.client.post(
+            reverse("student-list"),
+            data={"user": user.id, "student_id": "02000341"},
+            follow=True
+        )
+
+        # Assert a 200 status code
+        self.assertEqual(response_root.status_code, 200)
+
+        # Assert that an active student exists with the user ID
+        self.assertTrue(Student.objects.filter(id=user.id, is_active=True).exists())
+
+    def test_activate_old(self):
+        """Able to re-activate an existing student role"""
+        # Create the initial student, but don't activate
+        student = create_student("1", "Saul", "Goodman", "saul@goodman.com", "02000341", False)
+
+        # Attempt to add the student role to the user
+        response_root = self.client.post(
+            reverse("student-list"),
+            data={"user": student.id, "student_id": "14300020"},
+            follow=True
+        )
+
+        # Assert a 200 status code
+        self.assertEqual(response_root.status_code, 200)
+
+        # Assert that an active student exists with the user ID
+        self.assertTrue(Student.objects.filter(id=student.id, is_active=True).exists())
+
+        # Assert that the old student ID was kept
+        self.assertTrue(Student.objects.filter(student_id=student.student_id).exists())
+
+    def test_deactivate(self):
+        """Able to deactivate an existing student role"""
+        # Create the initial student
+        student = create_student("1", "Saul", "Goodman", "saul@goodman.com", "02000341", True)
+
+        # Attempt to remove the student role from the user
+        response_root = self.client.delete(
+            reverse("student-detail", args=[student.id]),
+            data={"user": student.id, "student_id": "14300020"},
+            follow=True
+        )
+
+        # Assert a 200 status code
+        self.assertEqual(response_root.status_code, 200)
+
+        # Assert that an active student with the user ID no longer exists
+        self.assertFalse(Student.objects.filter(id=student.id, is_active=True).exists())
 
     def test_student_exists(self):
         """
@@ -106,10 +120,10 @@ class StudentModelTests(APITestCase):
         """
         # Create multiple assistant
         student1 = create_student(
-            id=1, first_name="Johny", last_name="Doeg", email="john.doe@example.com"
+            id=1, first_name="Johny", last_name="Doe", email="john.doe@example.com", student_id="0100"
         )
         student2 = create_student(
-            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com"
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com", student_id="0200"
         )
 
         # Make a GET request to retrieve the student
@@ -144,7 +158,7 @@ class StudentModelTests(APITestCase):
         """
         Able to retrieve details of a single student.
         """
-        # Create an student for testing with the name "Bob Peeters"
+        # Create a student for testing with the name "Bob Peeters"
         student = create_student(
             id=5, first_name="Bob", last_name="Peeters", email="bob.peeters@example.com"
         )
@@ -173,7 +187,7 @@ class StudentModelTests(APITestCase):
         """
         Able to retrieve faculty details of a single student.
         """
-        # Create an student for testing with the name "Bob Peeters"
+        # Create a student for testing with the name "Bob Peeters"
         faculty = create_faculty(name="testing faculty")
         student = create_student(
             id=5,
@@ -220,7 +234,7 @@ class StudentModelTests(APITestCase):
         """
         Able to retrieve courses details of a single student.
         """
-        # Create an student for testing with the name "Bob Peeters"
+        # Create a student for testing with the name "Bob Peeters"
         course1 = create_course(
             name="Introduction to Computer Science",
             academic_startyear=2022,

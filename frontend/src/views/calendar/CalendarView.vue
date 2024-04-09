@@ -163,7 +163,7 @@ watch(selectedDate, (date) => {
                             <div class="flex border-round-md" v-for="project in projectsWithDeadline" :key="project.id">
                                 <!-- Icon -->
                                 <div
-                                    class="bg-primary flex justify-content-center align-items-center p-4 w-3 w-8rem h-8rem"
+                                    class="bg-primary flex justify-content-center align-items-center p-4 w-3 w-7rem h-7rem"
                                 >
                                     <span class="pi pi-book text-6xl" />
                                 </div>
@@ -180,7 +180,7 @@ watch(selectedDate, (date) => {
                                             },
                                         }"
                                     >
-                                        <h3 class="flex gap-3 align-items-center text-primary m-0 text-3xl">
+                                        <h3 class="flex gap-3 align-items-center text-primary m-0 text-xl">
                                             {{ project.name }} <span class="pi pi-arrow-right text-xl" />
                                         </h3>
                                     </RouterLink>

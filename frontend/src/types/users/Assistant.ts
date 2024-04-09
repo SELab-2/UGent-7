@@ -29,7 +29,6 @@ export class Assistant extends User {
             faculties,
             create_time,
             last_login,
-            courses,
         );
     }
 

@@ -4,6 +4,7 @@ import type { Course } from '@/types/Course.ts';
 import { type Faculty } from '@/types/Faculty.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
+import { type Student } from '@/types/users/Student.ts';
 
 /* Props */
 defineProps<{
@@ -11,7 +12,7 @@ defineProps<{
 }>();
 
 /* Composable injections */
-const { user, student } = storeToRefs(useAuthStore());
+const { user } = storeToRefs(useAuthStore());
 
 /* State */
 const images = Object.keys(
@@ -25,7 +26,12 @@ const images = Object.keys(
  * @param faculty
  */
 function getFacultyIcon(faculty: Faculty): string {
-    return images.find((image) => image.includes(faculty.id)) ?? '';
+    return (
+        images.find((image) => {
+            image = image.replace('/src/assets/img/faculties/', '');
+            return image === faculty.id + '.png';
+        }) ?? ''
+    );
 }
 </script>
 
@@ -47,7 +53,7 @@ function getFacultyIcon(faculty: Faculty): string {
                 </div>
             </div>
             <div v-if="user && user.isStudent()">
-                <StudentCourseJoinButton :student="student" :course="course" />
+                <StudentCourseJoinButton :student="user as Student" :course="course" />
             </div>
         </div>
     </div>

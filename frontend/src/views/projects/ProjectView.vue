@@ -33,7 +33,7 @@ const filteredCourses = computed(
         <div class="flex justify-content-between align-items-center mb-6">
             <!-- Project list title -->
             <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
-            <YearSelector :years="user?.academic_years" v-model="selectedYear" />
+            <YearSelector :years="user.academic_years" v-model="selectedYear" v-if="user" />
         </div>
 
         <ProjectList v-if="filteredCourses" :courses="filteredCourses" />

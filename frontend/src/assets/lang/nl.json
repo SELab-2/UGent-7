@@ -23,9 +23,8 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
-            "no_projects": "Geen projecten gevonden.",
-            "no_courses": "Geen vakken gevonden.",
-            "select_course": "Selecteer het vak waarvoor je een project wil maken:"
+            "select_course": "Selecteer het vak waarvoor je een project wil maken:",
+            "showPastProjects": "Projecten met verstreken deadline"
         },
         "login": {
             "title": "Inloggen",
@@ -56,7 +55,9 @@
             "group_size": "Aantal studenten per groep (1 voor individueel project)",
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
-            "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten"
+            "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
+            "docker_upload": "Upload een Dockerfile",
+            "submission_structure": "Structuur van hoe de indiening moet gebeuren"
         },
         "submissions": {
             "title": "Inzendingen",
@@ -70,7 +71,7 @@
           "clone": "Kloon vak",
           "name": "Vaknaam",
           "description": "Beschrijving",
-          "year": "Academiejaar",
+          "faculty": "Faculteit",
           "search": {
               "search": "Zoeken",
               "faculty": "Faculteit",

@@ -18,6 +18,6 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 
 class TeacherIDSerializer(serializers.Serializer):
-    teacher_id = serializers.PrimaryKeyRelatedField(
+    teacher = serializers.PrimaryKeyRelatedField(
         queryset=Teacher.objects.all()
     )

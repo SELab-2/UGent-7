@@ -13,9 +13,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         username = options['username']
         student = Student.objects.filter(username=username)
+
         if student.count() == 0:
             self.stdout.write(self.style.ERROR('User not found, first log in !'))
             return
-        student = student.get()
-        Teacher.objects.create(id=student.id, create_time=student.create_time)
+
+        Teacher.create(student.get(), create_time=student.create_time)
+
         self.stdout.write(self.style.SUCCESS('Successfully made the user teacher!'))

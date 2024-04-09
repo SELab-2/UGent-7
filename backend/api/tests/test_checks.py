@@ -1,73 +1,14 @@
 import json
-from django.utils import timezone
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from authentication.models import User
-from api.models.checks import StructureCheck, ExtraCheck
-from api.models.extension import FileExtension
-from api.models.project import Project
-from api.models.course import Course
-from django.conf import settings
-
-
-def create_fileExtension(id, extension):
-    """
-    Create a FileExtension with the given arguments.
-    """
-    return FileExtension.objects.create(id=id, extension=extension)
-
-
-def create_structure_check(id, name, project, obligated_extensions, blocked_extensions):
-    """
-    Create a StructureCheck with the given arguments.
-    """
-    check = StructureCheck.objects.create(id=id, name=name, project=project)
-
-    for ext in obligated_extensions:
-        check.obligated_extensions.add(ext)
-    for ext in blocked_extensions:
-        check.blocked_extensions.add(ext)
-
-    return check
-
-
-# def create_extra_check(id, project, run_script):
-#     """
-#     Create an ExtraCheck with the given arguments.
-#     """
-#     return ExtraCheck.objects.create(id=id, project=project, run_script=run_script)
-
-
-def create_project(id, name, description, visible, archived, days, course, max_score, group_size):
-    """Create a Project with the given arguments."""
-    deadline = timezone.now() + timezone.timedelta(days=days)
-
-    return Project.objects.create(
-        id=id,
-        name=name,
-        description=description,
-        visible=visible,
-        archived=archived,
-        deadline=deadline,
-        course=course,
-        max_score=max_score,
-        group_size=group_size,
-    )
-
-
-def create_course(id, name, academic_startyear):
-    """
-    Create a Course with the given arguments.
-    """
-    return Course.objects.create(
-        id=id, name=name, academic_startyear=academic_startyear
-    )
+from api.tests.helpers import create_structure_check, create_file_extension, create_project, create_course
 
 
 def get_project():
-    course = create_course(id=1, name="Course", academic_startyear=2021)
+    course = create_course(name="Course", academic_startyear=2021)
+
     project = create_project(
-        id=1,
         name="Project",
         description="Description",
         visible=True,
@@ -86,9 +27,9 @@ class FileExtensionModelTests(APITestCase):
             User.get_dummy_admin()
         )
 
-    def test_no_fileExtension(self):
+    def test_no_file_extension(self):
         """
-        Able to retrieve no FileExtension before publishing it.
+        Able to retrieve no file_extension before publishing it.
         """
         response_root = self.client.get(reverse("file-extension-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
@@ -99,13 +40,13 @@ class FileExtensionModelTests(APITestCase):
         # Assert that the parsed JSON is an empty list
         self.assertEqual(content_json, [])
 
-    def test_fileExtension_exists(self):
+    def test_file_extension_exists(self):
         """
-        Able to retrieve a single fileExtension after creating it.
+        Able to retrieve a single file_extension after creating it.
         """
-        fileExtension = create_fileExtension(id=5, extension="pdf")
+        file_extension = create_file_extension(extension="pdf")
 
-        # Make a GET request to retrieve the fileExtension
+        # Make a GET request to retrieve the file_extension
         response = self.client.get(reverse("file-extension-list"), follow=True)
 
         # Check if the response was successful
@@ -117,23 +58,23 @@ class FileExtensionModelTests(APITestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with one fileExtension
+        # Assert that the parsed JSON is a list with one file_extension
         self.assertEqual(len(content_json), 1)
 
-        # Assert the details of the retrieved fileExtension
-        # match the created fileExtension
-        retrieved_fileExtension = content_json[0]
-        self.assertEqual(retrieved_fileExtension["extension"], fileExtension.extension)
+        # Assert the details of the retrieved file_extension
+        # match the created file_extension
+        retrieved_file_extension = content_json[0]
+        self.assertEqual(retrieved_file_extension["extension"], file_extension.extension)
 
-    def test_multiple_fileExtension(self):
+    def test_multiple_file_extension(self):
         """
-        Able to retrieve multiple fileExtension after creating them.
+        Able to retrieve multiple file_extension after creating them.
         """
-        # Create multiple fileExtension
-        fileExtension1 = create_fileExtension(id=1, extension="jpg")
-        fileExtension2 = create_fileExtension(id=2, extension="png")
+        # Create multiple file_extension
+        file_extension1 = create_file_extension(extension="jpg")
+        file_extension2 = create_file_extension(extension="png")
 
-        # Make a GET request to retrieve the fileExtension
+        # Make a GET request to retrieve the file_extension
         response = self.client.get(reverse("file-extension-list"), follow=True)
 
         # Check if the response was successful
@@ -145,30 +86,30 @@ class FileExtensionModelTests(APITestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with multiple fileExtension
+        # Assert that the parsed JSON is a list with multiple file_extension
         self.assertEqual(len(content_json), 2)
 
-        # Assert the details of the retrieved fileExtension
-        # match the created fileExtension
-        retrieved_fileExtension1, retrieved_fileExtension2 = content_json
+        # Assert the details of the retrieved file_extension
+        # match the created file_extension
+        retrieved_file_extension1, retrieved_file_extension2 = content_json
         self.assertEqual(
-            retrieved_fileExtension1["extension"], fileExtension1.extension
+            retrieved_file_extension1["extension"], file_extension1.extension
         )
 
         self.assertEqual(
-            retrieved_fileExtension2["extension"], fileExtension2.extension
+            retrieved_file_extension2["extension"], file_extension2.extension
         )
 
-    def test_fileExtension_detail_view(self):
+    def test_file_extension_detail_view(self):
         """
-        Able to retrieve details of a single fileExtension.
+        Able to retrieve details of a single file_extension.
         """
-        # Create an fileExtension for testing.
-        fileExtension = create_fileExtension(id=3, extension="zip")
+        # Create an file_extension for testing.
+        file_extension = create_file_extension(extension="zip")
 
-        # Make a GET request to retrieve the fileExtension details
+        # Make a GET request to retrieve the file_extension details
         response = self.client.get(
-            reverse("file-extension-detail", args=[str(fileExtension.id)]), follow=True
+            reverse("file-extension-detail", args=[str(file_extension.id)]), follow=True
         )
 
         # Check if the response was successful
@@ -180,9 +121,9 @@ class FileExtensionModelTests(APITestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert the details of the retrieved fileExtension
-        # match the created fileExtension
-        self.assertEqual(content_json["extension"], fileExtension.extension)
+        # Assert the details of the retrieved file_extension
+        # match the created file_extension
+        self.assertEqual(content_json["extension"], file_extension.extension)
 
 
 class StructureCheckModelTests(APITestCase):
@@ -206,16 +147,15 @@ class StructureCheckModelTests(APITestCase):
         Able to retrieve a single Checks after creating it.
         """
         # Create a Checks instance with some file extensions
-        fileExtension1 = create_fileExtension(id=1, extension="jpg")
-        fileExtension2 = create_fileExtension(id=2, extension="png")
-        fileExtension3 = create_fileExtension(id=3, extension="tar")
-        fileExtension4 = create_fileExtension(id=4, extension="wfp")
+        file_extension1 = create_file_extension(extension="jpg")
+        file_extension2 = create_file_extension(extension="png")
+        file_extension3 = create_file_extension(extension="tar")
+        file_extension4 = create_file_extension(extension="wfp")
         checks = create_structure_check(
-            id=1,
             name=".",
             project=get_project(),
-            obligated_extensions=[fileExtension1, fileExtension4],
-            blocked_extensions=[fileExtension2, fileExtension3],
+            obligated_extensions=[file_extension1, file_extension4],
+            blocked_extensions=[file_extension2, file_extension3],
         )
 
         # Make a GET request to retrieve the Checks
@@ -241,10 +181,10 @@ class StructureCheckModelTests(APITestCase):
 
         self.assertEqual(len(retrieved_obligated_file_extensions), 2)
         self.assertEqual(
-            retrieved_obligated_file_extensions[0]["extension"], fileExtension1.extension
+            retrieved_obligated_file_extensions[0]["extension"], file_extension1.extension
         )
         self.assertEqual(
-            retrieved_obligated_file_extensions[1]["extension"], fileExtension4.extension
+            retrieved_obligated_file_extensions[1]["extension"], file_extension4.extension
         )
 
         retrieved_blocked_file_extensions = retrieved_checks[
@@ -253,11 +193,11 @@ class StructureCheckModelTests(APITestCase):
         self.assertEqual(len(retrieved_blocked_file_extensions), 2)
         self.assertEqual(
             retrieved_blocked_file_extensions[0]["extension"],
-            fileExtension2.extension,
+            file_extension2.extension,
         )
         self.assertEqual(
             retrieved_blocked_file_extensions[1]["extension"],
-            fileExtension3.extension,
+            file_extension3.extension,
         )
 
 
@@ -282,7 +222,7 @@ class StructureCheckModelTests(APITestCase):
 #         Able to retrieve a single Checks after creating it.
 #         """
 #         checks = create_extra_check(
-#             id=1, project=get_project(), run_script="test.sh"
+#              project=get_project(), run_script="test.sh"
 #         )
 
 #         # Make a GET request to retrieve the Checks

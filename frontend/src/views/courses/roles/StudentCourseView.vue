@@ -11,7 +11,6 @@ const props = defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
-
 </script>
 
 <template>

@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db.models import Max
 from faker.providers import BaseProvider, DynamicProvider
 import random
+import time
 
 from authentication.models import Faculty
 from api.models.student import Student
@@ -105,8 +106,7 @@ class Providers(BaseProvider):
                 )
 
                 if faculty is not None:
-                    for fac in faculty:
-                        teacher.faculties.add(fac)
+                    teacher.faculties.add(*faculty)  # Add faculties in bulk
 
                 return teacher
             except Exception:
@@ -140,8 +140,7 @@ class Providers(BaseProvider):
                 )
 
                 if faculty is not None:
-                    for fac in faculty:
-                        assistant.faculties.add(fac)
+                    assistant.faculties.add(*faculty)  # Add faculties in bulk
 
                 return assistant
             except Exception:
@@ -176,8 +175,7 @@ class Providers(BaseProvider):
                 )
 
                 if faculty is not None:
-                    for fac in faculty:
-                        student.faculties.add(fac)
+                    student.faculties.add(*faculty)  # Add faculties in bulk
 
                 return student
             except Exception:
@@ -214,28 +212,34 @@ class Providers(BaseProvider):
 
                 # add students
                 student_count = fake.random_int(min=min_students, max=max_students)
-                while course.students.count() < student_count:
+                students_list = []
+                while len(students_list) < student_count:
                     student = fake.student_provider()
-                    if student not in course.students.all():
-                        course.students.add(student)
+                    if student not in students_list:
+                        students_list.append(student)
+                course.students.add(*students_list)  # Add students in bulk
 
                 # add teachers
                 teacher_count = fake.random_int(min=min_teachers, max=max_teachers)
-                while course.teachers.count() < teacher_count:
+                teachers_list = []
+                while len(teachers_list) < teacher_count:
                     teacher = fake.teacher_provider()
-                    if teacher not in course.teachers.all():
-                        course.teachers.add(teacher)
+                    if teacher not in teachers_list:
+                        teachers_list.append(teacher)
+                course.teachers.add(*teachers_list)  # Add teachers in bulk
 
                 # add assistants
                 assistant_count = fake.random_int(min=min_assistants, max=max_assistants)
-                while course.assistants.count() < assistant_count:
+                assistants_list = []
+                while len(assistants_list) < assistant_count:
                     assistant = fake.assistant_provider()
-                    if assistant not in course.assistants.all():
-                        course.assistants.add(assistant)
+                    if assistant not in assistants_list:
+                        assistants_list.append(assistant)
+                course.assistants.add(*assistants_list)  # Add assistants in bulk
 
-                # print(course_name)
                 return course
-            except Exception:
+            except Exception as e:
+                print(e)
                 tries += 1
         errHandler.stdout.write(errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique Course."))
 
@@ -307,10 +311,12 @@ class Providers(BaseProvider):
                 elif len(students_not_in_group) < max_group_size:
                     group.students.extend(students_not_in_group)
                 else:
+                    choosen_students = []
                     for _ in range(0, max_group_size):
                         random_student = students_not_in_group[fake.random_int(min=0, max=len(students_not_in_group))]
-                        group.students.add(random_student)
+                        choosen_students.append(random_student)
                         students_not_in_group.remove(random_student)
+                    group.students.add(*choosen_students)  # bulk add the students
 
                 return group
             except Exception:
@@ -386,10 +392,9 @@ class Providers(BaseProvider):
                     if extension not in blocked_extensions and extension not in obligated_extensions:
                         blocked_extensions.append(extension)
 
-                for ext in obligated_extensions:
-                    check.obligated_extensions.add(ext)
-                for ext in blocked_extensions:
-                    check.blocked_extensions.add(ext)
+                check.obligated_extensions.add(*obligated_extensions)
+                check.blocked_extensions.add(*blocked_extensions)
+
                 return check
             except Exception:
                 tries += 1
@@ -410,6 +415,46 @@ def update_providers():
     structureCheck_provider.elements = StructureCheck.objects.all()
 
 
+def update_Faculty_providers():
+    faculty_provider.elements = Faculty.objects.all()
+
+
+def update_Student_providers():
+    student_provider.elements = Student.objects.all()
+
+
+def update_Assistant_providers():
+    assistant_provider.elements = Assistant.objects.all()
+
+
+def update_Teacher_providers():
+    teacher_provider.elements = Teacher.objects.all()
+
+
+def update_Course_providers():
+    course_provider.elements = Course.objects.all()
+
+
+def update_Project_providers():
+    project_provider.elements = Project.objects.all()
+
+
+def update_Group_providers():
+    group_provider.elements = Group.objects.all()
+
+
+def update_Submission_providers():
+    Submission_provider.elements = Submission.objects.all()
+
+
+def update_FileExtension_providers():
+    fileExtension_provider.elements = FileExtension.objects.all()
+
+
+def update_StructureCheck_providers():
+    structureCheck_provider.elements = StructureCheck.objects.all()
+
+
 # add new providers to faker instance
 fake.add_provider(Providers)
 fake.add_provider(faculty_provider)
@@ -424,44 +469,67 @@ fake.add_provider(fileExtension_provider)
 fake.add_provider(structureCheck_provider)
 
 
+def format_time(execution_time):
+    if execution_time < 1:
+        return f"{execution_time * 1000:.2f} milliseconds"
+    elif execution_time < 60:
+        return f"{execution_time:.2f} seconds"
+    elif execution_time < 3600:
+        return f"{execution_time / 60:.2f} minutes"
+    else:
+        return f"{execution_time / 3600:.2f} hours"
+
+
 class Command(BaseCommand):
     help = 'seed the db with data'
 
-    def seed_data(self, amount, provider_function):
+    def seed_data(self, amount, provider_function, update_function):
         for _ in range(amount):
             provider_function(self)
-            update_providers()
+        update_function()
 
     def handle(self, *args, **options):
+        start_time = time.time()
         # TODO maybey take as option
-        # amount_of_students = 10_000
-        # amount_of_assistants = 1_000
-        # amount_of_teachers = 1_000
+        # amount_of_students = 50_000
+        # amount_of_assistants = 300
+        # amount_of_teachers = 500
         # amount_of_courses = 1_000
-        # amount_of_projects = 5_000
-        # amount_of_groups = 20_000
+        # amount_of_projects = 3_000
+        # amount_of_groups = 9_000
         # amount_of_submissions = 50_000
         # amount_of_file_extensions = 20
-        # amount_of_structure_checks = 10_000
+        # amount_of_structure_checks = 12_000
 
-        amount_of_students = 1
+        amount_of_students = 0
         amount_of_assistants = 0
         amount_of_teachers = 0
         amount_of_courses = 0
-        amount_of_projects = 0
+        amount_of_projects = 30_000
         amount_of_groups = 0
         amount_of_submissions = 0
         amount_of_file_extensions = 0
         amount_of_structure_checks = 0
 
-        self.seed_data(amount_of_students, fake.provide_student)
-        self.seed_data(amount_of_assistants, fake.provide_assistant)
-        self.seed_data(amount_of_teachers, fake.provide_teacher)
-        self.seed_data(amount_of_courses, fake.provide_course)
-        self.seed_data(amount_of_projects, fake.provide_project)
-        self.seed_data(amount_of_groups, fake.provide_group)
-        self.seed_data(amount_of_submissions, fake.provide_submission)
-        self.seed_data(amount_of_file_extensions, fake.provide_fileExtension)
-        self.seed_data(amount_of_structure_checks, fake.provide_structure_check)
+        self.seed_data(amount_of_students, fake.provide_student, update_Student_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded students!'))
+        self.seed_data(amount_of_assistants, fake.provide_assistant, update_Assistant_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded assistants!'))
+        self.seed_data(amount_of_teachers, fake.provide_teacher, update_Teacher_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded teachers!'))
+        self.seed_data(amount_of_courses, fake.provide_course, update_Course_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded courses!'))
+        self.seed_data(amount_of_projects, fake.provide_project, update_Project_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded projects!'))
+        self.seed_data(amount_of_groups, fake.provide_group, update_Group_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded groups!'))
+        self.seed_data(amount_of_submissions, fake.provide_submission, update_Submission_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded submissions!'))
+        self.seed_data(amount_of_file_extensions, fake.provide_fileExtension, update_FileExtension_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded fileExtensions!'))
+        self.seed_data(amount_of_structure_checks, fake.provide_structure_check, update_StructureCheck_providers)
+        self.stdout.write(self.style.SUCCESS('Successfully seeded structure_checks!'))
 
-        self.stdout.write(self.style.SUCCESS('Successfully seeded db!'))
+        end_time = time.time()
+        execution_time = end_time - start_time
+        self.stdout.write(self.style.SUCCESS(f"Successfully seeded db in {format_time(execution_time)}!"))

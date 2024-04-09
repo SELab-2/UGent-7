@@ -1,17 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useGroup } from '@/composables/services/groups.service.ts';
 
-const {
-    groups,
-    group,
-    getGroupByID,
-    getGroupsByProject,
-    getGroupsByStudent,
-
-    createGroup,
-    deleteGroup,
-} = useGroup();
+const { groups, group, getGroupByID, getGroupsByProject, getGroupsByStudent } = useGroup();
 
 describe('group', (): void => {
     it('gets group data by id', async () => {

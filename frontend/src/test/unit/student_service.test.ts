@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useStudents } from '@/composables/services/students.service.ts';
 import { Student } from '@/types/users/Student';
 
@@ -7,20 +7,11 @@ const {
     students,
     student,
 
-    response,
-
     getStudentByID,
     getStudents,
     getStudentsByCourse,
-    getStudentsByGroup,
 
     createStudent,
-    deleteStudent,
-
-    studentJoinCourse,
-    studentLeaveCourse,
-    studentJoinGroup,
-    studentLeaveGroup,
 } = useStudents();
 
 describe('students', (): void => {

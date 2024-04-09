@@ -10,7 +10,7 @@ interface TeacherState {
     teachers: Ref<Teacher[] | null>;
     teacher: Ref<Teacher | null>;
     response: Ref<Response | null>;
-    getTeacherByID: (id: string, init: boolean) => Promise<void>;
+    getTeacherByID: (id: string, init?: boolean) => Promise<void>;
     getTeacherByCourse: (courseId: string) => Promise<void>;
     getTeachers: () => Promise<void>;
     teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>;

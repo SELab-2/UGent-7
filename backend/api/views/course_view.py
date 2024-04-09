@@ -11,7 +11,8 @@ from api.serializers.course_serializer import (CourseCloneSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
                                                TeacherJoinSerializer,
-                                               TeacherLeaveSerializer)
+                                               TeacherLeaveSerializer,
+                                               CreateCourseSerializer)
 from api.serializers.project_serializer import (CreateProjectSerializer,
                                                 ProjectSerializer)
 from api.serializers.student_serializer import StudentSerializer
@@ -35,7 +36,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     # TODO: Creating should return the info of the new object and not a message "created" (General TODO)
     def create(self, request: Request, *_):
         """Override the create method to add the teacher to the course"""
-        serializer = CourseSerializer(data=request.data, context={"request": request})
+        serializer = CreateCourseSerializer(data=request.data, context={"request": request})
 
         if serializer.is_valid(raise_exception=True):
             course = serializer.save()
@@ -44,10 +45,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             if is_teacher(request.user):
                 course.teachers.add(request.user.id)
 
-        return Response(
-            {"message": gettext("courses.success.create")},
-            status=status.HTTP_201_CREATED
-        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=False)
     def search(self, request: Request) -> Response:
@@ -61,7 +59,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         # Filter the queryset based on the search term
         queryset = self.get_queryset().filter(
             name__icontains=search
-        )
+        ).order_by('faculty')
 
         # Filter the queryset based on selected years
         if years:
@@ -160,7 +158,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.students.add(
-                serializer.validated_data["student_id"]
+                serializer.validated_data["student"]
             )
 
         return Response({
@@ -181,7 +179,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.students.remove(
-                serializer.validated_data["student_id"]
+                serializer.validated_data["student"]
             )
 
         return Response({
@@ -216,7 +214,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.teachers.add(
-                serializer.validated_data["teacher_id"]
+                serializer.validated_data["teacher"]
             )
 
         return Response({
@@ -237,7 +235,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             course.teachers.remove(
-                serializer.validated_data["teacher_id"]
+                serializer.validated_data["teacher"]
             )
 
         return Response({
