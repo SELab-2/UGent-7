@@ -40,7 +40,7 @@ const items = computed(() => [
         route: 'courses',
     },
     {
-        icon: 'bookmark',
+        icon: 'file-plus',
         label: t('layout.header.navigation.projects'),
         route: 'projects',
     },
@@ -59,18 +59,16 @@ const items = computed(() => [
                 </div>
                 <div class="text-right ml-auto text-sm flex flex-column align-items-end gap-3">
                     <div class="flex align-items-center gap-3">
-                        <template v-if="user !== null && user.hasMultipleRoles()">
-                            <!-- Role selector -->
-                            <RoleSelector />
-                        </template>
+                        <!-- Role selector -->
+                        <RoleSelector v-if="user !== null && user.roles.length > 1" />
                         <!-- Language selector -->
                         <LanguageSelector />
                     </div>
                     <div>
                         <!-- User information -->
-                        <template v-if="user !== null">
+                        <template v-if="isAuthenticated && user">
                             <RouterLink :to="{ name: 'logout' }" class="text-white">
-                                {{ t('layout.header.user', [user.getFullName()]) }}
+                                Ingelogd als {{ user.getFullName() }}
                             </RouterLink>
                         </template>
                         <!-- Login button -->

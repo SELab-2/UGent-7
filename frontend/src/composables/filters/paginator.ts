@@ -6,7 +6,6 @@ export interface PaginatorState {
     pageSize: Ref<number>;
     first: Ref<number>;
     paginate: (newFirst: number) => Promise<void>;
-    onPaginate: (callback: () => Promise<void>) => void;
 }
 
 export function usePaginator(initialPage: number = 1, initialPageSize: number = 20): PaginatorState {
@@ -15,8 +14,8 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
     const { push } = useRouter();
 
     /* State */
-    const page = ref<number>(parseInt(query.page as string) || initialPage);
-    const pageSize = ref<number>(parseInt(query.pageSize as string) || initialPageSize);
+    const page = ref<number>(initialPage);
+    const pageSize = ref<number>(initialPageSize);
 
     /* Watchers */
     watch(
@@ -55,22 +54,10 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
         });
     }
 
-    /**
-     * On paginate callback
-     *
-     * @param callback
-     */
-    async function onPaginate(callback: () => Promise<void>) {
-        watch(page, async () => {
-            await callback();
-        });
-    }
-
     return {
         page,
         pageSize,
         first,
         paginate,
-        onPaginate,
     };
 }

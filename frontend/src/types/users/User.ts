@@ -89,24 +89,6 @@ export class User {
     }
 
     /**
-     * Check if the user has a role.
-     *
-     * @param roles
-     */
-    public hasRoles(...roles: Role[]): boolean {
-        return roles.every((role) => this.roles.includes(role));
-    }
-
-    /**
-     *  Check if the user has multiple roles.
-     *
-     *  @returns boolean
-     */
-    public hasMultipleRoles(): boolean {
-        return this.roles.length > 1;
-    }
-
-    /**
      * Convert a user object to a user instance.
      *
      * @param user

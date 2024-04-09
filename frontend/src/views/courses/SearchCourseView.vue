@@ -17,21 +17,19 @@ import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
-import { useRoute, useRouter } from 'vue-router';
-import { getCourseFilters } from '@/types/filter/Filter.ts';
+import { watchDebounced } from '@vueuse/core';
+import { COURSE_FILTER } from '@/types/filter/Filter.ts';
 
 /* Composable injections */
 const { t } = useI18n();
-const { query } = useRoute();
 const { user } = storeToRefs(useAuthStore());
 const { faculties, getFaculties } = useFaculty();
 const { pagination, searchCourses } = useCourses();
-const { onPaginate, paginate, page, first, pageSize } = usePaginator();
-const { filter, onFilter } = useFilter(getCourseFilters(query));
+const { paginate, page, first, pageSize } = usePaginator();
+const { filter } = useFilter(COURSE_FILTER);
 
 /* Fetch the faculties */
 onMounted(async () => {
-    // Fetch the faculties
     await getFaculties();
 
     /* Reset current page on filter changes */
@@ -44,18 +42,19 @@ onMounted(async () => {
         { deep: true },
     );
 
-    /**
-     * Fetch the courses based on the filter.
-     */
-    async function fetchCourses(): Promise<void> {
-        await searchCourses(filter.value, page.value, pageSize.value);
-    }
-
     /* Search courses on page change */
-    onPaginate(fetchCourses);
+    watch(page, async () => {
+        await searchCourses(filter.value, page.value, pageSize.value);
+    });
 
     /* Search courses on filter change */
-    onFilter(fetchCourses);
+    watchDebounced(
+        filter,
+        async () => {
+            await searchCourses(filter.value, page.value, pageSize.value);
+        },
+        { debounce: 500, immediate: true, deep: true },
+    );
 });
 </script>
 
