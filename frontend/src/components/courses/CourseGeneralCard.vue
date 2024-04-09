@@ -17,7 +17,8 @@ const { user } = storeToRefs(useAuthStore());
 /* State */
 const images = Object.keys(
     import.meta.glob('@/assets/img/faculties/*', {
-        eager: true, query: 'url'
+        eager: true,
+        query: 'url',
     }),
 );
 
