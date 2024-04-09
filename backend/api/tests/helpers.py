@@ -11,11 +11,12 @@ from api.models.submission import Submission
 from authentication.models import Faculty, User
 
 
-def create_faculty(name: str|int) -> Faculty:
+def create_faculty(name: str | int) -> Faculty:
     """Create a Faculty with the given arguments."""
     return Faculty.objects.create(id=name, name=name)
 
-def create_user(id: str|int, first_name: str, last_name: str, email: str, faculty: list[Faculty] = None) -> User:
+
+def create_user(id: str | int, first_name: str, last_name: str, email: str, faculty: list[Faculty] = None) -> User:
     username = f"{first_name.lower()}{last_name.lower()}"
 
     user = User.objects.create(
@@ -32,13 +33,24 @@ def create_user(id: str|int, first_name: str, last_name: str, email: str, facult
 
     return user
 
-def create_admin(id: str|int, first_name: str, last_name: str, email: str, faculty: list[Faculty] = None):
+
+def create_admin(id: str | int, first_name: str, last_name: str, email: str, faculty: list[Faculty] = None):
     """Create an Admin with the given arguments."""
     admin = create_user(id, first_name, last_name, email, faculty)
     admin.make_admin()
     return admin
 
-def create_student(id: str|int, first_name: str, last_name: str, email: str, student_id: str = "", is_active: bool = True, faculty: list[Faculty] = None, courses: list[Course] = None) -> Student:
+
+def create_student(
+        id: str | int,
+        first_name: str,
+        last_name: str,
+        email: str,
+        student_id: str = "",
+        is_active: bool = True,
+        faculty: list[Faculty] = None,
+        courses: list[Course] = None
+) -> Student:
     """Create a student with the given arguments."""
     username = f"{first_name.lower()}{last_name.lower()}"
 
@@ -62,6 +74,7 @@ def create_student(id: str|int, first_name: str, last_name: str, email: str, stu
             student.courses.add(course)
 
     return student
+
 
 def create_assistant(id, first_name, last_name, email, is_active: bool = True, faculty=None, courses=None):
     """Create an assistant with the given arguments."""
@@ -87,6 +100,7 @@ def create_assistant(id, first_name, last_name, email, is_active: bool = True, f
 
     return assistant
 
+
 def create_teacher(id, first_name, last_name, email, is_active: bool = True, faculty=None, courses=None):
     """Create an assistant with the given arguments."""
     username = f"{first_name.lower()}{last_name.lower()}"
@@ -111,9 +125,11 @@ def create_teacher(id, first_name, last_name, email, is_active: bool = True, fac
 
     return assistant
 
+
 def create_file_extension(extension):
     """Create a FileExtension with the given arguments."""
     return FileExtension.objects.create(extension=extension)
+
 
 def create_structure_check(name, project, obligated_extensions, blocked_extensions):
     """Create a StructureCheck with the given arguments."""
@@ -127,7 +143,8 @@ def create_structure_check(name, project, obligated_extensions, blocked_extensio
 
     return check
 
-def create_project(name, description,  days, course, max_score=5, group_size=5, visible=True, archived=False):
+
+def create_project(name, description, days, course, max_score=5, group_size=5, visible=True, archived=False):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timezone.timedelta(days=days)
 
@@ -142,7 +159,8 @@ def create_project(name, description,  days, course, max_score=5, group_size=5, 
         group_size=group_size,
     )
 
-def create_course(name: str|int, academic_startyear: int, description: str = None, parent_course: Course = None) -> Course:
+
+def create_course(name: str | int, academic_startyear: int, description: str = None, parent_course: Course = None) -> Course:
     """Create a Course with the given arguments."""
     return Course.objects.create(
         name=name,
@@ -151,9 +169,11 @@ def create_course(name: str|int, academic_startyear: int, description: str = Non
         parent_course=parent_course,
     )
 
-def create_group(project: Project, score: int =0) -> Group:
+
+def create_group(project: Project, score: int = 0) -> Group:
     """Create a Group with the given arguments."""
     return Group.objects.create(project=project, score=score)
+
 
 def create_submission(submission_number: int, group: Group, structure_checks_passed: bool) -> Submission:
     """Create a Submission with the given arguments."""

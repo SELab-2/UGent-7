@@ -9,7 +9,8 @@ from api.models.checks import ExtraCheck, StructureCheck
 from api.models.project import Project
 from api.models.student import Student
 from api.models.teacher import Teacher
-from api.tests.helpers import create_course, create_file_extension, create_project, create_group, create_submission, create_student, create_structure_check
+from api.tests.helpers import create_course, create_file_extension, create_project, create_group, create_submission, \
+    create_student, create_structure_check
 from authentication.models import User
 
 
@@ -534,7 +535,8 @@ class ProjectModelTests(APITestCase):
             {
                 "name": ".",
                 "obligated_extensions": [file_extension1.extension, file_extension4.extension],
-                "blocked_extensions": [file_extension1.extension, file_extension2.extension, file_extension3.extension]},
+                "blocked_extensions": [file_extension1.extension, file_extension2.extension,
+                                       file_extension3.extension]},
             follow=True,
         )
 

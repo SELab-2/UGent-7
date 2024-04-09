@@ -147,12 +147,11 @@ class StructureCheckModelTests(APITestCase):
         Able to retrieve a single Checks after creating it.
         """
         # Create a Checks instance with some file extensions
-        file_extension1 = create_file_extension( extension="jpg")
-        file_extension2 = create_file_extension( extension="png")
-        file_extension3 = create_file_extension( extension="tar")
-        file_extension4 = create_file_extension( extension="wfp")
+        file_extension1 = create_file_extension(extension="jpg")
+        file_extension2 = create_file_extension(extension="png")
+        file_extension3 = create_file_extension(extension="tar")
+        file_extension4 = create_file_extension(extension="wfp")
         checks = create_structure_check(
-            
             name=".",
             project=get_project(),
             obligated_extensions=[file_extension1, file_extension4],

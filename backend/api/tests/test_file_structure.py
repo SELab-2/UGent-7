@@ -25,7 +25,6 @@ class FileTestsTests(APITestCase):
     def test_parsing(self):
         course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
-            
             group_size=5,
             max_score=10,
             name="test",
@@ -173,7 +172,6 @@ class FileTestsTests(APITestCase):
     def test_checking_obligated_not_found(self):
         course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
-            
             group_size=5,
             max_score=10,
             name="test",
@@ -241,7 +239,6 @@ class FileTestsTests(APITestCase):
     def test_checking_obligated_directory_not_found(self):
         course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
-            
             group_size=5,
             max_score=10,
             name="test",
@@ -309,7 +306,6 @@ class FileTestsTests(APITestCase):
     def test_checking_blocked_extension_found(self):
         course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
-            
             group_size=5,
             max_score=10,
             name="test",
@@ -378,7 +374,6 @@ class FileTestsTests(APITestCase):
     def test_checking_extra_directory_found(self):
         course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
-            
             group_size=5,
             max_score=10,
             name="test",

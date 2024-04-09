@@ -49,7 +49,6 @@ class AssistantModelTests(APITestCase):
         # Assert that an active student exists with the user ID
         self.assertTrue(Assistant.objects.filter(id=assistant.id, is_active=True).exists())
 
-
     def test_deactivate(self):
         """Able to deactivate an existing student role"""
         # Create the initial student

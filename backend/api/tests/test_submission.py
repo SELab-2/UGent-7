@@ -23,15 +23,18 @@ def create_past_project(name, description, days, course, days_start_date):
         name=name, description=description, deadline=deadline, course=course, score_visible=True, start_date=start_date
     )
 
+
 def create_submission(group, submission_number):
     """Create a Submission with the given arguments."""
     return Submission.objects.create(
         group=group, submission_number=submission_number, submission_time=timezone.now(), structure_checks_passed=True
     )
 
+
 def create_submission_file(submission, file):
     """Create an SubmissionFile with the given arguments."""
     return SubmissionFile.objects.create(submission=submission, file=file)
+
 
 class SubmissionModelTests(APITestCase):
 

@@ -34,7 +34,9 @@ def get_student():
     """
     Return a random student to use in tests.
     """
-    return create_student(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmai.com", student_id="02000341")
+    return create_student(
+        id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmai.com", student_id="02000341"
+    )
 
 
 class CourseModelTests(APITestCase):
@@ -866,9 +868,15 @@ class CourseModelTestsAsTeacher(APITestCase):
         course.teachers.add(self.user)
 
         # Create some students
-        student1 = create_student(id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmail.com", student_id="0100")
-        student2 = create_student(id=6, first_name="Ronny", last_name="Deila", email="Ronny.Deila@gmail.com", student_id="0200")
-        student3 = create_student(id=7, first_name="Karel", last_name="Geraerts", email="Karel.Geraerts@gmail.com", student_id="0300")
+        student1 = create_student(
+            id=5, first_name="Simon", last_name="Mignolet", email="Simon.Mignolet@gmail.com", student_id="0100"
+        )
+        student2 = create_student(
+            id=6, first_name="Ronny", last_name="Deila", email="Ronny.Deila@gmail.com", student_id="0200"
+        )
+        student3 = create_student(
+            id=7, first_name="Karel", last_name="Geraerts", email="Karel.Geraerts@gmail.com", student_id="0300"
+        )
 
         # Add the students to the course
         course.students.add(student1)
