@@ -924,10 +924,7 @@ class CourseModelTestsAsTeacher(APITestCase):
         course = get_course()
         course.teachers.add(self.user)
 
-        with open("data/testing/structures/root.zip", "rb") as zip_file:
-
-            uploaded_file = SimpleUploadedFile("root.zip", zip_file.read(), content_type="application/zip")
-
+        with open("data/testing/structures/zip_struct1.zip", "rb") as f:
             response = self.client.post(
                 reverse("course-projects", args=[str(course.id)]),
                 data={
@@ -939,9 +936,7 @@ class CourseModelTestsAsTeacher(APITestCase):
                     "deadline": timezone.now() + timezone.timedelta(days=50),
                     "start_date": timezone.now(),
                     "group_size": 2,
-                },
-                files={
-                    "zip_structure": uploaded_file
+                    "zip_structure": SimpleUploadedFile('zip_struct1.zip', f.read(), content_type='application/zip'),
                 },
                 follow=True,
             )

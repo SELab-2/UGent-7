@@ -1,3 +1,5 @@
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 from django.utils.translation import gettext
 from rest_framework import serializers
 from api.models.project import Project
@@ -7,7 +9,7 @@ from django.utils import timezone
 from api.models.checks import FileExtension
 from api.serializers.submission_serializer import SubmissionSerializer
 from api.serializers.checks_serializer import StructureCheckSerializer
-from api.helpers.check_folder_structure import parse_zip_file
+from api.logic.check_folder_structure import parse_zip_file
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -60,17 +62,15 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class CreateProjectSerializer(ProjectSerializer):
     number_groups = serializers.IntegerField(min_value=1, required=False)
-    zip_structure = serializers.FileField(write_only=True, required=False)
+    zip_structure = serializers.FileField(required=False, read_only=True)
 
-    def create(self, validated_data):        
+    def create(self, validated_data):
         # Pop the 'number_groups' field from validated_data
         number_groups = validated_data.pop('number_groups', None)
 
         # Get the zip structure file from the request
         request = self.context.get('request')
         zip_structure = request.FILES.get('zip_structure')
-
-        print(zip_structure)
 
         # Create the project object without passing 'number_groups' field
         project = super().create(validated_data)
@@ -89,9 +89,16 @@ class CreateProjectSerializer(ProjectSerializer):
                 group = Group.objects.create(project=project)
                 group.students.add(student)
 
-        # If a zip_structure is provided, extract the contents
+        # If a zip_structure is provided, parse it to create the structure checks
         if zip_structure is not None:
-            parse_zip_file(project, zip_structure)
+            # Define tje temporary storage location
+            temp_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
+            # Save the file to the temporary location
+            temp_file_path = temp_storage.save(f"tmp/{zip_structure.name}", zip_structure)
+            # Pass the full path to the parse_zip_file function
+            parse_zip_file(project, temp_file_path)
+            # Delete the temporary file
+            temp_storage.delete(temp_file_path)
 
         return project
 
