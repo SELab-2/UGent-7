@@ -444,16 +444,6 @@ class Command(BaseCommand):
         amount_of_file_extensions = 20
         amount_of_structure_checks = 10_000
 
-        # amount_of_students = 1
-        # amount_of_assistants = 0
-        # amount_of_teachers = 0
-        # amount_of_courses = 0
-        # amount_of_projects = 0
-        # amount_of_groups = 0
-        # amount_of_submissions = 0
-        # amount_of_file_extensions = 0
-        # amount_of_structure_checks = 0
-
         self.seed_data(amount_of_students, fake.provide_student)
         self.seed_data(amount_of_assistants, fake.provide_assistant)
         self.seed_data(amount_of_teachers, fake.provide_teacher)
