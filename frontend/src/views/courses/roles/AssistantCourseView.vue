@@ -12,7 +12,6 @@ const props = defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
-
 </script>
 
 <template>
@@ -32,7 +31,7 @@ const { t } = useI18n();
         <ProjectCreateButton :courses="[course]" />
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="[course]" />
+    <ProjectList :courses="[course]" :showPast="false" />
 </template>
 
 <style scoped lang="scss"></style>

@@ -21,9 +21,9 @@ const displayCourseSelection = ref(false);
 otherwise directly routes to the create page for the given course. */
 const handleCreateButton = (): void => {
     // If more then 1 course available, display the dialog
-    if (props.courses && props.courses.length > 1) {
+    if (props.courses.length > 1) {
         displayCourseSelection.value = true;
-    } else if (props.courses && props.courses.length === 1) {
+    } else if (props.courses.length === 1) {
         // Only one course available, directly route to the project creation view
         createProjectForCourse(props.courses[0].id);
     }

@@ -16,7 +16,7 @@ interface CoursesState {
     getCoursesByTeacher: (teacherId: string) => Promise<void>;
     getCourseByAssistant: (assistantId: string) => Promise<void>;
     createCourse: (courseData: Course) => Promise<void>;
-    cloneCourse: (courseId: string, cloneAssistants: boolean) => Promise<void>;
+    cloneCourse: (courseId: string, cloneAssistants: boolean, cloneTeachers: boolean) => Promise<void>;
     deleteCourse: (id: string) => Promise<void>;
 }
 
@@ -70,9 +70,17 @@ export function useCourses(): CoursesState {
         );
     }
 
-    async function cloneCourse(courseId: string, cloneAssistants: boolean): Promise<void> {
+    async function cloneCourse(courseId: string, cloneAssistants: boolean, cloneTeachers: boolean): Promise<void> {
         const endpoint = endpoints.courses.clone.replace('{courseId}', courseId);
-        await create<Course>(endpoint, { cloneAssistants: cloneAssistants.toString() }, course, Course.fromJSON);
+        await create<Course>(
+            endpoint,
+            {
+                clone_assistants: cloneAssistants.toString(),
+                clone_teachers: cloneTeachers.toString(),
+            },
+            course,
+            Course.fromJSON,
+        );
     }
 
     async function deleteCourse(id: string): Promise<void> {

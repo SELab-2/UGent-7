@@ -26,21 +26,21 @@ const confirm = useConfirm();
 
 /* State for the confirm dialog to clone a course */
 const cloneAssistants = ref<boolean>(false);
+const cloneTeachers = ref<boolean>(false);
 
 /* Methods */
-const handleClone = async () => {
-    console.log('Cloning course');
+const handleClone = async (): Promise<void> => {
     // Show a confirmation dialog before cloning the course
     confirm.require({
         message: t('confirmations.clone_course'),
         header: t('views.courses.clone'),
         icon: 'pi pi-exclamation-triangle',
-        accept: () => cloneCourse(props.course.id, cloneAssistants.value),
-        reject: () => { }
+        accept: () => {
+            cloneCourse(props.course.id, cloneAssistants.value, cloneTeachers.value);
+        },
+        reject: () => {},
     });
 };
-
-
 </script>
 
 <template>
@@ -62,21 +62,27 @@ const handleClone = async () => {
                 </RouterLink>
                 <span class="tooltiptext"> {{ t('views.courses.edit') }}</span>
             </div>
-            
+
             <!-- Clone button to clone the course -->
             <div class="tooltip">
                 <ConfirmDialog>
                     <template #container="{ message, acceptCallback, rejectCallback }">
-                        <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px;">
+                        <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
                             <span class="font-bold text-2xl">{{ message.header }}</span>
                             <p class="mb-4">{{ message.message }}</p>
                             <div class="flex items-center mb-4">
-                                <label for="cloneAssistants" class="mr-2">Clone assistants:</label>
+                                <label for="cloneTeachers" class="mr-2">{{ t('views.courses.clone_teachers') }}</label>
+                                <InputSwitch v-model="cloneTeachers" id="cloneTeachers" class="p-inputswitch-sm" />
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <label for="cloneAssistants" class="mr-2">{{
+                                    t('views.courses.clone_assistants')
+                                }}</label>
                                 <InputSwitch v-model="cloneAssistants" id="cloneAssistants" class="p-inputswitch-sm" />
                             </div>
                             <div class="flex gap-2 justify-content-end">
-                                <Button label="Cancel" outlined rounded @click="rejectCallback"></Button>
-                                <Button label="Save" @click="acceptCallback" rounded></Button>
+                                <Button outlined rounded @click="rejectCallback">{{ t('primevue.cancel') }}</Button>
+                                <Button @click="acceptCallback" rounded>{{ t('views.courses.clone') }}</Button>
                             </div>
                         </div>
                     </template>
@@ -103,7 +109,7 @@ const handleClone = async () => {
         <ProjectCreateButton :courses="[course]" />
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="[course]" />
+    <ProjectList :courses="[course]" :showPast="false" />
 </template>
 
 <style scoped lang="scss">

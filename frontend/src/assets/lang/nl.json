@@ -69,6 +69,8 @@
           "create": "Creëer vak",
           "edit": "Bewerk vak",
           "clone": "Kloon vak",
+          "clone_assistants": "Kloon assistenten:",
+          "clone_teachers": "Kloon lesgevers:",
           "name": "Vaknaam",
           "description": "Beschrijving",
           "faculty": "Faculteit",

@@ -27,7 +27,7 @@ const { t } = useI18n();
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="[course]" />
+    <ProjectList :courses="[course]" :showPast="false" />
 </template>
 
 <style scoped lang="scss"></style>

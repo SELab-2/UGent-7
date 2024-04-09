@@ -67,6 +67,8 @@
         "courses": {
             "create": "Create course",
             "clone": "Clone course",
+            "clone_assistants": "Clone assistants:",
+            "clone_teachers": "Clone teachers:",
             "edit": "Edit course",
             "name": "Course name",
             "description": "Description",
