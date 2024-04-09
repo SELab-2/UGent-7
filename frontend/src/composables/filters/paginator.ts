@@ -6,6 +6,7 @@ export interface PaginatorState {
     pageSize: Ref<number>;
     first: Ref<number>;
     paginate: (newFirst: number) => Promise<void>;
+    onPaginate: (callback: () => Promise<void>) => void;
 }
 
 export function usePaginator(initialPage: number = 1, initialPageSize: number = 20): PaginatorState {
@@ -54,10 +55,22 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
         });
     }
 
+    /**
+     * On paginate callback
+     *
+     * @param callback
+     */
+    function onPaginate(callback: () => Promise<void>): void {
+        watch(page, async () => {
+            await callback();
+        });
+    }
+
     return {
         page,
         pageSize,
         first,
         paginate,
+        onPaginate,
     };
 }
