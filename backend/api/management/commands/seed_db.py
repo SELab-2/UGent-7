@@ -75,7 +75,7 @@ class Providers(BaseProvider):
 
     MAX_TRIES = 1000
     min_id = 1
-    max_id = 9_999_999_999_999_999_999_999
+    max_id = 999_999_999_99
 
     min_salt = 1
     max_salt = 100_000
@@ -93,7 +93,7 @@ class Providers(BaseProvider):
                 faculty = [
                     fake.faculty_provider().id for _ in range(0, fake.random_int(min=min_faculty, max=max_faculty))
                 ]  # generate 1 or 2 facultys
-                username = f"{first}_{last}_{fake.random_int(min=self.min_salt, max=self.max_salt)}"
+                username = f"{first.lower()}{last.lower()}_{fake.random_int(min=self.min_salt, max=self.max_salt)}"[:12]
                 teacher = Teacher.objects.create(
                     id=id,
                     first_name=first,
@@ -127,7 +127,7 @@ class Providers(BaseProvider):
                 faculty = [
                     fake.faculty_provider().id for _ in range(0, fake.random_int(min=min_faculty, max=max_faculty))
                 ]  # generate 1 or 2 or 3 facultys
-                username = f"{first}_{last}_{fake.random_int(min=self.min_salt, max=self.max_salt)}"
+                username = f"{first.lower()}{last.lower()}_{fake.random_int(min=self.min_salt, max=self.max_salt)}"[:12]
                 assistant = Assistant.objects.create(
                     id=id,
                     first_name=first,
@@ -161,7 +161,7 @@ class Providers(BaseProvider):
                 faculty = [
                     fake.faculty_provider().id for _ in range(0, fake.random_int(min=min_faculty, max=max_faculty))
                 ]  # generate 1 or 2 or 3 facultys
-                username = f"{first}_{last}_{fake.random_int(min=self.min_salt, max=self.max_salt)}"
+                username = f"{first.lower()}{last.lower()}_{fake.random_int(min=self.min_salt, max=self.max_salt)}"[:12]
                 student = Student.objects.create(
                     id=id,
                     first_name=first,
@@ -501,11 +501,11 @@ class Command(BaseCommand):
         # amount_of_file_extensions = 20
         # amount_of_structure_checks = 12_000
 
-        amount_of_students = 0
+        amount_of_students = 10
         amount_of_assistants = 0
         amount_of_teachers = 0
         amount_of_courses = 0
-        amount_of_projects = 30_000
+        amount_of_projects = 0
         amount_of_groups = 0
         amount_of_submissions = 0
         amount_of_file_extensions = 0
