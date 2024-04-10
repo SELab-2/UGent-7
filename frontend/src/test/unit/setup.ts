@@ -522,16 +522,13 @@ export const restHandlers = [
         faculties.push(newFaculty);
         return HttpResponse.json(faculties);
     }),
-
-    /*
-    http.post(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'),
-        ({ params }) => {
-            const newGroup = params.body; // Assuming the request body contains the new group data
-            groups.push(newGroup);
-            return HttpResponse.json(newGroup);
-        }
-    )
-    */
+    http.post(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'), async ({ request, params }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newGroup = JSON.parse(requestBody);
+        groups.push(newGroup);
+        return HttpResponse.json(groups);
+    }),
 ];
 
 const server = setupServer(...restHandlers);

@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { useGroup } from '@/composables/services/groups.service.ts';
+import { Group } from '@/types/Group';
+import { useProject } from '@/composables/services/project.service';
+import { type Project } from '@/types/Projects';
 
-const { groups, group, getGroupByID, getGroupsByProject, getGroupsByStudent } = useGroup();
+const { groups, group, getGroupByID, getGroupsByProject, getGroupsByStudent, createGroup } = useGroup();
+const { project, getProjectByID } = useProject();
 
 describe('group', (): void => {
     it('gets group data by id', async () => {
@@ -52,11 +56,32 @@ describe('group', (): void => {
         expect(groups.value?.[0]?.submissions).toEqual([]);
     });
 
-    /*
-    it("create group", async () => {
-        let gr = new Group("3",10)
-        await createGroup(gr, "0")
-        console.log(group.value)
-    })
-    */
+    it('create group', async () => {
+        await getProjectByID('0');
+        const exampleProject: Project = project.value!;
+
+        const exampleGroup = new Group(
+            '', // id
+            10, // score
+            exampleProject, // project
+            [], // students
+            [], // submissions
+        );
+
+        await getGroupsByProject('0');
+
+        expect(groups).not.toBeNull();
+        expect(Array.isArray(groups.value)).toBe(true);
+        const prevLength = groups.value?.length ?? 0;
+
+        await createGroup(exampleGroup, '0');
+        await getGroupsByProject('0');
+
+        expect(groups).not.toBeNull();
+        expect(Array.isArray(groups.value)).toBe(true);
+        expect(groups.value?.length).toBe(prevLength + 1);
+
+        expect(groups.value?.[prevLength]?.score).toBe(10);
+        expect(groups.value?.[prevLength]?.project).toBeNull();
+    });
 });

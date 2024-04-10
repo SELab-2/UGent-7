@@ -26,7 +26,7 @@ describe('faculty', (): void => {
     it('create faculty', async () => {
         const exampleFaculty = new Faculty(
             'faculty_id', // id
-            'faculty_name' // name
+            'faculty_name', // name
         );
 
         await getFaculties();
