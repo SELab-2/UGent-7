@@ -1,13 +1,16 @@
 from random import choices, randint
 from django.core.management.base import BaseCommand
-from api.seeders.faker import faker
 from authentication.models import User
+from api.seeders.faker import faker
+from api.seeders.seeder import seed_students, seed_assistants, seed_teachers, seed_courses, seed_projects, seed_groups, \
+    seed_submissions
 from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
 from api.models.teacher import Teacher
 from api.models.student import Student
 from api.models.assistant import Assistant
+from api.models.submission import Submission
 
 
 def _seed_users(num: int = 500):
@@ -79,28 +82,42 @@ def _seed_groups(num: int = 3_000):
 class Command(BaseCommand):
     help = 'seed the db with data'
 
-    amount_of_users = 10_000
-    amount_of_courses = 1_000
-    amount_of_projects = 1_000
-    amount_of_groups = 5_000
+    amount_of_students = 50_000
+    amount_of_assistants = 5_000
+    amount_of_teachers = 1_500
+    amount_of_courses = 1_500
+    amount_of_projects = 3_000
+    amount_of_groups = 3_000
+    amount_of_submissions = 3_000
 
     def handle(self, *args, **options):
-        # Users (Students, Teachers, Assistants)
-        self.stdout.write('Seeding users...')
-        _seed_users(self.amount_of_users)
-        self.stdout.write(self.style.SUCCESS('Seeded users'))
+        # Reset DB
+        User.objects.all().delete()
+        Student.objects.all().delete()
+        Assistant.objects.all().delete()
+        Teacher.objects.all().delete()
+        Course.objects.all().delete()
+        Project.objects.all().delete()
+        Submission.objects.all().delete()
 
-        # Courses
-        self.stdout.write('Seeding courses...')
-        _seed_courses(self.amount_of_courses)
-        self.stdout.write(self.style.SUCCESS('Seeded courses'))
+        # Seed students
+        fake = faker()
+        seed_students(fake, self.amount_of_students, 0)
 
-        # Projects
-        self.stdout.write('Seeding projects...')
-        _seed_projects(self.amount_of_projects)
-        self.stdout.write(self.style.SUCCESS('Seeded projects'))
+        # Seed assistants
+        seed_assistants(fake, self.amount_of_assistants, self.amount_of_students)
 
-        # Groups
-        self.stdout.write('Seeding groups...')
-        _seed_groups(self.amount_of_groups)
-        self.stdout.write(self.style.SUCCESS('Seeded groups'))
+        # Seed teachers
+        seed_teachers(fake, self.amount_of_teachers, self.amount_of_students + self.amount_of_assistants)
+
+        # Seed courses
+        seed_courses(faker(), self.amount_of_courses)
+
+        # Seed projects
+        seed_projects(faker(), self.amount_of_projects)
+
+        # Seed groups
+        seed_groups(faker(), self.amount_of_groups)
+
+        # Seed submissions
+        seed_submissions(faker(), self.amount_of_submissions)

@@ -15,7 +15,7 @@ class ModelProvider(BaseProvider):
         rand = self.random_int(min=self.min_salt, max=self.max_salt)
         return f"{first_name.lower()}{last_name.lower()}{rand}"[:12]
 
-    def fake_user(self, fake, id: int) -> User:
+    def fake_user(self, fake, id: int, staff_probability: float = 0.001) -> User:
         """Create a fake user"""
         return User(
             id=id,
@@ -25,7 +25,7 @@ class ModelProvider(BaseProvider):
             email=fake.unique.email(),
             create_time=timezone.now(),
             last_enrolled=timezone.now().year,
-            is_staff=fake.boolean(chance_of_getting_true=0.001)
+            is_staff=fake.boolean(chance_of_getting_true=staff_probability)
         )
 
     def fake_course(self, fake, min_year=2022, max_year=2025) -> Course:
