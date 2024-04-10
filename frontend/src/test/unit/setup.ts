@@ -515,6 +515,13 @@ export const restHandlers = [
         courses.push(newCourse);
         return HttpResponse.json(courses);
     }),
+    http.post(baseUrl + endpoints.faculties.index, async ({ request }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newFaculty = JSON.parse(requestBody);
+        faculties.push(newFaculty);
+        return HttpResponse.json(faculties);
+    }),
 
     /*
     http.post(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'),

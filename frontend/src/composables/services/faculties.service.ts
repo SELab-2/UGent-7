@@ -28,7 +28,7 @@ export function useFaculty(): FacultyState {
 
     async function createFaculty(facultyData: Faculty): Promise<void> {
         const endpoint = endpoints.faculties.index;
-        await create<Faculty>(endpoint, { name: facultyData.name }, faculty, Faculty.fromJSON);
+        await create<Faculty>(endpoint, { id: facultyData.id, name: facultyData.name }, faculty, Faculty.fromJSON);
     }
 
     async function deleteFaculty(id: string): Promise<void> {
