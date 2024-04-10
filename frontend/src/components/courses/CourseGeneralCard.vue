@@ -5,6 +5,7 @@ import { type Faculty } from '@/types/Faculty.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { type Student } from '@/types/users/Student.ts';
+import { useGlob } from '@/composables/glob.ts';
 
 /* Props */
 defineProps<{
@@ -15,31 +16,15 @@ defineProps<{
 const { user } = storeToRefs(useAuthStore());
 
 /* State */
-const images = Object.keys(
-    import.meta.glob('@/assets/img/faculties/*', {
-        eager: true,
-        query: 'url',
-    }),
+const { getImport } = useGlob(
+    import.meta.glob('@/assets/img/faculties/*.png', { eager: true })
 );
-
-/**
- * Get the faculty icon based on the faculty id.
- * @param faculty
- */
-function getFacultyIcon(faculty: Faculty): string {
-    return (
-        images.find((image) => {
-            image = image.replace('/src/assets/img/faculties/', '');
-            return image === faculty.id + '.png';
-        }) ?? ''
-    );
-}
 </script>
 
 <template>
     <div class="surface-300 pl-7 p-4 relative">
         <img
-            :src="getFacultyIcon(course.faculty)"
+            :src="getImport(course.faculty.id + '.png')"
             :alt="course.faculty.name"
             class="absolute top-0 left-0 w-3rem"
             v-if="course.faculty !== null"
