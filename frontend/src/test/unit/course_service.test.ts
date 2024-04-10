@@ -11,6 +11,7 @@ const {
     getCourseByID,
     getCourses,
     getCoursesByStudent,
+    createCourse,
 } = useCourses();
 
 // "describe" bundles tests about 1 specific thing; here we're testing course
@@ -142,5 +143,37 @@ describe('course', (): void => {
         expect(courses.value?.[2]?.teachers).toEqual([]);
         expect(courses.value?.[2]?.assistants).toEqual([]);
         expect(courses.value?.[2]?.projects).toEqual([]);
+    });
+
+    it('create course', async () => {
+        const exampleCourse = new Course(
+            'course1_id', // id
+            'course1_name', // name
+            'course1_description', // description
+            2024, // acedemic_startyear,
+            null, // paranet_course
+            null, // faculty
+            [], // teachers
+            [], // assistants
+            [], // students
+            [], // projects
+        );
+
+        await getCourses();
+        expect(courses).not.toBeNull();
+        expect(Array.isArray(courses.value)).toBe(true);
+        const prevLength = courses.value?.length ?? 0;
+
+        await createCourse(exampleCourse);
+        await getCourses();
+
+        expect(courses).not.toBeNull();
+        expect(Array.isArray(courses.value)).toBe(true);
+        expect(courses.value?.length).toBe(prevLength + 1);
+
+        expect(courses.value?.[prevLength]?.id).toBe('course1_id');
+        expect(courses.value?.[prevLength]?.name).toBe('course1_name');
+        expect(courses.value?.[prevLength]?.description).toBe('course1_description');
+        expect(courses.value?.[prevLength]?.academic_startyear).toBe(2024);
     });
 });
