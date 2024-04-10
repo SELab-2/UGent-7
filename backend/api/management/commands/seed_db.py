@@ -148,40 +148,32 @@ class Providers(BaseProvider):
         errHandler.stdout.write(
             errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique assistant."))
 
-    def provide_student(self, errHandler, min_faculty=1, max_faculty=3, staf_prob=0.01):
+    def provide_student(self, _, min_faculty=1, max_faculty=3, staf_prob=0.01):
         """
         Create a student with the given arguments.
         """
-        tries = 0
-        while tries < self.MAX_TRIES:
-            try:
-                first = fake.first_name()
-                last = fake.last_name()
-                id = fake.unique.random_int(min=self.min_id, max=self.max_id)
-                faculty = [
-                    fake.faculty_provider().id for _ in range(0, fake.random_int(min=min_faculty, max=max_faculty))
-                ]  # generate 1 or 2 or 3 facultys
-                username = f"{first.lower()}{last.lower()}_{fake.random_int(min=self.min_salt, max=self.max_salt)}"[:12]
-                student = Student.objects.create(
-                    id=id,
-                    first_name=first,
-                    last_name=last,
-                    username=username,
-                    email=username + "@example.com",
-                    create_time=timezone.now(),
-                    last_enrolled=timezone.now().year,
-                    student_id=id,
-                    is_staff=fake.boolean(chance_of_getting_true=staf_prob)
-                )
+        first = fake.first_name()
+        last = fake.last_name()
+        username = f"{first.lower()}{last.lower()}_{fake.random_int(min=self.min_salt, max=self.max_salt)}"[:12]
+        id = fake.unique.random_int(min=self.min_id, max=self.max_id)
+        print(id)
+        student = Student.objects.create(
+            id=id,
+            first_name=first,
+            last_name=last,
+            username=username,
+            email=username + "@example.com",
+            create_time=timezone.now(),
+            last_enrolled=timezone.now().year,
+            student_id=id,
+            is_staff=fake.boolean(chance_of_getting_true=staf_prob),
+        )
 
-                if faculty is not None:
-                    student.faculties.add(*faculty)  # Add faculties in bulk
+        student.faculties.add(
+            *(fake.faculty_provider().id for _ in range(0, fake.random_int(min=min_faculty, max=max_faculty)))
+        )
 
-                return student
-            except Exception:
-                tries += 1
-        errHandler.stdout.write(
-            errHandler.style.WARNING("Exceeded maximum number of attempts to generate a unique student."))
+        return student
 
     def provide_course(
             self,
@@ -504,7 +496,7 @@ class Command(BaseCommand):
         amount_of_students = 10
         amount_of_assistants = 0
         amount_of_teachers = 0
-        amount_of_courses = 0
+        amount_of_courses = 1000
         amount_of_projects = 0
         amount_of_groups = 0
         amount_of_submissions = 0
