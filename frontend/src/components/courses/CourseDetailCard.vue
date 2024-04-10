@@ -4,6 +4,7 @@ import Button from 'primevue/button';
 import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
+import { useGlob } from '@/composables/glob.ts';
 
 /* Component props */
 defineProps<{
@@ -12,14 +13,7 @@ defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
-
-/* Default image thumbnails */
-const images = Object.keys(
-    import.meta.glob('@/assets/img/placeholders/*', {
-        eager: true,
-        query: 'url',
-    }),
-);
+const { getRandomImport } = useGlob(import.meta.glob('@/assets/img/placeholders/*.png', { eager: true }));
 </script>
 
 <template>
@@ -29,7 +23,7 @@ const images = Object.keys(
                 class="w-full h-12rem border-round-top"
                 style="object-fit: cover; margin-bottom: -4px"
                 :alt="course.name ?? ''"
-                :src="images[Math.ceil(Math.random() * images.length) % images.length]"
+                :src="getRandomImport()"
             />
         </template>
         <template #title>
