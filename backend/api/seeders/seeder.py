@@ -5,6 +5,17 @@ from django.db import connection
 from django.utils import timezone
 
 
+def format_time(execution_time):
+    if execution_time < 1:
+        return f"{execution_time * 1000:.2f} milliseconds"
+    elif execution_time < 60:
+        return f"{execution_time:.2f} seconds"
+    elif execution_time < 3600:
+        return f"{execution_time / 60:.2f} minutes"
+    else:
+        return f"{execution_time / 3600:.2f} hours"
+
+
 def timer(func):
     """Helper function to estimate view execution time"""
 
@@ -14,8 +25,8 @@ def timer(func):
 
         result = func(*args, **kwargs)
 
-        print('Seeder {} took {:,.2f} ms'.format(
-            func.__name__, (time() - start) * 1000
+        print('Seeder {} took {}'.format(
+            func.__name__, format_time((time() - start))
         ))
 
         return result
@@ -97,8 +108,16 @@ def seed_teachers(faker, count: int = 250, offset: int = 0) -> None:
 
 
 @timer
-def seed_courses(faker, count: int = 1_000, year_dev: int = 1, max_students: int = 100, max_teachers: int = 3,
-                 max_assistants: int = 5) -> None:
+def seed_courses(faker,
+                 count: int = 1_000,
+                 year_dev: int = 1,
+                 max_students: int = 100,
+                 max_teachers: int = 3,
+                 max_assistants: int = 5,
+                 min_students: int = 1,
+                 min_teachers: int = 1,
+                 min_assistants: int = 1
+                 ) -> None:
     """Seed courses into the database"""
     with connection.cursor() as cursor:
         # Fetch existing faculties.
@@ -113,7 +132,7 @@ def seed_courses(faker, count: int = 1_000, year_dev: int = 1, max_students: int
             [
                 faker.catch_phrase(),
                 faker.paragraph(),
-                timezone.now().year + choice(range(-year_dev, year_dev)),
+                timezone.now().year + faker.random_int(min=-year_dev, max=year_dev),
                 choice(faculties)
             ] for _ in range(count)
         ]
@@ -153,9 +172,9 @@ def seed_courses(faker, count: int = 1_000, year_dev: int = 1, max_students: int
         )
 
         for course in courses:
-            num_students = min(len(students), randint(1, max_students))
-            num_assistants = min(len(assistants), randint(1, max_assistants))
-            num_teachers = min(len(teachers), randint(1, max_teachers))
+            num_students = min(len(students), randint(min_students, max_students))
+            num_assistants = min(len(assistants), randint(min_assistants, max_assistants))
+            num_teachers = min(len(teachers), randint(min_teachers, max_teachers))
 
             chosen_students = sample(students, k=num_students)
             students = [student for student in students if student not in chosen_students]

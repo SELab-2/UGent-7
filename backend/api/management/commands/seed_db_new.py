@@ -12,8 +12,10 @@ from api.models.student import Student
 from api.models.assistant import Assistant
 from api.models.submission import Submission
 
+import time
 
-def _seed_users(num: int = 500):
+
+def _seed_users(num: int = 500, student_prob: int = 70, assistant_prob: int = 20, teacher_prob: int = 10):
     fake = faker()
     User.objects.all().delete()
 
@@ -21,7 +23,7 @@ def _seed_users(num: int = 500):
         [fake.fake_user(fake, id) for id in range(num)]
     )
 
-    roles = choices(['student'] * 70 + ['assistant'] * 20 + ['teacher'] * 10, k=num)
+    roles = choices(['student'] * student_prob + ['assistant'] * assistant_prob + ['teacher'] * teacher_prob, k=num)
 
     for user, role in zip(users, roles):
         if role == 'assistant':
@@ -79,6 +81,17 @@ def _seed_groups(num: int = 3_000):
         )
 
 
+def format_time(execution_time):
+    if execution_time < 1:
+        return f"{execution_time * 1000:.2f} milliseconds"
+    elif execution_time < 60:
+        return f"{execution_time:.2f} seconds"
+    elif execution_time < 3600:
+        return f"{execution_time / 60:.2f} minutes"
+    else:
+        return f"{execution_time / 3600:.2f} hours"
+
+
 class Command(BaseCommand):
     help = 'seed the db with data'
 
@@ -102,6 +115,7 @@ class Command(BaseCommand):
 
         # Seed students
         fake = faker()
+        start_time = time.time()
         seed_students(fake, self.amount_of_students, 0)
 
         # Seed assistants
@@ -121,3 +135,7 @@ class Command(BaseCommand):
 
         # Seed submissions
         seed_submissions(faker(), self.amount_of_submissions)
+
+        end_time = time.time()
+        execution_time = end_time - start_time
+        self.stdout.write(self.style.SUCCESS(f"Successfully seeded db in {format_time(execution_time)}!"))
