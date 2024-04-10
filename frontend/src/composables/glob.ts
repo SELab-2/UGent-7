@@ -29,10 +29,13 @@ export function useGlob(glob: Record<string, GlobModule>): GlobState {
             return glob[key].default;
         }
 
-        return Object.values(glob).find((module) => {
-            const parts = module.default.split('/');
-            return parts[parts.length - 1] === key;
-        })?.default;
+        for (const item in glob) {
+            const parts = item.split('/');
+
+            if (parts[parts.length - 1] === key) {
+                return glob[item].default;
+            }
+        }
     }
 
     return {
