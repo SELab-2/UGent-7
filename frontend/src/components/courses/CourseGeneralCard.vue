@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import StudentCourseJoinButton from '@/components/courses/students/StudentCourseJoinButton.vue';
 import type { Course } from '@/types/Course.ts';
-import { type Faculty } from '@/types/Faculty.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { type Student } from '@/types/users/Student.ts';
@@ -16,9 +15,7 @@ defineProps<{
 const { user } = storeToRefs(useAuthStore());
 
 /* State */
-const { getImport } = useGlob(
-    import.meta.glob('@/assets/img/faculties/*.png', { eager: true })
-);
+const { getImport } = useGlob(import.meta.glob('@/assets/img/faculties/*.png', { eager: true }));
 </script>
 
 <template>

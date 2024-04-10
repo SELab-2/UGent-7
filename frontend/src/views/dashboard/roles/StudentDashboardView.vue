@@ -23,10 +23,8 @@ const { courses, getCoursesByStudent } = useCourses();
 const selectedYear = ref(User.getAcademicYear());
 const showPast = ref(false);
 
-const filteredCourses = computed(() =>
-    courses.value?.filter((course) =>
-        course.academic_startyear === selectedYear.value
-    ) ?? null,
+const filteredCourses = computed(
+    () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? null,
 );
 
 /* Watchers */

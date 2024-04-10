@@ -17,7 +17,7 @@ const props = withDefaults(
     {
         courses: () => [],
         showPast: false,
-        cols: 4
+        cols: 4,
     },
 );
 
@@ -34,17 +34,14 @@ const allProjects = computed(() => props.courses?.flatMap((course) => course.pro
  * Sorts the projects by deadline
  */
 const sortedProjects = computed(() => {
-    const projects = allProjects.value?.filter((project) =>
-        !props.showPast ? moment(project.deadline).isAfter() : true,
-    ) ?? null;
+    const projects =
+        allProjects.value?.filter((project) => (!props.showPast ? moment(project.deadline).isAfter() : true)) ?? null;
 
     if (projects === null) {
         return projects;
     }
 
-    return [...projects].sort((a, b) =>
-        new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-    );
+    return [...projects].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
 });
 
 /* Watchers */
@@ -76,8 +73,18 @@ watch(
     <div class="grid align-items-stretch">
         <template v-if="sortedProjects !== null">
             <template v-if="sortedProjects.length > 0">
-                <div class="col-12 md:col-6 lg:col-4" :class="'xl:col-' + 12 / cols" v-for="project in sortedProjects" :key="project.id">
-                    <ProjectCard class="h-100" :project="project" :course="project.course" v-if="project.course !== null" />
+                <div
+                    class="col-12 md:col-6 lg:col-4"
+                    :class="'xl:col-' + 12 / cols"
+                    v-for="project in sortedProjects"
+                    :key="project.id"
+                >
+                    <ProjectCard
+                        class="h-100"
+                        :project="project"
+                        :course="project.course"
+                        v-if="project.course !== null"
+                    />
                 </div>
             </template>
             <template v-else>

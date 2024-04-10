@@ -1,8 +1,8 @@
-export type GlobModule = {
+export interface GlobModule {
     default: any;
 }
 
-export type GlobState = {
+export interface GlobState {
     getRandomImport: () => any;
     getImport: (key: string) => any;
 }
@@ -36,6 +36,7 @@ export function useGlob(glob: Record<string, GlobModule>): GlobState {
     }
 
     return {
-        getRandomImport, getImport
-    }
+        getRandomImport,
+        getImport,
+    };
 }

@@ -13,9 +13,7 @@ defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
-const { getRandomImport } = useGlob(
-    import.meta.glob('@/assets/img/placeholders/*.png', { eager: true })
-);
+const { getRandomImport } = useGlob(import.meta.glob('@/assets/img/placeholders/*.png', { eager: true }));
 </script>
 
 <template>
