@@ -34,20 +34,14 @@ describe('faculty', (): void => {
         expect(Array.isArray(faculties.value)).toBe(true);
         const prevLength = faculties.value?.length ?? 0;
 
-        console.log("### CREATE FACULTY TEST ###")
-
-        console.log("faculties before: " + JSON.stringify(faculties.value))
-
         await createFaculty(exampleFaculty);
         await getFaculties();
 
-        console.log("faculties after: " + JSON.stringify(faculties.value))
-
         expect(faculties).not.toBeNull();
         expect(Array.isArray(faculties.value)).toBe(true);
-        // expect(faculties.value?.length).toBe(prevLength + 1);
+        expect(faculties.value?.length).toBe(prevLength + 1);
 
-        // expect(faculties.value?.[prevLength]?.id).toBe('faculty_id');
-        // expect(faculties.value?.[prevLength]?.name).toBe('faculty_name');
+        expect(faculties.value?.[prevLength]?.id).toBe('faculty_id');
+        expect(faculties.value?.[prevLength]?.name).toBe('faculty_name');
     });
 });
