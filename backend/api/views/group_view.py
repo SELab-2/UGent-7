@@ -1,19 +1,22 @@
-from django.utils.translation import gettext
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.permissions import IsAdminUser
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
 from api.models.group import Group
-from api.permissions.group_permissions import GroupPermission, GroupSubmissionPermission
-from api.permissions.group_permissions import GroupStudentPermission
-from api.serializers.group_serializer import GroupSerializer
-from api.serializers.student_serializer import StudentSerializer
-from api.serializers.group_serializer import StudentJoinGroupSerializer, StudentLeaveGroupSerializer
+from api.permissions.group_permissions import (GroupPermission,
+                                               GroupStudentPermission,
+                                               GroupSubmissionPermission)
+from api.serializers.group_serializer import (GroupSerializer,
+                                              StudentJoinGroupSerializer,
+                                              StudentLeaveGroupSerializer)
 from api.serializers.project_serializer import SubmissionAddSerializer
+from api.serializers.student_serializer import StudentSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
+from django.utils.translation import gettext
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   RetrieveModelMixin, UpdateModelMixin)
+from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 
 class GroupViewSet(CreateModelMixin,
@@ -38,6 +41,7 @@ class GroupViewSet(CreateModelMixin,
         )
         return Response(serializer.data)
 
+    # TODO: I can access this endpoint unauthorized
     @action(detail=True, permission_classes=[IsAdminUser | GroupSubmissionPermission])
     def submissions(self, request, **_):
         """Returns a list of submissions for the given group"""

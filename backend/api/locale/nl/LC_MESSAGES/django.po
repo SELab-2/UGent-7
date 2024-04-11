@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-06 10:59+0200\n"
+"POT-Creation-Date: 2024-04-11 15:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,35 +18,93 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: logic/check_folder_structure.py:142
+#: logic/check_folder_structure.py:143
 msgid "zip.errors.invalid_structure.blocked_extension_found"
 msgstr ""
 "Bestanden met een verboden extensie zijn gevonden in het ingediende zip-"
 "bestand."
 
-#: logic/check_folder_structure.py:146 logic/check_folder_structure.py:197
+#: logic/check_folder_structure.py:147 logic/check_folder_structure.py:198
 msgid "zip.success"
 msgstr "Het zip-bestand van de indiening bevat alle benodigde bestanden."
 
-#: logic/check_folder_structure.py:149
+#: logic/check_folder_structure.py:150
 msgid "zip.errors.invalid_structure.obligated_extension_not_found"
 msgstr ""
 "Er is geen enkel bestand met een bepaalde extensie die verplicht is in het "
 "ingediende zip-bestand."
 
-#: logic/check_folder_structure.py:176
+#: logic/check_folder_structure.py:177
 msgid "zip.errors.invalid_structure.directory_not_defined"
 msgstr "Een verplichte map is niet aanwezig in het ingediende zip-bestand."
 
-#: logic/check_folder_structure.py:196
+#: logic/check_folder_structure.py:197
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
 msgstr "Het ingediende zip-bestand bevat een map die niet gevraagd is."
 
-#: serializers/checks_serializer.py:61
+#: models/submission.py:65
+msgid "submission.state.queued"
+msgstr "wachten"
+
+#: models/submission.py:66
+msgid "submission.state.running"
+msgstr "lopen"
+
+#: models/submission.py:67
+msgid "submission.state.success"
+msgstr "succes"
+
+#: models/submission.py:68
+msgid "submission.state.failed"
+msgstr "gefaald"
+
+#: models/submission.py:73
+msgid "submission.error.blockedextension"
+msgstr "De zip file bevat een niet toegelaten bestandstype."
+
+#: models/submission.py:74
+msgid "submission.error.obligatedextensionnotfound"
+msgstr ""
+"Er is geen enkel bestand met een bepaalde bestandstype die verplicht is in het "
+"ingediende zip-bestand."
+
+#: models/submission.py:75
+msgid "submission.error.obligateddirectorynotfound"
+msgstr "De ingediende zip file bevat niet een verplichtte map."
+
+#: models/submission.py:76
+msgid "submission.error.unaskeddirectory"
+msgstr "De ingediende zip file bevat een map die niet toegelaten is."
+
+#: models/submission.py:79
+msgid "submission.error.timelimit"
+msgstr "Tijdslimit bereikt."
+
+#: models/submission.py:80
+msgid "submission.error.memorylimit"
+msgstr "Geheugenlimiet bereikt."
+
+#: models/submission.py:81
+msgid "submission.error.runtimeerror"
+msgstr "Crashed."
+
+#: models/submission.py:82
+msgid "submission.error.outputlimit"
+msgstr "Te veel output."
+
+#: models/submission.py:83
+msgid "submission.error.internalerror"
+msgstr "Interne fout."
+
+#: models/submission.py:84
+msgid "submission.error.unknown"
+msgstr "Onbekende fout."
+
+#: serializers/checks_serializer.py:60
 msgid "extra_check.error.docker_image"
 msgstr "Het veld 'docker_image' is vereist."
 
-#: serializers/checks_serializer.py:65
+#: serializers/checks_serializer.py:63
 msgid "extra_check.error.timeout"
 msgstr "Het veld 'timeout' mag niet groter zijn dan 1000"
 
@@ -110,46 +168,53 @@ msgstr "De student bevindt zich al in de groep."
 msgid "group.errors.not_present"
 msgstr "De student bevindt zich niet in de groep."
 
-#: serializers/project_serializer.py:47
+#: serializers/project_serializer.py:49
 msgid "project.errors.context"
 msgstr "Het project is niet meegegeven als context waar dat nodig is."
 
-#: serializers/project_serializer.py:51
+#: serializers/project_serializer.py:53
 msgid "project.errors.start_date_in_past"
 msgstr "De startdatum van het project ligt in het verleden."
 
-#: serializers/project_serializer.py:55
+#: serializers/project_serializer.py:66
 msgid "project.errors.deadline_before_start_date"
 msgstr "De uiterste inleverdatum voor het project ligt voor de startdatum."
 
-#: serializers/project_serializer.py:105 tests/test_submission.py:358
+#: serializers/project_serializer.py:116 tests/test_submission.py:332
 msgid "project.error.submissions.past_project"
 msgstr "De uiterste inleverdatum voor het project is gepasseerd."
 
-#: serializers/project_serializer.py:108 tests/test_submission.py:429
+#: serializers/project_serializer.py:119 tests/test_submission.py:403
 msgid "project.error.submissions.non_visible_project"
 msgstr "Het project is niet zichtbaar."
 
-#: serializers/project_serializer.py:111 tests/test_submission.py:459
+#: serializers/project_serializer.py:122 tests/test_submission.py:433
 msgid "project.error.submissions.archived_project"
 msgstr "Het project is gearchiveerd."
 
-#: serializers/project_serializer.py:120 tests/test_project.py:590
+#: serializers/project_serializer.py:131 tests/test_project.py:512
 msgid "project.error.structure_checks.already_existing"
 msgstr "De structuur check was al aanwezig."
 
-#: serializers/project_serializer.py:136 tests/test_project.py:623
+#: serializers/project_serializer.py:147 tests/test_project.py:546
 msgid "project.error.structure_checks.extension_blocked_and_obligated"
 msgstr ""
 
-#: tests/test_submission.py:331 tests/test_submission.py:399
-#: views/group_view.py:110
-msgid "group.success.submissions.add"
-msgstr "De indiening is succesvol toegevoegd aan de groep."
+#: tests/test_project.py:450 views/project_view.py:124
+msgid "project.success.structure_check.add"
+msgstr "De structuur check is succesvol toegevoegd aan het project."
 
 #: views/admin_view.py:29
 msgid "admins.success.add"
 msgstr "De admin is successvol toegevoegd."
+
+#: views/assistant_view.py:32 views/teacher_view.py:32
+msgid "teachers.success.add"
+msgstr "De lesgever is successvol toegevoegd."
+
+#: views/assistant_view.py:41 views/teacher_view.py:41
+msgid "teachers.success.destroy"
+msgstr "De lesgever is succesvol verwijderd."
 
 #: views/course_view.py:48
 msgid "courses.success.create"
@@ -191,14 +256,22 @@ msgstr "De student is succesvol toegevoegd aan de groep."
 msgid "group.success.students.remove"
 msgstr "De student is succesvol verwijderd uit de groep."
 
+#: views/group_view.py:110
+msgid "group.success.submissions.add"
+msgstr "De indiening is succesvol toegevoegd aan de groep."
+
 #: views/project_view.py:87
 msgid "project.success.groups.created"
 msgstr "De groep is succesvol toegevoegd aan het project."
 
-#: views/project_view.py:125
-msgid "project.success.structure_check.add"
-msgstr "De structuur check is succesvol toegevoegd aan het project."
-
-#: views/project_view.py:161
+#: views/project_view.py:158
 msgid "project.success.extra_check.add"
 msgstr "De extra check is succesvol toegevoegd aan het project."
+
+#: views/student_view.py:33
+msgid "students.success.add"
+msgstr "De student is successvol toegevoegd."
+
+#: views/student_view.py:42
+msgid "students.success.destroy"
+msgstr "De student is successvol verwijderd."

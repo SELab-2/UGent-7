@@ -3,6 +3,8 @@ from authentication.models import User
 from django.db import models
 
 
+# TODO: registry
+# TODO: Build als we binnenkrijgen
 class DockerImage(models.Model):
     """
     Models that represents the different docker environments to run tests in

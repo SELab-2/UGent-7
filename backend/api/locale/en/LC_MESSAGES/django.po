@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-06 10:59+0200\n"
+"POT-Creation-Date: 2024-04-11 15:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,35 +18,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: logic/check_folder_structure.py:142
+#: logic/check_folder_structure.py:143
 msgid "zip.errors.invalid_structure.blocked_extension_found"
 msgstr "The submitted zip file contains a file with a non-allowed extension."
 
-#: logic/check_folder_structure.py:146 logic/check_folder_structure.py:197
+#: logic/check_folder_structure.py:147 logic/check_folder_structure.py:198
 msgid "zip.success"
 msgstr "The submitted zip file succeeds in all checks."
 
-#: logic/check_folder_structure.py:149
+#: logic/check_folder_structure.py:150
 msgid "zip.errors.invalid_structure.obligated_extension_not_found"
 msgstr ""
 "The submitted zip file doesn't have any file with a certain file extension "
 "that's obligated."
 
-#: logic/check_folder_structure.py:176
+#: logic/check_folder_structure.py:177
 msgid "zip.errors.invalid_structure.directory_not_defined"
 msgstr "An obligated directory was not found in the submitted zip file."
 
-#: logic/check_folder_structure.py:196
+#: logic/check_folder_structure.py:197
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
 msgstr ""
 "There was a directory found in the submitted zip file, which was not asked "
 "for."
 
-#: serializers/checks_serializer.py:61
+#: models/submission.py:65
+msgid "submission.state.queued"
+msgstr "Queued"
+
+#: models/submission.py:66
+msgid "submission.state.running"
+msgstr "Running"
+
+#: models/submission.py:67
+msgid "submission.state.success"
+msgstr "Success"
+
+#: models/submission.py:68
+msgid "submission.state.failed"
+msgstr "Failed"
+
+#: models/submission.py:73
+msgid "submission.error.blockedextension"
+msgstr "The zip file contains a file with a non-allowed extension."
+
+#: models/submission.py:74
+msgid "submission.error.obligatedextensionnotfound"
+msgstr "The submitted zip file doesn't have any file with an obligated file extension."
+
+#: models/submission.py:75
+msgid "submission.error.obligateddirectorynotfound"
+msgstr "The submitted zip file doesn't have an obligated directory."
+
+#: models/submission.py:76
+msgid "submission.error.unaskeddirectory"
+msgstr "The zip file contains a non allowed directory."
+
+#: models/submission.py:79
+msgid "submission.error.timelimit"
+msgstr "Timelimit exceeded."
+
+#: models/submission.py:80
+msgid "submission.error.memorylimit"
+msgstr "Memorylimit exceeded."
+
+#: models/submission.py:81
+msgid "submission.error.runtimeerror"
+msgstr "Crashed."
+
+#: models/submission.py:82
+msgid "submission.error.outputlimit"
+msgstr "Outputlimit exceeded."
+
+#: models/submission.py:83
+msgid "submission.error.internalerror"
+msgstr "Internal error."
+
+#: models/submission.py:84
+msgid "submission.error.unknown"
+msgstr "Unkown error."
+
+#: serializers/checks_serializer.py:60
 msgid "extra_check.error.docker_image"
 msgstr "The field 'docker_image' is required."
 
-#: serializers/checks_serializer.py:65
+#: serializers/checks_serializer.py:63
 msgid "extra_check.error.timeout"
 msgstr "The field 'timeout' cannot be greater than 1000."
 
@@ -109,46 +165,53 @@ msgstr "The student is already in the group."
 msgid "group.errors.not_present"
 msgstr "The student is currently not in the group."
 
-#: serializers/project_serializer.py:47
+#: serializers/project_serializer.py:49
 msgid "project.errors.context"
 msgstr "The project is not supplied in the context."
 
-#: serializers/project_serializer.py:51
+#: serializers/project_serializer.py:53
 msgid "project.errors.start_date_in_past"
 msgstr "The start date of the project lies in the past."
 
-#: serializers/project_serializer.py:55
+#: serializers/project_serializer.py:66
 msgid "project.errors.deadline_before_start_date"
 msgstr "The deadline of the project lies before the start date of the project."
 
-#: serializers/project_serializer.py:105 tests/test_submission.py:358
+#: serializers/project_serializer.py:116 tests/test_submission.py:332
 msgid "project.error.submissions.past_project"
 msgstr "The deadline of the project has already passed."
 
-#: serializers/project_serializer.py:108 tests/test_submission.py:429
+#: serializers/project_serializer.py:119 tests/test_submission.py:403
 msgid "project.error.submissions.non_visible_project"
 msgstr "The project is currently in a non-visible state."
 
-#: serializers/project_serializer.py:111 tests/test_submission.py:459
+#: serializers/project_serializer.py:122 tests/test_submission.py:433
 msgid "project.error.submissions.archived_project"
 msgstr "The project is archived."
 
-#: serializers/project_serializer.py:120 tests/test_project.py:590
+#: serializers/project_serializer.py:131 tests/test_project.py:512
 msgid "project.error.structure_checks.already_existing"
 msgstr "The structure check is already present in the project."
 
-#: serializers/project_serializer.py:136 tests/test_project.py:623
+#: serializers/project_serializer.py:147 tests/test_project.py:546
 msgid "project.error.structure_checks.extension_blocked_and_obligated"
 msgstr ""
 
-#: tests/test_submission.py:331 tests/test_submission.py:399
-#: views/group_view.py:110
-msgid "group.success.submissions.add"
-msgstr "The submission was successfully added to the group."
+#: tests/test_project.py:450 views/project_view.py:124
+msgid "project.success.structure_check.add"
+msgstr "A strucure check was successfully created for the project."
 
 #: views/admin_view.py:29
 msgid "admins.success.add"
 msgstr "The admin was successfully added."
+
+#: views/assistant_view.py:32 views/teacher_view.py:32
+msgid "teachers.success.add"
+msgstr "The teacher was successfully added."
+
+#: views/assistant_view.py:41 views/teacher_view.py:41
+msgid "teachers.success.destroy"
+msgstr "The teacher was successfully destroyed."
 
 #: views/course_view.py:48
 msgid "courses.success.create"
@@ -190,14 +253,22 @@ msgstr "The student was successfully added to the group."
 msgid "group.success.students.remove"
 msgstr "The student was successfully removed from the group."
 
+#: views/group_view.py:110
+msgid "group.success.submissions.add"
+msgstr "The submission was successfully added to the group."
+
 #: views/project_view.py:87
 msgid "project.success.groups.created"
 msgstr "A group was successfully created for the project."
 
-#: views/project_view.py:125
-msgid "project.success.structure_check.add"
-msgstr "A strucure check was successfully created for the project."
-
-#: views/project_view.py:161
+#: views/project_view.py:158
 msgid "project.success.extra_check.add"
 msgstr "The extra check check was successfully added to the project."
+
+#: views/student_view.py:33
+msgid "students.success.add"
+msgstr "The student was successfully added."
+
+#: views/student_view.py:42
+msgid "students.success.destroy"
+msgstr "The student was successfully destroyed."
