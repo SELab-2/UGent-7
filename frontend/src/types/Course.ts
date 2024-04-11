@@ -59,3 +59,32 @@ export class Course {
         );
     }
 }
+
+/**
+ * Get the academic year of a date.
+ *
+ * @param date
+ * @returns number
+ */
+export function getAcademicYear(date: Date = new Date()): number {
+    const year = date.getFullYear();
+
+    if (date.getMonth() >= 9) {
+        return year;
+    }
+
+    return year - 1;
+}
+
+/**
+ * Get the academic years between a minimum and maximum.
+ *
+ * @param years
+ * @returns number[]
+ */
+export function getAcademicYears(...years: number[]): number[] {
+    const min = Math.min(...years);
+    const max = Math.max(...years);
+
+    return Array.from({ length: max - min + 1 }, (_, i) => max - i);
+}

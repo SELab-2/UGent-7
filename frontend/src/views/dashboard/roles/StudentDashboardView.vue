@@ -3,12 +3,11 @@ import Title from '@/components/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
 import CourseList from '@/components/courses/CourseList.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import InputSwitch from 'primevue/inputswitch';
 import { type Student } from '@/types/users/Student.ts';
 import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
-import { User } from '@/types/users/User.ts';
+import { getAcademicYear, getAcademicYears } from '@/types/Course.ts';
 
 /* Props */
 const props = defineProps<{
@@ -20,8 +19,8 @@ const { t } = useI18n();
 const { courses, getCoursesByStudent } = useCourses();
 
 /* State */
-const selectedYear = ref(User.getAcademicYear());
-const showPast = ref(false);
+const selectedYear = ref(getAcademicYear());
+const allYears = computed(() => getAcademicYears(...(courses.value?.map((course) => course.academic_startyear) ?? [])));
 
 const filteredCourses = computed(
     () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? null,
@@ -46,7 +45,7 @@ watch(
         <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
 
         <!-- Academic year selector -->
-        <YearSelector :years="student.academic_years" v-model="selectedYear" />
+        <YearSelector :years="allYears" v-model="selectedYear" />
     </div>
     <!-- Course list body -->
     <CourseList :courses="filteredCourses" />
@@ -56,15 +55,8 @@ watch(
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
     </div>
 
-    <!-- Show past projects switch -->
-    <div class="flex gap-3 align-items-center mb-5">
-        <InputSwitch input-id="show-past" v-model="showPast" />
-        <label for="show-past">
-            {{ t('views.dashboard.showPastProjects') }}
-        </label>
-    </div>
     <!-- Project list body -->
-    <ProjectList :courses="filteredCourses" :show-past="showPast" />
+    <ProjectList :courses="filteredCourses" />
 </template>
 
 <style scoped lang="scss"></style>

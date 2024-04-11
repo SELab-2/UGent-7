@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 export interface FilterState {
     filter: Ref<Filter>;
-    onFilter: (callback: () => Promise<void>) => void;
+    onFilter: (callback: () => Promise<void>, debounce?: number, immediate?: boolean) => void;
 }
 
 export function useFilter(initial: Filter): FilterState {
@@ -18,8 +18,10 @@ export function useFilter(initial: Filter): FilterState {
      * On filter callback
      *
      * @param callback
+     * @param debounce
+     * @param immediate
      */
-    function onFilter(callback: () => Promise<void>): void {
+    function onFilter(callback: () => Promise<void>, debounce: number = 500, immediate: boolean = true): void {
         watchDebounced(
             filter,
             async () => {
@@ -32,7 +34,7 @@ export function useFilter(initial: Filter): FilterState {
 
                 await callback();
             },
-            { debounce: 500, immediate: true, deep: true },
+            { debounce, immediate, deep: true },
         );
     }
 
