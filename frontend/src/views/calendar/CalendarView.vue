@@ -39,6 +39,17 @@ const projectsWithDeadline = computed(() => {
     });
 });
 
+/* Courses of the current academic year, when the selected date is in the academic year and the date is in the future */
+const coursesWithProjectCreationPossibility = computed(() => {
+    if (user.value !== null && moment(selectedDate.value).isAfter(moment())) {
+        return (user.value as RoleUser).courses.filter((course) => {
+            return course.academic_startyear === selectedAcademicYear();
+        });
+    } else {
+        return [];
+    }
+});
+
 /**
  * Load the projects of the user.
  */
@@ -115,6 +126,18 @@ function countDeadlines(date: CalendarDateSlotOptions): number {
         }).length ?? 0
     );
 }
+
+/**
+ * Get the academic year of the selected date.
+ *
+ * @returns The academic year of the selected date.
+*/
+const selectedAcademicYear = (): number => {
+    const selectedYear = moment(selectedDate.value).year();
+    const selectedMonth = moment(selectedDate.value).month();
+
+    return selectedMonth < 8 ? selectedYear - 1 : selectedYear;
+};
 
 /* Watch the user and load the projects */
 watch(
@@ -197,7 +220,7 @@ watch(selectedDate, (date) => {
 
                     <template v-if="user?.isTeacher() || user?.isAssistant()">
                         <!-- Add project button -->
-                        <ProjectCreateButton :courses="(user as RoleUser).courses" />
+                        <ProjectCreateButton :courses="coursesWithProjectCreationPossibility" />
                     </template>
                 </div>
             </div>
