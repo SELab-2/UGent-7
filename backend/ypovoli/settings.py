@@ -45,9 +45,10 @@ INSTALLED_APPS = [
     "rest_framework",  # Django rest framework
     "drf_yasg",  # Yet Another Swagger generator
     "sslserver",  # Used for local SSL support (needed by CAS)
+    "django_seed",
     "authentication",  # Ypovoli authentication
     "api",  # Ypovoli logic of the base application
-    "notifications",  # Ypovoli notifications
+    "notifications",  # Ypovoli notifications,
 ]
 
 MIDDLEWARE = [
