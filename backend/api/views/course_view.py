@@ -1,3 +1,5 @@
+from django.db.models import Min, Max
+
 from api.models.course import Course
 from api.permissions.course_permissions import (CourseAssistantPermission,
                                                 CoursePermission,
@@ -26,6 +28,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from api.views.pagination.course_pagination import CoursePagination
+
 
 class CourseViewSet(viewsets.ModelViewSet):
     """Actions for general course logic"""
@@ -47,10 +51,8 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @action(detail=False)
+    @action(detail=False, pagination_class=CoursePagination)
     def search(self, request: Request) -> Response:
-        self.pagination_class = BasicPagination
-
         # Extract filter params
         search = request.query_params.get("search", "")
         years = request.query_params.getlist("years[]")
