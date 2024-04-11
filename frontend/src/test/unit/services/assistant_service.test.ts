@@ -18,8 +18,15 @@ const {
     assistantLeaveCourse,
 } = useAssistant();
 
+function resetService() {
+    assistant.value = null
+    assistants.value = null
+}
+
 describe('assistant', (): void => {
     it('gets assistant data by id', async () => {
+        resetService()
+
         await getAssistantByID('235');
         expect(assistant.value).not.toBeNull();
         expect(assistant.value?.username).toBe('bsimpson');
@@ -35,6 +42,8 @@ describe('assistant', (): void => {
     });
 
     it('gets assistants data', async () => {
+        resetService()
+
         await getAssistants();
         expect(assistants).not.toBeNull();
         expect(Array.isArray(assistants.value)).toBe(true);
@@ -64,6 +73,8 @@ describe('assistant', (): void => {
     });
 
     it('gets assistants data by course', async () => {
+        resetService()
+
         await getAssistantByCourse('1');
         expect(assistants).not.toBeNull();
         expect(Array.isArray(assistants.value)).toBe(true);
@@ -93,6 +104,8 @@ describe('assistant', (): void => {
     });
 
     it('create assistant', async () => {
+        resetService()
+
         const exampleAssistant = new Assistant(
             '', // id
             '', // username

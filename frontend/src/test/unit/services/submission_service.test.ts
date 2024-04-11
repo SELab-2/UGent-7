@@ -13,8 +13,15 @@ const {
     deleteSubmission,
 } = useSubmission();
 
+function resetService() {
+    submission.value = null
+    submissions.value = null
+}
+
 describe('submissions', (): void => {
     it('gets submissions data by id', async () => {
+        resetService()
+
         await getSubmissionByID('1');
         expect(submission.value).not.toBeNull();
         expect(submission.value?.group).toBeNull();
@@ -25,6 +32,8 @@ describe('submissions', (): void => {
     });
 
     it('gets submissions data by group', async () => {
+        resetService()
+        
         await getSubmissionByGroup('1');
         expect(submissions).not.toBeNull();
         expect(Array.isArray(submissions.value)).toBe(true);
@@ -44,6 +53,8 @@ describe('submissions', (): void => {
     });
 
     it('gets submissions data by project', async () => {
+        resetService()
+        
         await getSubmissionByProject('0');
         expect(submissions).not.toBeNull();
         expect(Array.isArray(submissions.value)).toBe(true);

@@ -56,7 +56,7 @@ export const getHandlers = [
     http.get(baseUrl + endpoints.teachers.byCourse.replace('{courseId}', ':id'), ({ params }) => {
         const course = courses.find((x) => x.id === params.id);
         const teacherIds = course !== null && course !== undefined ? course.teachers : [];
-        return HttpResponse.json(submissions.filter((x) => teacherIds.includes(x.id)));
+        return HttpResponse.json(teachers.filter((x) => teacherIds.includes(x.id)));
     }),
     http.get(baseUrl + endpoints.assistants.byCourse.replace('{courseId}', ':id'), ({ params }) => {
         const course = courses.find((x) => x.id === params.id);

@@ -14,8 +14,15 @@ const {
     deleteAdmin,
 } = useAdmin();
 
+function resetService() {
+    admin.value = null
+    admins.value = null
+}
+
 describe('admin', (): void => {
     it('gets assistant data by id', async () => {
+        resetService();
+
         await getAdminByID('300201547011');
         expect(admin.value).not.toBeNull();
         expect(admin.value?.username).toBe('tverslyp');
@@ -30,6 +37,8 @@ describe('admin', (): void => {
     });
 
     it('gets admins data', async () => {
+        resetService();
+
         await getAdmins();
         expect(admins).not.toBeNull();
         expect(Array.isArray(admins.value)).toBe(true);
@@ -57,6 +66,8 @@ describe('admin', (): void => {
     });
 
     it('create admin', async () => {
+        resetService();
+
         const exampleAdmin = new User(
             '', // id
             '', // username

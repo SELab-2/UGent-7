@@ -17,10 +17,17 @@ const {
     deleteProject,
  } = useProject();
 
- const { course, getCourseByID } = useCourses();
+const { course, getCourseByID } = useCourses();
+
+function resetService() {
+    project.value = null
+    projects.value = null
+}
 
 describe('project', (): void => {
     it('gets project data by id', async () => {
+        resetService()
+
         await getProjectByID('0');
         expect(project.value).not.toBeNull();
         expect(project.value?.name).toBe('sel2');
@@ -42,6 +49,8 @@ describe('project', (): void => {
     });
 
     it('gets projects data', async () => {
+        resetService()
+        
         await getProjectsByCourse('1');
         expect(projects).not.toBeNull();
         expect(Array.isArray(projects.value)).toBe(true);
@@ -83,6 +92,8 @@ describe('project', (): void => {
     });
 
     it('gets projects data', async () => {
+        resetService()
+
         await getProjectsByStudent('1');
         expect(projects).not.toBeNull();
         expect(Array.isArray(projects.value)).toBe(true);
@@ -124,6 +135,8 @@ describe('project', (): void => {
     });
 
     it('create project', async () => {
+        resetService()
+        
         const courseId = '1'
         await getCourseByID(courseId);
         const exampleCourse: Course = course.value!;

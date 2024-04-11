@@ -15,11 +15,18 @@ const {
     createGroup,
     deleteGroup,
  } = useGroup();
+
+function resetService() {
+    group.value = null
+    groups.value = null
+}
  
 const { project, getProjectByID } = useProject();
 
 describe('group', (): void => {
     it('gets group data by id', async () => {
+        resetService()
+        
         await getGroupByID('0');
         expect(group.value).not.toBeNull();
         expect(group.value?.score).toBe(20);
@@ -30,9 +37,9 @@ describe('group', (): void => {
     });
 
     it('gets groups data by project', async () => {
+        resetService()
+
         await getGroupsByProject('0');
-        // console.log(groups.value)
-        // Ensure group data is not null
         expect(groups.value).not.toBeNull();
         expect(Array.isArray(groups.value)).toBe(true);
         expect(groups.value?.length).toBe(2);
@@ -53,6 +60,8 @@ describe('group', (): void => {
     });
 
     it('gets groups data by student', async () => {
+        resetService()
+
         await getGroupsByStudent('1');
         expect(groups.value).not.toBeNull();
         expect(Array.isArray(groups.value)).toBe(true);
@@ -67,6 +76,8 @@ describe('group', (): void => {
     });
 
     it('create group', async () => {
+        resetService()
+
         const projectId = '0'
         await getProjectByID(projectId);
         const exampleProject: Project = project.value!;

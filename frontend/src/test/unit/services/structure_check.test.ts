@@ -12,8 +12,15 @@ const {
     deleteStructureCheck,
  } = useStructureCheck();
 
+function resetService() {
+    structureCheck.value = null
+    structureChecks.value = null
+}
+
 describe('structureCheck', (): void => {
     it('gets structure check data by id', async () => {
+        resetService()
+        
         await getStructureCheckByID('1');
         expect(structureCheck.value).not.toBeNull();
         expect(structureCheck.value?.name).toBe('.');
@@ -23,6 +30,8 @@ describe('structureCheck', (): void => {
     });
 
     it('gets structureCheck data', async () => {
+        resetService()
+        
         await getStructureCheckByProject('123456');
         expect(structureChecks).not.toBeNull();
         expect(Array.isArray(structureChecks.value)).toBe(true);

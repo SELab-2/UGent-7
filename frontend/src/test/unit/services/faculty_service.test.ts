@@ -13,14 +13,23 @@ const {
     deleteFaculty, 
 } = useFaculty();
 
+function resetService() {
+    faculty.value = null
+    faculties.value = null
+}
+
 describe('faculty', (): void => {
     it('gets faculty data by id', async () => {
+        resetService()
+
         await getFacultyByID('sciences');
         expect(faculty.value).not.toBeNull();
         expect(faculty.value?.name).toBe('wetenschappen');
     });
 
     it('gets faculties data', async () => {
+        resetService()
+
         await getFaculties();
         expect(faculties).not.toBeNull();
         expect(Array.isArray(faculties.value)).toBe(true);
@@ -32,6 +41,8 @@ describe('faculty', (): void => {
     });
 
     it('create faculty', async () => {
+        resetService()
+
         const exampleFaculty = new Faculty(
             'faculty_id', // id
             'faculty_name', // name

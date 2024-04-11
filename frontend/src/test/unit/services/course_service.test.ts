@@ -21,8 +21,15 @@ const {
     deleteCourse,
 } = useCourses();
 
+function resetService() {
+    course.value = null
+    courses.value = null
+}
+
 describe('course', (): void => {
     it('gets course data by id', async () => {
+        resetService()
+
         await getCourseByID('1');
         expect(course.value).not.toBeNull();
         expect(course.value?.name).toBe('Math');
@@ -36,6 +43,8 @@ describe('course', (): void => {
     });
 
     it('gets courses data', async () => {
+        resetService()
+
         await getCourses();
         expect(courses.value).not.toBeNull();
         expect(courses.value?.[0]?.name).toBe('Math');
@@ -103,6 +112,8 @@ describe('course', (): void => {
     });
 
     it('gets courses data by student', async () => {
+        resetService()
+
         await getCoursesByStudent('1');
         expect(courses).not.toBeNull();
         expect(Array.isArray(courses.value)).toBe(true);
@@ -137,6 +148,8 @@ describe('course', (): void => {
     });
 
     it('create course', async () => {
+        resetService()
+
         const exampleCourse = new Course(
             'course_id', // id
             'course_name', // name
