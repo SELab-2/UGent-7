@@ -31,3 +31,9 @@ for app_name in settings.INSTALLED_APPS:
                 continue
             file = file[:-3]
             app.autodiscover_tasks([app_name + '.tasks'], related_name=file)
+
+# Allow passing of models as arguments to tasks
+app.conf.event_serializer = 'pickle'
+app.conf.task_serializer = 'pickle'
+app.conf.result_serializer = 'pickle'
+app.conf.accept_content = ['application/json', 'application/x-python-serialize']

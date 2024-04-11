@@ -9,7 +9,7 @@ from django.dispatch import Signal, receiver
 
 # Signals
 
-run_extra_checks = Signal(providing_args=["submission"])
+run_extra_checks = Signal()
 
 
 # Receivers
@@ -44,4 +44,4 @@ def hook_extra_check(sender, instance: ExtraCheck, **kwargs):
 
 @receiver(post_save, sender=Submission)
 def hook_submission(sender, instance: Submission, **kwargs):
-    run_extra_checks.send(sender=[Submission], submission=instance)
+    run_extra_checks.send(sender=Submission, submission=instance)
