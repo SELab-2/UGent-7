@@ -90,7 +90,7 @@ export function useProject(): ProjectState {
                 score_visible: projectData.score_visible,
                 group_size: projectData.group_size,
                 zip_structure: projectData.structure_file,
-                course: projectData.course?.id
+                course: projectData.course?.id,
             },
             project,
             Project.fromJSON,
