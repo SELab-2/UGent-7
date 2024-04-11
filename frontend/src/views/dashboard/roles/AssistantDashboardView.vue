@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 import { type Assistant } from '@/types/users/Assistant';
-import { User } from '@/types/users/User.ts';
+import { getAcademicYear, getAcademicYears } from '@/types/Course.ts';
 
 /* Props */
 const props = defineProps<{
@@ -20,7 +20,8 @@ const { t } = useI18n();
 const { courses, getCourseByAssistant } = useCourses();
 
 /* State */
-const selectedYear = ref<number>(User.getAcademicYear());
+const selectedYear = ref(getAcademicYear());
+const allYears = computed(() => getAcademicYears(...(courses.value?.map((course) => course.academic_startyear) ?? [])));
 
 const filteredCourses = computed(
     () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
@@ -45,7 +46,7 @@ watch(
         <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
 
         <!-- Academic year selector -->
-        <YearSelector :years="assistant.academic_years" v-model="selectedYear" />
+        <YearSelector :years="allYears" v-model="selectedYear" />
     </div>
     <!-- Course list body -->
     <CourseList :courses="filteredCourses" />

@@ -1,12 +1,13 @@
 import { computed, type Ref, ref, watch } from 'vue';
-import { type LocationQuery, useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 
 export interface PaginatorState {
     page: Ref<number>;
     pageSize: Ref<number>;
     first: Ref<number>;
-    paginate: (newFirst: number) => Promise<void>;
     onPaginate: (callback: () => Promise<void>) => void;
+    resetPagination: (pagination: Ref<PaginatorResponse<any> | null>) => Promise<void>;
 }
 
 export function usePaginator(initialPage: number = 1, initialPageSize: number = 20): PaginatorState {
@@ -15,23 +16,9 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
     const { push } = useRouter();
 
     /* State */
-    const page = ref<number>(initialPage);
-    const pageSize = ref<number>(initialPageSize);
+    const page = ref<number>(parseInt(query.page?.toString() ?? initialPage.toString()));
 
-    /* Watchers */
-    watch(
-        () => query,
-        (query: LocationQuery) => {
-            if (query.page !== undefined) {
-                page.value = parseInt(query.page as string);
-            }
-
-            if (query.pageSize !== undefined) {
-                pageSize.value = parseInt(query.pageSize as string);
-            }
-        },
-        { immediate: true },
-    );
+    const pageSize = ref<number>(parseInt(query.pageSize?.toString() ?? initialPageSize.toString()));
 
     /* Computed */
     const first = computed({
@@ -40,19 +27,18 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
     });
 
     /**
-     * Paginate using a new first item index.
+     * Reset the pagination to the first page.
      *
-     * @param newFirst
+     * @returns void
      */
-    async function paginate(newFirst: number): Promise<void> {
-        first.value = newFirst;
+    async function resetPagination(pagination: Ref<PaginatorResponse<any> | null>): Promise<void> {
+        // Paginate to the first page upon filter change
+        first.value = 0;
 
-        await push({
-            query: {
-                page: page.value,
-                pageSize: pageSize.value,
-            },
-        });
+        if (pagination.value !== null) {
+            // Reset the results
+            pagination.value.results = null;
+        }
     }
 
     /**
@@ -62,6 +48,13 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
      */
     function onPaginate(callback: () => Promise<void>): void {
         watch(page, async () => {
+            await push({
+                query: {
+                    page: page.value,
+                    pageSize: pageSize.value,
+                },
+            });
+
             await callback();
         });
     }
@@ -70,7 +63,7 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
         page,
         pageSize,
         first,
-        paginate,
         onPaginate,
+        resetPagination,
     };
 }

@@ -11,7 +11,7 @@ import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
-import { User } from '@/types/users/User.ts';
+import { getAcademicYear, getAcademicYears } from '@/types/Course.ts';
 
 /* Props */
 const props = defineProps<{
@@ -23,7 +23,8 @@ const { t } = useI18n();
 const { courses, getCoursesByTeacher } = useCourses();
 
 /* State */
-const selectedYear = ref<number>(User.getAcademicYear());
+const selectedYear = ref(getAcademicYear());
+const allYears = computed(() => getAcademicYears(...(courses.value?.map((course) => course.academic_startyear) ?? [])));
 
 const filteredCourses = computed(
     () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
@@ -49,7 +50,7 @@ watch(
         <!-- Course list controls -->
         <ButtonGroup class="flex align-items-center">
             <!-- Academic year selector -->
-            <YearSelector :years="teacher.academic_years" v-model="selectedYear" />
+            <YearSelector :years="allYears" v-model="selectedYear" />
 
             <!-- Create course button -->
             <RouterLink :to="{ name: 'course-create' }">

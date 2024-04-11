@@ -18,38 +18,12 @@ export class User {
     ) {}
 
     /**
-     * Get the academic years of the user.
-     */
-    get academic_years(): number[] {
-        const startYear = User.getAcademicYear(this.create_time);
-        const endYear = User.getAcademicYear(new Date());
-
-        return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
-    }
-
-    /**
      * Get the full name of the user.
      *
      * @returns string
      */
     public getFullName(): string {
         return `${this.first_name} ${this.last_name}`;
-    }
-
-    /**
-     * Get the academic year of a date.
-     *
-     * @param date
-     * @returns number
-     */
-    public static getAcademicYear(date: Date = new Date()): number {
-        const year = date.getFullYear();
-
-        if (date.getMonth() >= 9) {
-            return year;
-        }
-
-        return year - 1;
     }
 
     /**
