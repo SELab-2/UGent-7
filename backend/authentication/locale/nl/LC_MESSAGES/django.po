@@ -28,5 +28,5 @@ msgstr "Psychologie en Pedagogische Wetenschappen"
 msgid "faculties.law_criminology"
 msgstr "Recht en Criminologie"
 
-msgid "faculties.science"
+msgid "faculties.sciences"
 msgstr "Wetenschappen"
