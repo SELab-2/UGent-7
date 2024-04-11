@@ -5,6 +5,8 @@ from api.models.project import Project
 from django.db import models
 
 
+# TODO: Remove zip.* translations
+# TODO: How it the zip structure checked?
 class StructureCheck(models.Model):
     """Model that represents a structure check for a project.
        This means that the structure of a submission is checked.

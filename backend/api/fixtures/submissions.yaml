@@ -4,29 +4,24 @@
     group: 1
     submission_number: 1
     submission_time: "2021-01-01T00:00:00Z"
-    structure_checks_passed: True
 - model: api.submission
   pk: 2
   fields:
     group: 1
     submission_number: 2
     submission_time: "2021-01-02T00:00:00Z"
-    structure_checks_passed: True
 - model: api.submission
   pk: 3
   fields:
     group: 4
     submission_number: 1
     submission_time: "2021-01-02T00:00:00Z"
-    structure_checks_passed: True
 - model: api.submission
   pk: 4
   fields:
     group: 4
     submission_number: 2
     submission_time: "2021-01-02T00:00:00Z"
-    structure_checks_passed: True
-
 
 - model: api.submissionfile
   pk: 1

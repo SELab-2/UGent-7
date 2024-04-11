@@ -1,8 +1,9 @@
-from api.logic.check_folder_structure import check_zip_file  # , parse_zip_file
-from api.models.submission import (ErrorTemplate, ExtraChecksResult,
-                                   Submission, SubmissionFile)
+from api.models.submission import (CheckResult, ExtraCheckResult,
+                                   StructureCheckResult, Submission,
+                                   SubmissionFile)
 from django.db.models import Max
 from rest_framework import serializers
+from rest_polymorphic.serializers import PolymorphicSerializer
 
 
 class SubmissionFileSerializer(serializers.ModelSerializer):
@@ -11,17 +12,30 @@ class SubmissionFileSerializer(serializers.ModelSerializer):
         fields = ["file"]
 
 
-class ErrorTemplateSerializer(serializers.ModelSerializer):
+class CheckResultSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ErrorTemplate
+        model = CheckResult
         fields = "__all__"
 
 
-class ExtraChecksResultSerializer(serializers.ModelSerializer):
-
+class StructureCheckResultSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ExtraChecksResult
-        exclude = ["log_file"]
+        model = StructureCheckResult
+        fields = "__all__"
+
+
+class ExtraCheckResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExtraCheckResult
+        fields = "__all__"
+
+
+class CheckResultPolymorphicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        CheckResult: CheckResultSerializer,
+        StructureCheckResult: StructureCheckResultSerializer,
+        ExtraCheckResult: ExtraCheckResultSerializer,
+    }
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
@@ -32,7 +46,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     files = SubmissionFileSerializer(many=True, read_only=True)
 
-    extra_checks_results = ExtraChecksResultSerializer(many=True, read_only=True)
+    results = CheckResultPolymorphicSerializer(many=True, read_only=True)
 
     class Meta:
         model = Submission
@@ -66,15 +80,13 @@ class SubmissionSerializer(serializers.ModelSerializer):
         # Create the Submission instance without the files
         submission = Submission.objects.create(**validated_data)
 
-        pas: bool = True
         # Create SubmissionFile instances for each file and check if none fail structure checks
         for file in files_data:
             SubmissionFile.objects.create(submission=submission, file=file)
-            status, _ = check_zip_file(submission.group.project, file.name)
-            if not status:
-                pas = False
+            # TODO: Run checks as a background task
+            # status, _ = check_zip_file(submission.group.project, submissionFile.file.path)
+            # if not status:
+            #     passed = False
 
-        # Set structure_checks_passed
-        submission.structure_checks_passed = pas
         submission.save()
         return submission
