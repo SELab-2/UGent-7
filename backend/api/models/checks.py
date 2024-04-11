@@ -44,8 +44,6 @@ class StructureCheck(models.Model):
 
     # ID check should be generated automatically
 
-# TODO: Add state, queued, running, done
-
 
 class ExtraCheck(models.Model):
     """Model that represents an extra check for a project.
