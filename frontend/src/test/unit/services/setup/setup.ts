@@ -5,7 +5,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { JSDOM } from 'jsdom';
 
-import { restHandlers } from './requesthandlers';
+import { restHandlers } from './request_handlers';
 
 const server = setupServer(...restHandlers);
 
