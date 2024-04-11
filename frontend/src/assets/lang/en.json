@@ -4,6 +4,7 @@
             "logo": "Ghent University logo",
             "login": "login",
             "view": "View as {0}",
+            "user": "Logged in as {0}",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
@@ -24,7 +25,8 @@
             "projects": "Current projects",
             "no_projects": "No projects available for this academic year.",
             "no_courses": "No courses available for this academic year.",
-            "select_course": "Select the course for which you want to create a project:"
+            "select_course": "Select the course for which you want to create a project:",
+            "showPastProjects": "Projects with passed deadline"
         },
         "login": {
             "title": "Login",
@@ -37,7 +39,8 @@
             }
         },
         "calendar": {
-            "title": "Calendar"
+            "title": "Calendar",
+            "noProjects": "No projects on selected date."
         },
         "projects": {
             "deadline": "Deadline",
@@ -69,7 +72,16 @@
             "edit": "Edit course",
             "name": "Course name",
             "description": "Description",
-            "faculty": "Faculty"
+            "faculty": "Faculty",
+            "year": "Academic year",
+            "search": {
+                "search": "Search",
+                "faculty": "Faculty",
+                "year": "Academic year",
+                "placeholder": "Search a course by name",
+                "title": "Search a course",
+                "results": "{0} courses found for set filters"
+            }
         }
     },
     "composables": {
@@ -106,7 +118,23 @@
     },
     "toasts": {
         "messages": {
-            "unknown": "An unknown error has occurred."
+            "success": "Success",
+            "error": "Error",
+            "unknown": "An unknown error has occurred.",
+            "courses": {
+                "enrollment": {
+                    "success": "You have been successfully enrolled for the course '{0}'.",
+                    "error": "An error occurred while enrolling for the course '{0}'."
+                },
+                "leave": {
+                    "success": "You have been successfully unenrolled for the course '{0}'",
+                    "error": "An error occurred while unenrolling for the course '{0}'."
+                }
+            },
+            "login": {
+                "success": "You have successfully logged in.",
+                "error": "An error occurred while logging in."
+            }
         }
     },
     "validations": {
