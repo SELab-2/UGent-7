@@ -5,9 +5,12 @@ import { reactive, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useCourses } from '@/composables/services/courses.service';
+import { useFaculty } from '@/composables/services/faculties.service.ts';
+import { Faculty } from '@/types/Faculty';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
+import Dropdown from 'primevue/dropdown';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
@@ -17,15 +20,18 @@ const { params } = useRoute();
 const { t } = useI18n();
 const { push } = useRouter();
 const { course, getCourseByID } = useCourses();
+const { faculties, getFaculties } = useFaculty();
 
 /* Load course data */
 onMounted(async () => {
+    await getFaculties();
     await getCourseByID(params.courseId as string);
 
     /* Set the form values */
     if (course.value !== null) {
         form.name = course.value.name;
         form.description = course.value.description ?? '';
+        form.faculty = course.value.faculty ?? new Faculty('', '');
         form.year = `${course.value.academic_startyear} - ${course.value.academic_startyear + 1}`;
     }
 });
@@ -34,6 +40,7 @@ onMounted(async () => {
 const form = reactive({
     name: '',
     description: '',
+    faculty: new Faculty('', ''), // Default value for the dropdown
     year: '',
 });
 
@@ -41,6 +48,7 @@ const form = reactive({
 const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
+        faculty: { required: helpers.withMessage(t('validations.required'), required) },
     };
 });
 
@@ -90,6 +98,19 @@ const submitCourse = async (): Promise<void> => {
                     <div class="mb-4">
                         <label for="courseDescription">{{ t('views.courses.description') }}</label>
                         <Textarea id="courseDescription" v-model="form.description" autoResize rows="5" cols="30" />
+                    </div>
+
+                    <!-- Course faculty -->
+                    <div class="mb-4">
+                        <label for="courseFaculty">{{ t('views.courses.faculty') }}</label>
+                        <Dropdown
+                            id="courseFaculty"
+                            v-model="form.faculty"
+                            :options="faculties"
+                            optionLabel="name"
+                            v-if="faculties"
+                        />
+                        <ErrorMessage :field="v$.faculty" />
                     </div>
 
                     <!-- Course academic year, not editable -->
