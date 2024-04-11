@@ -527,6 +527,13 @@ export const restHandlers = [
         groups.push(newGroup);
         return HttpResponse.json(groups);
     }),
+    http.post(baseUrl + endpoints.projects.byCourse.replace('{courseId}', ':id'), async ({ request, params }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newProject = JSON.parse(requestBody);
+        projects.push(newProject);
+        return HttpResponse.json(projects);
+    }),
 ];
 
 const server = setupServer(...restHandlers);

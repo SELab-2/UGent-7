@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
+import { useCourses } from '@/composables/services/courses.service';
+import { Project } from '@/types/Projects';
+import { Course } from '@/types/Course';
 
 const { 
     projects,
@@ -13,6 +16,8 @@ const {
     createProject,
     deleteProject,
  } = useProject();
+
+ const { course, getCourseByID } = useCourses();
 
 describe('project', (): void => {
     it('gets project data by id', async () => {
@@ -116,5 +121,46 @@ describe('project', (): void => {
         expect(projects.value?.[1]?.extra_checks).toEqual([]);
         expect(projects.value?.[1]?.groups).toEqual([]);
         expect(projects.value?.[1]?.submissions).toEqual([]);
+    });
+
+    it('create project', async () => {
+        const courseId = '1'
+        await getCourseByID(courseId);
+        const exampleCourse: Course = course.value!;
+
+        const exampleProject = new Project(
+            '', // id
+            'project_name', // name
+            'project_description', // description
+            true, // visible
+            false, // archived
+            false, // locked_groups
+            new Date('November 1, 2024 04:20:00'), // start_data
+            new Date('November 2, 2024 04:20:00'), // deadline
+            20, // max_score
+            false, // score_visible
+            5, // group_size
+            null, // structure_file
+            exampleCourse, // course
+            [], // structureChecks
+            [], // extra_checks
+            [], // groups
+            [] // submissions
+        );
+
+        await getProjectsByCourse(courseId);
+
+        expect(projects).not.toBeNull();
+        expect(Array.isArray(projects.value)).toBe(true);
+        const prevLength = projects.value?.length ?? 0;
+
+        await createProject(exampleProject, courseId);
+        await getProjectsByCourse(courseId);
+
+        expect(projects).not.toBeNull();
+        expect(Array.isArray(projects.value)).toBe(true);
+        expect(projects.value?.length).toBe(prevLength + 1);
+
+        // Only check for fields that are sent to the backend
     });
 });
