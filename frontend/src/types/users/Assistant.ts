@@ -37,7 +37,7 @@ export class Assistant extends User {
      *
      * @param assistant
      */
-    static fromJSON(assistant: any): Assistant {
+    static fromJSON(assistant: Assistant): Assistant {
         return new Assistant(
             assistant.id,
             assistant.username,

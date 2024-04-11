@@ -1,8 +1,9 @@
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { HttpResponse, http } from 'msw';
 
 import { endpoints } from '@/config/endpoints.ts';
-import { 
+import {
     groups,
     projects,
     courses,
@@ -12,7 +13,7 @@ import {
     assistants,
     admins,
     structureChecks,
-    submissions
+    submissions,
 } from './data';
 
 const baseUrl = 'http://localhost';
@@ -67,4 +68,4 @@ export const postHandlers = [
         projects.push(newProject);
         return HttpResponse.json(projects);
     }),
-]
+];

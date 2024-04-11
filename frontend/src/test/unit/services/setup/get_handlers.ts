@@ -1,8 +1,7 @@
-
 import { HttpResponse, http } from 'msw';
 
 import { endpoints } from '@/config/endpoints.ts';
-import { 
+import {
     groups,
     projects,
     courses,
@@ -12,7 +11,7 @@ import {
     assistants,
     admins,
     structureChecks,
-    submissions
+    submissions,
 } from './data';
 
 const baseUrl = 'http://localhost';
@@ -140,5 +139,4 @@ export const getHandlers = [
     http.get(baseUrl + endpoints.assistants.index, () => {
         return HttpResponse.json(assistants);
     }),
-]
-
+];

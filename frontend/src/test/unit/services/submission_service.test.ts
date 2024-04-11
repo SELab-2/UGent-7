@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 
-const { 
+const {
     submissions,
     submission,
     getSubmissionByID,
@@ -13,14 +13,14 @@ const {
     deleteSubmission,
 } = useSubmission();
 
-function resetService() {
-    submission.value = null
-    submissions.value = null
+function resetService(): void {
+    submission.value = null;
+    submissions.value = null;
 }
 
 describe('submissions', (): void => {
     it('gets submissions data by id', async () => {
-        resetService()
+        resetService();
 
         await getSubmissionByID('1');
         expect(submission.value).not.toBeNull();
@@ -32,8 +32,8 @@ describe('submissions', (): void => {
     });
 
     it('gets submissions data by group', async () => {
-        resetService()
-        
+        resetService();
+
         await getSubmissionByGroup('1');
         expect(submissions).not.toBeNull();
         expect(Array.isArray(submissions.value)).toBe(true);
@@ -53,8 +53,8 @@ describe('submissions', (): void => {
     });
 
     it('gets submissions data by project', async () => {
-        resetService()
-        
+        resetService();
+
         await getSubmissionByProject('0');
         expect(submissions).not.toBeNull();
         expect(Array.isArray(submissions.value)).toBe(true);

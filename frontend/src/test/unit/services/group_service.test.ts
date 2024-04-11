@@ -5,7 +5,7 @@ import { Group } from '@/types/Group';
 import { useProject } from '@/composables/services/project.service';
 import { type Project } from '@/types/Projects';
 
-const { 
+const {
     groups,
     group,
     getGroupByID,
@@ -14,19 +14,19 @@ const {
 
     createGroup,
     deleteGroup,
- } = useGroup();
+} = useGroup();
 
-function resetService() {
-    group.value = null
-    groups.value = null
+function resetService(): void {
+    group.value = null;
+    groups.value = null;
 }
- 
+
 const { project, getProjectByID } = useProject();
 
 describe('group', (): void => {
     it('gets group data by id', async () => {
-        resetService()
-        
+        resetService();
+
         await getGroupByID('0');
         expect(group.value).not.toBeNull();
         expect(group.value?.score).toBe(20);
@@ -37,7 +37,7 @@ describe('group', (): void => {
     });
 
     it('gets groups data by project', async () => {
-        resetService()
+        resetService();
 
         await getGroupsByProject('0');
         expect(groups.value).not.toBeNull();
@@ -60,7 +60,7 @@ describe('group', (): void => {
     });
 
     it('gets groups data by student', async () => {
-        resetService()
+        resetService();
 
         await getGroupsByStudent('1');
         expect(groups.value).not.toBeNull();
@@ -76,11 +76,12 @@ describe('group', (): void => {
     });
 
     it('create group', async () => {
-        resetService()
+        resetService();
 
-        const projectId = '0'
+        const projectId = '0';
         await getProjectByID(projectId);
-        const exampleProject: Project = project.value!;
+        const exampleProject: Project | null = project.value;
+        expect(exampleProject).not.toBeNull();
 
         const exampleGroup = new Group(
             '', // id

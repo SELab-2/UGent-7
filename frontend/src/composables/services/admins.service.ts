@@ -51,7 +51,7 @@ export function useAdmin(): AdminState {
 
         getAdminByID,
         getAdmins,
-        
+
         createAdmin,
         deleteAdmin,
     };

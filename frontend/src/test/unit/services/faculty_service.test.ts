@@ -3,24 +3,24 @@ import { describe, it, expect } from 'vitest';
 import { useFaculty } from '@/composables/services/faculties.service.ts';
 import { Faculty } from '@/types/Faculty';
 
-const { 
+const {
     faculties,
     faculty,
     getFacultyByID,
     getFaculties,
 
     createFaculty,
-    deleteFaculty, 
+    deleteFaculty,
 } = useFaculty();
 
-function resetService() {
-    faculty.value = null
-    faculties.value = null
+function resetService(): void {
+    faculty.value = null;
+    faculties.value = null;
 }
 
 describe('faculty', (): void => {
     it('gets faculty data by id', async () => {
-        resetService()
+        resetService();
 
         await getFacultyByID('sciences');
         expect(faculty.value).not.toBeNull();
@@ -28,7 +28,7 @@ describe('faculty', (): void => {
     });
 
     it('gets faculties data', async () => {
-        resetService()
+        resetService();
 
         await getFaculties();
         expect(faculties).not.toBeNull();
@@ -41,7 +41,7 @@ describe('faculty', (): void => {
     });
 
     it('create faculty', async () => {
-        resetService()
+        resetService();
 
         const exampleFaculty = new Faculty(
             'faculty_id', // id

@@ -21,14 +21,14 @@ const {
     studentLeaveGroup,
 } = useStudents();
 
-function resetService() {
-    student.value = null
-    students.value = null
+function resetService(): void {
+    student.value = null;
+    students.value = null;
 }
 
 describe('students', (): void => {
     it('gets student data by id', async () => {
-        resetService()
+        resetService();
 
         await getStudentByID('1');
         expect(student.value).not.toBeNull();
@@ -47,7 +47,7 @@ describe('students', (): void => {
     });
 
     it('gets students data', async () => {
-        resetService()
+        resetService();
 
         await getStudents();
         expect(students).not.toBeNull();
@@ -108,7 +108,7 @@ describe('students', (): void => {
     });
 
     it('gets students data by course', async () => {
-        resetService()
+        resetService();
 
         await getStudentsByCourse('1');
         expect(students).not.toBeNull();
@@ -169,8 +169,8 @@ describe('students', (): void => {
     });
 
     it('create student', async () => {
-        resetService()
-        
+        resetService();
+
         const exampleStudent = new Student(
             '', // id
             '', // username

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { Assistant } from "@/types/users/Assistant";
+import { Assistant } from '@/types/users/Assistant';
 
 describe('Assistant class', () => {
     const assistantData = {
@@ -32,7 +32,7 @@ describe('Assistant class', () => {
             assistantData.faculties,
             assistantData.courses,
             assistantData.create_time,
-            assistantData.last_login
+            assistantData.last_login,
         );
 
         expect(assistant).toBeInstanceOf(Assistant);
@@ -82,7 +82,7 @@ describe('Assistant class', () => {
             assistantData.faculties,
             assistantData.courses,
             assistantData.create_time,
-            assistantData.last_login
+            assistantData.last_login,
         );
 
         expect(assistant.isAssistant()).toBe(true);

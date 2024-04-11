@@ -1,13 +1,7 @@
 import { afterAll, afterEach, beforeAll } from 'vitest';
 
-beforeAll(() => {
+beforeAll(() => {});
 
-});
+afterAll(() => {});
 
-afterAll(() => {
-
-});
-
-afterEach(() => {
-
-});
+afterEach(() => {});

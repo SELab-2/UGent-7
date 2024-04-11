@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { useStructureCheck } from '@/composables/services/structure_check.service.ts';
 
-const { 
+const {
     structureChecks,
     structureCheck,
     getStructureCheckByID,
@@ -10,17 +10,17 @@ const {
 
     createStructureCheck,
     deleteStructureCheck,
- } = useStructureCheck();
+} = useStructureCheck();
 
-function resetService() {
-    structureCheck.value = null
-    structureChecks.value = null
+function resetService(): void {
+    structureCheck.value = null;
+    structureChecks.value = null;
 }
 
 describe('structureCheck', (): void => {
     it('gets structure check data by id', async () => {
-        resetService()
-        
+        resetService();
+
         await getStructureCheckByID('1');
         expect(structureCheck.value).not.toBeNull();
         expect(structureCheck.value?.name).toBe('.');
@@ -30,8 +30,8 @@ describe('structureCheck', (): void => {
     });
 
     it('gets structureCheck data', async () => {
-        resetService()
-        
+        resetService();
+
         await getStructureCheckByProject('123456');
         expect(structureChecks).not.toBeNull();
         expect(Array.isArray(structureChecks.value)).toBe(true);

@@ -3,9 +3,9 @@ import { describe, it, expect } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useCourses } from '@/composables/services/courses.service';
 import { Project } from '@/types/Projects';
-import { Course } from '@/types/Course';
+import { type Course } from '@/types/Course';
 
-const { 
+const {
     projects,
     project,
     getProjectByID,
@@ -15,18 +15,18 @@ const {
 
     createProject,
     deleteProject,
- } = useProject();
+} = useProject();
 
 const { course, getCourseByID } = useCourses();
 
-function resetService() {
-    project.value = null
-    projects.value = null
+function resetService(): void {
+    project.value = null;
+    projects.value = null;
 }
 
 describe('project', (): void => {
     it('gets project data by id', async () => {
-        resetService()
+        resetService();
 
         await getProjectByID('0');
         expect(project.value).not.toBeNull();
@@ -49,8 +49,8 @@ describe('project', (): void => {
     });
 
     it('gets projects data', async () => {
-        resetService()
-        
+        resetService();
+
         await getProjectsByCourse('1');
         expect(projects).not.toBeNull();
         expect(Array.isArray(projects.value)).toBe(true);
@@ -92,7 +92,7 @@ describe('project', (): void => {
     });
 
     it('gets projects data', async () => {
-        resetService()
+        resetService();
 
         await getProjectsByStudent('1');
         expect(projects).not.toBeNull();
@@ -135,11 +135,12 @@ describe('project', (): void => {
     });
 
     it('create project', async () => {
-        resetService()
-        
-        const courseId = '1'
+        resetService();
+
+        const courseId = '1';
         await getCourseByID(courseId);
-        const exampleCourse: Course = course.value!;
+        const exampleCourse: Course | null = course.value;
+        expect(exampleCourse).not.toBeNull();
 
         const exampleProject = new Project(
             '', // id
@@ -158,7 +159,7 @@ describe('project', (): void => {
             [], // structureChecks
             [], // extra_checks
             [], // groups
-            [] // submissions
+            [], // submissions
         );
 
         await getProjectsByCourse(courseId);

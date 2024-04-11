@@ -9,14 +9,14 @@ const {
 
     getAdminByID,
     getAdmins,
-    
+
     createAdmin,
     deleteAdmin,
 } = useAdmin();
 
-function resetService() {
-    admin.value = null
-    admins.value = null
+function resetService(): void {
+    admin.value = null;
+    admins.value = null;
 }
 
 describe('admin', (): void => {
