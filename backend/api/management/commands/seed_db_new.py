@@ -95,6 +95,9 @@ def format_time(execution_time):
 class Command(BaseCommand):
     help = 'seed the db with data'
 
+    def add_arguments(self, parser):
+        parser.add_argument('size', type=str, help='The size you want to seed')
+
     amount_of_students = 50_000
     amount_of_assistants = 5_000
     amount_of_teachers = 1_500
@@ -104,6 +107,35 @@ class Command(BaseCommand):
     amount_of_submissions = 3_000
 
     def handle(self, *args, **options):
+        size = options['size']
+        if size == "small":
+            self.amount_of_students = 10
+            self.amount_of_assistants = 5
+            self.amount_of_teachers = 3
+            self.amount_of_courses = 3
+            self.amount_of_projects = 4
+            self.amount_of_groups = 7
+            self.amount_of_submissions = 10
+        elif size == "medium":
+            self.amount_of_students = 20_000
+            self.amount_of_assistants = 2_000
+            self.amount_of_teachers = 500
+            self.amount_of_courses = 500
+            self.amount_of_projects = 1_000
+            self.amount_of_groups = 1_000
+            self.amount_of_submissions = 1_000
+        elif size == "large":
+            self.amount_of_students = 50_000
+            self.amount_of_assistants = 5_000
+            self.amount_of_teachers = 1_500
+            self.amount_of_courses = 1_500
+            self.amount_of_projects = 3_000
+            self.amount_of_groups = 3_000
+            self.amount_of_submissions = 3_000
+        else:
+            self.stdout.write(self.style.ERROR("give a size from small, medium or large!"))
+            return
+
         # Reset DB
         User.objects.all().delete()
         Student.objects.all().delete()
@@ -112,6 +144,8 @@ class Command(BaseCommand):
         Course.objects.all().delete()
         Project.objects.all().delete()
         Submission.objects.all().delete()
+
+        self.stdout.write(self.style.SUCCESS("Successfully cleared db!"))
 
         # Seed students
         fake = faker()

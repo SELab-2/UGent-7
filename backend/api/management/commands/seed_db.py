@@ -1,20 +1,21 @@
-from django.core.management.base import BaseCommand
-from faker import Faker
-from django.utils import timezone
-from django.db.models import Max
-from faker.providers import BaseProvider, DynamicProvider
 import random
 import time
 
-from authentication.models import Faculty
-from api.models.student import Student
 from api.models.assistant import Assistant
-from api.models.teacher import Teacher
+from api.models.checks import FileExtension, StructureCheck
 from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
+from api.models.student import Student
 from api.models.submission import Submission
-from api.models.checks import FileExtension, StructureCheck
+from api.models.teacher import Teacher
+from authentication.models import Faculty
+from django.core.management.base import BaseCommand
+from django.db.models import Max
+from django.utils import timezone
+from faker import Faker
+from faker.providers import BaseProvider, DynamicProvider
+
 fake = Faker()
 
 # Faker.seed(4321) # set to make data same each time
@@ -483,6 +484,9 @@ def format_time(execution_time):
 class Command(BaseCommand):
     help = 'seed the db with data'
 
+    def add_arguments(self, parser):
+        parser.add_argument('size', type=str, help='The size you want to seed')
+
     def seed_data(self, amount, provider_function, update_function):
         for _ in range(amount):
             provider_function(self)
@@ -491,25 +495,41 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         start_time = time.time()
         # TODO maybey take as option
-        amount_of_students = 50_000
-        amount_of_assistants = 5_000
-        amount_of_teachers = 1_500
-        amount_of_courses = 1_500
-        amount_of_projects = 3_000
-        amount_of_groups = 3_000
-        amount_of_submissions = 3_000
-        amount_of_file_extensions = 0
-        amount_of_structure_checks = 0
 
-        # amount_of_students = 10
-        # amount_of_assistants = 0
-        # amount_of_teachers = 0
-        # amount_of_courses = 0
-        # amount_of_projects = 0
-        # amount_of_groups = 0
-        # amount_of_submissions = 0
-        # amount_of_file_extensions = 0
-        # amount_of_structure_checks = 0
+        size = options['size']
+        if size == "small":
+            amount_of_students = 0
+            amount_of_assistants = 0
+            amount_of_teachers = 0
+            amount_of_courses = 0
+            amount_of_projects = 0
+            amount_of_groups = 0
+            amount_of_submissions = 0
+            amount_of_file_extensions = 50
+            amount_of_structure_checks = 1_000
+        elif size == "medium":
+            amount_of_students = 0
+            amount_of_assistants = 0
+            amount_of_teachers = 0
+            amount_of_courses = 0
+            amount_of_projects = 0
+            amount_of_groups = 0
+            amount_of_submissions = 0
+            amount_of_file_extensions = 50
+            amount_of_structure_checks = 2_000
+        elif size == "large":
+            amount_of_students = 0
+            amount_of_assistants = 0
+            amount_of_teachers = 0
+            amount_of_courses = 0
+            amount_of_projects = 0
+            amount_of_groups = 0
+            amount_of_submissions = 0
+            amount_of_file_extensions = 50
+            amount_of_structure_checks = 6_000
+        else:
+            self.stdout.write(self.style.ERROR("give a size from small, medium or large!"))
+            return
 
         self.seed_data(amount_of_students, fake.provide_student, update_Student_providers)
         self.stdout.write(self.style.SUCCESS('Successfully seeded students!'))

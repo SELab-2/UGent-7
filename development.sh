@@ -3,8 +3,9 @@
 backend=false
 frontend=false
 build=false
+data="small"
 
-while getopts ":bfc" opt; do
+while getopts ":bfcd:" opt; do
   case ${opt} in
     b )
       backend=true
@@ -15,8 +16,15 @@ while getopts ":bfc" opt; do
     c )
       build=true
       ;;
+    d )
+      data="$OPTARG"
+      if [[ ! $data =~ ^("small"|"medium"|"large")$ ]]; then
+        echo "Invalid size provided. Size must be 'small', 'medium', or 'large'."
+        exit 1
+      fi
+      ;;
     \? )
-      echo "Usage: $0 [-b] [-f] [-c]"
+      echo "Usage: $0 [-b] [-f] [-c] [-d <size>] "
       exit 1
       ;;
   esac
@@ -56,6 +64,15 @@ fi
 echo "Starting services..."
 docker-compose -f development.yml up -d
 
+echo "-------------------------------------"
+if [ "$data" = "medium" ]; then
+    docker exec backend sh -c "python manage.py loaddata */fixtures/medium/*"
+elif [ "$data" = "large" ]; then
+    docker exec backend sh -c "python manage.py loaddata */fixtures/large/*"
+fi
+echo "$data data is ready"
+echo "-------------------------------------"
+echo ""
 echo "-------------------------------------"
 echo "Following logs..."
 echo "Press CTRL + C to stop all containers"
