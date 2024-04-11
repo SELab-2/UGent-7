@@ -6,10 +6,12 @@ import { User } from '@/types/users/User.ts';
 const {
     admins,
     admin,
+
     getAdminByID,
     getAdmins,
-
+    
     createAdmin,
+    deleteAdmin,
 } = useAdmin();
 
 describe('admin', (): void => {

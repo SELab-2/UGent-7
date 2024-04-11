@@ -3,7 +3,15 @@ import { describe, it, expect } from 'vitest';
 import { useFaculty } from '@/composables/services/faculties.service.ts';
 import { Faculty } from '@/types/Faculty';
 
-const { faculties, faculty, getFacultyByID, getFaculties, createFaculty } = useFaculty();
+const { 
+    faculties,
+    faculty,
+    getFacultyByID,
+    getFaculties,
+
+    createFaculty,
+    deleteFaculty, 
+} = useFaculty();
 
 describe('faculty', (): void => {
     it('gets faculty data by id', async () => {

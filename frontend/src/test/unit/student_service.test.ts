@@ -10,8 +10,15 @@ const {
     getStudentByID,
     getStudents,
     getStudentsByCourse,
+    getStudentsByGroup,
 
     createStudent,
+    deleteStudent,
+
+    studentJoinCourse,
+    studentLeaveCourse,
+    studentJoinGroup,
+    studentLeaveGroup,
 } = useStudents();
 
 describe('students', (): void => {

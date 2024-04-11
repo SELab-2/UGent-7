@@ -9,6 +9,12 @@ const {
     getTeacherByID,
     getTeacherByCourse,
     getTeachers,
+
+    createTeacher,
+    deleteTeacher,
+
+    teacherJoinCourse,
+    teacherLeaveCourse,
 } = useTeacher();
 
 describe('teachers', (): void => {

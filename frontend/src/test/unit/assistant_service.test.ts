@@ -12,6 +12,10 @@ const {
     getAssistants,
 
     createAssistant,
+    deleteAssistant,
+
+    assistantJoinCourse,
+    assistantLeaveCourse,
 } = useAssistant();
 
 describe('assistant', (): void => {

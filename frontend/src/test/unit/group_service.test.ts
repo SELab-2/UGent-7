@@ -5,7 +5,17 @@ import { Group } from '@/types/Group';
 import { useProject } from '@/composables/services/project.service';
 import { type Project } from '@/types/Projects';
 
-const { groups, group, getGroupByID, getGroupsByProject, getGroupsByStudent, createGroup } = useGroup();
+const { 
+    groups,
+    group,
+    getGroupByID,
+    getGroupsByProject,
+    getGroupsByStudent,
+
+    createGroup,
+    deleteGroup,
+ } = useGroup();
+ 
 const { project, getProjectByID } = useProject();
 
 describe('group', (): void => {

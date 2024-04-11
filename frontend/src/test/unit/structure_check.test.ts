@@ -2,7 +2,15 @@
 import { describe, it, expect } from 'vitest';
 import { useStructureCheck } from '@/composables/services/structure_check.service.ts';
 
-const { structureChecks, structureCheck, getStructureCheckByID, getStructureCheckByProject } = useStructureCheck();
+const { 
+    structureChecks,
+    structureCheck,
+    getStructureCheckByID,
+    getStructureCheckByProject,
+
+    createStructureCheck,
+    deleteStructureCheck,
+ } = useStructureCheck();
 
 describe('structureCheck', (): void => {
     it('gets structure check data by id', async () => {
