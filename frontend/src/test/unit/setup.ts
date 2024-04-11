@@ -489,7 +489,6 @@ export const restHandlers = [
         const buffer = await request.arrayBuffer();
         const requestBody = new TextDecoder().decode(buffer);
         const newAdmin = JSON.parse(requestBody);
-        newAdmin.is_staff = true;
         admins.push(newAdmin);
         return HttpResponse.json(admins);
     }),
@@ -497,7 +496,6 @@ export const restHandlers = [
         const buffer = await request.arrayBuffer();
         const requestBody = new TextDecoder().decode(buffer);
         const newAssistant = JSON.parse(requestBody);
-        newAssistant.roles = ['assistant'];
         assistants.push(newAssistant);
         return HttpResponse.json(assistants);
     }),

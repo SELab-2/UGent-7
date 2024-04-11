@@ -90,18 +90,18 @@ describe('assistant', (): void => {
 
     it('create assistant', async () => {
         const exampleAssistant = new Assistant(
-            '102',
-            'sample_assistant',
-            'sample.assistant@UGent.be',
-            'Sample',
-            'Assistant',
-            2023,
-            true,
-            [],
-            [],
-            [],
-            new Date('April 2, 2023 01:15:00'),
-            new Date('April 2, 2024 01:15:00'),
+            '', // id
+            '', // username
+            'sample.assistant@UGent.be', // email
+            'assistant_first_name', // first_name
+            'assistant_last_name', // last name
+            2023, // last enrolled
+            true, // is_staff
+            [], // roles
+            [], // faculties
+            [], // courses
+            new Date(), // create_time
+            null, // last_login
         );
 
         await getAssistants();
@@ -116,9 +116,9 @@ describe('assistant', (): void => {
         expect(Array.isArray(assistants.value)).toBe(true);
         expect(assistants.value?.length).toBe(prevLength + 1);
 
-        expect(assistants.value?.[prevLength]?.first_name).toBe('Sample');
-        expect(assistants.value?.[prevLength]?.last_name).toBe('Assistant');
+        // Only check for fields that are sent to the backend
+        expect(assistants.value?.[prevLength]?.first_name).toBe('assistant_first_name');
+        expect(assistants.value?.[prevLength]?.last_name).toBe('assistant_last_name');
         expect(assistants.value?.[prevLength]?.email).toBe('sample.assistant@UGent.be');
-        expect(assistants.value?.[prevLength]?.roles).toContain('assistant');
     });
 });

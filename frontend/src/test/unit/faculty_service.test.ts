@@ -41,6 +41,7 @@ describe('faculty', (): void => {
         expect(Array.isArray(faculties.value)).toBe(true);
         expect(faculties.value?.length).toBe(prevLength + 1);
 
+        // Only check for fields that are sent to the backend
         expect(faculties.value?.[prevLength]?.id).toBe('faculty_id');
         expect(faculties.value?.[prevLength]?.name).toBe('faculty_name');
     });

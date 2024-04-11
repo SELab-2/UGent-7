@@ -57,7 +57,8 @@ describe('group', (): void => {
     });
 
     it('create group', async () => {
-        await getProjectByID('0');
+        const projectId = '0'
+        await getProjectByID(projectId);
         const exampleProject: Project = project.value!;
 
         const exampleGroup = new Group(
@@ -68,19 +69,20 @@ describe('group', (): void => {
             [], // submissions
         );
 
-        await getGroupsByProject('0');
+        await getGroupsByProject(projectId);
 
         expect(groups).not.toBeNull();
         expect(Array.isArray(groups.value)).toBe(true);
         const prevLength = groups.value?.length ?? 0;
 
-        await createGroup(exampleGroup, '0');
-        await getGroupsByProject('0');
+        await createGroup(exampleGroup, projectId);
+        await getGroupsByProject(projectId);
 
         expect(groups).not.toBeNull();
         expect(Array.isArray(groups.value)).toBe(true);
         expect(groups.value?.length).toBe(prevLength + 1);
 
+        // Only check for fields that are sent to the backend
         expect(groups.value?.[prevLength]?.score).toBe(10);
         expect(groups.value?.[prevLength]?.project).toBeNull();
     });

@@ -147,11 +147,11 @@ describe('course', (): void => {
 
     it('create course', async () => {
         const exampleCourse = new Course(
-            'course1_id', // id
-            'course1_name', // name
-            'course1_description', // description
+            'course_id', // id
+            'course_name', // name
+            'course_description', // description
             2024, // acedemic_startyear,
-            null, // paranet_course
+            null, // parent_course
             null, // faculty
             [], // teachers
             [], // assistants
@@ -171,9 +171,10 @@ describe('course', (): void => {
         expect(Array.isArray(courses.value)).toBe(true);
         expect(courses.value?.length).toBe(prevLength + 1);
 
-        expect(courses.value?.[prevLength]?.id).toBe('course1_id');
-        expect(courses.value?.[prevLength]?.name).toBe('course1_name');
-        expect(courses.value?.[prevLength]?.description).toBe('course1_description');
+        // Only check for fields that are sent to the backend
+        expect(courses.value?.[prevLength]?.id).toBe('course_id');
+        expect(courses.value?.[prevLength]?.name).toBe('course_name');
+        expect(courses.value?.[prevLength]?.description).toBe('course_description');
         expect(courses.value?.[prevLength]?.academic_startyear).toBe(2024);
     });
 });

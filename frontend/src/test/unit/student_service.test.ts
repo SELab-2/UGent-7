@@ -152,17 +152,17 @@ describe('students', (): void => {
 
     it('create student', async () => {
         const exampleStudent = new Student(
-            '103',
-            'sample_student',
-            'sample.student@UGent.be',
-            'Sample',
-            'Student',
-            false,
-            2024,
-            new Date('April 2, 2023 01:15:00'),
-            new Date('April 2, 2024 01:15:00'),
-            '12345',
-            ['student'],
+            '', // id
+            '', // username
+            'sample.student@UGent.be', // email
+            'student_first_name', // first_name
+            'student_last_name', // last_name
+            false, // is_staff
+            2024, // last_enrolled
+            new Date(), // create_time
+            null, // last_login
+            '', // studentId
+            [],
             [],
             [],
             [],
@@ -180,8 +180,9 @@ describe('students', (): void => {
         expect(Array.isArray(students.value)).toBe(true);
         expect(students.value?.length).toBe(prevLength + 1);
 
-        expect(students.value?.[prevLength]?.first_name).toBe('Sample');
-        expect(students.value?.[prevLength]?.last_name).toBe('Student');
+        // Only check for fields that are sent to the backend
+        expect(students.value?.[prevLength]?.first_name).toBe('student_first_name');
+        expect(students.value?.[prevLength]?.last_name).toBe('student_last_name');
         expect(students.value?.[prevLength]?.email).toBe('sample.student@UGent.be');
     });
 });

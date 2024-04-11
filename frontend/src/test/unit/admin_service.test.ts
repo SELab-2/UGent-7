@@ -56,17 +56,17 @@ describe('admin', (): void => {
 
     it('create admin', async () => {
         const exampleAdmin = new User(
-            '101', // id
-            'sample_admin', // username
+            '', // id
+            '', // username
             'sample.admin@UGent.be', // email
-            'Sample', // first_name
-            'Admin', // last_name
-            2024, // last_enrolled
+            'admin_first_name', // first_name
+            'admin_last_name', // last_name
+            -1, // last_enrolled
             true, // is_staff
-            ['user'], // roles
+            [], // roles
             [], // faculties
-            new Date('April 2, 2023 01:15:00'), // create_time
-            new Date('April 2, 2024 01:15:00'), // last_login
+            new Date(), // create_time
+            null, // last_login
         );
 
         await getAdmins();
@@ -81,9 +81,9 @@ describe('admin', (): void => {
         expect(Array.isArray(admins.value)).toBe(true);
         expect(admins.value?.length).toBe(prevLength + 1);
 
-        expect(admins.value?.[prevLength]?.first_name).toBe('Sample');
-        expect(admins.value?.[prevLength]?.last_name).toBe('Admin');
+        // Only check for fields that are sent to the backend
+        expect(admins.value?.[prevLength]?.first_name).toBe('admin_first_name');
+        expect(admins.value?.[prevLength]?.last_name).toBe('admin_last_name');
         expect(admins.value?.[prevLength]?.email).toBe('sample.admin@UGent.be');
-        expect(admins.value?.[prevLength]?.is_staff).toBe(true);
     });
 });
