@@ -142,6 +142,7 @@ const saveItem = (): void => {
                     // func(editItem.value);
                 }
             }
+            // update admin status TODO
             // update locally
             pagination.value.results.splice(index, 1, { ...editItem.value });
         }
@@ -242,6 +243,10 @@ const saveItem = (): void => {
         <div v-for="role in roles.toSpliced(0, 1)" :key="role" class="flex align-items-center gap-3 mb-3">
             <label class="font-semibold w-10rem">{{ t('admin.' + role) }}</label>
             <InputSwitch :model-value="editItem.roles.includes(role)" @click="() => updateRole(role)" />
+        </div>
+        <div class="flex align-items-center gap-3 mb-3">
+            <label>{{ t('admin.title') }}</label>
+            <InputSwitch :model-value="editItem.is_staff" @click="editItem.is_staff = true" />
         </div>
         <div class="flex justify-content-end gap-2">
             <Button type="button" :label="t('admin.cancel')" severity="secondary" @click="popupEdit = false"></Button>
