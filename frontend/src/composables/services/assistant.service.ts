@@ -58,12 +58,12 @@ export function useAssistant(): AssistantState {
 
     async function assistantJoinCourse(courseId: string, assistantId: string): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await create<Response>(endpoint, { assistantId }, response, Response.fromJSON);
+        await create<Response>(endpoint, { assistant: assistantId }, response, Response.fromJSON);
     }
 
     async function assistantLeaveCourse(courseId: string, assistantId: string): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await deleteIdWithData<Response>(endpoint, { assistantId }, response, Response.fromJSON);
+        await deleteIdWithData<Response>(endpoint, { assistant: assistantId }, response, Response.fromJSON);
     }
 
     async function createAssistant(assistantData: Assistant): Promise<void> {

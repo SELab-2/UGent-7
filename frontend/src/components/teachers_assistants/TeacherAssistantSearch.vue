@@ -120,7 +120,7 @@ onMounted(async () => {
         </div>
         <div class="col-12 xl:col-9">
             <TeacherAssistantList :users="filteredUsers" :cols="3" :course="props.course" />
-            <Paginator :rows="pageSize" :total-records="filteredUsers?.length" :first="first" v-model:first="first" />
+            <Paginator :rows="pageSize" :total-records="filteredUsers?.length" :first="first" />
         </div>
     </div>
 </template>

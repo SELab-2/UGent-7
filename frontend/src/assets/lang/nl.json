@@ -77,8 +77,12 @@
             "description": "Beschrijving",
             "faculty": "Faculteit",
             "year": "Academiejaar",
+            "enroll": "Inschrijven",
+            "leave": "Uitschrijven",
             "teachers_and_assistants": {
                 "title": "Lesgevers gelinkt aan dit vak",
+                "enroll": "Voeg toe als {0}",
+                "leave": "Verwijder uit vak",
                 "search": {
                     "search": "Zoeken",
                     "faculty": "Faculteit",

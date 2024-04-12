@@ -26,11 +26,9 @@ const { t } = useI18n();
 async function joinCourse(): Promise<void> {
     try {
         if (props.user.isAssistant()) {
-            const assistant = props.user as Assistant;
-            await assistantJoinCourse(assistant.id, props.course.id);
+            await assistantJoinCourse(props.course.id, props.user.id);
         } else if (props.user.isTeacher()) {
-            const teacher = props.user as Teacher;
-            await teacherJoinCourse(teacher.id, props.course.id);
+            await teacherJoinCourse(props.course.id, props.user.id);
         }
 
         addSuccessMessage(
@@ -39,7 +37,7 @@ async function joinCourse(): Promise<void> {
         );
 
         // TODO:
-        await refreshUser();
+        // await refreshUser();
     } catch (error) {
         addErrorMessage(t('toasts.messages.error'), t('toasts.messages.courses.enrollment.error', [props.course.name]));
     }
@@ -51,11 +49,9 @@ async function joinCourse(): Promise<void> {
 async function leaveCourse(): Promise<void> {
     try {
         if (props.user.isAssistant()) {
-            const assistant = props.user as Assistant;
-            await assistantLeaveCourse(assistant.id, props.course.id);
+            await assistantLeaveCourse(props.course.id, props.user.id);
         } else if (props.user.isTeacher()) {
-            const teacher = props.user as Teacher;
-            await teacherLeaveCourse(teacher.id, props.course.id);
+            await teacherLeaveCourse(props.course.id, props.user.id);
         }
 
         addSuccessMessage(
@@ -64,7 +60,7 @@ async function leaveCourse(): Promise<void> {
         );
 
         // TODO:
-        await refreshUser();
+        // await refreshUser();
     } catch (error) {
         addErrorMessage(t('toasts.messages.error'), t('toasts.messages.courses.leave.error', [props.course.name]));
     }
@@ -73,8 +69,8 @@ async function leaveCourse(): Promise<void> {
 
 <template>
     <Button
-        class="text-sm p-0"
-        label="Inschrijven"
+        class="text-sm p-0 custom-button"
+        :label="t('views.courses.teachers_and_assistants.enroll', [user.isAssistant() ? t('types.roles.assistant') : t('types.roles.teacher')])"
         icon-pos="right"
         icon="pi pi-arrow-right"
         @click="joinCourse"
@@ -82,8 +78,8 @@ async function leaveCourse(): Promise<void> {
         link
     />
     <Button
-        class="text-sm p-0"
-        label="Uitschrijven"
+        class="text-sm p-0 custom-button"
+        :label="t('views.courses.teachers_and_assistants.leave')"
         icon-pos="right"
         icon="pi pi-arrow-right"
         @click="leaveCourse"
@@ -92,4 +88,10 @@ async function leaveCourse(): Promise<void> {
     />
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.custom-button {
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+}
+</style>

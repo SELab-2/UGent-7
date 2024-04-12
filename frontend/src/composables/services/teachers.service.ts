@@ -59,12 +59,12 @@ export function useTeacher(): TeacherState {
 
     async function teacherJoinCourse(courseId: string, teacherId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
-        await create<Response>(endpoint, { teacherId }, response, Response.fromJSON);
+        await create<Response>(endpoint, { teacher: teacherId }, response, Response.fromJSON);
     }
 
     async function teacherLeaveCourse(courseId: string, teacherId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
-        await deleteIdWithData<Response>(endpoint, { teacherId }, response, Response.fromJSON);
+        await deleteIdWithData<Response>(endpoint, { teacher: teacherId }, response, Response.fromJSON);
     }
 
     async function createTeacher(teacherData: Teacher): Promise<void> {
