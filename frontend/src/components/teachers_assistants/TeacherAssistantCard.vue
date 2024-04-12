@@ -5,31 +5,33 @@ import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';
 import TeacherCourseAddButton from '@/components/teachers_assistants/add_button/TeacherCourseAddButton.vue';
 import AssistantCourseAddButton from '@/components/teachers_assistants/add_button/AssistantCourseAddButton.vue';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { storeToRefs } from 'pinia';
 
 /* Component props */
-defineProps<{
-    user: User,
-    course: Course,
-}>();
+const props = defineProps<{ user: User, course: Course }>();
 
 /* Composable injections */
 const { t } = useI18n();
+const { user } = storeToRefs(useAuthStore());
+
 </script>
 
 <template>
     <Card class="border-round course-card">
         <template #title>
-            <h2 class="text-primary m-0 text-xl">{{ user.getFullName() }}</h2>
+            <h2 class="text-primary m-0 text-xl">{{ props.user.getFullName() }}</h2>
         </template>
         <template #subtitle>
-            <span class="text-sm">{{ t(user.getRole()) }}</span>
+            <span class="text-sm">{{ t(props.user.getRole()) }}</span>
         </template>
         <template #content>
-            {{ user.email }}
+            {{ props.user.email }}
         </template>
-        <template #footer>
-            <TeacherCourseAddButton :user="user" :course="course" v-if="user.isTeacher()" />
-            <AssistantCourseAddButton :user="user" :course="course" v-else-if="user.isAssistant()" />
+        <!-- Display add/remove button on the assistant/teacher card, only when the user is a-->
+        <template #footer v-if="user?.isTeacher()">
+            <TeacherCourseAddButton :user="props.user" :course="course" v-if="props.user.isTeacher()" />
+            <AssistantCourseAddButton :user="props.user" :course="course" v-else-if="props.user.isAssistant()" />
         </template>
     </Card>
 </template>
