@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Skeleton from 'primevue/skeleton';
 import { type User } from '@/types/users/User.ts';
+import { type Course } from '@/types/Course.ts';
 import TeacherAssistantCard from './TeacherAssistantCard.vue';
 
 /* Props */
 interface Props {
     users: User[];
+    course: Course;
     cols?: number;
 }
 
@@ -25,7 +27,7 @@ withDefaults(defineProps<Props>(), {
                     v-for="user in users"
                     :key="user.id"
                 >
-                    <TeacherAssistantCard class="h-full" :user="user"/>
+                    <TeacherAssistantCard class="h-full" :user="user" :course="course" />
                 </div>
             </template>
         </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantCourseList.vue';
+import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 
@@ -36,7 +36,7 @@ const { t } = useI18n();
     </div>
 
     <!-- List with teachers and assistants -->
-    <TeacherAssistantList :course="props.course" />
+    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)"/>
 </template>
 
 <style scoped lang="scss"></style>

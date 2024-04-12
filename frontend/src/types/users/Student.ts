@@ -36,14 +36,6 @@ export class Student extends User {
     }
 
     /**
-     * Check if the student has a course.
-     * @param course
-     */
-    public hasCourse(course: Course): boolean {
-        return this.courses.some((c) => c.id === course.id);
-    }
-
-    /**
      * Convert a student object to a student instance.
      *
      * @param student
@@ -78,5 +70,13 @@ export class Student extends User {
      */
     public getRole(): string {
         return 'types.roles.student';
+    }
+
+    /**
+     * Check if the student has a course.
+     * @param course
+     */
+    public hasCourse(course: Course): boolean {
+        return this.courses.some((c) => c.id === course.id);
     }
 }

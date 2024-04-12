@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantCourseList.vue';
+import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
 import TeacherAssistantSearch from '@/components/teachers_assistants/TeacherAssistantSearch.vue';
 import TooltipHover from '@/components/TooltipHover.vue';
 import Button from 'primevue/button';
@@ -118,7 +118,7 @@ const handleClone = async (): Promise<void> => {
         <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
     </div>
     <!-- List with teachers and assistants -->
-    <TeacherAssistantList :course="props.course" />
+    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)"/>
 
     <!-- Heading to add/remove teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">

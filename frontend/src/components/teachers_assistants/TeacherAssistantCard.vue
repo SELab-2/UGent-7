@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
 import { type User } from '@/types/users/User.ts';
+import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';
+import TeacherAssistantCourseAddButton from './TeacherAssistantCourseAddButton.vue';
 
 /* Component props */
 defineProps<{
-    user: User
+    user: User,
+    course: Course,
 }>();
 
 /* Composable injections */
@@ -22,6 +25,9 @@ const { t } = useI18n();
         </template>
         <template #content>
             {{ user.email }}
+        </template>
+        <template #footer>
+            <TeacherAssistantCourseAddButton :user="user" :course="course" />
         </template>
     </Card>
 </template>

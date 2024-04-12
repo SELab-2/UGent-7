@@ -7,8 +7,10 @@ import InputIcon from 'primevue/inputicon';
 import Checkbox from 'primevue/checkbox';
 import Paginator from 'primevue/paginator';
 import TeacherAssistantList from './TeacherAssistantList.vue';
+import { type Course} from '@/types/Course.ts';
 import { onMounted, ref } from 'vue';
 import { useTeacher } from '@/composables/services/teachers.service';
+import { useAssistant } from '@/composables/services/assistant.service';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useFaculty } from '@/composables/services/faculties.service.ts';
 import { storeToRefs } from 'pinia';
@@ -25,8 +27,12 @@ const { query } = useRoute();
 const { user } = storeToRefs(useAuthStore());
 const { faculties, getFaculties } = useFaculty();
 const { teacherPagination, searchTeachers } = useTeacher();
+const { assistantPagination, searchAssistants } = useAssistant();
 const { onPaginate, resetPagination, page, first, pageSize } = usePaginator();
 const { filter, onFilter } = useFilter(getUserFilters(query));
+
+/* Props */
+const props = defineProps<{ course: Course }>();
 
 /* Teacher and assistant roles */
 const roles = [
@@ -42,9 +48,10 @@ const filteredUsers = ref<User[]>([]);
  */
 async function fetchUsers(): Promise<void> {
     await searchTeachers(filter.value, page.value, pageSize.value);
+    await searchAssistants(filter.value, page.value, pageSize.value);
 
     // Set the filtered users
-    filteredUsers.value = teacherPagination.value?.results || [];
+    filteredUsers.value = [...(teacherPagination.value?.results ?? []), ...(assistantPagination.value?.results ?? [])];
 }
 
 /* Fetch the faculties */
@@ -61,7 +68,7 @@ onMounted(async () => {
     /* Reset pagination on filter change */
     onFilter(
         async () => {
-            await resetPagination([teacherPagination]);
+            await resetPagination([teacherPagination, assistantPagination]);
         },
         0,
         false,
@@ -112,7 +119,7 @@ onMounted(async () => {
             </Accordion>
         </div>
         <div class="col-12 xl:col-9">
-            <TeacherAssistantList :users="filteredUsers" :cols="3" />
+            <TeacherAssistantList :users="filteredUsers" :cols="3" :course="props.course" />
             <Paginator :rows="pageSize" :total-records="filteredUsers?.length" :first="first" v-model:first="first" />
         </div>
     </div>

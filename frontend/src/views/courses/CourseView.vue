@@ -5,6 +5,8 @@ import TeacherCourseView from './roles/TeacherCourseView.vue';
 import AssistantCourseView from './roles/AssistantCourseView.vue';
 import { onMounted } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
+import { useAssistant } from '@/composables/services/assistant.service';
+import { useTeacher } from '@/composables/services/teachers.service';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
@@ -13,9 +15,22 @@ import { storeToRefs } from 'pinia';
 const { user } = storeToRefs(useAuthStore());
 const { params } = useRoute();
 const { course, getCourseByID } = useCourses();
+const { assistants, getAssistantByCourse } = useAssistant();
+const { teachers, getTeacherByCourse } = useTeacher();
 
-onMounted(() => {
-    getCourseByID(params.courseId as string);
+onMounted(async () => {
+    await getCourseByID(params.courseId as string);
+
+    // Get assistants and teachers
+    if (course.value) {
+        await getAssistantByCourse(course.value.id);
+        await getTeacherByCourse(course.value.id);
+
+        // Set the course's assistants and teachers
+        course.value.assistants = assistants.value ?? [];
+        course.value.teachers = teachers.value ?? [];
+    }
+
 });
 </script>
 

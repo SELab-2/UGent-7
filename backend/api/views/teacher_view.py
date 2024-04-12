@@ -1,6 +1,5 @@
 from django.utils.translation import gettext
 from django.db.models.functions import Concat
-from rest_framework.pagination import PageNumberPagination
 from django.db.models import Value
 from rest_framework.decorators import action
 from rest_framework.response import Response

@@ -32,6 +32,7 @@ export const endpoints = {
     },
     assistants: {
         index: '/api/assistants/',
+        search: '/api/assistants/search/',
         retrieve: '/api/assistants/{id}/',
         byCourse: '/api/courses/{courseId}/assistants/',
     },
