@@ -5,7 +5,6 @@ import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
 import { useCourses } from '@/composables/services/courses.service.ts';
-import { type User } from '@/types/users/User.ts';
 
 interface TeacherState {
     teachers: Ref<Teacher[] | null>;
@@ -58,12 +57,14 @@ export function useTeacher(): TeacherState {
         await deleteIdWithData<Response>(endpoint, { teacherId }, response, Response.fromJSON);
     }
 
-    async function createTeacher(user: User): Promise<void> {
+    async function createTeacher(teacherData: Teacher): Promise<void> {
         const endpoint = endpoints.teachers.index;
         await create<Teacher>(
             endpoint,
             {
-                user: user.id,
+                email: teacherData.email,
+                first_name: teacherData.first_name,
+                last_name: teacherData.last_name,
             },
             teacher,
             Teacher.fromJSON,
