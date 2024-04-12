@@ -38,6 +38,7 @@ export function useGroup(): GroupState {
             endpoint,
             {
                 score: groupData.score,
+                project: groupData.project?.id,
             },
             group,
             Group.fromJSON,

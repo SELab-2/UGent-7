@@ -4,8 +4,14 @@ import { useSubmissionStatus } from '@/composables/services/submission_status.se
 
 const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus();
 
+function resetService(): void {
+    submissionStatus.value = null;
+}
+
 describe('submision_status', (): void => {
     it('gets submision status data by project', async () => {
+        resetService();
+
         await getSubmissionStatusByProject('0');
         expect(submissionStatus.value).not.toBeNull();
         expect(submissionStatus.value?.groups_submitted).toBe(1);

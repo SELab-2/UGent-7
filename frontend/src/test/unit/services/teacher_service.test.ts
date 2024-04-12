@@ -9,10 +9,23 @@ const {
     getTeacherByID,
     getTeacherByCourse,
     getTeachers,
+
+    createTeacher,
+    deleteTeacher,
+
+    teacherJoinCourse,
+    teacherLeaveCourse,
 } = useTeacher();
+
+function resetService(): void {
+    teacher.value = null;
+    teachers.value = null;
+}
 
 describe('teachers', (): void => {
     it('gets teacher data by id', async () => {
+        resetService();
+
         await getTeacherByID('123');
         expect(teacher.value).not.toBeNull();
         expect(teacher.value?.username).toBe('tboonen');
@@ -28,6 +41,8 @@ describe('teachers', (): void => {
     });
 
     it('gets teacher data', async () => {
+        resetService();
+
         await getTeachers();
         expect(teachers).not.toBeNull();
         expect(Array.isArray(teachers.value)).toBe(true);
@@ -57,6 +72,8 @@ describe('teachers', (): void => {
     });
 
     it('gets teacher data by course', async () => {
+        resetService();
+
         await getTeacherByCourse('1');
         expect(teachers).not.toBeNull();
         expect(Array.isArray(teachers.value)).toBe(true);
