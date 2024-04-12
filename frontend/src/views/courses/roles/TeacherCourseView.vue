@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
+import TooltipHover from '@/components/TooltipHover.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import InputSwitch from 'primevue/inputswitch';
@@ -51,7 +52,7 @@ const handleClone = async (): Promise<void> => {
 
         <ButtonGroup class="flex align-items-center space-x-2">
             <!-- Update course button -->
-            <div class="tooltip">
+            <TooltipHover text="views.courses.edit">
                 <RouterLink :to="{ name: 'course-edit', params: { courseId: props.course.id } }">
                     <Button
                         :icon="PrimeIcons.PENCIL"
@@ -60,11 +61,10 @@ const handleClone = async (): Promise<void> => {
                         style="height: 51px; width: 51px; margin-right: 10px"
                     />
                 </RouterLink>
-                <span class="tooltiptext"> {{ t('views.courses.edit') }}</span>
-            </div>
+            </TooltipHover>
 
             <!-- Clone button to clone the course -->
-            <div class="tooltip">
+            <TooltipHover text="views.courses.clone">
                 <ConfirmDialog>
                     <template #container="{ message, acceptCallback, rejectCallback }">
                         <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
@@ -94,8 +94,7 @@ const handleClone = async (): Promise<void> => {
                     style="height: 51px; width: 51px"
                     @click="handleClone()"
                 />
-                <span class="tooltiptext">{{ t('views.courses.clone') }}</span>
-            </div>
+            </TooltipHover>
         </ButtonGroup>
     </div>
     <!-- Description -->
@@ -106,7 +105,9 @@ const handleClone = async (): Promise<void> => {
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
         <!-- Create project button -->
-        <ProjectCreateButton :courses="[course]" />
+        <TooltipHover text="views.projects.create">
+            <ProjectCreateButton :courses="[props.course]" />
+        </TooltipHover>
     </div>
     <!-- Project list body -->
     <ProjectList :courses="[course]" :showPast="false" />

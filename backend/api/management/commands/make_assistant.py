@@ -1,14 +1,14 @@
 from django.core.management.base import BaseCommand
-from api.models.teacher import Teacher
+from api.models.assistant import Assistant
 from authentication.models import User
 
 
 class Command(BaseCommand):
 
-    help = 'make yourself teacher'
+    help = 'make yourself assistant'
 
     def add_arguments(self, parser):
-        parser.add_argument('username', type=str, help='The username of the user to make teacher')
+        parser.add_argument('username', type=str, help='The username of the user to make assistant')
 
     def handle(self, *args, **options):
         username = options['username']
@@ -19,6 +19,6 @@ class Command(BaseCommand):
             return
 
         user = user.get()
-        Teacher(user_ptr=user).save_base(raw=True)
+        Assistant(user_ptr=user).save_base(raw=True)
 
-        self.stdout.write(self.style.SUCCESS('Successfully made the user teacher!'))
+        self.stdout.write(self.style.SUCCESS('Successfully made the user assistant!'))
