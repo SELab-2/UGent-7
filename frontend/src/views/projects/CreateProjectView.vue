@@ -3,19 +3,19 @@ import Calendar from 'primevue/calendar';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
-import { reactive, computed } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
+import { reactive, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Project } from '@/types/Projects';
 import { useProject } from '@/composables/services/project.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
-import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -66,12 +66,15 @@ const onZipStructureUpload = (event: any): void => {
 // useVuelidate function to perform form validation
 const v$ = useVuelidate(rules, form);
 
-const submitProject = async (): Promise<void> => {
+/**
+ * Function to submit the project form.
+ */
+async function submitProject(): Promise<void> {
     // Validate the form
-    const result = await v$.value.$validate();
+    const validated = await v$.value.$validate();
 
     // Only submit the form if the validation was successful
-    if (result) {
+    if (validated) {
         // Pass the project data to the service
         await createProject(
             new Project(
@@ -92,115 +95,147 @@ const submitProject = async (): Promise<void> => {
         );
 
         // Redirect to the dashboard overview
-        push({ name: 'dashboard' });
+        await push({ name: 'dashboard' });
     }
-};
+}
 </script>
 
 <template>
     <BaseLayout>
+        <!-- Create project heading -->
+        <Title class="mb-6">
+            {{ t('views.projects.create') }}
+        </Title>
+
         <!-- Project form -->
         <form @submit.prevent="submitProject">
-            <div class="grid fadein">
-                <div class="col-12 md:col-10">
-                    <!-- Create project heading -->
-                    <Title class="mb-6">{{ t('views.projects.create') }}</Title>
-
-                    <!-- Project name -->
-                    <div class="mb-4">
-                        <label for="projectName">{{ t('views.projects.name') }}</label>
-                        <InputText id="projectName" v-model="form.name" />
-                        <ErrorMessage :field="v$.name" />
+            <div class="grid">
+                <div class="col-12 lg:col-6">
+                    <div class="grid formgrid">
+                        <!-- Project name -->
+                        <div class="field col-12">
+                            <label for="projectName">
+                                {{ t('views.projects.name') }}
+                            </label>
+                            <InputText id="projectName" class="w-full" v-model="form.name" />
+                            <ErrorMessage :field="v$.name" />
+                        </div>
                     </div>
 
-                    <!-- Project description -->
-                    <div class="mb-4">
-                        <label for="projectDescription">{{ t('views.projects.description') }}</label>
-                        <Textarea id="projectDescription" v-model="form.description" autoResize rows="5" cols="30" />
+                    <div class="grid">
+                        <!-- Project description -->
+                        <div class="field col">
+                            <label for="projectDescription">
+                                {{ t('views.projects.description') }}
+                            </label>
+                            <Textarea
+                                id="projectDescription"
+                                class="w-full"
+                                v-model="form.description"
+                                autoResize
+                                rows="5"
+                                cols="30"
+                            />
+                        </div>
                     </div>
 
-                    <!-- Start date of the project -->
-                    <div class="mb-4">
-                        <label for="projectStartDate">{{ t('views.projects.start_date') }}</label>
-                        <Calendar
-                            id="projectStartDate"
-                            v-model="form.startDate"
-                            dateFormat="dd-mm-yy"
-                            :min-date="new Date()"
-                            showIcon
-                        />
-                        <ErrorMessage :field="v$.startDate" />
+                    <div class="grid">
+                        <!-- Start date of the project -->
+                        <div class="field col">
+                            <label for="projectStartDate">{{ t('views.projects.start_date') }}</label>
+                            <Calendar
+                                id="projectStartDate"
+                                class="w-full"
+                                v-model="form.startDate"
+                                dateFormat="dd-mm-yy"
+                                :min-date="new Date()"
+                                showIcon
+                            />
+                            <ErrorMessage :field="v$.startDate" />
+                        </div>
+
+                        <!-- Deadline of the project -->
+                        <div class="field col">
+                            <label for="projectDeadline">{{ t('views.projects.deadline') }}</label>
+                            <Calendar
+                                id="projectDeadline"
+                                class="w-full"
+                                v-model="form.deadline"
+                                dateFormat="dd-mm-yy"
+                                :min-date="form.startDate"
+                                showTime
+                                hourFormat="24"
+                                showIcon
+                            />
+                            <ErrorMessage :field="v$.deadline" />
+                        </div>
                     </div>
 
-                    <!-- Deadline of the project -->
-                    <div class="mb-4">
-                        <label for="projectDeadline">{{ t('views.projects.deadline') }}</label>
-                        <Calendar
-                            id="projectDeadline"
-                            v-model="form.deadline"
-                            dateFormat="dd-mm-yy"
-                            :min-date="form.startDate"
-                            showTime
-                            hourFormat="24"
-                            showIcon
-                        />
-                        <ErrorMessage :field="v$.deadline" />
-                    </div>
+                    <div class="grid align-items-end">
+                        <!-- Group size for the project -->
+                        <div class="field col">
+                            <label for="groupSize">
+                                {{ t('views.projects.group_size') }}
+                            </label>
+                            <InputNumber id="groupSize" class="w-full" v-model="form.groupSize" :min="1" />
+                            <ErrorMessage :field="v$.groupSize" />
+                        </div>
 
-                    <!-- Group size for the project -->
-                    <div class="mb-4">
-                        <label for="groupSize">{{ t('views.projects.group_size') }}</label>
-                        <InputNumber id="groupSize" v-model="form.groupSize" :min="1" />
-                        <ErrorMessage :field="v$.groupSize" />
-                    </div>
-
-                    <!-- Max score for the project -->
-                    <div class="mb-4">
-                        <label for="maxScore">{{ t('views.projects.max_score') }}</label>
-                        <InputNumber id="maxScore" v-model="form.maxScore" :min="1" />
-                        <ErrorMessage :field="v$.maxScore" />
+                        <!-- Max score for the project -->
+                        <div class="field col">
+                            <label for="maxScore">{{ t('views.projects.max_score') }}</label>
+                            <InputNumber id="maxScore" class="w-full" v-model="form.maxScore" :min="1" />
+                            <ErrorMessage :field="v$.maxScore" />
+                        </div>
                     </div>
 
                     <!-- Visibility of the project -->
-                    <div class="mb-4">
-                        <label for="visibility">{{ t('views.projects.visibility') }}</label>
-                        <InputSwitch id="visibility" v-model="form.visibility" />
+                    <div class="grid">
+                        <div class="flex align-items-center field-checkbox col-12">
+                            <InputSwitch id="visibility" v-model="form.visibility" />
+                            <label for="visibility">{{ t('views.projects.visibility') }}</label>
+                        </div>
                     </div>
 
                     <!-- Score visibility of the project -->
-                    <div class="mb-4">
-                        <label for="scoreVisibility">{{ t('views.projects.score_visibility') }}</label>
-                        <InputSwitch id="scoreVisibility" v-model="form.scoreVisibility" />
+                    <div class="grid">
+                        <div class="flex align-items-center field-checkbox col-12">
+                            <InputSwitch id="scoreVisibility" v-model="form.scoreVisibility" />
+                            <label for="scoreVisibility">{{ t('views.projects.score_visibility') }}</label>
+                        </div>
                     </div>
 
                     <!-- Submit button -->
-                    <div class="flex justify-end">
-                        <Button
-                            :label="t('views.projects.create')"
-                            type="submit"
-                            icon="pi pi-check"
-                            iconPos="right"
-                            rounded
-                        />
-                    </div>
+                    <Button
+                        :label="t('views.projects.create')"
+                        type="submit"
+                        icon="pi pi-check"
+                        iconPos="right"
+                        rounded
+                    />
                 </div>
 
-                <div class="col-12 md:col-10">
+                <div class="col-12 lg:col-6">
                     <!-- Upload field for docker script -->
-                    <div class="mt-7 mb-4">
-                        <label for="dockerScript">{{ t('views.projects.docker_upload') }}</label>
+                    <div class="field col">
+                        <label for="dockerScript">
+                            {{ t('views.projects.docker_upload') }}
+                        </label>
                         <FileUpload
-                            id="dockerScript"
+                            input="dockerScript"
                             mode="basic"
                             accept=".sh"
                             :multiple="false"
+                            title="hellaur"
                             @select="onDockerScriptUpload"
                         />
                     </div>
 
                     <!-- Upload field for a zip file that contains the submission structure -->
-                    <div class="mb-4">
-                        <label for="submissionStructure">{{ t('views.projects.submission_structure') }}</label>
+                    <div class="field col">
+                        <label for="submissionStructure">
+                            {{ t('views.projects.submission_structure') }}
+                        </label>
                         <FileUpload
                             id="submissionStructure"
                             mode="basic"
@@ -215,21 +250,4 @@ const submitProject = async (): Promise<void> => {
     </BaseLayout>
 </template>
 
-<style scoped>
-/* Flex column layout for label and input */
-.mb-4 {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Add margin between label and input */
-label {
-    margin-bottom: 0.5rem;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-</style>
+<style scoped></style>

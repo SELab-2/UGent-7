@@ -82,7 +82,7 @@ watch(
         <template v-if="sortedProjects !== null">
             <template v-if="sortedProjects.length > 0">
                 <div
-                    class="col-12 md:col-6 lg:col-4"
+                    class="col-12 md:col-6"
                     :class="'xl:col-' + 12 / cols"
                     v-for="project in sortedProjects"
                     :key="project.id"

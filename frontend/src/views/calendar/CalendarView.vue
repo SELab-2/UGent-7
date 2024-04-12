@@ -3,6 +3,8 @@ import moment from 'moment';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import Calendar, { type CalendarDateSlotOptions } from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';
+import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
+import Skeleton from 'primevue/skeleton';
 import { useProject } from '@/composables/services/project.service';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -11,7 +13,6 @@ import { storeToRefs } from 'pinia';
 import { type Project } from '@/types/Projects.ts';
 import { type RoleUser } from '@/types/users/Generics.ts';
 import { useRoute, useRouter } from 'vue-router';
-import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 
 /* Composable injections */
 const { t, locale } = useI18n();
@@ -19,7 +20,7 @@ const { query } = useRoute();
 const { push } = useRouter();
 
 /* Component state */
-const allProjects = ref<Project[]>([]);
+const allProjects = ref<Project[] | null>(null);
 const selectedDate = ref<Date>(getQueryDate());
 
 /* Service injection */
@@ -34,9 +35,11 @@ const formattedDate = computed(() => {
 
 /* Filter the projects on the date selected on the calendar */
 const projectsWithDeadline = computed(() => {
-    return allProjects.value?.filter((project) => {
-        return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
-    });
+    return (
+        allProjects.value?.filter((project) => {
+            return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
+        }) ?? null
+    );
 });
 
 /* Courses that take place on the selected date in the calendar => no display when the date is in the past */
@@ -56,10 +59,12 @@ const coursesWithProjectCreationPossibility = computed(() => {
 async function loadProjects(): Promise<void> {
     if (user.value !== null) {
         // Clear the old data, so that the data from another role is not displayed
-        allProjects.value = [];
+        allProjects.value = null;
 
         // Load the projects of the courses
         if (user.value.isSpecificRole()) {
+            let _allProjects: Project[] = [];
+
             // Cast the generic user to a specific role
             const role = user.value as RoleUser;
 
@@ -72,8 +77,10 @@ async function loadProjects(): Promise<void> {
                 });
 
                 // Concatenate the projects
-                allProjects.value = allProjects.value.concat(projects.value ?? []);
+                _allProjects = _allProjects.concat(projects.value ?? []);
             }
+
+            allProjects.value = _allProjects;
         }
     }
 }
@@ -177,50 +184,71 @@ watch(selectedDate, (date) => {
             <div class="col-12 md:col-6">
                 <div class="surface-100 p-6">
                     <!-- Selected date on the calendar -->
-                    <Title class="mb-6 font-extrabold">{{ formattedDate }}</Title>
+                    <Title class="mb-6 font-extrabold">
+                        {{ formattedDate }}
+                    </Title>
 
                     <!-- Listing projects with given deadline -->
                     <div class="flex flex-column gap-4">
-                        <template v-if="projectsWithDeadline.length > 0">
-                            <!-- Project cards -->
-                            <div class="flex border-round-md" v-for="project in projectsWithDeadline" :key="project.id">
-                                <!-- Icon -->
+                        <template v-if="projectsWithDeadline !== null">
+                            <template v-if="projectsWithDeadline.length > 0">
+                                <!-- Project cards -->
                                 <div
-                                    class="bg-primary flex justify-content-center align-items-center p-4 w-3 w-7rem h-7rem"
+                                    class="flex flex-column xl:flex-row border-round-md"
+                                    v-for="project in projectsWithDeadline"
+                                    :key="project.id"
                                 >
-                                    <span class="pi pi-book text-6xl" />
-                                </div>
-                                <!-- Details -->
-                                <div
-                                    class="flex flex-column gap-3 justify-content-center bg-white text-black-alpha-80 p-3 w-9"
-                                >
-                                    <RouterLink
-                                        :to="{
-                                            name: 'courseProject',
-                                            params: {
-                                                courseId: project.course?.id,
-                                                projectId: project.id,
-                                            },
-                                        }"
+                                    <!-- Icon -->
+                                    <div
+                                        class="bg-primary flex justify-content-center align-items-center p-4 xl:w-7rem xl:h-7rem"
                                     >
-                                        <h3 class="flex gap-3 align-items-center text-primary m-0 text-xl">
-                                            {{ project.name }} <span class="pi pi-arrow-right text-xl" />
-                                        </h3>
-                                    </RouterLink>
-                                    <p class="font-bold m-0">
-                                        {{ project.course?.name }}
-                                    </p>
+                                        <span class="pi pi-book text-6xl" />
+                                    </div>
+                                    <!-- Details -->
+                                    <div
+                                        class="flex flex-column gap-3 justify-content-center bg-white text-black-alpha-80 p-3 w-full"
+                                    >
+                                        <RouterLink
+                                            :to="{
+                                                name: 'course-project',
+                                                params: {
+                                                    courseId: project.course?.id,
+                                                    projectId: project.id,
+                                                },
+                                            }"
+                                        >
+                                            <h3 class="flex gap-3 align-items-center text-primary m-0 text-xl">
+                                                {{ project.name }} <span class="pi pi-arrow-right text-xl" />
+                                            </h3>
+                                        </RouterLink>
+                                        <p class="font-bold m-0">
+                                            {{ project.course?.name }}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
+                            </template>
+                            <template v-else>
+                                <p class="m-0">{{ t('views.calendar.noProjects') }}</p>
+                            </template>
                         </template>
                         <template v-else>
-                            <p class="m-0">{{ t('views.calendar.noProjects') }}</p>
+                            <Skeleton height="7rem" />
                         </template>
                     </div>
 
-                    <template v-if="user?.isTeacher() || user?.isAssistant()">
+                    <template
+                        v-if="
+                            (coursesWithProjectCreationPossibility.length > 0 && user?.isTeacher()) ||
+                            user?.isAssistant()
+                        "
+                    >
                         <!-- Add project button -->
-                        <ProjectCreateButton :courses="coursesWithProjectCreationPossibility" />
+                        <ProjectCreateButton
+                            class="mt-5"
+                            :label="t('components.button.createProject')"
+                            severity="secondary"
+                            :courses="coursesWithProjectCreationPossibility"
+                        />
                     </template>
                 </div>
             </div>
