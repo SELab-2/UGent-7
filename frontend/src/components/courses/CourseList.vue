@@ -26,7 +26,7 @@ const { t } = useI18n();
         <template v-if="courses !== null">
             <template v-if="courses.length > 0">
                 <div
-                    class="col-12 md:col-6 lg:col-4"
+                    class="col-12 lg:col-6"
                     :class="'xl:col-' + 12 / cols"
                     v-for="course in courses"
                     :key="course.id"

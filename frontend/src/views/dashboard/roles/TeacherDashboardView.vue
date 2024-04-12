@@ -71,7 +71,7 @@ watch(
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
         <!-- Create project button -->
-        <ProjectCreateButton :courses="filteredCourses" />
+        <ProjectCreateButton :courses="filteredCourses" :label="t('components.button.create_project')" />
     </div>
     <!-- Project list body -->
     <ProjectList :courses="filteredCourses" />

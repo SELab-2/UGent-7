@@ -12,7 +12,7 @@ const { t } = useI18n();
 const { push } = useRouter();
 
 /* Props */
-const props = defineProps<{ courses: Course[] }>();
+const props = defineProps<{ courses: Course[], label?: string, severity?: string }>();
 
 /* Dialog state to select the course you want to create a project for */
 const displayCourseSelection = ref(false);
@@ -25,34 +25,38 @@ const createProjectForCourse = (courseId: string): void => {
 </script>
 
 <template>
-    <!-- Button to create a new project -->
-    <Button
-        v-if="props.courses && props.courses.length > 0"
-        :icon="PrimeIcons.PLUS"
-        icon-pos="right"
-        class="custom-button"
-        @click="displayCourseSelection = true"
-    />
-    <!-- Dialog to select the course you want to create a project for -->
-    <Dialog
-        v-model:visible="displayCourseSelection"
-        modal
-        :draggable="false"
-        :contentStyle="{ width: '50vw' }"
-        :header="t('views.dashboard.select_course')"
-    >
-        <!-- List of courses to select from-->
-        <div v-if="props.courses && props.courses.length > 0">
-            <div
-                v-for="course in props.courses"
-                :key="course.id"
-                class="course-item"
-                @click="createProjectForCourse(course.id)"
-            >
-                <span class="course-name">{{ course.name }}</span>
+    <div>
+        <!-- Button to create a new project -->
+        <Button
+            v-if="props.courses && props.courses.length > 0"
+            :icon="PrimeIcons.PLUS"
+            icon-pos="right"
+            :label="label ?? ''"
+            :severity="severity ?? 'primary'"
+            class="custom-button"
+            @click="displayCourseSelection = true"
+        />
+        <!-- Dialog to select the course you want to create a project for -->
+        <Dialog
+            v-model:visible="displayCourseSelection"
+            modal
+            :draggable="false"
+            :contentStyle="{ width: '50vw' }"
+            :header="t('views.dashboard.select_course')"
+        >
+            <!-- List of courses to select from-->
+            <div v-if="props.courses && props.courses.length > 0">
+                <div
+                    v-for="course in props.courses"
+                    :key="course.id"
+                    class="course-item"
+                    @click="createProjectForCourse(course.id)"
+                >
+                    <span class="course-name">{{ course.name }}</span>
+                </div>
             </div>
-        </div>
-    </Dialog>
+        </Dialog>
+    </div>
 </template>
 
 <style scoped lang="scss">

@@ -196,7 +196,7 @@ watch(selectedDate, (date) => {
                                 >
                                     <RouterLink
                                         :to="{
-                                            name: 'courseProject',
+                                            name: 'course-project',
                                             params: {
                                                 courseId: project.course?.id,
                                                 projectId: project.id,
@@ -220,7 +220,7 @@ watch(selectedDate, (date) => {
 
                     <template v-if="user?.isTeacher() || user?.isAssistant()">
                         <!-- Add project button -->
-                        <ProjectCreateButton :courses="coursesWithProjectCreationPossibility" />
+                        <ProjectCreateButton severity="secondary" :courses="coursesWithProjectCreationPossibility" />
                     </template>
                 </div>
             </div>

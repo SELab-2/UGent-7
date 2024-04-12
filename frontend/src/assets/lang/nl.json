@@ -101,8 +101,9 @@
         }
     },
     "components": {
-        "buttons": {
-            "academic_year": "Academiejaar {0}"
+        "button": {
+            "academic_year": "Academiejaar {0}",
+            "create_project": "Maak een nieuw project"
         },
         "card": {
             "open": "Details"
