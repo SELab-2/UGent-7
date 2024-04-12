@@ -11,11 +11,6 @@ export type CourseFilter = {
     years: string[];
 } & Filter;
 
-export type UserFilter = {
-    faculties: string[];
-    roles: string[];
-} & Filter;
-
 export interface Filter {
     search: string;
     [key: string]: string | string[];
@@ -56,29 +51,6 @@ export function getCourseFilters(query: LocationQuery): CourseFilter {
 
     if (query.years !== undefined) {
         filters.years = getQueryList(query.years as string | string[]);
-    }
-
-    return filters;
-}
-
-/**
- * Get the user filters from the query.
- *
- * @param query
- */
-export function getUserFilters(query: LocationQuery): UserFilter {
-    const filters: UserFilter = {
-        search: query.search?.toString() ?? '',
-        faculties: [],
-        roles: [],
-    };
-
-    if (query.faculties !== undefined) {
-        filters.faculties = getQueryList(query.faculties as string | string[]);
-    }
-
-    if (query.roles !== undefined) {
-        filters.roles = getQueryList(query.roles as string | string[]);
     }
 
     return filters;
