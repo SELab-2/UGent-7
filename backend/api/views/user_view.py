@@ -17,6 +17,38 @@ class UserViewSet(ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser | IsSameUser]
 
+    @action(detail=False)
+    def search(self, request: Request) -> Response:
+        self.pagination_class = BasicPagination
+
+        search = request.query_params.get("search", "")
+        identifier = request.query_params.get("id", "")
+        username = request.query_params.get("username", "")
+        email = request.query_params.get("email", "")
+
+        queryset1 = self.get_queryset().filter(
+            id__icontains=search
+        )
+        queryset2 = self.get_queryset().filter(
+            username__icontains=search
+        )
+        queryset3 = self.get_queryset().filter(
+            email__icontains=search
+        )
+        queryset1 = queryset1.union(queryset2, queryset3)
+        queryset = self.get_queryset().filter(
+            id__icontains=identifier,
+            username__icontains=username,
+            email__icontains=email
+        )
+        queryset = queryset.intersection(queryset1)
+
+        serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+            "request": request
+        })
+
+        return self.get_paginated_response(serializer.data)
+
     @action(detail=True, methods=["get"], permission_classes=[NotificationPermission])
     def notifications(self, request: Request, pk: str):
         """Returns a list of notifications for the given user"""
