@@ -107,6 +107,7 @@ class ProjectViewSet(CreateModelMixin,
 
         project: Project = self.get_object()
 
+        # TODO: Crashes when requesting without any fields, shouldn't be given as context. Validator needs to check it
         serializer = StructureCheckAddSerializer(
             data=request.data,
             context={
@@ -151,6 +152,7 @@ class ProjectViewSet(CreateModelMixin,
             }
         )
 
+        # TODO: Weird error message when invalid docker_image id
         if serializer.is_valid(raise_exception=True):
             serializer.save(project=project)
 

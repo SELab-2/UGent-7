@@ -9,7 +9,7 @@ import Paginator from 'primevue/paginator';
 import Title from '@/components/layout/Title.vue';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import CourseList from '@/components/courses/CourseList.vue';
-import { onMounted, watch } from 'vue';
+import { onMounted } from 'vue';
 import { useCourses } from '@/composables/services/courses.service.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useFaculty } from '@/composables/services/faculties.service.ts';
@@ -19,6 +19,7 @@ import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
 import { useRoute } from 'vue-router';
 import { getCourseFilters } from '@/types/filter/Filter.ts';
+import { getAcademicYears } from '@/types/Course.ts';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -26,36 +27,35 @@ const { query } = useRoute();
 const { user } = storeToRefs(useAuthStore());
 const { faculties, getFaculties } = useFaculty();
 const { pagination, searchCourses } = useCourses();
-const { onPaginate, paginate, page, first, pageSize } = usePaginator();
+const { onPaginate, resetPagination, page, first, pageSize } = usePaginator();
 const { filter, onFilter } = useFilter(getCourseFilters(query));
+
+/**
+ * Fetch the courses based on the filter.
+ */
+async function fetchCourses(): Promise<void> {
+    await searchCourses(filter.value, page.value, pageSize.value);
+}
 
 /* Fetch the faculties */
 onMounted(async () => {
     // Fetch the faculties
     await getFaculties();
 
-    /* Reset current page on filter changes */
-    watch(
-        filter,
-        () => {
-            paginate(0);
-            pagination.value = null;
-        },
-        { deep: true },
-    );
-
-    /**
-     * Fetch the courses based on the filter.
-     */
-    async function fetchCourses(): Promise<void> {
-        await searchCourses(filter.value, page.value, pageSize.value);
-    }
-
     /* Search courses on page change */
     onPaginate(fetchCourses);
 
     /* Search courses on filter change */
     onFilter(fetchCourses);
+
+    /* Reset pagination on filter change */
+    onFilter(
+        async () => {
+            await resetPagination(pagination);
+        },
+        0,
+        false,
+    );
 });
 </script>
 
@@ -85,15 +85,19 @@ onMounted(async () => {
                             <label :for="faculty.id" class="ml-2 text-sm">{{ faculty.name }}</label>
                         </div>
                     </AccordionTab>
-                    <AccordionTab :header="t('views.courses.search.year')" v-if="user">
-                        <div v-for="year in user.academic_years" :key="year" class="flex align-items-center mb-2">
+                    <AccordionTab :header="t('views.courses.search.year')" v-if="user && pagination !== null">
+                        <div
+                            v-for="year in getAcademicYears(pagination.min_year, pagination.max_year)"
+                            :key="year"
+                            class="flex align-items-center mb-2"
+                        >
                             <Checkbox
                                 v-model="filter.years"
                                 :inputId="year.toString()"
                                 name="faculties"
                                 :value="year"
                             />
-                            <label :for="year.toString()" class="ml-2 text-sm">{{ year }} - {{ year + 1 }}</label>
+                            <label :for="year.toString()" class="ml-2 text-sm"> {{ year }} - {{ year + 1 }} </label>
                         </div>
                     </AccordionTab>
                 </Accordion>
@@ -106,12 +110,7 @@ onMounted(async () => {
                     {{ t('views.courses.search.results', [pagination.count]) }}
                 </p>
                 <CourseList class="mt-3" :courses="pagination?.results ?? null" :cols="3" :detail="false" />
-                <Paginator
-                    :rows="pageSize"
-                    :total-records="pagination?.count"
-                    :first="first"
-                    @update:first="paginate($event)"
-                />
+                <Paginator :rows="pageSize" :total-records="pagination?.count" :first="first" v-model:first="first" />
             </div>
         </div>
     </BaseLayout>

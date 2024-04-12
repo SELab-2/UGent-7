@@ -55,13 +55,14 @@ services:
     volumes:
       - ${BACKEND_DIR}:/code
 
+  # TODO: Is this an entire different container worthy?
   celery:
     <<: *common-keys-selab
     container_name: celery
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
-    command: celery -A ypovoli worker -l DEBUG
+    command: sh -c "./setup.sh && celery -A ypovoli worker -l DEBUG"
     volumes:
       - ${BACKEND_DIR}:/code
     depends_on:

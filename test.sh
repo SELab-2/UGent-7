@@ -3,8 +3,9 @@
 backend=false
 frontend=false
 build=false
+keep=false
 
-while getopts ":bfc" opt; do
+while getopts ":bfck" opt; do
   case ${opt} in
     b )
       backend=true
@@ -14,6 +15,9 @@ while getopts ":bfc" opt; do
       ;;
     c )
       build=true
+      ;;
+    k )
+      keep=true
       ;;
     \? )
       echo "Usage: $0 [-b] [-f] [-c]"
@@ -107,7 +111,11 @@ echo "-----------------"
 
 echo "Cleaning up..."
 
-docker-compose -f test.yml down --rmi all
+if [ "$keep" = false ]; then
+    docker-compose -f test.yml down --rmi all
+else
+    docker-compose -f test.yml down
+fi
 
 echo "Done."
 

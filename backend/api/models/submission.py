@@ -1,8 +1,11 @@
+
 from api.logic.get_file_path import (get_extra_check_result_file_path,
                                      get_submission_file_path)
-from api.models.checks import ExtraCheck
+from api.models.checks import ExtraCheck, StructureCheck
 from api.models.group import Group
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+from polymorphic.models import PolymorphicModel
 
 
 class Submission(models.Model):
@@ -25,18 +28,9 @@ class Submission(models.Model):
     # Automatically set the submission time to the current time
     submission_time = models.DateTimeField(auto_now_add=True)
 
-    # True if submission passed the structure checks
-    structure_checks_passed = models.BooleanField(
-        blank=False,
-        null=False,
-        default=False
-    )
-
     class Meta:
         # A group can only have one submission with a specific number
         unique_together = ("group", "submission_number")
-
-# TODO: We can use a FilePathField for this with allow_files = False and allow_folders = True and include it in Submission
 
 
 class SubmissionFile(models.Model):
@@ -61,57 +55,83 @@ class SubmissionFile(models.Model):
     )
 
 
-class ErrorTemplate(models.Model):
-    """
-        Model possible error templates for a submission checks result.
-    """
-
-    # ID should be generated automatically
-
-    # Key of the error template message
-    message_key = models.CharField(
-        max_length=256,
-        blank=False,
-        null=False
-    )
+class StateEnum(models.TextChoices):
+    QUEUED = "QUEUED", _("submission.state.queued")
+    RUNNING = "RUNNING", _("submission.state.running")
+    SUCCESS = "SUCCESS", _("submission.state.success")
+    FAILED = "FAILED", _("submission.state.failed")
 
 
-class ExtraChecksResult(models.Model):
-    """Model for the result of extra checks on a submission."""
+class ErrorMessageEnum(models.TextChoices):
+    # Structure checks errors
+    BLOCKED_EXTENSION = "BLOCKED_EXTENSION", _("submission.error.blockedextension")
+    OBLIGATED_EXTENSION_NOT_FOUND = "OBLIGATED_EXTENSION_NOT_FOUND", _("submission.error.obligatedextensionnotfound")
+    OBLIGATED_DIRECTORY_NOT_FOUND = "OBLIGATED_DIRECTORY_NOT_FOUND", _("submission.error.obligateddirectorynotfound")
+    UNASKED_DIRECTORY = "UNASKED_DIRECTORY", _("submission.error.unaskeddirectory")
 
-    # Result ID should be generated automatically
+    # Extra checks errors
+    TIMELIMIT = "TIMELIMIT", _("submission.error.timelimit")
+    MEMORYLIMIT = "MEMORYLIMIT", _("submission.error.memorylimit")
+    RUNTIMEERROR = "RUNTIMEERROR", _("submission.error.runtimeerror")
+    OUTPUTLIMIT = "OUTPUTLIMIT", _("submission.error.outputlimit")
+    INTERNALERROR = "INTERNALERROR", _("submission.error.internalerror")
+    UNKNOWN = "UNKNOWN", _("submission.error.unknown")
+
+
+class CheckResult(PolymorphicModel):
 
     submission = models.ForeignKey(
         Submission,
-        on_delete=models.CASCADE,
-        related_name="extra_checks_results",
-        blank=False,
-        null=False
-    )
-
-    # Link to the extra checks that were performed
-    extra_check = models.ForeignKey(
-        ExtraCheck,
         on_delete=models.CASCADE,
         related_name="results",
         blank=False,
         null=False
     )
 
-    # True if the submission passed the extra checks
-    passed = models.BooleanField(
+    result = models.CharField(
+        max_length=256,
+        choices=StateEnum,
+        default=StateEnum.QUEUED,
         blank=False,
-        null=False,
-        default=False
-    )
+        null=False
+    )  # type: ignore
 
-    # Error message if the submission failed the extra checks
-    error_message = models.ForeignKey(
-        ErrorTemplate,
-        on_delete=models.CASCADE,
-        related_name="extra_checks_results",
+    error_message = models.CharField(
+        max_length=256,
+        choices=ErrorMessageEnum,
         blank=True,
         null=True
+    )  # type: ignore
+
+    # Whether the pass result is still valid
+    # Becomes invalid after changing / adding a check
+    is_valid = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False
+    )
+
+
+class StructureCheckResult(CheckResult):
+
+    structure_check = models.ForeignKey(
+        StructureCheck,
+        on_delete=models.CASCADE,
+        related_name="structure_check",
+        blank=False,
+        null=False
+    )
+
+
+class ExtraCheckResult(CheckResult):
+
+    # Link to the extra checks that were performed
+    extra_check = models.ForeignKey(
+        ExtraCheck,
+        on_delete=models.CASCADE,
+        related_name="extra_check",
+        blank=False,
+        null=False
     )
 
     # File path for the log file of the extra checks
@@ -120,12 +140,4 @@ class ExtraChecksResult(models.Model):
         max_length=256,
         blank=False,
         null=True
-    )
-
-    # Whether the pass result is still valid
-    # Becomes invalid after changing / adding a check
-    is_valid = models.BooleanField(
-        default=True,
-        blank=False,
-        null=False
     )

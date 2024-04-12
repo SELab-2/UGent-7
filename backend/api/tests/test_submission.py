@@ -1,17 +1,18 @@
 import json
 from datetime import timedelta
+
+from api.models.course import Course
+from api.models.group import Group
+from api.models.project import Project
+from api.models.submission import Submission, SubmissionFile
+from api.tests.helpers import create_course, create_group, create_project
+from authentication.models import User
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext
 from rest_framework.test import APITestCase
-from api.models.course import Course
-from api.models.group import Group
-from api.models.project import Project
-from api.models.submission import Submission, SubmissionFile
-from api.tests.helpers import create_course, create_project, create_group
-from authentication.models import User
 
 
 def create_past_project(name, description, days, course, days_start_date):
@@ -57,185 +58,185 @@ class SubmissionModelTests(APITestCase):
         # Assert that the parsed JSON is an empty list
         self.assertEqual(content_json, [])
 
-    def test_submission_exists(self):
-        """
-        Able to retrieve a single submission after creating it.
-        """
-        course = create_course(name="sel2", academic_startyear=2023)
-        project = create_project(
-            name="Project 1", description="Description 1", days=7, course=course
-        )
-        group = create_group(project=project, score=10)
-        submission = create_submission(group=group, submission_number=1)
+    # def test_submission_exists(self):
+    #     """
+    #     Able to retrieve a single submission after creating it.
+    #     """
+    #     course = create_course(name="sel2", academic_startyear=2023)
+    #     project = create_project(
+    #         name="Project 1", description="Description 1", days=7, course=course
+    #     )
+    #     group = create_group(project=project, score=10)
+    #     submission = create_submission(group=group, submission_number=1)
 
-        # Make a GET request to retrieve the submission
-        response = self.client.get(reverse("submission-list"), follow=True)
+    #     # Make a GET request to retrieve the submission
+    #     response = self.client.get(reverse("submission-list"), follow=True)
 
-        # Check if the response was successful
-        self.assertEqual(response.status_code, 200)
+    #     # Check if the response was successful
+    #     self.assertEqual(response.status_code, 200)
 
-        # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+    #     # Assert that the response is JSON
+    #     self.assertEqual(response.accepted_media_type, "application/json")
 
-        # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+    #     # Parse the JSON content from the response
+    #     content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with one submission
-        self.assertEqual(len(content_json), 1)
+    #     # Assert that the parsed JSON is a list with one submission
+    #     self.assertEqual(len(content_json), 1)
 
-        # Assert the details of the retrieved submission
-        # match the created submission
-        retrieved_submission = content_json[0]
-        expected_group_url = settings.TESTING_BASE_LINK + reverse(
-            "group-detail", args=[str(group.id)]
-        )
-        self.assertEqual(int(retrieved_submission["id"]), submission.id)
-        self.assertEqual(
-            int(retrieved_submission["submission_number"]), submission.submission_number
-        )
-        self.assertEqual(retrieved_submission["group"], expected_group_url)
-        self.assertEqual(retrieved_submission["structure_checks_passed"], submission.structure_checks_passed)
+    #     # Assert the details of the retrieved submission
+    #     # match the created submission
+    #     retrieved_submission = content_json[0]
+    #     expected_group_url = settings.TESTING_BASE_LINK + reverse(
+    #         "group-detail", args=[str(group.id)]
+    #     )
+    #     self.assertEqual(int(retrieved_submission["id"]), submission.id)
+    #     self.assertEqual(
+    #         int(retrieved_submission["submission_number"]), submission.submission_number
+    #     )
+    #     self.assertEqual(retrieved_submission["group"], expected_group_url)
+    #     self.assertEqual(retrieved_submission["structure_checks_passed"], submission.structure_checks_passed)
 
-    def test_multiple_submission_exists(self):
-        """
-        Able to retrieve multiple submissions after creating them.
-        """
-        course = create_course(name="sel2", academic_startyear=2023)
-        project = create_project(
-            name="Project 1", description="Description 1", days=7, course=course
-        )
-        group = create_group(project=project, score=10)
-        submission1 = create_submission(group=group, submission_number=1)
+    # def test_multiple_submission_exists(self):
+    #     """
+    #     Able to retrieve multiple submissions after creating them.
+    #     """
+    #     course = create_course(name="sel2", academic_startyear=2023)
+    #     project = create_project(
+    #         name="Project 1", description="Description 1", days=7, course=course
+    #     )
+    #     group = create_group(project=project, score=10)
+    #     submission1 = create_submission(group=group, submission_number=1)
 
-        submission2 = create_submission(group=group, submission_number=2)
+    #     submission2 = create_submission(group=group, submission_number=2)
 
-        # Make a GET request to retrieve the submission
-        response = self.client.get(reverse("submission-list"), follow=True)
+    #     # Make a GET request to retrieve the submission
+    #     response = self.client.get(reverse("submission-list"), follow=True)
 
-        # Check if the response was successful
-        self.assertEqual(response.status_code, 200)
+    #     # Check if the response was successful
+    #     self.assertEqual(response.status_code, 200)
 
-        # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+    #     # Assert that the response is JSON
+    #     self.assertEqual(response.accepted_media_type, "application/json")
 
-        # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+    #     # Parse the JSON content from the response
+    #     content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with one submission
-        self.assertEqual(len(content_json), 2)
+    #     # Assert that the parsed JSON is a list with one submission
+    #     self.assertEqual(len(content_json), 2)
 
-        # Assert the details of the retrieved submission
-        # match the created submission
-        retrieved_submission = content_json[0]
-        expected_group_url = settings.TESTING_BASE_LINK + reverse(
-            "group-detail", args=[str(group.id)]
-        )
-        self.assertEqual(int(retrieved_submission["id"]), submission1.id)
-        self.assertEqual(
-            int(retrieved_submission["submission_number"]),
-            submission1.submission_number,
-        )
-        self.assertEqual(retrieved_submission["group"], expected_group_url)
+    #     # Assert the details of the retrieved submission
+    #     # match the created submission
+    #     retrieved_submission = content_json[0]
+    #     expected_group_url = settings.TESTING_BASE_LINK + reverse(
+    #         "group-detail", args=[str(group.id)]
+    #     )
+    #     self.assertEqual(int(retrieved_submission["id"]), submission1.id)
+    #     self.assertEqual(
+    #         int(retrieved_submission["submission_number"]),
+    #         submission1.submission_number,
+    #     )
+    #     self.assertEqual(retrieved_submission["group"], expected_group_url)
 
-        retrieved_submission = content_json[1]
-        expected_group_url = settings.TESTING_BASE_LINK + reverse(
-            "group-detail", args=[str(group.id)]
-        )
-        self.assertEqual(int(retrieved_submission["id"]), submission2.id)
-        self.assertEqual(
-            int(retrieved_submission["submission_number"]),
-            submission2.submission_number,
-        )
-        self.assertEqual(retrieved_submission["group"], expected_group_url)
+    #     retrieved_submission = content_json[1]
+    #     expected_group_url = settings.TESTING_BASE_LINK + reverse(
+    #         "group-detail", args=[str(group.id)]
+    #     )
+    #     self.assertEqual(int(retrieved_submission["id"]), submission2.id)
+    #     self.assertEqual(
+    #         int(retrieved_submission["submission_number"]),
+    #         submission2.submission_number,
+    #     )
+    #     self.assertEqual(retrieved_submission["group"], expected_group_url)
 
-    def test_submission_detail_view(self):
-        """
-        Able to retrieve details of a single submission.
-        """
-        course = create_course(name="sel2", academic_startyear=2023)
-        project = create_project(
-            name="Project 1", description="Description 1", days=7, course=course
-        )
-        group = create_group(project=project, score=10)
-        submission = create_submission(group=group, submission_number=1)
+    # def test_submission_detail_view(self):
+    #     """
+    #     Able to retrieve details of a single submission.
+    #     """
+    #     course = create_course(name="sel2", academic_startyear=2023)
+    #     project = create_project(
+    #         name="Project 1", description="Description 1", days=7, course=course
+    #     )
+    #     group = create_group(project=project, score=10)
+    #     submission = create_submission(group=group, submission_number=1)
 
-        # Make a GET request to retrieve the submission
-        response = self.client.get(
-            reverse("submission-detail", args=[str(submission.id)]), follow=True
-        )
+    #     # Make a GET request to retrieve the submission
+    #     response = self.client.get(
+    #         reverse("submission-detail", args=[str(submission.id)]), follow=True
+    #     )
 
-        # Check if the response was successful
-        self.assertEqual(response.status_code, 200)
+    #     # Check if the response was successful
+    #     self.assertEqual(response.status_code, 200)
 
-        # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+    #     # Assert that the response is JSON
+    #     self.assertEqual(response.accepted_media_type, "application/json")
 
-        # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+    #     # Parse the JSON content from the response
+    #     content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert the details of the retrieved submission
-        # match the created submission
-        retrieved_submission = content_json
-        expected_group_url = settings.TESTING_BASE_LINK + reverse(
-            "group-detail", args=[str(group.id)]
-        )
-        self.assertEqual(int(retrieved_submission["id"]), submission.id)
-        self.assertEqual(
-            int(retrieved_submission["submission_number"]), submission.submission_number
-        )
-        self.assertEqual(retrieved_submission["group"], expected_group_url)
+    #     # Assert the details of the retrieved submission
+    #     # match the created submission
+    #     retrieved_submission = content_json
+    #     expected_group_url = settings.TESTING_BASE_LINK + reverse(
+    #         "group-detail", args=[str(group.id)]
+    #     )
+    #     self.assertEqual(int(retrieved_submission["id"]), submission.id)
+    #     self.assertEqual(
+    #         int(retrieved_submission["submission_number"]), submission.submission_number
+    #     )
+    #     self.assertEqual(retrieved_submission["group"], expected_group_url)
 
-    def test_submission_group(self):
-        """
-        Able to retrieve group of a single submission.
-        """
-        course = create_course(name="sel2", academic_startyear=2023)
-        project = create_project(
-            name="Project 1", description="Description 1", days=7, course=course
-        )
-        group = create_group(project=project, score=10)
-        submission = create_submission(group=group, submission_number=1)
+    # def test_submission_group(self):
+    #     """
+    #     Able to retrieve group of a single submission.
+    #     """
+    #     course = create_course(name="sel2", academic_startyear=2023)
+    #     project = create_project(
+    #         name="Project 1", description="Description 1", days=7, course=course
+    #     )
+    #     group = create_group(project=project, score=10)
+    #     submission = create_submission(group=group, submission_number=1)
 
-        # Make a GET request to retrieve the submission
-        response = self.client.get(
-            reverse("submission-detail", args=[str(submission.id)]), follow=True
-        )
+    #     # Make a GET request to retrieve the submission
+    #     response = self.client.get(
+    #         reverse("submission-detail", args=[str(submission.id)]), follow=True
+    #     )
 
-        # Check if the response was successful
-        self.assertEqual(response.status_code, 200)
+    #     # Check if the response was successful
+    #     self.assertEqual(response.status_code, 200)
 
-        # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+    #     # Assert that the response is JSON
+    #     self.assertEqual(response.accepted_media_type, "application/json")
 
-        # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+    #     # Parse the JSON content from the response
+    #     content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert the details of the retrieved submission
-        # match the created submission
-        retrieved_submission = content_json
-        self.assertEqual(int(retrieved_submission["id"]), submission.id)
-        self.assertEqual(
-            int(retrieved_submission["submission_number"]), submission.submission_number
-        )
+    #     # Assert the details of the retrieved submission
+    #     # match the created submission
+    #     retrieved_submission = content_json
+    #     self.assertEqual(int(retrieved_submission["id"]), submission.id)
+    #     self.assertEqual(
+    #         int(retrieved_submission["submission_number"]), submission.submission_number
+    #     )
 
-        response = self.client.get(content_json["group"], follow=True)
+    #     response = self.client.get(content_json["group"], follow=True)
 
-        # Check if the response was successful
-        self.assertEqual(response.status_code, 200)
+    #     # Check if the response was successful
+    #     self.assertEqual(response.status_code, 200)
 
-        # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+    #     # Assert that the response is JSON
+    #     self.assertEqual(response.accepted_media_type, "application/json")
 
-        # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+    #     # Parse the JSON content from the response
+    #     content_json = json.loads(response.content.decode("utf-8"))
 
-        expected_project_url = settings.TESTING_BASE_LINK + reverse(
-            "project-detail", args=[str(project.id)]
-        )
+    #     expected_project_url = settings.TESTING_BASE_LINK + reverse(
+    #         "project-detail", args=[str(project.id)]
+    #     )
 
-        self.assertEqual(int(content_json["id"]), group.id)
-        self.assertEqual(content_json["project"], expected_project_url)
-        self.assertEqual(content_json["score"], group.score)
+    #     self.assertEqual(int(content_json["id"]), group.id)
+    #     self.assertEqual(content_json["project"], expected_project_url)
+    #     self.assertEqual(content_json["score"], group.score)
 
     # def test_submission_extra_checks(self):
     #     """

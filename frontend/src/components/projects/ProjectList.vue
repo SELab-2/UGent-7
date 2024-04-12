@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import { type Course } from '@/types/Course.ts';
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import ProjectCard from '@/components/projects/ProjectCard.vue';
 import { useI18n } from 'vue-i18n';
 import moment from 'moment';
 import Skeleton from 'primevue/skeleton';
+import InputSwitch from 'primevue/inputswitch';
 
 /* Props */
 const props = withDefaults(
     defineProps<{
         courses: Course[] | null;
-        showPast?: boolean;
         cols?: number;
     }>(),
     {
         courses: () => [],
-        showPast: false,
         cols: 4,
     },
 );
@@ -26,6 +25,7 @@ const { t } = useI18n();
 const { projects, getProjectsByCourse } = useProject();
 
 /* State */
+const showPast = ref(false);
 
 // The merged projects from all courses
 const allProjects = computed(() => props.courses?.flatMap((course) => course.projects) ?? null);
@@ -35,7 +35,7 @@ const allProjects = computed(() => props.courses?.flatMap((course) => course.pro
  */
 const sortedProjects = computed(() => {
     const projects =
-        allProjects.value?.filter((project) => (!props.showPast ? moment(project.deadline).isAfter() : true)) ?? null;
+        allProjects.value?.filter((project) => (!showPast.value ? moment(project.deadline).isAfter() : true)) ?? null;
 
     if (projects === null) {
         return projects;
@@ -70,6 +70,14 @@ watch(
 </script>
 
 <template>
+    <!-- Show past projects switch -->
+    <div class="flex gap-3 align-items-center mb-5">
+        <InputSwitch input-id="show-past" v-model="showPast" />
+        <label for="show-past">
+            {{ t('views.dashboard.showPastProjects') }}
+        </label>
+    </div>
+    <!-- Project list -->
     <div class="grid align-items-stretch">
         <template v-if="sortedProjects !== null">
             <template v-if="sortedProjects.length > 0">

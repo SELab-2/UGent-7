@@ -2,11 +2,11 @@ import { Course } from '@/types/Course.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
-import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
+import { type CoursePaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
 interface CoursesState {
-    pagination: Ref<PaginatorResponse<Course> | null>;
+    pagination: Ref<CoursePaginatorResponse | null>;
     courses: Ref<Course[] | null>;
     course: Ref<Course | null>;
     getCourseByID: (id: string) => Promise<void>;
@@ -21,7 +21,7 @@ interface CoursesState {
 }
 
 export function useCourses(): CoursesState {
-    const pagination = ref<PaginatorResponse<Course> | null>(null);
+    const pagination = ref<CoursePaginatorResponse | null>(null);
     const courses = ref<Course[] | null>(null);
     const course = ref<Course | null>(null);
 
