@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
+import TeacherAssistantList from '@/components/courses/TeacherAssistantList.vue';
 import TooltipHover from '@/components/TooltipHover.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
@@ -111,33 +112,14 @@ const handleClone = async (): Promise<void> => {
     </div>
     <!-- Project list body -->
     <ProjectList :courses="[course]" :showPast="false" />
+
+    <!-- Heading for teachers and assistants -->
+    <div class="flex justify-content-between align-items-center my-6">
+        <Title class="m-0">{{ t('views.courses.teachers_and_assistants') }}</Title>
+    </div>
+
+    <!-- List with teachers and assistants -->
+    <TeacherAssistantList :course="props.course" />
 </template>
 
-<style scoped lang="scss">
-.tooltip {
-    position: relative;
-    display: inline-block;
-}
-
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-}
-</style>
+<style scoped lang="scss"></style>

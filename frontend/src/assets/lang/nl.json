@@ -77,6 +77,7 @@
           "description": "Beschrijving",
           "faculty": "Faculteit",
           "year": "Academiejaar",
+          "teachers_and_assistants": "Mensen gelinkt aan dit vak",
           "search": {
               "search": "Zoeken",
               "faculty": "Faculteit",
