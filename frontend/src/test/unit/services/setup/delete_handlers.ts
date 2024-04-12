@@ -20,8 +20,13 @@ const baseUrl = 'http://localhost';
 
 export const deleteHandlers = [
     http.delete(baseUrl + endpoints.admins.retrieve.replace('{id}', ':id'), async ({ params }) => {
-        const index = admins.findIndex(x => x.id === params.id);
+        const index = admins.findIndex((x) => x.id === params.id);
         admins.splice(index, 1);
         return HttpResponse.json(admins);
+    }),
+    http.delete(baseUrl + endpoints.assistants.retrieve.replace('{id}', ':id'), async ({ params }) => {
+        const index = assistants.findIndex((x) => x.id === params.id);
+        assistants.splice(index, 1);
+        return HttpResponse.json(assistants);
     }),
 ];

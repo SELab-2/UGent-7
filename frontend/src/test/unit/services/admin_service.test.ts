@@ -2,7 +2,6 @@
 import { describe, it, expect } from 'vitest';
 import { useAdmin } from '@/composables/services/admins.service.ts';
 import { User } from '@/types/users/User.ts';
-import { aD } from 'vitest/dist/reporters-P7C2ytIv.js';
 
 const {
     admins,
@@ -109,7 +108,10 @@ describe('admin', (): void => {
         expect(Array.isArray(admins.value)).toBe(true);
         const prevLength = admins.value?.length ?? 0;
 
-        const adminId: string = admins.value?.[0]?.id as string
+        let adminId = '0';
+        if (admins.value?.[0]?.id !== undefined && admins.value?.[0].id !== null) {
+            adminId = admins.value?.[0]?.id;
+        }
 
         await deleteAdmin(adminId);
         await getAdmins();
@@ -117,6 +119,6 @@ describe('admin', (): void => {
         expect(admins).not.toBeNull();
         expect(Array.isArray(admins.value)).toBe(true);
         expect(admins.value?.length).toBe(prevLength - 1);
-        expect(admins.value?.[0]?.id).not.toBe(adminId)
+        expect(admins.value?.[0]?.id).not.toBe(adminId);
     });
 });

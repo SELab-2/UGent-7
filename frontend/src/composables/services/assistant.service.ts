@@ -71,7 +71,7 @@ export function useAssistant(): AssistantState {
     }
 
     async function deleteAssistant(id: string): Promise<void> {
-        const endpoint = endpoints.admins.retrieve.replace('{id}', id);
+        const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
         await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 

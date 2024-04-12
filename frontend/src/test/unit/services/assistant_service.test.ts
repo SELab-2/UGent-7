@@ -138,4 +138,26 @@ describe('assistant', (): void => {
         expect(assistants.value?.[prevLength]?.last_name).toBe('assistant_last_name');
         expect(assistants.value?.[prevLength]?.email).toBe('sample.assistant@UGent.be');
     });
+
+    it('delete assistant', async () => {
+        resetService();
+
+        await getAssistants();
+        expect(assistants.value).not.toBeNull();
+        expect(Array.isArray(assistants.value)).toBe(true);
+        const prevLength = assistants.value?.length ?? 0;
+
+        let assistantId = '0';
+        if (assistants.value?.[0]?.id !== undefined && assistants.value?.[0].id !== null) {
+            assistantId = assistants.value?.[0]?.id;
+        }
+
+        await deleteAssistant(assistantId);
+        await getAssistants();
+
+        expect(assistants).not.toBeNull();
+        expect(Array.isArray(assistants.value)).toBe(true);
+        expect(assistants.value?.length).toBe(prevLength - 1);
+        expect(assistants.value?.[0]?.id).not.toBe(assistantId);
+    });
 });
