@@ -39,7 +39,7 @@ const projectsWithDeadline = computed(() => {
     });
 });
 
-/* Courses of the current academic year, when the selected date is in the academic year and the date is in the future */
+/* Courses that take place on the selected date in the calendar => no display when the date is in the past */
 const coursesWithProjectCreationPossibility = computed(() => {
     if (user.value !== null && moment(selectedDate.value).isAfter(moment())) {
         return (user.value as RoleUser).courses.filter((course) => {
@@ -131,7 +131,7 @@ function countDeadlines(date: CalendarDateSlotOptions): number {
  * Get the academic year of the selected date.
  *
  * @returns The academic year of the selected date.
-*/
+ */
 const selectedAcademicYear = (): number => {
     const selectedYear = moment(selectedDate.value).year();
     const selectedMonth = moment(selectedDate.value).month();
