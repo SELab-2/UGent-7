@@ -23,6 +23,8 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
+            "no_projects": "Geen projecten beschikbaar voor dit academiejaar.",
+            "no_courses": "Geen vakken beschikbaar voor dit academiejaar.",
             "select_course": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
         },
@@ -74,6 +76,7 @@
           "name": "Vaknaam",
           "description": "Beschrijving",
           "faculty": "Faculteit",
+          "year": "Academiejaar",
           "search": {
               "search": "Zoeken",
               "faculty": "Faculteit",
@@ -85,21 +88,20 @@
       }
     },
     "composables": {
-      "helpers": {
-        "errors": {
-          "notFound": "Niet Gevonden",
-          "notFoundDetail": "Bron niet gevonden.",
-          "unauthorized": "Onbevoegd",
-          "unauthorizedDetail": "Je bent niet bevoegd om deze bron te bereiken.",
-          "server": "Server Fout",
-          "serverDetail": "Er vond een fout plaats op de server.",
-          "network": "Netwerk Fout",
-          "networkDetail": "Kan de server niet bereiken.",
-
-          "request": "Fout verzoek",
-          "requestDetail": "Een fout vond plaats tijdens het maken van het verzoek."
+        "helpers": {
+            "errors": {
+                "notFound": "Niet Gevonden",
+                "notFoundDetail": "Bron niet gevonden.",
+                "unauthorized": "Onbevoegd",
+                "unauthorizedDetail": "Je bent niet bevoegd om deze bron te bereiken.",
+                "server": "Server Fout",
+                "serverDetail": "Er vond een fout plaats op de server.",
+                "network": "Netwerk Fout",
+                "networkDetail": "Kan de server niet bereiken.",
+                "request": "Fout verzoek",
+                "requestDetail": "Een fout vond plaats tijdens het maken van het verzoek."
+            }
         }
-      }
     },
     "components": {
         "buttons": {
