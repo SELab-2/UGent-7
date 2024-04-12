@@ -109,4 +109,8 @@ export class User {
             user.last_login !== null ? new Date(user.last_login) : null,
         );
     }
+
+    static blankUser(): User {
+        return new User('', '', '', '', '', 0, false, [], [], new Date(), null);
+    }
 }
