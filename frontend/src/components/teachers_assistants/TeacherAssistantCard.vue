@@ -3,7 +3,8 @@ import Card from 'primevue/card';
 import { type User } from '@/types/users/User.ts';
 import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';
-import TeacherAssistantCourseAddButton from './TeacherAssistantCourseAddButton.vue';
+import TeacherCourseAddButton from '@/components/teachers_assistants/add_button/TeacherCourseAddButton.vue';
+import AssistantCourseAddButton from '@/components/teachers_assistants/add_button/AssistantCourseAddButton.vue';
 
 /* Component props */
 defineProps<{
@@ -27,7 +28,8 @@ const { t } = useI18n();
             {{ user.email }}
         </template>
         <template #footer>
-            <TeacherAssistantCourseAddButton :user="user" :course="course" />
+            <TeacherCourseAddButton :user="user" :course="course" v-if="user.isTeacher()" />
+            <AssistantCourseAddButton :user="user" :course="course" v-else-if="user.isAssistant()" />
         </template>
     </Card>
 </template>

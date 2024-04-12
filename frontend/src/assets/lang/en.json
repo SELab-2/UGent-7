@@ -147,6 +147,16 @@
                 "leave": {
                     "success": "You have been successfully unenrolled for the course '{0}'",
                     "error": "An error occurred while unenrolling for the course '{0}'."
+                },
+                "teachers_and_assistants": {
+                    "enroll": {
+                        "success": "{0} has been successfully added as {1} to the course.",
+                        "error": "An error occurred while adding {0} as {1} to the course."
+                    },
+                    "leave": {
+                        "success": "{0} has been successfully removed from the course.",
+                        "error": "An error occurred while removing {0} from the course."
+                    }
                 }
             },
             "login": {

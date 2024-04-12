@@ -149,6 +149,16 @@
                 "leave": {
                     "success": "Je bent succesvol uitgeschreven voor het vak '{0}'.",
                     "error": "Er is een fout opgetreden tijdens het uitschrijven voor het vak '{0}'."
+                },
+                "teachers_and_assistants": {
+                    "enroll": {
+                        "success": "{0} werd succesvol toegevoegd als {1} aan het vak.",
+                        "error": "Er is een fout opgetreden tijdens het toevoegen van {0} als {1} aan het vak."
+                    },
+                    "leave": {
+                        "success": "{0} werd succesvol verwijderd uit het vak.",
+                        "error": "Er is een fout opgetreden tijdens het verwijderen van {0} uit het vak."
+                    }
                 }
             },
             "login": {
