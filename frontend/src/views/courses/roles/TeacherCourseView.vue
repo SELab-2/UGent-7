@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/courses/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantCourseList.vue';
+import TeacherAssistantSearch from '@/components/teachers_assistants/TeacherAssistantSearch.vue';
 import TooltipHover from '@/components/TooltipHover.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
@@ -36,7 +37,6 @@ const handleClone = async (): Promise<void> => {
     confirm.require({
         message: t('confirmations.clone_course'),
         header: t('views.courses.clone'),
-        icon: 'pi pi-exclamation-triangle',
         accept: () => {
             cloneCourse(props.course.id, cloneAssistants.value, cloneTeachers.value);
         },
@@ -115,11 +115,17 @@ const handleClone = async (): Promise<void> => {
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
-        <Title class="m-0">{{ t('views.courses.teachers_and_assistants') }}</Title>
+        <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
     </div>
-
     <!-- List with teachers and assistants -->
     <TeacherAssistantList :course="props.course" />
+
+    <!-- Heading to add/remove teachers and assistants -->
+    <div class="flex justify-content-between align-items-center my-6">
+        <Title class="m-0">{{ t('views.courses.teachers_and_assistants.search.title') }}</Title>
+    </div>
+    <!-- Search and add/remove teachers and assistants -->
+    <TeacherAssistantSearch :course="props.course" />
 </template>
 
 <style scoped lang="scss"></style>

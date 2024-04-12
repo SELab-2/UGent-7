@@ -5,8 +5,7 @@ import { useI18n } from 'vue-i18n';
 
 /* Component props */
 defineProps<{
-    user: User;
-    role: string;
+    user: User
 }>();
 
 /* Composable injections */
@@ -19,7 +18,7 @@ const { t } = useI18n();
             <h2 class="text-primary m-0 text-xl">{{ user.getFullName() }}</h2>
         </template>
         <template #subtitle>
-            <span class="text-sm">{{ t(role) }}</span>
+            <span class="text-sm">{{ t(user.getRole()) }}</span>
         </template>
         <template #content>
             {{ user.email }}

@@ -68,24 +68,34 @@
             "chooseFile": "Kies bestand(en)"
         },
         "courses": {
-          "create": "Creëer vak",
-          "edit": "Bewerk vak",
-          "clone": "Kloon vak",
-          "clone_assistants": "Kloon assistenten:",
-          "clone_teachers": "Kloon lesgevers:",
-          "name": "Vaknaam",
-          "description": "Beschrijving",
-          "faculty": "Faculteit",
-          "year": "Academiejaar",
-          "teachers_and_assistants": "Mensen gelinkt aan dit vak",
-          "search": {
-              "search": "Zoeken",
-              "faculty": "Faculteit",
-              "year": "Academiejaar",
-              "placeholder": "Zoek een vak op naam",
-              "title": "Zoek een vak",
-              "results": "{0} vakken gevonden voor ingestelde filters"
-          }
+            "create": "Creëer vak",
+            "edit": "Bewerk vak",
+            "clone": "Kloon vak",
+            "clone_assistants": "Kloon assistenten:",
+            "clone_teachers": "Kloon lesgevers:",
+            "name": "Vaknaam",
+            "description": "Beschrijving",
+            "faculty": "Faculteit",
+            "year": "Academiejaar",
+            "teachers_and_assistants": {
+                "title": "Lesgevers gelinkt aan dit vak",
+                "search": {
+                    "search": "Zoeken",
+                    "faculty": "Faculteit",
+                    "role": "Rol",
+                    "placeholder": "Zoek een gebruiker op naam",
+                    "title": "Zoek gebuikers om aan dit vak toe te voegen",
+                    "results": "{0} gebruikers gevonden voor ingestelde filters"
+                }
+            },
+            "search": {
+                "search": "Zoeken",
+                "faculty": "Faculteit",
+                "year": "Academiejaar",
+                "placeholder": "Zoek een vak op naam",
+                "title": "Zoek een vak",
+                "results": "{0} vakken gevonden voor ingestelde filters"
+            }
       }
     },
     "composables": {

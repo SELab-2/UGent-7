@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/courses/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantCourseList.vue';
 import TooltipHover from '@/components/TooltipHover.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
@@ -38,7 +38,7 @@ const { t } = useI18n();
     <ProjectList :courses="[course]" :showPast="false" />
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
-        <Title class="m-0">{{ t('views.courses.teachers_and_assistants') }}</Title>
+        <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
     </div>
 
     <!-- List with teachers and assistants -->

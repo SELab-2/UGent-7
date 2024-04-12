@@ -44,15 +44,6 @@ export class Student extends User {
     }
 
     /**
-     * Check if the user is a student.
-     *
-     * @returns boolean
-     */
-    public isStudent(): boolean {
-        return true;
-    }
-
-    /**
      * Convert a student object to a student instance.
      *
      * @param student
@@ -70,5 +61,22 @@ export class Student extends User {
             student.last_login !== null ? new Date(student.last_login) : null,
             student.studentId,
         );
+    }
+
+    /**
+     * Check if the user is a student.
+     *
+     * @returns boolean
+     */
+    public isStudent(): boolean {
+        return true;
+    }
+
+    /**
+     * Get the role of the user.
+     * @returns string
+     */
+    public getRole(): string {
+        return 'types.roles.student';
     }
 }

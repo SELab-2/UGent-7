@@ -77,7 +77,17 @@
             "description": "Description",
             "faculty": "Faculty",
             "year": "Academic year",
-            "teachers_and_assistants": "People linked to this course",
+            "teachers_and_assistants": {
+                "title": "People linked to this course",
+                "search": {
+                    "search": "Search",
+                    "faculty": "Faculty",
+                    "role": "Role",
+                    "placeholder": "Search a user by name",
+                    "title": "Find users to link to this course",
+                    "results": "{0} users found for set filters"
+                }
+            },
             "search": {
                 "search": "Search",
                 "faculty": "Faculty",
