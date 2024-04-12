@@ -125,8 +125,7 @@
             "createProject": "Maak een nieuw project"
         },
         "card": {
-            "open": "Details",
-            "newProject": "Nieuw project"
+            "open": "Details"
         },
         "submission" : "Indienen"
     },
