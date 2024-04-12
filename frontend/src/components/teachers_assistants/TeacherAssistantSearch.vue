@@ -41,7 +41,7 @@ const roles = [
 ]
 
 /* Ref that contains all the filtered users */
-const filteredUsers = ref<User[]>([]);
+const filteredUsers = ref<User[]|null>([]);
 
 /**
  * Fetch the users based on the filter.
@@ -68,6 +68,7 @@ onMounted(async () => {
     /* Reset pagination on filter change */
     onFilter(
         async () => {
+            filteredUsers.value = null;
             await resetPagination([teacherPagination, assistantPagination]);
         },
         0,

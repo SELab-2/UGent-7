@@ -6,7 +6,7 @@ import TeacherAssistantCard from './TeacherAssistantCard.vue';
 
 /* Props */
 interface Props {
-    users: User[];
+    users: User[] | null;
     course: Course;
     cols?: number;
 }
@@ -33,7 +33,7 @@ withDefaults(defineProps<Props>(), {
         </template>
         <template v-else>
             <div class="col-12 md:col-6 lg:col-4" :class="'xl:col-' + 12 / cols" v-for="index in cols" :key="index">
-                <Skeleton :height="'25rem'" />
+                <Skeleton :height="'10rem'" />
             </div>
         </template>
     </div>
