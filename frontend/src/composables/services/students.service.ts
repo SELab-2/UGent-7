@@ -80,9 +80,8 @@ export function useStudents(): StudentsState {
         await create<Student>(
             endpoint,
             {
-                email: studentData.email,
-                first_name: studentData.first_name,
-                last_name: studentData.last_name,
+                user: studentData.id,
+                student_id: studentData.studentId
             },
             student,
             Student.fromJSON,

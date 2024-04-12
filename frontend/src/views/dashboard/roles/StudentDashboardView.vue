@@ -40,7 +40,7 @@ watch(
 
 <template>
     <!-- Course heading -->
-    <div class="flex justify-content-between align-items-center mb-6">
+    <div class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-6">
         <!-- Course list title -->
         <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
 

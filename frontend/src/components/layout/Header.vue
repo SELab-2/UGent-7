@@ -54,7 +54,7 @@ const items = computed(() => [
 <template>
     <div class="flex w-full">
         <!-- Logo -->
-        <div class="lg:w-2 lg:pl-0 flex align-items-center p-3 ">
+        <div class="lg:w-2 lg:pl-0 flex align-items-center p-3">
             <RouterLink :to="'/'">
                 <img class="w-full max-w-9rem" :src="logo" :alt="t('layout.header.logo')" />
             </RouterLink>
@@ -124,20 +124,30 @@ const items = computed(() => [
                 <div class="flex flex-column h-full">
                     <div class="flex align-items-center justify-content-between p-4 pb-2 flex-shrink-0">
                         <span class="inline-flex align-items-center gap-2">
-                            <img :alt="t('layout.header.logo')" :src="tiny" class="w-2rem mr-2"/> <span class="font-bold text-2xl text-primary">Ypovoli</span>
+                            <img :alt="t('layout.header.logo')" :src="tiny" class="w-2rem mr-2" />
+                            <span class="font-bold text-2xl text-primary">Ypovoli</span>
                         </span>
                         <span>
-                            <Button type="button" @click="closeCallback" icon="pi pi-times" rounded outlined class="h-2rem w-2rem"/>
+                            <Button
+                                type="button"
+                                @click="closeCallback"
+                                icon="pi pi-times"
+                                rounded
+                                outlined
+                                class="h-2rem w-2rem"
+                            />
                         </span>
                     </div>
                     <div class="overflow-y-auto px-2">
                         <ul class="list-none p-0 m-0">
-                            <li v-for="item in items">
-                                <RouterLink :to="{name: item.route}"
-                                            @click="closeCallback"
-                                            class="flex align-items-center cursor-pointer p-3 text-black-alpha-90 border-bottom-1 border-300"
-                                            v-ripple>
-                                    <i class="mr-2" :class="'pi pi-' + item.icon"/>
+                            <li v-for="item in items" :key="item.route">
+                                <RouterLink
+                                    :to="{ name: item.route }"
+                                    @click="closeCallback"
+                                    class="flex align-items-center cursor-pointer p-3 text-black-alpha-90 border-bottom-1 border-300"
+                                    v-ripple
+                                >
+                                    <i class="mr-2" :class="'pi pi-' + item.icon" />
                                     <span class="font-medium">{{ item.label }}</span>
                                 </RouterLink>
                             </li>

@@ -11,7 +11,7 @@ const logo: Record<string, string> = { nl, en };
 </script>
 
 <template>
-    <div id="footer" class="p-4 py-3">
+    <div id="footer" class="p-4 py-3 mt-auto">
         <div class="w-full lg:w-2 flex align-items-center py-3">
             <img class="w-full max-w-9rem" :src="logo[locale]" :alt="t('layout.header.logo')" />
         </div>
