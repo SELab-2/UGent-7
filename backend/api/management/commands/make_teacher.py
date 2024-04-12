@@ -19,6 +19,6 @@ class Command(BaseCommand):
             return
 
         user = user.get()
-        Teacher(user_ptr=user).save_base(raw=True)
+        Teacher.create(user)
 
         self.stdout.write(self.style.SUCCESS('Successfully made the user teacher!'))
