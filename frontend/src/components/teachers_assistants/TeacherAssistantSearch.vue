@@ -33,7 +33,7 @@ const roles = ['types.roles.teacher', 'types.roles.assistant'];
 /**
  * Fetch the users based on the filter.
  */
-async function fetchCourses(): Promise<void> {
+async function fetchUsers(): Promise<void> {
     await searchCourses(filter.value, page.value, pageSize.value);
 }
 
@@ -43,10 +43,10 @@ onMounted(async () => {
     await getFaculties();
 
     /* Search users on page change */
-    onPaginate(fetchCourses);
+    onPaginate(fetchUsers);
 
     /* Search users on filter change */
-    onFilter(fetchCourses);
+    onFilter(fetchUsers);
 
     /* Reset pagination on filter change */
     onFilter(

@@ -51,7 +51,7 @@ onMounted(async () => {
     /* Reset pagination on filter change */
     onFilter(
         async () => {
-            await resetPagination(pagination);
+            await resetPagination([pagination]);
         },
         0,
         false,

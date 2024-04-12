@@ -3,8 +3,10 @@ import { Teacher } from '@/types/users/Teacher.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
+import { get, getList, create, deleteId, deleteIdWithData, getPaginatedList } from '@/composables/services/helpers.ts';
 import { useCourses } from '@/composables/services/courses.service.ts';
+import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
+import { type Filter } from '@/types/filter/Filter.ts';
 
 interface TeacherState {
     teachers: Ref<Teacher[] | null>;
@@ -13,6 +15,7 @@ interface TeacherState {
     getTeacherByID: (id: string, init?: boolean) => Promise<void>;
     getTeacherByCourse: (courseId: string) => Promise<void>;
     getTeachers: () => Promise<void>;
+    searchTeachers: (filters: Filter, page: number, pageSize: number) => Promise<void>;
     teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>;
     teacherLeaveCourse: (courseId: string, teacherId: string) => Promise<void>;
     createTeacher: (teacherData: Teacher) => Promise<void>;
@@ -24,6 +27,7 @@ export function useTeacher(): TeacherState {
     const teachers = ref<Teacher[] | null>(null);
     const teacher = ref<Teacher | null>(null);
     const response = ref<Response | null>(null);
+    const teacherPagination = ref<PaginatorResponse<Teacher> | null>(null);
 
     /* Nested state */
     const { courses, getCoursesByTeacher } = useCourses();
@@ -45,6 +49,11 @@ export function useTeacher(): TeacherState {
     async function getTeachers(): Promise<void> {
         const endpoint = endpoints.teachers.index;
         await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
+    }
+
+    async function searchTeachers(filters: Filter, page: number, pageSize: number): Promise<void> {
+        const endpoint = endpoints.teachers.search;
+        await getPaginatedList<Teacher>(endpoint, filters, page, pageSize, teacherPagination, Teacher.fromJSON);
     }
 
     async function teacherJoinCourse(courseId: string, teacherId: string): Promise<void> {
@@ -91,6 +100,7 @@ export function useTeacher(): TeacherState {
         getTeacherByID,
         getTeacherByCourse,
         getTeachers,
+        searchTeachers,
 
         createTeacher,
         deleteTeacher,
