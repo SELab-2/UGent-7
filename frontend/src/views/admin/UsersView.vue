@@ -52,10 +52,12 @@ onMounted(async () => {
 
     onFilter(
         async () => {
-            await resetPagination(pagination);
+            await paginate(0).then(() => {
+                pagination.value = null;
+            });
+            await loadLazyData();
         },
-        0,
-        false,
+        { deep: true },
     );
 });
 
