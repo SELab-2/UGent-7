@@ -59,7 +59,7 @@ onMounted(async () => {
 });
 
 const creators = ref<Record<Role, (arg: any) => Promise<void>>>({});
-const createFunctions = ref([createStudent, createAssistant, createTeacher]);
+const createFunctions = ref<((arg: any) => Promise<void>)[]>([createStudent, createAssistant, createTeacher]);
 
 const loading = ref(false);
 const totalRecords = ref(0);
@@ -126,25 +126,35 @@ const updateRole = (role: Role): void => {
 const saveItem = async (): Promise<void> => {
     const value = pagination.value;
     if (value !== null && value.results !== null) {
-        if (editItem.value.roles.includes('student') && editItem.value.roles.includes('teacher')) {
-            // this is not allowed TODO
-        } else {
-            const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
-            // update remotely TODO
-            const paginationItem = value.results[index];
-            for (let i = 1; i < roles.length; i++) {
-                const role = roles[i];
-                if (!paginationItem.roles.includes(role) && editItem.value.roles.includes(role)) {
-                    // const func = creators.value[role];
-                    // Normally the create function requires an object of the specific role that it creates something of.
-                    // But they always just extract the email, the first name and the last name, which the User object has.
-                    // func(editItem.value);
+        const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
+        // update remotely TODO
+        const paginationItem = value.results[index];
+
+        for (let i = 1; i < roles.length; i++) {
+            const role = roles[i];
+            if (!paginationItem.roles.includes(role) && editItem.value.roles.includes(role)) {
+                let data: {[key: string]: any};
+                if (role === "student") {
+                    console.log("student reported");
+                    data = {
+                        ...editItem.value,
+                        studentId: editItem.value.id,
+                    };
+                    console.log(data);
+                } else {
+                    data = {
+                        ...editItem.value,
+                    };
                 }
+                const func = creators.value[role];
+                // Normally the create function requires an object of the specific role that it creates something of.
+                // But they always just id and I add a studentId for when it's the student role that gets added.
+                await func(data);
             }
-            // update admin status TODO
-            // update locally
-            value.results.splice(index, 1, { ...editItem.value });
         }
+        // update admin status TODO
+        // update locally
+        value.results.splice(index, 1, { ...editItem.value });
     } else {
         // raise error TODO
     }
@@ -243,7 +253,7 @@ const saveItem = async (): Promise<void> => {
         </div>
         <div class="flex align-items-center gap-3 mb-3">
             <label class="font-semibold w-10rem">{{ t('admin.title') }}</label>
-            <InputSwitch :model-value="editItem.is_staff" @click="editItem.is_staff = true" />
+            <InputSwitch :model-value="editItem.is_staff" @click="editItem.is_staff = !editItem.is_staff" />
         </div>
         <div class="flex justify-content-end gap-2">
             <Button type="button" :label="t('admin.cancel')" severity="secondary" @click="popupEdit = false"></Button>
