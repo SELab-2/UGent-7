@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
-from api.models.student import Student
 from api.models.teacher import Teacher
+from authentication.models import User
 
 
 class Command(BaseCommand):
@@ -12,12 +12,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         username = options['username']
-        student = Student.objects.filter(username=username)
+        user = User.objects.filter(username=username)
 
-        if student.count() == 0:
+        if user.count() == 0:
             self.stdout.write(self.style.ERROR('User not found, first log in !'))
             return
 
-        Teacher.create(student.get(), create_time=student.create_time)
+        user = user.get()
+        Teacher(user_ptr=user).save_base(raw=True)
 
         self.stdout.write(self.style.SUCCESS('Successfully made the user teacher!'))
