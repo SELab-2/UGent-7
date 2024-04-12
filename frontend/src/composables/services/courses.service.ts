@@ -60,10 +60,10 @@ export function useCourses(): CoursesState {
         await create<Course>(
             endpoint,
             {
+                id: courseData.id,
                 name: courseData.name,
                 description: courseData.description,
                 academic_startyear: courseData.academic_startyear,
-                faculty: courseData.faculty?.id,
             },
             course,
             Course.fromJSON,

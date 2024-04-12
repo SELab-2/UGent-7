@@ -39,7 +39,7 @@ export function useTeacher(): TeacherState {
 
     async function getTeacherByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
-        await get<Teacher>(endpoint, teacher, Teacher.fromJSON);
+        await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
     }
 
     async function getTeachers(): Promise<void> {

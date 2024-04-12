@@ -1,11 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { useGroup } from '@/composables/services/groups.service.ts';
+import { Group } from '@/types/Group';
+import { useProject } from '@/composables/services/project.service';
+import { type Project } from '@/types/Projects';
 
-const { groups, group, getGroupByID, getGroupsByProject, getGroupsByStudent } = useGroup();
+const {
+    groups,
+    group,
+    getGroupByID,
+    getGroupsByProject,
+    getGroupsByStudent,
+
+    createGroup,
+    deleteGroup,
+} = useGroup();
+
+function resetService(): void {
+    group.value = null;
+    groups.value = null;
+}
+
+const { project, getProjectByID } = useProject();
 
 describe('group', (): void => {
     it('gets group data by id', async () => {
+        resetService();
+
         await getGroupByID('0');
         expect(group.value).not.toBeNull();
         expect(group.value?.score).toBe(20);
@@ -16,9 +37,9 @@ describe('group', (): void => {
     });
 
     it('gets groups data by project', async () => {
+        resetService();
+
         await getGroupsByProject('0');
-        // console.log(groups.value)
-        // Ensure group data is not null
         expect(groups.value).not.toBeNull();
         expect(Array.isArray(groups.value)).toBe(true);
         expect(groups.value?.length).toBe(2);
@@ -39,6 +60,8 @@ describe('group', (): void => {
     });
 
     it('gets groups data by student', async () => {
+        resetService();
+
         await getGroupsByStudent('1');
         expect(groups.value).not.toBeNull();
         expect(Array.isArray(groups.value)).toBe(true);
@@ -52,11 +75,37 @@ describe('group', (): void => {
         expect(groups.value?.[0]?.submissions).toEqual([]);
     });
 
-    /*
-    it("create group", async () => {
-        let gr = new Group("3",10)
-        await createGroup(gr, "0")
-        console.log(group.value)
-    })
-    */
+    it('create group', async () => {
+        resetService();
+
+        const projectId = '0';
+        await getProjectByID(projectId);
+        const exampleProject: Project | null = project.value;
+        expect(exampleProject).not.toBeNull();
+
+        const exampleGroup = new Group(
+            '', // id
+            10, // score
+            exampleProject, // project
+            [], // students
+            [], // submissions
+        );
+
+        await getGroupsByProject(projectId);
+
+        expect(groups).not.toBeNull();
+        expect(Array.isArray(groups.value)).toBe(true);
+        const prevLength = groups.value?.length ?? 0;
+
+        await createGroup(exampleGroup, projectId);
+        await getGroupsByProject(projectId);
+
+        expect(groups).not.toBeNull();
+        expect(Array.isArray(groups.value)).toBe(true);
+        expect(groups.value?.length).toBe(prevLength + 1);
+
+        // Only check for fields that are sent to the backend
+        expect(groups.value?.[prevLength]?.score).toBe(10);
+        expect(groups.value?.[prevLength]?.project).toBeNull();
+    });
 });

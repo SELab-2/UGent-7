@@ -38,7 +38,7 @@ export function useAssistant(): AssistantState {
 
     async function getAssistantByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
+        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON);
     }
 
     async function getAssistants(): Promise<void> {
@@ -71,7 +71,7 @@ export function useAssistant(): AssistantState {
     }
 
     async function deleteAssistant(id: string): Promise<void> {
-        const endpoint = endpoints.admins.retrieve.replace('{id}', id);
+        const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
         await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON);
     }
 
