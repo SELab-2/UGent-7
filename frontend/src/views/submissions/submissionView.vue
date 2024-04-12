@@ -9,11 +9,14 @@ import { useRoute } from 'vue-router';
 import { useCourses } from '@/composables/services/course.service.ts';
 import FileUpload from 'primevue/fileupload';
 import { PrimeIcons } from 'primevue/api';
+import AllSubmission from "@/components/submissions/AllSubmission.vue";
+import {useGroup} from "@/composables/services/groups.service.ts";
 
 const { t } = useI18n();
 const route = useRoute();
 const { project, getProjectByID } = useProject();
 const { course, getCourseByID } = useCourses();
+const { group, getGroupByID } = useGroup();
 
 /* State */
 const files = ref<File[]>([]);
@@ -21,6 +24,7 @@ const files = ref<File[]>([]);
 onMounted(async () => {
     await getProjectByID(route.params.projectId as string);
     await getCourseByID(route.params.courseId as string);
+    await getGroupByID(route.params.groupId as string);
 });
 
 const onUpload = (callback: () => void): void => {
@@ -100,6 +104,9 @@ function formatDate(deadline: Date): string {
                         </FileUpload>
                     </div>
                 </div>
+            </div>
+            <div class="col-6 col-offset-1">
+              <AllSubmission v-if="group" :group="group"></AllSubmission>
             </div>
         </div>
     </BaseLayout>

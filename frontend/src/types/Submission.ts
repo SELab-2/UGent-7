@@ -8,7 +8,7 @@ export class Submission {
         public structure_checks_passed: boolean,
         public group: Group | null = null,
         public files: File[] = [], // TODO check
-        public extra_checks_results: any[] = [], // TODO
+        public extra_checks_results: Boolean[] = [], // TODO
     ) {}
 
     /**

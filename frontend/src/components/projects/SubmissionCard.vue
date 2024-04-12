@@ -44,7 +44,10 @@ const formattedDeadline = computed(() => {
             </div>
         </template>
         <template #footer>
-            <RouterLink :to="{ name: 'submission' }">
+            <RouterLink :to="{
+              name: 'submission',
+              params: { groupId: props.group.id }
+            }">
                 <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.submission')" icon-pos="right" outlined />
             </RouterLink>
         </template>
