@@ -7,8 +7,8 @@ import InputIcon from 'primevue/inputicon';
 import Checkbox from 'primevue/checkbox';
 import Paginator from 'primevue/paginator';
 import TeacherAssistantList from './TeacherAssistantList.vue';
-import { onMounted } from 'vue';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { onMounted, ref } from 'vue';
+import { useTeacher } from '@/composables/services/teachers.service';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useFaculty } from '@/composables/services/faculties.service.ts';
 import { storeToRefs } from 'pinia';
@@ -17,24 +17,34 @@ import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
 import { useRoute } from 'vue-router';
 import { getUserFilters } from '@/types/filter/Filter.ts';
+import { User } from '@/types/users/User';
 
 /* Composable injections */
 const { t } = useI18n();
 const { query } = useRoute();
 const { user } = storeToRefs(useAuthStore());
 const { faculties, getFaculties } = useFaculty();
-const { pagination, searchCourses } = useCourses();
+const { teacherPagination, searchTeachers } = useTeacher();
 const { onPaginate, resetPagination, page, first, pageSize } = usePaginator();
 const { filter, onFilter } = useFilter(getUserFilters(query));
 
 /* Teacher and assistant roles */
-const roles = ['types.roles.teacher', 'types.roles.assistant'];
+const roles = [
+    { label: 'teacher', value: 'types.roles.teacher' },
+    { label: 'assistant', value: 'types.roles.assistant' },
+]
+
+/* Ref that contains all the filtered users */
+const filteredUsers = ref<User[]>([]);
 
 /**
  * Fetch the users based on the filter.
  */
 async function fetchUsers(): Promise<void> {
-    await searchCourses(filter.value, page.value, pageSize.value);
+    await searchTeachers(filter.value, page.value, pageSize.value);
+
+    // Set the filtered users
+    filteredUsers.value = teacherPagination.value?.results || [];
 }
 
 /* Fetch the faculties */
@@ -51,7 +61,7 @@ onMounted(async () => {
     /* Reset pagination on filter change */
     onFilter(
         async () => {
-            await resetPagination(pagination);
+            await resetPagination([teacherPagination]);
         },
         0,
         false,
@@ -84,25 +94,26 @@ onMounted(async () => {
                         <label :for="faculty.id" class="ml-2 text-sm">{{ faculty.name }}</label>
                     </div>
                 </AccordionTab>
-                <AccordionTab :header="t('views.courses.teachers_and_assistants.search.role')" v-if="user && pagination !== null">
+                <AccordionTab :header="t('views.courses.teachers_and_assistants.search.role')" v-if="user">
                     <div
                         v-for="role in roles"
-                        :key="role"
+                        :key="role.label"
                         class="flex align-items-center mb-2"
                     >
                         <Checkbox
                             v-model="filter.roles"
-                            :inputId="role"
+                            :inputId="role.label"
                             name="roles"
-                            :value="t(role)"
+                            :value="role.label"
                         />
-                        <label :for="role" class="ml-2 text-sm"> {{ t(role) }} </label>
+                        <label :for="role.label" class="ml-2 text-sm"> {{ t(role.value) }} </label>
                     </div>
                 </AccordionTab>
             </Accordion>
         </div>
         <div class="col-12 xl:col-9">
-            <Paginator :rows="pageSize" :total-records="pagination?.count" :first="first" v-model:first="first" />
+            <TeacherAssistantList :users="filteredUsers" :cols="3" />
+            <Paginator :rows="pageSize" :total-records="filteredUsers?.length" :first="first" v-model:first="first" />
         </div>
     </div>
 </template>

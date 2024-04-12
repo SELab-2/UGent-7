@@ -1,4 +1,6 @@
 from django.utils.translation import gettext
+from django.db.models.functions import Concat
+from django.db.models import Value
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -45,9 +47,11 @@ class TeacherViewSet(ModelViewSet):
             return self.get_paginated_response([])
 
         # Filter the queryset based on the search term
-        queryset = self.get_queryset().filter(
-            name__icontains=search
-        ).order_by('faculty')
+        queryset = Teacher.objects.annotate(
+            full_name=Concat('first_name', Value(' '), 'last_name')
+        ).filter(
+            full_name__icontains=search
+        )
 
         # Filter the queryset based on selected faculties
         if faculties:

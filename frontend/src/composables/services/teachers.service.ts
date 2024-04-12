@@ -12,6 +12,7 @@ interface TeacherState {
     teachers: Ref<Teacher[] | null>;
     teacher: Ref<Teacher | null>;
     response: Ref<Response | null>;
+    teacherPagination: Ref<PaginatorResponse<Teacher> | null>;
     getTeacherByID: (id: string, init?: boolean) => Promise<void>;
     getTeacherByCourse: (courseId: string) => Promise<void>;
     getTeachers: () => Promise<void>;
@@ -96,6 +97,7 @@ export function useTeacher(): TeacherState {
         teachers,
         teacher,
         response,
+        teacherPagination,
 
         getTeacherByID,
         getTeacherByCourse,
