@@ -161,7 +161,7 @@ describe('project', (): void => {
         expect(Array.isArray(projects.value)).toBe(true);
         const prevLength = projects.value?.length ?? 0;
 
-        // await createProject(exampleProject, courseId as string);
+        // await createProject(JSON.stringify(exampleProject), courseId);
         // await getProjectsByCourse(courseId);
 
         // expect(projects).not.toBeNull();

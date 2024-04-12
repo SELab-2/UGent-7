@@ -2,6 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { useAdmin } from '@/composables/services/admins.service.ts';
 import { User } from '@/types/users/User.ts';
+import { aD } from 'vitest/dist/reporters-P7C2ytIv.js';
 
 const {
     admins,
@@ -83,7 +84,7 @@ describe('admin', (): void => {
         );
 
         await getAdmins();
-        expect(admins).not.toBeNull();
+        expect(admins.value).not.toBeNull();
         expect(Array.isArray(admins.value)).toBe(true);
         const prevLength = admins.value?.length ?? 0;
 
@@ -98,5 +99,24 @@ describe('admin', (): void => {
         expect(admins.value?.[prevLength]?.first_name).toBe('admin_first_name');
         expect(admins.value?.[prevLength]?.last_name).toBe('admin_last_name');
         expect(admins.value?.[prevLength]?.email).toBe('sample.admin@UGent.be');
+    });
+
+    it('delete admin', async () => {
+        resetService();
+
+        await getAdmins();
+        expect(admins.value).not.toBeNull();
+        expect(Array.isArray(admins.value)).toBe(true);
+        const prevLength = admins.value?.length ?? 0;
+
+        const adminId: string = admins.value?.[0]?.id as string
+
+        await deleteAdmin(adminId);
+        await getAdmins();
+
+        expect(admins).not.toBeNull();
+        expect(Array.isArray(admins.value)).toBe(true);
+        expect(admins.value?.length).toBe(prevLength - 1);
+        expect(admins.value?.[0]?.id).not.toBe(adminId)
     });
 });
