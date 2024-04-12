@@ -1,5 +1,6 @@
 from api.permissions.notification_permissions import NotificationPermission
 from api.permissions.role_permissions import IsSameUser
+from api.views.pagination.basic_pagination import BasicPagination
 from authentication.models import User
 from authentication.serializers import UserSerializer
 from notifications.models import Notification
