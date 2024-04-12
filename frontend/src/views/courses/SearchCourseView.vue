@@ -102,7 +102,7 @@ onMounted(async () => {
                     </AccordionTab>
                 </Accordion>
             </div>
-            <div class="col-12 xl:col-9">
+            <div class="col-12 xl:col-9 mt-4 xl:mt-0">
                 <Title>
                     {{ t('views.courses.search.title') }}
                 </Title>

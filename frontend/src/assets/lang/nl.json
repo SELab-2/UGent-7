@@ -115,11 +115,13 @@
         }
     },
     "components": {
-        "buttons": {
-            "academic_year": "Academiejaar {0}"
+        "button": {
+            "academic_year": "Academiejaar {0}",
+            "createProject": "Maak een nieuw project"
         },
         "card": {
-            "open": "Details"
+            "open": "Details",
+            "newProject": "Nieuw Project"
         },
         "submission" : "Indienen"
     },
@@ -164,7 +166,7 @@
         "am": "voormiddag",
         "apply": "Toepassen",
         "cancel": "Annuleer",
-        "choose": "Kies",
+        "choose": "Kies een bestand",
         "chooseDate": "Kies datum",
         "chooseMonth": "Kies maand",
         "chooseYear": "Kies jaar",

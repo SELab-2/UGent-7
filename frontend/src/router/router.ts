@@ -49,15 +49,15 @@ const routes: RouteRecordRaw[] = [
                     { path: 'edit', component: UpdateCourseView, name: 'course-edit' },
                     // Projects
                     {
-                        path: 'courseProjects',
+                        path: 'projects',
                         children: [
-                            { path: '', component: Dummy, name: 'courseProjects' },
+                            { path: '', component: Dummy, name: 'course-projects' },
                             { path: 'create', component: CreateProjectView, name: 'project-create' },
                             // Single project
                             {
                                 path: ':projectId',
                                 children: [
-                                    { path: '', component: SingleProjectView, name: 'courseProject' },
+                                    { path: '', component: SingleProjectView, name: 'course-project' },
                                     { path: 'edit', component: Dummy, name: 'project-edit' },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },

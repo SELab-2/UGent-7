@@ -52,7 +52,7 @@ const { t } = useI18n();
         <template #footer>
             <RouterLink
                 :to="{
-                    name: 'courseProject',
+                    name: 'course-project',
                     params: {
                         courseId: course.id,
                         projectId: project.id,
