@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import DataTable, {
-    type DataTableFilterEvent,
     type DataTableSelectAllChangeEvent,
-    type DataTableSortEvent,
 } from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
@@ -13,7 +11,7 @@ import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUser } from '@/composables/services/users.service.ts';
 import { useStudents } from '@/composables/services/students.service.ts';
@@ -31,22 +29,18 @@ const { pagination, users, getUsers, searchUsers } = useUser();
 const { createStudent } = useStudents();
 const { createAssistant } = useAssistant();
 const { createTeacher } = useTeacher();
-const { filter } = useFilter(USER_FILTER);
-const { paginate, page, first, pageSize } = usePaginator();
+const { filter, onFilter } = useFilter(USER_FILTER);
+const { page, first, pageSize, resetPagination } = usePaginator();
 
 onMounted(async () => {
     fillCreators();
-    await loadLazyData();
 
-    watch(
-        filter,
+    onFilter(
         async () => {
-            await paginate(0).then(() => {
-                pagination.value = null;
-            });
-            await loadLazyData();
+            await resetPagination(pagination);
         },
-        { deep: true },
+        0,
+        false,
     );
 });
 
@@ -73,21 +67,13 @@ const fillCreators = (): void => {
         creators.value[role] = createFunctions.value[i - 1];
     }
 };
-const loadLazyData = async (): Promise<void> => {
+const fetchUsers = async (): Promise<void> => {
     loading.value = true;
 
     setTimeout((): void => {
         searchUsers(filter.value, page.value, pageSize.value);
         loading.value = false;
     }, 500);
-};
-const onFilter = async (event: DataTableFilterEvent): Promise<void> => {
-    await paginate(event.first);
-    await loadLazyData();
-};
-const onSort = async (event: DataTableSortEvent): Promise<void> => {
-    await paginate(event.first);
-    await loadLazyData();
 };
 const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
     selectAll.value = event.checked;
@@ -125,14 +111,15 @@ const updateRole = (role: Role): void => {
     }
 };
 
-const saveItem = (): void => {
-    if (pagination.value != null) {
+const saveItem = async (): Promise<void> => {
+    const value = pagination.value;
+    if (value !== null && value.results !== null) {
         if (editItem.value.roles.includes('student') && editItem.value.roles.includes('teacher')) {
             // this is not allowed TODO
         } else {
-            const index = pagination.value.results.findIndex((row: User) => row.id === editItem.value.id);
+            const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
             // update remotely TODO
-            const paginationItem = pagination.value.results[index];
+            const paginationItem = value.results[index];
             for (let i = 1; i < roles.length; i++) {
                 const role = roles[i];
                 if (!paginationItem.roles.includes(role) && editItem.value.roles.includes(role)) {
@@ -144,7 +131,7 @@ const saveItem = (): void => {
             }
             // update admin status TODO
             // update locally
-            pagination.value.results.splice(index, 1, { ...editItem.value });
+            value.results.splice(index, 1, { ...editItem.value });
         }
     } else {
         // raise error TODO
@@ -168,9 +155,8 @@ const saveItem = (): void => {
                     auto-layout
                     :totalRecords="pagination?.count"
                     :loading="loading"
-                    @page="loadLazyData"
-                    @sort="onSort($event)"
-                    @filter="onFilter($event)"
+                    @page="fetchUsers"
+                    @filter="fetchUsers"
                     filterDisplay="row"
                     v-model:selection="selectedUsers"
                     :selectAll="selectAll"
