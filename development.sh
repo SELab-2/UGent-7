@@ -4,6 +4,7 @@ backend=false
 frontend=false
 build=false
 data="small"
+sleep_duration=7
 
 while getopts ":bfcd:" opt; do
   case ${opt} in
@@ -66,14 +67,15 @@ docker-compose -f development.yml up -d
 
 echo "-------------------------------------"
 echo "starting wait"
-sleep 20
-echo "starting data"
-# docker exec backend sh -c "python manage.py loaddata */fixtures/small/*"
-if [ "$data" = "medium" ]; then
+if [ "$data" = "medium" ] || [ "$data" = "large" ]; then
+    sleep "$sleep_duration"
+    echo "starting data"
     docker exec backend sh -c "python manage.py migrate"
+    echo "migrated db"
+fi
+if [ "$data" = "medium" ]; then
     docker exec backend sh -c "python manage.py loaddata */fixtures/medium/*"
 elif [ "$data" = "large" ]; then
-    docker exec backend sh -c "python manage.py migrate"
     docker exec backend sh -c "python manage.py loaddata */fixtures/large/*"
 fi
 echo "$data data is ready"
