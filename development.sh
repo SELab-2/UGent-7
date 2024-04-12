@@ -70,13 +70,13 @@ echo "starting wait"
 if [ "$data" = "medium" ] || [ "$data" = "large" ]; then
     sleep "$sleep_duration"
     echo "starting data"
-    docker exec backend sh -c "python manage.py migrate"
+    docker exec backend sh -c "python manage.py migrate" > /dev/null
     echo "migrated db"
 fi
 if [ "$data" = "medium" ]; then
-    docker exec backend sh -c "python manage.py loaddata */fixtures/medium/*"
+    docker exec backend sh -c "python manage.py loaddata */fixtures/medium/*" > /dev/null
 elif [ "$data" = "large" ]; then
-    docker exec backend sh -c "python manage.py loaddata */fixtures/large/*"
+    docker exec backend sh -c "python manage.py loaddata */fixtures/large/*" > /dev/null
 fi
 echo "$data data is ready"
 echo "-------------------------------------"
