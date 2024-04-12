@@ -35,7 +35,8 @@ const displayCourseSelection = ref(false);
             class="m-3"
             :draggable="false"
             :contentStyle="{ 'min-width': '50vw' }"
-            modal>
+            modal
+        >
             <template #header>
                 <h2 class="my-3 text-primary">
                     {{ t('views.dashboard.select_course') }}
@@ -46,7 +47,12 @@ const displayCourseSelection = ref(false);
                 <CourseList :cols="3" :courses="props.courses">
                     <template #footer="{ course }">
                         <RouterLink :to="{ name: 'project-create', params: { courseId: course.id } }">
-                            <Button :icon="PrimeIcons.PLUS" :label="t('components.card.newProject')" icon-pos="right" outlined />
+                            <Button
+                                :icon="PrimeIcons.PLUS"
+                                :label="t('components.card.newProject')"
+                                icon-pos="right"
+                                outlined
+                            />
                         </RouterLink>
                     </template>
                 </CourseList>
@@ -55,5 +61,4 @@ const displayCourseSelection = ref(false);
     </div>
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

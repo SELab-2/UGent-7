@@ -30,17 +30,17 @@ const { t } = useI18n();
                         />
                     </a>
                 </div>
-                <div class="w-12 md:w-7 flex flex-column md:flex-row align-items-center md:align-items-end justify-content-between relative surface-100">
+                <div
+                    class="w-12 md:w-7 flex flex-column md:flex-row align-items-center md:align-items-end justify-content-between relative surface-100"
+                >
                     <img :src="Illustration" :alt="t('views.login.illustration')" class="w-10rem md:w-15rem m-4 ml-7" />
-                    <div
-                        class="bg-primary text-white p-4 w-full md:w-20rem"
-                    >
+                    <div class="bg-primary text-white p-4 w-full md:w-20rem">
                         <h1 class="mt-0">
                             {{ t('views.login.card.title') }}
                         </h1>
                         <span>
-                        {{ t('views.login.card.subtitle') }}
-                    </span>
+                            {{ t('views.login.card.subtitle') }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -48,6 +48,4 @@ const { t } = useI18n();
     </BaseLayout>
 </template>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

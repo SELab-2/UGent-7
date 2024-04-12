@@ -5,7 +5,7 @@ import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
 import { useCourses } from '@/composables/services/courses.service.ts';
-import { User } from '@/types/users/User.ts';
+import { type User } from '@/types/users/User.ts';
 
 interface TeacherState {
     teachers: Ref<Teacher[] | null>;
@@ -63,7 +63,7 @@ export function useTeacher(): TeacherState {
         await create<Teacher>(
             endpoint,
             {
-                user: user.id
+                user: user.id,
             },
             teacher,
             Teacher.fromJSON,

@@ -128,7 +128,14 @@ async function submitProject(): Promise<void> {
                             <label for="projectDescription">
                                 {{ t('views.projects.description') }}
                             </label>
-                            <Textarea id="projectDescription" class="w-full" v-model="form.description" autoResize rows="5" cols="30" />
+                            <Textarea
+                                id="projectDescription"
+                                class="w-full"
+                                v-model="form.description"
+                                autoResize
+                                rows="5"
+                                cols="30"
+                            />
                         </div>
                     </div>
 
@@ -243,5 +250,4 @@ async function submitProject(): Promise<void> {
     </BaseLayout>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

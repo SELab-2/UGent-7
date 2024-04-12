@@ -81,7 +81,7 @@ export function useStudents(): StudentsState {
             endpoint,
             {
                 user: studentData.id,
-                student_id: studentData.studentId
+                student_id: studentData.studentId,
             },
             student,
             Student.fromJSON,

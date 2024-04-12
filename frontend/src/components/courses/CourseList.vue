@@ -32,7 +32,12 @@ const { t } = useI18n();
                         <template #footer="{ course }">
                             <slot name="footer" :course="course">
                                 <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">
-                                    <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
+                                    <Button
+                                        :icon="PrimeIcons.ARROW_RIGHT"
+                                        :label="t('components.card.open')"
+                                        icon-pos="right"
+                                        outlined
+                                    />
                                 </RouterLink>
                             </slot>
                         </template>

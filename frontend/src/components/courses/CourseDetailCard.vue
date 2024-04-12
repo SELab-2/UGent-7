@@ -38,7 +38,12 @@ const { getRandomImport } = useGlob(import.meta.glob('@/assets/img/placeholders/
         <template #footer>
             <slot :course="course" name="footer">
                 <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">
-                    <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.card.open')" icon-pos="right" outlined />
+                    <Button
+                        :icon="PrimeIcons.ARROW_RIGHT"
+                        :label="t('components.card.open')"
+                        icon-pos="right"
+                        outlined
+                    />
                 </RouterLink>
             </slot>
         </template>

@@ -44,7 +44,9 @@ watch(
 
 <template>
     <!-- Course heading -->
-    <div class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-6">
+    <div
+        class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-6"
+    >
         <!-- Course list title -->
         <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
         <!-- Course list controls -->
@@ -66,7 +68,9 @@ watch(
     <!-- Course list body -->
     <CourseList :courses="filteredCourses" />
     <!-- Project heading -->
-    <div class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mt-6 mb-5">
+    <div
+        class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mt-6 mb-5"
+    >
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
