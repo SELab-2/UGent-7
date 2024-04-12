@@ -11,7 +11,7 @@ import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUser } from '@/composables/services/users.service.ts';
 import { useStudents } from '@/composables/services/students.service.ts';
@@ -21,19 +21,33 @@ import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
 
 import { roles, type Role, User } from '@/types/users/User.ts';
-import { USER_FILTER } from '@/types/filter/Filter.ts';
+import { getUserFilters } from '@/types/filter/Filter.ts';
+import {useRoute} from "vue-router";
 
 /* Composable injections */
 const { t } = useI18n();
+const { query } = useRoute();
 const { pagination, users, getUsers, searchUsers } = useUser();
 const { createStudent } = useStudents();
 const { createAssistant } = useAssistant();
 const { createTeacher } = useTeacher();
-const { filter, onFilter } = useFilter(USER_FILTER);
-const { page, first, pageSize, resetPagination } = usePaginator();
+const { filter, onFilter } = useFilter(getUserFilters(query));
+const { page, first, pageSize, onPaginate, resetPagination } = usePaginator();
 
 onMounted(async () => {
     fillCreators();
+
+    onPaginate(fetchUsers);
+
+    watch(
+        filter,
+        () => {
+            loading.value = true;
+        },
+        { deep: true }
+    );
+
+    onFilter(fetchUsers);
 
     onFilter(
         async () => {
@@ -69,11 +83,9 @@ const fillCreators = (): void => {
 };
 const fetchUsers = async (): Promise<void> => {
     loading.value = true;
-
-    setTimeout((): void => {
-        searchUsers(filter.value, page.value, pageSize.value);
+    await searchUsers(filter.value, page.value, pageSize.value).then(() => {
         loading.value = false;
-    }, 500);
+    })
 };
 const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
     selectAll.value = event.checked;
@@ -155,8 +167,7 @@ const saveItem = async (): Promise<void> => {
                     auto-layout
                     :totalRecords="pagination?.count"
                     :loading="loading"
-                    @page="fetchUsers"
-                    @filter="fetchUsers"
+                    @page="loading = true"
                     filterDisplay="row"
                     v-model:selection="selectedUsers"
                     :selectAll="selectAll"
@@ -231,7 +242,7 @@ const saveItem = async (): Promise<void> => {
             <InputSwitch :model-value="editItem.roles.includes(role)" @click="() => updateRole(role)" />
         </div>
         <div class="flex align-items-center gap-3 mb-3">
-            <label>{{ t('admin.title') }}</label>
+            <label class="font-semibold w-10rem">{{ t('admin.title') }}</label>
             <InputSwitch :model-value="editItem.is_staff" @click="editItem.is_staff = true" />
         </div>
         <div class="flex justify-content-end gap-2">

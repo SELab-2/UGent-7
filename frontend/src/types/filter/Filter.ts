@@ -1,11 +1,10 @@
 import { type LocationQuery } from 'vue-router';
 
-export const USER_FILTER = {
-    search: '',
-    id: '',
-    username: '',
-    email: '',
-};
+export type UserFilter = {
+    id: string;
+    username: string;
+    email: string;
+} & Filter;
 
 export type CourseFilter = {
     faculties: string[];
@@ -21,6 +20,23 @@ export interface Filter {
     search: string;
     [key: string]: string | string[];
 }
+
+/**
+ * Get the user filters from the query.
+ *
+ * @param query
+ */
+export function getUserFilters(query: LocationQuery): UserFilter {
+    const filters: UserFilter = {
+        search: query.search?.toString() ?? '',
+        id: query.id?.toString() ?? '',
+        username: query.username?.toString() ?? '',
+        email: query.email?.toString() ?? '',
+    }
+
+    return filters;
+}
+
 
 /**
  * Get the course filters from the query.
