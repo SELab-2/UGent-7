@@ -111,7 +111,7 @@ const handleClone = async (): Promise<void> => {
         </TooltipHover>
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="[course]" :showPast="false" />
+    <ProjectList :courses="[course]" />
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">

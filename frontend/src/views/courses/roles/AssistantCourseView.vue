@@ -35,7 +35,7 @@ const { t } = useI18n();
         </TooltipHover>
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="[course]" :showPast="false" />
+    <ProjectList :courses="[course]" />
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
         <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>

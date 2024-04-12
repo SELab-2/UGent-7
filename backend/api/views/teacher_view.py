@@ -1,5 +1,6 @@
 from django.utils.translation import gettext
 from django.db.models.functions import Concat
+from rest_framework.pagination import PageNumberPagination
 from django.db.models import Value
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -44,18 +45,19 @@ class TeacherViewSet(ModelViewSet):
 
         # Make sure that if roles are passed, teacher is a selected role
         if roles and "teacher" not in roles:
-            return self.get_paginated_response([])
+            queryset = []
 
-        # Filter the queryset based on the search term
-        queryset = Teacher.objects.annotate(
-            full_name=Concat('first_name', Value(' '), 'last_name')
-        ).filter(
-            full_name__icontains=search
-        )
+        else:
+            # Filter the queryset based on the search term
+            queryset = Teacher.objects.annotate(
+                full_name=Concat('first_name', Value(' '), 'last_name')
+            ).filter(
+                full_name__icontains=search
+            )
 
-        # Filter the queryset based on selected faculties
-        if faculties:
-            queryset = queryset.filter(faculty__in=faculties)
+            # Filter the queryset based on selected faculties
+            if faculties:
+                queryset = queryset.filter(faculties__id__in=faculties)
 
         # Serialize the resulting queryset
         serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
