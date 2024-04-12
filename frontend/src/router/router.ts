@@ -124,6 +124,15 @@ const routes: RouteRecordRaw[] = [
     // Authentication
     { path: '/auth/', children: [{ path: 'login', component: LoginView, name: 'login' }] },
 
+    // Admin
+    {
+        path: '/admin/',
+        children: [
+            { path: '', component: AdminView, name: 'admin' },
+            { path: 'users', component: UsersView, name: 'admin-users' },
+        ],
+    },
+
     // Page not found: redirect to dashboard
     { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } },
 ];
