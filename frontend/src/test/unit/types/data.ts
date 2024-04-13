@@ -104,3 +104,7 @@ export const projectData = {
     groups: [],
     submissions: [],
 };
+
+export const responseData = {
+    message: 'response message',
+}
