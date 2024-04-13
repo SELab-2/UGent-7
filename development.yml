@@ -54,6 +54,8 @@ services:
       - 8080
     volumes:
       - ${BACKEND_DIR}:/code
+    environment:
+      - FIXTURE=${FIXTURE}
 
   # TODO: Is this an entire different container worthy?
   celery:
