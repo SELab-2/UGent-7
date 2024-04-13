@@ -1,25 +1,10 @@
 import { describe, it, expect } from 'vitest';
 
 import { Assistant } from '@/types/users/Assistant';
+import { assistantData } from './data';
 
 describe('Assistant class', () => {
-    const assistantData = {
-        id: '1',
-        username: 'assistant1',
-        email: 'assistant1@example.com',
-        first_name: 'John',
-        last_name: 'Doe',
-        last_enrolled: 2024,
-        is_staff: true,
-        roles: [],
-        faculties: [],
-        courses: [],
-        create_time: new Date(),
-        last_login: null,
-    };
-
-    // Test constructor
-    it('should create an instance of Assistant with correct properties', () => {
+    it('create instance of assistant with correct properties', () => {
         const assistant = new Assistant(
             assistantData.id,
             assistantData.username,
@@ -49,8 +34,7 @@ describe('Assistant class', () => {
         expect(assistant.last_login).toBe(assistantData.last_login);
     });
 
-    // Test static method fromJSON
-    it('should create an Assistant instance from JSON data', () => {
+    it('create an Assistant instance from JSON data', () => {
         const assistantJSON = { ...assistantData };
         const assistant = Assistant.fromJSON(assistantJSON);
 
@@ -68,8 +52,7 @@ describe('Assistant class', () => {
         expect(assistant.last_login).toStrictEqual(assistantData.last_login);
     });
 
-    // Test method isAssistant
-    it('should return true when isAssistant method is called', () => {
+    it('return true when isAssistant method is called', () => {
         const assistant = new Assistant(
             assistantData.id,
             assistantData.username,
