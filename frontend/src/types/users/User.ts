@@ -59,7 +59,7 @@ export class User {
      * @returns boolean
      */
     public isSpecificRole(): boolean {
-        return this.isStudent() || this.isAssistant() || this.isTeacher();
+        return this.roles.length > 0;
     }
 
     /**

@@ -3,6 +3,7 @@ import { Student } from '@/types/users/Student';
 import { Course } from '@/types/Course';
 import { Assistant } from '@/types/users/Assistant';
 import { Teacher } from '@/types/users/Teacher';
+import { User } from '@/types/users/User';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -16,10 +17,10 @@ export function createStudent(studentData: any): Student {
         studentData.create_time,
         studentData.last_login,
         studentData.studentId,
-        studentData.roles,
-        studentData.courses,
-        studentData.groups,
-        studentData.faculties,
+        studentData.roles.slice(),
+        studentData.courses.slice(),
+        studentData.groups.slice(),
+        studentData.faculties.slice(),
     );
 }
 
@@ -32,9 +33,9 @@ export function createAssistant(assistantData: any): Assistant {
         assistantData.last_name,
         assistantData.last_enrolled,
         assistantData.is_staff,
-        assistantData.roles,
-        assistantData.faculties,
-        assistantData.courses,
+        assistantData.roles.slice(),
+        assistantData.faculties.slice(),
+        assistantData.courses.slice(),
         assistantData.create_time,
         assistantData.last_login,
     );
@@ -49,11 +50,27 @@ export function createTeacher(teacherData: any): Assistant {
         teacherData.last_name,
         teacherData.last_enrolled,
         teacherData.is_staff,
-        teacherData.roles,
-        teacherData.faculties,
-        teacherData.courses,
+        teacherData.roles.slice(),
+        teacherData.faculties.slice(),
+        teacherData.courses.slice(),
         teacherData.create_time,
         teacherData.last_login,
+    );
+}
+
+export function createUser(userData: any): User {
+    return new User(
+        userData.id,
+        userData.username,
+        userData.email,
+        userData.first_name,
+        userData.last_name,
+        userData.last_enrolled,
+        userData.is_staff,
+        userData.roles.slice(),
+        userData.faculties.slice(),
+        userData.create_time,
+        userData.last_login,
     );
 }
 
@@ -65,9 +82,9 @@ export function createCourse(courseData: any): Course {
         courseData.academic_startyear,
         courseData.parent_course,
         courseData.faculty,
-        courseData.teachers,
-        courseData.assistants,
-        courseData.students,
-        courseData.projects,
+        courseData.teachers.slice(),
+        courseData.assistants.slice(),
+        courseData.students.slice(),
+        courseData.projects.slice(),
     );
 }

@@ -16,10 +16,10 @@ describe('assistant type', () => {
         expect(assistant.last_name).toBe(assistantData.last_name);
         expect(assistant.last_enrolled).toBe(assistantData.last_enrolled);
         expect(assistant.is_staff).toBe(assistantData.is_staff);
-        expect(assistant.faculties).toBe(assistantData.faculties);
-        expect(assistant.courses).toBe(assistantData.courses);
-        expect(assistant.create_time).toBe(assistantData.create_time);
-        expect(assistant.last_login).toBe(assistantData.last_login);
+        expect(assistant.faculties).toStrictEqual(assistantData.faculties);
+        expect(assistant.courses).toStrictEqual(assistantData.courses);
+        expect(assistant.create_time).toStrictEqual(assistantData.create_time);
+        expect(assistant.last_login).toStrictEqual(assistantData.last_login);
     });
 
     it('create an Assistant instance from JSON data', () => {
@@ -34,8 +34,8 @@ describe('assistant type', () => {
         expect(assistant.last_name).toBe(assistantData.last_name);
         expect(assistant.last_enrolled).toBe(assistantData.last_enrolled);
         expect(assistant.is_staff).toBe(assistantData.is_staff);
-        expect(assistant.faculties).toBe(assistantData.faculties);
-        expect(assistant.courses).toBe(assistantData.courses);
+        expect(assistant.faculties).toStrictEqual(assistantData.faculties);
+        expect(assistant.courses).toStrictEqual(assistantData.courses);
         expect(assistant.create_time).toStrictEqual(assistantData.create_time);
         expect(assistant.last_login).toStrictEqual(assistantData.last_login);
     });

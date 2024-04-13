@@ -45,6 +45,20 @@ export const teacherData = {
     last_login: null,
 };
 
+export const userData = {
+    id: 'user1_id',
+    username: 'user1_username',
+    email: 'user1@ugent.be',
+    first_name: 'user1_first_name',
+    last_name: 'user1_last_name',
+    last_enrolled: 2021,
+    is_staff: false,
+    roles: [],
+    faculties: [],
+    create_time: new Date(),
+    last_login: null,
+};
+
 export const courseData = {
     id: 'course1_id',
     name: 'course1_name',

@@ -17,12 +17,12 @@ describe('student type', () => {
         expect(student.is_staff).toBe(studentData.is_staff);
         expect(student.last_enrolled).toBe(studentData.last_enrolled);
         expect(student.create_time).toStrictEqual(studentData.create_time);
-        expect(student.last_login).toBe(studentData.last_login);
+        expect(student.last_login).toStrictEqual(studentData.last_login);
         expect(student.studentId).toBe(studentData.studentId);
-        expect(student.roles).toBe(studentData.roles);
-        expect(student.courses).toBe(studentData.courses);
-        expect(student.groups).toBe(studentData.groups);
-        expect(student.faculties).toBe(studentData.faculties);
+        expect(student.roles).toStrictEqual(studentData.roles);
+        expect(student.courses).toStrictEqual(studentData.courses);
+        expect(student.groups).toStrictEqual(studentData.groups);
+        expect(student.faculties).toStrictEqual(studentData.faculties);
     });
 
     it('create a student instance from JSON data', () => {
@@ -38,7 +38,7 @@ describe('student type', () => {
         expect(student.is_staff).toBe(studentData.is_staff);
         expect(student.last_enrolled).toBe(studentData.last_enrolled);
         expect(student.create_time).toStrictEqual(studentData.create_time);
-        expect(student.last_login).toBe(studentData.last_login);
+        expect(student.last_login).toStrictEqual(studentData.last_login);
         expect(student.studentId).toBe(studentData.studentId);
         expect(student.roles).toStrictEqual(studentData.roles);
         expect(student.courses).toStrictEqual(studentData.courses);
