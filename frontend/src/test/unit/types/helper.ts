@@ -10,6 +10,7 @@ import { Project } from '@/types/Projects';
 import { Response } from '@/types/Response';
 import { StructureCheck } from '@/types/StructureCheck';
 import { SubmissionStatus } from '@/types/SubmisionStatus';
+import { Submission } from '@/types/Submission';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -150,5 +151,17 @@ export function createSubmissionStatus(submissionStatusData: any): SubmissionSta
         submissionStatusData.non_empty_groups,
         submissionStatusData.groups_submitted,
         submissionStatusData.submissions_passed,
+    );
+}
+
+export function createSubmission(submissionData: any): Submission {
+    return new Submission(
+        submissionData.id,
+        submissionData.submission_number,
+        submissionData.submission_time,
+        submissionData.structure_checks_passed,
+        submissionData.group,
+        submissionData.files.slice(),
+        submissionData.extra_checks_results.slice(),
     );
 }

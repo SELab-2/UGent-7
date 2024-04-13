@@ -122,3 +122,13 @@ export const submissionStatusData = {
     groups_submitted: 2,
     submissions_passed: 1,
 };
+
+export const submissionData = {
+    id: 'submission1_id',
+    submission_number: 1,
+    submission_time: new Date('November 1, 2024 04:20:00'),
+    structure_checks_passed: true,
+    group: null,
+    files: [],
+    extra_checks_results: [],
+};
