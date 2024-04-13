@@ -71,3 +71,8 @@ export const courseData = {
     students: [],
     projects: [],
 };
+
+export const facultyData = {
+    id: 'faculty1_id',
+    name: 'faculty1_name',
+};

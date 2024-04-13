@@ -4,6 +4,7 @@ import { Course } from '@/types/Course';
 import { Assistant } from '@/types/users/Assistant';
 import { Teacher } from '@/types/users/Teacher';
 import { User } from '@/types/users/User';
+import { Faculty } from '@/types/Faculty';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -86,5 +87,12 @@ export function createCourse(courseData: any): Course {
         courseData.assistants.slice(),
         courseData.students.slice(),
         courseData.projects.slice(),
+    );
+}
+
+export function createFaculty(facultyData: any): Faculty {
+    return new Faculty(
+        facultyData.id,
+        facultyData.name,
     );
 }
