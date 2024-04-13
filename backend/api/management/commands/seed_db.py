@@ -506,7 +506,7 @@ class Command(BaseCommand):
             amount_of_groups = 0
             amount_of_submissions = 0
             amount_of_file_extensions = 50
-            amount_of_structure_checks = 1_000
+            amount_of_structure_checks = 8
         elif size == "medium":
             amount_of_students = 0
             amount_of_assistants = 0
