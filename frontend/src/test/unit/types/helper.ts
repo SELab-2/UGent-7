@@ -6,6 +6,7 @@ import { Teacher } from '@/types/users/Teacher';
 import { User } from '@/types/users/User';
 import { Faculty } from '@/types/Faculty';
 import { Group } from '@/types/Group';
+import { Project } from '@/types/Projects';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -105,5 +106,27 @@ export function createGroup(groupData: any): Group {
         groupData.project,
         groupData.students.slice(),
         groupData.submissions.slice(),
+    );
+}
+
+export function createProject(projectData: any): Project {
+    return new Project(
+        projectData.id,
+        projectData.name,
+        projectData.description,
+        projectData.visible,
+        projectData.archived,
+        projectData.locked_groups,
+        projectData.start_date,
+        projectData.deadline,
+        projectData.max_score,
+        projectData.score_visible,
+        projectData.group_size,
+        projectData.structure_file,
+        projectData.course,
+        projectData.structureChecks.slice(),
+        projectData.extra_checks.slice(),
+        projectData.groups.slice(),
+        projectData.submissions.slice(),
     );
 }

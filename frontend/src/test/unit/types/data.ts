@@ -84,3 +84,23 @@ export const groupData = {
     students: [],
     submissions: [],
 };
+
+export const projectData = {
+    id: 'project1_id',
+    name: 'project1_name',
+    description: 'project1_description',
+    visible: true,
+    archived: false,
+    locked_groups: false,
+    start_date: new Date('November 1, 2024 04:20:00'),
+    deadline: new Date('November 2, 2024 04:20:00'),
+    max_score: 10,
+    score_visible: true,
+    group_size: 3,
+    structure_file: null,
+    course: null,
+    structureChecks: [],
+    extra_checks: [],
+    groups: [],
+    submissions: [],
+};
