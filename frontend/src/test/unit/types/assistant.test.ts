@@ -6,7 +6,7 @@ import { createAssistant } from './helper';
 
 describe('assistant type', () => {
     it('create instance of assistant with correct properties', () => {
-        const assistant = createAssistant(assistantData)
+        const assistant = createAssistant(assistantData);
 
         expect(assistant).toBeInstanceOf(Assistant);
         expect(assistant.id).toBe(assistantData.id);
@@ -41,7 +41,7 @@ describe('assistant type', () => {
     });
 
     it('return true when isAssistant method is called', () => {
-        const assistant = createAssistant(assistantData)
+        const assistant = createAssistant(assistantData);
 
         expect(assistant.isAssistant()).toBe(true);
     });

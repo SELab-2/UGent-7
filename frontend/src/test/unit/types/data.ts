@@ -30,6 +30,21 @@ export const studentData = {
     groups: [],
 };
 
+export const teacherData = {
+    id: 'teacher1_id',
+    username: 'teacher1_username',
+    email: 'teacher1@ugent.be',
+    first_name: 'teacher1_first_name',
+    last_name: 'teacher1_last_name',
+    last_enrolled: 2022,
+    is_staff: true,
+    roles: [],
+    faculties: [],
+    courses: [],
+    create_time: new Date(),
+    last_login: null,
+};
+
 export const courseData = {
     id: 'course1_id',
     name: 'course1_name',
@@ -41,4 +56,4 @@ export const courseData = {
     assistants: [],
     students: [],
     projects: [],
-}
+};

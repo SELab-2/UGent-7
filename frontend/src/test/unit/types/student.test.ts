@@ -6,7 +6,7 @@ import { createStudent, createCourse } from './helper';
 
 describe('student type', () => {
     it('create instance of student with correct properties', () => {
-        const student = createStudent(studentData)
+        const student = createStudent(studentData);
 
         expect(student).toBeInstanceOf(Student);
         expect(student.id).toBe(studentData.id);
@@ -47,17 +47,17 @@ describe('student type', () => {
     });
 
     it('return true when isStudent method is called', () => {
-        const student = createStudent(studentData)
+        const student = createStudent(studentData);
 
         expect(student.isStudent()).toBe(true);
     });
 
     it('hasCourse method', () => {
-        const student = createStudent(studentData)
-        const course = createCourse(courseData)
+        const student = createStudent(studentData);
+        const course = createCourse(courseData);
 
         expect(student.hasCourse(course)).toBe(false);
-        student.courses.push(course)
+        student.courses.push(course);
         expect(student.hasCourse(course)).toBe(true);
     });
 });

@@ -1,7 +1,8 @@
-
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Student } from '@/types/users/Student';
 import { Course } from '@/types/Course';
 import { Assistant } from '@/types/users/Assistant';
+import { Teacher } from '@/types/users/Teacher';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -39,6 +40,22 @@ export function createAssistant(assistantData: any): Assistant {
     );
 }
 
+export function createTeacher(teacherData: any): Assistant {
+    return new Teacher(
+        teacherData.id,
+        teacherData.username,
+        teacherData.email,
+        teacherData.first_name,
+        teacherData.last_name,
+        teacherData.last_enrolled,
+        teacherData.is_staff,
+        teacherData.roles,
+        teacherData.faculties,
+        teacherData.courses,
+        teacherData.create_time,
+        teacherData.last_login,
+    );
+}
 
 export function createCourse(courseData: any): Course {
     return new Course(
