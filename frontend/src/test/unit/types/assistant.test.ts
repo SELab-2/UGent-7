@@ -2,23 +2,11 @@ import { describe, it, expect } from 'vitest';
 
 import { Assistant } from '@/types/users/Assistant';
 import { assistantData } from './data';
+import { createAssistant } from './helper';
 
-describe('Assistant class', () => {
+describe('assistant type', () => {
     it('create instance of assistant with correct properties', () => {
-        const assistant = new Assistant(
-            assistantData.id,
-            assistantData.username,
-            assistantData.email,
-            assistantData.first_name,
-            assistantData.last_name,
-            assistantData.last_enrolled,
-            assistantData.is_staff,
-            assistantData.roles,
-            assistantData.faculties,
-            assistantData.courses,
-            assistantData.create_time,
-            assistantData.last_login,
-        );
+        const assistant = createAssistant(assistantData)
 
         expect(assistant).toBeInstanceOf(Assistant);
         expect(assistant.id).toBe(assistantData.id);
@@ -53,20 +41,7 @@ describe('Assistant class', () => {
     });
 
     it('return true when isAssistant method is called', () => {
-        const assistant = new Assistant(
-            assistantData.id,
-            assistantData.username,
-            assistantData.email,
-            assistantData.first_name,
-            assistantData.last_name,
-            assistantData.last_enrolled,
-            assistantData.is_staff,
-            assistantData.roles,
-            assistantData.faculties,
-            assistantData.courses,
-            assistantData.create_time,
-            assistantData.last_login,
-        );
+        const assistant = createAssistant(assistantData)
 
         expect(assistant.isAssistant()).toBe(true);
     });
