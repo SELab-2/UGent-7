@@ -8,6 +8,7 @@ import { Faculty } from '@/types/Faculty';
 import { Group } from '@/types/Group';
 import { Project } from '@/types/Projects';
 import { Response } from '@/types/Response';
+import { StructureCheck } from '@/types/StructureCheck';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -135,5 +136,15 @@ export function createProject(projectData: any): Project {
 export function createResponse(responseData: any): Response {
     return new Response(
         responseData.message,
+    );
+}
+
+export function createStructureCheck(structureCheckData: any): StructureCheck {
+    return new StructureCheck(
+        structureCheckData.id,
+        structureCheckData.name,
+        structureCheckData.obligated_extensions.slice(),
+        structureCheckData.blocked_extensions.slice(),
+        structureCheckData.project,
     );
 }

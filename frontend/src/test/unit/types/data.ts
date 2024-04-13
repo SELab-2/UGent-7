@@ -108,3 +108,11 @@ export const projectData = {
 export const responseData = {
     message: 'response message',
 }
+
+export const structureCheckData = {
+    id: 'structureCheck1_id',
+    name: 'structureCheck1_name',
+    obligated_extensions: [],
+    blocked_extensions: [],
+    project: null,
+};
