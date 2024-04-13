@@ -9,6 +9,7 @@ import { Group } from '@/types/Group';
 import { Project } from '@/types/Projects';
 import { Response } from '@/types/Response';
 import { StructureCheck } from '@/types/StructureCheck';
+import { SubmissionStatus } from '@/types/SubmisionStatus';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -95,10 +96,7 @@ export function createCourse(courseData: any): Course {
 }
 
 export function createFaculty(facultyData: any): Faculty {
-    return new Faculty(
-        facultyData.id,
-        facultyData.name,
-    );
+    return new Faculty(facultyData.id, facultyData.name);
 }
 
 export function createGroup(groupData: any): Group {
@@ -134,9 +132,7 @@ export function createProject(projectData: any): Project {
 }
 
 export function createResponse(responseData: any): Response {
-    return new Response(
-        responseData.message,
-    );
+    return new Response(responseData.message);
 }
 
 export function createStructureCheck(structureCheckData: any): StructureCheck {
@@ -146,5 +142,13 @@ export function createStructureCheck(structureCheckData: any): StructureCheck {
         structureCheckData.obligated_extensions.slice(),
         structureCheckData.blocked_extensions.slice(),
         structureCheckData.project,
+    );
+}
+
+export function createSubmissionStatus(submissionStatusData: any): SubmissionStatus {
+    return new SubmissionStatus(
+        submissionStatusData.non_empty_groups,
+        submissionStatusData.groups_submitted,
+        submissionStatusData.submissions_passed,
     );
 }

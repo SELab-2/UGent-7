@@ -107,7 +107,7 @@ export const projectData = {
 
 export const responseData = {
     message: 'response message',
-}
+};
 
 export const structureCheckData = {
     id: 'structureCheck1_id',
@@ -115,4 +115,10 @@ export const structureCheckData = {
     obligated_extensions: [],
     blocked_extensions: [],
     project: null,
+};
+
+export const submissionStatusData = {
+    non_empty_groups: 5,
+    groups_submitted: 2,
+    submissions_passed: 1,
 };
