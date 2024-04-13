@@ -76,3 +76,11 @@ export const facultyData = {
     id: 'faculty1_id',
     name: 'faculty1_name',
 };
+
+export const groupData = {
+    id: 'group1_id',
+    score: 10,
+    project: null,
+    students: [],
+    submissions: [],
+};

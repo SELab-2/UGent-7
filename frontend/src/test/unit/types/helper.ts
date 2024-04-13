@@ -5,6 +5,7 @@ import { Assistant } from '@/types/users/Assistant';
 import { Teacher } from '@/types/users/Teacher';
 import { User } from '@/types/users/User';
 import { Faculty } from '@/types/Faculty';
+import { Group } from '@/types/Group';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -94,5 +95,15 @@ export function createFaculty(facultyData: any): Faculty {
     return new Faculty(
         facultyData.id,
         facultyData.name,
+    );
+}
+
+export function createGroup(groupData: any): Group {
+    return new Group(
+        groupData.id,
+        groupData.score,
+        groupData.project,
+        groupData.students.slice(),
+        groupData.submissions.slice(),
     );
 }
