@@ -69,11 +69,11 @@ describe('admin', (): void => {
         resetService();
 
         const exampleAdmin = new User(
-            '', // id
+            'admin_id', // id
             '', // username
-            'sample.admin@UGent.be', // email
-            'admin_first_name', // first_name
-            'admin_last_name', // last_name
+            '', // email
+            '', // first_name
+            '', // last_name
             -1, // last_enrolled
             true, // is_staff
             [], // roles
@@ -95,9 +95,7 @@ describe('admin', (): void => {
         expect(admins.value?.length).toBe(prevLength + 1);
 
         // Only check for fields that are sent to the backend
-        expect(admins.value?.[prevLength]?.first_name).toBe('admin_first_name');
-        expect(admins.value?.[prevLength]?.last_name).toBe('admin_last_name');
-        expect(admins.value?.[prevLength]?.email).toBe('sample.admin@UGent.be');
+        expect(admins.value?.[prevLength]?.id).toBe('admin_id');
     });
 
     it('delete admin', async () => {

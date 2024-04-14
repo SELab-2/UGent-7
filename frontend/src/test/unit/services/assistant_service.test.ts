@@ -107,11 +107,11 @@ describe('assistant', (): void => {
         resetService();
 
         const exampleAssistant = new Assistant(
-            '', // id
+            'assistant_id', // id
             '', // username
-            'sample.assistant@UGent.be', // email
-            'assistant_first_name', // first_name
-            'assistant_last_name', // last name
+            '', // email
+            '', // first_name
+            '', // last name
             2023, // last enrolled
             true, // is_staff
             [], // roles
@@ -134,9 +134,7 @@ describe('assistant', (): void => {
         expect(assistants.value?.length).toBe(prevLength + 1);
 
         // Only check for fields that are sent to the backend
-        expect(assistants.value?.[prevLength]?.first_name).toBe('assistant_first_name');
-        expect(assistants.value?.[prevLength]?.last_name).toBe('assistant_last_name');
-        expect(assistants.value?.[prevLength]?.email).toBe('sample.assistant@UGent.be');
+        expect(assistants.value?.[prevLength]?.id).toBe('assistant_id');
     });
 
     it('delete assistant', async () => {

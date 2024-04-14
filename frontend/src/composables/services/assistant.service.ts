@@ -1,4 +1,5 @@
 import { Assistant } from '@/types/users/Assistant.ts';
+import { User } from '@/types/users/User.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
@@ -56,14 +57,12 @@ export function useAssistant(): AssistantState {
         await deleteIdWithData<Response>(endpoint, { assistantId }, response, Response.fromJSON);
     }
 
-    async function createAssistant(assistantData: Assistant): Promise<void> {
+    async function createAssistant(user: User): Promise<void> {
         const endpoint = endpoints.assistants.index;
         await create<Assistant>(
             endpoint,
             {
-                email: assistantData.email,
-                first_name: assistantData.first_name,
-                last_name: assistantData.last_name,
+                id: user.id,
             },
             assistant,
             Assistant.fromJSON,

@@ -172,16 +172,16 @@ describe('students', (): void => {
         resetService();
 
         const exampleStudent = new Student(
-            '', // id
+            'id', // id
             '', // username
-            'sample.student@UGent.be', // email
-            'student_first_name', // first_name
-            'student_last_name', // last_name
+            '', // email
+            '', // first_name
+            '', // last_name
             false, // is_staff
             2024, // last_enrolled
             new Date(), // create_time
             null, // last_login
-            '', // studentId
+            'studentId', // studentId
             [],
             [],
             [],
@@ -201,8 +201,7 @@ describe('students', (): void => {
         expect(students.value?.length).toBe(prevLength + 1);
 
         // Only check for fields that are sent to the backend
-        expect(students.value?.[prevLength]?.first_name).toBe('student_first_name');
-        expect(students.value?.[prevLength]?.last_name).toBe('student_last_name');
-        expect(students.value?.[prevLength]?.email).toBe('sample.student@UGent.be');
+        expect(students.value?.[prevLength]?.id).toBe('id');
+        expect(students.value?.[prevLength]?.studentId).toBe('studentId');
     });
 });

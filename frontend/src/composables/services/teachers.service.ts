@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { User } from '@/types/users/User.ts';
 import { Teacher } from '@/types/users/Teacher.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
@@ -57,14 +58,12 @@ export function useTeacher(): TeacherState {
         await deleteIdWithData<Response>(endpoint, { teacherId }, response, Response.fromJSON);
     }
 
-    async function createTeacher(teacherData: Teacher): Promise<void> {
+    async function createTeacher(user: User): Promise<void> {
         const endpoint = endpoints.teachers.index;
         await create<Teacher>(
             endpoint,
             {
-                email: teacherData.email,
-                first_name: teacherData.first_name,
-                last_name: teacherData.last_name,
+                id: user.id
             },
             teacher,
             Teacher.fromJSON,
