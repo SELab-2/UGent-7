@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { Project } from '@/types/Projects';
+import { Project } from '@/types/Project';
 import { projectData } from './data';
 import { createProject } from './helper';
 

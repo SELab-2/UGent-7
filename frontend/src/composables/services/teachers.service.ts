@@ -11,7 +11,7 @@ interface TeacherState {
     teacher: Ref<Teacher | null>;
     response: Ref<Response | null>;
     getTeacherByID: (id: string, init?: boolean) => Promise<void>;
-    getTeacherByCourse: (courseId: string) => Promise<void>;
+    getTeachersByCourse: (courseId: string) => Promise<void>;
     getTeachers: () => Promise<void>;
     teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>;
     teacherLeaveCourse: (courseId: string, teacherId: string) => Promise<void>;
@@ -37,7 +37,7 @@ export function useTeacher(): TeacherState {
         }
     }
 
-    async function getTeacherByCourse(courseId: string): Promise<void> {
+    async function getTeachersByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
         await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
     }
@@ -89,7 +89,7 @@ export function useTeacher(): TeacherState {
         response,
 
         getTeacherByID,
-        getTeacherByCourse,
+        getTeachersByCourse,
         getTeachers,
 
         createTeacher,

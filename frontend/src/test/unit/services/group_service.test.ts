@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { useGroup } from '@/composables/services/groups.service.ts';
 import { Group } from '@/types/Group';
 import { useProject } from '@/composables/services/project.service';
-import { type Project } from '@/types/Projects';
+import { type Project } from '@/types/Project';
 
 const {
     groups,

@@ -251,3 +251,4 @@ async function submitProject(): Promise<void> {
 </template>
 
 <style scoped></style>
+@/types/Project

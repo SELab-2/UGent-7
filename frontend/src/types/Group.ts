@@ -1,4 +1,4 @@
-import { type Project } from './Projects';
+import { type Project } from './Project.ts';
 import { type Student } from './users/Student.ts';
 import { type Submission } from './Submission';
 

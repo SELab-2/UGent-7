@@ -8,7 +8,7 @@ const {
     assistant,
 
     getAssistantByID,
-    getAssistantByCourse,
+    getAssistantsByCourse,
     getAssistants,
 
     createAssistant,
@@ -75,7 +75,7 @@ describe('assistant', (): void => {
     it('gets assistants data by course', async () => {
         resetService();
 
-        await getAssistantByCourse('1');
+        await getAssistantsByCourse('1');
         expect(assistants).not.toBeNull();
         expect(Array.isArray(assistants.value)).toBe(true);
         expect(assistants.value?.length).toBe(2);

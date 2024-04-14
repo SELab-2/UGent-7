@@ -6,7 +6,7 @@ import { Teacher } from '@/types/users/Teacher';
 import { User } from '@/types/users/User';
 import { Faculty } from '@/types/Faculty';
 import { Group } from '@/types/Group';
-import { Project } from '@/types/Projects';
+import { Project } from '@/types/Project';
 import { Response } from '@/types/Response';
 import { StructureCheck } from '@/types/StructureCheck';
 import { SubmissionStatus } from '@/types/SubmisionStatus';

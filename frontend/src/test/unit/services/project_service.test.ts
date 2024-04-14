@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useCourses } from '@/composables/services/courses.service';
-import { Project } from '@/types/Projects';
+import { Project } from '@/types/Project';
 import { type Course } from '@/types/Course';
 
 const {

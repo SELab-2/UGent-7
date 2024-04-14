@@ -1,4 +1,4 @@
-import { Project } from '@/types/Projects.ts';
+import { Project } from '@/types/Project';
 import { Course } from '@/types/Course';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';

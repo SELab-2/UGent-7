@@ -10,7 +10,7 @@ interface AssistantState {
     assistant: Ref<Assistant | null>;
     response: Ref<Response | null>;
     getAssistantByID: (id: string, init?: boolean) => Promise<void>;
-    getAssistantByCourse: (courseId: string) => Promise<void>;
+    getAssistantsByCourse: (courseId: string) => Promise<void>;
     getAssistants: () => Promise<void>;
     assistantJoinCourse: (courseId: string, assistantId: string) => Promise<void>;
     assistantLeaveCourse: (courseId: string, assistantId: string) => Promise<void>;
@@ -36,7 +36,7 @@ export function useAssistant(): AssistantState {
         }
     }
 
-    async function getAssistantByCourse(courseId: string): Promise<void> {
+    async function getAssistantsByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
         await getList<Assistant>(endpoint, assistants, Assistant.fromJSON);
     }
@@ -88,7 +88,7 @@ export function useAssistant(): AssistantState {
         response,
 
         getAssistantByID,
-        getAssistantByCourse,
+        getAssistantsByCourse,
         getAssistants,
 
         createAssistant,

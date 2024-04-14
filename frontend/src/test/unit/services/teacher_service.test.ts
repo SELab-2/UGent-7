@@ -7,7 +7,7 @@ const {
     teacher,
 
     getTeacherByID,
-    getTeacherByCourse,
+    getTeachersByCourse,
     getTeachers,
 
     createTeacher,
@@ -74,7 +74,7 @@ describe('teachers', (): void => {
     it('gets teacher data by course', async () => {
         resetService();
 
-        await getTeacherByCourse('1');
+        await getTeachersByCourse('1');
         expect(teachers).not.toBeNull();
         expect(Array.isArray(teachers.value)).toBe(true);
         expect(teachers.value?.length).toBe(2);

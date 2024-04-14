@@ -96,3 +96,4 @@ const { t } = useI18n();
     }
 }
 </style>
+@/types/Project

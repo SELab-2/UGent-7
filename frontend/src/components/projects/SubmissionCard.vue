@@ -52,3 +52,4 @@ const formattedDeadline = computed(() => {
 </template>
 
 <style scoped lang="scss"></style>
+@/types/Project
