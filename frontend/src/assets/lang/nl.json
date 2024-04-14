@@ -125,7 +125,7 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "Nieuw Project"
+            "newProject": "Nieuw project"
         },
         "submission" : "Indienen"
     },
@@ -172,7 +172,8 @@
         "deadline": "De deadline moet na de startdatum liggen"
     },
     "confirmations": {
-        "clone_course": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar."
+        "clone_course": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
+        "leave_course": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
     },
     "primevue": {
         "accept": "Ja",

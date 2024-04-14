@@ -25,12 +25,12 @@ const year = defineModel();
     <Dropdown v-model="year" :options="years" optionLabel="label" optionValue="value" class="custom-dropdown">
         <template #value="{ value }">
             <span class="text-primary font-semibold"
-                >{{ t('components.buttons.academic_year') }} {{ value }} - {{ value + 1 }}</span
+                >{{ t('components.button.academic_year') }} {{ value }} - {{ value + 1 }}</span
             >
         </template>
         <template #option="{ option }">
             <span class="pi pi-calendar mr-2" />
-            <span>{{ t('components.buttons.academic_year') }} {{ (option as any).label }}</span>
+            <span>{{ t('components.button.academic_year') }} {{ (option as any).label }}</span>
         </template>
         <template #dropdownicon>
             <i class="pi pi-chevron-down pr-1 text-primary"></i>

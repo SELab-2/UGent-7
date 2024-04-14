@@ -119,11 +119,13 @@
         }
     },
     "components": {
-        "buttons": {
-            "academic_year": "Academic year {0}"
+        "button": {
+            "academic_year": "Academic year {0}",
+            "createProject": "Create a new project"
         },
         "card": {
-            "open": "details"
+            "open": "Details",
+            "newProject": "New project"
         },
         "submission": "Submit"
     },
@@ -170,7 +172,8 @@
         "deadline": "The deadline must be after the start date"
     },
     "confirmations": {
-        "clone_course": "Are you sure you want to clone this coure? This will create the same course for the next academic year."
+        "clone_course": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
+        "leave_course": "Are you sure you want to leave this course? You will no longer have access to this course."
     },
     "primevue": {
         "startsWith": "Starts with",

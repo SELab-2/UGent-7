@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
+import Button from 'primevue/button';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
+import { useStudents } from '@/composables/services/students.service';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
 /* Props */
 const props = defineProps<{
@@ -12,6 +19,34 @@ const props = defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
+const confirm = useConfirm();
+const { studentLeaveCourse } = useStudents();
+const { user } = storeToRefs(useAuthStore());
+const { refreshUser } = useAuthStore();
+const { push } = useRouter();
+
+/* Methods */
+const leaveCourse = async (): Promise<void> => {
+    // Show a confirmation dialog before leaving the course, to prevent accidental clicks
+    confirm.require({
+        message: t('confirmations.leave_course'),
+        header: t('views.courses.leave'),
+        accept: () => {
+            if (user.value){
+                // Leave the course
+                studentLeaveCourse(props.course.id, user.value.id);
+
+                // Refresh the user so the course is removed from the user's courses
+                refreshUser();
+
+                // Redirect to the dashboard
+                push({ name: 'dashboard' });
+            }
+        },
+        reject: () => {},
+    });
+};
+
 </script>
 
 <template>
@@ -37,6 +72,24 @@ const { t } = useI18n();
 
     <!-- List with teachers and assistants -->
     <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)"/>
+
+    <!-- Button to leave the course -->
+    <div class="text-right mt-6">
+        <ConfirmDialog>
+            <template #container="{ message, acceptCallback, rejectCallback }">
+                <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
+                    <span class="font-bold text-2xl">{{ message.header }}</span>
+                    <p class="mb-4">{{ message.message }}</p>
+                    <div class="flex gap-2 justify-content-end">
+                        <Button outlined rounded @click="rejectCallback">{{ t('primevue.cancel') }}</Button>
+                        <Button @click="acceptCallback" rounded>{{ t('views.courses.leave') }}</Button>
+                    </div>
+                </div>
+            </template>
+        </ConfirmDialog>
+
+        <Button @click="leaveCourse" icon="pi pi-sign-out" :label="t('views.courses.leave')"></Button>
+    </div>
 </template>
 
 <style scoped lang="scss"></style>
