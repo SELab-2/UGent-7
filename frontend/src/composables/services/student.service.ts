@@ -1,5 +1,4 @@
 import { Student } from '@/types/users/Student.ts';
-import { User } from '@/types/users/User.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { User } from '@/types/users/User.ts';
+import { type User } from '@/types/users/User.ts';
 import { Teacher } from '@/types/users/Teacher.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
@@ -63,7 +63,7 @@ export function useTeacher(): TeacherState {
         await create<Teacher>(
             endpoint,
             {
-                id: user.id
+                id: user.id,
             },
             teacher,
             Teacher.fromJSON,
