@@ -494,8 +494,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         start_time = time.time()
-        # TODO maybey take as option
-
         size = options['size']
         if size == "small":
             amount_of_students = 0
