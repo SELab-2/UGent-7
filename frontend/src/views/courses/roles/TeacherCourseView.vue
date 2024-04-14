@@ -16,6 +16,7 @@ import { PrimeIcons } from 'primevue/api';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { useCourses } from '@/composables/services/courses.service';
 import { ref } from 'vue';
+import TeacherAssistantUpdateButton from '@/components/teachers_assistants/TeacherAssistantUpdateButton.vue';
 
 /* Props */
 const props = defineProps<{
@@ -116,16 +117,14 @@ const handleClone = async (): Promise<void> => {
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
         <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
+
+        <TooltipHover text="views.courses.teachers_and_assistants.edit">
+            <TeacherAssistantUpdateButton :course="props.course" />
+        </TooltipHover>
     </div>
     <!-- List with teachers and assistants -->
     <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)"/>
 
-    <!-- Heading to add/remove teachers and assistants -->
-    <div class="flex justify-content-between align-items-center my-6">
-        <Title class="m-0">{{ t('views.courses.teachers_and_assistants.search.title') }}</Title>
-    </div>
-    <!-- Search and add/remove teachers and assistants -->
-    <TeacherAssistantSearch :course="props.course" />
 </template>
 
 <style scoped lang="scss"></style>

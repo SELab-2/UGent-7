@@ -41,7 +41,7 @@ const roles = [
 ]
 
 /* Ref that contains all the filtered users */
-const filteredUsers = ref<User[]|null>([]);
+const filteredUsers = ref<User[]|null>(null);
 
 /**
  * Fetch the users based on the filter.
