@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
 import Button from 'primevue/button';
-import { type Project } from '@/types/Projects.ts';
+import { type Project } from '@/types/Project.ts';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
