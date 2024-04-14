@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
-import { useStudents } from '@/composables/services/students.service.ts';
+import { useStudents } from '@/composables/services/student.service.ts';
 import { Student } from '@/types/users/Student';
 
 const {

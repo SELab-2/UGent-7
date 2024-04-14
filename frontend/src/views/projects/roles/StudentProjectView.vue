@@ -6,7 +6,7 @@ import Skeleton from 'primevue/skeleton';
 import { onMounted, ref } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useRoute } from 'vue-router';
-import { useGroup } from '@/composables/services/groups.service.ts';
+import { useGroup } from '@/composables/services/group.service.ts';
 import { type Group } from '@/types/Group.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';

@@ -10,7 +10,7 @@ import { type Teacher } from '@/types/users/Teacher';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 import { getAcademicYear, getAcademicYears } from '@/types/Course.ts';
 
 /* Props */

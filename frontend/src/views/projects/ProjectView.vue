@@ -3,7 +3,7 @@ import BaseLayout from '@/components/layout/BaseLayout.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import Title from '@/components/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 import { computed, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';

@@ -4,7 +4,7 @@ import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 
 interface AssistantState {
     assistants: Ref<Assistant[] | null>;

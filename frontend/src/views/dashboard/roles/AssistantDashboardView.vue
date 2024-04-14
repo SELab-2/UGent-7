@@ -6,7 +6,7 @@ import ProjectList from '@/components/projects/ProjectList.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 import { type Assistant } from '@/types/users/Assistant';
 import { getAcademicYear, getAcademicYears } from '@/types/Course.ts';
 

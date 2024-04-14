@@ -4,7 +4,7 @@ import StudentCourseView from './roles/StudentCourseView.vue';
 import TeacherCourseView from './roles/TeacherCourseView.vue';
 import AssistantCourseView from './roles/AssistantCourseView.vue';
 import { onMounted } from 'vue';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';

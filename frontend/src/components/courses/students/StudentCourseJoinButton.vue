@@ -4,7 +4,7 @@ import { type Course } from '@/types/Course.ts';
 import { type Student } from '@/types/users/Student.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useMessagesStore } from '@/store/messages.store.ts';
-import { useStudents } from '@/composables/services/students.service.ts';
+import { useStudents } from '@/composables/services/student.service.ts';
 import { useI18n } from 'vue-i18n';
 
 /* Props */
