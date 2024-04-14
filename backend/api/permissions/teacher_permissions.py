@@ -1,4 +1,5 @@
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
+from api.permissions.role_permissions import is_teacher
 from authentication.models import User
 
 
@@ -7,7 +8,12 @@ class TeacherPermission(IsAuthenticated):
 
     def has_permission(self, request, view):
         """Check if user has permission to view a general Teacher endpoint."""
-        return view.action == 'retrieve'
+        user = request.user
+
+        print(view.action)
+        if view.action in ['list', 'retrieve', 'search']:
+            # Every teacher can get the list of teachers
+            return user.is_authenticated and is_teacher(user)
 
     def has_object_permission(self, request, view, obj):
         """Check if user has permission to view a detailed group endpoint"""
