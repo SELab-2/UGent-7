@@ -2,7 +2,8 @@
 import { ref, computed } from 'vue';
 import { Submission } from "@/types/Submission.ts";
 import { Group } from "@/types/Group.ts";
-import LanguageSelector from "@/components/LanguageSelector.vue";
+import Tooltip from 'primevue/tooltip';
+
 
 const props = defineProps<{
   group: Group;
@@ -16,13 +17,14 @@ const submissions = ref<Submission[]>([
   new Submission('5', 5, new Date(2024, 4, 10), true, props.group, [], []),
 ]);
 
-const enhancedSubmissions = computed(() => {
+const submissionsExtra = computed(() => {
   const result = submissions.value.map(submission => {
     const iconDetails = getIcon(submission);
     return {
       ...submission,
       iconName: iconDetails.iconName,
       color: iconDetails.color,
+      hoverText: getHoverText(submission),
     };
   });
   console.log(result)
@@ -41,11 +43,17 @@ const getIcon = (submission: Submission): { iconName: string; color: string } =>
   }
 }
 
+const getHoverText = (submission: Submission): string => {
+  if (s)
+  return ""
+}
+
 </script>
 
 <template>
   <div>
-    <div v-for="submission in enhancedSubmissions" class="flex submission align-content-center align-items-center">
+    <div v-for="submission in submissionsExtra" class="flex submission align-content-center align-items-center"
+         v-tooltip = submission>
       <p :class="'font-semibold m-2 p-1 pi pi-' + submission.iconName" :style="{color: submission.color, fontSize: '1.25rem'}"></p>
       <label>#{{ submission.submission_number}}</label>
     </div>
