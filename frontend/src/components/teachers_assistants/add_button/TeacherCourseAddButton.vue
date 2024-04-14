@@ -6,6 +6,7 @@ import { type Teacher } from '@/types/users/Teacher';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { useI18n } from 'vue-i18n';
 import { useTeacher } from '@/composables/services/teachers.service';
+import { ref } from 'vue';
 
 /* Props */
 const props = defineProps<{ user: User; course: Course }>();
@@ -15,22 +16,33 @@ const { addSuccessMessage, addErrorMessage } = useMessagesStore();
 const { teachers, teacherJoinCourse, teacherLeaveCourse, getTeacherByCourse } = useTeacher();
 const { t } = useI18n();
 
+/* State */
+const courseValue = ref<Course>(props.course);
+
 /**
  * Enroll the user in the course.
  */
 async function joinCourse(): Promise<void> {
     try {
-        await teacherJoinCourse(props.course.id, props.user.id);
+        await teacherJoinCourse(courseValue.value.id, props.user.id);
 
         addSuccessMessage(
             t('toasts.messages.success'),
-            t('toasts.messages.courses.teachers_and_assistants.enroll.success', [props.user.getFullName(), t('types.roles.teacher')]),
+            t('toasts.messages.courses.teachers_and_assistants.enroll.success', [
+                props.user.getFullName(),
+                t('types.roles.teacher'),
+            ]),
         );
 
         await refreshCourse();
     } catch (error) {
-        addErrorMessage(t('toasts.messages.error'), 
-        t('toasts.messages.courses.teachers_and_assistants.enroll.error', [props.user.getFullName(), t('types.roles.teacher')]));
+        addErrorMessage(
+            t('toasts.messages.error'),
+            t('toasts.messages.courses.teachers_and_assistants.enroll.error', [
+                props.user.getFullName(),
+                t('types.roles.teacher'),
+            ]),
+        );
     }
 }
 
@@ -39,7 +51,7 @@ async function joinCourse(): Promise<void> {
  */
 async function leaveCourse(): Promise<void> {
     try {
-        await teacherLeaveCourse(props.course.id, props.user.id);
+        await teacherLeaveCourse(courseValue.value.id, props.user.id);
 
         addSuccessMessage(
             t('toasts.messages.success'),
@@ -48,18 +60,18 @@ async function leaveCourse(): Promise<void> {
 
         await refreshCourse();
     } catch (error) {
-        addErrorMessage(t('toasts.messages.error'), 
-        t('toasts.messages.courses.teachers_and_assistants.leave.error', [props.user.getFullName()]));
+        addErrorMessage(
+            t('toasts.messages.error'),
+            t('toasts.messages.courses.teachers_and_assistants.leave.error', [props.user.getFullName()]),
+        );
     }
 }
 
 /* Refreshes the course data by updating the teachers */
 async function refreshCourse(): Promise<void> {
     await getTeacherByCourse(props.course.id);
-    props.course.teachers = teachers.value ?? [];
+    courseValue.value.teachers = teachers.value ?? [];
 }
-
-
 </script>
 
 <template>
@@ -69,7 +81,7 @@ async function refreshCourse(): Promise<void> {
         icon-pos="right"
         icon="pi pi-arrow-right"
         @click="joinCourse"
-        v-if="! course.hasTeacher(user as Teacher)"
+        v-if="!courseValue.hasTeacher(user as Teacher)"
         link
     />
     <Button

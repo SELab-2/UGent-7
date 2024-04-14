@@ -32,7 +32,7 @@ const leaveCourse = async (): Promise<void> => {
         message: t('confirmations.leave_course'),
         header: t('views.courses.leave'),
         accept: () => {
-            if (user.value){
+            if (user.value !== null) {
                 // Leave the course
                 studentLeaveCourse(props.course.id, user.value.id);
 
@@ -46,7 +46,6 @@ const leaveCourse = async (): Promise<void> => {
         reject: () => {},
     });
 };
-
 </script>
 
 <template>
@@ -71,7 +70,7 @@ const leaveCourse = async (): Promise<void> => {
     </div>
 
     <!-- List with teachers and assistants -->
-    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)"/>
+    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />
 
     <!-- Button to leave the course -->
     <div class="text-right mt-6">

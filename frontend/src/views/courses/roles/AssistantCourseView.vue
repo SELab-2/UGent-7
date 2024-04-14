@@ -42,7 +42,7 @@ const { t } = useI18n();
     </div>
 
     <!-- List with teachers and assistants -->
-    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)"/>
+    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />
 </template>
 
 <style scoped lang="scss"></style>

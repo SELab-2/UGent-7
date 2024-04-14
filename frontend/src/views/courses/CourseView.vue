@@ -22,7 +22,7 @@ onMounted(async () => {
     await getCourseByID(params.courseId as string);
 
     // Get assistants and teachers
-    if (course.value) {
+    if (course.value !== null) {
         await getAssistantByCourse(course.value.id);
         await getTeacherByCourse(course.value.id);
 
@@ -30,7 +30,6 @@ onMounted(async () => {
         course.value.assistants = assistants.value ?? [];
         course.value.teachers = teachers.value ?? [];
     }
-
 });
 </script>
 

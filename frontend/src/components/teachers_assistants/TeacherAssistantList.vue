@@ -14,7 +14,6 @@ interface Props {
 withDefaults(defineProps<Props>(), {
     cols: 4,
 });
-
 </script>
 
 <template>
@@ -27,7 +26,7 @@ withDefaults(defineProps<Props>(), {
                     v-for="user in users"
                     :key="user.id"
                 >
-                    <TeacherAssistantCard class="h-full" :user="user" :course="course" />
+                    <TeacherAssistantCard class="h-full" :userValue="user" :course="course" />
                 </div>
             </template>
         </template>

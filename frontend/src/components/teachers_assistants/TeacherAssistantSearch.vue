@@ -7,7 +7,7 @@ import InputIcon from 'primevue/inputicon';
 import Checkbox from 'primevue/checkbox';
 import Paginator from 'primevue/paginator';
 import TeacherAssistantList from './TeacherAssistantList.vue';
-import { type Course} from '@/types/Course.ts';
+import { type Course } from '@/types/Course.ts';
 import { onMounted, ref } from 'vue';
 import { useTeacher } from '@/composables/services/teachers.service';
 import { useAssistant } from '@/composables/services/assistant.service';
@@ -19,7 +19,7 @@ import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
 import { useRoute } from 'vue-router';
 import { getUserFilters } from '@/types/filter/Filter.ts';
-import { User } from '@/types/users/User';
+import { type User } from '@/types/users/User';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -38,10 +38,10 @@ const props = defineProps<{ course: Course }>();
 const roles = [
     { label: 'teacher', value: 'types.roles.teacher' },
     { label: 'assistant', value: 'types.roles.assistant' },
-]
+];
 
 /* Ref that contains all the filtered users */
-const filteredUsers = ref<User[]|null>(null);
+const filteredUsers = ref<User[] | null>(null);
 
 /**
  * Fetch the users based on the filter.
@@ -103,17 +103,8 @@ onMounted(async () => {
                     </div>
                 </AccordionTab>
                 <AccordionTab :header="t('views.courses.teachers_and_assistants.search.role')" v-if="user">
-                    <div
-                        v-for="role in roles"
-                        :key="role.label"
-                        class="flex align-items-center mb-2"
-                    >
-                        <Checkbox
-                            v-model="filter.roles"
-                            :inputId="role.label"
-                            name="roles"
-                            :value="role.label"
-                        />
+                    <div v-for="role in roles" :key="role.label" class="flex align-items-center mb-2">
+                        <Checkbox v-model="filter.roles" :inputId="role.label" name="roles" :value="role.label" />
                         <label :for="role.label" class="ml-2 text-sm"> {{ t(role.value) }} </label>
                     </div>
                 </AccordionTab>

@@ -2,7 +2,6 @@
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
-import TeacherAssistantSearch from '@/components/teachers_assistants/TeacherAssistantSearch.vue';
 import TooltipHover from '@/components/TooltipHover.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
@@ -123,8 +122,7 @@ const handleClone = async (): Promise<void> => {
         </TooltipHover>
     </div>
     <!-- List with teachers and assistants -->
-    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)"/>
-
+    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />
 </template>
 
 <style scoped lang="scss"></style>

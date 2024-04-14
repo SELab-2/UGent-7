@@ -6,7 +6,6 @@ import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
 import TeacherAssistantSearch from './TeacherAssistantSearch.vue';
 import { ref } from 'vue';
-import { h } from 'vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -16,24 +15,18 @@ const props = defineProps<{ course: Course }>();
 
 /* Dialog state to select the course you want to create a project for */
 const displayEdit = ref(false);
-
 </script>
 
 <template>
     <div>
         <!-- Button to edit the teachers/assistants of a course -->
-        <Button
-            :icon="PrimeIcons.PENCIL"
-            icon-pos="right"
-            class="custom-button"
-            @click="displayEdit = true"
-        />
+        <Button :icon="PrimeIcons.PENCIL" icon-pos="right" class="custom-button" @click="displayEdit = true" />
         <!-- Dialog to display the teacher/assistant search -->
         <Dialog
             v-model:visible="displayEdit"
             class="m-3"
             :draggable="false"
-            :contentStyle="{ 'width': '90vw', height: '90vh'}"
+            :contentStyle="{ width: '90vw', height: '90vh' }"
             modal
         >
             <template #header>

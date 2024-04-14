@@ -6,6 +6,7 @@ import { type Assistant } from '@/types/users/Assistant';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { useI18n } from 'vue-i18n';
 import { useAssistant } from '@/composables/services/assistant.service';
+import { ref } from 'vue';
 
 /* Props */
 const props = defineProps<{ user: User; course: Course }>();
@@ -15,22 +16,33 @@ const { addSuccessMessage, addErrorMessage } = useMessagesStore();
 const { assistants, assistantJoinCourse, assistantLeaveCourse, getAssistantByCourse } = useAssistant();
 const { t } = useI18n();
 
+/* State */
+const courseValue = ref<Course>(props.course);
+
 /**
  * Enroll the user in the course.
  */
 async function joinCourse(): Promise<void> {
     try {
-        await assistantJoinCourse(props.course.id, props.user.id);
+        await assistantJoinCourse(courseValue.value.id, props.user.id);
 
         addSuccessMessage(
             t('toasts.messages.success'),
-            t('toasts.messages.courses.teachers_and_assistants.enroll.success', [props.user.getFullName(), t('types.roles.assistant')])
+            t('toasts.messages.courses.teachers_and_assistants.enroll.success', [
+                props.user.getFullName(),
+                t('types.roles.assistant'),
+            ]),
         );
 
         await refreshCourse();
     } catch (error) {
-        addErrorMessage(t('toasts.messages.error'), 
-        t('toasts.messages.courses.teachers_and_assistants.enroll.error', [props.user.getFullName(), t('types.roles.assistant')]));
+        addErrorMessage(
+            t('toasts.messages.error'),
+            t('toasts.messages.courses.teachers_and_assistants.enroll.error', [
+                props.user.getFullName(),
+                t('types.roles.assistant'),
+            ]),
+        );
     }
 }
 
@@ -39,24 +51,26 @@ async function joinCourse(): Promise<void> {
  */
 async function leaveCourse(): Promise<void> {
     try {
-        await assistantLeaveCourse(props.course.id, props.user.id);
+        await assistantLeaveCourse(courseValue.value.id, props.user.id);
 
         addSuccessMessage(
             t('toasts.messages.success'),
-            t('toasts.messages.courses.teachers_and_assistants.leave.success', [props.user.getFullName()])
+            t('toasts.messages.courses.teachers_and_assistants.leave.success', [props.user.getFullName()]),
         );
 
         await refreshCourse();
     } catch (error) {
-        addErrorMessage(t('toasts.messages.error'), 
-        t('toasts.messages.courses.teachers_and_assistants.leave.error', [props.user.getFullName()]));
+        addErrorMessage(
+            t('toasts.messages.error'),
+            t('toasts.messages.courses.teachers_and_assistants.leave.error', [props.user.getFullName()]),
+        );
     }
 }
 
 /* Refreshes the course data by updating the assistants */
 async function refreshCourse(): Promise<void> {
-    await getAssistantByCourse(props.course.id);
-    props.course.assistants = assistants.value ?? [];
+    await getAssistantByCourse(courseValue.value.id);
+    courseValue.value.assistants = assistants.value ?? [];
 }
 </script>
 
@@ -67,7 +81,7 @@ async function refreshCourse(): Promise<void> {
         icon-pos="right"
         icon="pi pi-arrow-right"
         @click="joinCourse"
-        v-if="! course.hasAssistant(user as Assistant)"
+        v-if="!courseValue.hasAssistant(user as Assistant)"
         link
     />
     <Button
