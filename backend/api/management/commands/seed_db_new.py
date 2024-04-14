@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from authentication.models import User
 from api.seeders.faker import faker
 from api.seeders.seeder import seed_students, seed_assistants, seed_teachers, seed_courses, seed_projects, seed_groups, \
-    seed_submissions
+    seed_submissions, fillFaculties
 from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
@@ -11,6 +11,7 @@ from api.models.teacher import Teacher
 from api.models.student import Student
 from api.models.assistant import Assistant
 from api.models.submission import Submission
+from authentication.models import Faculty
 
 import time
 
@@ -98,44 +99,38 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('size', type=str, help='The size you want to seed')
 
-    amount_of_students = 50_000
-    amount_of_assistants = 5_000
-    amount_of_teachers = 1_500
-    amount_of_courses = 1_500
-    amount_of_projects = 3_000
-    amount_of_groups = 3_000
-    amount_of_submissions = 3_000
-
     def handle(self, *args, **options):
         size = options['size']
         if size == "small":
-            self.amount_of_students = 10
-            self.amount_of_assistants = 5
-            self.amount_of_teachers = 3
-            self.amount_of_courses = 3
-            self.amount_of_projects = 4
-            self.amount_of_groups = 7
-            self.amount_of_submissions = 10
+            amount_of_students = 10
+            amount_of_assistants = 5
+            amount_of_teachers = 3
+            amount_of_courses = 3
+            amount_of_projects = 4
+            amount_of_groups = 7
+            amount_of_submissions = 10
         elif size == "medium":
-            self.amount_of_students = 20_000
-            self.amount_of_assistants = 2_000
-            self.amount_of_teachers = 500
-            self.amount_of_courses = 500
-            self.amount_of_projects = 1_000
-            self.amount_of_groups = 1_000
-            self.amount_of_submissions = 1_000
+            amount_of_students = 20_000
+            amount_of_assistants = 2_000
+            amount_of_teachers = 500
+            amount_of_courses = 500
+            amount_of_projects = 1_000
+            amount_of_groups = 1_000
+            amount_of_submissions = 1_000
         elif size == "large":
-            self.amount_of_students = 50_000
-            self.amount_of_assistants = 5_000
-            self.amount_of_teachers = 1_500
-            self.amount_of_courses = 1_500
-            self.amount_of_projects = 3_000
-            self.amount_of_groups = 3_000
-            self.amount_of_submissions = 3_000
+            amount_of_students = 50_000
+            amount_of_assistants = 5_000
+            amount_of_teachers = 1_500
+            amount_of_courses = 1_500
+            amount_of_projects = 3_000
+            amount_of_groups = 3_000
+            amount_of_submissions = 3_000
         else:
             self.stdout.write(self.style.ERROR("give a size from small, medium or large!"))
             return
 
+        Faculty.objects.all().delete()
+        fillFaculties()  # fill the faculty table again
         # Reset DB
         User.objects.all().delete()
         Student.objects.all().delete()
@@ -150,25 +145,25 @@ class Command(BaseCommand):
         # Seed students
         fake = faker()
         start_time = time.time()
-        seed_students(fake, self.amount_of_students, 0)
+        seed_students(fake, amount_of_students, 0)
 
         # Seed assistants
-        seed_assistants(fake, self.amount_of_assistants, self.amount_of_students)
+        seed_assistants(fake, amount_of_assistants, amount_of_students)
 
         # Seed teachers
-        seed_teachers(fake, self.amount_of_teachers, self.amount_of_students + self.amount_of_assistants)
+        seed_teachers(fake, amount_of_teachers, amount_of_students + amount_of_assistants)
 
         # Seed courses
-        seed_courses(faker(), self.amount_of_courses)
+        seed_courses(faker(), amount_of_courses)
 
         # Seed projects
-        seed_projects(faker(), self.amount_of_projects)
+        seed_projects(faker(), amount_of_projects)
 
         # Seed groups
-        seed_groups(faker(), self.amount_of_groups)
+        seed_groups(faker(), amount_of_groups)
 
         # Seed submissions
-        seed_submissions(faker(), self.amount_of_submissions)
+        seed_submissions(faker(), amount_of_submissions)
 
         end_time = time.time()
         execution_time = end_time - start_time

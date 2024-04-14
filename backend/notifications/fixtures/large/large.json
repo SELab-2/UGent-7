@@ -1,1 +1,1 @@
-[{"model": "notifications.notificationtemplate", "pk": 1, "fields": {"title_key": "Title: Score added", "description_key": "Description: Score added %(score)s"}}, {"model": "notifications.notificationtemplate", "pk": 2, "fields": {"title_key": "Title: Score updated", "description_key": "Description: Score updated %(score)s"}}]
+[]
