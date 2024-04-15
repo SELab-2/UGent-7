@@ -18,7 +18,7 @@ class UserViewSet(ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser | IsSameUser]
 
-    @action(detail=True, methods=['PATCH'], url_path='/admin', permission_classes=[IsAdminUser])
+    @action(detail=True, methods=['PATCH'], url_path='admin', permission_classes=[IsAdminUser])
     def patch_admin(self, request: Request) -> Response:
         """
         Update the user's admin status with is_staff in request query parameters
