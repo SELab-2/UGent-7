@@ -18,8 +18,9 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: |
+          cd backend
           python -m pip install --upgrade pip
           pip install poetry
-          poetry install --directory=./backend
+          poetry install
       - name: Execute linting checks
-        run: poetry run flake8 --config ./backend/.flake8 ./backend
+        run: cd backend; poetry run flake8 --config .flake8
