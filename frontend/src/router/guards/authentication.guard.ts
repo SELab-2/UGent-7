@@ -1,21 +1,29 @@
 import { type RouteLocationNormalized } from 'vue-router';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
+import { useMessagesStore } from '@/store/messages.store.ts';
+import { i18n } from '@/config/i18n.ts';
 
 export async function AuthenticationGuard(to: RouteLocationNormalized): Promise<{ name: string } | undefined> {
+    const { t } = i18n.global;
+    const { addErrorMessage } = useMessagesStore();
     const { refreshUser } = useAuthStore();
-    const { intent } = storeToRefs(useAuthStore());
+    const { intent, isAuthenticated } = storeToRefs(useAuthStore());
 
-    const { isAuthenticated } = storeToRefs(useAuthStore());
-
-    if (!['login', 'verify'].includes(to.name as string)) {
-        if (!isAuthenticated.value) {
+    if (!isAuthenticated.value && !['login', 'verify'].includes(<string> to.name)) {
+        try {
             await refreshUser();
+        } catch (error: any) {
+            const detail: string = error.response.data.detail.toString();
 
-            if (!isAuthenticated.value) {
-                intent.value = to.fullPath;
-                return { name: 'login' };
+            if (to.name !== 'dashboard') {
+                addErrorMessage(t('toasts.messages.error'), detail);
             }
+        }
+
+        if (!isAuthenticated.value) {
+            intent.value = to.fullPath;
+            return { name: 'login' };
         }
     }
 }
