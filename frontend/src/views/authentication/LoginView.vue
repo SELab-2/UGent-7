@@ -33,7 +33,11 @@ const { t } = useI18n();
                 <div
                     class="w-12 md:w-7 flex flex-column md:flex-row align-items-center md:align-items-end justify-content-between relative surface-100"
                 >
-                    <img :src="Illustration" :alt="t('views.login.illustration')" class="w-10rem md:w-15rem m-4 my-5 ml:0 md:ml-7" />
+                    <img
+                        :src="Illustration"
+                        :alt="t('views.login.illustration')"
+                        class="w-10rem md:w-15rem m-4 my-5 ml:0 md:ml-7"
+                    />
                     <div class="bg-primary text-white p-4 w-full md:w-20rem">
                         <h1 class="mt-0">
                             {{ t('views.login.card.title') }}
