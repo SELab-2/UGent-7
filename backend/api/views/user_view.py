@@ -18,6 +18,13 @@ class UserViewSet(ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser | IsSameUser]
 
+    @action(detail=True, methods=['PATCH'], url_path='/admin', permission_classes=[IsAdminUser])
+    def patch_admin(self, request: Request) -> Response:
+        """
+        Update the user's admin status with is_staff in request query parameters
+        """
+        # request.data needs to contain user id in 'user' field
+
     @action(detail=False)
     def search(self, request: Request) -> Response:
         self.pagination_class = BasicPagination
