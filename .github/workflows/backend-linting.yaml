@@ -7,10 +7,8 @@ on:
 
 jobs:
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-      - name: Add permission to remove contents of previous action script
-        run: echo ${{ secrets.SUDO }} | sudo -S chown -R $USER:$USER /home/selab2/actions-runner/_work/UGent-7/
       - uses: actions/checkout@v4
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
@@ -18,8 +16,9 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: |
+          cd backend
           python -m pip install --upgrade pip
           pip install poetry
-          poetry install --directory=./backend
+          poetry install
       - name: Execute linting checks
-        run: flake8 --config ./backend/.flake8 ./backend
+        run: cd backend; poetry run flake8 --config .flake8
