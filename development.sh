@@ -55,6 +55,10 @@ else
     echo "SSL certificates already exist, skipping generation."
 fi
 
+if [ "$data" != "" ]; then
+    sed -i "s/^FIXTURE=.*/FIXTURE=$data/" .env
+fi
+
 if [ "$build" = true ]; then
     echo "Building Docker images..."
     echo "This can take a while..."
@@ -62,7 +66,6 @@ if [ "$build" = true ]; then
 fi
 
 echo "Starting services..."
-export FIXTURE="$data"
 docker-compose -f development.yml up -d
 
 echo "-------------------------------------"
