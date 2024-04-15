@@ -1,4 +1,4 @@
-from api.models.checks import ExtraCheck
+from api.models.checks import ExtraCheck, StructureCheck
 from api.models.student import Student
 from api.models.submission import (ExtraCheckResult, StateEnum,
                                    StructureCheckResult, Submission)
@@ -29,8 +29,8 @@ def _user_creation(user: User, attributes: dict, **_):
 def _run_structure_checks(submission: Submission, **kwargs):
     for structure_check in submission.group.project.structure_checks.all():
         structure_check_result: StructureCheckResult
-        if submission.results.filter(structure_check__id=structure_check.id).exists():
-            structure_check_result = submission.results.get(structure_check__id=structure_check.id)
+        if submission.results.filter(structurecheckresult__structure_check__id=structure_check.id).exists():
+            structure_check_result = submission.results.get(structurecheckresult__structure_check__id=structure_check.id)
             structure_check_result.result = StateEnum.QUEUED
         else:
             structure_check_result = StructureCheckResult(
@@ -46,13 +46,11 @@ def _run_structure_checks(submission: Submission, **kwargs):
 
 @receiver(run_extra_checks)
 def _run_extra_checks(submission: Submission, **kwargs):
-    print("Running extra check", flush=True)
     for extra_check in submission.group.project.extra_checks.all():
         extra_check_result: ExtraCheckResult
-        print(submission.results.filter(extracheckresult__extra_check__id=extra_check.id))
         if submission.results.filter(extracheckresult__extra_check__id=extra_check.id).exists():
             extra_check_result = submission.results.get(extracheckresult__extra_check__id=extra_check.id)
-            extra_check_result.result = StateEnum.RUNNING
+            extra_check_result.result = StateEnum.QUEUED
         else:
             extra_check_result = ExtraCheckResult(
                 submission=submission,
@@ -65,17 +63,26 @@ def _run_extra_checks(submission: Submission, **kwargs):
         task_extra_check_start.apply_async((extra_check_result,))
     return True
 
-# TODO: All async
+
+@receiver(post_save, sender=StructureCheck)
+@receiver(post_delete, sender=StructureCheck)
+def hook_structure_check(sender, instance: StructureCheck, **kwargs):
+    for group in instance.project.groups.all():
+        submissions = group.submissions.order_by("-submission_time")
+        if submissions:
+            run_structure_checks.send(sender=StructureCheck, submission=submissions[0])
+
+            for submission in submissions[1:]:
+                submission.is_valid = False
+                submission.save()
 
 
 @receiver(post_save, sender=ExtraCheck)
 @receiver(post_delete, sender=ExtraCheck)
 def hook_extra_check(sender, instance: ExtraCheck, **kwargs):
-    print("Hooking extra check", flush=True)
     for group in instance.project.groups.all():
         submissions = group.submissions.order_by("-submission_time")
         if submissions:
-            print(group.id, flush=True)
             run_extra_checks.send(sender=ExtraCheck, submission=submissions[0])
 
             for submission in submissions[1:]:
@@ -83,12 +90,8 @@ def hook_extra_check(sender, instance: ExtraCheck, **kwargs):
                 submission.save()
 
 
-# TODO: Hook structure_check
-
-
 @receiver(post_save, sender=Submission)
 def hook_submission(sender, instance: Submission, created: bool, **kwargs):
     if created:
-        print("Hooking submission", flush=True)
         run_structure_checks.send(sender=Submission, submission=instance)
         run_extra_checks.send(sender=Submission, submission=instance)
