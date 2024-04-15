@@ -1,6 +1,7 @@
 from api.models.checks import ExtraCheck
 from api.models.student import Student
-from api.models.submission import Submission
+from api.models.submission import (ExtraCheckResult, StateEnum,
+                                   StructureCheckResult, Submission)
 from api.tasks.extra_check import task_extra_check_start
 from api.tasks.structure_check import task_structure_check_start
 from authentication.models import User
@@ -27,13 +28,32 @@ def _user_creation(user: User, attributes: dict, **_):
 
 @receiver(run_structure_checks)
 def _run_structure_checks(submission: Submission, **kwargs):
-    task_structure_check_start.apply_async((submission,))
+    for structure_check in submission.group.project.structure_checks.all():
+        structure_check_result = StructureCheckResult(
+            submission=submission,
+            result=StateEnum.QUEUED,
+            error_message=None,
+            is_valid=True,
+            structure_check=structure_check
+        )
+        structure_check_result.save()
+        task_structure_check_start.apply_async((structure_check_result,))
     return True
 
 
 @receiver(run_extra_checks)
 def _run_extra_checks(submission: Submission, **kwargs):
-    task_extra_check_start.apply_async((submission,))
+    for extra_check in submission.group.project.extra_checks.all():
+        extra_check_result = ExtraCheckResult(
+            submission=submission,
+            result=StateEnum.QUEUED,
+            error_message=None,
+            is_valid=True,
+            extra_check=extra_check,
+            log_file=None
+        )
+        extra_check_result.save()
+        task_extra_check_start.apply_async((extra_check_result,))
     return True
 
 
@@ -42,8 +62,9 @@ def _run_extra_checks(submission: Submission, **kwargs):
 def hook_extra_check(sender, instance: ExtraCheck, **kwargs):
     for group in instance.project.groups.all():
         submissions = group.submissions.order_by("submission_time")  # TODO: Ordered in the right way?
+        # TODO: Set to invalid old results
         if submissions:
-            run_extra_checks.send(sender=[ExtraCheck], submissions=submissions[0])
+            run_extra_checks.send(sender=ExtraCheck, submission=submissions[0])
 
             for submission in submissions[1:]:
                 submission.is_valid = False
