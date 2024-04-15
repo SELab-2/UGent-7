@@ -14,9 +14,9 @@ import Title from '@/components/layout/Title.vue';
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUser } from '@/composables/services/users.service.ts';
-import { useStudents } from '@/composables/services/students.service.ts';
+import { useStudents } from '@/composables/services/student.service.ts';
 import { useAssistant } from '@/composables/services/assistant.service.ts';
-import { useTeacher } from '@/composables/services/teachers.service.ts';
+import { useTeacher } from '@/composables/services/teacher.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
 
@@ -28,14 +28,15 @@ import {useRoute} from "vue-router";
 const { t } = useI18n();
 const { query } = useRoute();
 const { pagination, users, getUsers, searchUsers } = useUser();
-const { createStudent } = useStudents();
-const { createAssistant } = useAssistant();
-const { createTeacher } = useTeacher();
+const { createStudent, deleteStudent } = useStudents();
+const { createAssistant, deleteAssistant } = useAssistant();
+const { createTeacher, deleteTeacher } = useTeacher();
 const { filter, onFilter } = useFilter(getUserFilters(query));
 const { page, first, pageSize, onPaginate, resetPagination } = usePaginator();
 
 onMounted(async () => {
     fillCreators();
+    fillDestroyers();
 
     onPaginate(fetchUsers);
 
@@ -60,6 +61,8 @@ onMounted(async () => {
 
 const creators = ref<Record<Role, (arg: any) => Promise<void>>>({});
 const createFunctions = ref<((arg: any) => Promise<void>)[]>([createStudent, createAssistant, createTeacher]);
+const destroyers = ref<Record<Role, (arg: any) => Promise<void>>>({});
+const destroyFunctions = ref<((arg: any) => Promise<void>)[]>([deleteStudent, deleteAssistant, deleteTeacher]);
 
 const loading = ref(false);
 const totalRecords = ref(0);
@@ -81,6 +84,12 @@ const fillCreators = (): void => {
         creators.value[role] = createFunctions.value[i - 1];
     }
 };
+const fillDestroyers = (): void => {
+    for (let i = 1; i < roles.length; i++) {
+        const role: Role = roles[i];
+        destroyers.value[role] = destroyFunctions.value[i - 1];
+    }
+}
 const fetchUsers = async (): Promise<void> => {
     loading.value = true;
     await searchUsers(filter.value, page.value, pageSize.value).then(() => {
@@ -132,24 +141,27 @@ const saveItem = async (): Promise<void> => {
 
         for (let i = 1; i < roles.length; i++) {
             const role = roles[i];
-            if (!paginationItem.roles.includes(role) && editItem.value.roles.includes(role)) {
-                let data: {[key: string]: any};
+            const paginationIncludes = paginationItem.roles.includes(role);
+            const editIncludes = editItem.value.roles.includes(role);
+            if (!paginationIncludes && editIncludes) {
+                // add role in backend
+                const func = creators.value[role];
+
                 if (role === "student") {
                     console.log("student reported");
-                    data = {
+                    const data: {[key: string]: any} = {
                         ...editItem.value,
                         studentId: editItem.value.id,
                     };
-                    console.log(data);
+                    await func(data);
                 } else {
-                    data = {
-                        ...editItem.value,
-                    };
+                    await func(editItem.value);
                 }
-                const func = creators.value[role];
-                // Normally the create function requires an object of the specific role that it creates something of.
-                // But they always just id and I add a studentId for when it's the student role that gets added.
-                await func(data);
+            }
+            else if (paginationIncludes && !editIncludes) {
+                // remove role in backend
+                const func = destroyers.value[role];
+                await func(editItem.value.id);
             }
         }
         // update admin status TODO

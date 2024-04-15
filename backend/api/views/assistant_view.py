@@ -26,16 +26,21 @@ class AssistantViewSet(ModelViewSet):
     @swagger_auto_schema(request_body=UserIDSerializer)
     def create(self, request: Request, *args, **kwargs) -> Response:
         """Add the student role to the user"""
-        serializer = UserIDSerializer(
-            data=request.data
-        )
+        try:
+            assistant: Assistant = Assistant.objects.get(pk=request.data.get("user"))
 
-        if serializer.is_valid(raise_exception=True):
-            Assistant.create(serializer.validated_data.get('user'))
+            assistant.activate()
+        except Assistant.DoesNotExist:
+            serializer = UserIDSerializer(
+                data=request.data
+            )
 
-        return Response({
-            "message": gettext("teachers.success.add")
-        })
+            if serializer.is_valid(raise_exception=True):
+                Assistant.create(serializer.validated_data.get('user'))
+        finally:
+            return Response({
+                "message": gettext("teachers.success.add")
+            })
 
     @action(detail=False, pagination_class=UserPagination)
     def search(self, request: Request) -> Response:
