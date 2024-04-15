@@ -10,8 +10,8 @@ const props = defineProps<{
 }>();
 
 const submissions = ref<Submission[]>([
-  new Submission('1', 1, new Date(2024, 4, 8), true, props.group, [], []),
-  new Submission('2', 2, new Date(2024, 4, 8), false, props.group, [], []),
+  new Submission('1', 1, new Date(2024, 4, 8), true, props.group),
+  new Submission('2', 2, new Date(2024, 4, 8), false, props.group),
   new Submission('3', 3, new Date(2024, 4, 9), true, props.group, [], []),
   new Submission('4', 4, new Date(2024, 4, 9), false, props.group, [], []),
   new Submission('5', 5, new Date(2024, 4, 10), true, props.group, [], []),
@@ -44,7 +44,7 @@ const getIcon = (submission: Submission): { iconName: string; color: string } =>
 }
 
 const getHoverText = (submission: Submission): string => {
-  if (s)
+  if (submission)
   return ""
 }
 
