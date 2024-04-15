@@ -20,7 +20,7 @@ const { t } = useI18n();
         <Title class="m-0">{{ props.course.name }}</Title>
     </div>
     <!-- Description -->
-    <p>{{ props.course.description }}</p>
+    <div v-html="props.course.description" />
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->

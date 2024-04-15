@@ -28,7 +28,7 @@ export const projects = [
         score_visible: true,
         group_size: 8,
         submissions: ['1', '2'],
-        groups: ['0', '1'],
+        groups: ['0', '1'],z
     },
     {
         id: 1,

@@ -1,3 +1,4 @@
+from nh3 import clean
 from api.logic.check_folder_structure import parse_zip_file
 from api.models.checks import FileExtension
 from api.models.course import Course
@@ -63,6 +64,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         # Check if deadline of the project is before the start date
         if "deadline" in data and data["deadline"] < start_date:
             raise ValidationError(gettext("project.errors.deadline_before_start_date"))
+
+        data['description'] = clean(data['description'])
 
         return data
 

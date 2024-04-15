@@ -47,7 +47,7 @@ const { t } = useI18n();
             </template>
             <template v-else>
                 <div class="col-12">
-                    <p class="mt-0">{{ t('views.dashboard.no_courses') }}</p>
+                    <p class="mt-0">{{ t('views.dashboard.noCourses') }}</p>
                 </div>
             </template>
         </template>

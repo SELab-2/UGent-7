@@ -53,7 +53,7 @@ watch(
         <YearSelector :years="allYears" v-model="selectedYear" />
     </div>
     <!-- Course list body -->
-    <CourseList :courses="filteredCourses" />
+    <CourseList class="fadein" :courses="filteredCourses" />
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
@@ -61,7 +61,7 @@ watch(
     </div>
 
     <!-- Project list body -->
-    <ProjectList :projects="projects" />
+    <ProjectList class="fadein" :projects="projects" />
 </template>
 
 <style scoped lang="scss"></style>
