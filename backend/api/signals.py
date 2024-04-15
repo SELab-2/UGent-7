@@ -46,7 +46,6 @@ def _run_structure_checks(submission: Submission, **kwargs):
 
 @receiver(run_extra_checks)
 def _run_extra_checks(submission: Submission, **kwargs):
-    print("Running extra check", flush=True)
     for extra_check in submission.group.project.extra_checks.all():
         extra_check_result: ExtraCheckResult
         if submission.results.filter(extracheckresult__extra_check__id=extra_check.id).exists():
@@ -64,7 +63,18 @@ def _run_extra_checks(submission: Submission, **kwargs):
         task_extra_check_start.apply_async((extra_check_result,))
     return True
 
-# TODO: All async
+
+@receiver(post_save, sender=StructureCheck)
+@receiver(post_delete, sender=StructureCheck)
+def hook_structure_check(sender, instance: StructureCheck, **kwargs):
+    for group in instance.project.groups.all():
+        submissions = group.submissions.order_by("-submission_time")
+        if submissions:
+            run_structure_checks.send(sender=StructureCheck, submission=submissions[0])
+
+            for submission in submissions[1:]:
+                submission.is_valid = False
+                submission.save()
 
 
 @receiver(post_save, sender=StructureCheck)
@@ -83,11 +93,9 @@ def hook_structure_check(sender, instance: StructureCheck, **kwargs):
 @receiver(post_save, sender=ExtraCheck)
 @receiver(post_delete, sender=ExtraCheck)
 def hook_extra_check(sender, instance: ExtraCheck, **kwargs):
-    print("Hooking extra check", flush=True)
     for group in instance.project.groups.all():
         submissions = group.submissions.order_by("-submission_time")
         if submissions:
-            print(group.id, flush=True)
             run_extra_checks.send(sender=ExtraCheck, submission=submissions[0])
 
             for submission in submissions[1:]:
