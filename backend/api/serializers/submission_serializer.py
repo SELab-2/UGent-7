@@ -59,6 +59,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print(validated_data)
         # Extract files from the request
         request = self.context.get('request')
         files_data = request.FILES.getlist('files')
@@ -66,7 +67,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
         # Get the group for the submission
         group = validated_data['group']
 
-        # Get the project associated with the group
+        # Get the project associated withs the group
         project = group.project
 
         # Get the maximum submission number for the group's project

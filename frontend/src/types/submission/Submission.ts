@@ -1,10 +1,14 @@
+import { type ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
+import { type StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+
 export class Submission {
     constructor(
         public id: string,
         public submission_number: number,
         public submission_time: Date,
         public files: File[] = [],
-        public results: any[] = []
+        public extraCheckResults: ExtraCheckResult[] = [],
+        public structureCheckResult: StructureCheckResult[] = [],
     ) {}
 
     /**
@@ -18,7 +22,6 @@ export class Submission {
             submission.submission_number,
             new Date(submission.submission_time),
             submission.files,
-            submission.results
         );
     }
 }

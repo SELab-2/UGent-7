@@ -59,14 +59,23 @@ const routes: RouteRecordRaw[] = [
                                 children: [
                                     { path: '', component: SingleProjectView, name: 'course-project' },
                                     { path: 'edit', component: Dummy, name: 'project-edit' },
-                                    { path: 'group',
+                                    {
+                                        path: 'group',
                                         children: [
-                                            { path: '', component: Dummy, name:'group'},
-                                            { path: ':groupId', children: [
-                                                    {path: '', component: Dummy, name:'project-group'},
-                                                    { path: 'submission', component: SubmissionView, name: 'submission' },
-                                                ]}
-                                        ]},
+                                            { path: '', component: Dummy, name: 'group' },
+                                            {
+                                                path: ':groupId',
+                                                children: [
+                                                    { path: '', component: Dummy, name: 'project-group' },
+                                                    {
+                                                        path: 'submission',
+                                                        component: SubmissionView,
+                                                        name: 'submission',
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },
                                 ],

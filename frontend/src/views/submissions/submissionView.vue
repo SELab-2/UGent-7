@@ -9,14 +9,16 @@ import { useRoute } from 'vue-router';
 import { useCourses } from '@/composables/services/course.service.ts';
 import FileUpload from 'primevue/fileupload';
 import { PrimeIcons } from 'primevue/api';
-import AllSubmission from "@/components/submissions/AllSubmission.vue";
-import {useGroup} from "@/composables/services/groups.service.ts";
+import AllSubmission from '@/components/submissions/AllSubmission.vue';
+import { useGroup } from '@/composables/services/groups.service.ts';
+import { useSubmission } from '@/composables/services/submission.service.ts';
 
 const { t } = useI18n();
 const route = useRoute();
 const { project, getProjectByID } = useProject();
 const { course, getCourseByID } = useCourses();
 const { group, getGroupByID } = useGroup();
+const { submission, createSubmission } = useSubmission();
 
 /* State */
 const files = ref<File[]>([]);
@@ -28,9 +30,12 @@ onMounted(async () => {
 });
 
 const onUpload = (callback: () => void): void => {
-    // TODO call to server
-    files.value = [];
-    callback();
+    if (group.value !== null) {
+        createSubmission(files.value as File[], group.value.id);
+        files.value = [];
+        callback();
+
+    }
 };
 
 const onFileSelect = (event: any): void => {
@@ -106,7 +111,7 @@ function formatDate(deadline: Date): string {
                 </div>
             </div>
             <div class="col-6 col-offset-1">
-              <AllSubmission v-if="group" :group="group"></AllSubmission>
+                <AllSubmission v-if="group" :group="group"></AllSubmission>
             </div>
         </div>
     </BaseLayout>
