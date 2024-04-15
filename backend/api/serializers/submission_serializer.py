@@ -21,13 +21,13 @@ class CheckResultSerializer(serializers.ModelSerializer):
 class StructureCheckResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = StructureCheckResult
-        fields = "__all__"
+        exclude = ["polymorphic_ctype"]
 
 
 class ExtraCheckResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraCheckResult
-        fields = "__all__"
+        exclude = ["polymorphic_ctype"]
 
 
 class CheckResultPolymorphicSerializer(PolymorphicSerializer):
