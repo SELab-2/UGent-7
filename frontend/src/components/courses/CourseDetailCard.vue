@@ -17,37 +17,37 @@ const { getRandomImport } = useGlob(import.meta.glob('@/assets/img/placeholders/
 </script>
 
 <template>
-    <Card class="border-round course-card">
-        <template #header>
-            <img
-                class="w-full h-12rem border-round-top"
-                style="object-fit: cover; margin-bottom: -4px"
-                :alt="course.name ?? ''"
-                :src="getRandomImport()"
-            />
-        </template>
-        <template #title>
-            <h2 class="text-primary m-0 text-xl">{{ course.name }}</h2>
-        </template>
-        <template #subtitle>
-            <span class="text-sm">{{ course.getCourseYear() }}</span>
-        </template>
-        <template #content>
-            {{ course.getExcerpt() }}
-        </template>
-        <template #footer>
-            <slot :course="course" name="footer">
-                <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">
+    <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">
+        <Card class="border-round course-card">
+            <template #header>
+                <img
+                    class="w-full h-12rem border-round-top"
+                    style="object-fit: cover; margin-bottom: -4px"
+                    :alt="course.name ?? ''"
+                    :src="getRandomImport()"
+                />
+            </template>
+            <template #title>
+                <h2 class="text-primary m-0 text-xl">{{ course.name }}</h2>
+            </template>
+            <template #subtitle>
+                <span class="text-sm">{{ course.getCourseYear() }}</span>
+            </template>
+            <template #content>
+                {{ course.getExcerpt() }}
+            </template>
+            <template #footer>
+                <slot :course="course" name="footer">
                     <Button
                         :icon="PrimeIcons.ARROW_RIGHT"
                         :label="t('components.card.open')"
                         icon-pos="right"
                         outlined
                     />
-                </RouterLink>
-            </slot>
-        </template>
-    </Card>
+                </slot>
+            </template>
+        </Card>
+    </RouterLink>
 </template>
 
 <style lang="scss">
