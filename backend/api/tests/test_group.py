@@ -80,15 +80,11 @@ class GroupModelTests(APITestCase):
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        expected_course_url = settings.TESTING_BASE_LINK + reverse(
-            "course-detail", args=[str(course.id)]
-        )
-
         self.assertEqual(content_json["name"], project.name)
         self.assertEqual(content_json["description"], project.description)
         self.assertEqual(content_json["visible"], project.visible)
         self.assertEqual(content_json["archived"], project.archived)
-        self.assertEqual(content_json["course"], expected_course_url)
+        self.assertEqual(content_json["course"]["id"], course.id)
 
     def test_group_students(self):
         """Able to retrieve students details of a group."""
