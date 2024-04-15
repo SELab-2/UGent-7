@@ -3,6 +3,8 @@ name: frontend-linting
 on:
   pull_request:
     branches: [main, development]
+  push:
+    branches: [actions]
   workflow_dispatch:
 
 jobs:

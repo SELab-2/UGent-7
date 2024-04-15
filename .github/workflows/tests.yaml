@@ -3,14 +3,14 @@ name: tests
 on:
   pull_request:
     branches: [main, development]
+  push:
+    branches: [actions]
   workflow_dispatch:
 
 jobs:
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-      - name: Add permission to remove contents of previous action script
-        run: echo ${{ secrets.SUDO }} | sudo -S chown -R $USER:$USER /home/selab2/actions-runner/_work/UGent-7/
       - uses: actions/checkout@v4
       - name: Run tests
-        run: echo ${{ secrets.SUDO }} | sudo -S ./test.sh -c
+        run: ./test.sh -c
