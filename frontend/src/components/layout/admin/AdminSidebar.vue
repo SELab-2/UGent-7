@@ -24,26 +24,6 @@ const items = ref([
             },
         ],
     },
-    {
-        label: 'Profile',
-        items: [
-            {
-                label: 'Settings',
-                icon: 'pi pi-cog',
-                shortcut: '⌘+O',
-            },
-            {
-                label: 'Messages',
-                icon: 'pi pi-inbox',
-                badge: 2,
-            },
-            {
-                label: 'Logout',
-                icon: 'pi pi-sign-out',
-                shortcut: '⌘+Q',
-            },
-        ],
-    },
 ]);
 </script>
 
