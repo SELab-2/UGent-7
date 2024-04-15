@@ -19,11 +19,17 @@ class UserViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAdminUser | IsSameUser]
 
     @action(detail=True, methods=['PATCH'], url_path='admin', permission_classes=[IsAdminUser])
-    def patch_admin(self, request: Request) -> Response:
+    def patch_admin(self, request: Request, **_) -> Response:
         """
         Update the user's admin status with is_staff in request query parameters
         """
         # request.data needs to contain user id in 'user' field
+        if request.data.get("is_staff"):
+            self.get_object().make_admin()
+        else:
+            self.get_object().remove_admin()
+
+        return Response(status=HTTP_200_OK)
 
     @action(detail=False)
     def search(self, request: Request) -> Response:

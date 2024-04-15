@@ -1,8 +1,9 @@
 import { type Ref, ref } from 'vue';
 import { User } from '@/types/users/User.ts';
+import { Response } from '@/types/Response.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { endpoints } from '@/config/endpoints.ts';
-import { create, get, getList, getPaginatedList } from '@/composables/services/helpers.ts';
+import { create, get, patch, getList, getPaginatedList } from '@/composables/services/helpers.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
 interface userState {
@@ -13,12 +14,14 @@ interface userState {
     getUsers: () => Promise<void>;
     searchUsers: (filters: Filter, page: number, pageSize: number) => Promise<void>;
     createUser: (user_data: User) => Promise<void>;
+    toggleAdmin: (id: string, is_staff: boolean) => Promise<void>
 }
 
 export function useUser(): userState {
     const pagination = ref<PaginatorResponse<User> | null>(null);
     const users = ref<User[] | null>(null);
     const user = ref<User | null>(null);
+    const response = ref<Response | null>(null);
 
     async function getUserByID(id: string): Promise<void> {
         const endpoint = endpoints.users.retrieve.replace('{id}', id);
@@ -51,6 +54,17 @@ export function useUser(): userState {
         );
     }
 
+    async function toggleAdmin(id: string, is_staff: boolean): Promise<void> {
+        const endpoint = endpoints.users.admin.replace('{id}', id)
+        await patch(
+            endpoint,
+            {
+                is_staff: is_staff
+            },
+            response
+        );
+    }
+
     return {
         pagination,
         users,
@@ -60,5 +74,6 @@ export function useUser(): userState {
         getUsers,
         searchUsers,
         createUser,
+        toggleAdmin,
     };
 }

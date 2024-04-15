@@ -27,7 +27,7 @@ import {useRoute} from "vue-router";
 /* Composable injections */
 const { t } = useI18n();
 const { query } = useRoute();
-const { pagination, users, getUsers, searchUsers } = useUser();
+const { pagination, users, getUsers, searchUsers, toggleAdmin } = useUser();
 const { createStudent, deleteStudent } = useStudents();
 const { createAssistant, deleteAssistant } = useAssistant();
 const { createTeacher, deleteTeacher } = useTeacher();
@@ -164,7 +164,8 @@ const saveItem = async (): Promise<void> => {
                 await func(editItem.value.id);
             }
         }
-        // update admin status TODO
+        // update admin status
+        await toggleAdmin(editItem.value.id, editItem.value.is_staff)
         // update locally
         value.results.splice(index, 1, { ...editItem.value });
     } else {
