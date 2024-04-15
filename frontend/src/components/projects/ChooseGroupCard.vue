@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Dialog from 'primevue/dialog';
-import { useStudents } from '@/composables/services/students.service.ts';
+import { useStudents } from '@/composables/services/student.service.ts';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { type Group } from '@/types/Group.ts';

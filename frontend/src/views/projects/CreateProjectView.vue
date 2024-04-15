@@ -12,7 +12,7 @@ import InputSwitch from 'primevue/inputswitch';
 import { reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { Project } from '@/types/Projects';
+import { Project } from '@/types/Project';
 import { useProject } from '@/composables/services/project.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
@@ -251,3 +251,4 @@ async function submitProject(): Promise<void> {
 </template>
 
 <style scoped></style>
+@/types/Project

@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { type User } from '@/types/users/User.ts';
 import { Teacher } from '@/types/users/Teacher.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 
 interface TeacherState {
     teachers: Ref<Teacher[] | null>;
     teacher: Ref<Teacher | null>;
     response: Ref<Response | null>;
     getTeacherByID: (id: string, init?: boolean) => Promise<void>;
-    getTeacherByCourse: (courseId: string) => Promise<void>;
+    getTeachersByCourse: (courseId: string) => Promise<void>;
     getTeachers: () => Promise<void>;
     teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>;
     teacherLeaveCourse: (courseId: string, teacherId: string) => Promise<void>;
@@ -37,7 +38,7 @@ export function useTeacher(): TeacherState {
         }
     }
 
-    async function getTeacherByCourse(courseId: string): Promise<void> {
+    async function getTeachersByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
         await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
     }
@@ -57,14 +58,12 @@ export function useTeacher(): TeacherState {
         await deleteIdWithData<Response>(endpoint, { teacherId }, response, Response.fromJSON);
     }
 
-    async function createTeacher(teacherData: Teacher): Promise<void> {
+    async function createTeacher(user: User): Promise<void> {
         const endpoint = endpoints.teachers.index;
         await create<Teacher>(
             endpoint,
             {
-                email: teacherData.email,
-                first_name: teacherData.first_name,
-                last_name: teacherData.last_name,
+                id: user.id,
             },
             teacher,
             Teacher.fromJSON,
@@ -89,7 +88,7 @@ export function useTeacher(): TeacherState {
         response,
 
         getTeacherByID,
-        getTeacherByCourse,
+        getTeachersByCourse,
         getTeachers,
 
         createTeacher,

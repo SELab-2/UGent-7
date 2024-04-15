@@ -26,14 +26,12 @@ export function useAdmin(): AdminState {
         await getList<User>(endpoint, admins, User.fromJSON);
     }
 
-    async function createAdmin(adminData: User): Promise<void> {
+    async function createAdmin(user: User): Promise<void> {
         const endpoint = endpoints.admins.index;
         await create<User>(
             endpoint,
             {
-                email: adminData.email,
-                first_name: adminData.first_name,
-                last_name: adminData.last_name,
+                id: user.id,
             },
             admin,
             User.fromJSON,

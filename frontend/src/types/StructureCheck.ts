@@ -1,5 +1,5 @@
 import { type File_extension } from './FileExtension.ts';
-import { type Project } from './Projects';
+import { type Project } from './Project.ts';
 
 export class StructureCheck {
     constructor(
