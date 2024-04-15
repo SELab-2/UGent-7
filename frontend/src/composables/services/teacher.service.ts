@@ -5,7 +5,6 @@ import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
-import { useCourses } from '@/composables/services/course.service.ts';
 
 interface TeacherState {
     teachers: Ref<Teacher[] | null>;
@@ -26,16 +25,9 @@ export function useTeacher(): TeacherState {
     const teacher = ref<Teacher | null>(null);
     const response = ref<Response | null>(null);
 
-    /* Nested state */
-    const { courses, getCoursesByTeacher } = useCourses();
-
-    async function getTeacherByID(id: string, init: boolean = false): Promise<void> {
+    async function getTeacherByID(id: string): Promise<void> {
         const endpoint = endpoints.teachers.retrieve.replace('{id}', id);
         await get<Teacher>(endpoint, teacher, Teacher.fromJSON);
-
-        if (init) {
-            await initTeacher(teacher.value);
-        }
     }
 
     async function getTeachersByCourse(courseId: string): Promise<void> {
@@ -73,13 +65,6 @@ export function useTeacher(): TeacherState {
     async function deleteTeacher(id: string): Promise<void> {
         const endpoint = endpoints.students.retrieve.replace('{id}', id);
         await deleteId<Teacher>(endpoint, teacher, Teacher.fromJSON);
-    }
-
-    async function initTeacher(teacher: Teacher | null): Promise<void> {
-        if (teacher !== null) {
-            await getCoursesByTeacher(teacher.id);
-            teacher.courses = courses.value ?? [];
-        }
     }
 
     return {

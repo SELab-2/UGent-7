@@ -5,8 +5,11 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from drf_yasg.utils import swagger_auto_schema
+
+from api.models.project import Project
 from api.permissions.student_permissions import StudentPermission
 from api.models.student import Student
+from api.serializers.project_serializer import ProjectSerializer
 from api.serializers.student_serializer import StudentSerializer, CreateStudentSerializer, StudentIDSerializer
 from api.serializers.course_serializer import CourseSerializer
 from api.serializers.group_serializer import GroupSerializer
@@ -65,4 +68,17 @@ class StudentViewSet(viewsets.ModelViewSet):
         serializer = GroupSerializer(
             groups, many=True, context={"request": request}
         )
+        return Response(serializer.data)
+
+    @action(detail=True)
+    def projects(self, request: Request, **_) -> Response:
+        """Returns a list of projects for the given student"""
+        student = self.get_object()
+        projects = Project.objects.filter(course__in=student.courses.all()).select_related('course')
+
+        # Serialize the project objects
+        serializer = ProjectSerializer(
+            projects, many=True, context={"request": request}
+        )
+
         return Response(serializer.data)
