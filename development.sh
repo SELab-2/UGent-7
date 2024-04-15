@@ -3,7 +3,7 @@
 backend=false
 frontend=false
 build=false
-data=""
+data="empty"
 
 while getopts ":bfcd:" opt; do
   case ${opt} in
@@ -18,10 +18,13 @@ while getopts ":bfcd:" opt; do
       ;;
     d )
       data="$OPTARG"
-      if [[ ! $data =~ ^("small"|"medium"|"large")$ ]]; then
-        echo "Invalid size provided. Size must be 'small', 'medium', or 'large'."
+      if [[ ! $data =~ ^(""|"small"|"medium"|"large")$ ]]; then
+        echo "Invalid size provided. Size must be '', 'empty''small', 'medium', or 'large'."
         exit 1
       fi
+      ;;
+    : )
+      data=""
       ;;
     \? )
       echo "Usage: $0 [-b] [-f] [-c] [-d <size>] "
@@ -34,6 +37,7 @@ echo "Checking environment file..."
 
 if [ "$build" = true ]; then
     rm .env > /dev/null 2>&1
+    rm backend/db.sqlite3 > /dev/null 2>&1
 fi
 
 if ! [ -f .env ]; then
@@ -55,8 +59,11 @@ else
     echo "SSL certificates already exist, skipping generation."
 fi
 
-if [ "$data" != "" ]; then
+if [ "$data" != "empty" ]; then
     sed -i "s/^FIXTURE=.*/FIXTURE=$data/" .env
+    if [ "$data" != "" ]; then
+        rm -f backend/db.sqlite3 > /dev/null 2>&1
+    fi
 fi
 
 if [ "$build" = true ]; then
