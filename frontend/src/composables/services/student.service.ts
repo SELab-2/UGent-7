@@ -3,7 +3,7 @@ import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 
 interface StudentsState {
     students: Ref<Student[] | null>;
@@ -80,9 +80,8 @@ export function useStudents(): StudentsState {
         await create<Student>(
             endpoint,
             {
-                email: studentData.email,
-                first_name: studentData.first_name,
-                last_name: studentData.last_name,
+                id: studentData.id,
+                studentId: studentData.studentId,
             },
             student,
             Student.fromJSON,

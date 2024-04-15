@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useRoute } from 'vue-router';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 import FileUpload from 'primevue/fileupload';
 import { PrimeIcons } from 'primevue/api';
 

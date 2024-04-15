@@ -13,7 +13,7 @@ const props = defineProps<{ user: User; course: Course }>();
 
 /* Composable injections */
 const { addSuccessMessage, addErrorMessage } = useMessagesStore();
-const { assistants, assistantJoinCourse, assistantLeaveCourse, getAssistantByCourse } = useAssistant();
+const { assistants, assistantJoinCourse, assistantLeaveCourse, getAssistantsByCourse } = useAssistant();
 const { t } = useI18n();
 
 /* State */
@@ -69,7 +69,7 @@ async function leaveCourse(): Promise<void> {
 
 /* Refreshes the course data by updating the assistants */
 async function refreshCourse(): Promise<void> {
-    await getAssistantByCourse(courseValue.value.id);
+    await getAssistantsByCourse(courseValue.value.id);
     courseValue.value.assistants = assistants.value ?? [];
 }
 </script>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useStudents } from '@/composables/services/students.service.ts';
+import { useStudents } from '@/composables/services/student.service.ts';
 import { onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { type Group } from '@/types/Group.ts';

@@ -7,7 +7,7 @@ import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { useConfirm } from 'primevue/useconfirm';
-import { useStudents } from '@/composables/services/students.service';
+import { useStudents } from '@/composables/services/student.service';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';

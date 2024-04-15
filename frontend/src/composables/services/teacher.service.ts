@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { type User } from '@/types/users/User.ts';
 import { Teacher } from '@/types/users/Teacher.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData, getPaginatedList } from '@/composables/services/helpers.ts';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
@@ -14,7 +15,7 @@ interface TeacherState {
     response: Ref<Response | null>;
     teacherPagination: Ref<PaginatorResponse<Teacher> | null>;
     getTeacherByID: (id: string, init?: boolean) => Promise<void>;
-    getTeacherByCourse: (courseId: string) => Promise<void>;
+    getTeachersByCourse: (courseId: string) => Promise<void>;
     getTeachers: () => Promise<void>;
     searchTeachers: (filters: Filter, page: number, pageSize: number) => Promise<void>;
     teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>;
@@ -42,7 +43,7 @@ export function useTeacher(): TeacherState {
         }
     }
 
-    async function getTeacherByCourse(courseId: string): Promise<void> {
+    async function getTeachersByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
         await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
     }
@@ -67,14 +68,12 @@ export function useTeacher(): TeacherState {
         await deleteIdWithData<Response>(endpoint, { teacher: teacherId }, response, Response.fromJSON);
     }
 
-    async function createTeacher(teacherData: Teacher): Promise<void> {
+    async function createTeacher(user: User): Promise<void> {
         const endpoint = endpoints.teachers.index;
         await create<Teacher>(
             endpoint,
             {
-                email: teacherData.email,
-                first_name: teacherData.first_name,
-                last_name: teacherData.last_name,
+                id: user.id,
             },
             teacher,
             Teacher.fromJSON,
@@ -100,7 +99,7 @@ export function useTeacher(): TeacherState {
         teacherPagination,
 
         getTeacherByID,
-        getTeacherByCourse,
+        getTeachersByCourse,
         getTeachers,
         searchTeachers,
 

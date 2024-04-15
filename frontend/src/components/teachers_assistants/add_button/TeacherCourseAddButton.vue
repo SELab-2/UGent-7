@@ -5,7 +5,7 @@ import { type User } from '@/types/users/User.ts';
 import { type Teacher } from '@/types/users/Teacher';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { useI18n } from 'vue-i18n';
-import { useTeacher } from '@/composables/services/teachers.service';
+import { useTeacher } from '@/composables/services/teacher.service';
 import { ref } from 'vue';
 
 /* Props */
@@ -13,7 +13,7 @@ const props = defineProps<{ user: User; course: Course }>();
 
 /* Composable injections */
 const { addSuccessMessage, addErrorMessage } = useMessagesStore();
-const { teachers, teacherJoinCourse, teacherLeaveCourse, getTeacherByCourse } = useTeacher();
+const { teachers, teacherJoinCourse, teacherLeaveCourse, getTeachersByCourse } = useTeacher();
 const { t } = useI18n();
 
 /* State */
@@ -69,7 +69,7 @@ async function leaveCourse(): Promise<void> {
 
 /* Refreshes the course data by updating the teachers */
 async function refreshCourse(): Promise<void> {
-    await getTeacherByCourse(props.course.id);
+    await getTeachersByCourse(props.course.id);
     courseValue.value.teachers = teachers.value ?? [];
 }
 </script>

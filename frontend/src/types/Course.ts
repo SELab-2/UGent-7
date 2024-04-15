@@ -1,5 +1,5 @@
 import { type Assistant } from './users/Assistant.ts';
-import { type Project } from './Projects';
+import { type Project } from './Project.ts';
 import { type Student } from './users/Student.ts';
 import { type Teacher } from './users/Teacher.ts';
 import { Faculty } from '@/types/Faculty.ts';

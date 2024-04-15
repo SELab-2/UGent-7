@@ -1,9 +1,10 @@
 import { Assistant } from '@/types/users/Assistant.ts';
+import { type User } from '@/types/users/User.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData, getPaginatedList } from '@/composables/services/helpers.ts';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
@@ -13,7 +14,7 @@ interface AssistantState {
     response: Ref<Response | null>;
     assistantPagination: Ref<PaginatorResponse<Assistant> | null>;
     getAssistantByID: (id: string, init?: boolean) => Promise<void>;
-    getAssistantByCourse: (courseId: string) => Promise<void>;
+    getAssistantsByCourse: (courseId: string) => Promise<void>;
     getAssistants: () => Promise<void>;
     searchAssistants: (filters: Filter, page: number, pageSize: number) => Promise<void>;
     assistantJoinCourse: (courseId: string, assistantId: string) => Promise<void>;
@@ -41,7 +42,7 @@ export function useAssistant(): AssistantState {
         }
     }
 
-    async function getAssistantByCourse(courseId: string): Promise<void> {
+    async function getAssistantsByCourse(courseId: string): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
         await getList<Assistant>(endpoint, assistants, Assistant.fromJSON);
     }
@@ -66,14 +67,12 @@ export function useAssistant(): AssistantState {
         await deleteIdWithData<Response>(endpoint, { assistant: assistantId }, response, Response.fromJSON);
     }
 
-    async function createAssistant(assistantData: Assistant): Promise<void> {
+    async function createAssistant(user: User): Promise<void> {
         const endpoint = endpoints.assistants.index;
         await create<Assistant>(
             endpoint,
             {
-                email: assistantData.email,
-                first_name: assistantData.first_name,
-                last_name: assistantData.last_name,
+                id: user.id,
             },
             assistant,
             Assistant.fromJSON,
@@ -99,7 +98,7 @@ export function useAssistant(): AssistantState {
         assistantPagination,
 
         getAssistantByID,
-        getAssistantByCourse,
+        getAssistantsByCourse,
         getAssistants,
         searchAssistants,
 

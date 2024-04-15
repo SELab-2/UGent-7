@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { Course } from '@/types/Course.ts';
 
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 
 const {
     pagination,

@@ -13,7 +13,7 @@ import { useI18n } from 'vue-i18n';
 import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
-import { useCourses } from '@/composables/services/courses.service';
+import { useCourses } from '@/composables/services/course.service';
 import { ref } from 'vue';
 import TeacherAssistantUpdateButton from '@/components/teachers_assistants/TeacherAssistantUpdateButton.vue';
 

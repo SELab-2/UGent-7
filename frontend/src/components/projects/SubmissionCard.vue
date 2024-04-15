@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* Component props */
-import { type Project } from '@/types/Projects.ts';
+import { type Project } from '@/types/Project.ts';
 import { PrimeIcons } from 'primevue/api';
 import Card from 'primevue/card';
 import { useI18n } from 'vue-i18n';
@@ -52,3 +52,4 @@ const formattedDeadline = computed(() => {
 </template>
 
 <style scoped lang="scss"></style>
+@/types/Project

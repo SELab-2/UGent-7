@@ -10,7 +10,7 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
-import { type Project } from '@/types/Projects.ts';
+import { type Project } from '@/types/Project.ts';
 import { type RoleUser } from '@/types/users/Generics.ts';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -279,3 +279,4 @@ watch(selectedDate, (date) => {
     border-radius: 50%;
 }
 </style>
+@/types/Project

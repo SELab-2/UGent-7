@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
-import { useTeacher } from '@/composables/services/teachers.service.ts';
+import { useTeacher } from '@/composables/services/teacher.service.ts';
 
 const {
     teachers,
     teacher,
 
     getTeacherByID,
-    getTeacherByCourse,
+    getTeachersByCourse,
     getTeachers,
 
     createTeacher,
@@ -74,7 +74,7 @@ describe('teachers', (): void => {
     it('gets teacher data by course', async () => {
         resetService();
 
-        await getTeacherByCourse('1');
+        await getTeachersByCourse('1');
         expect(teachers).not.toBeNull();
         expect(Array.isArray(teachers.value)).toBe(true);
         expect(teachers.value?.length).toBe(2);

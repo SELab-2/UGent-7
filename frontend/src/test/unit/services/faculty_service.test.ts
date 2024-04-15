@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
-import { useFaculty } from '@/composables/services/faculties.service.ts';
+import { useFaculty } from '@/composables/services/faculty.service.ts';
 import { Faculty } from '@/types/Faculty';
 
 const {

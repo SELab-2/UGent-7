@@ -1,8 +1,8 @@
-import { type Course } from './Course';
+import { type Course } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
-import { type Group } from './Group';
+import { type Group } from './Group.ts';
 import { type StructureCheck } from './StructureCheck.ts';
-import { type Submission } from './Submission';
+import { type Submission } from './Submission.ts';
 
 export class Project {
     constructor(

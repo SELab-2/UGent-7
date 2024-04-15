@@ -6,7 +6,7 @@ import ProjectList from '@/components/projects/ProjectList.vue';
 import { type Student } from '@/types/users/Student.ts';
 import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
 import { getAcademicYear, getAcademicYears } from '@/types/Course.ts';
 
 /* Props */
