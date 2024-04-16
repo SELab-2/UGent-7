@@ -99,8 +99,6 @@ class GroupViewSet(CreateModelMixin,
     @submissions.mapping.put
     @swagger_auto_schema(request_body=SubmissionAddSerializer)
     def _add_submission(self, request: Request, **_):
-        print(request.data)
-        print("helllooooooo")
         """Add a submission to the group"""
         group: Group = self.get_object()
 
@@ -113,5 +111,6 @@ class GroupViewSet(CreateModelMixin,
             serializer.save(group=group)
 
         return Response({
-            "message": gettext("group.success.submissions.add")
+            "message": gettext("group.success.submissions.add"),
+            "submission": serializer.data
         })

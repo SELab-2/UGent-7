@@ -2,7 +2,7 @@ import { Course } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';
 import { type StructureCheck } from './StructureCheck.ts';
-import { type Submission } from './Submission.ts';
+import { type Submission } from './submission/Submission.ts';
 
 export class Project {
     constructor(

@@ -34,7 +34,6 @@ const onUpload = (callback: () => void): void => {
         createSubmission(files.value as File[], group.value.id);
         files.value = [];
         callback();
-
     }
 };
 

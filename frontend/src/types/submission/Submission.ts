@@ -1,5 +1,5 @@
-import { type ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
-import { type StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
+import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 
 export class Submission {
     constructor(
@@ -8,7 +8,8 @@ export class Submission {
         public submission_time: Date,
         public files: File[] = [],
         public extraCheckResults: ExtraCheckResult[] = [],
-        public structureCheckResult: StructureCheckResult[] = [],
+        public structureCheckResults: StructureCheckResult[] = [],
+        public is_valid: boolean,
     ) {}
 
     /**
@@ -16,12 +17,33 @@ export class Submission {
      *
      * @param submission
      */
-    static fromJSON(submission: Submission): Submission {
+    static fromJSON(submission: ResponseSubmission): Submission {
+        const extraCheckResults = submission.results
+            .filter((result: any) => result.resourcetype === 'ExtraCheckResult')
+            .map((result: ExtraCheckResult) => ExtraCheckResult.fromJSON(result));
+
+        const structureCheckResult = submission.results
+            .filter((result: any) => result.resourcetype === 'StructureCheckResult')
+            .map((result: StructureCheckResult) => StructureCheckResult.fromJSON(result));
         return new Submission(
             submission.id,
             submission.submission_number,
             new Date(submission.submission_time),
             submission.files,
+            extraCheckResults,
+            structureCheckResult,
+            submission.is_valid,
         );
     }
+}
+
+class ResponseSubmission {
+    constructor(
+        public id: string,
+        public submission_number: number,
+        public submission_time: Date,
+        public files: File[] = [],
+        public results: any[],
+        public is_valid: boolean,
+    ) {}
 }

@@ -1,7 +1,7 @@
 import { Submission } from '@/types/submission/Submission.ts';
-import {type Ref, ref, UnwrapRef} from 'vue';
+import { type Ref, ref, type UnwrapRef } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId } from '@/composables/services/helpers.ts';
+import { get, getList, deleteId, create } from '@/composables/services/helpers.ts';
 
 interface SubmissionState {
     submissions: Ref<Submission[] | null>;
@@ -33,17 +33,8 @@ export function useSubmission(): SubmissionState {
     }
 
     async function createSubmission(uploadedFiles: File[], groupId: string): Promise<void> {
-        console.log(uploadedFiles);
         const endpoint = endpoints.submissions.byGroup.replace('{groupId}', groupId);
-        await create<Submission>(
-            endpoint,
-            {
-                files: uploadedFiles,
-            },
-            submission,
-            Submission.fromJSON,
-            'multipart/form-data',
-        );
+        await create(endpoint, uploadedFiles, submission, Submission.fromJSON, 'multipart/form-data');
     }
 
     async function deleteSubmission(id: string): Promise<void> {

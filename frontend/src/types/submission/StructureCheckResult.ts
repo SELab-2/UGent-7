@@ -1,11 +1,11 @@
 export class StructureCheckResult {
     constructor(
         public id: string,
-        public result: any,
+        public result: string,
         public error_message: any,
-        public is_valid: boolean,
-        public submission_id: number,
-        public structure_check_id: number,
+        public submission: number,
+        public structure_check: number,
+        public resourcetype: string,
     ) {}
 
     static fromJSON(structureCheckResult: StructureCheckResult): StructureCheckResult {
@@ -13,9 +13,9 @@ export class StructureCheckResult {
             structureCheckResult.id,
             structureCheckResult.result,
             structureCheckResult.error_message,
-            structureCheckResult.is_valid,
-            structureCheckResult.submission_id,
-            structureCheckResult.structure_check_id,
+            structureCheckResult.submission,
+            structureCheckResult.structure_check,
+            structureCheckResult.resourcetype,
         );
     }
 }

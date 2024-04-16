@@ -10,7 +10,7 @@ import { Project } from '@/types/Project';
 import { Response } from '@/types/Response';
 import { StructureCheck } from '@/types/StructureCheck';
 import { SubmissionStatus } from '@/types/SubmisionStatus';
-import { Submission } from '@/types/Submission';
+import { Submission } from '@/types/submission/Submission.ts';
 
 export function createStudent(studentData: any): Student {
     return new Student(
