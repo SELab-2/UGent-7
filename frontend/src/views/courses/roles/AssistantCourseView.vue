@@ -5,6 +5,8 @@ import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssist
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
+import { watch } from 'vue';
+import { useProject } from '@/composables/services/project.service.ts';
 
 /* Props */
 const props = defineProps<{
@@ -13,6 +15,11 @@ const props = defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
+const { projects, getProjectsByCourse } = useProject();
+
+watch(() => props.course, async () => {
+    await getProjectsByCourse(props.course.id);
+}, { immediate: true });
 </script>
 
 <template>
@@ -34,7 +41,7 @@ const { t } = useI18n();
         </div>
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="[course]" />
+    <ProjectList :projects="projects" />
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
         <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>

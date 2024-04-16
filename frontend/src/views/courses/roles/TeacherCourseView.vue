@@ -2,6 +2,8 @@
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
+import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
+import TeacherAssistantUpdateButton from '@/components/teachers_assistants/TeacherAssistantUpdateButton.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import InputSwitch from 'primevue/inputswitch';
@@ -11,10 +13,9 @@ import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
-import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { useCourses } from '@/composables/services/course.service';
-import { ref } from 'vue';
-import TeacherAssistantUpdateButton from '@/components/teachers_assistants/TeacherAssistantUpdateButton.vue';
+import { useProject } from '@/composables/services/project.service.ts';
+import { ref, watch } from 'vue';
 
 /* Props */
 const props = defineProps<{
@@ -22,16 +23,17 @@ const props = defineProps<{
 }>();
 
 /* Composable injections */
+const confirm = useConfirm();
 const { t } = useI18n();
 const { cloneCourse } = useCourses();
-const confirm = useConfirm();
+const { projects, getProjectsByCourse } = useProject();
 
 /* State for the confirm dialog to clone a course */
 const cloneAssistants = ref<boolean>(false);
 const cloneTeachers = ref<boolean>(false);
 
 /* Methods */
-const handleClone = async (): Promise<void> => {
+async function handleClone(): Promise<void> {
     // Show a confirmation dialog before cloning the course
     confirm.require({
         message: t('confirmations.clone_course'),
@@ -41,7 +43,11 @@ const handleClone = async (): Promise<void> => {
         },
         reject: () => {},
     });
-};
+}
+
+watch(() => props.course, async () => {
+    await getProjectsByCourse(props.course.id);
+}, { immediate: true });
 </script>
 
 <template>
@@ -110,7 +116,7 @@ const handleClone = async (): Promise<void> => {
         </div>
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="[course]" />
+    <ProjectList :projects="projects" />
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">

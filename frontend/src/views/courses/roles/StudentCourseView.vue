@@ -11,6 +11,8 @@ import { useStudents } from '@/composables/services/student.service';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
+import { useProject } from '@/composables/services/project.service.ts';
+import { watch } from 'vue';
 
 /* Props */
 const props = defineProps<{
@@ -18,34 +20,39 @@ const props = defineProps<{
 }>();
 
 /* Composable injections */
-const { t } = useI18n();
 const confirm = useConfirm();
-const { studentLeaveCourse } = useStudents();
 const { user } = storeToRefs(useAuthStore());
+const { t } = useI18n();
+const { studentLeaveCourse } = useStudents();
 const { refreshUser } = useAuthStore();
+const { projects, getProjectsByCourse } = useProject();
 const { push } = useRouter();
 
 /* Methods */
-const leaveCourse = async (): Promise<void> => {
+async function leaveCourse (): Promise<void> {
     // Show a confirmation dialog before leaving the course, to prevent accidental clicks
     confirm.require({
         message: t('confirmations.leave_course'),
         header: t('views.courses.leave'),
-        accept: () => {
+        accept: async () => {
             if (user.value !== null) {
                 // Leave the course
-                studentLeaveCourse(props.course.id, user.value.id);
+                await studentLeaveCourse(props.course.id, user.value.id);
 
                 // Refresh the user so the course is removed from the user's courses
-                refreshUser();
+                await refreshUser();
 
                 // Redirect to the dashboard
-                push({ name: 'dashboard' });
+                await push({ name: 'dashboard' });
             }
         },
         reject: () => {},
     });
-};
+}
+
+watch(() => props.course, async () => {
+    await getProjectsByCourse(props.course.id);
+}, { immediate: true });
 </script>
 
 <template>
@@ -62,7 +69,7 @@ const leaveCourse = async (): Promise<void> => {
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="[course]" />
+    <ProjectList :projects="projects" />
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
