@@ -29,6 +29,7 @@ describe('course type', () => {
         expect(course).toBeInstanceOf(Course);
         expect(course.id).toBe(courseData.id);
         expect(course.name).toBe(courseData.name);
+        expect(course.excerpt).toBe(courseData.excerpt);
         expect(course.description).toBe(courseData.description);
         expect(course.academic_startyear).toBe(courseData.academic_startyear);
         expect(course.parent_course).toBe(courseData.parent_course);

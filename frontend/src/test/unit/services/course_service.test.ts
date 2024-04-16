@@ -153,6 +153,7 @@ describe('course', (): void => {
         const exampleCourse = new Course(
             'course_id', // id
             'course_name', // name
+            'course_excerpt', // excerpt
             'course_description', // description
             2024, // acedemic_startyear,
             null, // parent_course
@@ -179,6 +180,7 @@ describe('course', (): void => {
         expect(courses.value?.[prevLength]?.id).toBe('course_id');
         expect(courses.value?.[prevLength]?.name).toBe('course_name');
         expect(courses.value?.[prevLength]?.description).toBe('course_description');
+        expect(courses.value?.[prevLength]?.excerpt).toBe('course_excerpt');
         expect(courses.value?.[prevLength]?.academic_startyear).toBe(2024);
     });
 });
