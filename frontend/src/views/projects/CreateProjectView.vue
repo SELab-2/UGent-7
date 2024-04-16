@@ -10,11 +10,12 @@ import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
 import Tree from 'primevue/tree';
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Project } from '@/types/Project';
 import { useProject } from '@/composables/services/project.service';
+import { useStructureCheck } from '@/composables/services/structure_check.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 
@@ -25,6 +26,8 @@ const { params } = useRoute();
 
 /* Service injection */
 const { createProject } = useProject();
+const { structureChecks, getStructureCheckByProject} = useStructureCheck();
+
 
 /* Form content */
 const form = reactive({
@@ -107,33 +110,43 @@ interface TreeNode {
   // Additional properties as needed
 }
 
-// Define tree data
-const nodes: TreeNode[] = [
-  {
-    key: '1',
-    label: 'Node 1',
-    children: [
-      {
-        key: '1-1',
-        label: 'Child Node 1',
-      },
-      {
-        key: '1-2',
-        label: 'Child Node 2',
-      },
-    ],
-  },
-  {
-    key: '2',
-    label: 'Node 2',
-    children: [
+// Define tree data as ref
+const nodes = ref<TreeNode[]>([{
+            key: '1',
+            label: t('structure_checks.empty'),
+        }]);
+
+// Function to load structure checks into nodes
+async function loadStructureChecks() {
+    await getStructureCheckByProject("9")
+    console.log(structureChecks)
+
+    // Fetch structure checks data from API or elsewhere
+    // For now, let's assume some dummy data
+    const structureChecksData = [
         {
-            key: '1-2',
-            label: 'Child Node 2',
+            key: '1',
+            label: 'Structure Check 1',
         },
-    ]
-  },
-];
+        {
+            key: '2',
+            label: 'Structure Check 2',
+            children: [
+                {
+                    key: '2-1',
+                    label: 'Child Structure Check 1',
+                },
+                {
+                    key: '2-2',
+                    label: 'Child Structure Check 2',
+                },
+            ],
+        },
+    ];
+
+    // Assign the fetched data to the nodes
+    nodes.value = structureChecksData;
+}
 </script>
 
 <template>
@@ -284,6 +297,14 @@ const nodes: TreeNode[] = [
                     <!-- tree view for structure checks -->
                     <div>
                         <Tree :value="nodes" class="w-full md:w-30rem"></Tree>
+                        <Button
+                            label="Load Structure Checks"
+                            type="button"
+                            icon="pi pi-refresh"
+                            iconPos="right"
+                            @click="loadStructureChecks"
+                            rounded
+                        />
                     </div>
                 </div>
             </div>
