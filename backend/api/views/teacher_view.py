@@ -8,7 +8,10 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
+
+from api.models.project import Project
 from api.models.teacher import Teacher
+from api.serializers.project_serializer import ProjectSerializer
 from api.serializers.teacher_serializer import TeacherSerializer, TeacherIDSerializer
 from api.serializers.course_serializer import CourseSerializer
 from api.permissions.teacher_permissions import TeacherPermission
@@ -77,6 +80,19 @@ class TeacherViewSet(ModelViewSet):
         # Serialize the course objects
         serializer = CourseSerializer(
             courses, many=True, context={"request": request}
+        )
+
+        return Response(serializer.data)
+
+    @action(detail=True)
+    def projects(self, request: Request, **_) -> Response:
+        """Returns a list of projects for the given teacher"""
+        teacher = self.get_object()
+        projects = Project.objects.filter(course__in=teacher.courses.all()).select_related('course')
+
+        # Serialize the project objects
+        serializer = ProjectSerializer(
+            projects, many=True, context={"request": request}
         )
 
         return Response(serializer.data)

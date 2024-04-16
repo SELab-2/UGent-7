@@ -13,10 +13,10 @@ export const endpoints = {
         index: '/api/courses/',
         search: '/api/courses/search/',
         retrieve: '/api/courses/{id}/',
+        clone: '/api/courses/{courseId}/clone/',
         byStudent: '/api/students/{studentId}/courses/',
         byTeacher: '/api/teachers/{teacherId}/courses/',
         byAssistant: '/api/assistants/{assistantId}/courses/',
-        clone: '/api/courses/{courseId}/clone/',
     },
     students: {
         index: '/api/students/',
@@ -52,6 +52,9 @@ export const endpoints = {
     projects: {
         retrieve: '/api/projects/{id}',
         byCourse: '/api/courses/{courseId}/projects/',
+        byStudent: '/api/students/{studentId}/projects/',
+        byTeacher: '/api/teachers/{teacherId}/projects/',
+        byAssistant: '/api/assistants/{assistantId}/projects/',
     },
     submissions: {
         retrieve: '/api/submissions/{id}',
