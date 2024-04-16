@@ -1,1 +1,369 @@
-[{"model": "api.course", "pk": 1, "fields": {"name": "Reduced didactic methodology", "academic_startyear": 2024, "description": "This great generation mouth sure case memory.", "faculty": "Economie_Bedrijfskunde", "parent_course": null}}, {"model": "api.course", "pk": 2, "fields": {"name": "Ameliorated intermediate analyzer", "academic_startyear": 2023, "description": "Of together finish possible. Art rule court stage watch campaign. Professor you over throw yet site.", "faculty": "Farmaceutische_Wetenschappen", "parent_course": null}}, {"model": "api.course", "pk": 3, "fields": {"name": "Synergized holistic concept", "academic_startyear": 2023, "description": "Term hand everybody he. Thousand peace heart financial history into successful.", "faculty": "Psychologie_PedagogischeWetenschappen", "parent_course": null}}, {"model": "api.project", "pk": 1, "fields": {"name": "Enterprise-wide maximized interface", "description": "Property nation discussion peace eight economic break conference. May now almost.", "visible": false, "archived": false, "locked_groups": true, "start_date": "2024-05-03T11:09:05.408Z", "deadline": "2024-04-21T11:09:05.408Z", "max_score": 97, "score_visible": true, "group_size": 13, "course": 2}}, {"model": "api.project", "pk": 2, "fields": {"name": "Universal well-modulated instruction set", "description": "Lot discover watch single happen again energy defense. Either wait letter.", "visible": true, "archived": false, "locked_groups": true, "start_date": "2024-03-11T11:09:05.408Z", "deadline": "2024-05-31T11:09:05.408Z", "max_score": 43, "score_visible": true, "group_size": 2, "course": 1}}, {"model": "api.project", "pk": 3, "fields": {"name": "Function-based value-added challenge", "description": "Dog include to school interview any. Issue newspaper general quickly organization.", "visible": true, "archived": false, "locked_groups": false, "start_date": "2024-02-16T11:09:05.408Z", "deadline": "2024-05-22T11:09:05.408Z", "max_score": 10, "score_visible": false, "group_size": 11, "course": 2}}, {"model": "api.project", "pk": 4, "fields": {"name": "Progressive global throughput", "description": "Before project theory down money area maybe. Drug raise of purpose guy shoulder. Goal include just fill just ten.", "visible": true, "archived": false, "locked_groups": false, "start_date": "2024-06-29T11:09:05.408Z", "deadline": "2024-07-14T11:09:05.408Z", "max_score": 90, "score_visible": false, "group_size": 7, "course": 2}}, {"model": "api.student", "pk": "0", "fields": {"is_active": true, "student_id": "0", "courses": [1]}}, {"model": "api.student", "pk": "1", "fields": {"is_active": true, "student_id": "1", "courses": [1]}}, {"model": "api.student", "pk": "2", "fields": {"is_active": true, "student_id": "2", "courses": [1]}}, {"model": "api.student", "pk": "3", "fields": {"is_active": true, "student_id": "3", "courses": [1]}}, {"model": "api.student", "pk": "4", "fields": {"is_active": true, "student_id": "4", "courses": [1]}}, {"model": "api.student", "pk": "5", "fields": {"is_active": true, "student_id": "5", "courses": [1]}}, {"model": "api.student", "pk": "6", "fields": {"is_active": true, "student_id": "6", "courses": [1]}}, {"model": "api.student", "pk": "7", "fields": {"is_active": true, "student_id": "7", "courses": [1]}}, {"model": "api.student", "pk": "8", "fields": {"is_active": true, "student_id": "8", "courses": [1]}}, {"model": "api.student", "pk": "9", "fields": {"is_active": true, "student_id": "9", "courses": [1]}}, {"model": "api.group", "pk": 1, "fields": {"project": 4, "score": 29.0, "students": []}}, {"model": "api.group", "pk": 2, "fields": {"project": 1, "score": 96.0, "students": []}}, {"model": "api.group", "pk": 3, "fields": {"project": 2, "score": 0.0, "students": ["0", "2", "3", "5", "8", "9"]}}, {"model": "api.group", "pk": 4, "fields": {"project": 1, "score": 82.0, "students": ["4", "6", "7"]}}, {"model": "api.group", "pk": 5, "fields": {"project": 3, "score": 5.0, "students": []}}, {"model": "api.group", "pk": 6, "fields": {"project": 1, "score": 64.0, "students": ["1"]}}, {"model": "api.group", "pk": 7, "fields": {"project": 2, "score": 25.0, "students": []}}, {"model": "api.assistant", "pk": "10", "fields": {"is_active": true, "courses": [1]}}, {"model": "api.assistant", "pk": "11", "fields": {"is_active": true, "courses": [1]}}, {"model": "api.assistant", "pk": "12", "fields": {"is_active": true, "courses": [2]}}, {"model": "api.assistant", "pk": "13", "fields": {"is_active": true, "courses": [1]}}, {"model": "api.assistant", "pk": "14", "fields": {"is_active": true, "courses": [2]}}, {"model": "api.teacher", "pk": "15", "fields": {"is_active": true, "courses": [2]}}, {"model": "api.teacher", "pk": "16", "fields": {"is_active": true, "courses": [1]}}, {"model": "api.teacher", "pk": "17", "fields": {"is_active": true, "courses": [1]}}]
+[
+    {
+        "model": "api.course",
+        "pk": 1,
+        "fields": {
+            "name": "Reduced didactic methodology",
+            "academic_startyear": 2024,
+            "description": "This great generation mouth sure case memory.",
+            "faculty": "Economie_Bedrijfskunde",
+            "parent_course": null
+        }
+    },
+    {
+        "model": "api.course",
+        "pk": 2,
+        "fields": {
+            "name": "Ameliorated intermediate analyzer",
+            "academic_startyear": 2023,
+            "description": "Of together finish possible. Art rule court stage watch campaign. Professor you over throw yet site.",
+            "faculty": "Farmaceutische_Wetenschappen",
+            "parent_course": null
+        }
+    },
+    {
+        "model": "api.course",
+        "pk": 3,
+        "fields": {
+            "name": "Synergized holistic concept",
+            "academic_startyear": 2023,
+            "description": "Term hand everybody he. Thousand peace heart financial history into successful.",
+            "faculty": "Psychologie_PedagogischeWetenschappen",
+            "parent_course": null
+        }
+    },
+    {
+        "model": "api.project",
+        "pk": 1,
+        "fields": {
+            "name": "Enterprise-wide maximized interface",
+            "description": "Property nation discussion peace eight economic break conference. May now almost.",
+            "visible": false,
+            "archived": false,
+            "locked_groups": true,
+            "start_date": "2024-05-03T11:09:05.408Z",
+            "deadline": "2024-04-21T11:09:05.408Z",
+            "max_score": 97,
+            "score_visible": true,
+            "group_size": 13,
+            "course": 2
+        }
+    },
+    {
+        "model": "api.project",
+        "pk": 2,
+        "fields": {
+            "name": "Universal well-modulated instruction set",
+            "description": "Lot discover watch single happen again energy defense. Either wait letter.",
+            "visible": true,
+            "archived": false,
+            "locked_groups": true,
+            "start_date": "2024-03-11T11:09:05.408Z",
+            "deadline": "2024-05-31T11:09:05.408Z",
+            "max_score": 43,
+            "score_visible": true,
+            "group_size": 2,
+            "course": 1
+        }
+    },
+    {
+        "model": "api.project",
+        "pk": 3,
+        "fields": {
+            "name": "Function-based value-added challenge",
+            "description": "Dog include to school interview any. Issue newspaper general quickly organization.",
+            "visible": true,
+            "archived": false,
+            "locked_groups": false,
+            "start_date": "2024-02-16T11:09:05.408Z",
+            "deadline": "2024-05-22T11:09:05.408Z",
+            "max_score": 10,
+            "score_visible": false,
+            "group_size": 11,
+            "course": 2
+        }
+    },
+    {
+        "model": "api.project",
+        "pk": 4,
+        "fields": {
+            "name": "Progressive global throughput",
+            "description": "Before project theory down money area maybe. Drug raise of purpose guy shoulder. Goal include just fill just ten.",
+            "visible": true,
+            "archived": false,
+            "locked_groups": false,
+            "start_date": "2024-06-29T11:09:05.408Z",
+            "deadline": "2024-07-14T11:09:05.408Z",
+            "max_score": 90,
+            "score_visible": false,
+            "group_size": 7,
+            "course": 2
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "0",
+        "fields": {
+            "is_active": true,
+            "student_id": "0",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "1",
+        "fields": {
+            "is_active": true,
+            "student_id": "1",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "2",
+        "fields": {
+            "is_active": true,
+            "student_id": "2",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "3",
+        "fields": {
+            "is_active": true,
+            "student_id": "3",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "4",
+        "fields": {
+            "is_active": true,
+            "student_id": "4",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "5",
+        "fields": {
+            "is_active": true,
+            "student_id": "5",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "6",
+        "fields": {
+            "is_active": true,
+            "student_id": "6",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "7",
+        "fields": {
+            "is_active": true,
+            "student_id": "7",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "8",
+        "fields": {
+            "is_active": true,
+            "student_id": "8",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.student",
+        "pk": "9",
+        "fields": {
+            "is_active": true,
+            "student_id": "9",
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.group",
+        "pk": 1,
+        "fields": {
+            "project": 4,
+            "score": 29.0,
+            "students": []
+        }
+    },
+    {
+        "model": "api.group",
+        "pk": 2,
+        "fields": {
+            "project": 1,
+            "score": 96.0,
+            "students": []
+        }
+    },
+    {
+        "model": "api.group",
+        "pk": 3,
+        "fields": {
+            "project": 2,
+            "score": 0.0,
+            "students": [
+                "0",
+                "2",
+                "3",
+                "5",
+                "8",
+                "9"
+            ]
+        }
+    },
+    {
+        "model": "api.group",
+        "pk": 4,
+        "fields": {
+            "project": 1,
+            "score": 82.0,
+            "students": [
+                "4",
+                "6",
+                "7"
+            ]
+        }
+    },
+    {
+        "model": "api.group",
+        "pk": 5,
+        "fields": {
+            "project": 3,
+            "score": 5.0,
+            "students": []
+        }
+    },
+    {
+        "model": "api.group",
+        "pk": 6,
+        "fields": {
+            "project": 1,
+            "score": 64.0,
+            "students": [
+                "1"
+            ]
+        }
+    },
+    {
+        "model": "api.group",
+        "pk": 7,
+        "fields": {
+            "project": 2,
+            "score": 25.0,
+            "students": []
+        }
+    },
+    {
+        "model": "api.assistant",
+        "pk": "10",
+        "fields": {
+            "is_active": true,
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.assistant",
+        "pk": "11",
+        "fields": {
+            "is_active": true,
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.assistant",
+        "pk": "12",
+        "fields": {
+            "is_active": true,
+            "courses": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "api.assistant",
+        "pk": "13",
+        "fields": {
+            "is_active": true,
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.assistant",
+        "pk": "14",
+        "fields": {
+            "is_active": true,
+            "courses": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "api.teacher",
+        "pk": "15",
+        "fields": {
+            "is_active": true,
+            "courses": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "api.teacher",
+        "pk": "16",
+        "fields": {
+            "is_active": true,
+            "courses": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "api.teacher",
+        "pk": "17",
+        "fields": {
+            "is_active": true,
+            "courses": [
+                1
+            ]
+        }
+    }
+]
