@@ -108,7 +108,7 @@ watch(
         </ButtonGroup>
     </div>
     <!-- Description -->
-    <div v-html="props.course.description" />
+    <div class="surface-300 px-4 py-3" v-html="props.course.description" />
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
@@ -134,4 +134,4 @@ watch(
     <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss"></style>
