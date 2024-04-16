@@ -2,7 +2,6 @@
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
-import TooltipHover from '@/components/TooltipHover.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import InputSwitch from 'primevue/inputswitch';
@@ -53,7 +52,7 @@ const handleClone = async (): Promise<void> => {
 
         <ButtonGroup class="flex align-items-center space-x-2">
             <!-- Update course button -->
-            <TooltipHover text="views.courses.edit">
+            <div v-tooltip.top="t('views.courses.edit')">
                 <RouterLink :to="{ name: 'course-edit', params: { courseId: props.course.id } }">
                     <Button
                         :icon="PrimeIcons.PENCIL"
@@ -62,10 +61,10 @@ const handleClone = async (): Promise<void> => {
                         style="height: 51px; width: 51px; margin-right: 10px"
                     />
                 </RouterLink>
-            </TooltipHover>
+            </div>
 
             <!-- Clone button to clone the course -->
-            <TooltipHover text="views.courses.clone">
+            <div v-tooltip.top="t('views.courses.clone')">
                 <ConfirmDialog>
                     <template #container="{ message, acceptCallback, rejectCallback }">
                         <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
@@ -95,7 +94,7 @@ const handleClone = async (): Promise<void> => {
                     style="height: 51px; width: 51px"
                     @click="handleClone()"
                 />
-            </TooltipHover>
+            </div>
         </ButtonGroup>
     </div>
     <!-- Description -->
@@ -106,9 +105,9 @@ const handleClone = async (): Promise<void> => {
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
         <!-- Create project button -->
-        <TooltipHover text="views.projects.create">
+        <div v-tooltip.top="t('views.projects.create')">
             <ProjectCreateButton :courses="[props.course]" />
-        </TooltipHover>
+        </div>
     </div>
     <!-- Project list body -->
     <ProjectList :courses="[course]" />
@@ -117,9 +116,9 @@ const handleClone = async (): Promise<void> => {
     <div class="flex justify-content-between align-items-center my-6">
         <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
 
-        <TooltipHover text="views.courses.teachers_and_assistants.edit">
+       <div v-tooltip.top="t('views.courses.teachers_and_assistants.edit')">
             <TeacherAssistantUpdateButton :course="props.course" />
-        </TooltipHover>
+       </div>
     </div>
     <!-- List with teachers and assistants -->
     <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />

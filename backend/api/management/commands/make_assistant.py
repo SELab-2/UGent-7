@@ -19,6 +19,6 @@ class Command(BaseCommand):
             return
 
         user = user.get()
-        Assistant(user_ptr=user).save_base(raw=True)
+        Assistant.create(user)
 
         self.stdout.write(self.style.SUCCESS('Successfully made the user assistant!'))

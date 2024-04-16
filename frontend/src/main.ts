@@ -4,6 +4,7 @@ import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
 import Ripple from 'primevue/ripple';
+import Tooltip from 'primevue/tooltip';
 import { i18n } from '@/config/i18n.ts';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -22,6 +23,8 @@ app.use(ConfirmationService);
 
 /* Bind app directives */
 app.directive('ripple', Ripple);
+app.directive('tooltip', Tooltip);
+
 
 /* Mount the application */
 app.mount('#app');

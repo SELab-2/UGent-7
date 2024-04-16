@@ -2,7 +2,6 @@
 import Title from '@/components/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
-import TooltipHover from '@/components/TooltipHover.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
@@ -30,9 +29,9 @@ const { t } = useI18n();
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
         <!-- Create project button -->
-        <TooltipHover text="views.projects.create">
+        <div v-tooltip.top="t('views.projects.create')">
             <ProjectCreateButton :courses="[props.course]" />
-        </TooltipHover>
+        </div>
     </div>
     <!-- Project list body -->
     <ProjectList :courses="[course]" />
