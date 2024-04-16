@@ -17,9 +17,13 @@ const props = defineProps<{
 const { t } = useI18n();
 const { projects, getProjectsByCourse } = useProject();
 
-watch(() => props.course, async () => {
-    await getProjectsByCourse(props.course.id);
-}, { immediate: true });
+watch(
+    () => props.course,
+    async () => {
+        await getProjectsByCourse(props.course.id);
+    },
+    { immediate: true },
+);
 </script>
 
 <template>

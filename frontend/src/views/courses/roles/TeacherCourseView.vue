@@ -45,9 +45,13 @@ async function handleClone(): Promise<void> {
     });
 }
 
-watch(() => props.course, async () => {
-    await getProjectsByCourse(props.course.id);
-}, { immediate: true });
+watch(
+    () => props.course,
+    async () => {
+        await getProjectsByCourse(props.course.id);
+    },
+    { immediate: true },
+);
 </script>
 
 <template>

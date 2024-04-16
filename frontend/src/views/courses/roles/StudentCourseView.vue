@@ -29,30 +29,33 @@ const { projects, getProjectsByCourse } = useProject();
 const { push } = useRouter();
 
 /* Methods */
-async function leaveCourse (): Promise<void> {
+async function leaveCourse(): Promise<void> {
     // Show a confirmation dialog before leaving the course, to prevent accidental clicks
     confirm.require({
         message: t('confirmations.leave_course'),
         header: t('views.courses.leave'),
-        accept: async () => {
+        accept: (): void => {
             if (user.value !== null) {
                 // Leave the course
-                await studentLeaveCourse(props.course.id, user.value.id);
-
-                // Refresh the user so the course is removed from the user's courses
-                await refreshUser();
-
-                // Redirect to the dashboard
-                await push({ name: 'dashboard' });
+                studentLeaveCourse(props.course.id, user.value.id).then(() => {
+                    // Refresh the user so the course is removed from the user's courses
+                    refreshUser();
+                    // Redirect to the dashboard
+                    push({ name: 'dashboard' });
+                });
             }
         },
         reject: () => {},
     });
 }
 
-watch(() => props.course, async () => {
-    await getProjectsByCourse(props.course.id);
-}, { immediate: true });
+watch(
+    () => props.course,
+    async () => {
+        await getProjectsByCourse(props.course.id);
+    },
+    { immediate: true },
+);
 </script>
 
 <template>
