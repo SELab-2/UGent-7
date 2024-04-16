@@ -168,7 +168,7 @@ const saveItem = async (): Promise<void> => {
         // update admin status
         await toggleAdmin(editItem.value.id, editItem.value.is_staff)
         // update locally
-        value.results.splice(index, 1, { ...editItem.value });
+        await fetchUsers();
     } else {
         // raise error TODO
     }

@@ -40,7 +40,6 @@ class UserViewSet(ReadOnlyModelViewSet):
         username = request.query_params.get("username", "")
         email = request.query_params.get("email", "")
         roles = request.query_params.getlist("roles[]")
-        print(roles, flush=True)
 
         queryset1 = self.get_queryset().filter(
             id__icontains=search
@@ -53,17 +52,14 @@ class UserViewSet(ReadOnlyModelViewSet):
         )
         queryset4 = self.get_queryset().all()
         if "student" in roles:
-            print("student found", flush=True)
             queryset4 = queryset4.intersection(
                 self.get_queryset().filter(student__isnull=False, student__is_active=True)
             )
         if "assistant" in roles:
-            print("assistant found", flush=True)
             queryset4 = queryset4.intersection(
                 self.get_queryset().filter(assistant__isnull=False, assistant__is_active=True)
             )
         if "teacher" in roles:
-            print("teacher found", flush=True)
             queryset4 = queryset4.intersection(
                 self.get_queryset().filter(teacher__isnull=False, teacher__is_active=True)
             )
