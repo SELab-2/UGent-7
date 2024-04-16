@@ -1,6 +1,7 @@
-from random import choice, randint, sample
 from functools import wraps
+from random import choice, randint, sample
 from time import time
+
 from django.db import connection
 from django.utils import timezone
 
@@ -49,7 +50,7 @@ def timer(func):
 
         print('Seeder {} took {}'.format(
             func.__name__, format_time((time() - start))
-        ))
+        ), flush=True)
 
         return result
 
