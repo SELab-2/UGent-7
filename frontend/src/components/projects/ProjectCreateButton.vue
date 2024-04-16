@@ -6,15 +6,29 @@ import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
 import { ref } from 'vue';
 import CourseList from '@/components/courses/CourseList.vue';
+import { useRouter } from 'vue-router';
 
 /* Composable injections */
 const { t } = useI18n();
+const { push } = useRouter();
 
 /* Props */
 const props = defineProps<{ courses: Course[]; label?: string; severity?: string }>();
 
 /* Dialog state to select the course you want to create a project for */
 const displayCourseSelection = ref(false);
+
+/* Method that handles the click on the create button. Displays the dialog if more than 1 course available,
+otherwise directly routes to the create page for the given course. */
+const handleCreateButton = (): void => {
+    // If more then 1 course available, display the dialog
+    if (props.courses.length > 1) {
+        displayCourseSelection.value = true;
+    } else if (props.courses.length === 1) {
+        // Only one course available, directly route to the project creation view
+        push({ name: 'project-create', params: { courseId: props.courses[0].id } });
+    }
+};
 </script>
 
 <template>
@@ -27,7 +41,7 @@ const displayCourseSelection = ref(false);
             :label="label ?? ''"
             :severity="severity ?? 'primary'"
             class="custom-button"
-            @click="displayCourseSelection = true"
+            @click="handleCreateButton"
         />
         <!-- Dialog to select the course you want to create a project for -->
         <Dialog

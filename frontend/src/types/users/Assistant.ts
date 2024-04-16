@@ -62,4 +62,12 @@ export class Assistant extends User {
     public isAssistant(): boolean {
         return true;
     }
+
+    /**
+     * Get the role of the user.
+     * @returns string
+     */
+    public getRole(): string {
+        return 'types.roles.assistant';
+    }
 }

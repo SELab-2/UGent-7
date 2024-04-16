@@ -1,5 +1,3 @@
-from django.db.models import Min, Max
-
 from api.models.course import Course
 from api.permissions.course_permissions import (CourseAssistantPermission,
                                                 CoursePermission,
@@ -19,7 +17,6 @@ from api.serializers.project_serializer import (CreateProjectSerializer,
                                                 ProjectSerializer)
 from api.serializers.student_serializer import StudentSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
-from api.views.pagination.basic_pagination import BasicPagination
 from django.utils.translation import gettext
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets

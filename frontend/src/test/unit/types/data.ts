@@ -99,7 +99,7 @@ export const projectData = {
     score_visible: true,
     group_size: 3,
     structure_file: null,
-    course: null,
+    course: courseData,
     structureChecks: [],
     extra_checks: [],
     groups: [],

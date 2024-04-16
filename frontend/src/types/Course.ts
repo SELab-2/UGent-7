@@ -55,6 +55,22 @@ export class Course {
             faculty,
         );
     }
+
+    /**
+     * Check if the course has a given teacher.
+     * @param teacher
+     */
+    public hasTeacher(teacher: Teacher): boolean {
+        return this.teachers.some((t) => t.id === teacher.id);
+    }
+
+    /**
+     * Check if the course has a given assistant.
+     * @param assistant
+     */
+    public hasAssistant(assistant: Assistant): boolean {
+        return this.assistants.some((a) => a.id === assistant.id);
+    }
 }
 
 /**

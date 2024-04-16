@@ -55,7 +55,8 @@ class Course(models.Model):
             name=self.name,
             description=self.description,
             academic_startyear=self.academic_startyear + 1,
-            parent_course=self
+            parent_course=self,
+            faculty=self.faculty
         )
 
         if clone_assistants:

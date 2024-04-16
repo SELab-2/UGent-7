@@ -113,7 +113,14 @@ export const getHandlers = [
         return HttpResponse.json(structureChecks.filter((x) => x.project === params.id));
     }),
     http.get(baseUrl + endpoints.projects.byCourse.replace('{courseId}', ':id'), ({ params }) => {
-        return HttpResponse.json(projects.filter((x) => x.course === params.id));
+        return HttpResponse.json(projects.filter((x) => x.course.id === params.id));
+    }),
+    http.get(baseUrl + endpoints.projects.byStudent.replace('{studentId}', ':id'), ({ params }) => {
+        return HttpResponse.json(
+            projects.filter(
+                (project) => project.course.id in students.find((student) => student.id === params.id).courses,
+            ),
+        );
     }),
     http.get(baseUrl + endpoints.submissions.byGroup.replace('{groupId}', ':id'), ({ params }) => {
         return HttpResponse.json(submissions.filter((x) => x.group === params.id));

@@ -1,5 +1,5 @@
-from nh3 import clean
 from api.logic.check_folder_structure import parse_zip_file
+from nh3 import clean
 from api.models.checks import FileExtension
 from api.models.course import Course
 from api.models.group import Group

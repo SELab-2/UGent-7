@@ -1,4 +1,6 @@
 from django.utils.translation import gettext
+from django.db.models.functions import Concat
+from django.db.models import Value
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
@@ -13,6 +15,7 @@ from api.serializers.assistant_serializer import AssistantSerializer, AssistantI
 from api.serializers.course_serializer import CourseSerializer
 from api.serializers.project_serializer import ProjectSerializer
 from authentication.serializers import UserIDSerializer
+from api.views.pagination.user_pagination import UserPagination
 
 
 class AssistantViewSet(ModelViewSet):
@@ -33,6 +36,30 @@ class AssistantViewSet(ModelViewSet):
         return Response({
             "message": gettext("teachers.success.add")
         })
+
+    @action(detail=False, pagination_class=UserPagination)
+    def search(self, request: Request) -> Response:
+        # Extract filter params
+        search = request.query_params.get("search", "")
+        faculties = request.query_params.getlist("faculties[]")
+
+        # Filter the queryset based on the search term
+        queryset = Assistant.objects.annotate(
+            full_name=Concat('first_name', Value(' '), 'last_name')
+        ).filter(
+            full_name__icontains=search
+        )
+
+        # Filter the queryset based on selected faculties
+        if faculties:
+            queryset = queryset.filter(faculties__id__in=faculties)
+
+        # Serialize the resulting queryset
+        serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+            "request": request
+        })
+
+        return self.get_paginated_response(serializer.data)
 
     @swagger_auto_schema(request_body=AssistantIDSerializer)
     def destroy(self, request: Request, *args, **kwargs) -> Response:

@@ -1,9 +1,9 @@
+import moment from 'moment';
 import { Course } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';
 import { type StructureCheck } from './StructureCheck.ts';
 import { type Submission } from './Submission.ts';
-import moment from 'moment';
 
 export class Project {
     constructor(

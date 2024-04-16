@@ -63,4 +63,12 @@ export class Teacher extends User {
     public isTeacher(): boolean {
         return true;
     }
+
+    /**
+     * Get the role of the user in a string format.
+     * @returns string
+     */
+    public getRole(): string {
+        return 'types.roles.teacher';
+    }
 }

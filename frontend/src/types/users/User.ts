@@ -81,6 +81,14 @@ export class User {
     }
 
     /**
+     * Get the role of the user in a string format.
+     * @returns string
+     */
+    public getRole(): string {
+        return '';
+    }
+
+    /**
      * Convert a user object to a user instance.
      *
      * @param user
