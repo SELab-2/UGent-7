@@ -3,9 +3,10 @@
 backend=false
 frontend=false
 build=false
-data="empty"
+seed=false
+data="no"
 
-while getopts ":bfcd:" opt; do
+while getopts ":bfcsd:" opt; do
   case ${opt} in
     b )
       backend=true
@@ -16,18 +17,26 @@ while getopts ":bfcd:" opt; do
     c )
       build=true
       ;;
+    s )
+      seed=true
+      ;;
     d )
-      data="$OPTARG"
-      if [[ ! $data =~ ^(""|"small"|"medium"|"large")$ ]]; then
-        echo "Invalid size provided. Size must be '', 'empty''small', 'medium', or 'large'."
-        exit 1
-      fi
+      case "$OPTARG" in
+        ""|small|medium|large)
+          data="$OPTARG"
+          ;;
+        * )
+          echo "Invalid data size provided. Size must be '', 'empty''small', 'medium', or 'large'."
+          exit 1
+          ;;
+      esac
       ;;
     : )
-      data=""
+      echo "Usage: $0 [-b] [-f] [-c] [-s <size>] [-d <size>]" 1>&2
+      exit 1
       ;;
     \? )
-      echo "Usage: $0 [-b] [-f] [-c] [-d <size>] "
+      echo "Usage: $0 [-b] [-f] [-c] [-s <size>] [-d <size>]" 1>&2
       exit 1
       ;;
   esac
@@ -36,40 +45,75 @@ done
 echo "Checking environment file..."
 
 if [ "$build" = true ]; then
-    rm .env > /dev/null 2>&1
-    rm backend/db.sqlite3 > /dev/null 2>&1
+  rm .env > /dev/null 2>&1
+  rm backend/db.sqlite3 > /dev/null 2>&1
 fi
 
 if ! [ -f .env ]; then
-    cp .dev.env .env
-    sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
-    echo "Created environment file"
+  cp .dev.env .env
+  sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
+  echo "Created environment file"
 fi
 
 echo "Checking for existing SSL certificates..."
 
 if [ ! -f "data/nginx/ssl/private.key" ] || [ ! -f "data/nginx/ssl/certificate.crt" ]; then
-    echo "Generating SSL certificates..."
-    sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout data/nginx/ssl/private.key \
-    -out data/nginx/ssl/certificate.crt \
-    -subj "/C=BE/ST=/L=/O=/OU=/CN=" > /dev/null
-    echo "SSL certificates generated."
+  echo "Generating SSL certificates..."
+  sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout data/nginx/ssl/private.key \
+  -out data/nginx/ssl/certificate.crt \
+  -subj "/C=BE/ST=/L=/O=/OU=/CN=" > /dev/null
+  echo "SSL certificates generated."
 else
-    echo "SSL certificates already exist, skipping generation."
+  echo "SSL certificates already exist, skipping generation."
 fi
 
-if [ "$data" != "empty" ]; then
-    sed -i "s/^FIXTURE=.*/FIXTURE=$data/" .env
-    if [ "$data" != "" ]; then
-        rm -f backend/db.sqlite3 > /dev/null 2>&1
-    fi
+if [ "$data" != "no" ]; then
+  sed -i "s/^FIXTURE=.*/FIXTURE=$data/" .env
+  if [ "$data" != "" ]; then
+    rm -f backend/db.sqlite3 > /dev/null 2>&1
+  fi
 fi
 
 if [ "$build" = true ]; then
-    echo "Building Docker images..."
-    echo "This can take a while..."
-    docker-compose -f development.yml build --no-cache
+  echo "Building Docker images..."
+  echo "This can take a while..."
+  docker-compose -f development.yml build --no-cache
+fi
+
+if [ "$seed" = true ]; then
+  cleanup() {
+      echo "Ctrl+C detected. Cleaning up..."
+      docker-compose -f development.yml down
+      exit 1
+  }
+
+  trap cleanup SIGINT
+
+  echo "-------------------------------------"
+  echo "Creating database fixtures."
+  echo "This can take a long time..."
+  echo "Go do something else in the meantime!"
+  echo "-------------------------------------"
+  docker-compose -f development.yml up -d backend > /dev/null 2>&1
+  docker exec backend sh -c "python manage.py migrate" > /dev/null 2>&1
+
+  sizes=("small" "medium" "large")
+
+  for size in "${sizes[@]}"; do
+    echo "Seeding $size database..."
+    docker exec backend sh -c "python manage.py seed_db $size" > /dev/null 2>&1
+
+    echo "Dumping $size fixtures..."
+    docker exec backend sh -c "python manage.py dumpdata api --output=api/fixtures/$size/$size.json"
+    docker exec backend sh -c "python manage.py dumpdata authentication --output=authentication/fixtures/$size/$size.json"
+    docker exec backend sh -c "python manage.py dumpdata notifications --output=notifications/fixtures/$size/$size.json"
+  done
+
+  echo "Cleaning up..."
+  docker-compose -f development.yml down
+  echo "Done."
+  exit 0
 fi
 
 echo "Starting services..."
@@ -81,11 +125,11 @@ echo "Press CTRL + C to stop all containers"
 echo "-------------------------------------"
 
 if [ "$backend" = true ]; then
-    docker-compose -f development.yml logs --follow --tail 50 backend
+  docker-compose -f development.yml logs --follow --tail 50 backend
 elif [ "$frontend" = true ]; then
-    docker-compose -f development.yml logs --follow --tail 50 frontend
+  docker-compose -f development.yml logs --follow --tail 50 frontend
 else
-    docker-compose -f development.yml logs --follow --tail 50 backend frontend
+  docker-compose -f development.yml logs --follow --tail 50 backend frontend
 fi
 
 echo "Cleaning up..."
