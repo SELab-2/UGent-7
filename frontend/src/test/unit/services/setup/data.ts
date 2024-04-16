@@ -13,41 +13,6 @@ export const groups = [
     },
 ];
 
-export const projects = [
-    {
-        id: '0',
-        course: '1',
-        name: 'sel2',
-        description: 'this is a test',
-        visible: true,
-        archived: false,
-        locked_groups: false,
-        start_date: new Date('July 21, 2024 01:15:00'),
-        deadline: new Date('July 23, 2024 01:15:00'),
-        max_score: 100,
-        score_visible: true,
-        group_size: 8,
-        submissions: ['1', '2'],
-        groups: ['0', '1'],
-    },
-    {
-        id: 1,
-        course: '1',
-        name: 'sel3',
-        description: 'make a project',
-        visible: true,
-        archived: false,
-        locked_groups: false,
-        start_date: new Date('July 21, 2024 01:15:00'),
-        deadline: new Date('July 23, 2024 01:15:00'),
-        max_score: 20,
-        score_visible: false,
-        group_size: 3,
-        submissions: [],
-        groups: ['0', '1'],
-    },
-];
-
 export const courses = [
     {
         id: '1',
@@ -132,6 +97,41 @@ export const courses = [
         name: 'vergeet barbara',
         academic_startyear: 2023,
         description: null,
+    },
+];
+
+export const projects = [
+    {
+        id: '0',
+        course: courses[0],
+        name: 'sel2',
+        description: 'this is a test',
+        visible: true,
+        archived: false,
+        locked_groups: false,
+        start_date: new Date('July 21, 2024 01:15:00'),
+        deadline: new Date('July 23, 2024 01:15:00'),
+        max_score: 100,
+        score_visible: true,
+        group_size: 8,
+        submissions: ['1', '2'],
+        groups: ['0', '1'],
+    },
+    {
+        id: 1,
+        course: courses[0],
+        name: 'sel3',
+        description: 'make a project',
+        visible: true,
+        archived: false,
+        locked_groups: false,
+        start_date: new Date('July 21, 2024 01:15:00'),
+        deadline: new Date('July 23, 2024 01:15:00'),
+        max_score: 20,
+        score_visible: false,
+        group_size: 3,
+        submissions: [],
+        groups: ['0', '1'],
     },
 ];
 

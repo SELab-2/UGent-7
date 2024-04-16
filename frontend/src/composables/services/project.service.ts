@@ -1,9 +1,8 @@
 import { Project } from '@/types/Project';
-import { Course } from '@/types/Course';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import axios from 'axios';
-import { get, getList, getListMerged, create, deleteId, processError } from '@/composables/services/helpers.ts';
+import { create, deleteId, get, getList, processError } from '@/composables/services/helpers.ts';
 
 interface ProjectState {
     projects: Ref<Project[] | null>;
@@ -11,6 +10,8 @@ interface ProjectState {
     getProjectByID: (id: string) => Promise<void>;
     getProjectsByCourse: (courseId: string) => Promise<void>;
     getProjectsByStudent: (studentId: string) => Promise<void>;
+    getProjectsByAssistant: (assistantId: string) => Promise<void>;
+    getProjectsByTeacher: (teacherId: string) => Promise<void>;
     getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date) => Promise<void>;
     createProject: (projectData: Project, courseId: string) => Promise<void>;
     deleteProject: (id: string) => Promise<void>;
@@ -31,20 +32,18 @@ export function useProject(): ProjectState {
     }
 
     async function getProjectsByStudent(studentId: string): Promise<void> {
-        const endpoint = endpoints.courses.byStudent.replace('{studentId}', studentId);
-        const courses = ref<Course[] | null>(null);
-        await getList<Course>(endpoint, courses, Course.fromJSON);
+        const endpoint = endpoints.projects.byStudent.replace('{studentId}', studentId);
+        await getList<Project>(endpoint, projects, Project.fromJSON);
+    }
 
-        const endpList = [];
-        let coursesValue: Course[] | null = courses.value;
-        if (coursesValue === null) {
-            coursesValue = [];
-        }
-        for (const course of coursesValue) {
-            endpList.push(endpoints.projects.byCourse.replace('{courseId}', course.id.toString()));
-        }
+    async function getProjectsByAssistant(assistantId: string): Promise<void> {
+        const endpoint = endpoints.projects.byAssistant.replace('{assistantId}', assistantId);
+        await getList<Project>(endpoint, projects, Project.fromJSON);
+    }
 
-        await getListMerged<Project>(endpList, projects, Project.fromJSON);
+    async function getProjectsByTeacher(teacherId: string): Promise<void> {
+        const endpoint = endpoints.projects.byTeacher.replace('{teacherId}', teacherId);
+        await getList<Project>(endpoint, projects, Project.fromJSON);
     }
 
     async function getProjectsByCourseAndDeadline(courseId: string, deadlineDate: Date): Promise<void> {
@@ -56,13 +55,10 @@ export function useProject(): ProjectState {
                 const allProjects = response.data.map((projectData: Project) => Project.fromJSON(projectData));
 
                 // Filter projects based on the deadline date
-                const projectsWithMatchingDeadline = allProjects.filter((project: Project) => {
-                    const projectDeadlineDate = project.deadline;
-                    return projectDeadlineDate.toDateString() === deadlineDate.toDateString();
-                });
-
                 // Update the projects ref with the filtered projects
-                projects.value = projectsWithMatchingDeadline;
+                projects.value = allProjects.filter((project: Project) => {
+                    return project.deadline.toDateString() === deadlineDate.toDateString();
+                });
             })
             .catch((error) => {
                 if (axios.isAxiosError(error)) {
@@ -109,6 +105,8 @@ export function useProject(): ProjectState {
         getProjectsByCourse,
         getProjectsByCourseAndDeadline,
         getProjectsByStudent,
+        getProjectsByTeacher,
+        getProjectsByAssistant,
 
         createProject,
         deleteProject,

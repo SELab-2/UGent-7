@@ -279,15 +279,11 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json
 
-        expected_course_url = settings.TESTING_BASE_LINK + reverse(
-            "course-detail", args=[str(course.id)]
-        )
-
         self.assertEqual(retrieved_project["name"], project.name)
         self.assertEqual(retrieved_project["description"], project.description)
         self.assertEqual(retrieved_project["visible"], project.visible)
         self.assertEqual(retrieved_project["archived"], project.archived)
-        self.assertEqual(retrieved_project["course"], expected_course_url)
+        self.assertEqual(content_json["course"]["id"], course.id)
 
     def test_project_course(self):
         """
@@ -319,21 +315,9 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(retrieved_project["description"], project.description)
         self.assertEqual(retrieved_project["visible"], project.visible)
         self.assertEqual(retrieved_project["archived"], project.archived)
-
-        response = self.client.get(retrieved_project["course"], follow=True)
-
-        # Check if the response was successful
-        self.assertEqual(response.status_code, 200)
-
-        # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
-
-        # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(content_json["name"], course.name)
-        self.assertEqual(content_json["academic_startyear"], course.academic_startyear)
-        self.assertEqual(content_json["description"], course.description)
+        self.assertEqual(content_json["course"]["name"], course.name)
+        self.assertEqual(content_json["course"]["academic_startyear"], course.academic_startyear)
+        self.assertEqual(content_json["course"]["description"], course.description)
 
     def test_project_structure_checks(self):
         """
@@ -371,15 +355,11 @@ class ProjectModelTests(APITestCase):
 
         retrieved_project = content_json
 
-        expected_course_url = settings.TESTING_BASE_LINK + reverse(
-            "course-detail", args=[str(course.id)]
-        )
-
         self.assertEqual(retrieved_project["name"], project.name)
         self.assertEqual(retrieved_project["description"], project.description)
         self.assertEqual(retrieved_project["visible"], project.visible)
         self.assertEqual(retrieved_project["archived"], project.archived)
-        self.assertEqual(retrieved_project["course"], expected_course_url)
+        self.assertEqual(content_json["course"]["id"], course.id)
 
         response = self.client.get(retrieved_project["structure_checks"], follow=True)
 

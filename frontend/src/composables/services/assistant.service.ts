@@ -4,7 +4,6 @@ import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
-import { useCourses } from '@/composables/services/course.service.ts';
 
 interface AssistantState {
     assistants: Ref<Assistant[] | null>;
@@ -25,16 +24,9 @@ export function useAssistant(): AssistantState {
     const assistant = ref<Assistant | null>(null);
     const response = ref<Response | null>(null);
 
-    /* Nested state */
-    const { courses, getCourseByAssistant } = useCourses();
-
-    async function getAssistantByID(id: string, init: boolean = false): Promise<void> {
+    async function getAssistantByID(id: string): Promise<void> {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
         await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
-
-        if (init) {
-            await initAssistant(assistant.value);
-        }
     }
 
     async function getAssistantsByCourse(courseId: string): Promise<void> {
@@ -72,13 +64,6 @@ export function useAssistant(): AssistantState {
     async function deleteAssistant(id: string): Promise<void> {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
         await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON);
-    }
-
-    async function initAssistant(assistant: Assistant | null): Promise<void> {
-        if (assistant !== null) {
-            await getCourseByAssistant(assistant.id);
-            assistant.courses = courses.value ?? [];
-        }
     }
 
     return {

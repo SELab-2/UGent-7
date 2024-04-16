@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { type Course } from '@/types/Course.ts';
-import { computed, ref, watch } from 'vue';
-import { useProject } from '@/composables/services/project.service.ts';
-import ProjectCard from '@/components/projects/ProjectCard.vue';
-import { useI18n } from 'vue-i18n';
 import moment from 'moment';
 import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
+import ProjectCard from '@/components/projects/ProjectCard.vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { type Project } from '@/types/Project.ts';
 
 /* Props */
 const props = withDefaults(
     defineProps<{
-        courses: Course[] | null;
+        projects: Project[] | null;
         cols?: number;
     }>(),
     {
@@ -22,20 +21,16 @@ const props = withDefaults(
 
 /* Composables */
 const { t } = useI18n();
-const { projects, getProjectsByCourse } = useProject();
 
 /* State */
 const showPast = ref(false);
-
-// The merged projects from all courses
-const allProjects = computed(() => props.courses?.flatMap((course) => course.projects) ?? null);
 
 /**
  * Sorts the projects by deadline
  */
 const sortedProjects = computed(() => {
     const projects =
-        allProjects.value?.filter((project) => (!showPast.value ? moment(project.deadline).isAfter() : true)) ?? null;
+        props.projects?.filter((project) => (!showPast.value ? moment(project.deadline).isAfter() : true)) ?? null;
 
     if (projects === null) {
         return projects;
@@ -43,30 +38,6 @@ const sortedProjects = computed(() => {
 
     return [...projects].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
 });
-
-/* Watchers */
-watch(
-    () => props.courses,
-    async (courses: Course[] | null) => {
-        if (courses !== null) {
-            for (const course of courses) {
-                // Fetch the projects for the course
-                await getProjectsByCourse(course.id);
-
-                // Assign the course to the projects
-                projects.value?.forEach((project) => {
-                    project.course = course;
-                });
-
-                // Assign the projects to the course
-                course.projects = projects.value ?? [];
-            }
-        }
-    },
-    {
-        immediate: true,
-    },
-);
 </script>
 
 <template>
@@ -97,7 +68,7 @@ watch(
             </template>
             <template v-else>
                 <div class="col-12">
-                    <p>{{ t('views.dashboard.no_projects') }}</p>
+                    <p class="mt-0">{{ t('views.dashboard.no_projects') }}</p>
                 </div>
             </template>
         </template>
