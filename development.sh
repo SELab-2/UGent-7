@@ -104,7 +104,7 @@ if [ "$data" != "" ]; then
   python manage.py migrate > /dev/null
 
   echo "Filling $data database..."
-  python manage.py loaddata */fixtures/$data/* #> /dev/null 2>&1
+  python manage.py loaddata */fixtures/$data/* > /dev/null 2>&1
 
   echo "Resetting workspace..."
   deactivate
