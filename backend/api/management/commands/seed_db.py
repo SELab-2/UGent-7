@@ -1,12 +1,11 @@
 import time
-from random import choices, randint, seed
+from random import choices, randint
 
 from api.models.assistant import Assistant
 from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
 from api.models.student import Student
-from api.models.submission import Submission
 from api.models.teacher import Teacher
 from api.seeders.faker import faker
 from api.seeders.seeder import (fillFaculties, seed_assistants, seed_courses,
@@ -16,7 +15,7 @@ from api.seeders.seeder import (fillFaculties, seed_assistants, seed_courses,
                                 seed_students, seed_submission_files,
                                 seed_submission_results, seed_submissions,
                                 seed_teachers)
-from authentication.models import Faculty, User
+from authentication.models import User
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
@@ -126,7 +125,7 @@ class Command(BaseCommand):
             amount_of_courses = 250
             amount_of_projects = 500
             amount_of_groups = 500
-            amount_of_file_extensions = 50
+            amount_of_file_extensions = 32  # Max amount of file extensions in Faker
             amount_of_docker_images = 50
             amount_of_structure_checks = 250
             amount_of_extra_checks = 125
@@ -139,7 +138,7 @@ class Command(BaseCommand):
             amount_of_courses = 1_500
             amount_of_projects = 3_000
             amount_of_groups = 3_000
-            amount_of_file_extensions = 50
+            amount_of_file_extensions = 32  # Max amount of file extensions in Faker
             amount_of_docker_images = 50
             amount_of_structure_checks = 1_500
             amount_of_extra_checks = 750

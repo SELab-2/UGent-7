@@ -48,7 +48,7 @@ echo "Checking environment file..."
 # If clean build, remove .env and db.sqlite3
 if [ "$build" = true ]; then
   rm .env > /dev/null 2>&1
-  rm backend/db.sqlite3 > /dev/null 2>&1
+  rm -f backend/db.sqlite3 > /dev/null 2>&1
 fi
 
 # Create environment file if it doesn't exist

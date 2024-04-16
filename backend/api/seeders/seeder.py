@@ -1,8 +1,6 @@
 from functools import wraps
 from random import choice, randint, sample
-from re import sub
 from time import time
-from unicodedata import category
 
 from django.db import connection
 from django.utils import timezone
