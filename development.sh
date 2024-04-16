@@ -4,7 +4,7 @@ backend=false
 frontend=false
 build=false
 seed=false
-data="no"
+data=""
 
 # Arguments parsing
 while getopts ":bfcsd:" opt; do
@@ -23,11 +23,11 @@ while getopts ":bfcsd:" opt; do
       ;;
     d )
       case "$OPTARG" in
-        ""|small|medium|large)
+        small|medium|large)
           data="$OPTARG"
           ;;
         * )
-          echo "Invalid data size provided. Size must be '', 'empty''small', 'medium', or 'large'."
+          echo "Invalid data size provided. Size must be 'small', 'medium', or 'large'."
           exit 1
           ;;
       esac
@@ -48,7 +48,7 @@ echo "Checking environment file..."
 # If clean build, remove .env and db.sqlite3
 if [ "$build" = true ]; then
   rm .env > /dev/null 2>&1
-  rm backend/db.sqlite3 > /dev/null 2>&1
+  rm -f backend/db.sqlite3 > /dev/null 2>&1
 fi
 
 # Create environment file if it doesn't exist
@@ -72,12 +72,44 @@ else
   echo "SSL certificates already exist, skipping generation."
 fi
 
-# Set FIXTURE environment variable
-if [ "$data" != "no" ]; then
-  sed -i "s/^FIXTURE=.*/FIXTURE=$data/" .env
-  if [ "$data" != "" ]; then
-    rm -f backend/db.sqlite3 > /dev/null 2>&1
-  fi
+# Seed database if data size is provided
+if [ "$data" != "" ]; then
+# Cleanup function
+  cleanup() {
+      echo "Ctrl+C detected. Cleaning up..."
+      deactivate
+      rm -rf .venv_dev
+      exit 1
+  }
+
+  # Call cleanup function on SIGINT
+  trap cleanup SIGINT
+
+  echo "--------------------------"
+  echo "Filling the database."
+  echo "This can take some time..."
+  echo "--------------------------"
+
+  cd backend
+
+  rm -f db.sqlite3 > /dev/null 2>&1
+
+  echo "Setting up workspace..."
+  python -m venv .venv_dev > /dev/null
+  source .venv_dev/bin/activate
+  pip install poetry > /dev/null
+  poetry install > /dev/null
+
+  echo "Migrating database..."
+  python manage.py migrate > /dev/null
+
+  echo "Filling $data database..."
+  python manage.py loaddata */fixtures/$data/* > /dev/null 2>&1
+
+  echo "Resetting workspace..."
+  deactivate
+  rm -rf .venv_dev
+  cd ..
 fi
 
 # Build Docker images
@@ -87,7 +119,7 @@ if [ "$build" = true ]; then
   docker-compose -f development.yml build --no-cache
 fi
 
-# Seed database if flag is set
+# Create new database fixtures if flag is set
 if [ "$seed" = true ]; then
   # Cleanup function
   cleanup() {
@@ -111,7 +143,7 @@ if [ "$seed" = true ]; then
   sizes=("small" "medium" "large")
   for size in "${sizes[@]}"; do
     echo "Seeding $size database..."
-    docker exec backend sh -c "python manage.py seed_db $size"  2> /dev/null
+    docker exec backend sh -c "python manage.py seed_db $size"
 
     echo "Dumping $size fixtures..."
     docker exec backend sh -c "python manage.py dumpdata api --output=api/fixtures/$size/$size.json"

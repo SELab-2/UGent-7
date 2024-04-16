@@ -172,7 +172,6 @@ CACHES = {
 
 CELERY_BROKER_URL = f"redis://@{REDIS_CUSTOM['host']}:{REDIS_CUSTOM['port']}/{REDIS_CUSTOM['db_celery']}"
 CELERY_CACHE_BACKEND = "default"
-# TODO: Test if works
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_IMPORTS = ("api.tasks",)
 
