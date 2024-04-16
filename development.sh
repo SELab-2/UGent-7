@@ -6,6 +6,7 @@ build=false
 seed=false
 data="no"
 
+# Arguments parsing
 while getopts ":bfcsd:" opt; do
   case ${opt} in
     b )
@@ -44,17 +45,20 @@ done
 
 echo "Checking environment file..."
 
+# If clean build, remove .env and db.sqlite3
 if [ "$build" = true ]; then
   rm .env > /dev/null 2>&1
   rm backend/db.sqlite3 > /dev/null 2>&1
 fi
 
+# Create environment file if it doesn't exist
 if ! [ -f .env ]; then
   cp .dev.env .env
   sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
   echo "Created environment file"
 fi
 
+# Generate SSL certificates if they don't exist
 echo "Checking for existing SSL certificates..."
 
 if [ ! -f "data/nginx/ssl/private.key" ] || [ ! -f "data/nginx/ssl/certificate.crt" ]; then
@@ -68,6 +72,7 @@ else
   echo "SSL certificates already exist, skipping generation."
 fi
 
+# Set FIXTURE environment variable
 if [ "$data" != "no" ]; then
   sed -i "s/^FIXTURE=.*/FIXTURE=$data/" .env
   if [ "$data" != "" ]; then
@@ -75,19 +80,23 @@ if [ "$data" != "no" ]; then
   fi
 fi
 
+# Build Docker images
 if [ "$build" = true ]; then
   echo "Building Docker images..."
   echo "This can take a while..."
   docker-compose -f development.yml build --no-cache
 fi
 
+# Seed database if flag is set
 if [ "$seed" = true ]; then
+  # Cleanup function
   cleanup() {
       echo "Ctrl+C detected. Cleaning up..."
       docker-compose -f development.yml down
       exit 1
   }
 
+  # Call cleanup function on SIGINT
   trap cleanup SIGINT
 
   echo "-------------------------------------"
@@ -95,11 +104,11 @@ if [ "$seed" = true ]; then
   echo "This can take a long time..."
   echo "Go do something else in the meantime!"
   echo "-------------------------------------"
+
   docker-compose -f development.yml up -d backend > /dev/null 2>&1
   docker exec backend sh -c "python manage.py migrate" > /dev/null 2>&1
 
   sizes=("small" "medium" "large")
-
   for size in "${sizes[@]}"; do
     echo "Seeding $size database..."
     docker exec backend sh -c "python manage.py seed_db $size" > /dev/null 2>&1
@@ -116,6 +125,7 @@ if [ "$seed" = true ]; then
   exit 0
 fi
 
+# Start services
 echo "Starting services..."
 docker-compose -f development.yml up -d
 
@@ -124,6 +134,7 @@ echo "Following logs..."
 echo "Press CTRL + C to stop all containers"
 echo "-------------------------------------"
 
+# Follow logs based on flags
 if [ "$backend" = true ]; then
   docker-compose -f development.yml logs --follow --tail 50 backend
 elif [ "$frontend" = true ]; then
