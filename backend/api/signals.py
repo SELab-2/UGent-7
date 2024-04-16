@@ -77,19 +77,6 @@ def hook_structure_check(sender, instance: StructureCheck, **kwargs):
                 submission.save()
 
 
-@receiver(post_save, sender=ExtraCheck)
-@receiver(post_delete, sender=ExtraCheck)
-def hook_extra_check(sender, instance: ExtraCheck, **kwargs):
-    for group in instance.project.groups.all():
-        submissions = group.submissions.order_by("-submission_time")
-        if submissions:
-            run_extra_checks.send(sender=ExtraCheck, submission=submissions[0])
-
-            for submission in submissions[1:]:
-                submission.is_valid = False
-                submission.save()
-
-
 @receiver(post_save, sender=Submission)
 def hook_submission(sender, instance: Submission, created: bool, **kwargs):
     if created:
