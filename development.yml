@@ -49,11 +49,13 @@ services:
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
-    command: sh -c "./setup.sh && python manage.py runsslserver 192.168.90.2:8080"
+    command: sh -c "./setup.sh; python manage.py runsslserver 192.168.90.2:8080"
     expose:
       - 8080
     volumes:
       - ${BACKEND_DIR}:/code
+    environment:
+      - FIXTURE=${FIXTURE}
 
   # TODO: Is this an entire different container worthy?
   celery:

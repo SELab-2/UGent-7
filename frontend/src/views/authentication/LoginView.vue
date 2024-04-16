@@ -12,9 +12,9 @@ const { t } = useI18n();
 
 <template>
     <BaseLayout>
-        <div class="flex pb-7 h-full">
+        <div class="flex align-items-center" id="wrapper">
             <div class="flex flex-column md:flex-row align-self-center w-12 lg:w-10 mx-auto">
-                <div class="w-12 md:w-5 bg-primary text-white p-5">
+                <div class="w-12 md:w-5 bg-primary text-white p-6">
                     <Title color="contrast">
                         {{ t('views.login.title') }}
                     </Title>
@@ -33,7 +33,11 @@ const { t } = useI18n();
                 <div
                     class="w-12 md:w-7 flex flex-column md:flex-row align-items-center md:align-items-end justify-content-between relative surface-100"
                 >
-                    <img :src="Illustration" :alt="t('views.login.illustration')" class="w-10rem md:w-15rem m-4 ml-7" />
+                    <img
+                        :src="Illustration"
+                        :alt="t('views.login.illustration')"
+                        class="w-10rem md:w-15rem m-4 my-5 ml:0 md:ml-7"
+                    />
                     <div class="bg-primary text-white p-4 w-full md:w-20rem">
                         <h1 class="mt-0">
                             {{ t('views.login.card.title') }}
@@ -48,4 +52,8 @@ const { t } = useI18n();
     </BaseLayout>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+#wrapper {
+    min-height: calc(100vh - (150px + 173px + 7rem)) !important;
+}
+</style>

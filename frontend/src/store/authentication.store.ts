@@ -73,26 +73,20 @@ export const useAuthStore = defineStore('auth', () => {
      * Refresh the user objects in the API endpoint.
      */
     async function refreshUser(): Promise<void> {
-        // Display toast messages.
-        const { addErrorMessage } = useMessagesStore();
-
         // Get the user information (using a cookie).
-        try {
-            // Get the user information when it is not set.
-            if (user.value === null) {
-                const response = await axios.get(endpoints.auth.whoami);
-                user.value = User.fromJSON(response.data as User);
-            }
-
-            if (view.value === null || !user.value.hasRoles(view.value)) {
-                view.value = user.value.roles[0];
-            }
-
-            // Get the role information.
-            await initUser();
-        } catch (error: any) {
-            addErrorMessage(error.response.statusText as string, error.response.data.detail as string);
+        if (user.value === null) {
+            const response = await axios.get(endpoints.auth.whoami);
+            user.value = User.fromJSON(response.data as User);
         }
+
+        if (view.value === null || !user.value.hasRoles(view.value)) {
+            view.value = user.value.roles[0];
+        }
+
+        // Get the role information.
+        // This throws an error on a failed login, to be caught by the caller.
+        // Get the user information when it is not set.
+        await initUser();
     }
 
     /**
@@ -103,18 +97,15 @@ export const useAuthStore = defineStore('auth', () => {
     async function login(ticket: string): Promise<void> {
         // Display toast messages.
         const { t } = useI18n();
-        const { addSuccessMessage, addErrorMessage } = useMessagesStore();
+        const { addSuccessMessage } = useMessagesStore();
 
         // Attempt to log in the user using the ticket.
-        try {
-            await axios.post(endpoints.auth.token.obtain, {
-                ticket,
-            });
+        // This throws an error on a failed login, to be caught by the caller.
+        await axios.post(endpoints.auth.token.obtain, {
+            ticket,
+        });
 
-            addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.login.success'));
-        } catch (error: any) {
-            addErrorMessage(t('toasts.messages.error'), error.response.data.detail as string);
-        }
+        addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.login.success'));
     }
 
     /**

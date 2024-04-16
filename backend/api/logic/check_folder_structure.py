@@ -184,7 +184,8 @@ def check_zip_structure(
             zip_file_path,
             directory,
             obligated_extensions,
-            blocked_extensions)
+            blocked_extensions
+        )
         if not result:
             return result, message
     # Check for any directories not present in the folder structure dictionary

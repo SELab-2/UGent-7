@@ -28,6 +28,14 @@ class Submission(models.Model):
     # Automatically set the submission time to the current time
     submission_time = models.DateTimeField(auto_now_add=True)
 
+    # Whether the checks results are still valid
+    # Becomes invalid after changing / adding a check
+    is_valid = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False
+    )
+
     class Meta:
         # A group can only have one submission with a specific number
         unique_together = ("group", "submission_number")
@@ -102,14 +110,6 @@ class CheckResult(PolymorphicModel):
         blank=True,
         null=True
     )  # type: ignore
-
-    # Whether the pass result is still valid
-    # Becomes invalid after changing / adding a check
-    is_valid = models.BooleanField(
-        default=True,
-        blank=False,
-        null=False
-    )
 
 
 class StructureCheckResult(CheckResult):

@@ -1,8 +1,30 @@
-from random import choice, randint, sample
 from functools import wraps
+from random import choice, randint, sample
 from time import time
+
 from django.db import connection
 from django.utils import timezone
+
+
+def fillFaculties():
+    with connection.cursor() as cursor:
+        faculties = [
+            ["Bio-ingenieurswetenschappen", "faculties.bioscience_engineering"],
+            ["Diergeneeskunde", "faculties.veterinary_medicine"],
+            ["Economie_Bedrijfskunde", "faculties.economics_business_administration"],
+            ["Farmaceutische_Wetenschappen", "faculties.pharmaceutical_sciences"],
+            ["Geneeskunde_Gezondheidswetenschappen", "faculties.medicine_health_sciences"],
+            ["Ingenieurswetenschappen_Architectuur", "faculties.engineering_architecture"],
+            ["Letteren_Wijsbegeerte", "faculties.arts_philosophy"],
+            ["Politieke_Sociale_Wetenschappen", "faculties.political_social_sciences"],
+            ["Psychologie_PedagogischeWetenschappen", "faculties.psychology_educational_sciences"],
+            ["Recht_Criminologie", "faculties.law_criminology"],
+            ["Wetenschappen", "faculties.sciences"]
+        ]
+
+        cursor.executemany(
+            "INSERT INTO authentication_faculty(id, name) VALUES (?, ?)", faculties
+        )
 
 
 def format_time(execution_time):
@@ -23,11 +45,12 @@ def timer(func):
     def handle(*args, **kwargs):
         start = time()
 
+        # print(f"{func.__name__} running")
         result = func(*args, **kwargs)
 
         print('Seeder {} took {}'.format(
             func.__name__, format_time((time() - start))
-        ))
+        ), flush=True)
 
         return result
 
@@ -323,12 +346,15 @@ def seed_submissions(faker, count: int = 4_000, struct_check_passed_prob: float 
 
         # Create submissions
         submissions = [
-            [faker.date_this_month(), faker.boolean(chance_of_getting_true=struct_check_passed_prob), choice(groups)]
+            [
+                faker.date_this_month(),
+                choice(groups)
+            ]
             for _ in range(count)
         ]
 
         # Insert submissions
         cursor.executemany(
-            "INSERT INTO api_submission(submission_time, structure_checks_passed, group_id) VALUES (?, ?, ?)",
+            "INSERT INTO api_submission(submission_time, group_id) VALUES (?, ?)",
             submissions
         )
