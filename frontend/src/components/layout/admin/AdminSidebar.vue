@@ -13,15 +13,6 @@ const items = ref([
                 label: 'admin.users.title',
                 route: 'admin-users',
             },
-            {
-                label: 'admin.assistants.title',
-            },
-            {
-                label: 'admin.students.title',
-            },
-            {
-                label: 'admin.teachers.title',
-            },
         ],
     },
 ]);
