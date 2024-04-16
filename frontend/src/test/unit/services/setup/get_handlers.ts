@@ -13,7 +13,6 @@ import {
     structureChecks,
     submissions,
 } from './data';
-import { json } from 'stream/consumers';
 
 const baseUrl = 'http://localhost';
 

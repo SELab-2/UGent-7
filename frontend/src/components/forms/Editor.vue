@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Editor from 'primevue/editor';
-import Button from 'primevue/button';
 
 const model = defineModel();
 </script>

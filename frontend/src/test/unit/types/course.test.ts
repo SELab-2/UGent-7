@@ -24,7 +24,7 @@ describe('course type', () => {
 
     it('create a course instance from JSON data', () => {
         const courseJSON = { ...courseData };
-        const course = Course.fromJSON(courseJSON as any);
+        const course = Course.fromJSON(courseJSON);
 
         expect(course).toBeInstanceOf(Course);
         expect(course.id).toBe(courseData.id);

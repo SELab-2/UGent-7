@@ -41,7 +41,7 @@ export class Course {
      *
      * @param course
      */
-    static fromJSON(course: Course|any): Course {
+    static fromJSON(course: Course): Course {
         const faculty =
             course.faculty !== undefined && course.faculty !== null ? Faculty.fromJSON(course.faculty) : null;
 

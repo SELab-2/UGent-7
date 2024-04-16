@@ -42,7 +42,7 @@ export class Project {
      *
      * @param project
      */
-    static fromJSON(project: Project|any): Project {
+    static fromJSON(project: Project): Project {
         let course = null;
 
         if (project.course !== null && project.course !== undefined) {

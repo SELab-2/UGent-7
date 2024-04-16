@@ -63,7 +63,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                 <div class="grid">
                     <template v-if="incomingProjects !== null">
                         <template v-if="incomingProjects.length > 0">
-                            <div class="col-12" v-for="project in incomingProjects">
+                            <div class="col-12" v-for="project in incomingProjects" :key="project.id">
                                 <ProjectCard
                                     type="small"
                                     :project="project"

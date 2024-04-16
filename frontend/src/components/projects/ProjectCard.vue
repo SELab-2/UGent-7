@@ -52,7 +52,7 @@ const { t } = useI18n();
         >
             <div class="p-5 surface-300 border-round">
                 <div class="flex align-items-center gap-5">
-                    <i class="pi pi-clock text-6xl" />
+                    <i class="pi pi-clock text-6xl text-primary" />
                     <div class="w-full">
                         <h3 class="m-0">{{ project.name }}</h3>
                         <div class="flex justify-content-between align-items-center mt-2">
@@ -96,7 +96,15 @@ const { t } = useI18n();
                     <b>{{ t('views.projects.submissionStatus') }}</b
                     >: ok
                 </div>
-                <ProgressBar class="mt-3" :value="project.getProgress()" />
+                <ProgressBar class="mt-3" :value="project.getProgress()">
+                    {{
+                        t(
+                            'views.projects.days',
+                            { hour: moment(project.deadline).format('H:m') },
+                            moment(project.deadline).diff(moment(), 'day'),
+                        )
+                    }}
+                </ProgressBar>
             </template>
             <template #footer>
                 <RouterLink
