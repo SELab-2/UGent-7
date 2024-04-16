@@ -77,6 +77,9 @@ class SubmissionSerializer(serializers.ModelSerializer):
         # Set the new submission number to the maximum value plus 1
         validated_data['submission_number'] = max_submission_number + 1
 
+        # Required otherwise the default value isn't used
+        validated_data["is_valid"] = True
+
         # Create the Submission instance without the files
         submission = Submission.objects.create(**validated_data)
 
@@ -89,4 +92,5 @@ class SubmissionSerializer(serializers.ModelSerializer):
             #     passed = False
 
         submission.save()
+
         return submission
