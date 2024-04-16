@@ -1,5 +1,5 @@
 import time
-from random import choices, randint
+from random import choices, randint, seed
 
 from api.models.assistant import Assistant
 from api.models.course import Course
@@ -10,8 +10,12 @@ from api.models.submission import Submission
 from api.models.teacher import Teacher
 from api.seeders.faker import faker
 from api.seeders.seeder import (fillFaculties, seed_assistants, seed_courses,
-                                seed_groups, seed_projects, seed_students,
-                                seed_submissions, seed_teachers)
+                                seed_docker_images, seed_extra_checks,
+                                seed_file_extensions, seed_groups,
+                                seed_projects, seed_structure_checks,
+                                seed_students, seed_submission_files,
+                                seed_submission_results, seed_submissions,
+                                seed_teachers)
 from authentication.models import Faculty, User
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -109,7 +113,12 @@ class Command(BaseCommand):
             amount_of_courses = 3
             amount_of_projects = 4
             amount_of_groups = 7
+            amount_of_file_extensions = 5
+            amount_of_docker_images = 5
+            amount_of_structure_checks = 2
+            amount_of_extra_checks = 1
             amount_of_submissions = 10
+            amount_of_submission_files = 20
         elif size == "medium":
             amount_of_students = 5_000
             amount_of_assistants = 500
@@ -117,7 +126,12 @@ class Command(BaseCommand):
             amount_of_courses = 250
             amount_of_projects = 500
             amount_of_groups = 500
+            amount_of_file_extensions = 50
+            amount_of_docker_images = 50
+            amount_of_structure_checks = 250
+            amount_of_extra_checks = 125
             amount_of_submissions = 500
+            amount_of_submission_files = 1_000
         elif size == "large":
             amount_of_students = 50_000
             amount_of_assistants = 5_000
@@ -125,7 +139,12 @@ class Command(BaseCommand):
             amount_of_courses = 1_500
             amount_of_projects = 3_000
             amount_of_groups = 3_000
+            amount_of_file_extensions = 50
+            amount_of_docker_images = 50
+            amount_of_structure_checks = 1_500
+            amount_of_extra_checks = 750
             amount_of_submissions = 3_000
+            amount_of_submission_files = 6_000
         else:
             self.stdout.write(self.style.ERROR("give a size from small, medium or large!"))
             return
@@ -137,7 +156,7 @@ class Command(BaseCommand):
         # Seed students
         fake = faker()
         start_time = time.time()
-        seed_students(fake, amount_of_students, 0)
+        seed_students(fake, amount_of_students)
 
         # Seed assistants
         seed_assistants(fake, amount_of_assistants, amount_of_students)
@@ -154,8 +173,26 @@ class Command(BaseCommand):
         # Seed groups
         seed_groups(faker(), amount_of_groups)
 
+        # Seed file extensions
+        seed_file_extensions(faker(), amount_of_file_extensions)
+
+        # Seed docker images
+        seed_docker_images(faker(), amount_of_docker_images)
+
+        # Seed structure checks
+        seed_structure_checks(faker(), amount_of_structure_checks)
+
+        # Seed extra checks
+        seed_extra_checks(faker(), amount_of_extra_checks)
+
         # Seed submissions
         seed_submissions(faker(), amount_of_submissions)
+
+        # Seed submission files
+        seed_submission_files(faker(), amount_of_submission_files)
+
+        # Seed submission results
+        seed_submission_results(faker())
 
         end_time = time.time()
         execution_time = end_time - start_time

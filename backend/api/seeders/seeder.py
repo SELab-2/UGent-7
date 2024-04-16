@@ -1,6 +1,8 @@
 from functools import wraps
 from random import choice, randint, sample
+from re import sub
 from time import time
+from unicodedata import category
 
 from django.db import connection
 from django.utils import timezone
@@ -336,7 +338,122 @@ def seed_groups(faker, count: int = 4_000, min_score: int = 0) -> None:
 
 
 @timer
-def seed_submissions(faker, count: int = 4_000, struct_check_passed_prob: float = 70):
+def seed_file_extensions(faker, count: int = 50):
+    """Seed file extensions into the database"""
+    with connection.cursor() as cursor:
+        extensions: list[list[str]] = []
+        while len(extensions) < count:
+            extension: str = faker.file_extension()
+            if [extension] not in extensions:
+                extensions.append([extension])
+
+        cursor.executemany(
+            "INSERT INTO api_fileextension(extension) VALUES (?)",
+            extensions
+        )
+
+
+@timer
+def seed_docker_images(faker, count: int = 50):
+    with connection.cursor() as cursor:
+        users = list(
+            cursor.execute(sql="SELECT id FROM authentication_user").fetchall()
+        )
+
+        docker_images = [
+            [
+                faker.file_name(category="image"),
+                faker.file_path(extension="", depth=faker.random_int(min=0, max=5)),
+                choice(users)[0],
+                True
+            ]
+            for _ in range(count)
+        ]
+
+        cursor.executemany(
+            "INSERT INTO api_dockerimage(name, file, owner_id, public) VALUES (?, ?, ?, ?)",
+            docker_images
+        )
+
+
+@timer
+def seed_structure_checks(faker, count: int = 1_500):
+    with connection.cursor() as cursor:
+        projects = list(
+            cursor.execute(sql="SELECT id FROM api_project").fetchall()
+        )
+        extensions = list(
+            cursor.execute(sql="SELECT id FROM api_fileextension").fetchall()
+        )
+
+        structure_checks = [
+            [
+                i,
+                faker.file_path(extension="", depth=faker.random_int(min=0, max=5)),
+                choice(projects)[0]
+            ]
+            for i in range(count)
+        ]
+
+        obligated_extensions = []
+        while len(obligated_extensions) < count * 2:
+            project = faker.pyint(min_value=0, max_value=count - 1)
+            extension = choice(extensions)[0]
+            if [project, extension] not in obligated_extensions:
+                obligated_extensions.append([project, extension])
+
+        blocked_extensions = []
+        while len(blocked_extensions) < count * 2:
+            project = faker.pyint(min_value=0, max_value=count - 1)
+            extension = choice(extensions)[0]
+            if [project, extension] not in blocked_extensions:
+                blocked_extensions.append([project, extension])
+
+        cursor.executemany(
+            "INSERT INTO api_structurecheck(id, name, project_id) VALUES (?, ?, ?)",
+            structure_checks
+        )
+        cursor.executemany(
+            "INSERT INTO api_structurecheck_obligated_extensions(structurecheck_id, fileextension_id) VALUES (?, ?)",
+            obligated_extensions
+
+        )
+        cursor.executemany(
+            "INSERT INTO api_structurecheck_blocked_extensions(structurecheck_id, fileextension_id) VALUES (?, ?)",
+            blocked_extensions
+
+        )
+
+
+@timer
+def seed_extra_checks(faker, count: int = 750):
+    with connection.cursor() as cursor:
+        projects = list(
+            cursor.execute(sql="SELECT id FROM api_project").fetchall()
+        )
+        docker_images = list(
+            cursor.execute(sql="SELECT id FROM api_dockerimage").fetchall()
+        )
+
+        extra_checks = [
+            [
+                choice(projects)[0],
+                faker.boolean(chance_of_getting_true=50),
+                choice(docker_images)[0],
+                faker.file_path(extension="", depth=faker.random_int(min=0, max=5)),
+                faker.pyint(min_value=100, max_value=1000),
+            ]
+            for _ in range(count)
+        ]
+
+        cursor.executemany(
+            "INSERT INTO api_extracheck(project_id, show_log, docker_image_id, file, timeout) VALUES (?, ?, ?, ?, ?)",
+            extra_checks
+        )
+
+
+@timer
+def seed_submissions(faker, count: int = 4_000):
     """Seed submissions into the database"""
     with connection.cursor() as cursor:
         # Fetch existing groups.
@@ -348,13 +465,110 @@ def seed_submissions(faker, count: int = 4_000, struct_check_passed_prob: float 
         submissions = [
             [
                 faker.date_this_month(),
-                choice(groups)
+                choice(groups),
+                True
             ]
             for _ in range(count)
         ]
 
         # Insert submissions
         cursor.executemany(
-            "INSERT INTO api_submission(submission_time, group_id) VALUES (?, ?)",
+            "INSERT INTO api_submission(submission_time, group_id, is_valid) VALUES (?, ?, ?)",
             submissions
+        )
+
+
+@timer
+def seed_submission_files(faker, count: int = 10_000):
+    """Seed submission files into the database"""
+    with connection.cursor() as cursor:
+        submissions = list(
+            cursor.execute(sql="SELECT id FROM api_submission").fetchall()
+        )
+
+        files = [
+            [
+                choice(submissions)[0],
+                faker.file_path(extension=faker.file_extension(), depth=faker.random_int(min=0, max=5)),
+            ]
+        ]
+
+        cursor.executemany(
+            "INSERT INTO api_submissionfile(submission_id, file) VALUES (?, ?)",
+            files
+        )
+
+
+@timer
+def seed_submission_results(faker):
+    with connection.cursor() as cursor:
+        groups = list(
+            cursor.execute(sql="SELECT id, project_id FROM api_group").fetchall()
+        )
+        submissions = list(
+            cursor.execute(sql="SELECT id, group_id FROM api_submission").fetchall()
+        )
+        structure_checks = list(
+            cursor.execute(sql="SELECT id, project_id FROM api_structurecheck").fetchall()
+        )
+        extra_checks = list(
+            cursor.execute(sql="SELECT id, project_id FROM api_extracheck").fetchall()
+        )
+
+        check_result = ("QUEUED", "RUNNING", "SUCCESS", "FAILED")
+        error_structure = ("BLOCKED_EXTENSION", "OBLIGATED_EXTENSION_NOT_FOUND",
+                           "OBLIGATED_DIRECTORY_NOT_FOUND", "UNASKED_DIRECTORY")
+        error_extra = ("TIMEOUT", "MEMORYLIMIT", "RUNTIMEERROR", "OUTPUTLIMIT", "INTERNALERROR", "UNKNOWN")
+
+        results = []
+        structure_results = []
+        extra_results = []
+
+        for submission in submissions:
+            project = next(filter(lambda group: group[0] == submission[1], groups))[1]
+            structure_checks_project = list(filter(lambda check: check[1] == project, structure_checks))
+            extra_checks_project = list(filter(lambda check: check[1] == project, extra_checks))
+
+            for check in structure_checks_project:
+                result = choice(check_result)
+                id = faker.unique.random_int(min=111111, max=999999)
+                results.append([
+                    id,
+                    result,
+                    choice(error_structure) if result == "FAILED" else None,
+                    submission[0],
+                ])
+
+                structure_results.append([
+                    id,
+                    check[0],
+                ])
+
+            for check in extra_checks_project:
+                result = choice(check_result)
+                id = faker.unique.random_int(min=111111, max=999999)
+                results.append([
+                    id,
+                    result,
+                    choice(error_extra) if result == "FAILED" else None,
+                    submission[0],
+                ])
+
+                extra_results.append([
+                    id,
+                    faker.file_path(extension=faker.file_extension(category="text"), depth=faker.random_int(min=0, max=5)),
+                    check[0],
+                ])
+
+        cursor.executemany(
+            "INSERT INTO api_checkresult(id, result, error_message, submission_id) VALUES (?, ?, ?, ?)",
+            results
+        )
+        cursor.executemany(
+            "INSERT INTO api_structurecheckresult(checkresult_ptr_id, structure_check_id) VALUES (?, ?)",
+            structure_results
+        )
+        cursor.executemany(
+            "INSERT INTO api_extracheckresult(checkresult_ptr_id, log_file, extra_check_id) VALUES (?, ?, ?)",
+            extra_results
         )

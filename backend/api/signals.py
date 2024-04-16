@@ -1,3 +1,4 @@
+
 from api.models.checks import ExtraCheck, StructureCheck
 from api.models.student import Student
 from api.models.submission import (ExtraCheckResult, StateEnum,
@@ -67,18 +68,33 @@ def _run_extra_checks(submission: Submission, **kwargs):
 @receiver(post_save, sender=StructureCheck)
 @receiver(post_delete, sender=StructureCheck)
 def hook_structure_check(sender, instance: StructureCheck, **kwargs):
-    for group in instance.project.groups.all():
-        submissions = group.submissions.order_by("-submission_time")
-        if submissions:
-            run_structure_checks.send(sender=StructureCheck, submission=submissions[0])
+    if not kwargs.get('raw', False):
+        for group in instance.project.groups.all():
+            submissions = group.submissions.order_by("-submission_time")
+            if submissions:
+                run_structure_checks.send(sender=StructureCheck, submission=submissions[0])
 
-            for submission in submissions[1:]:
-                submission.is_valid = False
-                submission.save()
+                for submission in submissions[1:]:
+                    submission.is_valid = False
+                    submission.save()
+
+
+@receiver(post_save, sender=ExtraCheck)
+@receiver(post_delete, sender=ExtraCheck)
+def hook_extra_check(sender, instance: ExtraCheck, **kwargs):
+    if not kwargs.get('raw', False):
+        for group in instance.project.groups.all():
+            submissions = group.submissions.order_by("-submission_time")
+            if submissions:
+                run_extra_checks.send(sender=ExtraCheck, submission=submissions[0])
+
+                for submission in submissions[1:]:
+                    submission.is_valid = False
+                    submission.save()
 
 
 @receiver(post_save, sender=Submission)
 def hook_submission(sender, instance: Submission, created: bool, **kwargs):
-    if created:
+    if created and not kwargs.get('raw', False):
         run_structure_checks.send(sender=Submission, submission=instance)
         run_extra_checks.send(sender=Submission, submission=instance)
