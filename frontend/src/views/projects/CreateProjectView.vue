@@ -9,6 +9,7 @@ import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
+import Tree from 'primevue/tree';
 import { reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -98,6 +99,41 @@ async function submitProject(): Promise<void> {
         await push({ name: 'dashboard' });
     }
 }
+
+interface TreeNode {
+  key: string;
+  label: string;
+  children?: TreeNode[]; // Optional if the node has children
+  // Additional properties as needed
+}
+
+// Define tree data
+const nodes: TreeNode[] = [
+  {
+    key: '1',
+    label: 'Node 1',
+    children: [
+      {
+        key: '1-1',
+        label: 'Child Node 1',
+      },
+      {
+        key: '1-2',
+        label: 'Child Node 2',
+      },
+    ],
+  },
+  {
+    key: '2',
+    label: 'Node 2',
+    children: [
+        {
+            key: '1-2',
+            label: 'Child Node 2',
+        },
+    ]
+  },
+];
 </script>
 
 <template>
@@ -243,6 +279,11 @@ async function submitProject(): Promise<void> {
                             :multiple="false"
                             @select="onZipStructureUpload"
                         />
+                    </div>
+
+                    <!-- tree view for structure checks -->
+                    <div>
+                        <Tree :value="nodes" class="w-full md:w-30rem"></Tree>
                     </div>
                 </div>
             </div>
