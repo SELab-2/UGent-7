@@ -13,6 +13,7 @@ import { storeToRefs } from 'pinia';
 import { type Project } from '@/types/Project.ts';
 import { useRoute, useRouter } from 'vue-router';
 import { useCourses } from '@/composables/services/course.service.ts';
+import { type Course, getAcademicYear } from '@/types/Course.ts';
 
 /* Composable injections */
 const { t, locale } = useI18n();
@@ -38,6 +39,15 @@ const projectsWithDeadline = computed<Project[] | null>(() => {
     return (
         projects.value?.filter((project) => {
             return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
+        }) ?? null
+    );
+});
+
+/* Filter the courses for this year */
+const currentCourses = computed<Course[] | null>(() => {
+    return (
+        courses.value?.filter((course) => {
+            return course.academic_startyear === getAcademicYear();
         }) ?? null
     );
 });
@@ -204,13 +214,13 @@ watch(selectedDate, (date) => {
                         </template>
                     </div>
 
-                    <template v-if="courses !== null && user?.isTeacher() && user?.isAssistant()">
+                    <template v-if="currentCourses !== null && (user?.isTeacher() || user?.isAssistant())">
                         <!-- Add project button -->
                         <ProjectCreateButton
                             class="mt-5"
                             :label="t('components.button.createProject')"
                             severity="secondary"
-                            :courses="courses"
+                            :courses="currentCourses"
                         />
                     </template>
                 </div>
