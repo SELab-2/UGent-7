@@ -14,7 +14,7 @@ class StructureCheck(models.Model):
 
     # ID should be generated automatically
 
-    # Name of the structure check
+    # Name of the directory the structure check checks in
     name = models.CharField(
         max_length=100,
         blank=False,
