@@ -10,7 +10,7 @@ import { useCourses } from '@/composables/services/course.service.ts';
 import FileUpload from 'primevue/fileupload';
 import { PrimeIcons } from 'primevue/api';
 import AllSubmission from '@/components/submissions/AllSubmission.vue';
-import { useGroup } from '@/composables/services/groups.service.ts';
+import { useGroup } from '@/composables/services/group.service.ts';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 
 const { t } = useI18n();
