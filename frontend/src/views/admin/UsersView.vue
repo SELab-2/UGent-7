@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import DataTable, {
-    type DataTableSelectAllChangeEvent,
-} from 'primevue/datatable';
+import DataTable, { type DataTableSelectAllChangeEvent } from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import InputSwitch from 'primevue/inputswitch';
@@ -23,7 +21,7 @@ import { usePaginator } from '@/composables/filters/paginator.ts';
 
 import { roles, type Role, User } from '@/types/users/User.ts';
 import { getUserFilters } from '@/types/filter/Filter.ts';
-import {useRoute} from "vue-router";
+import { useRoute } from 'vue-router';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -46,14 +44,14 @@ onMounted(async () => {
         () => {
             loading.value = true;
         },
-        { deep: true }
+        { deep: true },
     );
 
     onFilter(fetchUsers);
 
     onFilter(
         async () => {
-            await resetPagination(pagination);
+            await resetPagination([pagination]);
         },
         0,
         false,
@@ -61,9 +59,9 @@ onMounted(async () => {
 });
 
 const creators = ref<Record<Role, (arg: any) => Promise<void>>>({});
-const createFunctions = ref<((arg: any) => Promise<void>)[]>([createStudent, createAssistant, createTeacher]);
+const createFunctions = ref<Array<(arg: any) => Promise<void>>>([createStudent, createAssistant, createTeacher]);
 const destroyers = ref<Record<Role, (arg: any) => Promise<void>>>({});
-const destroyFunctions = ref<((arg: any) => Promise<void>)[]>([deleteStudent, deleteAssistant, deleteTeacher]);
+const destroyFunctions = ref<Array<(arg: any) => Promise<void>>>([deleteStudent, deleteAssistant, deleteTeacher]);
 
 const loading = ref(false);
 const totalRecords = ref(0);
@@ -90,12 +88,12 @@ const fillDestroyers = (): void => {
         const role: Role = roles[i];
         destroyers.value[role] = destroyFunctions.value[i - 1];
     }
-}
+};
 const fetchUsers = async (): Promise<void> => {
     loading.value = true;
     await searchUsers(filter.value, page.value, pageSize.value).then(() => {
         loading.value = false;
-    })
+    });
 };
 const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
     selectAll.value = event.checked;
@@ -135,7 +133,7 @@ const updateRole = (role: Role): void => {
 
 const saveItem = async (): Promise<void> => {
     const value = pagination.value;
-    if (value !== null && value.results !== null) {
+    if (value?.results !== null) {
         const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
         // update remotely TODO
         const paginationItem = value.results[index];
@@ -148,9 +146,9 @@ const saveItem = async (): Promise<void> => {
                 // add role in backend
                 const func = creators.value[role];
 
-                if (role === "student") {
-                    console.log("student reported");
-                    const data: {[key: string]: any} = {
+                if (role === 'student') {
+                    console.log('student reported');
+                    const data: Record<string, any> = {
                         ...editItem.value,
                         studentId: editItem.value.id,
                     };
@@ -158,15 +156,14 @@ const saveItem = async (): Promise<void> => {
                 } else {
                     await func(editItem.value);
                 }
-            }
-            else if (paginationIncludes && !editIncludes) {
+            } else if (paginationIncludes && !editIncludes) {
                 // remove role in backend
                 const func = destroyers.value[role];
                 await func(editItem.value.id);
             }
         }
         // update admin status
-        await toggleAdmin(editItem.value.id, editItem.value.is_staff)
+        await toggleAdmin(editItem.value.id, editItem.value.is_staff);
         // update locally
         await fetchUsers();
     } else {
@@ -238,7 +235,7 @@ const saveItem = async (): Promise<void> => {
                                     :placeholder="t(column.header) + ' ' + t('admin.search')"
                                 />
                             </IconField>
-                            <SelectButton v-else multiple v-model="filter.roles" :options="roles.toSpliced(0, 1)"/>
+                            <SelectButton v-else multiple v-model="filter.roles" :options="roles.toSpliced(0, 1)" />
                         </template>
                         <template #body="{ data }" v-if="column.field == 'roles'">
                             {{ data.roles.join(', ') }}

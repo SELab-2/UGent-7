@@ -1,4 +1,4 @@
-import { type AxiosError } from 'axios';
+import { type AxiosError, type AxiosResponse } from 'axios';
 import { client } from '@/config/axios.ts';
 import { type Ref } from 'vue';
 import { useMessagesStore } from '@/store/messages.store.ts';
@@ -66,15 +66,15 @@ export async function patch(
     endpoint: string,
     data: any,
     ref: Ref<Response | null>,
-    contentType: string = 'application/json'
-): Promise<void>{
+    contentType: string = 'application/json',
+): Promise<void> {
     try {
-        const response = await client.patch(endpoint, data, {
+        const response: AxiosResponse<Response, any> = await client.patch(endpoint, data, {
             headers: {
                 'Content-Type': contentType,
             },
         });
-        ref.value = Response.fromJSON(response.data)
+        ref.value = Response.fromJSON(response.data);
     } catch (error: any) {
         processError(error);
         console.error(error);
