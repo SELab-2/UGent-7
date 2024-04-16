@@ -9,8 +9,7 @@ class TeacherPermission(IsAuthenticated):
     def has_permission(self, request, view):
         """Check if user has permission to view a general Teacher endpoint."""
         user = request.user
-
-        if view.action in ['list', 'retrieve', 'search']:
+        if view.action in ['list', 'retrieve', 'search', 'projects']:
             # Every teacher can get the list of teachers
             return user.is_authenticated and is_teacher(user)
 
