@@ -9,6 +9,7 @@ import Button from 'primevue/button';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
+import SelectButton from 'primevue/selectbutton';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import { ref, onMounted, watch } from 'vue';
@@ -237,6 +238,7 @@ const saveItem = async (): Promise<void> => {
                                     :placeholder="t(column.header) + ' ' + t('admin.search')"
                                 />
                             </IconField>
+                            <SelectButton v-else multiple v-model="filter.roles" :options="roles.toSpliced(0, 1)"/>
                         </template>
                         <template #body="{ data }" v-if="column.field == 'roles'">
                             {{ data.roles.join(', ') }}

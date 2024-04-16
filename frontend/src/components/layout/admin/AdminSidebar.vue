@@ -30,6 +30,9 @@ const items = ref([
 <template>
     <div class="card flex">
         <Menu :model="items" class="w-full md:w-15rem">
+            <template #submenuheader="{ item }">
+                <span class="ml-1">{{ t(item.label) }}</span>
+            </template>
             <template #item="{ item, props }">
                 <RouterLink :to="{ name: item.route }">
                     <a v-ripple class="flex align-items-center" v-bind="props.action">

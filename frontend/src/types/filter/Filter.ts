@@ -4,6 +4,7 @@ export type UserFilter = {
     id: string;
     username: string;
     email: string;
+    roles: string[];
 } & Filter;
 
 export type CourseFilter = {
@@ -27,11 +28,15 @@ export function getUserFilters(query: LocationQuery): UserFilter {
         id: query.id?.toString() ?? '',
         username: query.username?.toString() ?? '',
         email: query.email?.toString() ?? '',
+        roles: [],
+    };
+
+    if (query.roles !== undefined) {
+        filters.roles = getQueryList(query.roles as string | string[]);
     }
 
     return filters;
 }
-
 
 /**
  * Get the course filters from the query.

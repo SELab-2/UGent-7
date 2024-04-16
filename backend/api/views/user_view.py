@@ -39,6 +39,8 @@ class UserViewSet(ReadOnlyModelViewSet):
         identifier = request.query_params.get("id", "")
         username = request.query_params.get("username", "")
         email = request.query_params.get("email", "")
+        roles = request.query_params.getlist("roles[]")
+        print(roles, flush=True)
 
         queryset1 = self.get_queryset().filter(
             id__icontains=search
@@ -49,13 +51,29 @@ class UserViewSet(ReadOnlyModelViewSet):
         queryset3 = self.get_queryset().filter(
             email__icontains=search
         )
+        queryset4 = self.get_queryset().all()
+        if "student" in roles:
+            print("student found", flush=True)
+            queryset4 = queryset4.intersection(
+                self.get_queryset().filter(student__isnull=False, student__is_active=True)
+            )
+        if "assistant" in roles:
+            print("assistant found", flush=True)
+            queryset4 = queryset4.intersection(
+                self.get_queryset().filter(assistant__isnull=False, assistant__is_active=True)
+            )
+        if "teacher" in roles:
+            print("teacher found", flush=True)
+            queryset4 = queryset4.intersection(
+                self.get_queryset().filter(teacher__isnull=False, teacher__is_active=True)
+            )
         queryset1 = queryset1.union(queryset2, queryset3)
         queryset = self.get_queryset().filter(
             id__icontains=identifier,
             username__icontains=username,
             email__icontains=email
         )
-        queryset = queryset.intersection(queryset1)
+        queryset = queryset.intersection(queryset1, queryset4)
 
         serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
             "request": request
