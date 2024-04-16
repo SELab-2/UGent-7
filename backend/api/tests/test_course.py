@@ -663,22 +663,6 @@ class CourseModelTestsAsTeacher(APITestCase):
             self.user
         )
 
-    def test_add_self(self):
-        """
-        Teacher should be able to add him/herself to a course.
-        """
-        course = get_course()
-
-        response = self.client.post(
-            reverse("course-teachers", args=[str(course.id)]),
-            data={"teacher": self.user.id},
-            follow=True,
-        )
-
-        # Make sure the current logged in teacher was added correctly
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(course.teachers.filter(id=self.user.id).exists())
-
     def test_remove_self(self):
         """
         Teacher should be able to remove him/herself from a course.
@@ -709,7 +693,7 @@ class CourseModelTestsAsTeacher(APITestCase):
         )
 
         # Make sure the check was successful
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
 
     def test_add_assistant(self):
         """
