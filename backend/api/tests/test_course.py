@@ -798,6 +798,7 @@ class CourseModelTestsAsTeacher(APITestCase):
             data={
                 "name": "Introduction to Computer Science",
                 "academic_startyear": 2022,
+                "excerpt": "Excerpt",
                 "description": "An introductory course on computer science.",
                 "faculty": faculty.id,
             },
