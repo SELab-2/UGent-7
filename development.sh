@@ -111,7 +111,7 @@ if [ "$seed" = true ]; then
   sizes=("small" "medium" "large")
   for size in "${sizes[@]}"; do
     echo "Seeding $size database..."
-    docker exec backend sh -c "python manage.py seed_db $size" > /dev/null 2>&1
+    docker exec backend sh -c "python manage.py seed_db $size"  2> /dev/null
 
     echo "Dumping $size fixtures..."
     docker exec backend sh -c "python manage.py dumpdata api --output=api/fixtures/$size/$size.json"
