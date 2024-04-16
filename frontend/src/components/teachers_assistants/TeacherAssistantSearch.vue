@@ -47,8 +47,20 @@ const filteredUsers = ref<User[] | null>(null);
  * Fetch the users based on the filter.
  */
 async function fetchUsers(): Promise<void> {
-    await searchTeachers(filter.value, page.value, pageSize.value);
-    await searchAssistants(filter.value, page.value, pageSize.value);
+    if (filter.value.roles.length === 0) {
+        // No roles selected, so all users should be fetched
+        await searchTeachers(filter.value, page.value, pageSize.value);
+        await searchAssistants(filter.value, page.value, pageSize.value);
+    } else {
+        // Depending on the roles, fetch the users
+        if (filter.value.roles.includes('teacher')) {
+            await searchTeachers(filter.value, page.value, pageSize.value);
+        }
+
+        if (filter.value.roles.includes('assistant')) {
+            await searchAssistants(filter.value, page.value, pageSize.value);
+        }
+    }
 
     // Set the filtered users
     filteredUsers.value = [...(teacherPagination.value?.results ?? []), ...(assistantPagination.value?.results ?? [])];

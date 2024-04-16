@@ -116,9 +116,9 @@ const handleClone = async (): Promise<void> => {
     <div class="flex justify-content-between align-items-center my-6">
         <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
 
-       <div v-tooltip.top="t('views.courses.teachers_and_assistants.edit')">
+        <div v-tooltip.top="t('views.courses.teachers_and_assistants.edit')">
             <TeacherAssistantUpdateButton :course="props.course" />
-       </div>
+        </div>
     </div>
     <!-- List with teachers and assistants -->
     <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />

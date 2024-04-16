@@ -25,6 +25,5 @@ app.use(ConfirmationService);
 app.directive('ripple', Ripple);
 app.directive('tooltip', Tooltip);
 
-
 /* Mount the application */
 app.mount('#app');

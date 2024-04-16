@@ -39,24 +39,18 @@ class AssistantViewSet(ModelViewSet):
     def search(self, request: Request) -> Response:
         # Extract filter params
         search = request.query_params.get("search", "")
-        roles = request.query_params.getlist("roles[]")
         faculties = request.query_params.getlist("faculties[]")
 
-        # Make sure that if roles are passed, assistant is a selected role
-        if roles and "assistant" not in roles:
-            queryset = []
+        # Filter the queryset based on the search term
+        queryset = Assistant.objects.annotate(
+            full_name=Concat('first_name', Value(' '), 'last_name')
+        ).filter(
+            full_name__icontains=search
+        )
 
-        else:
-            # Filter the queryset based on the search term
-            queryset = Assistant.objects.annotate(
-                full_name=Concat('first_name', Value(' '), 'last_name')
-            ).filter(
-                full_name__icontains=search
-            )
-
-            # Filter the queryset based on selected faculties
-            if faculties:
-                queryset = queryset.filter(faculties__id__in=faculties)
+        # Filter the queryset based on selected faculties
+        if faculties:
+            queryset = queryset.filter(faculties__id__in=faculties)
 
         # Serialize the resulting queryset
         serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
