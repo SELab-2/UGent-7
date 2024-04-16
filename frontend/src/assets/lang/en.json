@@ -179,7 +179,10 @@
     "admin": {
         "title": "Admin",
         "keyword": "Keyword",
-        "search": "Search",
+        "search": {
+            "search": "Search",
+            "general": "Search by general keyword"
+        },
         "edit": "Edit",
         "cancel": "Cancel",
         "save": "Save",

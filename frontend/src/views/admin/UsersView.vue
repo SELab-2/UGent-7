@@ -205,7 +205,7 @@ const saveItem = async (): Promise<void> => {
                                 </InputIcon>
                                 <InputText
                                     v-model="filter['search']"
-                                    :placeholder="t('admin.keyword') + ' ' + t('admin.search')"
+                                    :placeholder="t('admin.search.general')"
                                 />
                             </IconField>
                         </div>
@@ -232,7 +232,7 @@ const saveItem = async (): Promise<void> => {
                                 </InputIcon>
                                 <InputText
                                     v-model="filter[column.field]"
-                                    :placeholder="t(column.header) + ' ' + t('admin.search')"
+                                    :placeholder="t('admin.search.search')"
                                 />
                             </IconField>
                             <SelectButton v-else multiple v-model="filter.roles" :options="roles.toSpliced(0, 1)" />

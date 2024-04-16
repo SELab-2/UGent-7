@@ -179,7 +179,10 @@
     "admin": {
         "title": "Beheerder",
         "keyword": "Trefwoord",
-        "search": "Zoektocht",
+        "search": {
+            "search": "Zoeken",
+            "general": "Zoek op algemeen trefwoord"
+        },
         "edit": "Bewerken",
         "cancel": "Annuleer",
         "save": "Sla op",
