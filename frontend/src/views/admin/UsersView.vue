@@ -203,10 +203,7 @@ const saveItem = async (): Promise<void> => {
                                 <InputIcon>
                                     <i class="pi pi-search" />
                                 </InputIcon>
-                                <InputText
-                                    v-model="filter['search']"
-                                    :placeholder="t('admin.search.general')"
-                                />
+                                <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
                             </IconField>
                         </div>
                     </template>
@@ -230,10 +227,7 @@ const saveItem = async (): Promise<void> => {
                                 <InputIcon>
                                     <i class="pi pi-search" />
                                 </InputIcon>
-                                <InputText
-                                    v-model="filter[column.field]"
-                                    :placeholder="t('admin.search.search')"
-                                />
+                                <InputText v-model="filter[column.field]" :placeholder="t('admin.search.search')" />
                             </IconField>
                             <SelectButton v-else multiple v-model="filter.roles" :options="roles.toSpliced(0, 1)" />
                         </template>
