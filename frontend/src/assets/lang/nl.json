@@ -51,6 +51,7 @@
             "joinGroup": "Kies groep",
             "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
+            "edit": "Bewerk project",
             "name": "Projectnaam",
             "description": "Beschrijving",
             "start_date": "Start project",
