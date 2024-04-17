@@ -69,11 +69,30 @@
         },
         "courses": {
             "create": "Create course",
+            "clone": "Clone course",
+            "clone_assistants": "Clone assistants:",
+            "clone_teachers": "Clone teachers:",
             "edit": "Edit course",
             "name": "Course name",
             "description": "Description",
             "faculty": "Faculty",
             "year": "Academic year",
+            "enroll": "Enroll",
+            "leave": "Leave",
+            "teachers_and_assistants": {
+                "title": "People linked to this course",
+                "enroll": "Add as {0}",
+                "leave": "Remove from course",
+                "edit": "Edit users",
+                "search": {
+                    "search": "Search",
+                    "faculty": "Faculty",
+                    "role": "Role",
+                    "placeholder": "Search a user by name",
+                    "title": "Find users to link to this course",
+                    "results": "{0} users found for set filters"
+                }
+            },
             "search": {
                 "search": "Search",
                 "faculty": "Faculty",
@@ -101,11 +120,13 @@
         }
     },
     "components": {
-        "buttons": {
-            "academic_year": "Academic year {0}"
+        "button": {
+            "academic_year": "Academic year {0}",
+            "createProject": "Create a new project"
         },
         "card": {
-            "open": "details"
+            "open": "Details",
+            "newProject": "New project"
         },
         "submission": "Submit"
     },
@@ -129,6 +150,16 @@
                 "leave": {
                     "success": "You have been successfully unenrolled for the course '{0}'",
                     "error": "An error occurred while unenrolling for the course '{0}'."
+                },
+                "teachers_and_assistants": {
+                    "enroll": {
+                        "success": "{0} has been successfully added as {1} to the course.",
+                        "error": "An error occurred while adding {0} as {1} to the course."
+                    },
+                    "leave": {
+                        "success": "{0} has been successfully removed from the course.",
+                        "error": "An error occurred while removing {0} from the course."
+                    }
                 }
             },
             "login": {
@@ -140,6 +171,41 @@
     "validations": {
         "required": "This field is required",
         "deadline": "The deadline must be after the start date"
+    },
+    "confirmations": {
+        "clone_course": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
+        "leave_course": "Are you sure you want to leave this course? You will no longer have access to this course."
+    },
+    "admin": {
+        "title": "Admin",
+        "keyword": "Keyword",
+        "search": {
+            "search": "Search",
+            "general": "Search by general keyword"
+        },
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "users": {
+            "title": "Users",
+            "id": "ID",
+            "username": "Username",
+            "email": "Email",
+            "roles": "Roles"
+        },
+        "user": "User",
+        "assistants": {
+            "title": "Assistants"
+        },
+        "assistant": "Assistant",
+        "students": {
+            "title": "Students"
+        },
+        "student": "Student",
+        "teachers": {
+            "title": "Teachers"
+        },
+        "teacher": "Teacher"
     },
     "primevue": {
         "startsWith": "Starts with",

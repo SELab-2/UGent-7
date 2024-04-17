@@ -21,7 +21,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='extrachecksresult',
             name='error_message',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='extra_checks_results', to='api.errortemplate'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='extra_checks_results', to='api.errortemplate'),
         ),
         migrations.DeleteModel(
             name='ErrorTemplates',

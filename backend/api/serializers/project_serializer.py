@@ -1,9 +1,10 @@
-
 from api.logic.check_folder_structure import parse_zip_file
 from api.models.checks import FileExtension
+from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
 from api.serializers.checks_serializer import StructureCheckSerializer
+from api.serializers.course_serializer import CourseSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -14,11 +15,8 @@ from rest_framework.exceptions import ValidationError
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    course = serializers.HyperlinkedRelatedField(
-        many=False,
-        view_name="course-detail",
-        read_only=True
-    )
+    # We want the course to be eager loaded
+    course = CourseSerializer(read_only=True)
 
     structure_checks = serializers.HyperlinkedIdentityField(
         view_name="project-structure-checks",
@@ -40,11 +38,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    class Meta:
-        model = Project
-        fields = "__all__"
-
     def validate(self, data):
+        """Validate the serializer data"""
         if not self.partial:
             # Only require course if it is not a partial update
             if "course" in self.context:
@@ -56,7 +51,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         if "start_date" in data and data["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
             raise ValidationError(gettext("project.errors.start_date_in_past"))
 
-        # Set the start date depending if it is a partial update and whether it was given by the user
+        # Set the start date depending on if it is a partial update and whether it was given by the user
         if "start_date" not in data:
             if self.partial:
                 start_date = self.instance.start_date
@@ -66,13 +61,14 @@ class ProjectSerializer(serializers.ModelSerializer):
             start_date = data["start_date"]
 
         # Check if deadline of the project is before the start date
-
-        # Data will always contain start_date if it's not a partial update. Same goes for deadline
-        start_date = data["start_date"] if "start_date" in data else self.instance.start_date
         if "deadline" in data and data["deadline"] < start_date:
             raise ValidationError(gettext("project.errors.deadline_before_start_date"))
 
         return data
+
+    class Meta:
+        model = Project
+        fields = "__all__"
 
 
 class CreateProjectSerializer(ProjectSerializer):
@@ -106,7 +102,7 @@ class CreateProjectSerializer(ProjectSerializer):
 
         # If a zip_structure is provided, parse it to create the structure checks
         if zip_structure is not None:
-            # Define tje temporary storage location
+            # Define the temporary storage location
             temp_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
             # Save the file to the temporary location
             temp_file_path = temp_storage.save(f"tmp/{zip_structure.name}", zip_structure)
@@ -155,20 +151,20 @@ class StructureCheckAddSerializer(StructureCheckSerializer):
 
         obl_ext = set()
         for ext in self.context["obligated"]:
-            extensie, _ = FileExtension.objects.get_or_create(
+            extension, _ = FileExtension.objects.get_or_create(
                 extension=ext
             )
-            obl_ext.add(extensie)
+            obl_ext.add(extension)
         data["obligated_extensions"] = obl_ext
 
         block_ext = set()
         for ext in self.context["blocked"]:
-            extensie, _ = FileExtension.objects.get_or_create(
+            extension, _ = FileExtension.objects.get_or_create(
                 extension=ext
             )
-            if extensie in obl_ext:
+            if extension in obl_ext:
                 raise ValidationError(gettext("project.error.structure_checks.extension_blocked_and_obligated"))
-            block_ext.add(extensie)
+            block_ext.add(extension)
         data["blocked_extensions"] = block_ext
 
         return data

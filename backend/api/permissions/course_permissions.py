@@ -76,5 +76,5 @@ class CourseTeacherPermission(CoursePermission):
         if request.method in SAFE_METHODS:
             return user.is_authenticated
 
-        # Only teachers can add or remove themselves from a course.
-        return is_teacher(user) and request.data.get("teacher") == user.id
+        # Teachers can add/remove other teachers to/from their own courses.
+        return is_teacher(user) and user.teacher.has_course(course)

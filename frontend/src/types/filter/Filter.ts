@@ -1,5 +1,12 @@
 import { type LocationQuery } from 'vue-router';
 
+export type UserFilter = {
+    id: string;
+    username: string;
+    email: string;
+    roles: string[];
+} & Filter;
+
 export type CourseFilter = {
     faculties: string[];
     years: string[];
@@ -8,6 +15,27 @@ export type CourseFilter = {
 export interface Filter {
     search: string;
     [key: string]: string | string[];
+}
+
+/**
+ * Get the user filters from the query.
+ *
+ * @param query
+ */
+export function getUserFilters(query: LocationQuery): UserFilter {
+    const filters: UserFilter = {
+        search: query.search?.toString() ?? '',
+        id: query.id?.toString() ?? '',
+        username: query.username?.toString() ?? '',
+        email: query.email?.toString() ?? '',
+        roles: [],
+    };
+
+    if (query.roles !== undefined) {
+        filters.roles = getQueryList(query.roles as string | string[]);
+    }
+
+    return filters;
 }
 
 /**

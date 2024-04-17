@@ -68,20 +68,39 @@
             "chooseFile": "Kies bestand(en)"
         },
         "courses": {
-          "create": "Creëer vak",
-          "edit": "Bewerk vak",
-          "name": "Vaknaam",
-          "description": "Beschrijving",
-          "faculty": "Faculteit",
-          "year": "Academiejaar",
-          "search": {
-              "search": "Zoeken",
-              "faculty": "Faculteit",
-              "year": "Academiejaar",
-              "placeholder": "Zoek een vak op naam",
-              "title": "Zoek een vak",
-              "results": "{0} vakken gevonden voor ingestelde filters"
-          }
+            "create": "Creëer vak",
+            "edit": "Bewerk vak",
+            "clone": "Kloon vak",
+            "clone_assistants": "Kloon assistenten:",
+            "clone_teachers": "Kloon lesgevers:",
+            "name": "Vaknaam",
+            "description": "Beschrijving",
+            "faculty": "Faculteit",
+            "year": "Academiejaar",
+            "enroll": "Inschrijven",
+            "leave": "Uitschrijven",
+            "teachers_and_assistants": {
+                "title": "Lesgevers gelinkt aan dit vak",
+                "enroll": "Voeg toe als {0}",
+                "leave": "Verwijder uit vak",
+                "edit": "Bewerk gebruikers",
+                "search": {
+                    "search": "Zoeken",
+                    "faculty": "Faculteit",
+                    "role": "Rol",
+                    "placeholder": "Zoek een gebruiker op naam",
+                    "title": "Zoek gebuikers om aan dit vak toe te voegen",
+                    "results": "{0} gebruikers gevonden voor ingestelde filters"
+                }
+            },
+            "search": {
+                "search": "Zoeken",
+                "faculty": "Faculteit",
+                "year": "Academiejaar",
+                "placeholder": "Zoek een vak op naam",
+                "title": "Zoek een vak",
+                "results": "{0} vakken gevonden voor ingestelde filters"
+            }
       }
     },
     "composables": {
@@ -107,7 +126,7 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "Nieuw Project"
+            "newProject": "Nieuw project"
         },
         "submission" : "Indienen"
     },
@@ -131,6 +150,16 @@
                 "leave": {
                     "success": "Je bent succesvol uitgeschreven voor het vak '{0}'.",
                     "error": "Er is een fout opgetreden tijdens het uitschrijven voor het vak '{0}'."
+                },
+                "teachers_and_assistants": {
+                    "enroll": {
+                        "success": "{0} werd succesvol toegevoegd als {1} aan het vak.",
+                        "error": "Er is een fout opgetreden tijdens het toevoegen van {0} als {1} aan het vak."
+                    },
+                    "leave": {
+                        "success": "{0} werd succesvol verwijderd uit het vak.",
+                        "error": "Er is een fout opgetreden tijdens het verwijderen van {0} uit het vak."
+                    }
                 }
             },
             "login": {
@@ -142,6 +171,41 @@
     "validations": {
         "required": "Dit veld is verplicht",
         "deadline": "De deadline moet na de startdatum liggen"
+    },
+    "confirmations": {
+        "clone_course": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
+        "leave_course": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
+    },
+    "admin": {
+        "title": "Beheerder",
+        "keyword": "Trefwoord",
+        "search": {
+            "search": "Zoeken",
+            "general": "Zoek op algemeen trefwoord"
+        },
+        "edit": "Bewerken",
+        "cancel": "Annuleer",
+        "save": "Sla op",
+        "users": {
+            "title": "Gebruikers",
+            "id": "ID",
+            "username": "Gebruikersnaam",
+            "email": "E-mail",
+            "roles": "Functies"
+        },
+        "user": "Gebruiker",
+        "assistants": {
+            "title": "Assistenten"
+        },
+        "assistant": "Assistent",
+        "students": {
+            "title": "Studenten"
+        },
+        "student": "Student",
+        "teachers": {
+            "title": "Leerkrachten"
+        },
+        "teacher": "Leerkracht"
     },
     "primevue": {
         "accept": "Ja",

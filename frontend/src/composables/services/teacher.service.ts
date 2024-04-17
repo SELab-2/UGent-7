@@ -4,16 +4,19 @@ import { Teacher } from '@/types/users/Teacher.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
-import { useCourses } from '@/composables/services/course.service.ts';
+import { get, getList, create, deleteId, deleteIdWithData, getPaginatedList } from '@/composables/services/helpers.ts';
+import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
+import { type Filter } from '@/types/filter/Filter.ts';
 
 interface TeacherState {
     teachers: Ref<Teacher[] | null>;
     teacher: Ref<Teacher | null>;
     response: Ref<Response | null>;
+    teacherPagination: Ref<PaginatorResponse<Teacher> | null>;
     getTeacherByID: (id: string, init?: boolean) => Promise<void>;
     getTeachersByCourse: (courseId: string) => Promise<void>;
     getTeachers: () => Promise<void>;
+    searchTeachers: (filters: Filter, page: number, pageSize: number) => Promise<void>;
     teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>;
     teacherLeaveCourse: (courseId: string, teacherId: string) => Promise<void>;
     createTeacher: (teacherData: Teacher) => Promise<void>;
@@ -25,17 +28,11 @@ export function useTeacher(): TeacherState {
     const teachers = ref<Teacher[] | null>(null);
     const teacher = ref<Teacher | null>(null);
     const response = ref<Response | null>(null);
+    const teacherPagination = ref<PaginatorResponse<Teacher> | null>(null);
 
-    /* Nested state */
-    const { courses, getCoursesByTeacher } = useCourses();
-
-    async function getTeacherByID(id: string, init: boolean = false): Promise<void> {
+    async function getTeacherByID(id: string): Promise<void> {
         const endpoint = endpoints.teachers.retrieve.replace('{id}', id);
         await get<Teacher>(endpoint, teacher, Teacher.fromJSON);
-
-        if (init) {
-            await initTeacher(teacher.value);
-        }
     }
 
     async function getTeachersByCourse(courseId: string): Promise<void> {
@@ -48,14 +45,19 @@ export function useTeacher(): TeacherState {
         await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
     }
 
+    async function searchTeachers(filters: Filter, page: number, pageSize: number): Promise<void> {
+        const endpoint = endpoints.teachers.search;
+        await getPaginatedList<Teacher>(endpoint, filters, page, pageSize, teacherPagination, Teacher.fromJSON);
+    }
+
     async function teacherJoinCourse(courseId: string, teacherId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
-        await create<Response>(endpoint, { teacherId }, response, Response.fromJSON);
+        await create<Response>(endpoint, { teacher: teacherId }, response, Response.fromJSON);
     }
 
     async function teacherLeaveCourse(courseId: string, teacherId: string): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
-        await deleteIdWithData<Response>(endpoint, { teacherId }, response, Response.fromJSON);
+        await deleteIdWithData<Response>(endpoint, { teacher: teacherId }, response, Response.fromJSON);
     }
 
     async function createTeacher(user: User): Promise<void> {
@@ -63,7 +65,7 @@ export function useTeacher(): TeacherState {
         await create<Teacher>(
             endpoint,
             {
-                id: user.id,
+                user: user.id,
             },
             teacher,
             Teacher.fromJSON,
@@ -75,21 +77,16 @@ export function useTeacher(): TeacherState {
         await deleteId<Teacher>(endpoint, teacher, Teacher.fromJSON);
     }
 
-    async function initTeacher(teacher: Teacher | null): Promise<void> {
-        if (teacher !== null) {
-            await getCoursesByTeacher(teacher.id);
-            teacher.courses = courses.value ?? [];
-        }
-    }
-
     return {
         teachers,
         teacher,
         response,
+        teacherPagination,
 
         getTeacherByID,
         getTeachersByCourse,
         getTeachers,
+        searchTeachers,
 
         createTeacher,
         deleteTeacher,

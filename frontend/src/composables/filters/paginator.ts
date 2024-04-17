@@ -7,7 +7,7 @@ export interface PaginatorState {
     pageSize: Ref<number>;
     first: Ref<number>;
     onPaginate: (callback: () => Promise<void>) => void;
-    resetPagination: (pagination: Ref<PaginatorResponse<any> | null>) => Promise<void>;
+    resetPagination: (pagination: Array<Ref<PaginatorResponse<any> | null>>) => Promise<void>;
 }
 
 export function usePaginator(initialPage: number = 1, initialPageSize: number = 20): PaginatorState {
@@ -31,13 +31,15 @@ export function usePaginator(initialPage: number = 1, initialPageSize: number = 
      *
      * @returns void
      */
-    async function resetPagination(pagination: Ref<PaginatorResponse<any> | null>): Promise<void> {
+    async function resetPagination(pagination: Array<Ref<PaginatorResponse<any> | null>>): Promise<void> {
         // Paginate to the first page upon filter change
         first.value = 0;
 
-        if (pagination.value !== null) {
-            // Reset the results
-            pagination.value.results = null;
+        for (const pag of pagination) {
+            if (pag.value !== null) {
+                // Reset the results
+                pag.value.results = null;
+            }
         }
     }
 

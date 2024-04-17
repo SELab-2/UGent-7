@@ -1,5 +1,6 @@
 from api.permissions.notification_permissions import NotificationPermission
 from api.permissions.role_permissions import IsSameUser
+from api.views.pagination.basic_pagination import BasicPagination
 from authentication.models import User
 from authentication.serializers import UserSerializer
 from notifications.models import Notification
@@ -16,6 +17,65 @@ class UserViewSet(ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser | IsSameUser]
+
+    @action(detail=True, methods=['PATCH'], url_path='admin', permission_classes=[IsAdminUser])
+    def patch_admin(self, request: Request, **_) -> Response:
+        """
+        Update the user's admin status with is_staff in request query parameters
+        """
+        # request.data needs to contain user id in 'user' field
+        if request.data.get("is_staff"):
+            self.get_object().make_admin()
+        else:
+            self.get_object().remove_admin()
+
+        return Response(status=HTTP_200_OK)
+
+    @action(detail=False)
+    def search(self, request: Request) -> Response:
+        self.pagination_class = BasicPagination
+
+        search = request.query_params.get("search", "")
+        identifier = request.query_params.get("id", "")
+        username = request.query_params.get("username", "")
+        email = request.query_params.get("email", "")
+        roles = request.query_params.getlist("roles[]")
+
+        queryset1 = self.get_queryset().filter(
+            id__icontains=search
+        )
+        queryset2 = self.get_queryset().filter(
+            username__icontains=search
+        )
+        queryset3 = self.get_queryset().filter(
+            email__icontains=search
+        )
+        queryset4 = self.get_queryset().all()
+        if "student" in roles:
+            queryset4 = queryset4.intersection(
+                self.get_queryset().filter(student__isnull=False, student__is_active=True)
+            )
+        if "assistant" in roles:
+            queryset4 = queryset4.intersection(
+                self.get_queryset().filter(assistant__isnull=False, assistant__is_active=True)
+            )
+        if "teacher" in roles:
+            queryset4 = queryset4.intersection(
+                self.get_queryset().filter(teacher__isnull=False, teacher__is_active=True)
+            )
+        queryset1 = queryset1.union(queryset2, queryset3)
+        queryset = self.get_queryset().filter(
+            id__icontains=identifier,
+            username__icontains=username,
+            email__icontains=email
+        )
+        queryset = queryset.intersection(queryset1, queryset4)
+
+        serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+            "request": request
+        })
+
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=["get"], permission_classes=[NotificationPermission])
     def notifications(self, request: Request, pk: str):

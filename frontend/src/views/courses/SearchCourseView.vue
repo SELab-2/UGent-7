@@ -7,7 +7,7 @@ import InputIcon from 'primevue/inputicon';
 import Checkbox from 'primevue/checkbox';
 import Paginator from 'primevue/paginator';
 import Title from '@/components/layout/Title.vue';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import CourseList from '@/components/courses/CourseList.vue';
 import { onMounted } from 'vue';
 import { useCourses } from '@/composables/services/course.service.ts';
@@ -51,7 +51,7 @@ onMounted(async () => {
     /* Reset pagination on filter change */
     onFilter(
         async () => {
-            await resetPagination(pagination);
+            await resetPagination([pagination]);
         },
         0,
         false,

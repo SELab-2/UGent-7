@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import moment from 'moment';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Calendar, { type CalendarDateSlotOptions } from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
@@ -11,8 +11,9 @@ import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { type Project } from '@/types/Project.ts';
-import { type RoleUser } from '@/types/users/Generics.ts';
 import { useRoute, useRouter } from 'vue-router';
+import { useCourses } from '@/composables/services/course.service.ts';
+import { type Course, getAcademicYear } from '@/types/Course.ts';
 
 /* Composable injections */
 const { t, locale } = useI18n();
@@ -20,12 +21,12 @@ const { query } = useRoute();
 const { push } = useRouter();
 
 /* Component state */
-const allProjects = ref<Project[] | null>(null);
 const selectedDate = ref<Date>(getQueryDate());
 
 /* Service injection */
 const { user } = storeToRefs(useAuthStore());
-const { projects, getProjectsByCourse } = useProject();
+const { courses, getCoursesByTeacher, getCourseByAssistant } = useCourses();
+const { projects, getProjectsByTeacher, getProjectsByAssistant, getProjectsByStudent } = useProject();
 
 /* Formatted date */
 const formattedDate = computed(() => {
@@ -34,23 +35,21 @@ const formattedDate = computed(() => {
 });
 
 /* Filter the projects on the date selected on the calendar */
-const projectsWithDeadline = computed(() => {
+const projectsWithDeadline = computed<Project[] | null>(() => {
     return (
-        allProjects.value?.filter((project) => {
+        projects.value?.filter((project) => {
             return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
         }) ?? null
     );
 });
 
-/* Courses that take place on the selected date in the calendar => no display when the date is in the past */
-const coursesWithProjectCreationPossibility = computed(() => {
-    if (user.value !== null && moment(selectedDate.value).isAfter(moment())) {
-        return (user.value as RoleUser).courses.filter((course) => {
-            return course.academic_startyear === selectedAcademicYear();
-        });
-    } else {
-        return [];
-    }
+/* Filter the courses for this year */
+const currentCourses = computed<Course[] | null>(() => {
+    return (
+        courses.value?.filter((course) => {
+            return course.academic_startyear === getAcademicYear();
+        }) ?? null
+    );
 });
 
 /**
@@ -58,29 +57,20 @@ const coursesWithProjectCreationPossibility = computed(() => {
  */
 async function loadProjects(): Promise<void> {
     if (user.value !== null) {
-        // Clear the old data, so that the data from another role is not displayed
-        allProjects.value = null;
+        projects.value = null;
 
-        // Load the projects of the courses
-        if (user.value.isSpecificRole()) {
-            let _allProjects: Project[] = [];
+        if (user.value.isStudent()) {
+            await getProjectsByStudent(user.value.id);
+        }
 
-            // Cast the generic user to a specific role
-            const role = user.value as RoleUser;
+        if (user.value.isTeacher()) {
+            await getProjectsByTeacher(user.value.id);
+            await getCoursesByTeacher(user.value.id);
+        }
 
-            for (const course of role.courses) {
-                await getProjectsByCourse(course.id);
-
-                // Assign the course to the project
-                projects.value?.forEach((project) => {
-                    project.course = course;
-                });
-
-                // Concatenate the projects
-                _allProjects = _allProjects.concat(projects.value ?? []);
-            }
-
-            allProjects.value = _allProjects;
+        if (user.value.isAssistant()) {
+            await getProjectsByAssistant(user.value.id);
+            await getCourseByAssistant(user.value.id);
         }
     }
 }
@@ -113,7 +103,7 @@ function hasDeadline(date: CalendarDateSlotOptions): boolean {
     const dateObj = new Date(date.year, date.month, date.day);
 
     return (
-        allProjects.value?.some((project) => {
+        projects.value?.some((project) => {
             return moment(project.deadline).isSame(moment(dateObj), 'day');
         }) ?? false
     );
@@ -128,23 +118,11 @@ function countDeadlines(date: CalendarDateSlotOptions): number {
     const dateObj = new Date(date.year, date.month, date.day);
 
     return (
-        allProjects.value?.filter((project) => {
+        projects.value?.filter((project) => {
             return moment(project.deadline).isSame(moment(dateObj), 'day');
         }).length ?? 0
     );
 }
-
-/**
- * Get the academic year of the selected date.
- *
- * @returns The academic year of the selected date.
- */
-const selectedAcademicYear = (): number => {
-    const selectedYear = moment(selectedDate.value).year();
-    const selectedMonth = moment(selectedDate.value).month();
-
-    return selectedMonth < 8 ? selectedYear - 1 : selectedYear;
-};
 
 /* Watch the user and load the projects */
 watch(
@@ -236,18 +214,13 @@ watch(selectedDate, (date) => {
                         </template>
                     </div>
 
-                    <template
-                        v-if="
-                            (coursesWithProjectCreationPossibility.length > 0 && user?.isTeacher()) ||
-                            user?.isAssistant()
-                        "
-                    >
+                    <template v-if="currentCourses !== null && (user?.isTeacher() || user?.isAssistant())">
                         <!-- Add project button -->
                         <ProjectCreateButton
                             class="mt-5"
                             :label="t('components.button.createProject')"
                             severity="secondary"
-                            :courses="coursesWithProjectCreationPossibility"
+                            :courses="currentCourses"
                         />
                     </template>
                 </div>

@@ -1,4 +1,4 @@
-import { type Course } from './Course.ts';
+import { Course } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';
 import { type StructureCheck } from './StructureCheck.ts';
@@ -17,9 +17,8 @@ export class Project {
         public max_score: number,
         public score_visible: boolean,
         public group_size: number,
-
+        public course: Course,
         public structure_file: File | null = null,
-        public course: Course | null = null,
         public structureChecks: StructureCheck[] = [],
         public extra_checks: ExtraCheck[] = [],
         public groups: Group[] = [],
@@ -32,6 +31,8 @@ export class Project {
      * @param project
      */
     static fromJSON(project: Project): Project {
+        const course = Course.fromJSON(project.course);
+
         return new Project(
             project.id,
             project.name,
@@ -44,6 +45,7 @@ export class Project {
             project.max_score,
             project.score_visible,
             project.group_size,
+            course,
         );
     }
 }

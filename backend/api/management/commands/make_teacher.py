@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'make yourself teacher'
 
     def add_arguments(self, parser):
-        parser.add_argument('username', type=str, help='The username of the student user to make teacher')
+        parser.add_argument('username', type=str, help='The username of the user to make teacher')
 
     def handle(self, *args, **options):
         username = options['username']

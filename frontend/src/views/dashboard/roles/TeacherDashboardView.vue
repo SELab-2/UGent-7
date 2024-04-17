@@ -12,6 +12,7 @@ import { useI18n } from 'vue-i18n';
 import { computed, ref, watch } from 'vue';
 import { useCourses } from '@/composables/services/course.service.ts';
 import { getAcademicYear, getAcademicYears } from '@/types/Course.ts';
+import { useProject } from '@/composables/services/project.service.ts';
 
 /* Props */
 const props = defineProps<{
@@ -20,6 +21,7 @@ const props = defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
+const { projects, getProjectsByTeacher } = useProject();
 const { courses, getCoursesByTeacher } = useCourses();
 
 /* State */
@@ -35,6 +37,7 @@ watch(
     props.teacher,
     () => {
         getCoursesByTeacher(props.teacher.id);
+        getProjectsByTeacher(props.teacher.id);
     },
     {
         immediate: true,
@@ -78,7 +81,7 @@ watch(
         <ProjectCreateButton :courses="filteredCourses" :label="t('components.button.createProject')" />
     </div>
     <!-- Project list body -->
-    <ProjectList :courses="filteredCourses" />
+    <ProjectList :projects="projects" />
 </template>
 
 <style scoped lang="scss"></style>

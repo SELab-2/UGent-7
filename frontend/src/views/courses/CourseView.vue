@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import StudentCourseView from './roles/StudentCourseView.vue';
 import TeacherCourseView from './roles/TeacherCourseView.vue';
 import AssistantCourseView from './roles/AssistantCourseView.vue';
 import { onMounted } from 'vue';
+import { useAssistant } from '@/composables/services/assistant.service';
+import { useTeacher } from '@/composables/services/teacher.service';
 import { useCourses } from '@/composables/services/course.service.ts';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/store/authentication.store.ts';
@@ -13,9 +15,21 @@ import { storeToRefs } from 'pinia';
 const { user } = storeToRefs(useAuthStore());
 const { params } = useRoute();
 const { course, getCourseByID } = useCourses();
+const { assistants, getAssistantsByCourse } = useAssistant();
+const { teachers, getTeachersByCourse } = useTeacher();
 
-onMounted(() => {
-    getCourseByID(params.courseId as string);
+onMounted(async () => {
+    await getCourseByID(params.courseId as string);
+
+    // Get assistants and teachers
+    if (course.value !== null) {
+        await getAssistantsByCourse(course.value.id);
+        await getTeachersByCourse(course.value.id);
+
+        // Set the course's assistants and teachers
+        course.value.assistants = assistants.value ?? [];
+        course.value.teachers = teachers.value ?? [];
+    }
 });
 </script>
 

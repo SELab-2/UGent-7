@@ -13,10 +13,10 @@ export const endpoints = {
         index: '/api/courses/',
         search: '/api/courses/search/',
         retrieve: '/api/courses/{id}/',
+        clone: '/api/courses/{courseId}/clone/',
         byStudent: '/api/students/{studentId}/courses/',
         byTeacher: '/api/teachers/{teacherId}/courses/',
         byAssistant: '/api/assistants/{assistantId}/courses/',
-        clone: '/api/courses/{courseId}/clone/',
     },
     students: {
         index: '/api/students/',
@@ -26,17 +26,25 @@ export const endpoints = {
     },
     teachers: {
         index: '/api/teachers/',
+        search: '/api/teachers/search/',
         retrieve: '/api/teachers/{id}/',
         byCourse: '/api/courses/{courseId}/teachers/',
     },
     assistants: {
         index: '/api/assistants/',
+        search: '/api/assistants/search/',
         retrieve: '/api/assistants/{id}/',
         byCourse: '/api/courses/{courseId}/assistants/',
     },
     admins: {
         index: '/api/admins/',
         retrieve: '/api/admins/{id}/',
+    },
+    users: {
+        index: '/api/users/',
+        search: '/api/users/search/',
+        retrieve: '/api/users/{id}/',
+        admin: '/api/users/{id}/admin/',
     },
     faculties: {
         index: '/api/faculties/',
@@ -50,6 +58,9 @@ export const endpoints = {
     projects: {
         retrieve: '/api/projects/{id}',
         byCourse: '/api/courses/{courseId}/projects/',
+        byStudent: '/api/students/{studentId}/projects/',
+        byTeacher: '/api/teachers/{teacherId}/projects/',
+        byAssistant: '/api/assistants/{assistantId}/projects/',
     },
     submissions: {
         retrieve: '/api/submissions/{id}',
