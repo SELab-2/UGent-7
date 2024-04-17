@@ -55,8 +55,8 @@ function formatDate(deadline: Date): string {
 <template>
     <BaseLayout>
         <div class="grid">
-            <div class="col-12 md:col-4">
-                <div>
+            <div class="col-8 md:col-6">
+                <div class="flex-column">
                     <Title> {{ t(`views.submissions.title`) }}: {{ project ? project.name : 'Loading' }} </Title>
                     <p v-if="course">{{ t(`views.submissions.course`) }}: {{ course.name }}</p>
                     <p v-if="project?.deadline">Deadline: {{ project ? formatDate(project.deadline) : 'Loading' }}</p>
@@ -109,7 +109,7 @@ function formatDate(deadline: Date): string {
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-offset-1">
+            <div class="col-5 col-offset-1">
                 <AllSubmission v-if="group" :group="group"></AllSubmission>
             </div>
         </div>

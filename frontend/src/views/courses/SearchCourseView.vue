@@ -9,8 +9,8 @@ import Paginator from 'primevue/paginator';
 import Title from '@/components/layout/Title.vue';
 import BaseLayout from '@/components/layout/BaseLayout.vue';
 import CourseList from '@/components/courses/CourseList.vue';
-import { onMounted, watch } from 'vue';
-import { useCourses } from '@/composables/services/courses.service.ts';
+import { onMounted } from 'vue';
+import { useCourses } from '@/composables/services/course.service.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useFaculty } from '@/composables/services/faculty.service.ts';
 import { storeToRefs } from 'pinia';
@@ -19,6 +19,7 @@ import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
 import { useRoute } from 'vue-router';
 import { getCourseFilters } from '@/types/filter/Filter.ts';
+import { getAcademicYears } from '@/types/Course.ts';
 
 /* Composable injections */
 const { t } = useI18n();
