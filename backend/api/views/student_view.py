@@ -23,24 +23,18 @@ class StudentViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(request_body=CreateStudentSerializer)
     def create(self, request: Request, *args, **kwargs) -> Response:
         """Add the student role to the user"""
-        try:
-            student: Student = Student.objects.get(pk=request.data.get('user'))
+        serializer = CreateStudentSerializer(
+            data=request.data
+        )
 
-            student.activate()
-        except Student.DoesNotExist:
-            serializer = CreateStudentSerializer(
-                data=request.data
-            )
+        if serializer.is_valid(raise_exception=True):
+            Student.create(serializer.validated_data.get('user'),
+                           student_id=serializer.validated_data.get('student_id')
+                           )
 
-            if serializer.is_valid(raise_exception=True):
-                Student.create(serializer.validated_data.get('user'),
-                               student_id=serializer.validated_data.get('student_id')
-                               )
-
-        finally:
-            return Response({
-                "message": gettext("students.success.add")
-            })
+        return Response({
+            "message": gettext("students.success.add")
+        })
 
     @swagger_auto_schema(request_body=StudentIDSerializer)
     def destroy(self, request: Request, *args, **kwargs) -> Response:

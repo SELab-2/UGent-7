@@ -26,22 +26,17 @@ class TeacherViewSet(ModelViewSet):
 
     @swagger_auto_schema(request_body=UserIDSerializer)
     def create(self, request: Request, *args, **kwargs) -> Response:
-        """Add the student role to the user"""
-        try:
-            teacher: Teacher = Teacher.objects.get(pk=request.data.get("user"))
+        """Add the teacher role to the user"""
+        serializer = UserIDSerializer(
+            data=request.data
+        )
 
-            teacher.activate()
-        except Teacher.DoesNotExist:
-            serializer = UserIDSerializer(
-                data=request.data
-            )
+        if serializer.is_valid(raise_exception=True):
+            Teacher.create(serializer.validated_data.get('user'))
 
-            if serializer.is_valid(raise_exception=True):
-                Teacher.create(serializer.validated_data.get('user'))
-        finally:
-            return Response({
-                "message": gettext("teachers.success.add")
-            })
+        return Response({
+            "message": gettext("teachers.success.add")
+        })
 
     @action(detail=False, pagination_class=UserPagination)
     def search(self, request: Request) -> Response:
