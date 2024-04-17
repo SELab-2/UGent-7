@@ -1,7 +1,8 @@
 import { Course } from '@/types/Course.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
+import { get, getList, create, patch, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
+import { type Response } from '@/types/Response.ts';
 import { type CoursePaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
@@ -16,6 +17,7 @@ interface CoursesState {
     getCoursesByTeacher: (teacherId: string) => Promise<void>;
     getCourseByAssistant: (assistantId: string) => Promise<void>;
     createCourse: (courseData: Course) => Promise<void>;
+    updateCourse: (courseData: Course) => Promise<void>;
     cloneCourse: (courseId: string, cloneAssistants: boolean, cloneTeachers: boolean) => Promise<void>;
     deleteCourse: (id: string) => Promise<void>;
 }
@@ -24,6 +26,7 @@ export function useCourses(): CoursesState {
     const pagination = ref<CoursePaginatorResponse | null>(null);
     const courses = ref<Course[] | null>(null);
     const course = ref<Course | null>(null);
+    const response = ref<Response | null>(null);
 
     async function getCourseByID(id: string): Promise<void> {
         const endpoint = endpoints.courses.retrieve.replace('{id}', id);
@@ -71,6 +74,22 @@ export function useCourses(): CoursesState {
         );
     }
 
+    async function updateCourse(courseData: Course): Promise<void> {
+        // Endpoint to update is same as retrieve
+        const endpoint = endpoints.courses.retrieve.replace('{id}', courseData.id);
+
+        await patch(
+            endpoint,
+            {
+                id: courseData.id,
+                name: courseData.name,
+                description: courseData.description,
+                faculty: courseData.faculty?.id,
+            },
+            response
+        );
+    }
+
     async function cloneCourse(courseId: string, cloneAssistants: boolean, cloneTeachers: boolean): Promise<void> {
         const endpoint = endpoints.courses.clone.replace('{courseId}', courseId);
         await create<Course>(
@@ -102,6 +121,7 @@ export function useCourses(): CoursesState {
         getCourseByAssistant,
 
         createCourse,
+        updateCourse,
         cloneCourse,
         deleteCourse,
     };

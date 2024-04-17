@@ -48,6 +48,16 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def update(self, request: Request, *_, **__):
+        """Override the update method to add the teacher to the course"""
+        course = self.get_object()
+        serializer = CreateCourseSerializer(course, data=request.data, partial=True, context={"request": request})
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+        return Response(serializer.data)
+
     @action(detail=False, pagination_class=CoursePagination)
     def search(self, request: Request) -> Response:
         # Extract filter params

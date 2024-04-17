@@ -62,6 +62,19 @@ class CreateCourseSerializer(CourseSerializer):
 
         return course
 
+    def update(self, instance, validated_data):
+        faculty = validated_data.pop('faculty', None)
+
+        # Update the course
+        course = super().update(instance, validated_data)
+
+        # Link the faculty, if specified
+        if faculty is not None:
+            course.faculty = faculty
+            course.save()
+
+        return course
+
 
 class CourseIDSerializer(serializers.Serializer):
     student_id = serializers.PrimaryKeyRelatedField(
