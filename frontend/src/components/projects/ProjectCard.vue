@@ -8,12 +8,24 @@ import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 import { type Course } from '@/types/Course.ts';
+<<<<<<< HEAD
+=======
+// import { ref } from 'vue';
+>>>>>>> e61a2d0 (chore: metergroup styling)
 
 /**
  * TODO
  *  - Submission check depends on more than just structure checks
  */
 
+<<<<<<< HEAD
+=======
+ const meterItems = [
+    { value: 20, color: '#749b68', label: 'Testen slagen', icon: 'pi pi-check' },
+    { value: 30, color: '#FF5445', label: 'Testen falen', icon: 'pi pi-times' },
+];
+
+>>>>>>> e61a2d0 (chore: metergroup styling)
 /* Component props */
 const props = withDefaults(
     defineProps<{
@@ -68,6 +80,7 @@ const { t } = useI18n();
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
         </RouterLink>
     </template>
     <template v-else>
@@ -127,6 +140,41 @@ const { t } = useI18n();
             </template>
         </Card>
     </template>
+=======
+            <div>
+                <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
+                <b>{{ t('views.projects.submissionStatus') }}</b>:
+                <MeterGroup :value="meterItems" labelOrientation="vertical">
+                    <template #start>
+                    <div class="flex justify-between mt-2 relative">
+                        <span>27 Indieningen</span>
+                        <span class="w-full absolute text-right">52 Groepen</span>
+                    </div>
+                </template>
+                </MeterGroup>
+            </div>
+        </template>
+        <template #footer>
+            <RouterLink
+                :to="{
+                    name: 'course-project',
+                    params: {
+                        courseId: course.id,
+                        projectId: project.id,
+                    },
+                }"
+            >
+                <Button
+                    class="align-self-end"
+                    :icon="PrimeIcons.ARROW_RIGHT"
+                    :label="t('components.card.open')"
+                    icon-pos="right"
+                    outlined
+                />
+            </RouterLink>
+        </template>
+    </Card>
+>>>>>>> e61a2d0 (chore: metergroup styling)
 </template>
 
 <style lang="scss">
