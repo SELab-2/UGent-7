@@ -19,7 +19,7 @@ psycopg2-binary = "^2.9.9"
 djangorestframework-simplejwt = "^5.3.1"
 celery = {extras = ["redis"], version = "^5.3.6"}
 django-redis = "^5.4.0"
-gunicorn = "^21.2.0"
+gunicorn = "^22.0.0"
 whitenoise = "^6.6.0"
 flake8 = "^7.0.0"
 celery-types = "^0.22.0"

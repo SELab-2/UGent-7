@@ -5,11 +5,6 @@ poetry install > /dev/null
 echo "Migrating database..."
 python manage.py migrate > /dev/null
 
-if [ "$FIXTURE" != "" ]; then
-    echo "Populating $FIXTURE database..."
-    python manage.py loaddata */fixtures/$FIXTURE/* > /dev/null
-fi
-
 echo "Compiling translations..."
 django-admin compilemessages > /dev/null
 
