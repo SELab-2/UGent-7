@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Dropdown from 'primevue/dropdown';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import { reactive, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';

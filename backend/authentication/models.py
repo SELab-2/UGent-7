@@ -40,6 +40,10 @@ class User(AbstractBaseUser):
         self.is_staff = True
         self.save()
 
+    def remove_admin(self):
+        self.is_staff = False
+        self.save()
+
     @cached_property
     def roles(self):
         """Return all roles associated with this user"""

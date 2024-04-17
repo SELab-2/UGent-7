@@ -1,6 +1,7 @@
 import { type Faculty } from '../Faculty.ts';
 
-export type Role = 'user' | 'student' | 'assistant' | 'teacher';
+export const roles = ['user', 'student', 'assistant', 'teacher'] as const;
+export type Role = (typeof roles)[number];
 
 export class User {
     constructor(
@@ -107,5 +108,9 @@ export class User {
             new Date(user.create_time),
             user.last_login !== null ? new Date(user.last_login) : null,
         );
+    }
+
+    static blankUser(): User {
+        return new User('', '', '', '', '', 0, false, [], [], new Date(), null);
     }
 }

@@ -176,6 +176,37 @@
         "clone_course": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
         "leave_course": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
     },
+    "admin": {
+        "title": "Beheerder",
+        "keyword": "Trefwoord",
+        "search": {
+            "search": "Zoeken",
+            "general": "Zoek op algemeen trefwoord"
+        },
+        "edit": "Bewerken",
+        "cancel": "Annuleer",
+        "save": "Sla op",
+        "users": {
+            "title": "Gebruikers",
+            "id": "ID",
+            "username": "Gebruikersnaam",
+            "email": "E-mail",
+            "roles": "Functies"
+        },
+        "user": "Gebruiker",
+        "assistants": {
+            "title": "Assistenten"
+        },
+        "assistant": "Assistent",
+        "students": {
+            "title": "Studenten"
+        },
+        "student": "Student",
+        "teachers": {
+            "title": "Leerkrachten"
+        },
+        "teacher": "Leerkracht"
+    },
     "primevue": {
         "accept": "Ja",
         "addRule": "Voeg regel toe",

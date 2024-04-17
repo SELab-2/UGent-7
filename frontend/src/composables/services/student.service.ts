@@ -72,8 +72,8 @@ export function useStudents(): StudentsState {
         await create<Student>(
             endpoint,
             {
-                id: studentData.id,
-                studentId: studentData.studentId,
+                user: studentData.id,
+                student_id: studentData.studentId,
             },
             student,
             Student.fromJSON,
