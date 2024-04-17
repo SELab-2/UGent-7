@@ -1,31 +1,21 @@
 <script setup lang="ts">
 import moment from 'moment';
+import MeterGroup from 'primevue/metergroup';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import ProgressBar from 'primevue/progressbar';
 import { type Project } from '@/types/Project.ts';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { type Course } from '@/types/Course.ts';
-<<<<<<< HEAD
-=======
-// import { ref } from 'vue';
->>>>>>> e61a2d0 (chore: metergroup styling)
+import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
 
 /**
  * TODO
  *  - Submission check depends on more than just structure checks
  */
 
-<<<<<<< HEAD
-=======
- const meterItems = [
-    { value: 20, color: '#749b68', label: 'Testen slagen', icon: 'pi pi-check' },
-    { value: 30, color: '#FF5445', label: 'Testen falen', icon: 'pi pi-times' },
-];
-
->>>>>>> e61a2d0 (chore: metergroup styling)
 /* Component props */
 const props = withDefaults(
     defineProps<{
@@ -46,8 +36,33 @@ const formattedStartDate = computed(() => {
     return moment(props.project.start_date).format('DD MMMM YYYY');
 });
 
+const meterItems = computed(() => {
+    const groups = submissionStatus.value?.non_empty_groups || 1;
+    const groupsSubmitted = submissionStatus.value?.groups_submitted || 0;
+    const submissionsPassed = submissionStatus.value?.submissions_passed || 0;
+    const submissionsFailed = groupsSubmitted - submissionsPassed;
+    return [
+        { value: (submissionsPassed / groups) * 100, color: '#749b68', label: 'Succeeded tests', icon: 'pi pi-check' },
+        { value: (submissionsFailed / groups) * 100, color: '#FF5445', label: 'Failed tests', icon: 'pi pi-times' },
+    ]
+})
+
 /* Composable injections */
 const { t } = useI18n();
+const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus();
+
+/* Watchers */
+watch(
+    props.course,
+    () => {
+
+        getSubmissionStatusByProject(props.project.id)
+    },
+    {
+        immediate: true,
+    },
+);
+
 </script>
 
 <template>
@@ -76,11 +91,23 @@ const { t } = useI18n();
                                     moment(project.deadline).diff(moment(), 'day'),
                                 )
                             }}</span>
+                            <MeterGroup v-if="(submissionStatus?.groups_submitted || 0) > 0" :value="meterItems" labelOrientation="vertical">
+                                <template #start>
+                                    <div class="flex justify-between mt-2 relative">
+                                        <span>{{ submissionStatus?.groups_submitted }} {{ submissionStatus?.groups_submitted === 1 
+                                        ? t('components.card.submission') 
+                                        : t('components.card.submissions') }}</span>
+                                    <span class="w-full absolute text-right">{{ submissionStatus?.non_empty_groups }} Groups</span>
+                                    </div>
+                                </template>
+                            </MeterGroup>
+                            <p v-else>
+                                {{ t('components.card.noSubmissions') }}
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
         </RouterLink>
     </template>
     <template v-else>
@@ -140,41 +167,6 @@ const { t } = useI18n();
             </template>
         </Card>
     </template>
-=======
-            <div>
-                <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-                <b>{{ t('views.projects.submissionStatus') }}</b>:
-                <MeterGroup :value="meterItems" labelOrientation="vertical">
-                    <template #start>
-                    <div class="flex justify-between mt-2 relative">
-                        <span>27 Indieningen</span>
-                        <span class="w-full absolute text-right">52 Groepen</span>
-                    </div>
-                </template>
-                </MeterGroup>
-            </div>
-        </template>
-        <template #footer>
-            <RouterLink
-                :to="{
-                    name: 'course-project',
-                    params: {
-                        courseId: course.id,
-                        projectId: project.id,
-                    },
-                }"
-            >
-                <Button
-                    class="align-self-end"
-                    :icon="PrimeIcons.ARROW_RIGHT"
-                    :label="t('components.card.open')"
-                    icon-pos="right"
-                    outlined
-                />
-            </RouterLink>
-        </template>
-    </Card>
->>>>>>> e61a2d0 (chore: metergroup styling)
 </template>
 
 <style lang="scss">
@@ -210,4 +202,3 @@ const { t } = useI18n();
     }
 }
 </style>
-µ
