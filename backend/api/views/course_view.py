@@ -283,9 +283,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             project = serializer.save()
             course.projects.add(project)
 
-        return Response({
-            "message": gettext("course.success.project.add"),
-        })
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["post"], permission_classes=[IsAdminUser | IsTeacher])
     @swagger_auto_schema(request_body=CourseCloneSerializer)

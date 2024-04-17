@@ -16,11 +16,14 @@ import { Project } from '@/types/Project';
 import { useProject } from '@/composables/services/project.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { Course } from '@/types/Course';
+import { useCourses } from '@/composables/services/course.service';
 
 /* Composable injections */
 const { t } = useI18n();
 const { push } = useRouter();
 const { params } = useRoute();
+const { course, getCourseByID } = useCourses();
 
 /* Service injection */
 const { createProject } = useProject();
@@ -73,8 +76,11 @@ async function submitProject(): Promise<void> {
     // Validate the form
     const validated = await v$.value.$validate();
 
+    // Get the course object from the course ID
+    await getCourseByID(params.courseId as string);
+
     // Only submit the form if the validation was successful
-    if (validated) {
+    if (validated && course.value) {
         // Pass the project data to the service
         await createProject(
             new Project(
@@ -89,6 +95,7 @@ async function submitProject(): Promise<void> {
                 form.maxScore,
                 form.scoreVisibility,
                 form.groupSize,
+                course.value,
                 form.submissionStructure,
             ),
             params.courseId as string,
