@@ -146,7 +146,12 @@ async function submitProject(): Promise<void> {
 
                     <div class="grid">
                         <!-- Project description -->
-                        <Editor id="projectDescription" class="w-full" v-model="form.description" />
+                        <div class="field col">
+                            <label for="projectDescription">
+                                {{ t('views.projects.description') }}
+                            </label>
+                            <Editor id="projectDescription" class="w-full" v-model="form.description" />
+                        </div>
                     </div>
 
                     <div class="grid">
