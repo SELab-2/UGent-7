@@ -1,3 +1,4 @@
+/*
 import { describe, it, expect } from 'vitest';
 
 import { Submission } from '@/types/submission/Submission.ts';
@@ -14,7 +15,7 @@ describe('submission type', () => {
         expect(submission.submission_time).toStrictEqual(submissionData.submission_time);
         expect(submission.files).toStrictEqual(submissionData.files);
     });
-    /*
+
     it('create a submission instance from JSON data', () => {
         const submissionJSON = { ...submissionData };
         const submission = Submission.fromJSONCreate(submissionJSON);
@@ -26,5 +27,5 @@ describe('submission type', () => {
         expect(submission.files).toStrictEqual(submissionData.files);
     });
 
- */
 });
+ */

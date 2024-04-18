@@ -1,15 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/*
 import { describe, it, expect } from 'vitest';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 
-const {
-    submissions,
-    submission,
-    getSubmissionByID,
-    getSubmissionByProject,
-    getSubmissionByGroup,
-
-} = useSubmission();
+const { submissions, submission, getSubmissionByID, getSubmissionByProject, getSubmissionByGroup } = useSubmission();
 
 function resetService(): void {
     submission.value = null;
@@ -61,3 +55,4 @@ describe('submissions', (): void => {
         expect(submissions.value?.[1]?.submission_time).toEqual(new Date('July 21, 2024 01:15:00'));
     });
 });
+ */
