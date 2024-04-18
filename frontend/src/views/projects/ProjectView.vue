@@ -1,47 +1,24 @@
 <script setup lang="ts">
 import BaseLayout from '@/components/layout/BaseLayout.vue';
-import ProjectList from '@/components/projects/ProjectList.vue';
-import Title from '@/components/layout/Title.vue';
-import { watch } from 'vue';
-import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
-import { useI18n } from 'vue-i18n';
-import { useProject } from '@/composables/services/project.service.ts';
+import { storeToRefs } from 'pinia';
+import { type Student } from '@/types/users/Student';
+import { type Teacher } from '@/types/users/Teacher';
+import { type Assistant } from '@/types/users/Assistant';
+import StudentProjectView from '@/views/projects/roles/StudentProjectView.vue';
+import TeacherProjectView from '@/views/projects/roles/TeacherProjectView.vue';
+import AssistantProjectView from '@/views/projects/roles/AssistantProjectView.vue';
 
-/* Composable injections */
-const { t } = useI18n();
+/* Service injection */
 const { user } = storeToRefs(useAuthStore());
-const { projects, getProjectsByStudent, getProjectsByTeacher, getProjectsByAssistant } = useProject();
-
-watch(
-    user,
-    async () => {
-        if (user.value !== null) {
-            projects.value = null;
-
-            if (user.value.isStudent()) {
-                await getProjectsByStudent(user.value.id);
-            }
-
-            if (user.value.isTeacher()) {
-                await getProjectsByTeacher(user.value.id);
-            }
-
-            if (user.value.isAssistant()) {
-                await getProjectsByAssistant(user.value.id);
-            }
-        }
-    },
-    { immediate: true },
-);
 </script>
 
 <template>
     <BaseLayout>
-        <!-- Project list title -->
-        <Title class="mb-6">{{ t('views.dashboard.projects') }}</Title>
-        <ProjectList :projects="projects" />
+        <StudentProjectView v-if="user?.isStudent()" :student="user as Student" />
+        <TeacherProjectView v-else-if="user?.isTeacher()" :teacher="user as Teacher" />
+        <AssistantProjectView v-else-if="user?.isAssistant()" :assistant="user as Assistant" />
     </BaseLayout>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped></style>

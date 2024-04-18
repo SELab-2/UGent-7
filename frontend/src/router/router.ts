@@ -11,12 +11,12 @@ import VerifyView from '@/views/authentication/VerifyView.vue';
 import { type RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts';
 import { LogoutGuard } from '@/router/guards/logout.guard.ts';
-import ProjectView from '@/views/projects/ProjectView.vue';
+import ProjectView from '@/views/projects/ProjectsView.vue';
 import CreateProjectView from '@/views/projects/CreateProjectView.vue';
 import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from '@/views/submissions/submissionView.vue';
-import SingleProjectView from '@/views/projects/SingleProjectView.vue';
+import SingleProjectView from '@/views/projects/ProjectView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication

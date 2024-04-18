@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import ChooseGroupCard from '@/components/projects/ChooseGroupCard.vue';
 import JoinedGroupCard from '@/components/projects/JoinedGroupCard.vue';
+import SubmissionCard from '@/components/projects/SubmissionCard.vue';
 import Title from '@/components/layout/Title.vue';
 import Skeleton from 'primevue/skeleton';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useRoute } from 'vue-router';
 import { useGroup } from '@/composables/services/group.service.ts';
 import { type Group } from '@/types/Group.ts';
-import { useAuthStore } from '@/store/authentication.store.ts';
-import { storeToRefs } from 'pinia';
 import { type Student } from '@/types/users/Student.ts';
-import SubmissionCard from '@/components/projects/SubmissionCard.vue';
+
+/* Props */
+const props = defineProps<{
+    student: Student
+}>();
 
 /* Composable injections */
 const route = useRoute();
-const { student } = storeToRefs(useAuthStore());
 const { project, getProjectByID } = useProject();
 const { groups, getGroupsByProject, getGroupsByStudent } = useGroup();
 
@@ -32,22 +34,26 @@ function handleGroupChanged(joinedGroupData: Group): void {
     group.value = joinedGroupData;
 }
 
-onMounted(async () => {
-    if (student.value !== null) {
-        const currentStudent: Student = student.value;
-        const projectId: string = route.params.projectId as string;
+watch(
+    () => [props.student, route.params.projectId],
+    () => {
 
-        await getProjectByID(projectId);
-        await getGroupsByProject(projectId);
-        projectGroups.value = groups.value ?? [];
-
-        // Check if the student is in a group for the project
-        await getGroupsByStudent(currentStudent.id.toString());
-
-        group.value =
-            groups.value?.find((group) => projectGroups.value?.some((projectGroup) => projectGroup.id === group.id)) ??
-            null;
     }
+);
+
+onMounted(async () => {
+    const projectId: string = route.params.projectId as string;
+
+    await getProjectByID(projectId);
+    await getGroupsByProject(projectId);
+    projectGroups.value = groups.value ?? [];
+
+    // Check if the student is in a group for the project
+    await getGroupsByStudent(currentStudent.id.toString());
+
+    group.value =
+        groups.value?.find((group) => projectGroups.value?.some((projectGroup) => projectGroup.id === group.id)) ??
+        null;
 });
 </script>
 
