@@ -5,6 +5,8 @@ from time import time
 from django.db import connection
 from django.utils import timezone
 
+generated_usernames = set()
+
 
 def fillFaculties():
     with connection.cursor() as cursor:
@@ -60,9 +62,9 @@ def timer(func):
 @timer
 def seed_users(faker, count: int, offset: int = 0, staff_prob: float = 0.001) -> list[list]:
     """Seed users into the database"""
+    global generated_usernames
     with connection.cursor() as cursor:
         # Create a set to store generated usernames
-        generated_usernames = set()
 
         users = []
         for id in range(offset, count + offset):
@@ -80,8 +82,6 @@ def seed_users(faker, count: int, offset: int = 0, staff_prob: float = 0.001) ->
 
             # Add the username to the set
             generated_usernames.add(username)
-
-            print(username)
 
             # Append user data to the list
             users.append([
