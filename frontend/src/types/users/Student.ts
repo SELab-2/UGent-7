@@ -3,10 +3,6 @@ import { type Faculty } from '../Faculty.ts';
 import { type Group } from '../Group.ts';
 import { type Role, User } from '@/types/users/User.ts';
 
-interface StudentProps {
-    [key: string]: any;
-}
-
 export class Student extends User {
     constructor(
         public id: string,
@@ -44,7 +40,7 @@ export class Student extends User {
      *
      * @param student
      */
-    static fromJSON(student: StudentProps): Student {
+    static fromJSON(student: Student): Student {
         return new Student(
             student.id,
             student.username,
