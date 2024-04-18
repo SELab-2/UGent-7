@@ -46,7 +46,6 @@ export async function create<T>(
                 'Content-Type': contentType,
             },
         });
-        console.log('hieronder respons', response.data);
         ref.value = fromJson(response.data);
     } catch (error: any) {
         processError(error);
