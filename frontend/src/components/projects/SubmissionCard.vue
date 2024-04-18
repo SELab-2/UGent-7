@@ -8,9 +8,9 @@ import { computed, onMounted } from 'vue';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 import { type Group } from '@/types/Group.ts';
 import Button from 'primevue/button';
-import {Submission} from "@/types/submission/Submission.ts";
-import {ExtraCheckResult} from "@/types/submission/ExtraCheckResult.ts";
-import {StructureCheckResult} from "@/types/submission/StructureCheckResult.ts";
+import { type Submission } from '@/types/submission/Submission.ts';
+import { type ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
+import { type StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 
 const { t } = useI18n();
 const { submissions, getSubmissionByGroup } = useSubmission();
@@ -34,9 +34,7 @@ const formattedDeadline = computed(() => {
  * Returns the icon name, color and hover text for the submission
  * @param submission
  */
-const parseSubmissionStatus = (
-    submission: Submission,
-): string => {
+const parseSubmissionStatus = (submission: Submission): string => {
     if (
         !(
             submission.extraCheckResults.map((check: ExtraCheckResult) => check.result === 'SUCCESS').every(Boolean) ||
@@ -60,7 +58,6 @@ const parseSubmissionStatus = (
         return t('views.submissions.hoverText.allChecksPassed');
     }
 };
-
 </script>
 
 <template>
@@ -74,7 +71,11 @@ const parseSubmissionStatus = (
                 <div>
                     <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
                     {{ t('views.projects.submissionStatus') }}:
-                    {{ submissions && submissions.length > 0 ? parseSubmissionStatus(submissions.at(-1)!) : t('helpers.loading') }}
+                    {{
+                        submissions && submissions.length > 0
+                            ? parseSubmissionStatus(submissions.at(-1)!)
+                            : t('helpers.loading')
+                    }}
                 </div>
             </div>
         </template>
