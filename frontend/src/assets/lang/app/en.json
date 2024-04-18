@@ -257,7 +257,12 @@
         "teachers": {
             "title": "Teachers"
         },
-        "teacher": "Teacher"
+        "teacher": "Teacher",
+        "catalog": "Catalog",
+        "docker_images": {
+            "title": "Docker images",
+            "name": "Name docker image"
+        }
     },
     "primevue": {
         "startsWith": "Starts with",

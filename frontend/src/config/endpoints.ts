@@ -18,6 +18,9 @@ export const endpoints = {
         byTeacher: '/api/teachers/{teacherId}/courses/',
         byAssistant: '/api/assistants/{assistantId}/courses/',
     },
+    dockerImages: {
+        index: '/api/docker-images/',
+    },
     students: {
         index: '/api/students/',
         retrieve: '/api/students/{id}/',

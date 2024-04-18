@@ -15,6 +15,15 @@ const items = ref([
             },
         ],
     },
+    {
+        label: 'admin.catalog',
+        items: [
+            {
+                label: 'admin.docker_images.title',
+                route: 'admin-docker_images',
+            },
+        ],
+    },
 ]);
 </script>
 

@@ -257,7 +257,12 @@
         "teachers": {
             "title": "Proffen"
         },
-        "teacher": "Prof"
+        "teacher": "Prof",
+        "catalog": "Catalogus",
+        "docker_images": {
+            "title": "Docker images",
+            "name": "Naam docker image"
+        }
     },
     "primevue": {
         "accept": "Ja",
