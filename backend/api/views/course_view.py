@@ -48,7 +48,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-      def update(self, request: Request, *_, **__):
+    def update(self, request: Request, *_, **__):
         """Override the update method to add the teacher to the course"""
         course = self.get_object()
         serializer = CreateCourseSerializer(course, data=request.data, partial=True, context={"request": request})
@@ -284,9 +284,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             project = serializer.save()
             course.projects.add(project)
 
-        return Response({
-            "message": gettext("course.success.project.add"),
-        })
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["post"], permission_classes=[IsAdminUser | IsTeacher])
     @swagger_auto_schema(request_body=CourseCloneSerializer)
