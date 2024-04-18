@@ -130,10 +130,7 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "New project",
-            "noSubmissions": "This project does not have any submissions.",
-            "submission": "Submission",
-            "submissions": "Submissions"
+            "newProject": "New project"
         },
         "submission": "Submit"
     },

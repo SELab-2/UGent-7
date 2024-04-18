@@ -131,10 +131,7 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "Nieuw project",
-            "noSubmissions": "Dit project heeft nog geen indieningen.",
-            "submission": "Indiening",
-            "submissions": "Indieningen"
+            "newProject": "Nieuw project"
         },
         "submission" : "Indienen"
     },

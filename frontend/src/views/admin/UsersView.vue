@@ -147,6 +147,7 @@ const saveItem = async (): Promise<void> => {
                 const func = creators.value[role];
 
                 if (role === 'student') {
+                    console.log('student reported');
                     const data: Record<string, any> = {
                         ...editItem.value,
                         studentId: editItem.value.id,
