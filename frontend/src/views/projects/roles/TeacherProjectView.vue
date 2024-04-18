@@ -1,29 +1,59 @@
 <script setup lang="ts">
-import Button from 'primevue/button';
-import { type Project } from '@/types/Project';
-import { type Course } from '@/types/Course';
-import { PrimeIcons } from 'primevue/api';
-import { useI18n } from 'vue-i18n';
+import Title from '@/components/layout/Title.vue';
+import Skeleton from 'primevue/skeleton';
+import { type Teacher } from '@/types/users/Teacher.ts';
+import { type Project } from '@/types/Project.ts';
+import ProjectInfo from '@/components/projects/ProjectInfo.vue';
+import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
+import { watch } from 'vue';
+import ProjectMeter from '@/components/projects/ProjectMeter.vue';
 
+/* Props */
 const props = defineProps<{
-    course: Course;
-    project: Project;
+    teacher: Teacher;
+    project: Project | null;
 }>();
 
-const { t } = useI18n();
+/* Composable injections */
+const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus();
+
+/* Watchers */
+watch(
+    () => props.project,
+    () => {
+        if (props.project !== null) {
+            getSubmissionStatusByProject(props.project.id);
+        }
+    },
+    {
+        immediate: true,
+    },
+);
 </script>
 
 <template>
-    <!-- Update course button -->
-    <div v-tooltip.top="t('views.courses.edit')">
-        <RouterLink :to="{ name: 'project-edit', params: { courseId: props.course.id, projectId: props.project.id } }">
-            <Button
-                :icon="PrimeIcons.PENCIL"
-                icon-pos="right"
-                class="custom-button"
-                style="height: 51px; width: 51px; margin-right: 10px"
-            />
-        </RouterLink>
+    <template v-if="project !== null">
+        <Title class="mb-5">
+            {{ project.name }}
+        </Title>
+    </template>
+    <template v-else>
+        <Skeleton class="mb-4" height="3rem" width="30rem" />
+    </template>
+    <div class="grid">
+        <div class="col-12 md:col-8">
+            <template v-if="project !== null">
+                <ProjectInfo class="mb-3" :project="project" />
+                <div v-if="project" v-html="project.description" />
+            </template>
+            <template v-else>
+                <Skeleton height="4rem" />
+                <Skeleton height="10rem" />
+            </template>
+        </div>
+        <div class="col-12 md:col-4">
+            <ProjectMeter :submission-status="submissionStatus" />
+        </div>
     </div>
 </template>
 

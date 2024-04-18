@@ -14,8 +14,8 @@ import { watch } from 'vue';
 /* Props */
 interface Props {
     detail?: boolean;
-    courses: Course[] | null;
     cols?: number;
+    courses: Course[] | null;
 }
 
 withDefaults(defineProps<Props>(), {

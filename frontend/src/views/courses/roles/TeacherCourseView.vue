@@ -15,7 +15,7 @@ import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
 import { useCourses } from '@/composables/services/course.service';
 import { useProject } from '@/composables/services/project.service.ts';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 /* Props */
 const props = defineProps<{
@@ -28,11 +28,22 @@ const { t } = useI18n();
 const { cloneCourse } = useCourses();
 const { projects, getProjectsByCourse } = useProject();
 
+/* State */
+const instructors = computed(() => {
+    if (props.course.teachers !== null && props.course.assistants !== null) {
+        return props.course.teachers.concat(props.course.assistants);
+    }
+
+    return null;
+});
+
 /* State for the confirm dialog to clone a course */
 const cloneAssistants = ref<boolean>(false);
 const cloneTeachers = ref<boolean>(false);
 
-/* Methods */
+/**
+ * Clones the course with the given ID.
+ */
 async function handleClone(): Promise<void> {
     // Show a confirmation dialog before cloning the course
     confirm.require({
@@ -109,6 +120,7 @@ watch(
     </div>
     <!-- Description -->
     <div class="surface-300 px-4 py-3" v-html="props.course.description" />
+
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
@@ -131,7 +143,7 @@ watch(
         </div>
     </div>
     <!-- List with teachers and assistants -->
-    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />
+    <TeacherAssistantList :course="props.course" :users="instructors" />
 </template>
 
 <style lang="scss"></style>

@@ -7,9 +7,33 @@ export class Group {
         public id: string,
         public score: number = -1,
         public project: Project | null = null,
-        public students: Student[] = [],
-        public submissions: Submission[] = [],
+        public students: Student[] | null = null,
+        public submissions: Submission[] | null = null,
     ) {}
+
+    /**
+     * Check if the group is locked.
+     *
+     * @returns {boolean}
+     */
+    public isLocked(): boolean {
+        const students = this.students ?? [];
+
+        if (this.project !== null) {
+            return students.length >= this.project?.group_size || this.project.isLocked();
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the size of the group.
+     *
+     * @returns {number} The size of the group.
+     */
+    public getSize(): number {
+        return this.students?.length ?? 0;
+    }
 
     /**
      * Convert a group object to a group instance.
