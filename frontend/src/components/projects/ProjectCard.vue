@@ -42,8 +42,8 @@ const meterItems = computed(() => {
     const submissionsPassed = submissionStatus.value?.submissions_passed || 0;
     const submissionsFailed = groupsSubmitted - submissionsPassed;
     return [
-        { value: (submissionsPassed / groups) * 100, color: '#749b68', label: 'Succeeded tests', icon: 'pi pi-check' },
-        { value: (submissionsFailed / groups) * 100, color: '#FF5445', label: 'Failed tests', icon: 'pi pi-times' },
+        { value: (submissionsPassed / groups) * 100, color: '#749b68', label: t('components.card.testsSucceed'), icon: 'pi pi-check' },
+        { value: (submissionsFailed / groups) * 100, color: '#FF5445', label: t('components.card.testsFail'), icon: 'pi pi-times' },
     ]
 })
 
@@ -91,19 +91,6 @@ watch(
                                     moment(project.deadline).diff(moment(), 'day'),
                                 )
                             }}</span>
-                            <MeterGroup v-if="(submissionStatus?.groups_submitted || 0) > 0" :value="meterItems" labelOrientation="vertical">
-                                <template #start>
-                                    <div class="flex justify-between mt-2 relative">
-                                        <span>{{ submissionStatus?.groups_submitted }} {{ submissionStatus?.groups_submitted === 1 
-                                        ? t('components.card.submission') 
-                                        : t('components.card.submissions') }}</span>
-                                    <span class="w-full absolute text-right">{{ submissionStatus?.non_empty_groups }} Groups</span>
-                                    </div>
-                                </template>
-                            </MeterGroup>
-                            <p v-else>
-                                {{ t('components.card.noSubmissions') }}
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -133,8 +120,22 @@ watch(
                 </div>
                 <div>
                     <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-                    <b>{{ t('views.projects.submissionStatus') }}</b
-                    >: ok
+                    <b>{{ t('views.projects.submissionStatus') }}</b>
+                    <MeterGroup v-if="(submissionStatus?.groups_submitted || 0) > 0" :value="meterItems" labelOrientation="vertical">
+                        <template #start>
+                            <div class="flex justify-between mt-2 relative">
+                                <span>{{ submissionStatus?.groups_submitted }} {{ submissionStatus?.groups_submitted === 1 
+                                ? t('components.card.singleSubmission') 
+                                : t('components.card.multipleSubmissions') }}</span>
+                            <span class="w-full absolute text-right">{{ submissionStatus?.non_empty_groups }} {{ submissionStatus?.non_empty_groups === 1 
+                                ? t('components.card.singleGroup') 
+                                : t('components.card.multipleGroups')}}</span>
+                            </div>
+                        </template>
+                    </MeterGroup>
+                    <p v-else>
+                        {{ t('components.card.noSubmissions') }}
+                    </p>
                 </div>
                 <ProgressBar class="mt-3" :value="project.getProgress()">
                     {{
