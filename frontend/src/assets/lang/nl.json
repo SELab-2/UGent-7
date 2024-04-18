@@ -60,6 +60,7 @@
             "joinGroup": "Kies groep",
             "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
+            "edit": "Bewerk project",
             "name": "Projectnaam",
             "description": "Beschrijving",
             "start_date": "Start project",
@@ -74,7 +75,19 @@
             "title": "Inzendingen",
             "submit": "Indienen",
             "course": "Vak",
-            "chooseFile": "Kies bestand(en)"
+            "chooseFile": "Kies bestand(en)",
+            "hoverText": {
+              "allChecksFailed": "Structuur en extra checks gefaald",
+              "allChecksPassed": "Alle checks geslaagd",
+              "extraChecksFailed": "Extra checks gefaald",
+              "structureChecksFailed": "Structuur checks gefaald"
+            },
+            "timeSince": {
+              "today": "Vandaag",
+              "daysAgo": "dag(en) geleden",
+              "weekAgo": "Meer dan een week geleden",
+              "monthAgo": "Meer dan een maand geleden"
+            }
         },
         "courses": {
             "create": "Creëer vak",
@@ -130,13 +143,20 @@
         }
     },
     "components": {
-        "button": {
-            "academic_year": "Academiejaar {0}",
-            "createProject": "Maak een nieuw project"
+        "buttons": {
+            "academic_year": "Academiejaar {0}"
         },
         "card": {
             "open": "Details",
-            "newProject": "Nieuw project"
+            "newProject": "Nieuw project",
+            "noSubmissions": "Dit project heeft geen indieningen",
+            "singleSubmission": "Indiening",
+            "multipleSubmissions": "Indieningen",
+            "singleGroup": "Groep",
+            "multipleGroups": "Groepen",
+            "testsSucceed": "Geslaagde testen",
+            "testsFail": "Gefaalde testen",
+            "submit": "Indienen"
         },
         "submission" : "Indienen"
     },
@@ -146,6 +166,9 @@
             "assistant": "Assistent",
             "teacher": "Professor"
         }
+    },
+    "helpers": {
+      "loading": "Laden...,"
     },
     "toasts": {
         "messages": {

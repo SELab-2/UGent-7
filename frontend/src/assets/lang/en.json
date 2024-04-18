@@ -55,6 +55,7 @@
             "joinGroup": "Join group",
             "leaveGroup": "Leave group",
             "create": "Create new project",
+            "edit": "Edit project",
             "name": "Project name",
             "description": "Description",
             "start_date": "Start project",
@@ -69,7 +70,19 @@
             "title": "Submissions",
             "submit": "Submit",
             "course": "Course",
-            "chooseFile": "Choose a file"
+            "chooseFile": "Choose a file",
+            "hoverText": {
+              "allChecksFailed": "Structure and extra checks failed",
+              "allChecksPassed": "All checks passed",
+              "extraChecksFailed": "Extra checks failed",
+              "structureChecksFailed": "Structure checks failed"
+            },
+            "timeSince": {
+              "today": "Today",
+              "daysAgo": "day(s) ago",
+              "weekAgo": "More than a week ago",
+              "monthAgo": "More than a month ago"
+            }
         },
         "courses": {
             "create": "Create course",
@@ -130,7 +143,15 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "New project"
+            "newProject": "New project",
+            "noSubmissions": "This project does not have any submissions",
+            "singleSubmission": "Submission",
+            "multipleSubmissions": "Submissions",
+            "singleGroup": "Group",
+            "multipleGroups": "Groups",
+            "testsSucceed": "Succeeded tests",
+            "testsFail": "Failed tests",
+            "submit": "Submit"
         },
         "submission": "Submit"
     },
@@ -140,6 +161,9 @@
             "assistant": "Assistant",
             "teacher": "Teacher"
         }
+    },
+    "helpers": {
+      "loading": "Loading...,"
     },
     "toasts": {
         "messages": {

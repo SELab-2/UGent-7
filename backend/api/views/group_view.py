@@ -111,5 +111,6 @@ class GroupViewSet(CreateModelMixin,
             serializer.save(group=group)
 
         return Response({
-            "message": gettext("group.success.submissions.add")
+            "message": gettext("group.success.submissions.add"),
+            "submission": serializer.data
         })

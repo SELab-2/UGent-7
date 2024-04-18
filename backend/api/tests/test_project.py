@@ -107,7 +107,7 @@ class ProjectModelTests(APITestCase):
         )
 
         # Creating a group as a teacher should work
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
 
         project = Project.objects.get(
             name="Test Project",

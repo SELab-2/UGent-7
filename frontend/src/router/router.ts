@@ -4,6 +4,7 @@
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import CreateCourseView from '@/views/courses/CreateCourseView.vue';
+import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
 import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
 import CalendarView from '@/views/calendar/CalendarView.vue';
@@ -13,9 +14,10 @@ import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts';
 import { LogoutGuard } from '@/router/guards/logout.guard.ts';
 import ProjectView from '@/views/projects/ProjectView.vue';
 import CreateProjectView from '@/views/projects/CreateProjectView.vue';
-import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
+import UpdateProjectView from '@/views/projects/UpdateProjectView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
-import SubmissionView from '@/views/submissions/submissionView.vue';
+import SubmissionView from '@/views/submissions/SubmissionView.vue';
+import SingleProjectView from '@/views/projects/SingleProjectView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 import ProjectsView from '@/views/projects/ProjectsView.vue';
@@ -60,10 +62,26 @@ const routes: RouteRecordRaw[] = [
                                 path: ':projectId',
                                 children: [
                                     { path: '', component: ProjectView, name: 'course-project' },
-                                    { path: 'edit', component: Dummy, name: 'project-edit' },
+                                    { path: 'edit', component: UpdateProjectView, name: 'project-edit' },
+                                    {
+                                        path: 'group',
+                                        children: [
+                                            { path: '', component: Dummy, name: 'group' },
+                                            {
+                                                path: ':groupId',
+                                                children: [
+                                                    { path: '', component: Dummy, name: 'project-group' },
+                                                    {
+                                                        path: 'submission',
+                                                        component: SubmissionView,
+                                                        name: 'submission',
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },
-                                    { path: 'submission', component: SubmissionView, name: 'submission' },
                                 ],
                             },
                         ],
