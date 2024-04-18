@@ -156,13 +156,15 @@ def seed_courses(faker,
                 faker.catch_phrase(),
                 faker.paragraph(),
                 timezone.now().year + faker.random_int(min=-year_dev, max=year_dev),
-                choice(faculties)
+                choice(faculties),
+                faker.sentence()
             ] for _ in range(count)
         ]
 
         # Insert courses
         cursor.executemany(
-            "INSERT INTO api_course(name, description, academic_startyear, faculty_id) VALUES (?, ?, ?, ?)", courses
+            "INSERT INTO api_course(name, description, academic_startyear, faculty_id, excerpt) VALUES (?, ?, ?, ?, ?)",
+            courses
         )
 
         # Link students, teachers, assistants to courses
