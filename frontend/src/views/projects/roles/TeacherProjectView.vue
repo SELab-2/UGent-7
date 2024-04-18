@@ -1,24 +1,39 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import Skeleton from 'primevue/skeleton';
-import { Teacher } from '@/types/users/Teacher.ts';
-import { Project } from '@/types/Project.ts';
-import ChooseGroupCard from '@/components/projects/ChooseGroupCard.vue';
+import { type Teacher } from '@/types/users/Teacher.ts';
+import { type Project } from '@/types/Project.ts';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
-import SubmissionCard from '@/components/projects/SubmissionCard.vue';
-import JoinedGroupCard from '@/components/projects/JoinedGroupCard.vue';
+import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
+import { watch } from 'vue';
+import ProjectMeter from '@/components/projects/ProjectMeter.vue';
 
 /* Props */
 const props = defineProps<{
     teacher: Teacher;
-    project: Project|null;
+    project: Project | null;
 }>();
 
+/* Composable injections */
+const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus();
+
+/* Watchers */
+watch(
+    () => props.project,
+    () => {
+        if (props.project !== null) {
+            getSubmissionStatusByProject(props.project.id);
+        }
+    },
+    {
+        immediate: true,
+    },
+);
 </script>
 
 <template>
     <template v-if="project !== null">
-        <Title class="mb-4">
+        <Title class="mb-5">
             {{ project.name }}
         </Title>
     </template>
@@ -28,7 +43,7 @@ const props = defineProps<{
     <div class="grid">
         <div class="col-12 md:col-8">
             <template v-if="project !== null">
-                <ProjectInfo class="my-3" :project="project" />
+                <ProjectInfo class="mb-3" :project="project" />
                 <div v-if="project" v-html="project.description" />
             </template>
             <template v-else>
@@ -37,7 +52,7 @@ const props = defineProps<{
             </template>
         </div>
         <div class="col-12 md:col-4">
-            Hellaur
+            <ProjectMeter :submission-status="submissionStatus" />
         </div>
     </div>
 </template>

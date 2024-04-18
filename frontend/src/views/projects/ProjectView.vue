@@ -22,30 +22,34 @@ const { groups, getGroupsByProject } = useGroup();
 const { students, getStudentsByGroup } = useStudents();
 
 /* Watch the query parameters for changes */
-watch(() => params, async (params) => {
-    const projectId = params.projectId as string;
+watch(
+    () => params,
+    async (params) => {
+        const projectId = params.projectId as string;
 
-    if (projectId) {
-        // Get the project by the ID param.
-        await getProjectByID(projectId);
+        if (projectId !== '') {
+            // Get the project by the ID param.
+            await getProjectByID(projectId);
 
-        // Get the groups of the project.
-        await getGroupsByProject(projectId);
+            // Get the groups of the project.
+            await getGroupsByProject(projectId);
 
-        if (project.value !== null && groups.value !== null) {
-            project.value.groups = groups.value;
+            if (project.value !== null && groups.value !== null) {
+                project.value.groups = groups.value;
 
-            // Fill the students with each group.
-            for (const group of groups.value) {
-                await getStudentsByGroup(group.id);
-                group.students = students.value ?? [];
-                group.project = project.value;
+                // Fill the students with each group.
+                for (const group of groups.value) {
+                    await getStudentsByGroup(group.id);
+                    group.students = students.value ?? [];
+                    group.project = project.value;
+                }
             }
         }
-    }
-}, {
-    immediate: true
-});
+    },
+    {
+        immediate: true,
+    },
+);
 </script>
 
 <template>

@@ -9,12 +9,12 @@ import { computed, watch } from 'vue';
 import { useGroup } from '@/composables/services/group.service.ts';
 import { type Group } from '@/types/Group.ts';
 import { type Student } from '@/types/users/Student.ts';
-import { Project } from '@/types/Project.ts';
+import { type Project } from '@/types/Project.ts';
 
 /* Props */
 const props = defineProps<{
     student: Student;
-    project: Project|null;
+    project: Project | null;
 }>();
 
 /* Composable injections */
@@ -26,11 +26,11 @@ const group = computed(() => {
         const studentGroups = groups.value;
 
         if (studentGroups !== null) {
-            return props.project.groups?.find((projectGroup: Group) =>
-                studentGroups.some((studentGroup: Group) =>
-                    studentGroup.id === projectGroup.id
-                )
-            ) ?? null;
+            return (
+                props.project.groups?.find((projectGroup: Group) =>
+                    studentGroups.some((studentGroup: Group) => studentGroup.id === projectGroup.id),
+                ) ?? null
+            );
         }
 
         return null;
@@ -41,7 +41,7 @@ const group = computed(() => {
 
 /* Watch the student and project ID for changes */
 watch(() => [props.student], loadStudentGroups, {
-    immediate: true
+    immediate: true,
 });
 
 /**
@@ -55,7 +55,7 @@ async function loadStudentGroups(): Promise<void> {
 
 <template>
     <template v-if="project !== null">
-        <Title class="mb-4">
+        <Title class="mb-5">
             {{ project.name }}
         </Title>
     </template>
@@ -65,7 +65,7 @@ async function loadStudentGroups(): Promise<void> {
     <div class="grid">
         <div class="col-12 md:col-8">
             <template v-if="project !== null">
-                <ProjectInfo class="my-3" :project="project" />
+                <ProjectInfo class="mb-3" :project="project" />
                 <div v-if="project" v-html="project.description" />
             </template>
             <template v-else>
@@ -75,15 +75,13 @@ async function loadStudentGroups(): Promise<void> {
         </div>
         <div class="col-12 md:col-4">
             <template v-if="project !== null && group !== undefined">
-                <div class="mt-3">
-                    <template v-if="group === null">
-                        <ChooseGroupCard :project="project" :student="student" @group-joined="loadStudentGroups" />
-                    </template>
-                    <template v-else>
-                        <SubmissionCard class="mb-3" :group="group" />
-                        <JoinedGroupCard :group="group" @group-left="loadStudentGroups"></JoinedGroupCard>
-                    </template>
-                </div>
+                <template v-if="group === null">
+                    <ChooseGroupCard :project="project" :student="student" @group-joined="loadStudentGroups" />
+                </template>
+                <template v-else>
+                    <SubmissionCard class="mb-3" :group="group" />
+                    <JoinedGroupCard :group="group" @group-left="loadStudentGroups"></JoinedGroupCard>
+                </template>
             </template>
             <template v-else>
                 <Skeleton height="10rem" class="mb-3" />

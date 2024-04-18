@@ -13,6 +13,38 @@ export class Submission {
     ) {}
 
     /**
+     * Check if the submission is passed.
+     */
+    public isPassed(): boolean {
+        return this.isExtraCheckPassed() && this.isStructureCheckPassed();
+    }
+
+    /**
+     * Check if some of the checks is passed.
+     */
+    public isSomePassed(): boolean {
+        return this.isExtraCheckPassed() || this.isStructureCheckPassed();
+    }
+
+    /**
+     * Check if the extra check is passed.
+     */
+    public isExtraCheckPassed(): boolean {
+        const extraChecksPassed = this.extraCheckResults.map((check: ExtraCheckResult) => check.result === 'SUCCESS');
+        return extraChecksPassed.every((check: boolean) => check);
+    }
+
+    /**
+     * Check if the structure check is passed.
+     */
+    public isStructureCheckPassed(): boolean {
+        const structureChecksPassed = this.structureCheckResults.map(
+            (check: StructureCheckResult) => check.result === 'SUCCESS',
+        );
+        return structureChecksPassed.every((check: boolean) => check);
+    }
+
+    /**
      * Convert a submission object to a submission instance.
      *
      * @param submission

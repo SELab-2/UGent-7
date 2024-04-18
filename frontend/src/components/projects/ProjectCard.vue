@@ -1,20 +1,14 @@
 <script setup lang="ts">
-import moment from 'moment';
-import MeterGroup from 'primevue/metergroup';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import { type Project } from '@/types/Project.ts';
 import { type Group } from '@/types/Group.ts';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
-import { computed, watch } from 'vue';
+import { watch } from 'vue';
 import { type Course } from '@/types/Course.ts';
 import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
-
-/**
- * TODO
- *  - Submission check depends on more than just structure checks
- */
+import ProjectMeter from '@/components/projects/ProjectMeter.vue';
 
 /* Component props */
 const props = withDefaults(
@@ -29,27 +23,6 @@ const props = withDefaults(
         type: 'large',
     },
 );
-
-const meterItems = computed(() => {
-    const groups = submissionStatus.value !== null ? submissionStatus.value.non_empty_groups : 0;
-    const groupsSubmitted = submissionStatus.value !== null ? submissionStatus.value.groups_submitted : 0;
-    const submissionsPassed = submissionStatus.value !== null ? submissionStatus.value.submissions_passed : 0;
-    const submissionsFailed = groupsSubmitted - submissionsPassed;
-    return [
-        {
-            value: (submissionsPassed / groups) * 100,
-            color: '#749b68',
-            label: t('components.card.testsSucceed'),
-            icon: 'pi pi-check',
-        },
-        {
-            value: (submissionsFailed / groups) * 100,
-            color: '#FF5445',
-            label: t('components.card.testsFail'),
-            icon: 'pi pi-times',
-        },
-    ];
-});
 
 /* Composable injections */
 const { t } = useI18n();
@@ -128,35 +101,7 @@ watch(
                     >: {{ project.getFormattedDeadline() }}<br />
                 </div>
                 <div>
-                    <MeterGroup
-                        v-if="(submissionStatus?.groups_submitted || 0) > 0"
-                        :value="meterItems"
-                        labelOrientation="vertical"
-                    >
-                        <template #start>
-                            <div class="flex justify-between mt-2 relative">
-                                <span
-                                    >{{ submissionStatus?.groups_submitted }}
-                                    {{
-                                        submissionStatus?.groups_submitted === 1
-                                            ? t('components.card.singleSubmission')
-                                            : t('components.card.multipleSubmissions')
-                                    }}</span
-                                >
-                                <span class="w-full absolute text-right"
-                                    >{{ submissionStatus?.non_empty_groups }}
-                                    {{
-                                        submissionStatus?.non_empty_groups === 1
-                                            ? t('components.card.singleGroup')
-                                            : t('components.card.multipleGroups')
-                                    }}</span
-                                >
-                            </div>
-                        </template>
-                    </MeterGroup>
-                    <p v-else>
-                        {{ t('components.card.noSubmissions') }}
-                    </p>
+                    <ProjectMeter :submission-status="submissionStatus" />
                 </div>
             </template>
             <template #footer>
