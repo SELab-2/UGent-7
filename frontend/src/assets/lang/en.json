@@ -56,6 +56,7 @@
             "leaveGroup": "Leave group",
             "create": "Create new project",
             "name": "Project name",
+            "edit": "Edit project",
             "description": "Description",
             "start_date": "Start project",
             "group_size": "Number of students in a group (1 for an individual project)",
@@ -130,7 +131,14 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "New project"
+            "newProject": "New project",
+            "noSubmissions": "This project does not have any submissions",	
+            "singleSubmission": "Submission",	
+            "multipleSubmissions": "Submissions",	
+            "singleGroup": "Group",	
+            "multipleGroups": "Groups",	
+            "testsSucceed": "Succeeded tests",	
+            "testsFail": "Failed tests"
         },
         "submission": "Submit"
     },
