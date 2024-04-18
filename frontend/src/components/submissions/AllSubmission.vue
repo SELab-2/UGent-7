@@ -65,6 +65,9 @@ watch(
     },
 );
 
+/**
+ * Returns the extra information for the submission
+ */
 const submissionsExtra = computed(() => {
     return tempSubmissions.value.map((submission) => {
         const iconDetails = getExtraSubmissionInformation(submission);

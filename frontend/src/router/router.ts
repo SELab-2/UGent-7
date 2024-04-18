@@ -81,7 +81,6 @@ const routes: RouteRecordRaw[] = [
                                     },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },
-                                    { path: 'submission', component: SubmissionView, name: 'submission' },
                                 ],
                             },
                         ],

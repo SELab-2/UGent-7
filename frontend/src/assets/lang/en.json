@@ -161,6 +161,9 @@
             "teacher": "Teacher"
         }
     },
+    "helpers": {
+      "loading": "Loading...,"
+    },
     "toasts": {
         "messages": {
             "success": "Success",
