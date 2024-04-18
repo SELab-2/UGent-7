@@ -1,6 +1,8 @@
+import { describe, it } from 'vitest';
+describe('submissions', (): void => {
+    it('gets submissions data by id', async () => {});
+});
 /*
-import { describe, it, expect } from 'vitest';
-
 import { Submission } from '@/types/submission/Submission.ts';
 import { submissionData } from './data';
 import { createSubmission } from './helper';
