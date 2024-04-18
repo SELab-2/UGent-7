@@ -5,13 +5,22 @@ import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssist
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 
 /* Props */
 const props = defineProps<{
     course: Course;
 }>();
+
+/* State */
+const instructors = computed(() => {
+    if (props.course.teachers !== null && props.course.assistants !== null) {
+        return props.course.teachers.concat(props.course.assistants);
+    }
+
+    return null;
+});
 
 /* Composable injections */
 const { t } = useI18n();
@@ -33,7 +42,7 @@ watch(
         <Title class="m-0">{{ props.course.name }}</Title>
     </div>
     <!-- Description -->
-    <div v-html="props.course.description" />
+    <div class="surface-300 px-4 py-3" v-html="props.course.description" />
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
@@ -52,7 +61,7 @@ watch(
     </div>
 
     <!-- List with teachers and assistants -->
-    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />
+    <TeacherAssistantList :course="props.course" :users="instructors" />
 </template>
 
 <style scoped lang="scss"></style>

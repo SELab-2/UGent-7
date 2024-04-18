@@ -5,67 +5,51 @@ import SubmissionCard from '@/components/projects/SubmissionCard.vue';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
 import Title from '@/components/layout/Title.vue';
 import Skeleton from 'primevue/skeleton';
-import { ref, watch } from 'vue';
-import { useProject } from '@/composables/services/project.service.ts';
-import { useRoute } from 'vue-router';
+import { computed, watch } from 'vue';
 import { useGroup } from '@/composables/services/group.service.ts';
 import { type Group } from '@/types/Group.ts';
 import { type Student } from '@/types/users/Student.ts';
-import { useStudents } from '@/composables/services/student.service.ts';
+import { Project } from '@/types/Project.ts';
 
 /* Props */
 const props = defineProps<{
     student: Student;
+    project: Project|null;
 }>();
 
 /* Composable injections */
-const route = useRoute();
-const { project, getProjectByID } = useProject();
-const { groups, getGroupsByProject, getGroupsByStudent } = useGroup();
-const { students, getStudentsByGroup } = useStudents();
+const { groups, getGroupsByStudent } = useGroup();
 
 /* Component state */
-const studentGroup = ref<Group | undefined | null>(undefined);
+const group = computed(() => {
+    if (groups.value !== null && props.project !== null) {
+        const studentGroups = groups.value;
 
-/**
- * Handles the group changed event.
- */
-async function handleGroupChanged(): Promise<void> {
-    await loadData();
-}
+        if (studentGroups !== null) {
+            return props.project.groups?.find((projectGroup: Group) =>
+                studentGroups.some((studentGroup: Group) =>
+                    studentGroup.id === projectGroup.id
+                )
+            ) ?? null;
+        }
 
-watch(() => [props.student, route.params.projectId], loadData, {
-    immediate: true,
+        return null;
+    }
+
+    return undefined;
+});
+
+/* Watch the student and project ID for changes */
+watch(() => [props.student], loadStudentGroups, {
+    immediate: true
 });
 
 /**
  * Loads the data for the project view.
  */
-async function loadData(): Promise<void> {
-    studentGroup.value = undefined;
-    const projectId = route.params.projectId as string;
-
-    // Get the project by the ID param.
-    await getProjectByID(projectId);
-
-    // Get the groups of the project.
-    await getGroupsByProject(projectId);
-
-    if (project.value !== null) {
-        project.value.groups = groups.value ?? [];
-    }
-
-    for (const group of project.value?.groups ?? []) {
-        await getStudentsByGroup(group.id);
-        group.students = students.value ?? [];
-        group.project = project.value;
-    }
-
-    // Get the group of the student for this project.
+async function loadStudentGroups(): Promise<void> {
+    // Get the groups of the given student.
     await getGroupsByStudent(props.student.id);
-    studentGroup.value =
-        project.value?.groups?.find((group) => groups.value?.some((projectGroup) => projectGroup.id === group.id)) ??
-        null;
 }
 </script>
 
@@ -85,29 +69,25 @@ async function loadData(): Promise<void> {
                 <div v-if="project" v-html="project.description" />
             </template>
             <template v-else>
-                <Skeleton height="4rem" />
+                <Skeleton height="4rem" class="mb-3" />
                 <Skeleton height="10rem" />
             </template>
         </div>
         <div class="col-12 md:col-4">
-            <template v-if="project !== null">
+            <template v-if="project !== null && group !== undefined">
                 <div class="mt-3">
-                    <template v-if="studentGroup === null">
-                        <ChooseGroupCard :project="project" :student="student" @group-joined="handleGroupChanged" />
-                    </template>
-                    <template v-else-if="studentGroup !== undefined">
-                        <SubmissionCard class="mb-3" :group="studentGroup" />
-                        <JoinedGroupCard :group="studentGroup" @group-left="handleGroupChanged"></JoinedGroupCard>
+                    <template v-if="group === null">
+                        <ChooseGroupCard :project="project" :student="student" @group-joined="loadStudentGroups" />
                     </template>
                     <template v-else>
-                        <Skeleton height="30rem" />
-                        <Skeleton height="10rem" class="mt-3" />
+                        <SubmissionCard class="mb-3" :group="group" />
+                        <JoinedGroupCard :group="group" @group-left="loadStudentGroups"></JoinedGroupCard>
                     </template>
                 </div>
             </template>
             <template v-else>
+                <Skeleton height="10rem" class="mb-3" />
                 <Skeleton height="30rem" />
-                <Skeleton height="10rem" class="mt-3" />
             </template>
         </div>
     </div>

@@ -51,7 +51,7 @@ async function joinSelectedGroup(): Promise<void> {
         <h2 class="mt-0">
             {{ t('views.projects.chooseGroup') }}
         </h2>
-        <template v-if="project.groups.length > 0 && !project.isLocked()">
+        <template v-if="project.groups !== null && project.groups.length > 0 && !project.isLocked()">
             <DataTable :value="project.groups" v-model:selection="selectedGroup" selection-mode="single">
                 <Column :header="t('views.projects.groupName')">
                     <template #body="{ data }">
@@ -60,7 +60,7 @@ async function joinSelectedGroup(): Promise<void> {
                 </Column>
                 <Column :header="t('views.projects.groupPopulation')">
                     <template #body="{ data }">
-                        <i class="pi pi-users mr-2" /> {{ data.students.length }} / {{ project.group_size }}
+                        <i class="pi pi-users mr-2" /> {{ data.getSize() }} / {{ project.group_size }}
                     </template>
                 </Column>
                 <Column :header="t('views.projects.groupStatus')">

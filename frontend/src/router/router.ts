@@ -18,6 +18,7 @@ import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from '@/views/submissions/submissionView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
+import ProjectsView from '@/views/projects/ProjectsView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -76,7 +77,7 @@ const routes: RouteRecordRaw[] = [
     { path: '/calendar', component: CalendarView, name: 'calendar' },
 
     // Projects
-    { path: '/projects', component: ProjectView, name: 'projects' },
+    { path: '/projects', component: ProjectsView, name: 'projects' },
 
     // Users
     {

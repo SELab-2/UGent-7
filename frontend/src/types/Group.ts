@@ -27,6 +27,15 @@ export class Group {
     }
 
     /**
+     * Get the size of the group.
+     *
+     * @returns {number} The size of the group.
+     */
+    public getSize(): number {
+        return this.students?.length ?? 0;
+    }
+
+    /**
      * Convert a group object to a group instance.
      *
      * @param group

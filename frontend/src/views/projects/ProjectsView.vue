@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import { watch } from 'vue';
 import { storeToRefs } from 'pinia';
