@@ -19,9 +19,9 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
     const endpoint = endpoints.dockerImages.index;
     const data = {
-        'file': files[0],
-        'name': name.value,
-    }
+        file: files[0],
+        name: name.value,
+    };
     await create<Response>(endpoint, data, response, Response.fromJSON, 'multipart/form-data');
     name.value = '';
 };
@@ -33,11 +33,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
             <div class="gap-3 mb-3">{{ t('admin.docker_images.title') }}</div>
         </Title>
         <Body>
-            <InputText
-                class="mb-3 gap-3"
-                v-model:model-value="name"
-                :placeholder="t('admin.docker_images.name')"
-            />
+            <InputText class="mb-3 gap-3" v-model:model-value="name" :placeholder="t('admin.docker_images.name')" />
             <FileUpload
                 v-if="name.length > 0"
                 class="mb-3 gap-3"
