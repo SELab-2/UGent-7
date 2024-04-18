@@ -63,7 +63,7 @@ export function useProject(): ProjectState {
             .catch((error) => {
                 if (axios.isAxiosError(error)) {
                     processError(error);
-                    console.log(error.response?.data);
+                    console.error(error.response?.data);
                 } else {
                     console.error('An unexpected error ocurred: ', error);
                 }
