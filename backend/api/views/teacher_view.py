@@ -26,7 +26,7 @@ class TeacherViewSet(ModelViewSet):
 
     @swagger_auto_schema(request_body=UserIDSerializer)
     def create(self, request: Request, *args, **kwargs) -> Response:
-        """Add the student role to the user"""
+        """Add the teacher role to the user"""
         serializer = UserIDSerializer(
             data=request.data
         )

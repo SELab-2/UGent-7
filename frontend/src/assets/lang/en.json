@@ -180,6 +180,37 @@
         "clone_course": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
         "leave_course": "Are you sure you want to leave this course? You will no longer have access to this course."
     },
+    "admin": {
+        "title": "Admin",
+        "keyword": "Keyword",
+        "search": {
+            "search": "Search",
+            "general": "Search by general keyword"
+        },
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "users": {
+            "title": "Users",
+            "id": "ID",
+            "username": "Username",
+            "email": "Email",
+            "roles": "Roles"
+        },
+        "user": "User",
+        "assistants": {
+            "title": "Assistants"
+        },
+        "assistant": "Assistant",
+        "students": {
+            "title": "Students"
+        },
+        "student": "Student",
+        "teachers": {
+            "title": "Teachers"
+        },
+        "teacher": "Teacher"
+    },
     "primevue": {
         "startsWith": "Starts with",
         "contains": "Contains",

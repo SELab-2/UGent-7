@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import StudentDashboardView from '@/views/dashboard/roles/StudentDashboardView.vue';

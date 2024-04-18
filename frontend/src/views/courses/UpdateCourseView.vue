@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';

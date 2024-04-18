@@ -64,7 +64,7 @@ export function useAssistant(): AssistantState {
         await create<Assistant>(
             endpoint,
             {
-                id: user.id,
+                user: user.id,
             },
             assistant,
             Assistant.fromJSON,
