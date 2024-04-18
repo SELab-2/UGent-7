@@ -4,6 +4,7 @@ import MeterGroup from 'primevue/metergroup';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import { type Project } from '@/types/Project.ts';
+import { type Group } from '@/types/Group.ts';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import { computed, watch } from 'vue';
@@ -21,6 +22,8 @@ const props = withDefaults(
         type?: 'small' | 'large';
         project: Project;
         course: Course;
+        projectGroups: Group[];
+        studentGroups: Group[];
     }>(),
     {
         type: 'large',
@@ -59,6 +62,13 @@ const meterItems = computed(() => {
 /* Composable injections */
 const { t } = useI18n();
 const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus();
+
+/**
+ * Return True if the user is in a group in this project.
+ */
+function isInGroup(): boolean {
+    return props.studentGroups.some((group) => props.projectGroups.includes(group));
+}
 
 /* Watchers */
 watch(
@@ -177,11 +187,13 @@ watch(
                         />
                     </RouterLink>
                     <RouterLink
+                        v-if="isInGroup()"
                         :to="{
                             name: 'submission',
                             params: {
                                 courseId: course.id,
                                 projectId: project.id,
+                                groupId: '5',
                             },
                         }"
                     >
