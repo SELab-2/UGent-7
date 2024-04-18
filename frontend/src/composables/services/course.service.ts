@@ -1,7 +1,7 @@
 import { Course } from '@/types/Course.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
+import { get, getList, create, patch, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
 import { type Response } from '@/types/Response.ts';
 import { type CoursePaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
@@ -79,18 +79,18 @@ export function useCourses(): CoursesState {
         // Endpoint to update is same as retrieve	
         const endpoint = endpoints.courses.retrieve.replace('{id}', courseData.id);	
 
-        await patch(	
-            endpoint,	
-            {	
-                id: courseData.id,	
-                name: courseData.name,	
-                description: courseData.description,	
-                faculty: courseData.faculty?.id,	
-            },	
-            response,	
-        );	
+        await patch(
+            endpoint,
+            {
+                id: courseData.id,
+                name: courseData.name,
+                description: courseData.description,
+                faculty: courseData.faculty?.id,
+            },
+            response,
+        );
     }
-    
+
     async function cloneCourse(courseId: string, cloneAssistants: boolean, cloneTeachers: boolean): Promise<void> {
         const endpoint = endpoints.courses.clone.replace('{courseId}', courseId);
         await create<Course>(
