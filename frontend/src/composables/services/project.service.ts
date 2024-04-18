@@ -23,6 +23,7 @@ interface ProjectState {
 export function useProject(): ProjectState {
     const projects = ref<Project[] | null>(null);
     const project = ref<Project | null>(null);
+    const response = ref<Response | null>(null);
 
     async function getProjectByID(id: string): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
