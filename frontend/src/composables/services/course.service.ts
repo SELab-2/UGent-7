@@ -66,6 +66,7 @@ export function useCourses(): CoursesState {
                 id: courseData.id,
                 name: courseData.name,
                 description: courseData.description,
+                excerpt: courseData.excerpt,
                 academic_startyear: courseData.academic_startyear,
                 faculty: courseData.faculty?.id,
             },

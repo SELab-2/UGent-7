@@ -5,7 +5,7 @@ import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import InputText from 'primevue/inputtext';
-import Textarea from 'primevue/textarea';
+import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
@@ -134,14 +134,7 @@ async function submitProject(): Promise<void> {
                             <label for="projectDescription">
                                 {{ t('views.projects.description') }}
                             </label>
-                            <Textarea
-                                id="projectDescription"
-                                class="w-full"
-                                v-model="form.description"
-                                autoResize
-                                rows="5"
-                                cols="30"
-                            />
+                            <Editor id="projectDescription" class="w-full" v-model="form.description" />
                         </div>
                     </div>
 

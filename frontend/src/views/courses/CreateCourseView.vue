@@ -2,18 +2,19 @@
 import Dropdown from 'primevue/dropdown';
 import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import Textarea from 'primevue/textarea';
+import ErrorMessage from '@/components/forms/ErrorMessage.vue';
+import Editor from '@/components/forms/Editor.vue';
 import { reactive, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import InputText from 'primevue/inputtext';
-import Textarea from 'primevue/textarea';
-import Button from 'primevue/button';
-import { Course } from '@/types/Course';
+import { Course, getAcademicYear } from '@/types/Course';
 import { useCourses } from '@/composables/services/course.service';
 import { useFaculty } from '@/composables/services/faculty.service.ts';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
-import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -32,6 +33,7 @@ onMounted(async () => {
 const form = reactive({
     name: '',
     description: '',
+    excerpt: '',
     faculty: null,
 });
 
@@ -40,13 +42,14 @@ const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
         faculty: { required: helpers.withMessage(t('validations.required'), required) },
+        excerpt: { required: helpers.withMessage(t('validations.required'), required) },
     };
 });
 
 // useVuelidate function to perform form validation
 const v$ = useVuelidate(rules, form);
 
-const submitCourse = async (): Promise<void> => {
+async function submitCourse(): Promise<void> {
     // Validate the form
     const result = await v$.value.$validate();
 
@@ -57,26 +60,18 @@ const submitCourse = async (): Promise<void> => {
             new Course(
                 '',
                 form.name,
+                form.excerpt,
                 form.description,
-                currentAcademicYear(),
+                getAcademicYear(),
                 null, // No parent course
                 form.faculty,
             ),
         );
 
         // Redirect to the dashboard overview
-        push({ name: 'dashboard' });
+        await push({ name: 'dashboard' });
     }
-};
-
-/* Get the current academic year */
-const currentAcademicYear = (): number => {
-    if (new Date().getMonth() < 9) {
-        return new Date().getFullYear() - 1;
-    } else {
-        return new Date().getFullYear();
-    }
-};
+}
 </script>
 
 <template>
@@ -95,10 +90,17 @@ const currentAcademicYear = (): number => {
                         <ErrorMessage :field="v$.name" />
                     </div>
 
+                    <!-- Course excerpt -->
+                    <div class="mb-4">
+                        <label for="courseExcerpt">{{ t('views.courses.excerpt') }}</label>
+                        <Textarea id="courseExcerpt" v-model="form.excerpt" autoResize rows="5" cols="30" />
+                        <ErrorMessage :field="v$.excerpt" />
+                    </div>
+
                     <!-- Course description -->
                     <div class="mb-4">
                         <label for="courseDescription">{{ t('views.courses.description') }}</label>
-                        <Textarea id="courseDescription" v-model="form.description" autoResize rows="5" cols="30" />
+                        <Editor v-model="form.description" />
                     </div>
 
                     <!-- Course faculty -->

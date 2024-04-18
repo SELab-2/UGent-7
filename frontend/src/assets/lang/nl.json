@@ -23,8 +23,8 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
-            "no_projects": "Geen projecten beschikbaar voor dit academiejaar.",
-            "no_courses": "Geen vakken beschikbaar voor dit academiejaar.",
+            "noProjects": "Geen projecten beschikbaar voor dit academiejaar.",
+            "noCourses": "Geen vakken beschikbaar voor dit academiejaar.",
             "select_course": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
         },
@@ -43,7 +43,11 @@
             "noProjects": "Geen projecten op geselecteerde datum."
         },
         "projects": {
+            "all": "Alle projecten",
+            "coming": "Aankomende deadlines",
             "deadline": "Deadline",
+            "days": "Vandaag om {hour} | Morgen om {hour} | Over {count} dagen",
+            "start": "Startdatum",
             "submissionStatus": "Indienstatus",
             "group": "Groep",
             "groupMembers": "Groepsleden",
@@ -76,6 +80,7 @@
             "clone_teachers": "Kloon lesgevers:",
             "name": "Vaknaam",
             "description": "Beschrijving",
+            "excerpt": "Korte beschrijving",
             "faculty": "Faculteit",
             "year": "Academiejaar",
             "enroll": "Inschrijven",

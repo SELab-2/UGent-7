@@ -1,3 +1,4 @@
+from nh3 import clean
 from django.utils.translation import gettext
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -36,6 +37,11 @@ class CourseSerializer(serializers.ModelSerializer):
     faculty = FacultySerializer(
         read_only=True
     )
+
+    def validate(self, attrs: dict) -> dict:
+        """Extra custom validation for course serializer"""
+        attrs['description'] = clean(attrs['description'])
+        return attrs
 
     class Meta:
         model = Course

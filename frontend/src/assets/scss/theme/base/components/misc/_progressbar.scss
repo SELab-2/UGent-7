@@ -2,13 +2,13 @@
 .p-progressbar {
     position: relative;
     overflow: hidden;
+    display: flex;
 }
 
 .p-progressbar-determinate .p-progressbar-value {
     height: 100%;
-    width: 0%;
+    width: 0;
     position: absolute;
-    display: none;
     border: 0 none;
     display: flex;
     align-items: center;

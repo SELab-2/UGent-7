@@ -48,7 +48,7 @@ const handleCreateButton = (): void => {
             v-model:visible="displayCourseSelection"
             class="m-3"
             :draggable="false"
-            :contentStyle="{ 'min-width': '50vw' }"
+            :contentStyle="{ 'min-width': '50vw', 'max-width': '1080px' }"
             modal
         >
             <template #header>

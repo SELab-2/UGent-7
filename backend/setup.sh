@@ -4,7 +4,6 @@ poetry install > /dev/null
 
 echo "Migrating database..."
 python manage.py migrate > /dev/null
-python manage.py migrate django_celery_results > /dev/null
 
 echo "Compiling translations..."
 django-admin compilemessages > /dev/null
