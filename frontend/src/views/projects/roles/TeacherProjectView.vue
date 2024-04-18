@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
-import { Project } from '@/types/Project';
-import { Course } from '@/types/Course';
+import { type Project } from '@/types/Project';
+import { type Course } from '@/types/Course';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 
@@ -11,7 +11,6 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-
 </script>
 
 <template>

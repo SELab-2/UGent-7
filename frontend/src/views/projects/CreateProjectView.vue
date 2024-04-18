@@ -79,7 +79,7 @@ async function submitProject(): Promise<void> {
     await getCourseByID(params.courseId as string);
 
     // Only submit the form if the validation was successful
-    if (validated && course.value) {
+    if (validated && course.value !== null) {
         // Pass the project data to the service
         await createProject(
             new Project(

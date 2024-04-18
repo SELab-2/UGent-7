@@ -40,7 +40,7 @@ onMounted(async () => {
         form.groupSize = project.value.group_size;
         form.maxScore = project.value.max_score;
         form.visibility = project.value.visible;
-        form.scoreVisibility = project.value.score_visible;       
+        form.scoreVisibility = project.value.score_visible;
     }
 });
 
@@ -96,7 +96,7 @@ async function submitProject(): Promise<void> {
     await getCourseByID(params.courseId as string);
 
     // Only submit the form if the validation was successful
-    if (validated && course.value) {
+    if (validated && course.value !== null) {
         // Pass the project data to the service
         await updateProject(
             new Project(
@@ -113,11 +113,14 @@ async function submitProject(): Promise<void> {
                 form.groupSize,
                 course.value,
                 form.submissionStructure,
-            )
+            ),
         );
 
         // Redirect to the project overview
-        await push({ name: 'course-project', params: { courseId: params.courseId as string, projectId: params.projectId as string } });
+        await push({
+            name: 'course-project',
+            params: { courseId: params.courseId as string, projectId: params.projectId as string },
+        });
     }
 }
 </script>

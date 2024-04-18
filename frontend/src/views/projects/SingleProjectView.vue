@@ -23,13 +23,17 @@ onMounted(async () => {
     await getProjectByID(params.projectId as string);
     await getCourseByID(params.courseId as string);
 });
-
 </script>
 
 <template>
     <BaseLayout>
         <StudentProjectView v-if="user?.isStudent()" :student="user as Student" />
-        <TeacherProjectView v-else-if="user?.isTeacher() && project && course" :teacher="user as Teacher" :project="project" :course = "course" />
+        <TeacherProjectView
+            v-else-if="user?.isTeacher() && project && course"
+            :teacher="user as Teacher"
+            :project="project"
+            :course="course"
+        />
         <AssistantProjectView v-else-if="user?.isAssistant()" :assistant="user as Assistant" />
     </BaseLayout>
 </template>

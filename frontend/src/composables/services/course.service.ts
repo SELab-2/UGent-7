@@ -87,7 +87,7 @@ export function useCourses(): CoursesState {
                 description: courseData.description,
                 faculty: courseData.faculty?.id,
             },
-            response
+            response,
         );
     }
 
