@@ -152,7 +152,7 @@ const routes: RouteRecordRaw[] = [
         children: [
             { path: '', component: AdminView, name: 'admin' },
             { path: 'users', component: UsersView, name: 'admin-users' },
-            { path: 'docker_images', component: DockerImagesView, name: 'admin-docker_images' },
+            { path: 'docker-images', component: DockerImagesView, name: 'admin-dockerImages' },
         ],
     },
 

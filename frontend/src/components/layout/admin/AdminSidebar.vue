@@ -20,7 +20,7 @@ const items = ref([
         items: [
             {
                 label: 'admin.docker_images.title',
-                route: 'admin-docker_images',
+                route: 'admin-dockerImages',
             },
         ],
     },
