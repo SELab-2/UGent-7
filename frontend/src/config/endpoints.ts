@@ -56,7 +56,7 @@ export const endpoints = {
         byStudent: '/api/students/{studentId}/groups/',
     },
     projects: {
-        retrieve: '/api/projects/{id}',
+        retrieve: '/api/projects/{id}/',
         byCourse: '/api/courses/{courseId}/projects/',
         byStudent: '/api/students/{studentId}/projects/',
         byTeacher: '/api/teachers/{teacherId}/projects/',
