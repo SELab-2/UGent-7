@@ -8,7 +8,6 @@ import { type Response } from '@/types/Response.ts';
 interface ProjectState {
     projects: Ref<Project[] | null>;
     project: Ref<Project | null>;
-    const response = ref<Response | null>(null);
     getProjectByID: (id: string) => Promise<void>;
     getProjectsByCourse: (courseId: string) => Promise<void>;
     getProjectsByStudent: (studentId: string) => Promise<void>;
