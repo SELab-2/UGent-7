@@ -74,7 +74,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                         </template>
                         <template v-else>
                             <div class="col-12">
-                                <p class="mt-0">{{ t('views.dashboard.noProjects') }}</p>
+                                <p class="mt-0">{{ t('views.dashboard.noIncomingProjects') }}</p>
                             </div>
                         </template>
                     </template>
