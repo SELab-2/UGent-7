@@ -43,8 +43,12 @@
             "noProjects": "No projects on selected date."
         },
         "projects": {
+            "all": "All projects",
+            "coming": "Near deadlines",
             "deadline": "Deadline",
-            "submissionStatus": "Indienstatus",
+            "days": "Today at {hour} | Tomorrow at {hour} | In {count} days",
+            "start": "Start date",
+            "submissionStatus": "Submission status",
             "group": "Group",
             "groupMembers": "Group members",
             "chooseGroup": "Choose a group",

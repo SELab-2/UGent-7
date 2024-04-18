@@ -2,19 +2,30 @@
 import Button from 'primevue/button';
 import { type Course } from '@/types/Course.ts';
 import { type Student } from '@/types/users/Student.ts';
-import { useAuthStore } from '@/store/authentication.store.ts';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { useStudents } from '@/composables/services/student.service.ts';
 import { useI18n } from 'vue-i18n';
 
 /* Props */
-const props = defineProps<{ student: Student; course: Course }>();
+const props = defineProps<{ student: Student; courses: Course[]; course: Course }>();
 
 /* Composable injections */
-const { refreshUser } = useAuthStore();
 const { addSuccessMessage, addErrorMessage } = useMessagesStore();
 const { studentJoinCourse, studentLeaveCourse } = useStudents();
 const { t } = useI18n();
+
+/* Emits */
+const emit = defineEmits(['update:courses']);
+
+/**
+ * Check if the student has already enrolled in the course.
+ *
+ * @param course The course to check
+ * @returns True if the student has the course, false otherwise
+ */
+function hasCourse(course: Course): boolean {
+    return props.courses.some((c) => c.id === course.id);
+}
 
 /**
  * Enroll the student in the course.
@@ -28,7 +39,7 @@ async function joinCourse(): Promise<void> {
             t('toasts.messages.courses.enrollment.success', [props.course.name]),
         );
 
-        await refreshUser();
+        emit('update:courses');
     } catch (error) {
         addErrorMessage(t('toasts.messages.error'), t('toasts.messages.courses.enrollment.error', [props.course.name]));
     }
@@ -46,7 +57,7 @@ async function leaveCourse(): Promise<void> {
             t('toasts.messages.courses.leave.success', [props.course.name]),
         );
 
-        await refreshUser();
+        emit('update:courses');
     } catch (error) {
         addErrorMessage(t('toasts.messages.error'), t('toasts.messages.courses.leave.error', [props.course.name]));
     }
@@ -60,7 +71,7 @@ async function leaveCourse(): Promise<void> {
         icon-pos="right"
         icon="pi pi-arrow-right"
         @click="joinCourse"
-        v-if="!student.hasCourse(course)"
+        v-if="!hasCourse(course)"
         link
     />
     <Button
