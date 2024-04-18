@@ -32,8 +32,9 @@ const { student, getStudentByID } = useStudents();
  * Get the groups of the corresponding users
  */
 function getUserGroups(): Group[] {
-    if (user.value?.isStudent()) {
-        return (student.value?.groups || []);
+    if (user.value !== null && user.value?.isStudent()) {
+        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+        return student.value !== null && student.value.groups !== null ? student.value?.groups : [];
     }
     return [];
 }
@@ -46,7 +47,7 @@ watch(
     user,
     () => {
         if (user.value !== null && user.value.isStudent()) {
-            getStudentByID(user.value.id)
+            getStudentByID(user.value.id);
         }
     },
     {

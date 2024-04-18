@@ -66,10 +66,9 @@ const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus()
 /**
  * Return True if the user is in a group in this project.
  */
-function isInGroup(): Boolean {
-    return props.studentGroups.some(group => props.projectGroups.includes(group));
+function isInGroup(): boolean {
+    return props.studentGroups.some((group) => props.projectGroups.includes(group));
 }
-
 
 /* Watchers */
 watch(
