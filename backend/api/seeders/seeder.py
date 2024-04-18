@@ -489,7 +489,7 @@ def seed_submissions(faker, count: int = 4_000):
             [
                 faker.date_this_month(),
                 choice(groups),
-                True
+                faker.boolean(chance_of_getting_true=80)
             ]
             for _ in range(count)
         ]
