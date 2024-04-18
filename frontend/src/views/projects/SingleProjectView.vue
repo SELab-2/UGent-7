@@ -15,9 +15,10 @@ import { useProject } from '@/composables/services/project.service';
 
 /* Service injection */
 const { user } = storeToRefs(useAuthStore());
-const { params } = useRoute();	
-const { project, getProjectByID } = useProject();	
-const { course, getCourseByID } = useCourses();	
+const { params } = useRoute();
+const { project, getProjectByID } = useProject();
+const { course, getCourseByID } = useCourses();
+
 onMounted(async () => {	
     await getProjectByID(params.projectId as string);	
     await getCourseByID(params.courseId as string);	
