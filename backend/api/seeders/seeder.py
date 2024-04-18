@@ -163,7 +163,8 @@ def seed_courses(faker,
 
         # Insert courses
         cursor.executemany(
-            "INSERT INTO api_course(name, description, academic_startyear, faculty_id, excerpt) VALUES (?, ?, ?, ?, ?)", courses
+            "INSERT INTO api_course(name, description, academic_startyear, faculty_id, excerpt) VALUES (?, ?, ?, ?, ?)",
+            courses
         )
 
         # Link students, teachers, assistants to courses
