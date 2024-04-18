@@ -43,18 +43,8 @@ watch(
 </script>
 
 <template>
-    <!-- Course heading -->
-    <div class="flex justify-content-between align-items-center mb-6">
-        <!-- Course list title -->
-        <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
-
-        <!-- Academic year selector -->
-        <YearSelector :years="allYears" v-model="selectedYear" />
-    </div>
-    <!-- Course list body -->
-    <CourseList :courses="filteredCourses" />
     <!-- Project heading -->
-    <div class="flex justify-content-between align-items-center my-6">
+    <div class="flex justify-content-between align-items-center mb-6">
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
@@ -63,6 +53,16 @@ watch(
     </div>
     <!-- Project list body -->
     <ProjectList :projects="projects" />
+    <!-- Course heading -->
+    <div class="flex justify-content-between align-items-center my-6">
+        <!-- Course list title -->
+        <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>
+
+        <!-- Academic year selector -->
+        <YearSelector :years="allYears" v-model="selectedYear" />
+    </div>
+    <!-- Course list body -->
+    <CourseList :courses="filteredCourses" />
 </template>
 
 <style scoped lang="scss"></style>

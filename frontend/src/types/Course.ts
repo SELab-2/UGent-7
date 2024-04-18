@@ -8,6 +8,7 @@ export class Course {
     constructor(
         public id: string,
         public name: string,
+        public excerpt: string,
         public description: string | null,
         public academic_startyear: number,
         public parent_course: Course | null = null,
@@ -29,15 +30,10 @@ export class Course {
     /**
      * Get the excerpt of the course description.
      *
-     * @param maxLength
      * @returns string
      */
-    public getExcerpt(maxLength: number = 100): string {
-        if (this.description === null) return '';
-
-        if (this.description.length < maxLength) return this.description;
-
-        return this.description.substring(0, maxLength) + '...';
+    public getExcerpt(): string {
+        return this.excerpt;
     }
 
     /**
@@ -52,6 +48,7 @@ export class Course {
         return new Course(
             course.id,
             course.name,
+            course.excerpt,
             course.description,
             course.academic_startyear,
             course.parent_course,

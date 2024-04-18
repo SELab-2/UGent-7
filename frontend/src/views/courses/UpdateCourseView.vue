@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
+import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
+import ErrorMessage from '@/components/forms/ErrorMessage.vue';
+import Editor from '@/components/forms/Editor.vue';
+import Button from 'primevue/button';
+import Dropdown from 'primevue/dropdown';
 import { reactive, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useCourses } from '@/composables/services/course.service';
 import { useFaculty } from '@/composables/services/faculty.service.ts';
 import { Faculty } from '@/types/Faculty';
-import InputText from 'primevue/inputtext';
-import Textarea from 'primevue/textarea';
-import Button from 'primevue/button';
-import Dropdown from 'primevue/dropdown';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
-import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 
 /* Composable injections */
 const { params } = useRoute();
@@ -40,6 +41,7 @@ onMounted(async () => {
 const form = reactive({
     name: '',
     description: '',
+    excerpt: '',
     faculty: new Faculty('', ''), // Default value for the dropdown
     year: '',
 });
@@ -49,6 +51,7 @@ const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
         faculty: { required: helpers.withMessage(t('validations.required'), required) },
+        excerpt: { required: helpers.withMessage(t('validations.required'), required) },
     };
 });
 
@@ -73,7 +76,7 @@ const submitCourse = async (): Promise<void> => {
         // );
 
         // Redirect to the dashboard overview
-        push({ name: 'course', params: { courseId: params.courseId as string } });
+        await push({ name: 'course', params: { courseId: params.courseId as string } });
     }
 };
 </script>
@@ -94,10 +97,17 @@ const submitCourse = async (): Promise<void> => {
                         <ErrorMessage :field="v$.name" />
                     </div>
 
+                    <!-- Course excerpt -->
+                    <div class="mb-4">
+                        <label for="courseExcerpt">{{ t('views.courses.excerpt') }}</label>
+                        <Textarea id="courseExcerpt" v-model="form.excerpt" autoResize rows="5" cols="30" />
+                        <ErrorMessage :field="v$.excerpt" />
+                    </div>
+
                     <!-- Course description -->
                     <div class="mb-4">
                         <label for="courseDescription">{{ t('views.courses.description') }}</label>
-                        <Textarea id="courseDescription" v-model="form.description" autoResize rows="5" cols="30" />
+                        <Editor v-model="form.description" />
                     </div>
 
                     <!-- Course faculty -->

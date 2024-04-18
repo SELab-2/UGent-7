@@ -16,6 +16,7 @@ export const groups = [
 export const courses = [
     {
         id: '1',
+        excerpt: 'excerpt1',
         teachers: ['123', '124'],
         assistants: ['235', '236'],
         students: ['1', '2', '3', '000201247011'],
@@ -28,6 +29,7 @@ export const courses = [
     },
     {
         id: '2',
+        excerpt: 'excerpt2',
         teachers: [],
         assistants: [],
         students: [],
@@ -40,6 +42,7 @@ export const courses = [
     },
     {
         id: '3',
+        excerpt: 'excerpt3',
         teachers: [],
         assistants: [],
         students: [],
@@ -52,6 +55,7 @@ export const courses = [
     },
     {
         id: '12',
+        excerpt: 'excerpt12',
         teachers: [],
         assistants: [],
         students: [],
@@ -64,6 +68,7 @@ export const courses = [
     },
     {
         id: '13',
+        excerpt: 'excerpt13',
         teachers: [],
         assistants: [],
         students: [],
@@ -76,6 +81,7 @@ export const courses = [
     },
     {
         id: '14',
+        excerpt: 'excerpt14',
         teachers: [],
         assistants: [],
         students: [],
@@ -88,6 +94,7 @@ export const courses = [
     },
     {
         id: '15',
+        excerpt: 'excerpt15',
         teachers: [],
         assistants: [],
         students: [],
