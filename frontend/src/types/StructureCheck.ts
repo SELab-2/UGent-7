@@ -5,8 +5,8 @@ export class StructureCheck {
     constructor(
         public id: string,
         public name: string,
-        public obligated_extensions: File_extension[] = [],
-        public blocked_extensions: File_extension[] = [],
+        public obligated_extensions: File_extension[] | null = null,
+        public blocked_extensions: File_extension[] | null = null,
         public project: Project | null = null,
     ) {}
 

@@ -16,7 +16,6 @@ import CreateProjectView from '@/views/projects/CreateProjectView.vue';
 import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from '@/views/submissions/submissionView.vue';
-import SingleProjectView from '@/views/projects/SingleProjectView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 
@@ -59,7 +58,7 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: ':projectId',
                                 children: [
-                                    { path: '', component: SingleProjectView, name: 'course-project' },
+                                    { path: '', component: ProjectView, name: 'course-project' },
                                     { path: 'edit', component: Dummy, name: 'project-edit' },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },

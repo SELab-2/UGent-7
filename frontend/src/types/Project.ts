@@ -20,10 +20,10 @@ export class Project {
         public group_size: number,
         public course: Course | null = null,
         public structure_file: File | null = null,
-        public structureChecks: StructureCheck[] = [],
-        public extra_checks: ExtraCheck[] = [],
-        public groups: Group[] = [],
-        public submissions: Submission[] = [],
+        public structureChecks: StructureCheck[] | null = null,
+        public extra_checks: ExtraCheck[] | null = null,
+        public groups: Group[] | null = null,
+        public submissions: Submission[] | null = null,
     ) {}
 
     /**
@@ -35,6 +35,63 @@ export class Project {
         const max = moment(this.deadline).diff(this.start_date, 'day');
         const now = moment(this.deadline).diff(moment(), 'day');
         return Math.min(100, Math.round(100 - (now / max) * 100));
+    }
+
+    /**
+     * Get the formatted start date of the project.
+     *
+     * @returns The formatted start date of the project.
+     */
+    public getFormattedStartDate(): string {
+        return moment(this.start_date).format('DD MMMM YYYY');
+    }
+
+    /**
+     * Get the formatted deadline hour of the project.
+     *
+     * @returns The formatted deadline hour of the project.
+     */
+    public getFormattedDeadlineHour(): string {
+        return moment(this.deadline).format('HH:mm');
+    }
+
+    /**
+     * Get the days left until the deadline of the project.
+     *
+     * @returns The days left until the deadline of the project.
+     */
+    public getDaysLeft(): number {
+        return moment(this.deadline).diff(moment(), 'days');
+    }
+
+    /**
+     * Get the formatted deadline of the project.
+     *
+     * @returns The formatted deadline of the project.
+     */
+    public getFormattedDeadline(): string {
+        return moment(this.deadline).format('DD MMMM YYYY');
+    }
+
+    /**
+     * Get the group number of a group.
+     *
+     * @param group The group to get the number of.
+     * @returns The number of the group.
+     */
+    public getGroupNumber(group: Group): number {
+        const groups = this.groups ?? [];
+
+        return groups.sort((a, b) => parseInt(a.id) - parseInt(b.id)).findIndex((g) => g.id === group.id) + 1;
+    }
+
+    /**
+     * Check if the project is locked.
+     *
+     * @returns True if the project is locked, false otherwise.
+     */
+    public isLocked(): boolean {
+        return !this.visible || this.archived || this.locked_groups || moment(this.start_date).isBefore();
     }
 
     /**

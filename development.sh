@@ -95,7 +95,7 @@ if [ "$data" != "" ]; then
   rm -f db.sqlite3 > /dev/null 2>&1
 
   echo "Setting up workspace..."
-  python -m venv .venv_dev > /dev/null
+  python3 -m venv .venv_dev > /dev/null
   source .venv_dev/bin/activate
   pip install poetry > /dev/null
   poetry install > /dev/null

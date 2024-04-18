@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import moment from 'moment';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import ProgressBar from 'primevue/progressbar';
 import { type Project } from '@/types/Project.ts';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
-import { computed } from 'vue';
 import { type Course } from '@/types/Course.ts';
 
 /**
@@ -15,7 +13,7 @@ import { type Course } from '@/types/Course.ts';
  */
 
 /* Component props */
-const props = withDefaults(
+withDefaults(
     defineProps<{
         type?: 'small' | 'large';
         project: Project;
@@ -25,14 +23,6 @@ const props = withDefaults(
         type: 'large',
     },
 );
-
-const formattedDeadline = computed(() => {
-    return moment(props.project.deadline).format('DD MMMM YYYY');
-});
-
-const formattedStartDate = computed(() => {
-    return moment(props.project.start_date).format('DD MMMM YYYY');
-});
 
 /* Composable injections */
 const { t } = useI18n();
@@ -56,12 +46,12 @@ const { t } = useI18n();
                     <div class="w-full">
                         <h3 class="m-0">{{ project.name }}</h3>
                         <div class="flex justify-content-between align-items-center mt-2">
-                            <span>{{ moment(project.deadline).format('DD MMMM YYYY') }}</span>
+                            <span>{{ project.getFormattedDeadline() }}</span>
                             <span>{{
                                 t(
                                     'views.projects.days',
-                                    { hour: moment(project.deadline).format('H:m') },
-                                    moment(project.deadline).diff(moment(), 'day'),
+                                    { hour: project.getFormattedDeadlineHour() },
+                                    project.getDaysLeft(),
                                 )
                             }}</span>
                         </div>
@@ -84,12 +74,12 @@ const { t } = useI18n();
                 <div class="mb-2">
                     <i :class="['pi', PrimeIcons.PLAY, 'icon-color']" class="mr-2"></i>
                     <b>{{ t('views.projects.start') }}</b
-                    >: {{ formattedStartDate }}<br />
+                    >: {{ project.getFormattedStartDate() }}<br />
                 </div>
                 <div class="mb-2">
                     <i :class="['pi', PrimeIcons.CALENDAR_PLUS, 'icon-color']" class="mr-2"></i>
                     <b>{{ t('views.projects.deadline') }}</b
-                    >: {{ formattedDeadline }}<br />
+                    >: {{ project.getFormattedDeadline() }}<br />
                 </div>
                 <div>
                     <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
@@ -97,13 +87,7 @@ const { t } = useI18n();
                     >: ok
                 </div>
                 <ProgressBar class="mt-3" :value="project.getProgress()">
-                    {{
-                        t(
-                            'views.projects.days',
-                            { hour: moment(project.deadline).format('H:m') },
-                            moment(project.deadline).diff(moment(), 'day'),
-                        )
-                    }}
+                    {{ t('views.projects.days', { hour: project.getFormattedDeadlineHour() }, project.getDaysLeft()) }}
                 </ProgressBar>
             </template>
             <template #footer>

@@ -13,10 +13,10 @@ export class Course {
         public academic_startyear: number,
         public parent_course: Course | null = null,
         public faculty: Faculty | null = null,
-        public teachers: Teacher[] = [],
-        public assistants: Assistant[] = [],
-        public students: Student[] = [],
-        public projects: Project[] = [],
+        public teachers: Teacher[] | null = null,
+        public assistants: Assistant[] | null = null,
+        public students: Student[] | null = null,
+        public projects: Project[] | null = null,
     ) {}
 
     /**
@@ -61,7 +61,8 @@ export class Course {
      * @param teacher
      */
     public hasTeacher(teacher: Teacher): boolean {
-        return this.teachers.some((t) => t.id === teacher.id);
+        const teachers = this.teachers ?? [];
+        return teachers.some((t) => t.id === teacher.id);
     }
 
     /**
@@ -69,7 +70,8 @@ export class Course {
      * @param assistant
      */
     public hasAssistant(assistant: Assistant): boolean {
-        return this.assistants.some((a) => a.id === assistant.id);
+        const assistants = this.assistants ?? [];
+        return assistants.some((a) => a.id === assistant.id);
     }
 }
 

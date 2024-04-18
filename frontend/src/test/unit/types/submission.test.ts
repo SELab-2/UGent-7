@@ -28,7 +28,7 @@ describe('submission type', () => {
         expect(submission.submission_time).toStrictEqual(submissionData.submission_time);
         expect(submission.structure_checks_passed).toBe(submissionData.structure_checks_passed);
         expect(submission.group).toStrictEqual(submissionData.group);
-        expect(submission.files).toStrictEqual(submissionData.files);
-        expect(submission.extra_checks_results).toStrictEqual(submissionData.extra_checks_results);
+        expect(submission.files).toBeNull();
+        expect(submission.extra_checks_results).toBeNull();
     });
 });
