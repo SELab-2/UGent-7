@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 
 import { Student } from '@/types/users/Student';
-import { studentData, courseData } from './data';
-import { createStudent, createCourse } from './helper';
+import { studentData } from './data';
+import { createStudent } from './helper';
 
 describe('student type', () => {
     it('create instance of student with correct properties', () => {
