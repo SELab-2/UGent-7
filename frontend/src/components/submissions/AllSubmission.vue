@@ -1,32 +1,21 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { Submission } from '@/types/submission/Submission.ts';
-import { type Group } from '@/types/Group.ts';
-import { useSubmission } from '@/composables/services/submission.service.ts';
 import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
 import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const { submissions, getSubmissionByGroup } = useSubmission();
+const tempSubmissions = ref<Submission[]>([]);
 
 const testSubmissions = ref<Submission[]>([
     new Submission(
-        '1',
-        1,
-        new Date(2024, 2, 12),
+        '4',
+        4,
+        new Date(),
         [],
-        [new ExtraCheckResult('1', 'FAILURE', null, null, 1, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('1', 'FAILURE', null, 1, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '2',
-        2,
-        new Date(2024, 3, 1),
-        [],
-        [new ExtraCheckResult('2', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('2', 'FAILURE', null, 2, 1, 'StructureCheckResult')],
+        [new ExtraCheckResult('3', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
+        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
         true,
     ),
     new Submission(
@@ -39,39 +28,53 @@ const testSubmissions = ref<Submission[]>([
         true,
     ),
     new Submission(
-        '4',
-        4,
-        new Date(),
+        '2',
+        2,
+        new Date(2024, 3, 1),
         [],
-        [new ExtraCheckResult('3', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
+        [new ExtraCheckResult('2', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
+        [new StructureCheckResult('2', 'FAILURE', null, 2, 1, 'StructureCheckResult')],
+        true,
+    ),
+    new Submission(
+        '1',
+        1,
+        new Date(2024, 2, 12),
+        [],
+        [new ExtraCheckResult('1', 'FAILURE', null, null, 1, 1, 'ExtraCheckResult')],
+        [new StructureCheckResult('1', 'FAILURE', null, 1, 1, 'StructureCheckResult')],
         true,
     ),
 ]);
 
 const props = defineProps<{
-    group: Group;
+    submissions: Submission[];
 }>();
 
 onMounted(async () => {
-    await getSubmissionByGroup(props.group.id);
-    submissions.value = testSubmissions.value;
+    tempSubmissions.value = [...(props.submissions ?? []), ...testSubmissions.value].reverse();
 });
 
+watch(
+    () => props.submissions,
+    (newSubmissions) => {
+        tempSubmissions.value = [...newSubmissions, ...testSubmissions.value].reverse();
+    },
+    {
+        immediate: true, // Zal ook uitvoeren onMounted, dus je kan de logica uit onMounted verwijderen als je dit gebruikt
+    },
+);
+
 const submissionsExtra = computed(() => {
-    const result =
-        submissions.value != null
-            ? submissions.value.map((submission) => {
-                  const iconDetails = getExtraSubmissionInformation(submission);
-                  return {
-                      ...submission,
-                      iconName: iconDetails.iconName,
-                      color: iconDetails.color,
-                      hoverText: iconDetails.hoverText,
-                  };
-              })
-            : null;
-    return result;
+    return tempSubmissions.value.map((submission) => {
+        const iconDetails = getExtraSubmissionInformation(submission);
+        return {
+            ...submission,
+            iconName: iconDetails.iconName,
+            color: iconDetails.color,
+            hoverText: iconDetails.hoverText,
+        };
+    });
 });
 
 /**
@@ -126,6 +129,7 @@ const timeSince = (submissionDate: Date): string => {
     <div>
         <div
             v-for="submission in submissionsExtra?.reverse()"
+            :key="submission.id"
             class="flex submission align-content-center align-items-center"
             v-tooltip="submission.hoverText"
         >

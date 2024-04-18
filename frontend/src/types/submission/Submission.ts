@@ -35,6 +35,10 @@ export class Submission {
             submission.is_valid,
         );
     }
+
+    static fromJSONCreate(respons: { message: string; submission: ResponseSubmission }): Submission {
+        return Submission.fromJSON(respons.submission);
+    }
 }
 
 class ResponseSubmission {

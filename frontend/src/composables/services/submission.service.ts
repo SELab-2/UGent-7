@@ -34,7 +34,7 @@ export function useSubmission(): SubmissionState {
 
     async function createSubmission(uploadedFiles: File[], groupId: string): Promise<void> {
         const endpoint = endpoints.submissions.byGroup.replace('{groupId}', groupId);
-        await create(endpoint, uploadedFiles, submission, Submission.fromJSON, 'multipart/form-data');
+        await create(endpoint, uploadedFiles, submission, Submission.fromJSONCreate, 'multipart/form-data');
     }
 
     async function deleteSubmission(id: string): Promise<void> {

@@ -18,7 +18,7 @@ const route = useRoute();
 const { project, getProjectByID } = useProject();
 const { course, getCourseByID } = useCourses();
 const { group, getGroupByID } = useGroup();
-const { submission, createSubmission } = useSubmission();
+const { submission, submissions, createSubmission, getSubmissionByGroup } = useSubmission();
 
 /* State */
 const files = ref<File[]>([]);
@@ -27,11 +27,15 @@ onMounted(async () => {
     await getProjectByID(route.params.projectId as string);
     await getCourseByID(route.params.courseId as string);
     await getGroupByID(route.params.groupId as string);
+    await getSubmissionByGroup(route.params.groupId as string);
 });
 
-const onUpload = (callback: () => void): void => {
+const onUpload = async (callback: () => void): Promise<void> => {
     if (group.value !== null) {
-        createSubmission(files.value as File[], group.value.id);
+        await createSubmission(files.value as File[], group.value.id);
+        if (submission.value != null) {
+            submissions.value = [...(submissions.value ?? []), submission.value];
+        }
         files.value = [];
         callback();
     }
@@ -110,7 +114,7 @@ function formatDate(deadline: Date): string {
                 </div>
             </div>
             <div class="col-5 col-offset-1">
-                <AllSubmission v-if="group" :group="group"></AllSubmission>
+                <AllSubmission v-if="group && submissions" :group="group" :submissions="submissions"></AllSubmission>
             </div>
         </div>
     </BaseLayout>
