@@ -70,7 +70,19 @@
             "title": "Inzendingen",
             "submit": "Indienen",
             "course": "Vak",
-            "chooseFile": "Kies bestand(en)"
+            "chooseFile": "Kies bestand(en)",
+            "hoverText": {
+              "allChecksFailed": "Structuur en extra checks gefaald",
+              "allChecksPassed": "Alle checks geslaagd",
+              "extraChecksFailed": "Extra checks gefaald",
+              "structureChecksFailed": "Structuur checks gefaald"
+            },
+            "timeSince": {
+              "today": "Vandaag",
+              "daysAgo": "dag(en) geleden",
+              "weekAgo": "Meer dan een week geleden",
+              "monthAgo": "Meer dan een maand geleden"
+            }
         },
         "courses": {
             "create": "Creëer vak",
@@ -126,9 +138,8 @@
         }
     },
     "components": {
-        "button": {
-            "academic_year": "Academiejaar {0}",
-            "createProject": "Maak een nieuw project"
+        "buttons": {
+            "academic_year": "Academiejaar {0}"
         },
         "card": {
             "open": "Details",
@@ -150,6 +161,9 @@
             "assistant": "Assistent",
             "teacher": "Professor"
         }
+    },
+    "helpers": {
+      "loading": "Laden...,"
     },
     "toasts": {
         "messages": {

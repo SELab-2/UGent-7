@@ -6,7 +6,7 @@ from celery.result import AsyncResult
 
 # TODO
 # ! This works
-# ! But not async | I can obviouly do this in the same function dummy
+# ! But not async | I can obviously do this in the same function dummy
 def test_print(id, result):
     print("result: " + str(result), flush=True)
 

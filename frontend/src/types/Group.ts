@@ -1,6 +1,6 @@
 import { type Project } from './Project.ts';
 import { type Student } from './users/Student.ts';
-import { type Submission } from './Submission';
+import { type Submission } from './submission/Submission.ts';
 
 export class Group {
     constructor(

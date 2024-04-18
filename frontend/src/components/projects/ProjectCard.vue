@@ -126,9 +126,6 @@ watch(
                     >: {{ formattedDeadline }}<br />
                 </div>
                 <div>
-                    <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-                    <b>{{ t('views.projects.submissionStatus') }}</b
-                    >:
                     <MeterGroup
                         v-if="(submissionStatus?.groups_submitted || 0) > 0"
                         :value="meterItems"

@@ -16,7 +16,7 @@ import ProjectView from '@/views/projects/ProjectView.vue';
 import CreateProjectView from '@/views/projects/CreateProjectView.vue';
 import UpdateProjectView from '@/views/projects/UpdateProjectView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
-import SubmissionView from '@/views/submissions/submissionView.vue';
+import SubmissionView from '@/views/submissions/SubmissionView.vue';
 import SingleProjectView from '@/views/projects/SingleProjectView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
@@ -62,9 +62,25 @@ const routes: RouteRecordRaw[] = [
                                 children: [
                                     { path: '', component: SingleProjectView, name: 'course-project' },
                                     { path: 'edit', component: UpdateProjectView, name: 'project-edit' },
+                                    {
+                                        path: 'group',
+                                        children: [
+                                            { path: '', component: Dummy, name: 'group' },
+                                            {
+                                                path: ':groupId',
+                                                children: [
+                                                    { path: '', component: Dummy, name: 'project-group' },
+                                                    {
+                                                        path: 'submission',
+                                                        component: SubmissionView,
+                                                        name: 'submission',
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },
-                                    { path: 'submission', component: SubmissionView, name: 'submission' },
                                 ],
                             },
                         ],

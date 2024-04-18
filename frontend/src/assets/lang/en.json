@@ -70,7 +70,19 @@
             "title": "Submissions",
             "submit": "Submit",
             "course": "Course",
-            "chooseFile": "Choose a file"
+            "chooseFile": "Choose a file",
+            "hoverText": {
+              "allChecksFailed": "Structure and extra checks failed",
+              "allChecksPassed": "All checks passed",
+              "extraChecksFailed": "Extra checks failed",
+              "structureChecksFailed": "Structure checks failed"
+            },
+            "timeSince": {
+              "today": "Today",
+              "daysAgo": "day(s) ago",
+              "weekAgo": "More than a week ago",
+              "monthAgo": "More than a month ago"
+            }
         },
         "courses": {
             "create": "Create course",
@@ -149,6 +161,9 @@
             "assistant": "Assistant",
             "teacher": "Teacher"
         }
+    },
+    "helpers": {
+      "loading": "Loading...,"
     },
     "toasts": {
         "messages": {
