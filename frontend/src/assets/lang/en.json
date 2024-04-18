@@ -24,6 +24,7 @@
             "courses": "My courses",
             "projects": "Current projects",
             "noProjects": "No projects available for this academic year.",
+            "noIncomingProjects": "No projects with a deadline within 7 days.",
             "noCourses": "No courses available for this academic year.",
             "select_course": "Select the course for which you want to create a project:",
             "showPastProjects": "Projects with passed deadline"

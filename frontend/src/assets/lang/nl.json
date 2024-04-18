@@ -24,6 +24,7 @@
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
             "noProjects": "Geen projecten beschikbaar voor dit academiejaar.",
+            "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
             "noCourses": "Geen vakken beschikbaar voor dit academiejaar.",
             "select_course": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
@@ -143,8 +144,9 @@
         }
     },
     "components": {
-        "buttons": {
-            "academic_year": "Academiejaar {0}"
+        "button": {
+            "academic_year": "Academiejaar {0}",
+            "createProject": "Creëer nieuw project"
         },
         "card": {
             "open": "Details",
