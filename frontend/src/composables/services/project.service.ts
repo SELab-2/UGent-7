@@ -2,7 +2,8 @@ import { Project } from '@/types/Project';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import axios from 'axios';
-import { create, deleteId, get, getList, processError } from '@/composables/services/helpers.ts';
+import { create, deleteId, get, getList, patch, processError } from '@/composables/services/helpers.ts';
+import { type Response } from '@/types/Response.ts';
 
 interface ProjectState {
     projects: Ref<Project[] | null>;
@@ -14,12 +15,14 @@ interface ProjectState {
     getProjectsByTeacher: (teacherId: string) => Promise<void>;
     getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date) => Promise<void>;
     createProject: (projectData: Project, courseId: string) => Promise<void>;
+    updateProject: (projectData: Project) => Promise<void>;
     deleteProject: (id: string) => Promise<void>;
 }
 
 export function useProject(): ProjectState {
     const projects = ref<Project[] | null>(null);
     const project = ref<Project | null>(null);
+    const response = ref<Response | null>(null);
 
     async function getProjectByID(id: string): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
@@ -93,6 +96,28 @@ export function useProject(): ProjectState {
         );
     }
 
+    async function updateProject(projectData: Project): Promise<void> {
+        const endpoint = endpoints.projects.retrieve.replace('{id}', projectData.id);
+        await patch(
+            endpoint,
+            {
+                name: projectData.name,
+                description: projectData.description,
+                visible: projectData.visible,
+                archived: projectData.archived,
+                locked_groups: projectData.locked_groups,
+                start_date: projectData.start_date,
+                deadline: projectData.deadline,
+                max_score: projectData.max_score,
+                score_visible: projectData.score_visible,
+                group_size: projectData.group_size,
+                zip_structure: projectData.structure_file,
+            },
+            response,
+            'multipart/form-data',
+        );
+    }
+
     async function deleteProject(id: string): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
         await deleteId<Project>(endpoint, project, Project.fromJSON);
@@ -109,6 +134,7 @@ export function useProject(): ProjectState {
         getProjectsByAssistant,
 
         createProject,
+        updateProject,
         deleteProject,
     };
 }

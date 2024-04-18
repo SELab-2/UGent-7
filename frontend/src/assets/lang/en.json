@@ -55,6 +55,7 @@
             "joinGroup": "Join group",
             "leaveGroup": "Leave group",
             "create": "Create new project",
+            "edit": "Edit project",
             "name": "Project name",
             "description": "Description",
             "start_date": "Start project",
