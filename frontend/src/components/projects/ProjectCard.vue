@@ -3,7 +3,6 @@ import moment from 'moment';
 import MeterGroup from 'primevue/metergroup';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
-import ProgressBar from 'primevue/progressbar';
 import { type Project } from '@/types/Project.ts';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
@@ -160,34 +159,44 @@ watch(
                         {{ t('components.card.noSubmissions') }}
                     </p>
                 </div>
-                <ProgressBar class="mt-3" :value="project.getProgress()">
-                    {{
-                        t(
-                            'views.projects.days',
-                            { hour: moment(project.deadline).format('H:m') },
-                            moment(project.deadline).diff(moment(), 'day'),
-                        )
-                    }}
-                </ProgressBar>
             </template>
             <template #footer>
-                <RouterLink
-                    :to="{
-                        name: 'course-project',
-                        params: {
-                            courseId: course.id,
-                            projectId: project.id,
-                        },
-                    }"
-                >
-                    <Button
-                        class="align-self-end"
-                        :icon="PrimeIcons.ARROW_RIGHT"
-                        :label="t('components.card.open')"
-                        icon-pos="right"
-                        outlined
-                    />
-                </RouterLink>
+                <div class="flex justify-content-between">
+                    <RouterLink
+                        :to="{
+                            name: 'course-project',
+                            params: {
+                                courseId: course.id,
+                                projectId: project.id,
+                            },
+                        }"
+                    >
+                        <Button
+                            class="align-self-end"
+                            :icon="PrimeIcons.ARROW_RIGHT"
+                            :label="t('components.card.open')"
+                            icon-pos="right"
+                            outlined
+                        />
+                    </RouterLink>
+                    <RouterLink
+                        :to="{
+                            name: 'submission',
+                            params: {
+                                courseId: course.id,
+                                projectId: project.id,
+                            },
+                        }"
+                    >
+                        <Button
+                            class="align-self-end"
+                            :icon="PrimeIcons.ARROW_RIGHT"
+                            :label="t('components.card.submit')"
+                            icon-pos="right"
+                            outlined
+                        />
+                    </RouterLink>
+                </div>
             </template>
         </Card>
     </template>

@@ -139,7 +139,8 @@
             "singleGroup": "Groep",
             "multipleGroups": "Groepen",
             "testsSucceed": "Geslaagde testen",
-            "testsFail": "Gefaalde testen"
+            "testsFail": "Gefaalde testen",
+            "submit": "Indienen"
         },
         "submission" : "Indienen"
     },

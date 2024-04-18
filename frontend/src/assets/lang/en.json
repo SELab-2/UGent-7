@@ -138,7 +138,8 @@
             "singleGroup": "Group",
             "multipleGroups": "Groups",
             "testsSucceed": "Succeeded tests",
-            "testsFail": "Failed tests"
+            "testsFail": "Failed tests",
+            "submit": "Submit"
         },
         "submission": "Submit"
     },
