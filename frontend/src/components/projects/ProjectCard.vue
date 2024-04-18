@@ -37,15 +37,25 @@ const formattedStartDate = computed(() => {
 });
 
 const meterItems = computed(() => {
-    const groups = submissionStatus.value?.non_empty_groups || 1;
-    const groupsSubmitted = submissionStatus.value?.groups_submitted || 0;
-    const submissionsPassed = submissionStatus.value?.submissions_passed || 0;
+    const groups = submissionStatus.value !== null ? submissionStatus.value.non_empty_groups : 0;
+    const groupsSubmitted = submissionStatus.value !== null ? submissionStatus.value.groups_submitted : 0;
+    const submissionsPassed = submissionStatus.value !== null ? submissionStatus.value.submissions_passed : 0;
     const submissionsFailed = groupsSubmitted - submissionsPassed;
     return [
-        { value: (submissionsPassed / groups) * 100, color: '#749b68', label: t('components.card.testsSucceed'), icon: 'pi pi-check' },
-        { value: (submissionsFailed / groups) * 100, color: '#FF5445', label: t('components.card.testsFail'), icon: 'pi pi-times' },
-    ]
-})
+        {
+            value: (submissionsPassed / groups) * 100,
+            color: '#749b68',
+            label: t('components.card.testsSucceed'),
+            icon: 'pi pi-check',
+        },
+        {
+            value: (submissionsFailed / groups) * 100,
+            color: '#FF5445',
+            label: t('components.card.testsFail'),
+            icon: 'pi pi-times',
+        },
+    ];
+});
 
 /* Composable injections */
 const { t } = useI18n();
@@ -55,14 +65,12 @@ const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus()
 watch(
     props.course,
     () => {
-
-        getSubmissionStatusByProject(props.project.id)
+        getSubmissionStatusByProject(props.project.id);
     },
     {
         immediate: true,
     },
 );
-
 </script>
 
 <template>
@@ -120,16 +128,31 @@ watch(
                 </div>
                 <div>
                     <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
-                    <b>{{ t('views.projects.submissionStatus') }}</b>
-                    <MeterGroup v-if="(submissionStatus?.groups_submitted || 0) > 0" :value="meterItems" labelOrientation="vertical">
+                    <b>{{ t('views.projects.submissionStatus') }}</b
+                    >:
+                    <MeterGroup
+                        v-if="(submissionStatus?.groups_submitted || 0) > 0"
+                        :value="meterItems"
+                        labelOrientation="vertical"
+                    >
                         <template #start>
                             <div class="flex justify-between mt-2 relative">
-                                <span>{{ submissionStatus?.groups_submitted }} {{ submissionStatus?.groups_submitted === 1 
-                                ? t('components.card.singleSubmission') 
-                                : t('components.card.multipleSubmissions') }}</span>
-                            <span class="w-full absolute text-right">{{ submissionStatus?.non_empty_groups }} {{ submissionStatus?.non_empty_groups === 1 
-                                ? t('components.card.singleGroup') 
-                                : t('components.card.multipleGroups')}}</span>
+                                <span
+                                    >{{ submissionStatus?.groups_submitted }}
+                                    {{
+                                        submissionStatus?.groups_submitted === 1
+                                            ? t('components.card.singleSubmission')
+                                            : t('components.card.multipleSubmissions')
+                                    }}</span
+                                >
+                                <span class="w-full absolute text-right"
+                                    >{{ submissionStatus?.non_empty_groups }}
+                                    {{
+                                        submissionStatus?.non_empty_groups === 1
+                                            ? t('components.card.singleGroup')
+                                            : t('components.card.multipleGroups')
+                                    }}</span
+                                >
                             </div>
                         </template>
                     </MeterGroup>
