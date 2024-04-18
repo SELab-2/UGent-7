@@ -55,6 +55,7 @@
             "joinGroup": "Kies groep",
             "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
+            "edit": "Bewerk project",
             "name": "Projectnaam",
             "description": "Beschrijving",
             "start_date": "Start project",
@@ -131,7 +132,14 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "Nieuw project"
+            "newProject": "Nieuw project",
+            "noSubmissions": "Dit project heeft geen indieningen",	
+            "singleSubmission": "Indiening",	
+            "multipleSubmissions": "Indieningen",	
+            "singleGroup": "Groep",	
+            "multipleGroups": "Groepen",	
+            "testsSucceed": "Geslaagde testen",	
+            "testsFail": "Gefaalde testen"
         },
         "submission" : "Indienen"
     },
