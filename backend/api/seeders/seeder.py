@@ -5,6 +5,8 @@ from time import time
 from django.db import connection
 from django.utils import timezone
 
+generated_usernames = set()
+
 
 def fillFaculties():
     with connection.cursor() as cursor:
@@ -60,20 +62,39 @@ def timer(func):
 @timer
 def seed_users(faker, count: int, offset: int = 0, staff_prob: float = 0.001) -> list[list]:
     """Seed users into the database"""
+    global generated_usernames
     with connection.cursor() as cursor:
-        users = [
-            [
+        # Create a set to store generated usernames
+
+        users = []
+        for id in range(offset, count + offset):
+            # Generate username
+            first_name = faker.first_name()
+            last_name = faker.last_name()
+            username_base = first_name + last_name
+            username = username_base[:12]  # Truncate if longer than 12 characters
+
+            # Check if the username is unique
+            suffix = 1
+            while username in generated_usernames:
+                username = username_base[:12 - len(str(suffix))] + str(suffix)  # Append a unique suffix
+                suffix += 1
+
+            # Add the username to the set
+            generated_usernames.add(username)
+
+            # Append user data to the list
+            users.append([
                 id,
-                faker.unique.user_name(),
-                faker.unique.email(),
-                faker.first_name(),
-                faker.last_name(),
+                username,
+                username + "@ugent.be",
+                first_name,
+                last_name,
                 timezone.now().year,
                 timezone.now(),
                 timezone.now(),
                 faker.boolean(chance_of_getting_true=staff_prob),
-            ] for id in range(offset, count + offset)
-        ]
+            ])
 
         cursor.executemany(
             "INSERT INTO authentication_user"
@@ -133,7 +154,8 @@ def seed_teachers(faker, count: int = 250, offset: int = 0) -> None:
 @timer
 def seed_courses(faker,
                  count: int = 1_000,
-                 year_dev: int = 1,
+                 year_dev_min: int = -3,
+                 year_dev_max: int = 1,
                  max_students: int = 100,
                  max_teachers: int = 3,
                  max_assistants: int = 5,
@@ -155,9 +177,9 @@ def seed_courses(faker,
             [
                 faker.catch_phrase(),
                 faker.paragraph(),
-                timezone.now().year + faker.random_int(min=-year_dev, max=year_dev),
+                timezone.now().year + faker.random_int(min=year_dev_min, max=year_dev_max),
                 choice(faculties),
-                faker.sentence()
+                ""
             ] for _ in range(count)
         ]
 
@@ -257,14 +279,16 @@ def seed_projects(
         )
 
         # Create projects
-        projects = [
-            [
+        projects = []
+        for _ in range(count):
+            start_date = timezone.now() + timezone.timedelta(
+                days=faker.random_int(min=min_start_date_dev, max=max_start_date_dev)
+            )
+            projects.append([
                 faker.catch_phrase(),
                 faker.paragraph(),
-                timezone.now() + timezone.timedelta(
-                    days=faker.random_int(min=min_start_date_dev, max=max_start_date_dev)
-                ),
-                timezone.now() + timezone.timedelta(
+                start_date,
+                start_date + timezone.timedelta(
                     days=faker.random_int(min=min_deadline_dev, max=max_deadline_dev)
                 ),
                 faker.random_int(min=min_max_score, max=max_max_score),
@@ -274,8 +298,7 @@ def seed_projects(
                 faker.boolean(chance_of_getting_true=visible_prob),
                 faker.boolean(chance_of_getting_true=archived_prob),
                 choice(courses)
-            ] for _ in range(count)
-        ]
+            ])
 
         # Insert projects
         cursor.executemany(
@@ -466,7 +489,7 @@ def seed_submissions(faker, count: int = 4_000):
             [
                 faker.date_this_month(),
                 choice(groups),
-                faker.boolean(chance_of_getting_true=80),
+                faker.boolean(chance_of_getting_true=80)
             ]
             for _ in range(count)
         ]
