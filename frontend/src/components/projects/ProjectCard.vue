@@ -4,14 +4,12 @@ import MeterGroup from 'primevue/metergroup';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import { type Project } from '@/types/Project.ts';
+import { type Group } from '@/types/Group.ts';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import { computed, watch } from 'vue';
 import { type Course } from '@/types/Course.ts';
 import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/store/authentication.store.ts';
-import { useGroup } from '@/composables/services/group.service';
 
 /**
  * TODO
@@ -24,6 +22,8 @@ const props = withDefaults(
         type?: 'small' | 'large';
         project: Project;
         course: Course;
+        projectGroups: Group[];
+        studentGroups: Group[];
     }>(),
     {
         type: 'large',
@@ -62,16 +62,13 @@ const meterItems = computed(() => {
 /* Composable injections */
 const { t } = useI18n();
 const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus();
-const { groups, getGroupsByStudent } = useGroup();
-const { user } = storeToRefs(useAuthStore());
 
 /**
  * Return True if the user is in a group in this project.
  */
-// function isInGroup(): Boolean {
-//     console.log(groups)
-//     return true;
-// }
+function isInGroup(): Boolean {
+    return props.studentGroups.some(group => props.projectGroups.includes(group));
+}
 
 
 /* Watchers */
@@ -79,18 +76,6 @@ watch(
     props.course,
     () => {
         getSubmissionStatusByProject(props.project.id);
-    },
-    {
-        immediate: true,
-    },
-);
-
-watch(
-    user,
-    () => {
-        if (user.value !== null && user.value.isStudent()) {
-            getGroupsByStudent(user.value.id)
-        }
     },
     {
         immediate: true,
@@ -203,7 +188,7 @@ watch(
                         />
                     </RouterLink>
                     <RouterLink
-                        v-if="false"
+                        v-if="isInGroup()"
                         :to="{
                             name: 'submission',
                             params: {

@@ -3,9 +3,13 @@ import moment from 'moment';
 import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
 import ProjectCard from '@/components/projects/ProjectCard.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { type Project } from '@/types/Project.ts';
+import { type Group } from '@/types/Group.ts';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { useStudents } from '@/composables/services/student.service';
 
 /* Props */
 const props = withDefaults(
@@ -21,9 +25,34 @@ const props = withDefaults(
 
 /* Composables */
 const { t } = useI18n();
+const { user } = storeToRefs(useAuthStore());
+const { student, getStudentByID } = useStudents();
+
+/**
+ * Get the groups of the corresponding users
+ */
+function getUserGroups(): Group[] {
+    if (user.value?.isStudent()) {
+        return (student.value?.groups || []);
+    }
+    return [];
+}
 
 /* State */
 const showPast = ref(false);
+
+/* Watchers */
+watch(
+    user,
+    () => {
+        if (user.value !== null && user.value.isStudent()) {
+            getStudentByID(user.value.id)
+        }
+    },
+    {
+        immediate: true,
+    },
+);
 
 /* Sorts the projects by deadline */
 const sortedProjects = computed<Project[] | null>(() => {
@@ -68,6 +97,8 @@ const incomingProjects = computed<Project[] | null>(() => {
                                     type="small"
                                     :project="project"
                                     :course="project.course"
+                                    :projectGroups="project.groups"
+                                    :studentGroups="getUserGroups()"
                                     v-if="project.course !== null"
                                 />
                             </div>
@@ -97,6 +128,8 @@ const incomingProjects = computed<Project[] | null>(() => {
                                     class="h-100"
                                     :project="project"
                                     :course="project.course"
+                                    :projectGroups="project.groups"
+                                    :studentGroups="getUserGroups()"
                                     v-if="project.course !== null"
                                 />
                             </div>
