@@ -782,6 +782,7 @@ class CourseModelTestsAsTeacher(APITestCase):
             data={
                 "name": "Introduction to Computer Science",
                 "academic_startyear": 2022,
+                "excerpt": "Excerpt",
                 "description": "An introductory course on computer science.",
                 "faculty": faculty.id,
             },
@@ -820,7 +821,7 @@ class CourseModelTestsAsTeacher(APITestCase):
             follow=True,
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertTrue(course.projects.filter(name="become champions").exists())
 
         # Make sure there are no groups automatically made
@@ -851,7 +852,7 @@ class CourseModelTestsAsTeacher(APITestCase):
                 follow=True,
             )
 
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, 201)
             self.assertTrue(course.projects.filter(name="become champions").exists())
 
             # Make sure there are structure checks added to the project
@@ -880,7 +881,7 @@ class CourseModelTestsAsTeacher(APITestCase):
             follow=True,
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertTrue(course.projects.filter(name="become champions").exists())
 
         # Make sure the groups are created
@@ -925,7 +926,7 @@ class CourseModelTestsAsTeacher(APITestCase):
             follow=True,
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertTrue(course.projects.filter(name="become champions").exists())
 
         # Make sure the groups are created

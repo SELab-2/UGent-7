@@ -9,7 +9,11 @@ import { useGlob } from '@/composables/glob.ts';
 /* Props */
 defineProps<{
     course: Course;
+    courses: Course[];
 }>();
+
+/* Emits */
+const emit = defineEmits(['update:courses']);
 
 /* Composable injections */
 const { user } = storeToRefs(useAuthStore());
@@ -36,7 +40,12 @@ const { getImport } = useGlob(import.meta.glob('@/assets/img/faculties/*.png', {
                 </div>
             </div>
             <div v-if="user && user.isStudent()">
-                <StudentCourseJoinButton :student="user as Student" :course="course" />
+                <StudentCourseJoinButton
+                    :student="user as Student"
+                    :courses="courses"
+                    :course="course"
+                    @update:courses="emit('update:courses')"
+                />
             </div>
         </div>
     </div>

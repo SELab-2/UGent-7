@@ -65,7 +65,7 @@ export function useTeacher(): TeacherState {
         await create<Teacher>(
             endpoint,
             {
-                id: user.id,
+                user: user.id,
             },
             teacher,
             Teacher.fromJSON,

@@ -16,6 +16,9 @@ class Course(models.Model):
     # Begin year of the academic year
     academic_startyear = models.IntegerField(blank=False, null=False)
 
+    # The excerpt of the course
+    excerpt = models.CharField(max_length=200, blank=False, null=False)
+
     # The description of the course
     description = models.TextField(blank=True, null=True)
 

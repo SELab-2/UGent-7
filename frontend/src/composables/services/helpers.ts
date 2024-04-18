@@ -1,9 +1,10 @@
-import { type AxiosError } from 'axios';
+import { type AxiosError, type AxiosResponse } from 'axios';
 import { client } from '@/config/axios.ts';
 import { type Ref } from 'vue';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { i18n } from '@/config/i18n.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
+import { Response } from '@/types/Response.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
 /**
@@ -51,6 +52,34 @@ export async function create<T>(
         processError(error);
         console.error(error); // Log the error for debugging
         throw error; // Re-throw the error to the caller
+    }
+}
+
+/**
+ * Patch an item given its ID.
+ *
+ * @param endpoint
+ * @param data
+ * @param ref
+ * @param contentType
+ */
+export async function patch(
+    endpoint: string,
+    data: any,
+    ref: Ref<Response | null>,
+    contentType: string = 'application/json',
+): Promise<void> {
+    try {
+        const response: AxiosResponse<Response, any> = await client.patch(endpoint, data, {
+            headers: {
+                'Content-Type': contentType,
+            },
+        });
+        ref.value = Response.fromJSON(response.data);
+    } catch (error: any) {
+        processError(error);
+        console.error(error);
+        throw error;
     }
 }
 

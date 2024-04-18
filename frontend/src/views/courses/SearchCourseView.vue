@@ -7,7 +7,7 @@ import InputIcon from 'primevue/inputicon';
 import Checkbox from 'primevue/checkbox';
 import Paginator from 'primevue/paginator';
 import Title from '@/components/layout/Title.vue';
-import BaseLayout from '@/components/layout/BaseLayout.vue';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import CourseList from '@/components/courses/CourseList.vue';
 import { onMounted } from 'vue';
 import { useCourses } from '@/composables/services/course.service.ts';
@@ -110,7 +110,7 @@ onMounted(async () => {
                     {{ t('views.courses.search.results', [pagination.count]) }}
                 </p>
                 <CourseList class="mt-3" :courses="pagination?.results ?? null" :cols="3" :detail="false" />
-                <Paginator :rows="pageSize" :total-records="pagination?.count" :first="first" v-model:first="first" />
+                <Paginator :rows="pageSize" :total-records="pagination?.count" v-model:first="first" />
             </div>
         </div>
     </BaseLayout>

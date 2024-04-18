@@ -85,6 +85,7 @@ export function createCourse(courseData: any): Course {
     return new Course(
         courseData.id,
         courseData.name,
+        courseData.excerpt,
         courseData.description,
         courseData.academic_startyear,
         courseData.parent_course,

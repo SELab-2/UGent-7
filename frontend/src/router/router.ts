@@ -4,6 +4,7 @@
 import DashboardView from '@/views/dashboard/DashboardView.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import CreateCourseView from '@/views/courses/CreateCourseView.vue';
+import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
 import Dummy from '@/components/Dummy.vue';
 import LoginView from '@/views/authentication/LoginView.vue';
 import CalendarView from '@/views/calendar/CalendarView.vue';
@@ -13,10 +14,12 @@ import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts';
 import { LogoutGuard } from '@/router/guards/logout.guard.ts';
 import ProjectView from '@/views/projects/ProjectView.vue';
 import CreateProjectView from '@/views/projects/CreateProjectView.vue';
-import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
+import UpdateProjectView from '@/views/projects/UpdateProjectView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from '@/views/submissions/submissionView.vue';
 import SingleProjectView from '@/views/projects/SingleProjectView.vue';
+import AdminView from '@/views/admin/AdminView.vue';
+import UsersView from '@/views/admin/UsersView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -58,7 +61,7 @@ const routes: RouteRecordRaw[] = [
                                 path: ':projectId',
                                 children: [
                                     { path: '', component: SingleProjectView, name: 'course-project' },
-                                    { path: 'edit', component: Dummy, name: 'project-edit' },
+                                    { path: 'edit', component: UpdateProjectView, name: 'project-edit' },
                                     {
                                         path: 'group',
                                         children: [
@@ -78,6 +81,7 @@ const routes: RouteRecordRaw[] = [
                                     },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },
+                                    { path: 'submission', component: SubmissionView, name: 'submission' },
                                 ],
                             },
                         ],
@@ -139,6 +143,15 @@ const routes: RouteRecordRaw[] = [
 
     // Authentication
     { path: '/auth/', children: [{ path: 'login', component: LoginView, name: 'login' }] },
+
+    // Admin
+    {
+        path: '/admin/',
+        children: [
+            { path: '', component: AdminView, name: 'admin' },
+            { path: 'users', component: UsersView, name: 'admin-users' },
+        ],
+    },
 
     // Page not found: redirect to dashboard
     { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } },

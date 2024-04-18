@@ -1,3 +1,4 @@
+from nh3 import clean
 from django.utils.translation import gettext
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -37,6 +38,11 @@ class CourseSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    def validate(self, attrs: dict) -> dict:
+        """Extra custom validation for course serializer"""
+        attrs['description'] = clean(attrs['description'])
+        return attrs
+
     class Meta:
         model = Course
         fields = "__all__"
@@ -54,6 +60,19 @@ class CreateCourseSerializer(CourseSerializer):
 
         # Create the course
         course = super().create(validated_data)
+
+        # Link the faculty, if specified
+        if faculty is not None:
+            course.faculty = faculty
+            course.save()
+
+        return course
+
+    def update(self, instance, validated_data):
+        faculty = validated_data.pop('faculty', None)
+
+        # Update the course
+        course = super().update(instance, validated_data)
 
         # Link the faculty, if specified
         if faculty is not None:

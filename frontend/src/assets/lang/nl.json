@@ -23,8 +23,8 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
-            "no_projects": "Geen projecten beschikbaar voor dit academiejaar.",
-            "no_courses": "Geen vakken beschikbaar voor dit academiejaar.",
+            "noProjects": "Geen projecten beschikbaar voor dit academiejaar.",
+            "noCourses": "Geen vakken beschikbaar voor dit academiejaar.",
             "select_course": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
         },
@@ -43,7 +43,11 @@
             "noProjects": "Geen projecten op geselecteerde datum."
         },
         "projects": {
+            "all": "Alle projecten",
+            "coming": "Aankomende deadlines",
             "deadline": "Deadline",
+            "days": "Vandaag om {hour} | Morgen om {hour} | Over {count} dagen",
+            "start": "Startdatum",
             "submissionStatus": "Indienstatus",
             "group": "Groep",
             "groupMembers": "Groepsleden",
@@ -51,6 +55,7 @@
             "joinGroup": "Kies groep",
             "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
+            "edit": "Bewerk project",
             "name": "Projectnaam",
             "description": "Beschrijving",
             "start_date": "Start project",
@@ -87,6 +92,7 @@
             "clone_teachers": "Kloon lesgevers:",
             "name": "Vaknaam",
             "description": "Beschrijving",
+            "excerpt": "Korte beschrijving",
             "faculty": "Faculteit",
             "year": "Academiejaar",
             "enroll": "Inschrijven",
@@ -136,7 +142,15 @@
             "academic_year": "Academiejaar {0}"
         },
         "card": {
-            "open": "Details"
+            "open": "Details",
+            "newProject": "Nieuw project",
+            "noSubmissions": "Dit project heeft geen indieningen",
+            "singleSubmission": "Indiening",
+            "multipleSubmissions": "Indieningen",
+            "singleGroup": "Groep",
+            "multipleGroups": "Groepen",
+            "testsSucceed": "Geslaagde testen",
+            "testsFail": "Gefaalde testen"
         },
         "submission" : "Indienen"
     },
@@ -185,6 +199,37 @@
     "confirmations": {
         "clone_course": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
         "leave_course": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
+    },
+    "admin": {
+        "title": "Beheerder",
+        "keyword": "Trefwoord",
+        "search": {
+            "search": "Zoeken",
+            "general": "Zoek op algemeen trefwoord"
+        },
+        "edit": "Bewerken",
+        "cancel": "Annuleer",
+        "save": "Sla op",
+        "users": {
+            "title": "Gebruikers",
+            "id": "ID",
+            "username": "Gebruikersnaam",
+            "email": "E-mail",
+            "roles": "Functies"
+        },
+        "user": "Gebruiker",
+        "assistants": {
+            "title": "Assistenten"
+        },
+        "assistant": "Assistent",
+        "students": {
+            "title": "Studenten"
+        },
+        "student": "Student",
+        "teachers": {
+            "title": "Leerkrachten"
+        },
+        "teacher": "Leerkracht"
     },
     "primevue": {
         "accept": "Ja",

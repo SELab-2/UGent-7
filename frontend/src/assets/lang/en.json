@@ -23,8 +23,8 @@
         "dashboard": {
             "courses": "My courses",
             "projects": "Current projects",
-            "no_projects": "No projects available for this academic year.",
-            "no_courses": "No courses available for this academic year.",
+            "noProjects": "No projects available for this academic year.",
+            "noCourses": "No courses available for this academic year.",
             "select_course": "Select the course for which you want to create a project:",
             "showPastProjects": "Projects with passed deadline"
         },
@@ -43,14 +43,19 @@
             "noProjects": "No projects on selected date."
         },
         "projects": {
+            "all": "All projects",
+            "coming": "Near deadlines",
             "deadline": "Deadline",
-            "submissionStatus": "Indienstatus",
+            "days": "Today at {hour} | Tomorrow at {hour} | In {count} days",
+            "start": "Start date",
+            "submissionStatus": "Submission status",
             "group": "Group",
             "groupMembers": "Group members",
             "chooseGroup": "Choose a group",
             "joinGroup": "Join group",
             "leaveGroup": "Leave group",
             "create": "Create new project",
+            "edit": "Edit project",
             "name": "Project name",
             "description": "Description",
             "start_date": "Start project",
@@ -138,7 +143,14 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "New project"
+            "newProject": "New project",
+            "noSubmissions": "This project does not have any submissions",
+            "singleSubmission": "Submission",
+            "multipleSubmissions": "Submissions",
+            "singleGroup": "Group",
+            "multipleGroups": "Groups",
+            "testsSucceed": "Succeeded tests",
+            "testsFail": "Failed tests"
         },
         "submission": "Submit"
     },
@@ -187,6 +199,37 @@
     "confirmations": {
         "clone_course": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
         "leave_course": "Are you sure you want to leave this course? You will no longer have access to this course."
+    },
+    "admin": {
+        "title": "Admin",
+        "keyword": "Keyword",
+        "search": {
+            "search": "Search",
+            "general": "Search by general keyword"
+        },
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "users": {
+            "title": "Users",
+            "id": "ID",
+            "username": "Username",
+            "email": "Email",
+            "roles": "Roles"
+        },
+        "user": "User",
+        "assistants": {
+            "title": "Assistants"
+        },
+        "assistant": "Assistant",
+        "students": {
+            "title": "Students"
+        },
+        "student": "Student",
+        "teachers": {
+            "title": "Teachers"
+        },
+        "teacher": "Teacher"
     },
     "primevue": {
         "startsWith": "Starts with",

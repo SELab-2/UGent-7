@@ -1,18 +1,41 @@
 import { type LocationQuery } from 'vue-router';
 
+export type UserFilter = {
+    id: string;
+    username: string;
+    email: string;
+    roles: string[];
+} & Filter;
+
 export type CourseFilter = {
     faculties: string[];
     years: string[];
 } & Filter;
 
-export type UserFilter = {
-    faculties: string[];
-    roles: string[];
-} & Filter;
-
 export interface Filter {
     search: string;
     [key: string]: string | string[];
+}
+
+/**
+ * Get the user filters from the query.
+ *
+ * @param query
+ */
+export function getUserFilters(query: LocationQuery): UserFilter {
+    const filters: UserFilter = {
+        search: query.search?.toString() ?? '',
+        id: query.id?.toString() ?? '',
+        username: query.username?.toString() ?? '',
+        email: query.email?.toString() ?? '',
+        roles: [],
+    };
+
+    if (query.roles !== undefined) {
+        filters.roles = getQueryList(query.roles as string | string[]);
+    }
+
+    return filters;
 }
 
 /**
@@ -33,29 +56,6 @@ export function getCourseFilters(query: LocationQuery): CourseFilter {
 
     if (query.years !== undefined) {
         filters.years = getQueryList(query.years as string | string[]);
-    }
-
-    return filters;
-}
-
-/**
- * Get the user filters from the query.
- *
- * @param query
- */
-export function getUserFilters(query: LocationQuery): UserFilter {
-    const filters: UserFilter = {
-        search: query.search?.toString() ?? '',
-        faculties: [],
-        roles: [],
-    };
-
-    if (query.faculties !== undefined) {
-        filters.faculties = getQueryList(query.faculties as string | string[]);
-    }
-
-    if (query.roles !== undefined) {
-        filters.roles = getQueryList(query.roles as string | string[]);
     }
 
     return filters;

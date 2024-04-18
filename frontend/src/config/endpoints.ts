@@ -40,6 +40,12 @@ export const endpoints = {
         index: '/api/admins/',
         retrieve: '/api/admins/{id}/',
     },
+    users: {
+        index: '/api/users/',
+        search: '/api/users/search/',
+        retrieve: '/api/users/{id}/',
+        admin: '/api/users/{id}/admin/',
+    },
     faculties: {
         index: '/api/faculties/',
         retrieve: '/api/faculties/{id}',
@@ -50,7 +56,7 @@ export const endpoints = {
         byStudent: '/api/students/{studentId}/groups/',
     },
     projects: {
-        retrieve: '/api/projects/{id}',
+        retrieve: '/api/projects/{id}/',
         byCourse: '/api/courses/{courseId}/projects/',
         byStudent: '/api/students/{studentId}/projects/',
         byTeacher: '/api/teachers/{teacherId}/projects/',
