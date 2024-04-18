@@ -80,7 +80,7 @@ if [ "$data" != "" ]; then
   echo "--------------------------"
 
   rm -f backend/db.sqlite3 > /dev/null 2>&1
-  docker run -v backend:/code ugent-7_backend sh -c "python manage.py migrate; python manage.py loaddata */fixtures/small/*" > /dev/null
+  docker run -v backend:/code ugent-7_backend sh -c "python manage.py migrate; python manage.py loaddata */fixtures/$data/*" > /dev/null
 fi
 
 # Build Docker images
