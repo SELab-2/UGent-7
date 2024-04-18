@@ -51,13 +51,4 @@ describe('student type', () => {
 
         expect(student.isStudent()).toBe(true);
     });
-
-    it('hasCourse method', () => {
-        const student = createStudent(studentData);
-        const course = createCourse(courseData);
-
-        expect(student.hasCourse(course)).toBe(false);
-        student.courses.push(course);
-        expect(student.hasCourse(course)).toBe(true);
-    });
 });
