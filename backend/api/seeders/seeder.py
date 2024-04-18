@@ -61,19 +61,38 @@ def timer(func):
 def seed_users(faker, count: int, offset: int = 0, staff_prob: float = 0.001) -> list[list]:
     """Seed users into the database"""
     with connection.cursor() as cursor:
-        users = [
-            [
+        # Create a set to store generated usernames
+        generated_usernames = set()
+
+        users = []
+        for id in range(offset, count + offset):
+            # Generate username
+            first_name = faker.first_name()
+            last_name = faker.last_name()
+            username_base = first_name + last_name
+            username = username_base[:12]  # Truncate if longer than 12 characters
+
+            # Check if the username is unique
+            suffix = 1
+            while username in generated_usernames:
+                username = username_base[:12 - len(str(suffix))] + str(suffix)  # Append a unique suffix
+                suffix += 1
+
+            # Add the username to the set
+            generated_usernames.add(username)
+
+            # Append user data to the list
+            users.append([
                 id,
-                faker.unique.user_name(),
-                faker.unique.email(),
-                faker.first_name(),
-                faker.last_name(),
+                username,
+                (username + "@ugent.be")[:50],  # Truncate if longer than 50 characters
+                first_name,
+                last_name,
                 timezone.now().year,
                 timezone.now(),
                 timezone.now(),
                 faker.boolean(chance_of_getting_true=staff_prob),
-            ] for id in range(offset, count + offset)
-        ]
+            ])
 
         cursor.executemany(
             "INSERT INTO authentication_user"
