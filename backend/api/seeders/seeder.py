@@ -85,7 +85,7 @@ def seed_users(faker, count: int, offset: int = 0, staff_prob: float = 0.001) ->
             users.append([
                 id,
                 username,
-                (username + "@ugent.be")[:50],  # Truncate if longer than 50 characters
+                (username + "@ugent.be"),
                 first_name,
                 last_name,
                 timezone.now().year,
