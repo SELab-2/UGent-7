@@ -82,6 +82,7 @@ class CreateCourseSerializer(CourseSerializer):
 
         return course
 
+
 class CourseIDSerializer(serializers.Serializer):
     student_id = serializers.PrimaryKeyRelatedField(
         queryset=Course.objects.all()
