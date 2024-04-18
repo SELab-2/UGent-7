@@ -130,7 +130,14 @@
         },
         "card": {
             "open": "Details",
-            "newProject": "New project"
+            "newProject": "New project",
+            "noSubmissions": "This project does not have any submissions",
+            "singleSubmission": "Submission",
+            "multipleSubmissions": "Submissions",
+            "singleGroup": "Group",
+            "multipleGroups": "Groups",
+            "testsSucceed": "Succeeded tests",
+            "testsFail": "Failed tests"
         },
         "submission": "Submit"
     },
