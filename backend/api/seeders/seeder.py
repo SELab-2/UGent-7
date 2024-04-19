@@ -179,7 +179,7 @@ def seed_courses(faker,
                 faker.paragraph(),
                 timezone.now().year + faker.random_int(min=year_dev_min, max=year_dev_max),
                 choice(faculties),
-                ""
+                faker.sentence()
             ] for _ in range(count)
         ]
 
