@@ -73,7 +73,7 @@ export function useTeacher(): TeacherState {
     }
 
     async function deleteTeacher(id: string): Promise<void> {
-        const endpoint = endpoints.students.retrieve.replace('{id}', id);
+        const endpoint = endpoints.teachers.retrieve.replace('{id}', id);
         await deleteId<Teacher>(endpoint, teacher, Teacher.fromJSON);
     }
 
