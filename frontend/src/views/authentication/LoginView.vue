@@ -39,7 +39,7 @@ const { t } = useI18n();
                         class="w-10rem md:w-15rem m-4 my-5 ml:0 md:ml-7"
                     />
                     <div class="bg-primary text-white p-4 w-full md:w-20rem">
-                        <h1 class="mt-0">
+                        <h1 class="mt-0 text-white">
                             {{ t('views.login.card.title') }}
                         </h1>
                         <span>

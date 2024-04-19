@@ -155,7 +155,6 @@
             "noSubmissions": "Dit project heeft geen indieningen",
             "submissions": "Indiening | Indieningen",
             "groups": "Groep | Groepen",
-            "multipleGroups": "Groepen",
             "testsSucceed": "Geslaagde testen",
             "testsFail": "Gefaalde testen",
             "submit": "Indienen"
@@ -238,9 +237,9 @@
         },
         "student": "Student",
         "teachers": {
-            "title": "Leerkrachten"
+            "title": "Proffen"
         },
-        "teacher": "Leerkracht"
+        "teacher": "Prof"
     },
     "primevue": {
         "accept": "Ja",
