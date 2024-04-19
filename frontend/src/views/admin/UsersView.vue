@@ -7,7 +7,7 @@ import Button from 'primevue/button';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
-import SelectButton from 'primevue/selectbutton';
+import MultiSelect from 'primevue/multiselect';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import { ref, onMounted, watch } from 'vue';
@@ -64,7 +64,6 @@ const destroyers = ref<Record<Role, (arg: any) => Promise<void>>>({});
 const destroyFunctions = ref<Array<(arg: any) => Promise<void>>>([deleteStudent, deleteAssistant, deleteTeacher]);
 
 const loading = ref(false);
-const totalRecords = ref(0);
 const selectedUsers = ref();
 const selectAll = ref(false);
 const editItem = ref<User>(User.blankUser());
@@ -109,7 +108,7 @@ const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
     }
 };
 const onRowSelect = (): void => {
-    selectAll.value = selectedUsers.value.length === totalRecords.value;
+    selectAll.value = selectedUsers.value.length === (pagination.value?.count ?? 0);
 };
 const onRowUnselect = (): void => {
     selectAll.value = false;
@@ -209,7 +208,7 @@ const saveItem = async (): Promise<void> => {
                     </template>
                     <template #empty>No matching data.</template>
                     <template #loading>Loading data. Please wait.</template>
-                    <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+                    <Column selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center"></Column>
                     <Column
                         v-for="column in columns"
                         :key="column.field"
@@ -225,11 +224,16 @@ const saveItem = async (): Promise<void> => {
                                 class="flex align-items-center"
                             >
                                 <InputIcon>
-                                    <i class="pi pi-search" />
+                                    <i class="pi pi-search flex justify-content-center" />
                                 </InputIcon>
                                 <InputText v-model="filter[column.field]" :placeholder="t('admin.search.search')" />
                             </IconField>
-                            <SelectButton v-else multiple v-model="filter.roles" :options="roles.toSpliced(0, 1)" />
+                            <MultiSelect
+                                v-else
+                                class="flex align-items-center h-3rem"
+                                v-model="filter.roles"
+                                :options="roles.toSpliced(0, 1)"
+                            />
                         </template>
                         <template #body="{ data }" v-if="column.field == 'roles'">
                             {{ data.roles.join(', ') }}
