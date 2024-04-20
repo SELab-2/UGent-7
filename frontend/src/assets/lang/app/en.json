@@ -231,6 +231,8 @@
     "admin": {
         "title": "Admin",
         "keyword": "Keyword",
+        "list": "List",
+        "add": "Add",
         "search": {
             "search": "Search",
             "general": "Search by general keyword"
@@ -261,7 +263,8 @@
         "catalog": "Catalog",
         "docker_images": {
             "title": "Docker images",
-            "name": "Name docker image"
+            "name": "Name of docker image",
+            "public": "Public"
         }
     },
     "primevue": {

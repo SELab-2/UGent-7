@@ -231,6 +231,8 @@
     "admin": {
         "title": "Beheerder",
         "keyword": "Trefwoord",
+        "list": "Lijst",
+        "add": "Voeg toe",
         "search": {
             "search": "Zoeken",
             "general": "Zoek op algemeen trefwoord"
@@ -261,7 +263,8 @@
         "catalog": "Catalogus",
         "docker_images": {
             "title": "Docker images",
-            "name": "Naam docker image"
+            "name": "Naam van docker image",
+            "public": "Publiek"
         }
     },
     "primevue": {
