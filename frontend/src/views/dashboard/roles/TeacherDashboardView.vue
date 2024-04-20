@@ -48,7 +48,7 @@ watch(
 <template>
     <!-- Project heading -->
     <div
-        class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-5"
+        class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-6"
     >
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>

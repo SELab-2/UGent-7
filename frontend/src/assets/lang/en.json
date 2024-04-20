@@ -24,6 +24,7 @@
             "courses": "My courses",
             "projects": "Current projects",
             "noProjects": "No projects available for this academic year.",
+            "noIncomingProjects": "No projects with a deadline within 7 days.",
             "noCourses": "No courses available for this academic year.",
             "select_course": "Select the course for which you want to create a project:",
             "showPastProjects": "Projects with passed deadline"
@@ -47,9 +48,14 @@
             "coming": "Near deadlines",
             "deadline": "Deadline",
             "days": "Today at {hour} | Tomorrow at {hour} | In {count} days",
+            "groupName": "Group name",
+            "groupPopulation": "Size",
+            "groupStatus": "Status",
             "start": "Start date",
             "submissionStatus": "Submission status",
             "group": "Group",
+            "groupSize": "Individual | Groups of {count} people",
+            "noGroups": "No groups available",
             "groupMembers": "Group members",
             "chooseGroup": "Choose a group",
             "joinGroup": "Join group",
@@ -64,22 +70,37 @@
             "visibility": "Make project visible to students",
             "score_visibility": "Make score, when uploaded, automatically visible to students",
             "docker_upload": "Upload a Dockerfile",
-            "submission_structure": "Structure of how a submission should be made"
+            "submission_structure": "Structure of how a submission should be made",
+            "noStudents": "No students in this group"
         },
         "submissions": {
             "title": "Submissions",
             "submit": "Submit",
             "course": "Course",
-            "chooseFile": "Choose a file"
+            "chooseFile": "Choose a file",
+            "noSubmissions": "No submissions available",
+            "hoverText": {
+              "allChecksFailed": "Structure and extra checks failed",
+              "allChecksPassed": "All checks passed",
+              "extraChecksFailed": "Extra checks failed",
+              "structureChecksFailed": "Structure checks failed"
+            },
+            "timeSince": {
+              "today": "Today",
+              "daysAgo": "day(s) ago",
+              "weekAgo": "More than a week ago",
+              "monthAgo": "More than a month ago"
+            }
         },
         "courses": {
             "create": "Create course",
+            "edit": "Edit course",
             "clone": "Clone course",
             "clone_assistants": "Clone assistants:",
             "clone_teachers": "Clone teachers:",
-            "edit": "Edit course",
             "name": "Course name",
             "description": "Description",
+            "excerpt": "Short description",
             "faculty": "Faculty",
             "year": "Academic year",
             "enroll": "Enroll",
@@ -133,12 +154,11 @@
             "open": "Details",
             "newProject": "New project",
             "noSubmissions": "This project does not have any submissions",
-            "singleSubmission": "Submission",
-            "multipleSubmissions": "Submissions",
-            "singleGroup": "Group",
-            "multipleGroups": "Groups",
+            "submissions": "Submission | Submissions",
+            "groups": "Group | Groups",
             "testsSucceed": "Succeeded tests",
-            "testsFail": "Failed tests"
+            "testsFail": "Failed tests",
+            "submit": "Submit"
         },
         "submission": "Submit"
     },
@@ -148,6 +168,9 @@
             "assistant": "Assistant",
             "teacher": "Teacher"
         }
+    },
+    "helpers": {
+      "loading": "Loading...,"
     },
     "toasts": {
         "messages": {

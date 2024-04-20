@@ -16,6 +16,7 @@ withDefaults(defineProps<{ color?: 'primary' | 'contrast' }>(), {
     color: var(--primary-color);
     position: relative;
     display: inline-block;
+    line-height: 2.8rem;
 
     &::after {
         content: '';

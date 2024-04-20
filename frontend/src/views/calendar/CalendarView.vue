@@ -252,4 +252,3 @@ watch(selectedDate, (date) => {
     border-radius: 50%;
 }
 </style>
-@/types/Project

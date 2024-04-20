@@ -12,14 +12,15 @@ import VerifyView from '@/views/authentication/VerifyView.vue';
 import { type RouteRecordRaw, createWebHistory, createRouter } from 'vue-router';
 import { AuthenticationGuard } from '@/router/guards/authentication.guard.ts';
 import { LogoutGuard } from '@/router/guards/logout.guard.ts';
+import { AdminGuard } from '@/router/guards/admin.guard.ts';
 import ProjectView from '@/views/projects/ProjectView.vue';
 import CreateProjectView from '@/views/projects/CreateProjectView.vue';
 import UpdateProjectView from '@/views/projects/UpdateProjectView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
-import SubmissionView from '@/views/submissions/submissionView.vue';
-import SingleProjectView from '@/views/projects/SingleProjectView.vue';
+import SubmissionView from '@/views/submissions/SubmissionView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
+import ProjectsView from '@/views/projects/ProjectsView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -60,11 +61,27 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: ':projectId',
                                 children: [
-                                    { path: '', component: SingleProjectView, name: 'course-project' },
+                                    { path: '', component: ProjectView, name: 'course-project' },
                                     { path: 'edit', component: UpdateProjectView, name: 'project-edit' },
+                                    {
+                                        path: 'group',
+                                        children: [
+                                            { path: '', component: Dummy, name: 'group' },
+                                            {
+                                                path: ':groupId',
+                                                children: [
+                                                    { path: '', component: Dummy, name: 'project-group' },
+                                                    {
+                                                        path: 'submission',
+                                                        component: SubmissionView,
+                                                        name: 'submission',
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
                                     { path: 'groups', component: Dummy, name: 'project-groups' },
                                     { path: 'submit', component: Dummy, name: 'project-submit' },
-                                    { path: 'submission', component: SubmissionView, name: 'submission' },
                                 ],
                             },
                         ],
@@ -78,7 +95,7 @@ const routes: RouteRecordRaw[] = [
     { path: '/calendar', component: CalendarView, name: 'calendar' },
 
     // Projects
-    { path: '/projects', component: ProjectView, name: 'projects' },
+    { path: '/projects', component: ProjectsView, name: 'projects' },
 
     // Users
     {
@@ -130,6 +147,7 @@ const routes: RouteRecordRaw[] = [
     // Admin
     {
         path: '/admin/',
+        beforeEnter: AdminGuard,
         children: [
             { path: '', component: AdminView, name: 'admin' },
             { path: 'users', component: UsersView, name: 'admin-users' },

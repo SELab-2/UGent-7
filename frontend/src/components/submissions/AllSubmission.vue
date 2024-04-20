@@ -1,0 +1,157 @@
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+import { Submission } from '@/types/submission/Submission.ts';
+import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
+import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+const tempSubmissions = ref<Submission[]>([]);
+
+const testSubmissions = ref<Submission[]>([
+    new Submission(
+        '4',
+        4,
+        new Date(),
+        [],
+        [new ExtraCheckResult('3', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
+        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
+        true,
+    ),
+    new Submission(
+        '3',
+        3,
+        new Date(2024, 3, 14),
+        [],
+        [new ExtraCheckResult('3', 'FAILURE', null, null, 2, 1, 'ExtraCheckResult')],
+        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
+        true,
+    ),
+    new Submission(
+        '2',
+        2,
+        new Date(2024, 3, 1),
+        [],
+        [new ExtraCheckResult('2', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
+        [new StructureCheckResult('2', 'FAILURE', null, 2, 1, 'StructureCheckResult')],
+        true,
+    ),
+    new Submission(
+        '1',
+        1,
+        new Date(2024, 2, 12),
+        [],
+        [new ExtraCheckResult('1', 'FAILURE', null, null, 1, 1, 'ExtraCheckResult')],
+        [new StructureCheckResult('1', 'FAILURE', null, 1, 1, 'StructureCheckResult')],
+        true,
+    ),
+]);
+
+const props = defineProps<{
+    submissions: Submission[];
+}>();
+
+onMounted(async () => {
+    tempSubmissions.value = [...(props.submissions ?? []), ...testSubmissions.value].reverse();
+});
+
+watch(
+    () => props.submissions,
+    (newSubmissions) => {
+        tempSubmissions.value = [...newSubmissions, ...testSubmissions.value].reverse();
+    },
+    {
+        immediate: true, // Zal ook uitvoeren onMounted, dus je kan de logica uit onMounted verwijderen als je dit gebruikt
+    },
+);
+
+/**
+ * Returns the extra information for the submission
+ */
+const submissionsExtra = computed(() => {
+    return tempSubmissions.value.map((submission) => {
+        const iconDetails = getExtraSubmissionInformation(submission);
+        return {
+            ...submission,
+            iconName: iconDetails.iconName,
+            color: iconDetails.color,
+            hoverText: iconDetails.hoverText,
+        };
+    });
+});
+
+/**
+ * Returns the icon name, color and hover text for the submission
+ * @param submission
+ */
+const getExtraSubmissionInformation = (
+    submission: Submission,
+): { iconName: string; color: string; hoverText: string } => {
+    if (
+        !(
+            submission.extraCheckResults.map((check: ExtraCheckResult) => check.result === 'SUCCESS').every(Boolean) ||
+            submission.structureCheckResults
+                .map((check: StructureCheckResult) => check.result === 'SUCCESS')
+                .every(Boolean)
+        )
+    ) {
+        return { iconName: 'times', color: 'red', hoverText: t('views.submissions.hoverText.allChecksFailed') };
+    } else if (
+        !submission.extraCheckResults.map((check: ExtraCheckResult) => check.result === 'SUCCESS').every(Boolean)
+    ) {
+        return { iconName: 'cloud', color: 'lightblue', hoverText: t('views.submissions.hoverText.extraChecksFailed') };
+    } else if (
+        !submission.structureCheckResults
+            .map((check: StructureCheckResult) => check.result === 'SUCCESS')
+            .every(Boolean)
+    ) {
+        return { iconName: 'bolt', color: 'yellow', hoverText: t('views.submissions.hoverText.structureChecksFailed') };
+    } else {
+        return { iconName: 'check', color: 'lightgreen', hoverText: t('views.submissions.hoverText.allChecksPassed') };
+    }
+};
+
+const timeSince = (submissionDate: Date): string => {
+    const today = new Date();
+    const diffTime = new Date(today.getTime() - submissionDate.getTime());
+    const diffDays = Math.floor(diffTime.getTime() / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+        return t('views.submissions.timeSince.today');
+    } else if (diffDays <= 7) {
+        return `${diffDays} ${t('views.submissions.timeSince.daysAgo')}`;
+    } else if (diffDays <= 30) {
+        return t('views.submissions.timeSince.weekAgo');
+    } else {
+        return t('views.submissions.timeSince.monthAgo');
+    }
+};
+</script>
+
+<template>
+    <div>
+        <div
+            v-for="submission in submissionsExtra?.reverse()"
+            :key="submission.id"
+            class="flex submission align-content-center align-items-center"
+            v-tooltip="submission.hoverText"
+        >
+            <p
+                :class="'font-semibold m-2 p-1 pi pi-' + submission.iconName"
+                :style="{ color: submission.color, fontSize: '1.25rem' }"
+            ></p>
+            <label class="font-semibold m-2 p-1">#{{ submission.submission_number }} </label>
+            <p>{{ timeSince(submission.submission_time) }}</p>
+        </div>
+    </div>
+</template>
+
+<style scoped lang="scss">
+@import '@/assets/scss/theme/theme.scss';
+.submission {
+    border-bottom: 1.5px solid var(--primary-color);
+}
+.submission:last-child {
+    border-bottom: none;
+}
+</style>

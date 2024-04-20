@@ -32,8 +32,8 @@ describe('group', (): void => {
         expect(group.value?.score).toBe(20);
         expect(group.value?.id).toBe('0');
         expect(group.value?.project).toBeNull();
-        expect(group.value?.students).toEqual([]);
-        expect(group.value?.submissions).toEqual([]);
+        expect(group.value?.students).toBeNull();
+        expect(group.value?.submissions).toBeNull();
     });
 
     it('gets groups data by project', async () => {
@@ -48,15 +48,15 @@ describe('group', (): void => {
         expect(groups.value?.[0]?.score).toBe(20);
         expect(groups.value?.[0]?.id).toBe('0');
         expect(groups.value?.[0]?.project).toBeNull();
-        expect(groups.value?.[0]?.students).toEqual([]);
-        expect(groups.value?.[0]?.submissions).toEqual([]);
+        expect(groups.value?.[0]?.students).toBeNull();
+        expect(groups.value?.[0]?.submissions).toBeNull();
 
         expect(groups.value?.[1]).not.toBeNull();
         expect(groups.value?.[1]?.score).toBe(18);
         expect(groups.value?.[1]?.id).toBe('1');
         expect(groups.value?.[1]?.project).toBeNull();
-        expect(groups.value?.[1]?.students).toEqual([]);
-        expect(groups.value?.[1]?.submissions).toEqual([]);
+        expect(groups.value?.[1]?.students).toBeNull();
+        expect(groups.value?.[1]?.submissions).toBeNull();
     });
 
     it('gets groups data by student', async () => {
@@ -71,8 +71,8 @@ describe('group', (): void => {
         expect(groups.value?.[0]?.score).toBe(20);
         expect(groups.value?.[0]?.id).toBe('0');
         expect(groups.value?.[0]?.project).toBeNull();
-        expect(groups.value?.[0]?.students).toEqual([]);
-        expect(groups.value?.[0]?.submissions).toEqual([]);
+        expect(groups.value?.[0]?.students).toBeNull();
+        expect(groups.value?.[0]?.submissions).toBeNull();
     });
 
     it('create group', async () => {

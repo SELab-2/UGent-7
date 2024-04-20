@@ -33,11 +33,11 @@ describe('course type', () => {
         expect(course.description).toBe(courseData.description);
         expect(course.academic_startyear).toBe(courseData.academic_startyear);
         expect(course.parent_course).toBe(courseData.parent_course);
-        expect(course.faculty).toBe(courseData.faculty);
-        expect(course.teachers).toStrictEqual(courseData.teachers);
-        expect(course.assistants).toStrictEqual(courseData.assistants);
-        expect(course.students).toStrictEqual(courseData.students);
-        expect(course.projects).toStrictEqual(courseData.projects);
+        expect(course.faculty).toBeNull();
+        expect(course.teachers).toBeNull();
+        expect(course.assistants).toBeNull();
+        expect(course.students).toBeNull();
+        expect(course.projects).toBeNull();
     });
 
     it('getCourseYear method', () => {
