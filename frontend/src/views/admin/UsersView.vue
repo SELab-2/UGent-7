@@ -10,6 +10,7 @@ import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
+import Body from '@/components/layout/Body.vue';
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUser } from '@/composables/services/users.service.ts';
@@ -176,6 +177,8 @@ const saveItem = async (): Promise<void> => {
     <AdminLayout>
         <Title>
             <div class="gap-3 mb-3">{{ t('admin.users.title') }}</div>
+        </Title>
+        <Body>
             <div class="card p-fluid">
                 <DataTable
                     :value="pagination?.results"
@@ -246,7 +249,7 @@ const saveItem = async (): Promise<void> => {
                     </Column>
                 </DataTable>
             </div>
-        </Title>
+        </Body>
     </AdminLayout>
     <Dialog v-model:visible="popupEdit" header="Edit user" :style="{ width: '28rem' }" class="flex" id="editDialog">
         <div
