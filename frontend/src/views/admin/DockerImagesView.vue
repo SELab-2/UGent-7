@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DataTable from 'primevue/datatable';
 import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import InputSwitch from 'primevue/inputswitch';
@@ -41,7 +42,11 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
         </Title>
         <Body>
             <SelectButton class="mb-3 gap-3" v-model="selected" :options="selectOptions.map(t)" />
-            <div v-if="selected === t(selectOptions[0])"></div>
+            <div v-if="selected === t(selectOptions[0])">
+                <DataTable>
+
+                </DataTable>
+            </div>
             <div v-else>
                 <InputText class="mb-3 gap-3" v-model:model-value="name" :placeholder="t('admin.docker_images.name')" />
                 <div v-if="name.length > 0">
