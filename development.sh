@@ -74,13 +74,42 @@ fi
 
 # Seed database if data size is provided
 if [ "$data" != "" ]; then
+# Cleanup function
+  cleanup() {
+      echo "Ctrl+C detected. Cleaning up..."
+      deactivate
+      rm -rf .venv_dev
+      exit 1
+  }
+
+  # Call cleanup function on SIGINT
+  trap cleanup SIGINT
+
   echo "--------------------------"
   echo "Filling the database."
   echo "This can take some time..."
   echo "--------------------------"
 
-  rm -f backend/db.sqlite3 > /dev/null 2>&1
-  docker run -v backend:/code ugent-7_backend sh -c "python manage.py migrate; python manage.py loaddata */fixtures/$data/*" > /dev/null
+  cd backend
+
+  rm -f db.sqlite3 > /dev/null 2>&1
+
+  echo "Setting up workspace..."
+  python3.11 -m venv .venv_dev > /dev/null
+  source .venv_dev/bin/activate
+  pip install poetry > /dev/null
+  poetry install > /dev/null
+
+  echo "Migrating database..."
+  python3.11 manage.py migrate > /dev/null
+
+  echo "Filling $data database..."
+  python3.11 manage.py loaddata */fixtures/$data/* > /dev/null 2>&1
+
+  echo "Resetting workspace..."
+  deactivate
+  rm -rf .venv_dev
+  cd ..
 fi
 
 # Build Docker images
