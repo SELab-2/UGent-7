@@ -110,31 +110,36 @@ async function submitProject(): Promise<void> {
     }
 }
 
+// interface TreeNode {
+//   key: string;
+//   label: string;
+//   children?: TreeNode[]; // Optional if the node has children
+//   sort: string;
+//   // Additional properties as needed
+// }
+
 interface TreeNode {
-  key: string;
-  label: string;
-  children?: TreeNode[]; // Optional if the node has children
-  sort: string;
-  // Additional properties as needed
-}
+        [key: string]: TreeNode | undefined;
+    }
 
 // Define a method to compute the style for each node
 function getNodeStyle(node: TreeNode) {
     console.log('getNodeStyle called'); // Add logging to check if the function is called
     // Check if the node meets a certain condition, e.g., has a specific label
-    if (node.sort === 'file') return {color: 'black'};
-    if (node.sort === 'obligated') return {color: 'green'};
-    if (node.sort === 'blocked') return {color: 'red'};
+    // if (node.sort === 'file') return {color: 'black'};
+    // if (node.sort === 'obligated') return {color: 'green'};
+    // if (node.sort === 'blocked') return {color: 'red'};
     // If no condition is met, return an empty object
     return {};
 }
 
+        // {
+        //     key: '1',
+        //     label: t('structure_checks.empty'),
+        //     sort:'file'
+        // }
 // Define tree data as ref
-const nodes = ref<TreeNode[]>([{
-            key: '1',
-            label: t('structure_checks.empty'),
-            sort:'file'
-        }]);
+const nodes = ref<TreeNode>();
 
 // Function to load structure checks into nodes
 async function loadStructureChecks() {
@@ -142,86 +147,20 @@ async function loadStructureChecks() {
 
     console.log(structureChecks.value)
     // Initialize an empty array for the structure checks data
-    const structureChecksData: TreeNode[] = [];
+    const structureCheckNames: string[] = (structureChecks.value || []).map(check => check.name);
+    console.log(structureCheckNames)
 
-    // Iterate over the structure checks and create a tree node for each
-    for (const structureCheck of structureChecks.value ? structureChecks.value : []) {
-        // Split the name string by "/"
-        const nameParts = structureCheck.name.substring(1).split("/");
-        const obl = structureCheck.obligated_extensions || [];
+    const obj: TreeNode = {};
+    structureCheckNames.forEach(path => {
+        path.split('/').reduce((r: TreeNode, e: string) => {
+            return r[e] || (r[e] = {});
+        }, obj);
+    });
 
-        // Initialize a variable to keep track of the current parent
-        let parent: TreeNode[] = structureChecksData;
-
-        // Iterate over the name parts to build the parent-child relationships
-        for (let i = 0; i < nameParts.length; i++) {
-            const namePart = nameParts[i];
-
-            // Check if the current name part already exists as a child
-            let child = parent.find(child => child.label === namePart);
-
-            // If not, create a new child node
-            if (!child) {
-                child = {
-                    key: `${structureCheck.id}_${i}`, // Use a unique identifier for the key
-                    label: namePart, // Use the name part for the label
-                    children: [],
-                    sort: 'file'
-                };
-                parent.push(child); // Add the child to the parent's children array
-            }
-
-            // Update the parent for the next iteration
-            parent = child.children? child.children : [];
-        }
-
-        for (let i = 0; i < obl.length; i++) {
-            const ext = obl[i];
-
-            // Find the parent node corresponding to the current structure check
-            const parentStructureCheckNode = structureChecksData.find(node => node.key === `${structureCheck.id}_${i}`);
-
-            // If the parent node is found, add the obligated extension as its child
-            if (parentStructureCheckNode) {
-                parentStructureCheckNode.children?.push({
-                    key: `${structureCheck.id}_${i}_obl`, // Use a unique identifier for the key
-                    label: ext.extension,
-                    children: [],
-                    sort: 'obligated'
-                });
-            }
-}
-    }
-
-    console.log(structureChecksData)
-    // Assign the built structure checks data to the nodes
-    nodes.value = structureChecksData;
-
-    // Fetch structure checks data from API or elsewhere
-    // For now, let's assume some dummy data
-    // const structureChecksData = [
-    //     {
-    //         key: '1',
-    //         label: 'Structure Check 1',
-    //     },
-    //     {
-    //         key: '2',
-    //         label: 'Structure Check 2',
-    //         children: [
-    //             {
-    //                 key: '2-1',
-    //                 label: 'Child Structure Check 1',
-    //             },
-    //             {
-    //                 key: '2-2',
-    //                 label: 'Child Structure Check 2',
-    //             },
-    //         ],
-    //     },
-    // ];
+    console.log(obj);
 
     // Assign the fetched data to the nodes
-    nodes.value = structureChecksData;
+    nodes.value = {};
 }
 </script>
 
