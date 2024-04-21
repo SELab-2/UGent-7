@@ -6,7 +6,7 @@ import { useMessagesStore } from '@/store/messages.store.ts';
 import { useI18n } from 'vue-i18n';
 import { useTeacher } from '@/composables/services/teacher.service';
 import { useAssistant } from '@/composables/services/assistant.service';
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 /* Props */
 const props = defineProps<{ user: User; course: Course }>();
@@ -19,7 +19,7 @@ const { t } = useI18n();
 
 /* State */
 const courseValue = ref<Course>(props.course);
-const selectedRole = ref<string>('');
+const selectedRole = ref<string | null>(null);
 
 /* Options */
 const options = [
@@ -28,28 +28,48 @@ const options = [
     { label: t('types.roles.teacher'), value: 'teacher' },
 ];
 
+/* Set the role of the user in the course */
+onMounted(async () => {
+    if (courseValue.value.teachers !== null && courseValue.value.assistants !== null) {
+        // Check if the user is a teacher or assistant in the course, if so set the role
+        if (courseValue.value.teachers.some((teacher) => teacher.id === props.user.id)) {
+            selectedRole.value = 'teacher';
+        } else if (courseValue.value.assistants.some((assistant) => assistant.id === props.user.id)) {
+            selectedRole.value = 'assistant';
+        } else {
+            selectedRole.value = '';
+        }
+    }
+});
+
 /**
  * Enroll the user in the course.
  */
-async function joinCourse(): Promise<void> {
+async function joinCourse(newValue: string): Promise<void> {
     try {
-        await teacherJoinCourse(courseValue.value.id, props.user.id);
+        // Depending on the new selected value, join the course
+        if (newValue === 'assistant') {
+            await assistantJoinCourse(courseValue.value.id, props.user.id);
+        } else {
+            await teacherJoinCourse(courseValue.value.id, props.user.id);
+        }
 
         addSuccessMessage(
             t('toasts.messages.success'),
             t('toasts.messages.courses.teachers_and_assistants.enroll.success', [
                 props.user.getFullName(),
-                t('types.roles.teacher'),
+                t(`types.roles.${selectedRole.value}`),
             ]),
         );
 
+        // Refresh the course data
         await refreshCourse();
     } catch (error) {
         addErrorMessage(
             t('toasts.messages.error'),
             t('toasts.messages.courses.teachers_and_assistants.enroll.error', [
                 props.user.getFullName(),
-                t('types.roles.teacher'),
+                t(`types.roles.${selectedRole.value}`),
             ]),
         );
     }
@@ -58,15 +78,21 @@ async function joinCourse(): Promise<void> {
 /**
  * Leave the course.
  */
-async function leaveCourse(): Promise<void> {
+async function leaveCourse(oldValue: string): Promise<void> {
     try {
-        await teacherLeaveCourse(courseValue.value.id, props.user.id);
+        // Depending on the old value, leave the course
+        if (oldValue === 'assistant') {
+            await assistantLeaveCourse(courseValue.value.id, props.user.id);
+        } else {
+            await teacherLeaveCourse(courseValue.value.id, props.user.id);
+        }
 
         addSuccessMessage(
             t('toasts.messages.success'),
             t('toasts.messages.courses.teachers_and_assistants.leave.success', [props.user.getFullName()]),
         );
 
+        // Refresh the course data
         await refreshCourse();
     } catch (error) {
         addErrorMessage(
@@ -76,16 +102,48 @@ async function leaveCourse(): Promise<void> {
     }
 }
 
+/* Listen for changes to the role selection */
+watch(selectedRole, async (newValue, oldValue) => {
+    // Make sure the oldValue is not null (this is the initial value)
+    if (oldValue !== null) {
+        // If the newValue is empty, this means the user is leaving the course
+        if (newValue === '') {
+            await leaveCourse(oldValue);
+        } else {
+            // If the oldValue is not empty, this means the user is changing roles. Remove the user from the old role
+            if (oldValue !== '') {
+                await leaveCourse(oldValue);
+            }
+
+            // Add the user to the new role
+            if (newValue !== null) {
+                await joinCourse(newValue);
+            }
+        }
+    }
+});
+
 /* Refreshes the course data by updating the teachers */
 async function refreshCourse(): Promise<void> {
-    await getTeachersByCourse(props.course.id);
+    // Get the new teachers and assistants
+    await getTeachersByCourse(courseValue.value.id);
+    await getAssistantsByCourse(courseValue.value.id);
+
+    // Set the new course data
+    courseValue.value.assistants = assistants.value ?? [];
     courseValue.value.teachers = teachers.value ?? [];
 }
 </script>
 
 <template>
     <div class="p-selectbutton">
-        <SelectButton v-model="selectedRole" :options="options" option-value="value" option-label="label" :allow-empty="false" />
+        <SelectButton
+            v-model="selectedRole"
+            :options="options"
+            option-value="value"
+            option-label="label"
+            :allow-empty="false"
+        />
     </div>
 </template>
 
@@ -96,5 +154,4 @@ async function refreshCourse(): Promise<void> {
     height: 90%;
     max-inline-size: 300px;
 }
-
 </style>

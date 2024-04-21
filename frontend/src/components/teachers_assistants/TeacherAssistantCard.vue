@@ -6,7 +6,7 @@ import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';
 
 /* Component props */
-const props = defineProps<{ userValue: User; course: Course, detail?: boolean}>();
+const props = defineProps<{ userValue: User; course: Course; detail?: boolean }>();
 
 /* Composable injections */
 const { t } = useI18n();
@@ -24,7 +24,7 @@ const { t } = useI18n();
             {{ props.userValue.email }}
         </template>
         <!-- Display add/remove button on the assistant/teacher card, only when the user is a-->
-        <template #footer v-if="! props.detail">
+        <template #footer v-if="!props.detail">
             <CourseRoleAddButton :user="props.userValue" :course="course" />
         </template>
     </Card>
