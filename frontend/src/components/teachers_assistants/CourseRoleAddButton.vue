@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Button from 'primevue/button';
+import SelectButton from 'primevue/selectbutton';
 import { type Course } from '@/types/Course.ts';
 import { type User } from '@/types/users/User.ts';
-import { type Assistant } from '@/types/users/Assistant';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { useI18n } from 'vue-i18n';
+import { useTeacher } from '@/composables/services/teacher.service';
 import { useAssistant } from '@/composables/services/assistant.service';
 import { ref } from 'vue';
 
@@ -13,24 +13,33 @@ const props = defineProps<{ user: User; course: Course }>();
 
 /* Composable injections */
 const { addSuccessMessage, addErrorMessage } = useMessagesStore();
+const { teachers, teacherJoinCourse, teacherLeaveCourse, getTeachersByCourse } = useTeacher();
 const { assistants, assistantJoinCourse, assistantLeaveCourse, getAssistantsByCourse } = useAssistant();
 const { t } = useI18n();
 
 /* State */
 const courseValue = ref<Course>(props.course);
+const selectedRole = ref<string>('');
+
+/* Options */
+const options = [
+    { label: t('views.courses.teachers_and_assistants.search.no_role'), value: '' },
+    { label: t('types.roles.assistant'), value: 'assistant' },
+    { label: t('types.roles.teacher'), value: 'teacher' },
+];
 
 /**
  * Enroll the user in the course.
  */
 async function joinCourse(): Promise<void> {
     try {
-        await assistantJoinCourse(courseValue.value.id, props.user.id);
+        await teacherJoinCourse(courseValue.value.id, props.user.id);
 
         addSuccessMessage(
             t('toasts.messages.success'),
             t('toasts.messages.courses.teachers_and_assistants.enroll.success', [
                 props.user.getFullName(),
-                t('types.roles.assistant'),
+                t('types.roles.teacher'),
             ]),
         );
 
@@ -40,7 +49,7 @@ async function joinCourse(): Promise<void> {
             t('toasts.messages.error'),
             t('toasts.messages.courses.teachers_and_assistants.enroll.error', [
                 props.user.getFullName(),
-                t('types.roles.assistant'),
+                t('types.roles.teacher'),
             ]),
         );
     }
@@ -51,7 +60,7 @@ async function joinCourse(): Promise<void> {
  */
 async function leaveCourse(): Promise<void> {
     try {
-        await assistantLeaveCourse(courseValue.value.id, props.user.id);
+        await teacherLeaveCourse(courseValue.value.id, props.user.id);
 
         addSuccessMessage(
             t('toasts.messages.success'),
@@ -67,38 +76,25 @@ async function leaveCourse(): Promise<void> {
     }
 }
 
-/* Refreshes the course data by updating the assistants */
+/* Refreshes the course data by updating the teachers */
 async function refreshCourse(): Promise<void> {
-    await getAssistantsByCourse(courseValue.value.id);
-    courseValue.value.assistants = assistants.value ?? [];
+    await getTeachersByCourse(props.course.id);
+    courseValue.value.teachers = teachers.value ?? [];
 }
 </script>
 
 <template>
-    <Button
-        class="text-sm p-0 custom-button"
-        :label="t('views.courses.teachers_and_assistants.enroll', [t('types.roles.assistant')])"
-        icon-pos="right"
-        icon="pi pi-arrow-right"
-        @click="joinCourse"
-        v-if="!courseValue.hasAssistant(user as Assistant)"
-        link
-    />
-    <Button
-        class="text-sm p-0 custom-button"
-        :label="t('views.courses.teachers_and_assistants.leave')"
-        icon-pos="right"
-        icon="pi pi-arrow-right"
-        @click="leaveCourse"
-        v-else
-        link
-    />
+    <div class="p-selectbutton">
+        <SelectButton v-model="selectedRole" :options="options" option-value="value" option-label="label" :allow-empty="false" />
+    </div>
 </template>
 
 <style scoped lang="scss">
-.custom-button {
+.p-selectbutton {
     display: flex;
-    justify-content: flex-start;
-    text-align: left;
+    justify-content: center; // Aligns items to the right
+    height: 90%;
+    max-inline-size: 300px;
 }
+
 </style>
