@@ -5,7 +5,7 @@ import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import InputText from 'primevue/inputtext';
-import Textarea from 'primevue/textarea';
+import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
@@ -18,6 +18,7 @@ import { useProject } from '@/composables/services/project.service';
 import { useStructureCheck } from '@/composables/services/structure_check.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { useCourses } from '@/composables/services/course.service';
 import { StructureCheck } from '@/types/StructureCheck';
 
 /* Composable injections */
@@ -27,6 +28,7 @@ const { params } = useRoute();
 
 /* Service injection */
 const { createProject } = useProject();
+const { course, getCourseByID } = useCourses();
 const { structureChecks, getStructureCheckByProject} = useStructureCheck();
 
 
@@ -78,8 +80,11 @@ async function submitProject(): Promise<void> {
     // Validate the form
     const validated = await v$.value.$validate();
 
+    // Get the course object from the course ID
+    await getCourseByID(params.courseId as string);
+
     // Only submit the form if the validation was successful
-    if (validated) {
+    if (validated && course.value !== null) {
         // Pass the project data to the service
         await createProject(
             new Project(
@@ -94,6 +99,7 @@ async function submitProject(): Promise<void> {
                 form.maxScore,
                 form.scoreVisibility,
                 form.groupSize,
+                course.value,
                 form.submissionStructure,
             ),
             params.courseId as string,
@@ -142,10 +148,10 @@ async function loadStructureChecks() {
     for (const structureCheck of structureChecks.value ? structureChecks.value : []) {
         // Split the name string by "/"
         const nameParts = structureCheck.name.substring(1).split("/");
-        const obl = structureCheck.obligated_extensions;
+        const obl = structureCheck.obligated_extensions || [];
 
         // Initialize a variable to keep track of the current parent
-        let parent = structureChecksData;
+        let parent: TreeNode[] = structureChecksData;
 
         // Iterate over the name parts to build the parent-child relationships
         for (let i = 0; i < nameParts.length; i++) {
@@ -166,7 +172,7 @@ async function loadStructureChecks() {
             }
 
             // Update the parent for the next iteration
-            parent = child.children;
+            parent = child.children? child.children : [];
         }
 
         for (let i = 0; i < obl.length; i++) {
@@ -244,14 +250,7 @@ async function loadStructureChecks() {
                             <label for="projectDescription">
                                 {{ t('views.projects.description') }}
                             </label>
-                            <Textarea
-                                id="projectDescription"
-                                class="w-full"
-                                v-model="form.description"
-                                autoResize
-                                rows="5"
-                                cols="30"
-                            />
+                            <Editor id="projectDescription" class="w-full" v-model="form.description" />
                         </div>
                     </div>
 

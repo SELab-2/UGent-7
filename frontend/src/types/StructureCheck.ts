@@ -5,8 +5,8 @@ export class StructureCheck {
     constructor(
         public id: string,
         public name: string,
-        public obligated_extensions: File_extension[] = [],
-        public blocked_extensions: File_extension[] = [],
+        public obligated_extensions: File_extension[] | null = null,
+        public blocked_extensions: File_extension[] | null = null,
         public project: Project | null = null,
     ) {}
 
@@ -16,6 +16,11 @@ export class StructureCheck {
      * @param structureCheck
      */
     static fromJSON(structureCheck: StructureCheck): StructureCheck {
-        return new StructureCheck(structureCheck.id, structureCheck.name);
+        return new StructureCheck(
+            structureCheck.id,
+            structureCheck.name,
+            structureCheck.obligated_extensions,
+            structureCheck.blocked_extensions
+        );
     }
 }

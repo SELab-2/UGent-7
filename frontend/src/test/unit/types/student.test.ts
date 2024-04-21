@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 
 import { Student } from '@/types/users/Student';
-import { studentData, courseData } from './data';
-import { createStudent, createCourse } from './helper';
+import { studentData } from './data';
+import { createStudent } from './helper';
 
 describe('student type', () => {
     it('create instance of student with correct properties', () => {
@@ -50,14 +50,5 @@ describe('student type', () => {
         const student = createStudent(studentData);
 
         expect(student.isStudent()).toBe(true);
-    });
-
-    it('hasCourse method', () => {
-        const student = createStudent(studentData);
-        const course = createCourse(courseData);
-
-        expect(student.hasCourse(course)).toBe(false);
-        student.courses.push(course);
-        expect(student.hasCourse(course)).toBe(true);
     });
 });

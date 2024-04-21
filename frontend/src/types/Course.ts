@@ -8,14 +8,15 @@ export class Course {
     constructor(
         public id: string,
         public name: string,
+        public excerpt: string,
         public description: string | null,
         public academic_startyear: number,
         public parent_course: Course | null = null,
         public faculty: Faculty | null = null,
-        public teachers: Teacher[] = [],
-        public assistants: Assistant[] = [],
-        public students: Student[] = [],
-        public projects: Project[] = [],
+        public teachers: Teacher[] | null = null,
+        public assistants: Assistant[] | null = null,
+        public students: Student[] | null = null,
+        public projects: Project[] | null = null,
     ) {}
 
     /**
@@ -29,15 +30,10 @@ export class Course {
     /**
      * Get the excerpt of the course description.
      *
-     * @param maxLength
      * @returns string
      */
-    public getExcerpt(maxLength: number = 100): string {
-        if (this.description === null) return '';
-
-        if (this.description.length < maxLength) return this.description;
-
-        return this.description.substring(0, maxLength) + '...';
+    public getExcerpt(): string {
+        return this.excerpt;
     }
 
     /**
@@ -52,6 +48,7 @@ export class Course {
         return new Course(
             course.id,
             course.name,
+            course.excerpt,
             course.description,
             course.academic_startyear,
             course.parent_course,
@@ -64,7 +61,8 @@ export class Course {
      * @param teacher
      */
     public hasTeacher(teacher: Teacher): boolean {
-        return this.teachers.some((t) => t.id === teacher.id);
+        const teachers = this.teachers ?? [];
+        return teachers.some((t) => t.id === teacher.id);
     }
 
     /**
@@ -72,7 +70,8 @@ export class Course {
      * @param assistant
      */
     public hasAssistant(assistant: Assistant): boolean {
-        return this.assistants.some((a) => a.id === assistant.id);
+        const assistants = this.assistants ?? [];
+        return assistants.some((a) => a.id === assistant.id);
     }
 }
 

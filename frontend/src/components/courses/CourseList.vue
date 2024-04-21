@@ -6,12 +6,16 @@ import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import { PrimeIcons } from 'primevue/api';
 import Button from 'primevue/button';
+import { useCourses } from '@/composables/services/course.service.ts';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { watch } from 'vue';
 
 /* Props */
 interface Props {
     detail?: boolean;
-    courses: Course[] | null;
     cols?: number;
+    courses: Course[] | null;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -20,7 +24,29 @@ withDefaults(defineProps<Props>(), {
 });
 
 /* Composable injections */
+const courseService = useCourses();
 const { t } = useI18n();
+const { user } = storeToRefs(useAuthStore());
+
+/* State */
+const userCourses = courseService.courses;
+
+/**
+ * Load the courses based on the user role.
+ */
+async function loadCourses(): Promise<void> {
+    if (user.value !== null) {
+        if (user.value.isStudent()) {
+            await courseService.getCoursesByStudent(user.value.id);
+        } else if (user.value.isAssistant()) {
+            await courseService.getCourseByAssistant(user.value.id);
+        } else if (user.value.isTeacher()) {
+            await courseService.getCoursesByTeacher(user.value.id);
+        }
+    }
+}
+
+watch(user, loadCourses, { immediate: true });
 </script>
 
 <template>
@@ -42,12 +68,18 @@ const { t } = useI18n();
                             </slot>
                         </template>
                     </CourseDetailCard>
-                    <CourseGeneralCard class="h-full" :course="course" v-else />
+                    <CourseGeneralCard
+                        class="h-full"
+                        :course="course"
+                        :courses="userCourses ?? []"
+                        @update:courses="loadCourses"
+                        v-else
+                    />
                 </div>
             </template>
             <template v-else>
                 <div class="col-12">
-                    <p class="mt-0">{{ t('views.dashboard.no_courses') }}</p>
+                    <p class="mt-0">{{ t('views.dashboard.noCourses') }}</p>
                 </div>
             </template>
         </template>

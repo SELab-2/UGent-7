@@ -3,9 +3,13 @@ import moment from 'moment';
 import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
 import ProjectCard from '@/components/projects/ProjectCard.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { type Project } from '@/types/Project.ts';
+import { type Group } from '@/types/Group.ts';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/store/authentication.store.ts';
+import { useStudents } from '@/composables/services/student.service';
 
 /* Props */
 const props = withDefaults(
@@ -21,14 +25,38 @@ const props = withDefaults(
 
 /* Composables */
 const { t } = useI18n();
+const { user } = storeToRefs(useAuthStore());
+const { student, getStudentByID } = useStudents();
+
+/**
+ * Get the groups of the corresponding users
+ */
+function getUserGroups(): Group[] {
+    if (user.value !== null && user.value?.isStudent()) {
+        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+        return student.value !== null && student.value.groups !== null ? student.value?.groups : [];
+    }
+    return [];
+}
 
 /* State */
 const showPast = ref(false);
 
-/**
- * Sorts the projects by deadline
- */
-const sortedProjects = computed(() => {
+/* Watchers */
+watch(
+    user,
+    () => {
+        if (user.value !== null && user.value.isStudent()) {
+            getStudentByID(user.value.id);
+        }
+    },
+    {
+        immediate: true,
+    },
+);
+
+/* Sorts the projects by deadline */
+const sortedProjects = computed<Project[] | null>(() => {
     const projects =
         props.projects?.filter((project) => (!showPast.value ? moment(project.deadline).isAfter() : true)) ?? null;
 
@@ -38,45 +66,89 @@ const sortedProjects = computed(() => {
 
     return [...projects].sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
 });
+
+/* Filters the projects by incoming deadline (less than one week) */
+const incomingProjects = computed<Project[] | null>(() => {
+    return (
+        sortedProjects.value?.filter((project) => moment(project.deadline).isBefore(moment().add(1, 'week'))) ?? null
+    );
+});
 </script>
 
 <template>
-    <!-- Show past projects switch -->
-    <div class="flex gap-3 align-items-center mb-5">
-        <InputSwitch input-id="show-past" v-model="showPast" />
-        <label for="show-past">
-            {{ t('views.dashboard.showPastProjects') }}
-        </label>
-    </div>
-    <!-- Project list -->
-    <div class="grid align-items-stretch">
-        <template v-if="sortedProjects !== null">
-            <template v-if="sortedProjects.length > 0">
-                <div
-                    class="col-12 md:col-6"
-                    :class="'xl:col-' + 12 / cols"
-                    v-for="project in sortedProjects"
-                    :key="project.id"
-                >
-                    <ProjectCard
-                        class="h-100"
-                        :project="project"
-                        :course="project.course"
-                        v-if="project.course !== null"
-                    />
+    <div>
+        <!-- Show past projects switch -->
+        <div class="flex gap-3 align-items-center mb-5">
+            <InputSwitch input-id="show-past" v-model="showPast" />
+            <label for="show-past">
+                {{ t('views.dashboard.showPastProjects') }}
+            </label>
+        </div>
+        <!-- Project list -->
+        <div class="grid nested-grid">
+            <div class="col-12 md:col-5">
+                <h2 class="mt-0">
+                    {{ t('views.projects.coming') }}
+                </h2>
+                <div class="grid">
+                    <template v-if="incomingProjects !== null">
+                        <template v-if="incomingProjects.length > 0">
+                            <div class="col-12" v-for="project in incomingProjects" :key="project.id">
+                                <ProjectCard
+                                    type="small"
+                                    :project="project"
+                                    :course="project.course"
+                                    :projectGroups="project.groups"
+                                    :studentGroups="getUserGroups()"
+                                    v-if="project.course !== null"
+                                />
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="col-12">
+                                <p class="mt-0">{{ t('views.dashboard.noIncomingProjects') }}</p>
+                            </div>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <div class="col-12" v-for="index in cols" :key="index">
+                            <Skeleton height="8rem" />
+                        </div>
+                    </template>
                 </div>
-            </template>
-            <template v-else>
-                <div class="col-12">
-                    <p class="mt-0">{{ t('views.dashboard.no_projects') }}</p>
-                </div>
-            </template>
-        </template>
-        <template v-else>
-            <div class="col-12 md:col-6 lg:col-4" :class="'xl:col-' + 12 / cols" v-for="index in cols" :key="index">
-                <Skeleton height="25rem" />
             </div>
-        </template>
+            <div class="col-12 md:col-7">
+                <h2 class="mt-0">
+                    {{ t('views.projects.all') }}
+                </h2>
+                <div class="grid">
+                    <template v-if="sortedProjects !== null">
+                        <template v-if="sortedProjects.length > 0">
+                            <div class="col-12" v-for="project in sortedProjects" :key="project.id">
+                                <ProjectCard
+                                    class="h-100"
+                                    :project="project"
+                                    :course="project.course"
+                                    :projectGroups="project.groups"
+                                    :studentGroups="getUserGroups()"
+                                    v-if="project.course !== null"
+                                />
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="col-12">
+                                <p class="mt-0">{{ t('views.dashboard.noProjects') }}</p>
+                            </div>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <div class="col-12" v-for="index in cols" :key="index">
+                            <Skeleton height="20rem" />
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

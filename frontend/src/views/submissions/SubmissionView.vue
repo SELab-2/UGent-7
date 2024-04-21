@@ -9,11 +9,16 @@ import { useRoute } from 'vue-router';
 import { useCourses } from '@/composables/services/course.service.ts';
 import FileUpload from 'primevue/fileupload';
 import { PrimeIcons } from 'primevue/api';
+import AllSubmission from '@/components/submissions/AllSubmission.vue';
+import { useGroup } from '@/composables/services/group.service.ts';
+import { useSubmission } from '@/composables/services/submission.service.ts';
 
 const { t } = useI18n();
 const route = useRoute();
 const { project, getProjectByID } = useProject();
 const { course, getCourseByID } = useCourses();
+const { group, getGroupByID } = useGroup();
+const { submission, submissions, createSubmission, getSubmissionByGroup } = useSubmission();
 
 /* State */
 const files = ref<File[]>([]);
@@ -21,12 +26,19 @@ const files = ref<File[]>([]);
 onMounted(async () => {
     await getProjectByID(route.params.projectId as string);
     await getCourseByID(route.params.courseId as string);
+    await getGroupByID(route.params.groupId as string);
+    await getSubmissionByGroup(route.params.groupId as string);
 });
 
-const onUpload = (callback: () => void): void => {
-    // TODO call to server
-    files.value = [];
-    callback();
+const onUpload = async (callback: () => void): Promise<void> => {
+    if (group.value !== null) {
+        await createSubmission(files.value as File[], group.value.id);
+        if (submission.value != null) {
+            submissions.value = [...(submissions.value ?? []), submission.value];
+        }
+        files.value = [];
+        callback();
+    }
 };
 
 const onFileSelect = (event: any): void => {
@@ -47,8 +59,8 @@ function formatDate(deadline: Date): string {
 <template>
     <BaseLayout>
         <div class="grid">
-            <div class="col-12 md:col-4">
-                <div>
+            <div class="col-8 md:col-6">
+                <div class="flex-column">
                     <Title> {{ t(`views.submissions.title`) }}: {{ project ? project.name : 'Loading' }} </Title>
                     <p v-if="course">{{ t(`views.submissions.course`) }}: {{ course.name }}</p>
                     <p v-if="project?.deadline">Deadline: {{ project ? formatDate(project.deadline) : 'Loading' }}</p>
@@ -100,6 +112,9 @@ function formatDate(deadline: Date): string {
                         </FileUpload>
                     </div>
                 </div>
+            </div>
+            <div class="col-5 col-offset-1">
+                <AllSubmission v-if="group && submissions" :group="group" :submissions="submissions"></AllSubmission>
             </div>
         </div>
     </BaseLayout>

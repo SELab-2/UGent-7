@@ -11,6 +11,7 @@ describe('course type', () => {
         expect(course).toBeInstanceOf(Course);
         expect(course.id).toBe(courseData.id);
         expect(course.name).toBe(courseData.name);
+        expect(course.excerpt).toBe(courseData.excerpt);
         expect(course.description).toBe(courseData.description);
         expect(course.academic_startyear).toBe(courseData.academic_startyear);
         expect(course.parent_course).toBe(courseData.parent_course);
@@ -28,33 +29,21 @@ describe('course type', () => {
         expect(course).toBeInstanceOf(Course);
         expect(course.id).toBe(courseData.id);
         expect(course.name).toBe(courseData.name);
+        expect(course.excerpt).toBe(courseData.excerpt);
         expect(course.description).toBe(courseData.description);
         expect(course.academic_startyear).toBe(courseData.academic_startyear);
         expect(course.parent_course).toBe(courseData.parent_course);
-        expect(course.faculty).toBe(courseData.faculty);
-        expect(course.teachers).toStrictEqual(courseData.teachers);
-        expect(course.assistants).toStrictEqual(courseData.assistants);
-        expect(course.students).toStrictEqual(courseData.students);
-        expect(course.projects).toStrictEqual(courseData.projects);
+        expect(course.faculty).toBeNull();
+        expect(course.teachers).toBeNull();
+        expect(course.assistants).toBeNull();
+        expect(course.students).toBeNull();
+        expect(course.projects).toBeNull();
     });
 
     it('getCourseYear method', () => {
         const course = createCourse(courseData);
 
         expect(course.getCourseYear()).toBe(`${courseData.academic_startyear} - ${courseData.academic_startyear + 1}`);
-    });
-
-    it('getExcerpt method', () => {
-        const course = createCourse(courseData);
-
-        expect(course.getExcerpt()).toBe(courseData.description);
-        expect(course.getExcerpt(10)).toBe(courseData.description.substring(0, 10) + '...');
-    });
-
-    it('getExcerpt method with null description', () => {
-        const course = createCourse({ ...courseData, description: null });
-
-        expect(course.getExcerpt()).toBe('');
     });
 
     it('getAcademicYear method', () => {

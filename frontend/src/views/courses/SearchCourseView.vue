@@ -110,7 +110,7 @@ onMounted(async () => {
                     {{ t('views.courses.search.results', [pagination.count]) }}
                 </p>
                 <CourseList class="mt-3" :courses="pagination?.results ?? null" :cols="3" :detail="false" />
-                <Paginator :rows="pageSize" :total-records="pagination?.count" :first="first" v-model:first="first" />
+                <Paginator :rows="pageSize" :total-records="pagination?.count" v-model:first="first" />
             </div>
         </div>
     </BaseLayout>

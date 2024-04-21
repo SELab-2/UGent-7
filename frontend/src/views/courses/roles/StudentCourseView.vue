@@ -12,7 +12,7 @@ import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useProject } from '@/composables/services/project.service.ts';
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 
 /* Props */
 const props = defineProps<{
@@ -28,7 +28,18 @@ const { refreshUser } = useAuthStore();
 const { projects, getProjectsByCourse } = useProject();
 const { push } = useRouter();
 
-/* Methods */
+/* State */
+const instructors = computed(() => {
+    if (props.course.teachers !== null && props.course.assistants !== null) {
+        return props.course.teachers.concat(props.course.assistants);
+    }
+
+    return null;
+});
+
+/**
+ * Leave the course as a student.
+ */
 async function leaveCourse(): Promise<void> {
     // Show a confirmation dialog before leaving the course, to prevent accidental clicks
     confirm.require({
@@ -65,7 +76,7 @@ watch(
         <Title class="m-0">{{ props.course.name }}</Title>
     </div>
     <!-- Description -->
-    <p>{{ props.course.description }}</p>
+    <div class="surface-300 px-4 py-3" v-html="props.course.description" />
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
@@ -80,7 +91,7 @@ watch(
     </div>
 
     <!-- List with teachers and assistants -->
-    <TeacherAssistantList :course="props.course" :users="course.teachers.concat(course.assistants)" />
+    <TeacherAssistantList :course="props.course" :users="instructors" />
 
     <!-- Button to leave the course -->
     <div class="text-right mt-6">

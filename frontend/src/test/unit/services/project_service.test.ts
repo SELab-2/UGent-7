@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useCourses } from '@/composables/services/course.service';
 import { Project } from '@/types/Project';
-import { type Course } from '@/types/Course';
+import { Course } from '@/types/Course';
 
 const {
     projects,
@@ -32,6 +32,7 @@ describe('project', (): void => {
         expect(project.value).not.toBeNull();
         expect(project.value?.name).toBe('sel2');
         expect(project.value?.course.id).toBe('1');
+        expect(project.value?.course).toBeInstanceOf(Course);
         expect(project.value?.description).toBe('this is a test');
         expect(project.value?.visible).toBe(true);
         expect(project.value?.archived).toBe(false);
@@ -42,13 +43,13 @@ describe('project', (): void => {
         expect(project.value?.score_visible).toBe(true);
         expect(project.value?.group_size).toBe(8);
         expect(project.value?.course.id).toBe('1');
-        expect(project.value?.structureChecks).toEqual([]);
-        expect(project.value?.extra_checks).toEqual([]);
-        expect(project.value?.groups).toEqual([]);
-        expect(project.value?.submissions).toEqual([]);
+        expect(project.value?.structureChecks).toBeNull();
+        expect(project.value?.extra_checks).toBeNull();
+        expect(project.value?.groups).toBeNull();
+        expect(project.value?.submissions).toBeNull();
     });
 
-    it('gets projects data', async () => {
+    it('gets projects data by course', async () => {
         resetService();
 
         await getProjectsByCourse('1');
@@ -58,6 +59,7 @@ describe('project', (): void => {
         expect(projects.value).not.toBeNull();
         expect(projects.value?.[0]?.name).toBe('sel2');
         expect(projects.value?.[0]?.course.id).toBe('1');
+        expect(projects.value?.[0].course).toBeInstanceOf(Course);
         expect(projects.value?.[0]?.description).toBe('this is a test');
         expect(projects.value?.[0]?.visible).toBe(true);
         expect(projects.value?.[0]?.archived).toBe(false);
@@ -68,12 +70,13 @@ describe('project', (): void => {
         expect(projects.value?.[0]?.score_visible).toBe(true);
         expect(projects.value?.[0]?.group_size).toBe(8);
         expect(projects.value?.[0]?.course.id).toBe('1');
-        expect(projects.value?.[0]?.structureChecks).toEqual([]);
-        expect(projects.value?.[0]?.extra_checks).toEqual([]);
-        expect(projects.value?.[0]?.groups).toEqual([]);
-        expect(projects.value?.[0]?.submissions).toEqual([]);
+        expect(projects.value?.[0]?.structureChecks).toBeNull();
+        expect(projects.value?.[0]?.extra_checks).toBeNull();
+        expect(projects.value?.[0]?.groups).toBeNull();
+        expect(projects.value?.[0]?.submissions).toBeNull();
 
         expect(projects.value?.[1]?.name).toBe('sel3');
+        expect(projects.value?.[1].course).toBeInstanceOf(Course);
         expect(projects.value?.[1]?.course.id).toBe('1');
         expect(projects.value?.[1]?.description).toBe('make a project');
         expect(projects.value?.[1]?.visible).toBe(true);
@@ -85,10 +88,10 @@ describe('project', (): void => {
         expect(projects.value?.[1]?.score_visible).toBe(false);
         expect(projects.value?.[1]?.group_size).toBe(3);
         expect(projects.value?.[1]?.course.id).toBe('1');
-        expect(projects.value?.[1]?.structureChecks).toEqual([]);
-        expect(projects.value?.[1]?.extra_checks).toEqual([]);
-        expect(projects.value?.[1]?.groups).toEqual([]);
-        expect(projects.value?.[1]?.submissions).toEqual([]);
+        expect(projects.value?.[1]?.structureChecks).toBeNull();
+        expect(projects.value?.[1]?.extra_checks).toBeNull();
+        expect(projects.value?.[1]?.groups).toBeNull();
+        expect(projects.value?.[1]?.submissions).toBeNull();
     });
 
     it('gets projects data', async () => {
@@ -110,10 +113,10 @@ describe('project', (): void => {
         expect(projects.value?.[0]?.score_visible).toBe(true);
         expect(projects.value?.[0]?.group_size).toBe(8);
         expect(projects.value?.[0]?.course.id).toBe('1');
-        expect(projects.value?.[0]?.structureChecks).toEqual([]);
-        expect(projects.value?.[0]?.extra_checks).toEqual([]);
-        expect(projects.value?.[0]?.groups).toEqual([]);
-        expect(projects.value?.[0]?.submissions).toEqual([]);
+        expect(projects.value?.[0]?.structureChecks).toBeNull();
+        expect(projects.value?.[0]?.extra_checks).toBeNull();
+        expect(projects.value?.[0]?.groups).toBeNull();
+        expect(projects.value?.[0]?.submissions).toBeNull();
 
         expect(projects.value?.[1]?.name).toBe('sel3');
         expect(projects.value?.[1]?.course.id).toBe('1');
@@ -126,10 +129,10 @@ describe('project', (): void => {
         expect(projects.value?.[1]?.max_score).toBe(20);
         expect(projects.value?.[1]?.score_visible).toBe(false);
         expect(projects.value?.[1]?.group_size).toBe(3);
-        expect(projects.value?.[1]?.structureChecks).toEqual([]);
-        expect(projects.value?.[1]?.extra_checks).toEqual([]);
-        expect(projects.value?.[1]?.groups).toEqual([]);
-        expect(projects.value?.[1]?.submissions).toEqual([]);
+        expect(projects.value?.[1]?.structureChecks).toBeNull();
+        expect(projects.value?.[1]?.extra_checks).toBeNull();
+        expect(projects.value?.[1]?.groups).toBeNull();
+        expect(projects.value?.[1]?.submissions).toBeNull();
     });
 
     it('create project', async () => {

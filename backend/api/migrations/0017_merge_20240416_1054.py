@@ -7,6 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('api', '0016_alter_checkresult_submission_and_more'),
+        ('api', '0016_course_excerpt_alter_checkresult_submission_and_more'),
         ('api', '0016_remove_checkresult_is_valid_submission_is_valid_and_more'),
     ]
 

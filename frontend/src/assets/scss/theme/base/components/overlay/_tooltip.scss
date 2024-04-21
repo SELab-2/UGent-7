@@ -57,7 +57,7 @@
 // theme
 .p-tooltip {
     .p-tooltip-text {
-        background: $tooltipBg;
+        background: $primaryColor;
         color: $tooltipTextColor;
         padding: $tooltipPadding;
         box-shadow: $inputOverlayShadow;
@@ -66,25 +66,25 @@
 
     &.p-tooltip-right {
         .p-tooltip-arrow {
-            border-right-color: $tooltipBg;
+            border-right-color: $primaryColor;
         }
     }
 
     &.p-tooltip-left {
         .p-tooltip-arrow {
-            border-left-color: $tooltipBg;
+            border-left-color: $primaryColor;
         }
     }
 
     &.p-tooltip-top {
         .p-tooltip-arrow {
-            border-top-color: $tooltipBg;
+            border-top-color: $primaryColor;
         }
     }
 
     &.p-tooltip-bottom {
         .p-tooltip-arrow {
-            border-bottom-color: $tooltipBg;
+            border-bottom-color: $primaryColor;
         }
     }
 }

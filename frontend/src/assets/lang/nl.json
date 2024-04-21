@@ -23,8 +23,9 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
-            "no_projects": "Geen projecten beschikbaar voor dit academiejaar.",
-            "no_courses": "Geen vakken beschikbaar voor dit academiejaar.",
+            "noProjects": "Geen projecten beschikbaar voor dit academiejaar.",
+            "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
+            "noCourses": "Geen vakken beschikbaar voor dit academiejaar.",
             "select_course": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
         },
@@ -43,14 +44,24 @@
             "noProjects": "Geen projecten op geselecteerde datum."
         },
         "projects": {
+            "all": "Alle projecten",
+            "coming": "Aankomende deadlines",
             "deadline": "Deadline",
+            "days": "Vandaag om {hour} | Morgen om {hour} | Over {count} dagen",
+            "groupName": "Groepsnaam",
+            "groupPopulation": "Grootte",
+            "groupStatus": "Status",
+            "start": "Startdatum",
             "submissionStatus": "Indienstatus",
             "group": "Groep",
+            "groupSize": "Individueel | Groepen van {count} personen",
+            "noGroups": "Geen groepen beschikbaar",
             "groupMembers": "Groepsleden",
             "chooseGroup": "Kies een groep",
             "joinGroup": "Kies groep",
             "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
+            "edit": "Bewerk project",
             "name": "Projectnaam",
             "description": "Beschrijving",
             "start_date": "Start project",
@@ -59,13 +70,27 @@
             "visibility": "Project zichtbaar maken voor studenten",
             "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
             "docker_upload": "Upload een Dockerfile",
-            "submission_structure": "Structuur van hoe de indiening moet gebeuren"
+            "submission_structure": "Structuur van hoe de indiening moet gebeuren",
+            "noStudents": "Geen studenten in deze groep"
         },
         "submissions": {
             "title": "Inzendingen",
             "submit": "Indienen",
             "course": "Vak",
-            "chooseFile": "Kies bestand(en)"
+            "chooseFile": "Kies bestand(en)",
+            "noSubmissions": "Geen indieningen beschikbaar",
+            "hoverText": {
+              "allChecksFailed": "Structuur en extra checks gefaald",
+              "allChecksPassed": "Alle checks geslaagd",
+              "extraChecksFailed": "Extra checks gefaald",
+              "structureChecksFailed": "Structuur checks gefaald"
+            },
+            "timeSince": {
+              "today": "Vandaag",
+              "daysAgo": "dag(en) geleden",
+              "weekAgo": "Meer dan een week geleden",
+              "monthAgo": "Meer dan een maand geleden"
+            }
         },
         "courses": {
             "create": "Creëer vak",
@@ -75,6 +100,7 @@
             "clone_teachers": "Kloon lesgevers:",
             "name": "Vaknaam",
             "description": "Beschrijving",
+            "excerpt": "Korte beschrijving",
             "faculty": "Faculteit",
             "year": "Academiejaar",
             "enroll": "Inschrijven",
@@ -122,11 +148,17 @@
     "components": {
         "button": {
             "academic_year": "Academiejaar {0}",
-            "createProject": "Maak een nieuw project"
+            "createProject": "Creëer nieuw project"
         },
         "card": {
             "open": "Details",
-            "newProject": "Nieuw project"
+            "newProject": "Nieuw project",
+            "noSubmissions": "Dit project heeft geen indieningen",
+            "submissions": "Indiening | Indieningen",
+            "groups": "Groep | Groepen",
+            "testsSucceed": "Geslaagde testen",
+            "testsFail": "Gefaalde testen",
+            "submit": "Indienen"
         },
         "submission" : "Indienen"
     },
@@ -136,6 +168,9 @@
             "assistant": "Assistent",
             "teacher": "Professor"
         }
+    },
+    "helpers": {
+      "loading": "Laden...,"
     },
     "toasts": {
         "messages": {
@@ -203,9 +238,9 @@
         },
         "student": "Student",
         "teachers": {
-            "title": "Leerkrachten"
+            "title": "Proffen"
         },
-        "teacher": "Leerkracht"
+        "teacher": "Prof"
     },
     "primevue": {
         "accept": "Ja",

@@ -62,6 +62,7 @@ export const userData = {
 export const courseData = {
     id: 'course1_id',
     name: 'course1_name',
+    excerpt: 'course1_excerpt',
     description: 'course1_description',
     academic_startyear: 2024,
     parent_course: null,

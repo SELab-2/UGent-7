@@ -3,8 +3,8 @@ import Card from 'primevue/card';
 import { type User } from '@/types/users/User.ts';
 import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';
-import TeacherCourseAddButton from '@/components/teachers_assistants/add_button/TeacherCourseAddButton.vue';
-import AssistantCourseAddButton from '@/components/teachers_assistants/add_button/AssistantCourseAddButton.vue';
+import TeacherCourseAddButton from '@/components/teachers_assistants/button/TeacherCourseAddButton.vue';
+import AssistantCourseAddButton from '@/components/teachers_assistants/button/AssistantCourseAddButton.vue';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 
