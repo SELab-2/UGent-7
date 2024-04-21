@@ -70,7 +70,8 @@
             "visibility": "Project zichtbaar maken voor studenten",
             "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
             "docker_upload": "Upload een Dockerfile",
-            "submission_structure": "Structuur van hoe de indiening moet gebeuren"
+            "submission_structure": "Structuur van hoe de indiening moet gebeuren",
+            "noStudents": "Geen studenten in deze groep"
         },
         "submissions": {
             "title": "Inzendingen",
