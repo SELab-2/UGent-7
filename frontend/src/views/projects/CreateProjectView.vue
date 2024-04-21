@@ -138,7 +138,7 @@ const nodes = ref<TreeNode[]>([{
 
 // Function to load structure checks into nodes
 async function loadStructureChecks() {
-    await getStructureCheckByProject("44")
+    await getStructureCheckByProject("1235")
 
     console.log(structureChecks.value)
     // Initialize an empty array for the structure checks data
@@ -178,16 +178,19 @@ async function loadStructureChecks() {
         for (let i = 0; i < obl.length; i++) {
             const ext = obl[i];
 
-            let parent = structureChecksData;
-            let child = {
-                key: `${structureCheck.id}_${i}_obl`, // Use a unique identifier for the key
-                label: ext.extension,
-                children: [],
-                sort: 'obligated'
-            };
-            parent.push(child); // Add the child to the parent's children array
+            // Find the parent node corresponding to the current structure check
+            const parentStructureCheckNode = structureChecksData.find(node => node.key === `${structureCheck.id}_${i}`);
 
-        }
+            // If the parent node is found, add the obligated extension as its child
+            if (parentStructureCheckNode) {
+                parentStructureCheckNode.children?.push({
+                    key: `${structureCheck.id}_${i}_obl`, // Use a unique identifier for the key
+                    label: ext.extension,
+                    children: [],
+                    sort: 'obligated'
+                });
+            }
+}
     }
 
     console.log(structureChecksData)
