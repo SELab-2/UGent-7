@@ -11,8 +11,7 @@ import MultiSelect from 'primevue/multiselect';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import Body from '@/components/layout/Body.vue';
-import {ref, onMounted, watch, computed} from 'vue';
-import {ComposerTranslation, useI18n} from 'vue-i18n';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useUser } from '@/composables/services/users.service.ts';
 import { useStudents } from '@/composables/services/student.service.ts';
 import { useAssistant } from '@/composables/services/assistant.service.ts';
@@ -78,8 +77,8 @@ const columns = ref([
 ]);
 
 const roleOptions = computed(() => {
-    return roles.toSpliced(0, 1)
-})
+    return roles.toSpliced(0, 1);
+});
 
 const fillCreators = (): void => {
     for (let i = 1; i < roles.length; i++) {
