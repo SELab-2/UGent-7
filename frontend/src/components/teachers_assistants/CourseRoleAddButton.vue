@@ -78,7 +78,7 @@ async function joinCourse(newValue: string): Promise<void> {
 /**
  * Leave the course.
  */
-async function leaveCourse(oldValue: string): Promise<void> {
+async function leaveCourse(oldValue: string, showMessage: boolean = true): Promise<void> {
     try {
         // Depending on the old value, leave the course
         if (oldValue === 'assistant') {
@@ -87,10 +87,14 @@ async function leaveCourse(oldValue: string): Promise<void> {
             await teacherLeaveCourse(courseValue.value.id, props.user.id);
         }
 
-        addSuccessMessage(
-            t('toasts.messages.success'),
-            t('toasts.messages.courses.teachers_and_assistants.leave.success', [props.user.getFullName()]),
-        );
+        // Only show the message if parameter is set to true. This is because when changing roles assistant <=> teacher
+        // we don't want a leave as .. + join as .. message
+        if (showMessage) {
+            addSuccessMessage(
+                t('toasts.messages.success'),
+                t('toasts.messages.courses.teachers_and_assistants.leave.success', [props.user.getFullName()]),
+            );
+        }
 
         // Refresh the course data
         await refreshCourse();
@@ -112,7 +116,7 @@ watch(selectedRole, async (newValue, oldValue) => {
         } else {
             // If the oldValue is not empty, this means the user is changing roles. Remove the user from the old role
             if (oldValue !== '') {
-                await leaveCourse(oldValue);
+                await leaveCourse(oldValue, false);
             }
 
             // Add the user to the new role
