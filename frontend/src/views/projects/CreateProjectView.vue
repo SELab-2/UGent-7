@@ -114,12 +114,12 @@ interface TreeNode_struct {
         label: string;
         children?: TreeNode_struct[];
         key: string;
-        sort: string
+        sort: string;
+        parrent: TreeNode_struct|null;
     }
 
 // Define a method to compute the style for each node
 function getNodeStyle(node: TreeNode_struct) {
-    console.log('getNodeStyle called'); // Add logging to check if the function is called
     // Check if the node meets a certain condition, e.g., has a specific label
     if (node.sort === 'file') return {color: 'black'};
     if (node.sort === 'obligated') return {color: 'green'};
@@ -133,15 +133,14 @@ const nodes = ref<TreeNode_struct[]>([
     {
         key: '1',
         label: t('structure_checks.empty'),
-        sort:'empty'
+        sort:'empty',
+        parrent: null
     }
 ]);
 
 // Function to load structure checks into nodes
 async function loadStructureChecks() {
-    console.log("get structure checks pressed")
     await getStructureCheckByProject("1235") //3001
-    console.log(structureChecks.value)
 
     // Initialize an empty array for the result
     let result: TreeNode_struct[] = [];
@@ -154,23 +153,26 @@ async function loadStructureChecks() {
         let path = structureCheck.name;
         let obligated = structureCheck.obligated_extensions;
         let blocked = structureCheck.blocked_extensions;
-        // console.log(obligated);
-        // console.log(blocked);
+
         // Split the path into individual parts
+        let parrent: TreeNode_struct|null = null
         path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
             // Check if the current part doesn't exist in the hierarchy
             if (!r[name]) {
                 // Create a new node for the current part
                 r[name] = { result: [] };
                 // Add the node to the result array
-                r.result.push(
-                    {
-                        key: `${path}_{name}_${i}`,
-                        label: name,
-                        children: r[name].result,
-                        sort: 'file'
-                    }
-                );
+                const newNode: TreeNode_struct = {
+                    key: `${path}_${name}_${i}`,
+                    label: name,
+                    children: r[name].result,
+                    sort: 'file',
+                    parrent: parrent
+                };
+                parrent = newNode
+
+                // Add the node to the parent's children array
+                r.result.push(newNode);
                 
                 if (i === a.length - 1) {
                     if(obligated){
@@ -179,7 +181,8 @@ async function loadStructureChecks() {
                             r[name].result.push({
                                 key: `${path}_${name}_obligated_${index}`,
                                 label: ext.extension,
-                                sort: 'obligated'
+                                sort: 'obligated',
+                                parrent: newNode
                             });
                         });
                     }
@@ -189,7 +192,8 @@ async function loadStructureChecks() {
                             r[name].result.push({
                                 key: `${path}_${name}_blocked_${index}`,
                                 label: ext.extension,
-                                sort: 'blocked'
+                                sort: 'blocked',
+                                parrent: newNode
                             });
                         });
                     }
@@ -204,7 +208,7 @@ async function loadStructureChecks() {
     nodes.value = result[0].children;
 }
 
-const editedNode = ref(null);
+const editedNode = ref<TreeNode_struct|null>(null);
 const editedNodeName = ref('');
 const nodeTypes = [
     { label: 'File', value: 'file' },
@@ -215,33 +219,59 @@ const editedNodeType = ref(nodeTypes[0].value);
 
 const onNodeSelect = (event) => {
     editedNode.value = event;
-    console.log(editedNode.value)
 };
 
 const editSelectedNode = () => {
-    if (editedNode.value.sort != "empty"){
+    if (editedNode.value && editedNode.value.sort != "empty"){
         editedNode.value.label = editedNodeName.value;
     }
-    console.log(editedNode.value); // Log the selected TreeNode
 };
 
 let counter = 0;
 const addSelectedNode = () => {
-    if (editedNode.value.sort != "empty"){
-        counter += 1;
-        let node = {
-            key: `${editedNode.value.label}_${counter}_obligated_${editedNodeName.value}`,
-            label: editedNodeName.value,
-            sort: editedNodeType.value.value,
-            children: []
+    if(editedNode.value && editedNode.value.children){
+        if (editedNode.value.sort != "empty"){
+            counter += 1;
+            let node: TreeNode_struct = {
+                key: `${editedNode.value.label}_${counter}_obligated_${editedNodeName.value}`,
+                label: editedNodeName.value,
+                sort: editedNodeType.value.value,
+                children: [],
+                parrent: editedNode.value
+            }
+            editedNode.value.children.push(node);
+            editedNode.value.children.sort((a: any, b: any) => {
+                const order = { 'obligated': 0, 'blocked': 1, 'file': 2 };
+                return order[a.sort] - order[b.sort];
+            });
         }
-        editedNode.value.children.push(node);
-        editedNode.value.children.sort((a: any, b: any) => {
-            const order = { 'obligated': 0, 'blocked': 1, 'file': 2 };
-            return order[a.sort] - order[b.sort];
-        });
     }
-    console.log(editedNode.value); // Log the selected TreeNode
+};
+
+const deleteSelectedNode = () => {
+    if(editedNode.value){
+        if (editedNode.value.sort != "empty"){
+            // Find the index of the selected node in the parent's children array
+            if(editedNode.value.parrent){
+                const index = editedNode.value.parrent.children.findIndex(child => child === editedNode.value);
+
+                // If the selected node is found in the parent's children array
+                if (index !== -1) {
+                    // Remove the selected node from the parent's children array
+                    editedNode.value.parrent.children.splice(index, 1);
+                }
+            }else{
+                console.log("root")
+                const index = nodes.value.findIndex(child => child === editedNode.value);
+
+                // If the selected node is found in the parent's children array
+                if (index !== -1) {
+                    // Remove the selected node from the parent's children array
+                    nodes.value.splice(index, 1);
+                }
+            }
+        }
+    }
 };
 
 // function addNode(path: string, extension: string, blocked_ext: boolean){
@@ -484,6 +514,15 @@ const addSelectedNode = () => {
                             icon="pi pi-refresh"
                             iconPos="right"
                             @click="addSelectedNode"
+                            rounded
+                        />
+
+                        <Button
+                            label="delete node"
+                            type="button"
+                            icon="pi pi-refresh"
+                            iconPos="right"
+                            @click="deleteSelectedNode"
                             rounded
                         />
 
