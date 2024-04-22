@@ -19,7 +19,7 @@ const { t } = useI18n();
             <div class="flex justify-content-between">
                 <h2 class="text-primary mt-2 mb-0 text-xl">{{ props.userValue.getFullName() }}</h2>
 
-                <!-- Display the delete button on a detail card, only if the user is not the last teacher in the course -->
+                <!-- Display the delete button on a detail card, only if the user is not the last teacher of the course -->
                 <LeaveCourseButton
                     :user="props.userValue"
                     :course="course"
@@ -36,7 +36,7 @@ const { t } = useI18n();
         <template #content>
             {{ props.userValue.email }}
         </template>
-        <!-- Display the role switch button, only if the card is not in detail mode, and the user is not the last teacher in the course -->
+        <!-- Display the role switch button, only if the card is not in detail mode, and the user is not the last teacher of the course -->
         <template
             #footer
             v-if="!props.detail && !(course.teachers?.length == 1 && course.teachers[0].id == props.userValue.id)"

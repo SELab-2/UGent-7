@@ -49,7 +49,7 @@ async function leaveCourse(): Promise<void> {
     }
 }
 
-/* Refreshes the course data by updating the teachers */
+/* Refreshes the course data by updating the teachers/assistants */
 async function refreshCourse(): Promise<void> {
     // Get the new teachers and assistants
     await getTeachersByCourse(courseValue.value.id);

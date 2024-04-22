@@ -127,7 +127,7 @@ watch(selectedRole, async (newValue, oldValue) => {
     }
 });
 
-/* Refreshes the course data by updating the teachers */
+/* Refreshes the course data by updating the teachers/assistants */
 async function refreshCourse(): Promise<void> {
     // Get the new teachers and assistants
     await getTeachersByCourse(courseValue.value.id);
@@ -154,7 +154,7 @@ async function refreshCourse(): Promise<void> {
 <style scoped lang="scss">
 .p-selectbutton {
     display: flex;
-    justify-content: center; // Aligns items to the right
+    justify-content: center;
     height: 90%;
     max-inline-size: 300px;
 }
