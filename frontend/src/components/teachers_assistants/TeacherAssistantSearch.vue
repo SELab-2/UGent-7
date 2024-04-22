@@ -10,9 +10,7 @@ import TeacherAssistantList from './TeacherAssistantList.vue';
 import { type Course } from '@/types/Course.ts';
 import { onMounted } from 'vue';
 import { useUser } from '@/composables/services/users.service';
-import { useAuthStore } from '@/store/authentication.store.ts';
 import { useFaculty } from '@/composables/services/faculty.service.ts';
-import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
@@ -23,7 +21,7 @@ import { getUserFilters } from '@/types/filter/Filter.ts';
 const { t } = useI18n();
 const { query } = useRoute();
 const { faculties, getFaculties } = useFaculty();
-const { users, searchUsers, pagination } = useUser();
+const { searchUsers, pagination } = useUser();
 const { onPaginate, resetPagination, page, first, pageSize } = usePaginator();
 const { filter, onFilter } = useFilter(getUserFilters(query));
 
@@ -88,7 +86,7 @@ onMounted(async () => {
         </div>
         <div class="col-12 xl:col-9">
             <TeacherAssistantList :users="pagination?.results ?? null" :cols="3" :course="props.course" :detail="false" />
-            <Paginator :rows="pageSize" :total-records="users?.length" :first="first" />
+            <Paginator :rows="pageSize" :total-records="pagination?.count" v-model:first="first" />
         </div>
     </div>
 </template>

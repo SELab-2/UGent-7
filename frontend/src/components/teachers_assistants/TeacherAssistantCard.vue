@@ -33,8 +33,8 @@ const { t } = useI18n();
         <template #content>
             {{ props.userValue.email }}
         </template>
-        <!-- Display the role switch button, only if the card is not in detail mode -->
-        <template #footer v-if="!props.detail">
+        <!-- Display the role switch button, only if the card is not in detail mode, and the user is not the last teacher in the course -->
+        <template #footer v-if="!props.detail && ! (course.teachers?.length == 1 && course.teachers[0].id == props.userValue.id)">
             <CourseRoleAddButton :user="props.userValue" :course="course" />
         </template>
     </Card>
