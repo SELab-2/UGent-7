@@ -23,7 +23,10 @@ const { t } = useI18n();
                 <LeaveCourseButton
                     :user="props.userValue"
                     :course="course"
-                    v-if="props.detail && ! (props.userValue.getRole() == 'types.roles.teacher' && course.teachers?.length == 1)"
+                    v-if="
+                        props.detail &&
+                        !(props.userValue.getRole() == 'types.roles.teacher' && course.teachers?.length == 1)
+                    "
                 />
             </div>
         </template>
@@ -34,7 +37,10 @@ const { t } = useI18n();
             {{ props.userValue.email }}
         </template>
         <!-- Display the role switch button, only if the card is not in detail mode, and the user is not the last teacher in the course -->
-        <template #footer v-if="!props.detail && ! (course.teachers?.length == 1 && course.teachers[0].id == props.userValue.id)">
+        <template
+            #footer
+            v-if="!props.detail && !(course.teachers?.length == 1 && course.teachers[0].id == props.userValue.id)"
+        >
             <CourseRoleAddButton :user="props.userValue" :course="course" />
         </template>
     </Card>

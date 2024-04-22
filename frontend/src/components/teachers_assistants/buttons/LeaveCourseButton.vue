@@ -38,7 +38,7 @@ async function leaveCourse(): Promise<void> {
             t('toasts.messages.success'),
             t('toasts.messages.courses.teachers_and_assistants.leave.success', [props.user.getFullName()]),
         );
-        
+
         // Refresh the course data
         await refreshCourse();
     } catch (error) {
@@ -70,6 +70,4 @@ async function refreshCourse(): Promise<void> {
     />
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

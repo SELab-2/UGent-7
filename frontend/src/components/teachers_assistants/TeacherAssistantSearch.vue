@@ -85,7 +85,12 @@ onMounted(async () => {
             </Accordion>
         </div>
         <div class="col-12 xl:col-9">
-            <TeacherAssistantList :users="pagination?.results ?? null" :cols="3" :course="props.course" :detail="false" />
+            <TeacherAssistantList
+                :users="pagination?.results ?? null"
+                :cols="3"
+                :course="props.course"
+                :detail="false"
+            />
             <Paginator :rows="pageSize" :total-records="pagination?.count" v-model:first="first" />
         </div>
     </div>
