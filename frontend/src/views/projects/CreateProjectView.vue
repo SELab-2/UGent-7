@@ -236,6 +236,10 @@ const addSelectedNode = () => {
             children: []
         }
         editedNode.value.children.push(node);
+        editedNode.value.children.sort((a: any, b: any) => {
+            const order = { 'obligated': 0, 'blocked': 1, 'file': 2 };
+            return order[a.sort] - order[b.sort];
+        });
     }
     console.log(editedNode.value); // Log the selected TreeNode
 };
