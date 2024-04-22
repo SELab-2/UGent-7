@@ -7,6 +7,7 @@ import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import InputText from 'primevue/inputtext';
 import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
+import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
 import Tree from 'primevue/tree';
@@ -19,7 +20,6 @@ import { useStructureCheck } from '@/composables/services/structure_check.servic
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { useCourses } from '@/composables/services/course.service';
-import { StructureCheck } from '@/types/StructureCheck';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -110,14 +110,6 @@ async function submitProject(): Promise<void> {
     }
 }
 
-// interface TreeNode {
-//   key: string;
-//   label: string;
-//   children?: TreeNode[]; // Optional if the node has children
-//   sort: string;
-//   // Additional properties as needed
-// }
-
 interface TreeNode_struct {
         label: string;
         children?: TreeNode_struct[];
@@ -141,13 +133,15 @@ const nodes = ref<TreeNode_struct[]>([
     {
         key: '1',
         label: t('structure_checks.empty'),
-        sort:'file'
+        sort:'empty'
     }
 ]);
 
 // Function to load structure checks into nodes
 async function loadStructureChecks() {
-    await getStructureCheckByProject("1235")
+    console.log("get structure checks pressed")
+    await getStructureCheckByProject("1235") //3001
+    console.log(structureChecks.value)
 
     // Initialize an empty array for the result
     let result: TreeNode_struct[] = [];
@@ -160,8 +154,8 @@ async function loadStructureChecks() {
         let path = structureCheck.name;
         let obligated = structureCheck.obligated_extensions;
         let blocked = structureCheck.blocked_extensions;
-        console.log(obligated);
-        console.log(blocked);
+        // console.log(obligated);
+        // console.log(blocked);
         // Split the path into individual parts
         path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
             // Check if the current part doesn't exist in the hierarchy
@@ -169,28 +163,36 @@ async function loadStructureChecks() {
                 // Create a new node for the current part
                 r[name] = { result: [] };
                 // Add the node to the result array
-                r.result.push({key: `${path}_{name}_${i}`, label: name, children: r[name].result, sort: 'file' });
+                r.result.push(
+                    {
+                        key: `${path}_{name}_${i}`,
+                        label: name,
+                        children: r[name].result,
+                        sort: 'file'
+                    }
+                );
                 
-                if (i === a.length - 1 && obligated) {
-                    // If it's the deepest path and there are obligated extensions, add them as children
-                    obligated.forEach((ext: any, index: number) => {
-                        r[name].result.push({
-                            key: `${path}_${name}_obligated_${index}`,
-                            label: ext.extension,
-                            sort: 'obligated'
+                if (i === a.length - 1) {
+                    if(obligated){
+                        // If it's the deepest path and there are obligated extensions, add them as children
+                        obligated.forEach((ext: any, index: number) => {
+                            r[name].result.push({
+                                key: `${path}_${name}_obligated_${index}`,
+                                label: ext.extension,
+                                sort: 'obligated'
+                            });
                         });
-                    });
-                }
-
-                if (i === a.length - 1 && blocked) {
-                    // If it's the deepest path and there are blocked extensions, add them as children
-                    blocked.forEach((ext: any, index: number) => {
-                        r[name].result.push({
-                            key: `${path}_${name}_blocked_${index}`,
-                            label: ext.extension,
-                            sort: 'blocked'
+                    }
+                    if(blocked){
+                        // If it's the deepest path and there are blocked extensions, add them as children
+                        blocked.forEach((ext: any, index: number) => {
+                            r[name].result.push({
+                                key: `${path}_${name}_blocked_${index}`,
+                                label: ext.extension,
+                                sort: 'blocked'
+                            });
                         });
-                    });
+                    }
                 }
             }
             // Return the current node
@@ -201,6 +203,110 @@ async function loadStructureChecks() {
     // Assign the fetched data to the nodes
     nodes.value = result[0].children;
 }
+
+const editedNode = ref(null);
+const editedNodeName = ref('');
+const nodeTypes = [
+    { label: 'File', value: 'file' },
+    { label: 'Obligated', value: 'obligated' },
+    { label: 'Blocked', value: 'blocked' }
+];
+const editedNodeType = ref(nodeTypes[0].value);
+
+const onNodeSelect = (event) => {
+    editedNode.value = event;
+    console.log(editedNode.value)
+};
+
+const editSelectedNode = () => {
+    if (editedNode.value.sort != "empty"){
+        editedNode.value.label = editedNodeName.value;
+    }
+    console.log(editedNode.value); // Log the selected TreeNode
+};
+
+let counter = 0;
+const addSelectedNode = () => {
+    if (editedNode.value.sort != "empty"){
+        counter += 1;
+        let node = {
+            key: `${editedNode.value.label}_${counter}_obligated_${editedNodeName.value}`,
+            label: editedNodeName.value,
+            sort: editedNodeType.value.value,
+            children: []
+        }
+        editedNode.value.children.push(node);
+    }
+    console.log(editedNode.value); // Log the selected TreeNode
+};
+
+// function addNode(path: string, extension: string, blocked_ext: boolean){
+//     // Initialize an empty array for the result
+//     let result: TreeNode_struct[] = nodes.value;
+
+//     // Initialize a level object with the result array
+//     let level = { result };
+
+     
+//     let obligated = [extension];
+//     let blocked = [extension];
+//     if(blocked_ext){
+//         obligated = [];
+//     }else{
+//         blocked = [];
+//     }
+//     console.log(obligated)
+//     console.log(blocked)
+//     console.log(path)
+//     // console.log(obligated);
+//     // console.log(blocked);
+//     // Split the path into individual parts
+//     path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
+//         // Check if the current part doesn't exist in the hierarchy
+//         if (!r[name]) {
+//             // Create a new node for the current part
+//             r[name] = { result: [] };
+//             // Add the node to the result array
+//             r.result.push(
+//                 {
+//                     key: `${path}_{name}_${i}`,
+//                     label: name,
+//                     children: r[name].result,
+//                     sort: 'file'
+//                 }
+//             );
+            
+//             if (i === a.length - 1) {
+//                 if(obligated){
+//                     // If it's the deepest path and there are obligated extensions, add them as children
+//                     obligated.forEach((ext: any, index: number) => {
+//                         r[name].result.push({
+//                             key: `${path}_${name}_obligated_${index}`,
+//                             label: ext,
+//                             sort: 'obligated'
+//                         });
+//                     });
+//                 }
+//                 if(blocked){
+//                     // If it's the deepest path and there are blocked extensions, add them as children
+//                     blocked.forEach((ext: any, index: number) => {
+//                         r[name].result.push({
+//                             key: `${path}_${name}_blocked_${index}`,
+//                             label: ext,
+//                             sort: 'blocked'
+//                         });
+//                     });
+//                 }
+//             }
+//         }
+//         // Return the current node
+//         return r[name];
+//     }, level);
+
+//     console.log(result)
+//     // Assign the fetched data to the nodes
+//     nodes.value = result;
+// }
 </script>
 
 <template>
@@ -343,7 +449,7 @@ async function loadStructureChecks() {
 
                     <!-- tree view for structure checks -->
                     <div>
-                        <Tree :value="nodes" class="w-full md:w-30rem">
+                        <Tree :value="nodes" class="w-full md:w-30rem" @node-select="onNodeSelect" selectionMode="single">
                             <template #default="node">
                                 <b :style="getNodeStyle(node.node)">{{ node.node.label }}</b>
                             </template>
@@ -356,6 +462,37 @@ async function loadStructureChecks() {
                             @click="loadStructureChecks"
                             rounded
                         />
+
+                        <InputText v-model="editedNodeName" placeholder="Edit Node Name" />
+
+                        <Button
+                            label="Edit node"
+                            type="button"
+                            icon="pi pi-refresh"
+                            iconPos="right"
+                            @click="editSelectedNode"
+                            rounded
+                        />
+
+                        <Button
+                            label="add node"
+                            type="button"
+                            icon="pi pi-refresh"
+                            iconPos="right"
+                            @click="addSelectedNode"
+                            rounded
+                        />
+
+                        <Dropdown v-model="editedNodeType" :options="nodeTypes" />
+
+                        <!-- <Button
+                            label="Add Structure Checks"
+                            type="button"
+                            icon="pi pi-refresh"
+                            iconPos="right"
+                            @click="addNode('stop','jpg', true)"
+                            rounded
+                        /> -->
                     </div>
                 </div>
             </div>
