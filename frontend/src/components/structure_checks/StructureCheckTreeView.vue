@@ -62,6 +62,12 @@ async function loadStructureChecks() {
         let obligated = structureCheck.obligated_extensions;
         let blocked = structureCheck.blocked_extensions;
 
+        if (path === '.') {
+            path = '';
+        } else if (!path.startsWith('/')) {
+            path = '/' + path;
+        }
+
         // Split the path into individual parts
         let parrent: TreeNode_struct|null = null
         path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
@@ -113,7 +119,9 @@ async function loadStructureChecks() {
     });
 
     // Assign the fetched data to the nodes
-    nodes.value = result[0].children || [];
+    if (result[0]){
+        nodes.value = result[0].children || [];
+    }
 }
 
 const editedNode = ref<TreeNode_struct|null>(null);
@@ -200,12 +208,13 @@ const deleteSelectedNode = () => {
 </script>
 
 <template>
-        <Tree :value="nodes" class="w-full md:w-30rem" @node-select="onNodeSelect" selectionMode="single">
+        <Tree v-if="nodes && nodes.length" :value="nodes" class="w-full md:w-30rem" @node-select="onNodeSelect" selectionMode="single">
             <template #default="node">
                 <b :style="getNodeStyle(node.node)">{{ node.node.label }}</b>
             </template>
         </Tree>
         <Button
+            v-if="$props.editable"
             :label="t('structure_checks.reload')"
             type="button"
             icon="pi pi-refresh"

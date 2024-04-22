@@ -7,6 +7,7 @@ import ProjectInfo from '@/components/projects/ProjectInfo.vue';
 import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
 import { watch } from 'vue';
 import ProjectMeter from '@/components/projects/ProjectMeter.vue';
+import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue';
 
 /* Props */
 const props = defineProps<{
@@ -54,6 +55,8 @@ watch(
         <div class="col-12 md:col-4">
             <ProjectMeter :submission-status="submissionStatus" />
         </div>
+        <StructureCheckTreeView v-if="props.project" :projectId="`${props.project.id}`"  :editable=false>
+        </StructureCheckTreeView>
     </div>
 </template>
 

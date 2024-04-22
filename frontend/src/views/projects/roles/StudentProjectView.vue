@@ -10,6 +10,7 @@ import { useGroup } from '@/composables/services/group.service.ts';
 import { type Group } from '@/types/Group.ts';
 import { type Student } from '@/types/users/Student.ts';
 import { type Project } from '@/types/Project.ts';
+import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue';
 
 /* Props */
 const props = defineProps<{
@@ -88,6 +89,8 @@ async function loadStudentGroups(): Promise<void> {
                 <Skeleton height="30rem" />
             </template>
         </div>
+        <StructureCheckTreeView v-if="props.project" :projectId="`${props.project.id}`"  :editable=false>
+        </StructureCheckTreeView>
     </div>
 </template>
 
