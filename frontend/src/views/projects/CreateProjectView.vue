@@ -118,49 +118,88 @@ async function submitProject(): Promise<void> {
 //   // Additional properties as needed
 // }
 
-interface TreeNode {
-        [key: string]: TreeNode | undefined;
+interface TreeNode_struct {
+        label: string;
+        children?: TreeNode_struct[];
+        key: string;
+        sort: string
     }
 
 // Define a method to compute the style for each node
-function getNodeStyle(node: TreeNode) {
+function getNodeStyle(node: TreeNode_struct) {
     console.log('getNodeStyle called'); // Add logging to check if the function is called
     // Check if the node meets a certain condition, e.g., has a specific label
-    // if (node.sort === 'file') return {color: 'black'};
-    // if (node.sort === 'obligated') return {color: 'green'};
-    // if (node.sort === 'blocked') return {color: 'red'};
+    if (node.sort === 'file') return {color: 'black'};
+    if (node.sort === 'obligated') return {color: 'green'};
+    if (node.sort === 'blocked') return {color: 'red'};
     // If no condition is met, return an empty object
     return {};
 }
 
-        // {
-        //     key: '1',
-        //     label: t('structure_checks.empty'),
-        //     sort:'file'
-        // }
 // Define tree data as ref
-const nodes = ref<TreeNode>();
+const nodes = ref<TreeNode_struct[]>([
+    {
+        key: '1',
+        label: t('structure_checks.empty'),
+        sort:'file'
+    }
+]);
 
 // Function to load structure checks into nodes
 async function loadStructureChecks() {
     await getStructureCheckByProject("1235")
 
-    console.log(structureChecks.value)
-    // Initialize an empty array for the structure checks data
-    const structureCheckNames: string[] = (structureChecks.value || []).map(check => check.name);
-    console.log(structureCheckNames)
+    // Initialize an empty array for the result
+    let result: TreeNode_struct[] = [];
 
-    const obj: TreeNode = {};
-    structureCheckNames.forEach(path => {
-        path.split('/').reduce((r: TreeNode, e: string) => {
-            return r[e] || (r[e] = {});
-        }, obj);
+    // Initialize a level object with the result array
+    let level = { result };
+
+    // Iterate over each path
+    (structureChecks.value||[]).forEach(structureCheck => {
+        let path = structureCheck.name;
+        let obligated = structureCheck.obligated_extensions;
+        let blocked = structureCheck.blocked_extensions;
+        console.log(obligated);
+        console.log(blocked);
+        // Split the path into individual parts
+        path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
+            // Check if the current part doesn't exist in the hierarchy
+            if (!r[name]) {
+                // Create a new node for the current part
+                r[name] = { result: [] };
+                // Add the node to the result array
+                r.result.push({key: `${path}_{name}_${i}`, label: name, children: r[name].result, sort: 'file' });
+                
+                if (i === a.length - 1 && obligated) {
+                    // If it's the deepest path and there are obligated extensions, add them as children
+                    obligated.forEach((ext: any, index: number) => {
+                        r[name].result.push({
+                            key: `${path}_${name}_obligated_${index}`,
+                            label: ext.extension,
+                            sort: 'obligated'
+                        });
+                    });
+                }
+
+                if (i === a.length - 1 && blocked) {
+                    // If it's the deepest path and there are blocked extensions, add them as children
+                    blocked.forEach((ext: any, index: number) => {
+                        r[name].result.push({
+                            key: `${path}_${name}_blocked_${index}`,
+                            label: ext.extension,
+                            sort: 'blocked'
+                        });
+                    });
+                }
+            }
+            // Return the current node
+            return r[name];
+        }, level);
     });
 
-    console.log(obj);
-
     // Assign the fetched data to the nodes
-    nodes.value = {};
+    nodes.value = result[0].children;
 }
 </script>
 
