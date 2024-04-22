@@ -2,9 +2,11 @@ import { type LocationQuery } from 'vue-router';
 
 export type UserFilter = {
     id: string;
+    name: string;
     username: string;
     email: string;
     roles: string[];
+    faculties: string[];
 } & Filter;
 
 export type CourseFilter = {
@@ -26,13 +28,19 @@ export function getUserFilters(query: LocationQuery): UserFilter {
     const filters: UserFilter = {
         search: query.search?.toString() ?? '',
         id: query.id?.toString() ?? '',
+        name: query.name?.toString() ?? '',
         username: query.username?.toString() ?? '',
         email: query.email?.toString() ?? '',
         roles: [],
+        faculties: [],
     };
 
     if (query.roles !== undefined) {
         filters.roles = getQueryList(query.roles as string | string[]);
+    }
+
+    if (query.faculties !== undefined) {
+        filters.faculties = getQueryList(query.faculties as string | string[]);
     }
 
     return filters;

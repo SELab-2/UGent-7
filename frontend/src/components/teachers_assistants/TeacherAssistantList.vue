@@ -16,6 +16,7 @@ withDefaults(defineProps<Props>(), {
     cols: 4,
     detail: true,
 });
+
 </script>
 
 <template>
