@@ -4,19 +4,17 @@ import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
+import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue'
 import InputText from 'primevue/inputtext';
 import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
-import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
-import Tree from 'primevue/tree';
-import { reactive, computed, ref } from 'vue';
+import { reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Project } from '@/types/Project';
 import { useProject } from '@/composables/services/project.service';
-import { useStructureCheck } from '@/composables/services/structure_check.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { useCourses } from '@/composables/services/course.service';
@@ -29,7 +27,6 @@ const { params } = useRoute();
 /* Service injection */
 const { createProject } = useProject();
 const { course, getCourseByID } = useCourses();
-const { structureChecks, getStructureCheckByProject} = useStructureCheck();
 
 
 /* Form content */
@@ -109,238 +106,8 @@ async function submitProject(): Promise<void> {
         await push({ name: 'dashboard' });
     }
 }
-
-interface TreeNode_struct {
-        label: string;
-        children?: TreeNode_struct[];
-        key: string;
-        sort: string;
-        parrent: TreeNode_struct|null;
-    }
-
-// Define a method to compute the style for each node
-function getNodeStyle(node: TreeNode_struct) {
-    // Check if the node meets a certain condition, e.g., has a specific label
-    if (node.sort === 'file') return {color: 'black'};
-    if (node.sort === 'obligated') return {color: 'green'};
-    if (node.sort === 'blocked') return {color: 'red'};
-    // If no condition is met, return an empty object
-    return {};
-}
-
-// Define tree data as ref
-const nodes = ref<TreeNode_struct[]>([
-    {
-        key: '1',
-        label: t('structure_checks.empty'),
-        sort:'empty',
-        parrent: null
-    }
-]);
-
-// Function to load structure checks into nodes
-async function loadStructureChecks() {
-    await getStructureCheckByProject("1235") //3001
-
-    // Initialize an empty array for the result
-    let result: TreeNode_struct[] = [];
-
-    // Initialize a level object with the result array
-    let level = { result };
-
-    // Iterate over each path
-    (structureChecks.value||[]).forEach(structureCheck => {
-        let path = structureCheck.name;
-        let obligated = structureCheck.obligated_extensions;
-        let blocked = structureCheck.blocked_extensions;
-
-        // Split the path into individual parts
-        let parrent: TreeNode_struct|null = null
-        path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
-            // Check if the current part doesn't exist in the hierarchy
-            if (!r[name]) {
-                // Create a new node for the current part
-                r[name] = { result: [] };
-                // Add the node to the result array
-                const newNode: TreeNode_struct = {
-                    key: `${path}_${name}_${i}`,
-                    label: name,
-                    children: r[name].result,
-                    sort: 'file',
-                    parrent: parrent
-                };
-                parrent = newNode
-
-                // Add the node to the parent's children array
-                r.result.push(newNode);
-                
-                if (i === a.length - 1) {
-                    if(obligated){
-                        // If it's the deepest path and there are obligated extensions, add them as children
-                        obligated.forEach((ext: any, index: number) => {
-                            r[name].result.push({
-                                key: `${path}_${name}_obligated_${index}`,
-                                label: ext.extension,
-                                sort: 'obligated',
-                                parrent: newNode
-                            });
-                        });
-                    }
-                    if(blocked){
-                        // If it's the deepest path and there are blocked extensions, add them as children
-                        blocked.forEach((ext: any, index: number) => {
-                            r[name].result.push({
-                                key: `${path}_${name}_blocked_${index}`,
-                                label: ext.extension,
-                                sort: 'blocked',
-                                parrent: newNode
-                            });
-                        });
-                    }
-                }
-            }
-            // Return the current node
-            return r[name];
-        }, level);
-    });
-
-    // Assign the fetched data to the nodes
-    nodes.value = result[0].children;
-}
-
-const editedNode = ref<TreeNode_struct|null>(null);
-const editedNodeName = ref('');
-const nodeTypes = [
-    { label: 'File', value: 'file' },
-    { label: 'Obligated', value: 'obligated' },
-    { label: 'Blocked', value: 'blocked' }
-];
-const editedNodeType = ref(nodeTypes[0].value);
-
-const onNodeSelect = (event) => {
-    editedNode.value = event;
-};
-
-const editSelectedNode = () => {
-    if (editedNode.value && editedNode.value.sort != "empty"){
-        editedNode.value.label = editedNodeName.value;
-    }
-};
-
-let counter = 0;
-const addSelectedNode = () => {
-    if(editedNode.value && editedNode.value.children){
-        if (editedNode.value.sort != "empty"){
-            counter += 1;
-            let node: TreeNode_struct = {
-                key: `${editedNode.value.label}_${counter}_obligated_${editedNodeName.value}`,
-                label: editedNodeName.value,
-                sort: editedNodeType.value.value,
-                children: [],
-                parrent: editedNode.value
-            }
-            editedNode.value.children.push(node);
-            editedNode.value.children.sort((a: any, b: any) => {
-                const order = { 'obligated': 0, 'blocked': 1, 'file': 2 };
-                return order[a.sort] - order[b.sort];
-            });
-        }
-    }
-};
-
-const deleteSelectedNode = () => {
-    if(editedNode.value){
-        if (editedNode.value.sort != "empty"){
-            // Find the index of the selected node in the parent's children array
-            if(editedNode.value.parrent){
-                const index = editedNode.value.parrent.children.findIndex(child => child === editedNode.value);
-
-                // If the selected node is found in the parent's children array
-                if (index !== -1) {
-                    // Remove the selected node from the parent's children array
-                    editedNode.value.parrent.children.splice(index, 1);
-                }
-            }else{
-                console.log("root")
-                const index = nodes.value.findIndex(child => child === editedNode.value);
-
-                // If the selected node is found in the parent's children array
-                if (index !== -1) {
-                    // Remove the selected node from the parent's children array
-                    nodes.value.splice(index, 1);
-                }
-            }
-        }
-    }
-};
-
-// function addNode(path: string, extension: string, blocked_ext: boolean){
-//     // Initialize an empty array for the result
-//     let result: TreeNode_struct[] = nodes.value;
-
-//     // Initialize a level object with the result array
-//     let level = { result };
-
-     
-//     let obligated = [extension];
-//     let blocked = [extension];
-//     if(blocked_ext){
-//         obligated = [];
-//     }else{
-//         blocked = [];
-//     }
-//     console.log(obligated)
-//     console.log(blocked)
-//     console.log(path)
-//     // console.log(obligated);
-//     // console.log(blocked);
-//     // Split the path into individual parts
-//     path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
-//         // Check if the current part doesn't exist in the hierarchy
-//         if (!r[name]) {
-//             // Create a new node for the current part
-//             r[name] = { result: [] };
-//             // Add the node to the result array
-//             r.result.push(
-//                 {
-//                     key: `${path}_{name}_${i}`,
-//                     label: name,
-//                     children: r[name].result,
-//                     sort: 'file'
-//                 }
-//             );
-            
-//             if (i === a.length - 1) {
-//                 if(obligated){
-//                     // If it's the deepest path and there are obligated extensions, add them as children
-//                     obligated.forEach((ext: any, index: number) => {
-//                         r[name].result.push({
-//                             key: `${path}_${name}_obligated_${index}`,
-//                             label: ext,
-//                             sort: 'obligated'
-//                         });
-//                     });
-//                 }
-//                 if(blocked){
-//                     // If it's the deepest path and there are blocked extensions, add them as children
-//                     blocked.forEach((ext: any, index: number) => {
-//                         r[name].result.push({
-//                             key: `${path}_${name}_blocked_${index}`,
-//                             label: ext,
-//                             sort: 'blocked'
-//                         });
-//                     });
-//                 }
-//             }
-//         }
-//         // Return the current node
-//         return r[name];
-//     }, level);
-
-//     console.log(result)
-//     // Assign the fetched data to the nodes
-//     nodes.value = result;
-// }
+let projectId:string = "1235"
+let editable: boolean = false
 </script>
 
 <template>
@@ -483,59 +250,9 @@ const deleteSelectedNode = () => {
 
                     <!-- tree view for structure checks -->
                     <div>
-                        <Tree :value="nodes" class="w-full md:w-30rem" @node-select="onNodeSelect" selectionMode="single">
-                            <template #default="node">
-                                <b :style="getNodeStyle(node.node)">{{ node.node.label }}</b>
-                            </template>
-                        </Tree>
-                        <Button
-                            label="Load Structure Checks"
-                            type="button"
-                            icon="pi pi-refresh"
-                            iconPos="right"
-                            @click="loadStructureChecks"
-                            rounded
-                        />
+                        <StructureCheckTreeView :projectId=projectId  :editable=editable>
 
-                        <InputText v-model="editedNodeName" placeholder="Edit Node Name" />
-
-                        <Button
-                            label="Edit node"
-                            type="button"
-                            icon="pi pi-refresh"
-                            iconPos="right"
-                            @click="editSelectedNode"
-                            rounded
-                        />
-
-                        <Button
-                            label="add node"
-                            type="button"
-                            icon="pi pi-refresh"
-                            iconPos="right"
-                            @click="addSelectedNode"
-                            rounded
-                        />
-
-                        <Button
-                            label="delete node"
-                            type="button"
-                            icon="pi pi-refresh"
-                            iconPos="right"
-                            @click="deleteSelectedNode"
-                            rounded
-                        />
-
-                        <Dropdown v-model="editedNodeType" :options="nodeTypes" />
-
-                        <!-- <Button
-                            label="Add Structure Checks"
-                            type="button"
-                            icon="pi pi-refresh"
-                            iconPos="right"
-                            @click="addNode('stop','jpg', true)"
-                            rounded
-                        /> -->
+                        </StructureCheckTreeView>
                     </div>
                 </div>
             </div>

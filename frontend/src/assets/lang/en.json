@@ -1,4 +1,10 @@
 {
+    "structure_checks": {
+        "edit": "Edit node",
+        "add": "Add node",
+        "delete": "Delete node",
+        "reload": "reload Structure Checks"
+    },
     "layout": {
         "header": {
             "logo": "Ghent University logo",

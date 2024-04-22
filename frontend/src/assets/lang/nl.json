@@ -1,4 +1,10 @@
 {
+    "structure_checks": {
+        "edit": "pas node aan",
+        "add": "voeg node toe",
+        "delete": "verwijder node",
+        "reload": "herlaad Structure Checks"
+    },
     "layout": {
         "header": {
             "logo": "Logo van de Universiteit Gent",
