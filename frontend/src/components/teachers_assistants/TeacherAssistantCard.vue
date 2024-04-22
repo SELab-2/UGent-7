@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
-import CourseRoleAddButton from '@/components/teachers_assistants/CourseRoleAddButton.vue';
+import CourseRoleAddButton from '@/components/teachers_assistants/buttons/CourseRoleAddButton.vue';
+import LeaveCourseButton from '@/components/teachers_assistants/buttons/LeaveCourseButton.vue';
 import { type User } from '@/types/users/User.ts';
 import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';
@@ -15,15 +16,24 @@ const { t } = useI18n();
 <template>
     <Card class="course-card">
         <template #title>
-            <h2 class="text-primary m-0 text-xl">{{ props.userValue.getFullName() }}</h2>
+            <div class="flex justify-content-between">
+                <h2 class="text-primary mt-2 mb-0 text-xl">{{ props.userValue.getFullName() }}</h2>
+
+                <!-- Display the delete button on a detail card, only if the user is not the last teacher in the course -->
+                <LeaveCourseButton
+                    :user="props.userValue"
+                    :course="course"
+                    v-if="props.detail && ! (props.userValue.getRole() == 'types.roles.teacher' && course.teachers?.length == 1)"
+                />
+            </div>
         </template>
         <template #subtitle v-if="props.detail">
-            <span class="text-sm">{{ t(props.userValue.getRole()) }}</span>
+            <span class="text-sm m-0">{{ t(props.userValue.getRole()) }}</span>
         </template>
         <template #content>
             {{ props.userValue.email }}
         </template>
-        <!-- Display add/remove button on the assistant/teacher card, only when the user is a-->
+        <!-- Display the role switch button, only if the card is not in detail mode -->
         <template #footer v-if="!props.detail">
             <CourseRoleAddButton :user="props.userValue" :course="course" />
         </template>
