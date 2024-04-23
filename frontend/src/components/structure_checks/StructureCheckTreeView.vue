@@ -6,6 +6,8 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { parseArgs } from 'util';
+import { StructureCheck } from '@/types/StructureCheck';
 
 /* Props */
 const props = defineProps<{
@@ -160,7 +162,7 @@ const editSelectedNode = () => {
 };
 
 let counter = 0;
-const addSelectedNode = () => {
+const addSelectedNode = () => { //TODO make also work to add in root and if there are no items already
     if(editedNode.value && editedNode.value.children){
         if (editedNode.value.sort != "empty"){
             counter += 1;
@@ -172,6 +174,7 @@ const addSelectedNode = () => {
                 parrent: editedNode.value
             }
             editedNode.value.children.push(node);
+            // sort the nodes by type to make them cluster together
             editedNode.value.children.sort((a: TreeNode_struct, b: TreeNode_struct) => {
                 const order:StringToIntDict = { 'obligated': 0, 'blocked': 1, 'file': 2 };
                 return order[a.sort] - order[b.sort];
@@ -205,6 +208,53 @@ const deleteSelectedNode = () => {
         }
     }
 };
+
+const saveSelectedNode = () => {
+    console.log(parseNodesToStructureChecks(nodes.value))
+}
+
+function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
+    const structureChecks: any[] = [];
+    let structure_parrent: StructureCheck|null = null;
+
+    // Recursive function to traverse tree nodes and build structure checks
+    function traverse(node: TreeNode_struct, parentPath: string = '') {
+        // Generate the full path by concatenating parent paths and current node label
+        const fullPath = parentPath === '' ? node.label : `${parentPath}/${node.label}`;
+
+        // Add obligated and blocked extensions if they exist
+        if (node.sort === 'obligated') {
+            if(structure_parrent && structure_parrent.obligated_extensions){ //TODO check if works for root
+                structure_parrent.obligated_extensions.push({ extension: node.label });
+            }
+        } else if (node.sort === 'blocked') {
+            if(structure_parrent && structure_parrent.blocked_extensions){
+                structure_parrent.blocked_extensions.push({ extension: node.label });
+            }
+        }else{
+            // Create structure check object based on node properties
+            const structureCheck: any = {
+                name: fullPath,
+                obligated_extensions: [],
+                blocked_extensions: [],
+                // Add other properties as needed
+            };
+            structure_parrent = structureCheck;
+            // Recursively traverse children
+            if (node.children) {
+                node.children.forEach(child => traverse(child, fullPath));
+            }
+
+            // Add the structure check object to the array
+            structureChecks.push(structureCheck);
+            }
+        }
+
+    // Start traversing from the root nodes
+    nodes.forEach(node => traverse(node));
+
+    return structureChecks;
+}
 </script>
 
 <template>
@@ -256,6 +306,16 @@ const deleteSelectedNode = () => {
             icon="pi pi-refresh"
             iconPos="right"
             @click="deleteSelectedNode"
+            rounded
+        />
+
+        <Button
+            v-if="$props.editable"
+            :label="t('structure_checks.save')"
+            type="button"
+            icon="pi pi-refresh"
+            iconPos="right"
+            @click="saveSelectedNode"
             rounded
         />
 

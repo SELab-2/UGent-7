@@ -3,7 +3,8 @@
         "edit": "pas node aan",
         "add": "voeg node toe",
         "delete": "verwijder node",
-        "reload": "herlaad Structure Checks"
+        "reload": "herlaad Structure Checks",
+        "save": "sla structure checks op"
     },
     "layout": {
         "header": {

@@ -107,7 +107,6 @@ async function submitProject(): Promise<void> {
     }
 }
 let projectId:string = "1235"
-let editable: boolean = false
 </script>
 
 <template>
@@ -250,7 +249,7 @@ let editable: boolean = false
 
                     <!-- tree view for structure checks -->
                     <div>
-                        <StructureCheckTreeView :projectId=projectId  :editable=editable>
+                        <StructureCheckTreeView :projectId=projectId  :editable=true>
 
                         </StructureCheckTreeView>
                     </div>

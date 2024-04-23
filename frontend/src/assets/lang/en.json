@@ -3,7 +3,8 @@
         "edit": "Edit node",
         "add": "Add node",
         "delete": "Delete node",
-        "reload": "reload Structure Checks"
+        "reload": "Reload Structure checks",
+        "save": "Save structure checks"
     },
     "layout": {
         "header": {
