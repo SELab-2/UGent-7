@@ -211,6 +211,7 @@ const deleteSelectedNode = () => {
 
 const saveSelectedNode = () => {
     console.log(parseNodesToStructureChecks(nodes.value))
+    //TODO realy save them
 }
 
 function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
