@@ -17,7 +17,7 @@ const props = defineProps<{
 
 const { t } = useI18n();
 
-const { structureChecks, getStructureCheckByProject} = useStructureCheck();
+const { structureChecks, getStructureCheckByProject, createStructureCheck} = useStructureCheck();
 
 onMounted(() => {
     loadStructureChecks();
@@ -209,8 +209,10 @@ const deleteSelectedNode = () => {
     }
 };
 
-const saveSelectedNode = () => {
-    console.log(parseNodesToStructureChecks(nodes.value))
+async function saveSelectedNode() {
+    let checks = parseNodesToStructureChecks(nodes.value)
+    console.log(checks)
+    await createStructureCheck(checks[0],props.projectId);
     //TODO realy save them
 }
 
