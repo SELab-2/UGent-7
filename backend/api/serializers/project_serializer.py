@@ -147,13 +147,17 @@ class SubmissionAddSerializer(SubmissionSerializer):
 
 
 class StructureCheckAddSerializer(StructureCheckSerializer):
+    blocked_extensions = serializers.ListField(child=serializers.CharField(), required=False)
+    obligated_extensions = serializers.ListField(child=serializers.CharField(), required=False)
+
     def validate(self, data):
         project: Project = self.context["project"]
         if project.structure_checks.filter(name=data["name"]).count():
             raise ValidationError(gettext("project.error.structure_checks.already_existing"))
 
         obl_ext = set()
-        for ext in self.context["obligated"]:
+        obligated = data.pop("obligated_extensions", [])
+        for ext in obligated:
             extension, _ = FileExtension.objects.get_or_create(
                 extension=ext
             )
@@ -161,7 +165,8 @@ class StructureCheckAddSerializer(StructureCheckSerializer):
         data["obligated_extensions"] = obl_ext
 
         block_ext = set()
-        for ext in self.context["blocked"]:
+        blocked = data.pop("blocked_extensions", [])
+        for ext in blocked:
             extension, _ = FileExtension.objects.get_or_create(
                 extension=ext
             )

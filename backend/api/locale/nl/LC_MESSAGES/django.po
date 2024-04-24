@@ -198,7 +198,7 @@ msgstr "De structuur check was al aanwezig."
 
 #: serializers/project_serializer.py:147 tests/test_project.py:546
 msgid "project.error.structure_checks.extension_blocked_and_obligated"
-msgstr ""
+msgstr "Extensie is zowel verplicht als geblokkeerd."
 
 #: tests/test_project.py:450 views/project_view.py:124
 msgid "project.success.structure_check.add"

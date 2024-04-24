@@ -212,7 +212,7 @@ const deleteSelectedNode = () => {
 async function saveSelectedNode() {
     let checks = parseNodesToStructureChecks(nodes.value)
     console.log(checks)
-    await createStructureCheck(checks[0],props.projectId);
+    await createStructureCheck(checks[6],props.projectId);
     //TODO realy save them
 }
 

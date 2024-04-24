@@ -107,14 +107,11 @@ class ProjectViewSet(CreateModelMixin,
 
         project: Project = self.get_object()
 
-        # TODO: Crashes when requesting without any fields, shouldn't be given as context. Validator needs to check it
         serializer = StructureCheckAddSerializer(
             data=request.data,
             context={
                 "project": project,
                 "request": request,
-                "obligated": request.data.getlist('obligated_extensions'),
-                "blocked": request.data.getlist('blocked_extensions')
             }
         )
 
