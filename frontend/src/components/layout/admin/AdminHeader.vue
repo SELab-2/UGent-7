@@ -1,9 +1,22 @@
 <script setup lang="ts">
-import LanguageSelector from '@/components/LanguageSelector.vue';
+import Header from '@/components/layout/Header.vue';
+import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
+
+/* Composables */
+const { t } = useI18n();
+
+/* Navigation items */
+const items = computed(() => [
+    {
+        label: t('admin.users.title'),
+        route: 'admin-users',
+    }
+]);
 </script>
 
 <template>
-    <LanguageSelector />
+    <Header :items="items" />
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss"></style>
