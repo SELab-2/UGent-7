@@ -63,7 +63,7 @@ class AssistantViewSet(ModelViewSet):
 
     @swagger_auto_schema(request_body=AssistantIDSerializer)
     def destroy(self, request: Request, *args, **kwargs) -> Response:
-        """Delete the student role from the user"""
+        """Delete the assistant role from the user"""
         self.get_object().deactivate()
 
         return Response({

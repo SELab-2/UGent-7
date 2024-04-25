@@ -1,4 +1,6 @@
 from api.models.course import Course
+from api.models.assistant import Assistant
+from api.models.teacher import Teacher
 from api.permissions.course_permissions import (CourseAssistantPermission,
                                                 CoursePermission,
                                                 CourseStudentPermission,
@@ -17,6 +19,7 @@ from api.serializers.project_serializer import (CreateProjectSerializer,
                                                 ProjectSerializer)
 from api.serializers.student_serializer import StudentSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
+from authentication.serializers import UserIDSerializer
 from django.utils.translation import gettext
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
@@ -105,6 +108,16 @@ class CourseViewSet(viewsets.ModelViewSet):
         """Add an assistant to the course"""
         course = self.get_object()
 
+        # Get the user
+        user_serializer = UserIDSerializer(
+            data={'user': request.data.get('assistant')},
+        )
+
+        # Create an assistant role for the user (if there is already an assistant object, activate it). If the role
+        # is already active, nothing will happen.
+        if user_serializer.is_valid(raise_exception=True):
+            Assistant.create(user_serializer.validated_data.get('user'))
+
         # Add assistant to course
         serializer = AssistantIDSerializer(
             data=request.data
@@ -131,9 +144,16 @@ class CourseViewSet(viewsets.ModelViewSet):
         )
 
         if serializer.is_valid(raise_exception=True):
+            assistant = serializer.validated_data["assistant"]
+
+            # Remove the assistant from the course
             course.assistants.remove(
-                serializer.validated_data["assistant"]
+                assistant
             )
+
+            # If this was the last course of the assistant, deactivate the assistant role
+            if not assistant.courses.exists():
+                assistant.deactivate()
 
         return Response({
             "message": gettext("courses.success.assistants.remove")
@@ -216,6 +236,16 @@ class CourseViewSet(viewsets.ModelViewSet):
         # Get the course
         course = self.get_object()
 
+        # Get the user
+        user_serializer = UserIDSerializer(
+            data={'user': request.data.get('teacher')},
+        )
+
+        # Create a teacher role for the user (if there is already an teacher object, activate it). If the role
+        # is already active, nothing will happen.
+        if user_serializer.is_valid(raise_exception=True):
+            Teacher.create(user_serializer.validated_data.get('user'))
+
         # Add teacher to course
         serializer = TeacherJoinSerializer(data=request.data, context={
             "course": course
@@ -243,9 +273,16 @@ class CourseViewSet(viewsets.ModelViewSet):
         })
 
         if serializer.is_valid(raise_exception=True):
+            teacher = serializer.validated_data["teacher"]
+
+            # Remove the teacher from the course
             course.teachers.remove(
-                serializer.validated_data["teacher"]
+                teacher
             )
+
+            # If this was the last course of the teacher, deactivate the teacher role
+            if not teacher.courses.exists():
+                teacher.deactivate()
 
         return Response({
             "message": gettext("courses.success.teachers.remove")

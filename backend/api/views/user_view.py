@@ -1,3 +1,5 @@
+from django.db.models.functions import Concat
+from django.db.models import Value
 from api.permissions.notification_permissions import NotificationPermission
 from api.permissions.role_permissions import IsSameUser
 from api.views.pagination.basic_pagination import BasicPagination
@@ -41,6 +43,29 @@ class UserViewSet(ReadOnlyModelViewSet):
         email = request.query_params.get("email", "")
         roles = request.query_params.getlist("roles[]")
 
+        # Search parameters for a simple name + faculty filter
+        name = request.query_params.get("name", None)
+        faculties = request.query_params.getlist("faculties[]")
+
+        # If name is provided, just filter by the name (and faculties if provided)
+        if name or faculties:
+            queryset = self.get_queryset().annotate(
+                full_name=Concat('first_name', Value(' '), 'last_name')
+            ).filter(
+                full_name__icontains=name
+            )
+
+            # Filter the queryset based on selected faculties
+            if faculties:
+                queryset = queryset.filter(faculties__id__in=faculties)
+
+            serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+                "request": request
+            })
+
+            return self.get_paginated_response(serializer.data)
+
+        # Otherwise, search by the provided search term
         queryset1 = self.get_queryset().filter(
             id__icontains=search
         )
