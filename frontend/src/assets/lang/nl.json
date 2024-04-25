@@ -66,6 +66,7 @@
             "description": "Beschrijving",
             "start_date": "Start project",
             "group_size": "Aantal studenten per groep (1 voor individueel project)",
+            "number_of_groups": "Aantal groepen (optioneel, anders #studenten / grootte groep)",
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
             "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",

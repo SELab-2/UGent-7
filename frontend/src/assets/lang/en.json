@@ -66,6 +66,7 @@
             "description": "Description",
             "start_date": "Start project",
             "group_size": "Number of students in a group (1 for an individual project)",
+            "number_of_groups": "Number of groups (optional, otherwise #students / group size)",
             "max_score": "Maximum score that can be achieved",
             "visibility": "Make project visible to students",
             "score_visibility": "Make score, when uploaded, automatically visible to students",
