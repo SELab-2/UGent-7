@@ -166,4 +166,8 @@ class TeacherLeaveSerializer(TeacherIDSerializer):
         if course.is_past():
             raise ValidationError(gettext("courses.error.past_course"))
 
+        # Make sure it is not the last teacher
+        if course.teachers.count() == 1:
+            raise ValidationError(gettext("courses.error.teachers.last_teacher"))
+
         return data
