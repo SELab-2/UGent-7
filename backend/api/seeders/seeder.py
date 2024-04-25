@@ -429,7 +429,7 @@ def seed_structure_checks(faker, count: int = 1_500):
         while len(blocked_extensions) < count * 2:
             project = faker.pyint(min_value=0, max_value=count - 1)
             extension = choice(extensions)[0]
-            if [project, extension] not in blocked_extensions:
+            if ([project, extension] not in blocked_extensions) and ([project, extension] not in obligated_extensions):
                 blocked_extensions.append([project, extension])
 
         cursor.executemany(

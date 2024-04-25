@@ -69,7 +69,7 @@ export const endpoints = {
         status: '/api/projects/{projectId}/submission_status/',
     },
     structureChecks: {
-        retrieve: '/api/structure_checks/{id}',
+        retrieve: '/api/structure-checks/{id}',
         byProject: '/api/projects/{projectId}/structure_checks/',
     },
 };

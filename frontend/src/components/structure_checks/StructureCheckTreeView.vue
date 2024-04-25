@@ -17,7 +17,7 @@ const props = defineProps<{
 
 const { t } = useI18n();
 
-const { structureChecks, getStructureCheckByProject, createStructureCheck} = useStructureCheck();
+const { structureChecks, getStructureCheckByProject, createStructureCheck, deleteStructureCheck} = useStructureCheck();
 
 onMounted(() => {
     loadStructureChecks();
@@ -210,9 +210,16 @@ const deleteSelectedNode = () => {
 };
 
 async function saveSelectedNode() {
-    let checks = parseNodesToStructureChecks(nodes.value)
-    console.log(checks)
-    await createStructureCheck(checks[6],props.projectId);
+    let checks = parseNodesToStructureChecks(nodes.value);
+    console.log(checks);
+    await getStructureCheckByProject(props.projectId);
+    if (structureChecks.value) {
+        await Promise.all(structureChecks.value.map(check => deleteStructureCheck(check.id)));
+    }
+    console.log(structureChecks);
+    // TODO pack into 1 call
+    await Promise.all(checks.map(check => createStructureCheck(check, props.projectId)));
+    
     //TODO realy save them
 }
 
