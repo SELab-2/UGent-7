@@ -3,7 +3,7 @@ import ButtonGroup from 'primevue/buttongroup';
 import Button from 'primevue/button';
 import Title from '@/components/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
-import CourseList from '@/components/courses/CourseList.vue';
+import CourseList from '@/components/courses/CourseDetailList.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { type Teacher } from '@/types/users/Teacher';
