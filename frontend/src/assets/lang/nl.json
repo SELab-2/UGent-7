@@ -23,9 +23,12 @@
         "dashboard": {
             "courses": "Mijn vakken",
             "projects": "Lopende projecten",
-            "noProjects": "Geen projecten beschikbaar voor dit academiejaar.",
+            "noProjects": {
+                "student": "Geen lopende projecten gevonden voor alle ingeschreven vakken. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
+                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent."
+            },
             "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
-            "noCourses": "Geen vakken beschikbaar voor dit academiejaar.",
+            "noCourses": "Geen vakken gevonden. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
             "select_course": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
         },
@@ -149,7 +152,9 @@
     "components": {
         "button": {
             "academic_year": "Academiejaar {0}",
-            "createProject": "Creëer nieuw project"
+            "createProject": "Creëer nieuw project",
+            "searchCourse": "Zoek een vak",
+            "createCourse": "Maak een vak"
         },
         "card": {
             "open": "Details",

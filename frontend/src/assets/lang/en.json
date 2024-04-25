@@ -23,7 +23,10 @@
         "dashboard": {
             "courses": "My courses",
             "projects": "Current projects",
-            "noProjects": "No projects available for this academic year.",
+            "noProjects": {
+                "student": "No current projects found for all registered subjects. Register for a public course using the search function, or use an invitation link from a teacher.",
+                "teacher": "No current projects found for all registered subjects. Create a new project for a course or use an invitation link from a teacher."
+            },
             "noIncomingProjects": "No projects with a deadline within 7 days.",
             "noCourses": "No courses available for this academic year.",
             "select_course": "Select the course for which you want to create a project:",
@@ -149,7 +152,9 @@
     "components": {
         "button": {
             "academic_year": "Academic year {0}",
-            "createProject": "Create a new project"
+            "createProject": "Create a new project",
+            "searchCourse": "Search a course",
+            "createCourse": "Create a new course"
         },
         "card": {
             "open": "Details",

@@ -160,7 +160,7 @@ watch(selectedDate, (date) => {
                 </div>
             </div>
             <div class="col-12 md:col-6">
-                <div class="surface-100 p-6">
+                <div class="surface-100 p-4 md:p-6">
                     <!-- Selected date on the calendar -->
                     <Title class="mb-6 font-extrabold">
                         {{ formattedDate }}
@@ -214,7 +214,7 @@ watch(selectedDate, (date) => {
                         </template>
                     </div>
 
-                    <template v-if="currentCourses !== null && (user?.isTeacher() || user?.isAssistant())">
+                    <template v-if="currentCourses !== null && (user?.isTeacher() || user?.isAssistant()) && currentCourses.length > 0">
                         <!-- Add project button -->
                         <ProjectCreateButton
                             class="mt-5"

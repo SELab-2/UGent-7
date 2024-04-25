@@ -72,14 +72,21 @@ watch(user, loadCourses, { immediate: true });
                         class="h-full"
                         :course="course"
                         :courses="userCourses ?? []"
-                        @update:courses="loadCourses"
+                        @update:courses="null"
                         v-else
                     />
                 </div>
             </template>
             <template v-else>
-                <div class="col-12">
-                    <p class="mt-0">{{ t('views.dashboard.noCourses') }}</p>
+                <div class="w-30rem text-center mx-auto">
+                    <span class="pi pi-exclamation-circle text-6xl text-primary"/>
+                    <p>{{ t('views.dashboard.noCourses') }}</p>
+                    <RouterLink :to="{ name: 'courses' }" v-if="user?.isStudent()">
+                        <Button :label="t('components.button.searchCourse')" icon="pi pi-search"/>
+                    </RouterLink>
+                    <RouterLink :to="{ name: 'course-create' }" v-else>
+                        <Button :label="t('components.button.createCourse')" icon="pi pi-plus"/>
+                    </RouterLink>
                 </div>
             </template>
         </template>
