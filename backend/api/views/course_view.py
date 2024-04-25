@@ -183,6 +183,17 @@ class CourseViewSet(viewsets.ModelViewSet):
                     serializer.validated_data["student"]
                 )
 
+            # If there are now more students for a project then space in groups, create a new group
+            all_projects = course.projects.exclude(group_size=1)
+
+            for project in all_projects:
+                number_groups = project.groups.count()
+
+                if project.group_size * number_groups < course.students.count():
+                    Group.objects.create(
+                        project=project
+                    )
+
         return Response({
             "message": gettext("courses.success.students.add")
         })
