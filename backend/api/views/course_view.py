@@ -304,10 +304,6 @@ class CourseViewSet(viewsets.ModelViewSet):
                 teacher
             )
 
-            # If this was the last course of the teacher, deactivate the teacher role
-            if not teacher.courses.exists():
-                teacher.deactivate()
-
         return Response({
             "message": gettext("courses.success.teachers.remove")
         })
