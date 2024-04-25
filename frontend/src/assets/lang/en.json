@@ -121,6 +121,7 @@
                     "search": "Search",
                     "faculty": "Faculty",
                     "role": "Role",
+                    "no_role": "None",
                     "placeholder": "Search a user by name",
                     "title": "Find users to link to this course",
                     "results": "{0} users found for set filters"

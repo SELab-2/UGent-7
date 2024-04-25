@@ -121,6 +121,7 @@
                     "search": "Zoeken",
                     "faculty": "Faculteit",
                     "role": "Rol",
+                    "no_role": "Geen",
                     "placeholder": "Zoek een gebruiker op naam",
                     "title": "Zoek gebuikers om aan dit vak toe te voegen",
                     "results": "{0} gebruikers gevonden voor ingestelde filters"

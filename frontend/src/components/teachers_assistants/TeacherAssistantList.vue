@@ -9,10 +9,12 @@ interface Props {
     users: User[] | null;
     course: Course;
     cols?: number;
+    detail?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
     cols: 4,
+    detail: true,
 });
 </script>
 
@@ -26,7 +28,7 @@ withDefaults(defineProps<Props>(), {
                     v-for="user in users"
                     :key="user.id"
                 >
-                    <TeacherAssistantCard class="h-full" :userValue="user" :course="course" />
+                    <TeacherAssistantCard class="h-full" :userValue="user" :course="course" :detail="detail" />
                 </div>
             </template>
         </template>
