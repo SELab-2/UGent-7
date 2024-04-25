@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DataTable from 'primevue/datatable';
 import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import InputSwitch from 'primevue/inputswitch';
@@ -7,19 +6,37 @@ import SelectButton from 'primevue/selectbutton';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import Body from '@/components/layout/Body.vue';
+import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
+import { useFilter } from "@/composables/filters/filter.ts";
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
-import {DockerImage} from "@/types/DockerImage.ts";
+import { useRoute } from "vue-router";
+import { DockerImage } from "@/types/DockerImage.ts";
+import { getDockerImageFilters } from "@/types/filter/Filter.ts";
+import type {Role} from "@/types/users/User.ts";
+import InputIcon from "primevue/inputicon";
+import MultiSelect from "primevue/multiselect";
+import Column from "primevue/column";
+import IconField from "primevue/iconfield";
 
 /* Injection */
 const { t } = useI18n();
-const { pagination, searchDockerImages, createDockerImage } = useDockerImages();
+const { query } = useRoute();
+const { pagination, dockerImages, getDockerImages, searchDockerImages, createDockerImage } = useDockerImages();
+const { filter, onFilter } = useFilter(getDockerImageFilters(query));
 
 const addItem = ref<DockerImage>(DockerImage.blankDockerImage())
 
 const selectOptions = ref(['admin.list', 'admin.add']);
 const selected = ref<string>(t(selectOptions.value[0]));
+
+const columns = ref([
+    { field: 'id', header: 'admin.users.id' },
+    { field: 'username', header: 'admin.users.username' },
+    { field: 'email', header: 'admin.users.email' },
+    { field: 'roles', header: 'admin.users.roles' },
+]);
 
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
@@ -36,13 +53,34 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
         <Body>
             <SelectButton class="mb-3 gap-3" v-model="selected" :options="selectOptions.map(t)" />
             <div v-if="selected === t(selectOptions[0])">
-                <DataTable
-                    :value="pagination?.results"
-                    lazy
-                    paginator
-                    v-mode:f>
-
-                </DataTable>
+                <LazyDataTable
+                    :pagination="pagination"
+                    :entities="dockerImages"
+                    :get="getDockerImages"
+                    :search="searchDockerImages"
+                    :filter="filter"
+                    :on-filter="onFilter">
+                        <Column
+                            v-for="column in columns"
+                            :key="column.field"
+                            :field="column.field"
+                            :header="t(column.header)"
+                            :show-filter-menu="false"
+                            :style="{ minWidth: '14rem' }"
+                        >
+                            <template #filter>
+                                <IconField
+                                    iconPosition="left"
+                                    class="flex align-items-center"
+                                >
+                                    <InputIcon>
+                                        <i class="pi pi-search flex justify-content-center" />
+                                    </InputIcon>
+                                    <InputText v-model="filter[column.field]" :placeholder="t('admin.search.search')" />
+                                </IconField>
+                            </template>
+                        </Column>
+                </LazyDataTable>
             </div>
             <div v-else>
                 <InputText class="mb-3 gap-3" v-model:model-value="addItem.name" :placeholder="t('admin.docker_images.name')" />

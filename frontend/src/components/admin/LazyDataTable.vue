@@ -4,6 +4,7 @@ import { onMounted, watch, ref, defineExpose, toRef } from "vue";
 import { PaginatorResponse } from '@/types/filter/Paginator.ts'
 import { usePaginator } from '@/composables/filters/paginator.ts';
 import { Filter } from "@/types/filter/Filter.ts";
+import Column from "primevue/column";
 
 /* Properties */
 const props = defineProps<{
@@ -98,6 +99,7 @@ defineExpose({fetch})
             </template>
             <template #empty>No matching data.</template>
             <template #loading>Loading data. Please wait.</template>
+            <Column selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center"></Column>
             <slot />
         </DataTable>
     </div>

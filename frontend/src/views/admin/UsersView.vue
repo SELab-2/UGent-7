@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DataTable, { type DataTableSelectAllChangeEvent } from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import InputSwitch from 'primevue/inputswitch';
@@ -156,7 +155,6 @@ const saveItem = async (): Promise<void> => {
                     </template>
                     <template #empty>No matching data.</template>
                     <template #loading>Loading data. Please wait.</template>
-                    <Column selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center"></Column>
                     <Column
                         v-for="column in columns"
                         :key="column.field"
