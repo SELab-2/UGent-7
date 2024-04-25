@@ -559,6 +559,7 @@ def seed_submission_results(faker):
                     id,
                     result,
                     choice(error_structure) if result == "FAILED" else None,
+                    29,
                     submission[0],
                 ])
 
@@ -574,6 +575,7 @@ def seed_submission_results(faker):
                     id,
                     result,
                     choice(error_extra) if result == "FAILED" else None,
+                    28,
                     submission[0],
                 ])
 
@@ -584,7 +586,7 @@ def seed_submission_results(faker):
                 ])
 
         cursor.executemany(
-            "INSERT INTO api_checkresult(id, result, error_message, submission_id) VALUES (?, ?, ?, ?)",
+            "INSERT INTO api_checkresult(id, result, error_message, polymorphic_ctype_id, submission_id) VALUES (?, ?, ?, ?)",
             results
         )
         cursor.executemany(
