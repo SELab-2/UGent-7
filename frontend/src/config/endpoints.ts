@@ -20,6 +20,7 @@ export const endpoints = {
     },
     dockerImages: {
         index: '/api/docker-images/',
+        search: '/api/docker-images/search',
     },
     students: {
         index: '/api/students/',
