@@ -214,7 +214,13 @@ watch(selectedDate, (date) => {
                         </template>
                     </div>
 
-                    <template v-if="currentCourses !== null && (user?.isTeacher() || user?.isAssistant()) && currentCourses.length > 0">
+                    <template
+                        v-if="
+                            currentCourses !== null &&
+                            (user?.isTeacher() || user?.isAssistant()) &&
+                            currentCourses.length > 0
+                        "
+                    >
                         <!-- Add project button -->
                         <ProjectCreateButton
                             class="mt-5"

@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { watch } from 'vue';
 import { useCourses } from '@/composables/services/course.service.ts';
-import { Course } from '@/types/Course.ts';
+import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 
 /* Props */
@@ -15,7 +15,7 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-    cols: 4
+    cols: 4,
 });
 
 /* Composable injections */
@@ -44,39 +44,38 @@ async function loadCourses(): Promise<void> {
 watch(user, loadCourses, { immediate: true });
 </script>
 
-<template><div class="grid align-items-stretch">
-    <template v-if="courses !== null">
-        <template v-if="courses.length > 0">
-            <div class="col-12 md:col-6" :class="'xl:col-' + 12 / cols" v-for="course in courses" :key="course.id">
-                <CourseGeneralCard
-                    class="h-full"
-                    :course="course"
-                    :courses="userCourses ?? []"
-                    @update:courses="loadCourses"
-                />
-            </div>
+<template>
+    <div class="grid align-items-stretch">
+        <template v-if="courses !== null">
+            <template v-if="courses.length > 0">
+                <div class="col-12 md:col-6" :class="'xl:col-' + 12 / cols" v-for="course in courses" :key="course.id">
+                    <CourseGeneralCard
+                        class="h-full"
+                        :course="course"
+                        :courses="userCourses ?? []"
+                        @update:courses="loadCourses"
+                    />
+                </div>
+            </template>
+            <template v-else>
+                <div class="w-30rem text-center mx-auto">
+                    <span class="pi pi-exclamation-circle text-6xl text-primary" />
+                    <p>{{ t('views.dashboard.noCourses') }}</p>
+                    <RouterLink :to="{ name: 'courses' }" v-if="user?.isStudent()">
+                        <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
+                    </RouterLink>
+                    <RouterLink :to="{ name: 'course-create' }" v-else>
+                        <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
+                    </RouterLink>
+                </div>
+            </template>
         </template>
         <template v-else>
-            <div class="w-30rem text-center mx-auto">
-                <span class="pi pi-exclamation-circle text-6xl text-primary"/>
-                <p>{{ t('views.dashboard.noCourses') }}</p>
-                <RouterLink :to="{ name: 'courses' }" v-if="user?.isStudent()">
-                    <Button :label="t('components.button.searchCourse')" icon="pi pi-search"/>
-                </RouterLink>
-                <RouterLink :to="{ name: 'course-create' }" v-else>
-                    <Button :label="t('components.button.createCourse')" icon="pi pi-plus"/>
-                </RouterLink>
+            <div class="col-12 md:col-6 lg:col-4" :class="'xl:col-' + 12 / cols" v-for="index in cols" :key="index">
+                <Skeleton height="10rem" />
             </div>
         </template>
-    </template>
-    <template v-else>
-        <div class="col-12 md:col-6 lg:col-4" :class="'xl:col-' + 12 / cols" v-for="index in cols" :key="index">
-            <Skeleton height="10rem" />
-        </div>
-    </template>
-</div>
+    </div>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

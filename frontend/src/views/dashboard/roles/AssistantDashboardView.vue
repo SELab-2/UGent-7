@@ -52,7 +52,7 @@ watch(
         <ProjectCreateButton :courses="filteredCourses" />
     </div>
     <!-- Project list body -->
-    <ProjectList :projects="projects"  />
+    <ProjectList :projects="projects" />
     <!-- Course heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Course list title -->

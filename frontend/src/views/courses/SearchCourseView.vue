@@ -8,7 +8,7 @@ import Checkbox from 'primevue/checkbox';
 import Paginator from 'primevue/paginator';
 import Title from '@/components/layout/Title.vue';
 import BaseLayout from '@/components/layout/base/BaseLayout.vue';
-import CourseList from '@/components/courses/CourseDetailList.vue';
+import CourseGeneralList from '@/components/courses/CourseGeneralList.vue';
 import { onMounted } from 'vue';
 import { useCourses } from '@/composables/services/course.service.ts';
 import { useAuthStore } from '@/store/authentication.store.ts';
@@ -20,8 +20,6 @@ import { usePaginator } from '@/composables/filters/paginator.ts';
 import { useRoute } from 'vue-router';
 import { getCourseFilters } from '@/types/filter/Filter.ts';
 import { getAcademicYears } from '@/types/Course.ts';
-import CourseGeneralCard from '@/components/courses/CourseGeneralCard.vue';
-import CourseGeneralList from '@/components/courses/CourseGeneralList.vue';
 
 /* Composable injections */
 const { t } = useI18n();

@@ -11,7 +11,7 @@ import { type Group } from '@/types/Group.ts';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useStudents } from '@/composables/services/student.service';
-import { Course } from '@/types/Course.ts';
+import { type Course } from '@/types/Course.ts';
 
 /* Props */
 const props = withDefaults(
@@ -21,7 +21,7 @@ const props = withDefaults(
         cols?: number;
     }>(),
     {
-        projects: [],
+        projects: () => [],
         cols: 4,
     },
 );
@@ -149,15 +149,13 @@ const incomingProjects = computed<Project[] | null>(() => {
         </template>
         <template v-else>
             <div class="max-w-30rem text-center mx-auto">
-                <span class="pi pi-exclamation-circle text-6xl text-primary"/>
+                <span class="pi pi-exclamation-circle text-6xl text-primary" />
                 <p>
                     <span v-if="user?.isStudent()">{{ t('views.dashboard.noProjects.student') }}</span>
                     <span v-else>{{ t('views.dashboard.noProjects.teacher') }}</span>
                 </p>
                 <RouterLink :to="{ name: 'courses' }" v-if="user?.isStudent()">
-                    <Button
-                        :label="t('components.button.searchCourse')"
-                        icon="pi pi-search"/>
+                    <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
                 </RouterLink>
             </div>
         </template>
