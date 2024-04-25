@@ -1,4 +1,5 @@
 from api.models.course import Course
+from api.models.group import Group
 from api.permissions.course_permissions import (CourseAssistantPermission,
                                                 CoursePermission,
                                                 CourseStudentPermission,
@@ -169,6 +170,18 @@ class CourseViewSet(viewsets.ModelViewSet):
             course.students.add(
                 serializer.validated_data["student"]
             )
+
+            # If there are individual projects, add the student to a new group
+            individual_projects = course.projects.filter(group_size=1)
+
+            for project in individual_projects:
+                group = Group.objects.create(
+                    project=project
+                )
+
+                group.students.add(
+                    serializer.validated_data["student"]
+                )
 
         return Response({
             "message": gettext("courses.success.students.add")
