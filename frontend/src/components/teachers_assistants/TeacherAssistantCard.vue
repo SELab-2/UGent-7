@@ -5,12 +5,16 @@ import LeaveCourseButton from '@/components/teachers_assistants/buttons/LeaveCou
 import { type User } from '@/types/users/User.ts';
 import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/store/authentication.store.ts';
 
 /* Component props */
 const props = defineProps<{ userValue: User; course: Course; detail?: boolean }>();
 
 /* Composable injections */
 const { t } = useI18n();
+const { user } = storeToRefs(useAuthStore());
+
 </script>
 
 <template>
@@ -25,7 +29,8 @@ const { t } = useI18n();
                     :course="course"
                     v-if="
                         props.detail &&
-                        !(props.userValue.getRole() == 'types.roles.teacher' && course.teachers?.length == 1)
+                        !(props.userValue.getRole() == 'types.roles.teacher' && course.teachers?.length == 1) &&
+                        user?.isTeacher()
                     "
                 />
             </div>
