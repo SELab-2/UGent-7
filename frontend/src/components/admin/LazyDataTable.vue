@@ -1,52 +1,75 @@
 <script setup lang="ts">
-import DataTable from "primevue/datatable";
-import { onMounted, watch, ref } from "vue";
+import DataTable, {type DataTableSelectAllChangeEvent} from "primevue/datatable";
+import { onMounted, watch, ref, defineExpose, toRef } from "vue";
 import { PaginatorResponse } from '@/types/filter/Paginator.ts'
 import { usePaginator } from '@/composables/filters/paginator.ts';
 import { Filter } from "@/types/filter/Filter.ts";
-import { useFilter} from "@/composables/filters/filter.ts";
 
 /* Properties */
 const props = defineProps<{
-    pagination: PaginatorResponse<any>
+    pagination: PaginatorResponse<any> | null
+    entities: any[] | null // list containing all the entities displayed by data table after executing get method
+    get: () => Promise<void> // get method for backend
     search: (filters: Filter, page: number, pageSize: number) => Promise<void>
-    filterState: Filter // is used to get filter and onFilter out of UseFilter()
+    filter: Filter
+    onFilter: (callback: () => Promise<void>, debounce?: (number | undefined), immediate?: (boolean | undefined)) => void
 }>()
 
 /* Injections */
 const { page, first, pageSize, onPaginate, resetPagination } = usePaginator();
-const { filter, onFilter } = useFilter(props.filterState);
-
-
 
 const loading = ref(false);
+const selected = ref<any[] | null>(null);
+const selectAll = ref(false);
 
 onMounted(async () => {
+    onPaginate(fetch);
+
     watch(
-        filter,
+        props.filter,
         () => {
             loading.value = true;
         },
         { deep: true },
     );
+    props.onFilter(fetch);
 
-    onFilter(fetch);
-
-    onFilter(
+    props.onFilter(
         async () => {
-            await resetPagination([pagination]);
+            await resetPagination([toRef(props.pagination)]);
         },
         0,
         false,
     );
-})
+});
 
 const fetch = async (): Promise<void> => {
     loading.value = true;
-    props.search(filter.value, page.value, pageSize.value).then(() => {
+    props.search(props.filter, page.value, pageSize.value).then(() => {
         loading.value = false;
     })
-}
+};
+const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
+    selectAll.value = event.checked;
+
+    if (selectAll.value) {
+        props.get().then(() => {
+            selectAll.value = true;
+            selected.value = props.entities;
+        });
+    } else {
+        selectAll.value = false;
+        selected.value = [];
+    }
+};
+const onRowSelect = (): void => {
+    selectAll.value = selected.value?.length === (props.pagination?.count ?? 0);
+};
+const onRowUnselect = (): void => {
+    selectAll.value = false;
+};
+
+defineExpose({fetch})
 </script>
 
 <template>
@@ -63,7 +86,7 @@ const fetch = async (): Promise<void> => {
             :loading="loading"
             @page="loading = true"
             filterDisplay="row"
-            v-model:selection="selectedUsers"
+            v-model:selection="selected"
             :selectAll="selectAll"
             @select-all-change="onSelectAllChange"
             @row-select="onRowSelect"
@@ -76,7 +99,6 @@ const fetch = async (): Promise<void> => {
             <template #empty>No matching data.</template>
             <template #loading>Loading data. Please wait.</template>
             <slot />
-
         </DataTable>
     </div>
 </template>
