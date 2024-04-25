@@ -231,6 +231,7 @@
     "admin": {
         "title": "Admin",
         "keyword": "Keyword",
+        "id": "ID",
         "list": "List",
         "add": "Add",
         "search": {
@@ -242,7 +243,6 @@
         "save": "Save",
         "users": {
             "title": "Users",
-            "id": "ID",
             "username": "Username",
             "email": "Email",
             "roles": "Roles"
@@ -263,7 +263,9 @@
         "catalog": "Catalog",
         "docker_images": {
             "title": "Docker images",
-            "name": "Name of docker image",
+            "name_input": "Name of docker image",
+            "name": "Name",
+            "owner": "Owner ID",
             "public": "Public"
         }
     },

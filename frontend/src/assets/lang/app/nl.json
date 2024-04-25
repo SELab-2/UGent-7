@@ -231,6 +231,7 @@
     "admin": {
         "title": "Beheerder",
         "keyword": "Trefwoord",
+        "id": "ID",
         "list": "Lijst",
         "add": "Voeg toe",
         "search": {
@@ -242,7 +243,6 @@
         "save": "Sla op",
         "users": {
             "title": "Gebruikers",
-            "id": "ID",
             "username": "Gebruikersnaam",
             "email": "E-mail",
             "roles": "Functies"
@@ -263,7 +263,9 @@
         "catalog": "Catalogus",
         "docker_images": {
             "title": "Docker images",
-            "name": "Naam van docker image",
+            "name_input": "Naam van docker image",
+            "name": "Naam",
+            "owner": "Eigenaar ID",
             "public": "Publiek"
         }
     },

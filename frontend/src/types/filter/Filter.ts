@@ -75,6 +75,11 @@ export function getCourseFilters(query: LocationQuery): CourseFilter {
     return filters;
 }
 
+/**
+ * Get the docker image filters from the query.
+ *
+ * @param query
+ */
 export function getDockerImageFilters(query:LocationQuery): DockerImageFilter {
     return {
         search: query.search?.toString() ?? '',

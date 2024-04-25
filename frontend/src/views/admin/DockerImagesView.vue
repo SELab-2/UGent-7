@@ -14,9 +14,7 @@ import { ref } from 'vue';
 import { useRoute } from "vue-router";
 import { DockerImage } from "@/types/DockerImage.ts";
 import { getDockerImageFilters } from "@/types/filter/Filter.ts";
-import type {Role} from "@/types/users/User.ts";
 import InputIcon from "primevue/inputicon";
-import MultiSelect from "primevue/multiselect";
 import Column from "primevue/column";
 import IconField from "primevue/iconfield";
 
@@ -32,10 +30,10 @@ const selectOptions = ref(['admin.list', 'admin.add']);
 const selected = ref<string>(t(selectOptions.value[0]));
 
 const columns = ref([
-    { field: 'id', header: 'admin.users.id' },
-    { field: 'username', header: 'admin.users.username' },
-    { field: 'email', header: 'admin.users.email' },
-    { field: 'roles', header: 'admin.users.roles' },
+    { field: 'id', header: 'admin.id' },
+    { field: 'name', header: 'admin.docker_images.name' },
+    { field: 'owner', header: 'admin.docker_images.owner' },
+    { field: 'public', header: 'admin.docker_images.public' },
 ]);
 
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
@@ -60,30 +58,40 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                     :search="searchDockerImages"
                     :filter="filter"
                     :on-filter="onFilter">
-                        <Column
-                            v-for="column in columns"
-                            :key="column.field"
-                            :field="column.field"
-                            :header="t(column.header)"
-                            :show-filter-menu="false"
-                            :style="{ minWidth: '14rem' }"
-                        >
-                            <template #filter>
-                                <IconField
-                                    iconPosition="left"
-                                    class="flex align-items-center"
-                                >
-                                    <InputIcon>
-                                        <i class="pi pi-search flex justify-content-center" />
-                                    </InputIcon>
-                                    <InputText v-model="filter[column.field]" :placeholder="t('admin.search.search')" />
-                                </IconField>
-                            </template>
-                        </Column>
+                    <template #header>
+                        <div class="flex justify-content-end">
+                            <IconField iconPosition="left">
+                                <InputIcon>
+                                    <i class="pi pi-search" />
+                                </InputIcon>
+                                <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
+                            </IconField>
+                        </div>
+                    </template>
+                    <Column
+                        v-for="column in columns"
+                        :key="column.field"
+                        :field="column.field"
+                        :header="t(column.header)"
+                        :show-filter-menu="false"
+                        :style="{ minWidth: '14rem' }"
+                    >
+                        <template #filter>
+                            <IconField
+                                iconPosition="left"
+                                class="flex align-items-center"
+                            >
+                                <InputIcon>
+                                    <i class="pi pi-search flex justify-content-center" />
+                                </InputIcon>
+                                <InputText v-model="filter[column.field]" :placeholder="t('admin.search.search')" />
+                            </IconField>
+                        </template>
+                    </Column>
                 </LazyDataTable>
             </div>
             <div v-else>
-                <InputText class="mb-3 gap-3" v-model:model-value="addItem.name" :placeholder="t('admin.docker_images.name')" />
+                <InputText class="mb-3 gap-3" v-model:model-value="addItem.name" :placeholder="t('admin.docker_images.name_input')" />
                 <div v-if="addItem.name.length > 0">
                     <div class="flex align-items-center mb-3 gap-3">
                         <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>

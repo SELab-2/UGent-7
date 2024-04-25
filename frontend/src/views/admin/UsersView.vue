@@ -47,7 +47,7 @@ const editItem = ref<User>(User.blankUser());
 const popupEdit = ref<boolean>(false);
 
 const columns = ref([
-    { field: 'id', header: 'admin.users.id' },
+    { field: 'id', header: 'admin.id' },
     { field: 'username', header: 'admin.users.username' },
     { field: 'email', header: 'admin.users.email' },
     { field: 'roles', header: 'admin.users.roles' },
