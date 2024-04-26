@@ -8,7 +8,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.90.0/24
+        - subnet: 192.168.91.0/24
 
 ############################# EXTENSIONS
 
@@ -31,7 +31,6 @@ services:
   nginx:
     <<: *common-keys-selab
     image: nginx:latest
-    container_name: nginx
     ports:
       - 80:80
       - 443:443
@@ -45,20 +44,16 @@ services:
 
   backend:
     <<: *common-keys-selab
-    container_name: backend
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
-    command: sh -c "./setup.sh; python manage.py runsslserver 192.168.90.2:8080"
-    expose:
-      - 8080
+    command: sh -c "./setup.sh; python manage.py runsslserver 0.0.0.0:8000"
     volumes:
       - ${BACKEND_DIR}:/code
 
   # TODO: Is this an entire different container worthy?
   celery:
     <<: *common-keys-selab
-    container_name: celery
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
@@ -71,13 +66,10 @@ services:
 
   frontend:
     <<: *common-keys-selab
-    container_name: frontend
     build:
       context: $FRONTEND_DIR
       dockerfile: Dockerfile.dev
     command: sh -c "npm install && npm run host"
-    expose:
-      - 5173
     volumes:
       - ${FRONTEND_DIR}:/app
     depends_on:
@@ -85,11 +77,7 @@ services:
 
   redis:
     <<: *common-keys-selab
-    container_name: redis
     image: redis:latest
-    networks:
-      selab_network:
-        ipv4_address: $REDIS_IP
     expose:
       - $REDIS_PORT
     entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
