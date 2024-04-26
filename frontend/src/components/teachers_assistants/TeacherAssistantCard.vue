@@ -14,7 +14,6 @@ const props = defineProps<{ userValue: User; course: Course; detail?: boolean }>
 /* Composable injections */
 const { t } = useI18n();
 const { user } = storeToRefs(useAuthStore());
-
 </script>
 
 <template>

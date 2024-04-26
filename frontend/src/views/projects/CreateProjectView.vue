@@ -99,7 +99,7 @@ async function submitProject(): Promise<void> {
                 form.submissionStructure,
             ),
             params.courseId as string,
-            form.numberOfGroups !== null ? form.numberOfGroups : 0,
+            form.numberOfGroups ?? 0,
         );
 
         // Redirect to the dashboard overview
