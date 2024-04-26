@@ -2,8 +2,12 @@ from functools import wraps
 from random import choice, randint, sample
 from time import time
 
+from api.models.submission import StructureCheckResult
+from api.models.submission import ExtraCheckResult
+
 from django.db import connection
 from django.utils import timezone
+from django.contrib.contenttypes.models import ContentType
 
 generated_usernames = set()
 
@@ -546,6 +550,17 @@ def seed_submission_results(faker):
         results = []
         structure_results = []
         extra_results = []
+        # Get the content type for the StructureCheckResult model
+        structure_content_type = ContentType.objects.get_for_model(StructureCheckResult)
+
+        # Get the ID of the content type
+        structure_content_type_id = structure_content_type.id
+
+        # Get the content type for the ExtraCheckResult model
+        extra_content_type = ContentType.objects.get_for_model(ExtraCheckResult)
+
+        # Get the ID of the content type
+        extra_content_type_id = extra_content_type.id
 
         for submission in submissions:
             project = next(filter(lambda group: group[0] == submission[1], groups))[1]
@@ -559,7 +574,7 @@ def seed_submission_results(faker):
                     id,
                     result,
                     choice(error_structure) if result == "FAILED" else None,
-                    29,
+                    structure_content_type_id,
                     submission[0],
                 ])
 
@@ -575,7 +590,7 @@ def seed_submission_results(faker):
                     id,
                     result,
                     choice(error_extra) if result == "FAILED" else None,
-                    28,
+                    extra_content_type_id,
                     submission[0],
                 ])
 
