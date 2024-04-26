@@ -53,7 +53,7 @@ const handleCreateButton = (): void => {
         >
             <template #header>
                 <h2 class="my-3 text-primary">
-                    {{ t('views.dashboard.select_course') }}
+                    {{ t('components.button.selectCourse') }}
                 </h2>
             </template>
             <template #default>

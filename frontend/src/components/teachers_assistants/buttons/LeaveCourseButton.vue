@@ -36,7 +36,7 @@ async function leaveCourse(): Promise<void> {
 
         addSuccessMessage(
             t('toasts.messages.success'),
-            t('toasts.messages.courses.teachers_and_assistants.leave.success', [props.user.getFullName()]),
+            t('toasts.messages.courses.teachersAndAssistants.leave.success', [props.user.getFullName()]),
         );
 
         // Refresh the course data
@@ -44,7 +44,7 @@ async function leaveCourse(): Promise<void> {
     } catch (error) {
         addErrorMessage(
             t('toasts.messages.error'),
-            t('toasts.messages.courses.teachers_and_assistants.leave.error', [props.user.getFullName()]),
+            t('toasts.messages.courses.teachersAndAssistants.leave.error', [props.user.getFullName()]),
         );
     }
 }

@@ -15,22 +15,17 @@
             },
             "language": {
                 "nl": "Nederlands",
-                "en": "Engels"
+                "en": "English"
             }
         }
     },
     "views": {
         "dashboard": {
             "courses": "Mijn vakken",
-            "projects": "Lopende projecten",
-            "noProjects": {
-                "student": "Geen lopende projecten gevonden voor alle ingeschreven vakken. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
-                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent."
-            },
-            "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
-            "noCourses": "Geen vakken gevonden. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
-            "select_course": "Selecteer het vak waarvoor je een project wil maken:",
-            "showPastProjects": "Projecten met verstreken deadline"
+            "projects": "Lopende projecten"
+        },
+        "verify": {
+            "redirect": "Je wordt zo meteen doorverwezen"
         },
         "login": {
             "title": "Inloggen",
@@ -71,9 +66,9 @@
             "group_size": "Aantal studenten per groep (1 voor individueel project)",
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
-            "score_visibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
-            "docker_upload": "Upload een Dockerfile",
-            "submission_structure": "Structuur van hoe de indiening moet gebeuren",
+            "scoreVisibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
+            "dockerUpload": "Upload een Dockerfile",
+            "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
             "noStudents": "Geen studenten in deze groep"
         },
         "submissions": {
@@ -99,8 +94,8 @@
             "create": "Creëer vak",
             "edit": "Bewerk vak",
             "clone": "Kloon vak",
-            "clone_assistants": "Kloon assistenten:",
-            "clone_teachers": "Kloon lesgevers:",
+            "cloneAssistants": "Kloon assistenten:",
+            "cloneTeachers": "Kloon lesgevers:",
             "name": "Vaknaam",
             "description": "Beschrijving",
             "excerpt": "Korte beschrijving",
@@ -108,7 +103,8 @@
             "year": "Academiejaar",
             "enroll": "Inschrijven",
             "leave": "Uitschrijven",
-            "teachers_and_assistants": {
+            "noProjects": "Geen projecten beschikbaar voor dit vak",
+            "teachersAndAssistants": {
                 "title": "Lesgevers gelinkt aan dit vak",
                 "enroll": "Voeg toe als {0}",
                 "leave": "Verwijder uit vak",
@@ -150,8 +146,9 @@
         }
     },
     "components": {
+        "submission" : "Indienen",
         "button": {
-            "academic_year": "Academiejaar {0}",
+            "academicYear": "Academiejaar {0}",
             "createProject": "Creëer nieuw project",
             "searchCourse": "Zoek een vak",
             "createCourse": "Maak een vak"
@@ -166,7 +163,20 @@
             "testsFail": "Gefaalde testen",
             "submit": "Indienen"
         },
-        "submission" : "Indienen"
+        "list": {
+            "noProjects": {
+                "student": "Geen lopende projecten gevonden voor alle ingeschreven vakken. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
+                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent."
+            },
+            "noCourses": {
+                "student": "Geen vakken gevonden. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
+                "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop."
+            },
+            "noResults": "Geen resultaten.",
+            "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
+            "selectCourse": "Selecteer het vak waarvoor je een project wil maken:",
+            "showPastProjects": "Projecten met verstreken deadline"
+        }
     },
     "types": {
         "roles": {
@@ -192,7 +202,7 @@
                     "success": "Je bent succesvol uitgeschreven voor het vak '{0}'.",
                     "error": "Er is een fout opgetreden tijdens het uitschrijven voor het vak '{0}'."
                 },
-                "teachers_and_assistants": {
+                "teachersAndAssistants": {
                     "enroll": {
                         "success": "{0} werd succesvol toegevoegd als {1} aan het vak.",
                         "error": "Er is een fout opgetreden tijdens het toevoegen van {0} als {1} aan het vak."
@@ -214,8 +224,8 @@
         "deadline": "De deadline moet na de startdatum liggen"
     },
     "confirmations": {
-        "clone_course": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
-        "leave_course": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
+        "clonseCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
+        "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
     },
     "admin": {
         "title": "Beheerder",

@@ -86,7 +86,7 @@ const incomingProjects = computed<Project[] | null>(() => {
             <div class="flex gap-3 align-items-center mb-5">
                 <InputSwitch input-id="show-past" v-model="showPast" />
                 <label for="show-past">
-                    {{ t('views.dashboard.showPastProjects') }}
+                    {{ t('components.list.showPastProjects') }}
                 </label>
             </div>
             <div class="grid nested-grid">
@@ -110,7 +110,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                             </template>
                             <template v-else>
                                 <div class="col-12">
-                                    <p class="mt-0">{{ t('views.dashboard.noIncomingProjects') }}</p>
+                                    <p class="mt-0">{{ t('components.list.noIncomingProjects') }}</p>
                                 </div>
                             </template>
                         </template>
@@ -150,13 +150,14 @@ const incomingProjects = computed<Project[] | null>(() => {
         <template v-else>
             <div class="max-w-30rem text-center mx-auto">
                 <span class="pi pi-exclamation-circle text-6xl text-primary" />
-                <p>
-                    <span v-if="user?.isStudent()">{{ t('views.dashboard.noProjects.student') }}</span>
-                    <span v-else>{{ t('views.dashboard.noProjects.teacher') }}</span>
-                </p>
-                <RouterLink :to="{ name: 'courses' }" v-if="user?.isStudent()">
-                    <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
-                </RouterLink>
+                <div class="mt-3">
+                    <slot name="empty">
+                        <p>{{ t('components.list.noProjects.student') }}</p>
+                        <RouterLink :to="{ name: 'courses' }">
+                            <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
+                        </RouterLink>
+                    </slot>
+                </div>
             </div>
         </template>
     </div>
