@@ -87,7 +87,7 @@ watch(
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
-        <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
+        <Title class="m-0">{{ t('views.courses.teachersAndAssistants.title') }}</Title>
     </div>
 
     <!-- List with teachers and assistants -->
