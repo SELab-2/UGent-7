@@ -24,6 +24,10 @@ x-common-keys-selab_test: &common-keys-selab_test
     PGID: $PGID
   env_file:
     - .env
+  dns:
+    - 1.1.1.1
+    - 4.4.4.4
+    - 8.8.8.8
 
 ############################# SERVICES
 
