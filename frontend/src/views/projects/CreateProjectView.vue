@@ -203,7 +203,7 @@ let projectId:string = "1235"
                     <div class="grid">
                         <div class="flex align-items-center field-checkbox col-12">
                             <InputSwitch id="scoreVisibility" v-model="form.scoreVisibility" />
-                            <label for="scoreVisibility">{{ t('views.projects.score_visibility') }}</label>
+                            <label for="scoreVisibility">{{ t('views.projects.scoreVisibility') }}</label>
                         </div>
                     </div>
 
@@ -221,7 +221,7 @@ let projectId:string = "1235"
                     <!-- Upload field for docker script -->
                     <div class="field col">
                         <label for="dockerScript">
-                            {{ t('views.projects.docker_upload') }}
+                            {{ t('views.projects.dockerUpload') }}
                         </label>
                         <FileUpload
                             input="dockerScript"
@@ -236,7 +236,7 @@ let projectId:string = "1235"
                     <!-- Upload field for a zip file that contains the submission structure -->
                     <div class="field col">
                         <label for="submissionStructure">
-                            {{ t('views.projects.submission_structure') }}
+                            {{ t('views.projects.submissionStructure') }}
                         </label>
                         <FileUpload
                             id="submissionStructure"
