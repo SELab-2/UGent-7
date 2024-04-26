@@ -5,8 +5,6 @@ import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import { PrimeIcons } from 'primevue/api';
 import Button from 'primevue/button';
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/store/authentication.store.ts';
 
 /* Props */
 interface Props {

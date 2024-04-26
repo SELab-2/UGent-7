@@ -224,7 +224,7 @@
         "deadline": "De deadline moet na de startdatum liggen"
     },
     "confirmations": {
-        "clonseCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
+        "cloneCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
         "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
     },
     "admin": {
