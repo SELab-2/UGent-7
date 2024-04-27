@@ -4,6 +4,8 @@ from __future__ import annotations
 import uuid
 from typing import TYPE_CHECKING
 
+from ypovoli.settings import DOCKER_BUILD_ROOT_NAME
+
 if TYPE_CHECKING:
     from api.models.checks import ExtraCheck
     from api.models.docker import DockerImage
@@ -39,3 +41,7 @@ def get_docker_image_file_path(instance: DockerImage, _: str) -> str:
         return f"docker_images/public/{_get_uuid()}"
     else:
         return f"docker_images/private/{_get_uuid()}"
+
+
+def get_docker_image_tag(instance: DockerImage) -> str:
+    return f"{DOCKER_BUILD_ROOT_NAME}_{instance.id}"
