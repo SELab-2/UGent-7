@@ -22,6 +22,7 @@ from api.serializers.student_serializer import StudentSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
 from authentication.serializers import UserIDSerializer
 from django.utils.translation import gettext
+from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -195,24 +196,28 @@ class CourseViewSet(viewsets.ModelViewSet):
             individual_projects = course.projects.filter(group_size=1)
 
             for project in individual_projects:
-                group = Group.objects.create(
-                    project=project
-                )
+                # Check if the start date of the project is in the future
+                if project.start_date > timezone.now():
+                    group = Group.objects.create(
+                        project=project
+                    )
 
-                group.students.add(
-                    serializer.validated_data["student"]
-                )
+                    group.students.add(
+                        serializer.validated_data["student"]
+                    )
 
-            # If there are now more students for a project then space in groups, create a new group
+            # If there are now more students for a project then places in groups, create a new group
             all_projects = course.projects.exclude(group_size=1)
 
             for project in all_projects:
-                number_groups = project.groups.count()
+                # Check if the start date of the project is in the future
+                if project.start_date > timezone.now():
+                    number_groups = project.groups.count()
 
-                if project.group_size * number_groups < course.students.count():
-                    Group.objects.create(
-                        project=project
-                    )
+                    if project.group_size * number_groups < course.students.count():
+                        Group.objects.create(
+                            project=project
+                        )
 
         return Response({
             "message": gettext("courses.success.students.add")

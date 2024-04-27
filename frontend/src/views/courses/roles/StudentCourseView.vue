@@ -45,7 +45,7 @@ const visibleProjects = computed(() => projects.value?.filter((project) => proje
 async function leaveCourse(): Promise<void> {
     // Show a confirmation dialog before leaving the course, to prevent accidental clicks
     confirm.require({
-        message: t('confirmations.leave_course'),
+        message: t('confirmations.leaveCourse'),
         header: t('views.courses.leave'),
         accept: (): void => {
             if (user.value !== null) {
