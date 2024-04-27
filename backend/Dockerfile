@@ -16,6 +16,5 @@ RUN apk add --no-cache gettext libintl
 WORKDIR /code
 
 COPY --from=requirements /code/requirements.txt .
-COPY . .
 
 RUN pip install -r requirements.txt --no-cache-dir
