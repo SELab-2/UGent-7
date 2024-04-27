@@ -38,7 +38,14 @@ const formattedDate = computed(() => {
 const projectsWithDeadline = computed<Project[] | null>(() => {
     return (
         projects.value?.filter((project) => {
-            return moment(project.deadline).isSame(moment(selectedDate.value), 'day') && (! user.value?.isStudent() || project.visible);
+            if (user.value !== null) {
+                return (
+                    moment(project.deadline).isSame(moment(selectedDate.value), 'day') &&
+                    (!user.value.isStudent() || project.visible)
+                );
+            } else {
+                return false;
+            }
         }) ?? null
     );
 });
@@ -104,7 +111,14 @@ function hasDeadline(date: CalendarDateSlotOptions): boolean {
 
     return (
         projects.value?.some((project) => {
-            return moment(project.deadline).isSame(moment(dateObj), 'day') && (! user.value?.isStudent() || project.visible);
+            if (user.value !== null) {
+                return (
+                    moment(project.deadline).isSame(moment(dateObj), 'day') &&
+                    (!user.value.isStudent() || project.visible)
+                );
+            } else {
+                return false;
+            }
         }) ?? false
     );
 }
@@ -119,7 +133,14 @@ function countDeadlines(date: CalendarDateSlotOptions): number {
 
     return (
         projects.value?.filter((project) => {
-            return moment(project.deadline).isSame(moment(dateObj), 'day') && (! user.value?.isStudent() || project.visible);
+            if (user.value !== null) {
+                return (
+                    moment(project.deadline).isSame(moment(dateObj), 'day') &&
+                    (!user.value.isStudent() || project.visible)
+                );
+            } else {
+                return false;
+            }
         }).length ?? 0
     );
 }

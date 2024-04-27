@@ -37,9 +37,7 @@ const instructors = computed(() => {
     return null;
 });
 
-const visibleProjects = computed(
-    () => projects.value?.filter((project) => project.visible) ?? null,
-);
+const visibleProjects = computed(() => projects.value?.filter((project) => project.visible) ?? null);
 
 /**
  * Leave the course as a student.

@@ -28,9 +28,7 @@ const filteredCourses = computed(
     () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? null,
 );
 
-const visibleProjects = computed(
-    () => projects.value?.filter((project) => project.visible) ?? null,
-);
+const visibleProjects = computed(() => projects.value?.filter((project) => project.visible) ?? null);
 
 /* Watchers */
 watch(
