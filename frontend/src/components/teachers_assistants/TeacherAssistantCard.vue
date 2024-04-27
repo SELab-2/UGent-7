@@ -28,8 +28,8 @@ const { user } = storeToRefs(useAuthStore());
                     :course="course"
                     v-if="
                         props.detail &&
-                        !(props.userValue.getRole() == 'types.roles.teacher' && course.teachers?.length == 1) &&
-                        user?.isTeacher()
+                        user?.isTeacher() &&
+                        !(userValue.hasRoles('teacher') && course.teachers?.length == 1)
                     "
                 />
             </div>

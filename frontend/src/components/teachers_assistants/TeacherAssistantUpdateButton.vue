@@ -31,7 +31,7 @@ const displayEdit = ref(false);
         >
             <template #header>
                 <h2 class="my-3 text-primary">
-                    {{ t('views.courses.teachers_and_assistants.search.title') }}
+                    {{ t('views.courses.teachersAndAssistants.search.title') }}
                 </h2>
             </template>
             <template #default>

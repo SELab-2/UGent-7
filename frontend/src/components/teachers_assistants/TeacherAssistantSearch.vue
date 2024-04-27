@@ -61,17 +61,17 @@ onMounted(async () => {
     <div class="grid">
         <div class="col-12 xl:col-3">
             <Accordion :active-index="[0]" multiple>
-                <AccordionTab :header="t('views.courses.teachers_and_assistants.search.search')">
+                <AccordionTab :header="t('views.courses.teachersAndAssistants.search.search')">
                     <IconField iconPosition="left">
                         <InputText
-                            :placeholder="t('views.courses.teachers_and_assistants.search.placeholder')"
+                            :placeholder="t('views.courses.teachersAndAssistants.search.placeholder')"
                             v-model="filter.name"
                             class="w-full"
                         />
                         <InputIcon class="pi pi-search"></InputIcon>
                     </IconField>
                 </AccordionTab>
-                <AccordionTab :header="t('views.courses.teachers_and_assistants.search.faculty')" v-if="faculties">
+                <AccordionTab :header="t('views.courses.teachersAndAssistants.search.faculty')" v-if="faculties">
                     <div v-for="faculty in faculties" :key="faculty.id" class="flex align-items-centFupder mb-2">
                         <Checkbox
                             v-model="filter.faculties"

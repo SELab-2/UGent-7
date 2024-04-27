@@ -23,7 +23,7 @@ const selectedRole = ref<string | null>(null);
 
 /* Options */
 const options = [
-    { label: t('views.courses.teachers_and_assistants.search.no_role'), value: '' },
+    { label: t('views.courses.teachersAndAssistants.search.no_role'), value: '' },
     { label: t('types.roles.assistant'), value: 'assistant' },
     { label: t('types.roles.teacher'), value: 'teacher' },
 ];
@@ -56,7 +56,7 @@ async function joinCourse(newValue: string): Promise<void> {
 
         addSuccessMessage(
             t('toasts.messages.success'),
-            t('toasts.messages.courses.teachers_and_assistants.enroll.success', [
+            t('toasts.messages.courses.teachersAndAssistants.enroll.success', [
                 props.user.getFullName(),
                 t(`types.roles.${selectedRole.value}`),
             ]),
@@ -67,7 +67,7 @@ async function joinCourse(newValue: string): Promise<void> {
     } catch (error) {
         addErrorMessage(
             t('toasts.messages.error'),
-            t('toasts.messages.courses.teachers_and_assistants.enroll.error', [
+            t('toasts.messages.courses.teachersAndAssistants.enroll.error', [
                 props.user.getFullName(),
                 t(`types.roles.${selectedRole.value}`),
             ]),
@@ -92,7 +92,7 @@ async function leaveCourse(oldValue: string, showMessage: boolean = true): Promi
         if (showMessage) {
             addSuccessMessage(
                 t('toasts.messages.success'),
-                t('toasts.messages.courses.teachers_and_assistants.leave.success', [props.user.getFullName()]),
+                t('toasts.messages.courses.teachersAndAssistants.leave.success', [props.user.getFullName()]),
             );
         }
 
@@ -101,7 +101,7 @@ async function leaveCourse(oldValue: string, showMessage: boolean = true): Promi
     } catch (error) {
         addErrorMessage(
             t('toasts.messages.error'),
-            t('toasts.messages.courses.teachers_and_assistants.leave.error', [props.user.getFullName()]),
+            t('toasts.messages.courses.teachersAndAssistants.leave.error', [props.user.getFullName()]),
         );
     }
 }

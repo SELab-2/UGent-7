@@ -3,7 +3,7 @@ import ButtonGroup from 'primevue/buttongroup';
 import Button from 'primevue/button';
 import Title from '@/components/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
-import CourseList from '@/components/courses/CourseList.vue';
+import CourseList from '@/components/courses/CourseDetailList.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { type Teacher } from '@/types/users/Teacher';
@@ -57,7 +57,27 @@ watch(
         <ProjectCreateButton :courses="filteredCourses" :label="t('components.button.createProject')" />
     </div>
     <!-- Project list body -->
-    <ProjectList :projects="projects" />
+    <ProjectList :projects="projects">
+        <template #empty>
+            <template v-if="filteredCourses.length === 0">
+                <p>{{ t('components.list.noCourses.teacher') }}</p>
+                <RouterLink :to="{ name: 'course-create' }">
+                    <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
+                </RouterLink>
+            </template>
+            <template v-else>
+                <p>
+                    {{ t('components.list.noProjects.teacher') }}
+                </p>
+
+                <p v-if="filteredCourses.length === 0">
+                    {{ t('components.list.noCourses.teacher') }}
+                </p>
+
+                <ProjectCreateButton :courses="filteredCourses" :label="t('components.button.createProject')" />
+            </template>
+        </template>
+    </ProjectList>
     <!-- Course heading -->
     <div
         class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center my-6"
@@ -81,7 +101,14 @@ watch(
         </ButtonGroup>
     </div>
     <!-- Course list body -->
-    <CourseList :courses="filteredCourses" />
+    <CourseList :courses="filteredCourses">
+        <template #empty>
+            <p>{{ t('components.list.noCourses.teacher') }}</p>
+            <RouterLink :to="{ name: 'course-create' }">
+                <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
+            </RouterLink>
+        </template>
+    </CourseList>
 </template>
 
 <style scoped lang="scss"></style>

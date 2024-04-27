@@ -54,10 +54,18 @@ watch(
         </div>
     </div>
     <!-- Project list body -->
-    <ProjectList :projects="projects" />
+    <ProjectList :projects="projects">
+        <template #empty>
+            <p>
+                {{ t('views.courses.noProjects') }}
+            </p>
+
+            <ProjectCreateButton :courses="[course]" :label="t('components.button.createProject')" />
+        </template>
+    </ProjectList>
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
-        <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
+        <Title class="m-0">{{ t('views.courses.teachersAndAssistants.title') }}</Title>
     </div>
 
     <!-- List with teachers and assistants -->

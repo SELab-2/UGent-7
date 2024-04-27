@@ -10,6 +10,7 @@ import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
+import { endpoints } from '@/config/endpoints.ts';
 
 /* Composables */
 const { user, isAuthenticated } = storeToRefs(useAuthStore());
@@ -93,14 +94,14 @@ const items = computed(() => [
                         </template>
                         <!-- Login button -->
                         <template v-else>
-                            <RouterLink :to="{ name: 'login' }">
+                            <a :href="endpoints.auth.login">
                                 <Button
                                     icon="pi pi-unlock"
                                     :label="t('layout.header.login')"
                                     severity="secondary"
                                     class="text-sm"
                                 />
-                            </RouterLink>
+                            </a>
                         </template>
                     </div>
                 </div>
