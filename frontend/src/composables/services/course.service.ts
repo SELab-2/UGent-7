@@ -68,6 +68,7 @@ export function useCourses(): CoursesState {
                 description: courseData.description,
                 excerpt: courseData.excerpt,
                 academic_startyear: courseData.academic_startyear,
+                private: courseData.private_course,
                 faculty: courseData.faculty?.id,
             },
             course,

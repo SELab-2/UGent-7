@@ -101,6 +101,7 @@
             "description": "Beschrijving",
             "excerpt": "Korte beschrijving",
             "faculty": "Faculteit",
+            "private": "Gesloten vak (studenten kunnen enkel inschrijven via uitnodigingslink)",
             "year": "Academiejaar",
             "enroll": "Inschrijven",
             "leave": "Uitschrijven",

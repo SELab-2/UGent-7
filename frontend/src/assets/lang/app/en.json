@@ -101,6 +101,7 @@
             "description": "Description",
             "excerpt": "Short description",
             "faculty": "Faculty",
+            "private": "Private course (students can only enroll with an invitation link)",
             "year": "Academic year",
             "enroll": "Enroll",
             "leave": "Leave",

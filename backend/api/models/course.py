@@ -41,6 +41,12 @@ class Course(models.Model):
         null=True,
     )
 
+    # Field that defines if the course can be joined by anyone, or only using the invite link
+    private = models.BooleanField(default=False)
+
+    # Field that contains the invite link for the course
+    invite_link = models.CharField(max_length=100, blank=True, null=True)
+
     def __str__(self) -> str:
         """The string representation of the course."""
         return str(self.name)
