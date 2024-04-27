@@ -133,3 +133,13 @@ export const submissionData = {
     files: [],
     extra_checks_results: [],
 };
+
+export const extraCheckResultData = {
+    id: 'extraCheckResult1_id',
+    result: 'extraCheckResult1_result',
+    error_message: 'extraCheckResult1_error_message',
+    log_file: null,
+    submission: 1,
+    extra_check: 1,
+    resourcetype: 'extraCheckResult1_resourcetype',
+};
