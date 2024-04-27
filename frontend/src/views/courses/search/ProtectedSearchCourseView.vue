@@ -37,10 +37,11 @@ async function searchCourses(): Promise<void> {
                     <slot name="publicButton" />
                 </div>
 
-                <div class="flex gap-2 mt-4">
-                    <InputText v-model="searchQuery" :placeholder="t('views.courses.search.placeholderByLink')" style="width: 80%;" />                    
-                    <Button label="Search" @click="searchCourses" />
-                </div>                
+                <span class="relative flex mt-4">
+                    <InputText v-model="searchQuery" :placeholder="t('views.courses.searchByLink.placeholder')" style="width: 80%;" type="search" />
+                    <Button @click="searchCourses" icon="pi pi-search" class="p-button-primary" />
+                </span> 
+       
             </div>
         </div>
     </BaseLayout>
