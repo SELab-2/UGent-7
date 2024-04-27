@@ -179,3 +179,5 @@ FILE_PATHS = {
     "extra_checks": "../data/extra_checks/",
     "log_file": "../data/log_files/"
 }
+
+DOCKER_BUILD_ROOT_NAME = "ypovoli_docker_build"

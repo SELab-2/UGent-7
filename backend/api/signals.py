@@ -1,8 +1,11 @@
 
 from api.models.checks import ExtraCheck, StructureCheck
+from api.models.docker import DockerImage
+from api.models.docker import StateEnum as DockerStateEnum
 from api.models.student import Student
 from api.models.submission import (ExtraCheckResult, StateEnum,
                                    StructureCheckResult, Submission)
+from api.tasks.docker_image import task_docker_image_build
 from api.tasks.extra_check import task_extra_check_start
 from api.tasks.structure_check import task_structure_check_start
 from authentication.models import User
@@ -12,11 +15,14 @@ from django.dispatch import Signal, receiver
 
 # Signals
 
+
+run_docker_image_build = Signal()
 run_structure_checks = Signal()
 run_extra_checks = Signal()
 
-
 # Receivers
+
+
 @receiver(user_created)
 def _user_creation(user: User, attributes: dict, **_):
     """Upon user creation, auto-populate additional properties"""
@@ -26,8 +32,15 @@ def _user_creation(user: User, attributes: dict, **_):
         Student.create(user, student_id=student_id)
 
 
+@receiver(run_docker_image_build)
+def _run_docker_image_build(docker_image: DockerImage, **_):
+    docker_image.state = DockerStateEnum.QUEUED
+    docker_image.save()
+    task_docker_image_build.apply_async((docker_image,))
+
+
 @receiver(run_structure_checks)
-def _run_structure_checks(submission: Submission, **kwargs):
+def _run_structure_checks(submission: Submission, **_):
     for structure_check in submission.group.project.structure_checks.all():
         structure_check_result: StructureCheckResult
         if submission.results.filter(structurecheckresult__structure_check__id=structure_check.id).exists():
@@ -46,7 +59,7 @@ def _run_structure_checks(submission: Submission, **kwargs):
 
 
 @receiver(run_extra_checks)
-def _run_extra_checks(submission: Submission, **kwargs):
+def _run_extra_checks(submission: Submission, **_):
     for extra_check in submission.group.project.extra_checks.all():
         extra_check_result: ExtraCheckResult
         if submission.results.filter(extracheckresult__extra_check__id=extra_check.id).exists():
@@ -63,6 +76,8 @@ def _run_extra_checks(submission: Submission, **kwargs):
         extra_check_result.save()
         task_extra_check_start.apply_async((extra_check_result,))
     return True
+
+# Hooks
 
 
 @receiver(post_save, sender=StructureCheck)
