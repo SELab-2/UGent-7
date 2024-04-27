@@ -1,6 +1,7 @@
 from api.models.course import Course
 from api.models.assistant import Assistant
 from api.models.teacher import Teacher
+from api.models.group import Group
 from api.permissions.course_permissions import (CourseAssistantPermission,
                                                 CoursePermission,
                                                 CourseStudentPermission,
@@ -21,6 +22,7 @@ from api.serializers.student_serializer import StudentSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
 from authentication.serializers import UserIDSerializer
 from django.utils.translation import gettext
+from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -190,6 +192,33 @@ class CourseViewSet(viewsets.ModelViewSet):
                 serializer.validated_data["student"]
             )
 
+            # If there are individual projects, add the student to a new group
+            individual_projects = course.projects.filter(group_size=1)
+
+            for project in individual_projects:
+                # Check if the start date of the project is in the future
+                if project.start_date > timezone.now():
+                    group = Group.objects.create(
+                        project=project
+                    )
+
+                    group.students.add(
+                        serializer.validated_data["student"]
+                    )
+
+            # If there are now more students for a project then places in groups, create a new group
+            all_projects = course.projects.exclude(group_size=1)
+
+            for project in all_projects:
+                # Check if the start date of the project is in the future
+                if project.start_date > timezone.now():
+                    number_groups = project.groups.count()
+
+                    if project.group_size * number_groups < course.students.count():
+                        Group.objects.create(
+                            project=project
+                        )
+
         return Response({
             "message": gettext("courses.success.students.add")
         })
@@ -279,10 +308,6 @@ class CourseViewSet(viewsets.ModelViewSet):
             course.teachers.remove(
                 teacher
             )
-
-            # If this was the last course of the teacher, deactivate the teacher role
-            if not teacher.courses.exists():
-                teacher.deactivate()
 
         return Response({
             "message": gettext("courses.success.teachers.remove")

@@ -34,6 +34,7 @@ const form = reactive({
     startDate: new Date(),
     deadline: new Date(),
     groupSize: 1,
+    numberOfGroups: null,
     maxScore: 10,
     visibility: true,
     scoreVisibility: false,
@@ -98,6 +99,7 @@ async function submitProject(): Promise<void> {
                 form.submissionStructure,
             ),
             params.courseId as string,
+            form.numberOfGroups ?? 0,
         );
 
         // Redirect to the dashboard overview
@@ -180,8 +182,17 @@ async function submitProject(): Promise<void> {
                             <ErrorMessage :field="v$.groupSize" />
                         </div>
 
-                        <!-- Max score for the project -->
                         <div class="field col">
+                            <label for="numberOfGroups">
+                                {{ t('views.projects.number_of_groups') }}
+                            </label>
+                            <InputNumber id="numberOfGroups" class="w-full" v-model="form.numberOfGroups" :min="1" />
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <!-- Max score for the project -->
+                        <div class="field col-6">
                             <label for="maxScore">{{ t('views.projects.max_score') }}</label>
                             <InputNumber id="maxScore" class="w-full" v-model="form.maxScore" :min="1" />
                             <ErrorMessage :field="v$.maxScore" />
