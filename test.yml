@@ -8,7 +8,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.91.0/24
+        - subnet: 192.168.92.0/24
 
 ############################# EXTENSIONS
 
@@ -24,40 +24,38 @@ x-common-keys-selab_test: &common-keys-selab_test
     PGID: $PGID
   env_file:
     - .env
+  dns:
+    - 1.1.1.1
+    - 4.4.4.4
+    - 8.8.8.8
 
 ############################# SERVICES
 
 services:
-  test_nginx:
+  nginx:
     <<: *common-keys-selab_test
     image: nginx:latest
-    container_name: test_nginx
-    expose:
-      - 80
-      - 443
-      - 8080
+    container_name: nginx
     volumes:
       - ${DATA_DIR}/nginx/nginx.test.conf:/etc/nginx/nginx.conf:ro
       - ${SSL_DIR}:/etc/nginx/ssl:ro
     depends_on:
-      - test_backend
-      - test_frontend
+      - backend
+      - frontend
 
-  test_backend:
+  backend:
     <<: *common-keys-selab_test
-    container_name: test_backend
+    container_name: backend
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
-    command: sh -c "./setup.sh && python manage.py runsslserver 192.168.91.2:8080"
-    expose:
-      - 8080
+    command: sh -c "./setup.sh && python manage.py runsslserver 0.0.0.0:8000"
     volumes:
       - $BACKEND_DIR:/code
 
-  test_celery:
+  celery:
     <<: *common-keys-selab_test
-    container_name: test_celery
+    container_name: celery
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
@@ -65,39 +63,32 @@ services:
     volumes:
       - $BACKEND_DIR:/code
     depends_on:
-      - test_backend
-      - test_redis
+      - backend
+      - redis
 
-  test_frontend:
+  frontend:
     <<: *common-keys-selab_test
-    container_name: test_frontend
+    container_name: frontend
     build:
       context: $FRONTEND_DIR
       dockerfile: Dockerfile.dev
     command: sh -c "npm install && npm run host"
-    expose:
-      - 5173
     volumes:
       - $FRONTEND_DIR:/app
     depends_on:
-      - test_backend
+      - backend
 
-  test_redis:
+  redis:
     <<: *common-keys-selab_test
-    container_name: test_redis
+    container_name: redis
     image: redis:latest
-    networks:
-      test_selab_network:
-        ipv4_address: 192.168.91.10
-    expose:
-      - 6379
     entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
       - ${DATA_DIR}/redis:/data
 
-  test_cypress:
+  cypress:
     <<: *common-keys-selab_test
-    container_name: test_cypress
+    container_name: cypress
     image: cypress/included:cypress-12.17.3-node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
     working_dir: /e2e
     volumes:
