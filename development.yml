@@ -34,6 +34,7 @@ x-common-keys-selab: &common-keys-selab
 services:
   nginx:
     <<: *common-keys-selab
+    container_name: nginx
     image: nginx:latest
     ports:
       - 80:80
@@ -48,6 +49,7 @@ services:
 
   backend:
     <<: *common-keys-selab
+    container_name: backend
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
@@ -58,6 +60,7 @@ services:
   # TODO: Is this an entire different container worthy?
   celery:
     <<: *common-keys-selab
+    container_name: celery
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
@@ -70,6 +73,7 @@ services:
 
   frontend:
     <<: *common-keys-selab
+    container_name: frontend
     build:
       context: $FRONTEND_DIR
       dockerfile: Dockerfile.dev
@@ -81,6 +85,7 @@ services:
 
   redis:
     <<: *common-keys-selab
+    container_name: redis
     image: redis:latest
     expose:
       - $REDIS_PORT
