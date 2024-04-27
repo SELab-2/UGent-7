@@ -75,7 +75,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class CreateProjectSerializer(ProjectSerializer):
-    number_groups = serializers.IntegerField(min_value=1, required=False)
+    number_groups = serializers.IntegerField(min_value=0, required=False)
     zip_structure = serializers.FileField(required=False, read_only=True)
 
     def create(self, validated_data):
@@ -89,19 +89,29 @@ class CreateProjectSerializer(ProjectSerializer):
         # Create the project object without passing 'number_groups' field
         project = super().create(validated_data)
 
-        # Create groups for the project, if specified
-        if number_groups is not None:
-
-            for _ in range(number_groups):
-                Group.objects.create(project=project)
-
-        elif project.group_size == 1:
+        if project.group_size == 1:
             # If the group_size is set to one, create a group for each student
             students = project.course.students.all()
 
             for student in students:
                 group = Group.objects.create(project=project)
                 group.students.add(student)
+
+        elif number_groups is not None:
+            # Create groups for the project, if specified
+
+            if number_groups > 0:
+                # Create the number of groups specified
+                for _ in range(number_groups):
+                    Group.objects.create(project=project)
+
+            else:
+                # If the number of groups is set to zero, create #students / group_size groups
+                number_students = project.course.students.count()
+                group_size = project.group_size
+
+                for _ in range(0, number_students, group_size):
+                    group = Group.objects.create(project=project)
 
         # If a zip_structure is provided, parse it to create the structure checks
         if zip_structure is not None:

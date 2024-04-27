@@ -877,6 +877,7 @@ class CourseModelTestsAsTeacher(APITestCase):
                 "days": 50,
                 "deadline": timezone.now() + timezone.timedelta(days=50),
                 "start_date": timezone.now(),
+                "group_size": 3,
                 "number_groups": 5
             },
             follow=True,

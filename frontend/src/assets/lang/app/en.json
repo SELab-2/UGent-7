@@ -71,6 +71,7 @@
             "description": "Description",
             "start_date": "Start project",
             "group_size": "Number of students in a group (1 for an individual project)",
+            "number_of_groups": "Number of groups (optional, otherwise #students / group size)",
             "max_score": "Maximum score that can be achieved",
             "visibility": "Make project visible to students",
             "scoreVisibility": "Make score, when uploaded, automatically visible to students",
@@ -102,7 +103,7 @@
             "edit": "Edit course",
             "clone": "Clone course",
             "cloneAssistants": "Clone assistants:",
-            "cloneCourse": "Clone teachers:",
+            "cloneTeachers": "Clone teachers:",
             "name": "Course name",
             "description": "Description",
             "excerpt": "Short description",
@@ -231,8 +232,8 @@
         "deadline": "The deadline must be after the start date"
     },
     "confirmations": {
-        "clone_course": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
-        "leave_course": "Are you sure you want to leave this course? You will no longer have access to this course."
+        "cloneCourse": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
+        "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course."
     },
     "admin": {
         "title": "Admin",

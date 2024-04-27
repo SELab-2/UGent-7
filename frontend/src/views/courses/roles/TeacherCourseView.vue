@@ -92,14 +92,12 @@ watch(
                             <span class="font-bold text-2xl">{{ message.header }}</span>
                             <p class="mb-4">{{ message.message }}</p>
                             <div class="flex items-center mb-4">
-                                <label for="cloneTeachers" class="mr-2">{{
-                                    t('views.courses.confirmations.cloneCourse')
-                                }}</label>
+                                <label for="cloneTeachers" class="mr-2">{{ t('views.courses.cloneTeachers') }}</label>
                                 <InputSwitch v-model="cloneTeachers" id="cloneTeachers" class="p-inputswitch-sm" />
                             </div>
                             <div class="flex items-center mb-4">
                                 <label for="cloneAssistants" class="mr-2">{{
-                                    t('views.courses.confirmations.cloneAssistants')
+                                    t('views.courses.cloneAssistants')
                                 }}</label>
                                 <InputSwitch v-model="cloneAssistants" id="cloneAssistants" class="p-inputswitch-sm" />
                             </div>
