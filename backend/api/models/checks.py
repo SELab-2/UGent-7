@@ -16,7 +16,13 @@ class StructureCheck(models.Model):
 
     # Name of the directory the structure check checks in
     name = models.CharField(
-        max_length=100,
+        max_length=255,
+        blank=False,
+        null=False
+    )
+
+    path = models.CharField(
+        max_length=255,
         blank=False,
         null=False
     )
