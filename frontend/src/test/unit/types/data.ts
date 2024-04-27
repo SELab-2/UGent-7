@@ -143,3 +143,12 @@ export const extraCheckResultData = {
     extra_check: 1,
     resourcetype: 'extraCheckResult1_resourcetype',
 };
+
+export const structureCheckResultData = {
+    id: 'structureCheckResult1_id',
+    result: 'structureCheckResult1_result',
+    error_message: 'structureCheckResult1_error_message',
+    submission: 1,
+    structure_check: 1,
+    resourcetype: 'structureCheckResult1_resourcetype',
+};

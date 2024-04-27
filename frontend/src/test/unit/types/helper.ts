@@ -180,3 +180,14 @@ export function createExtraCheckResult(extraCheckResultData: any): ExtraCheckRes
         extraCheckResultData.resourcetype,
     );
 }
+
+export function createStructureCheckResult(structureCheckResultData: any): StructureCheckResult {
+    return new StructureCheckResult(
+        structureCheckResultData.id,
+        structureCheckResultData.result,
+        structureCheckResultData.error_message,
+        structureCheckResultData.submission,
+        structureCheckResultData.structure_check,
+        structureCheckResultData.resourcetype,
+    );
+}
