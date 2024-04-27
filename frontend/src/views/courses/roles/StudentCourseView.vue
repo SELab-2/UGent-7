@@ -37,6 +37,10 @@ const instructors = computed(() => {
     return null;
 });
 
+const visibleProjects = computed(
+    () => projects.value?.filter((project) => project.visible) ?? null,
+);
+
 /**
  * Leave the course as a student.
  */
@@ -83,7 +87,13 @@ watch(
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
     </div>
     <!-- Project list body -->
-    <ProjectList :projects="projects" />
+    <ProjectList :projects="visibleProjects">
+        <template #empty>
+            <p>
+                {{ t('views.courses.noProjects') }}
+            </p>
+        </template>
+    </ProjectList>
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">

@@ -28,6 +28,10 @@ const filteredCourses = computed(
     () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? null,
 );
 
+const visibleProjects = computed(
+    () => projects.value?.filter((project) => project.visible) ?? null,
+);
+
 /* Watchers */
 watch(
     props.student,
@@ -49,7 +53,7 @@ watch(
     </div>
 
     <!-- Project list body -->
-    <ProjectList class="fadein" :projects="projects" />
+    <ProjectList class="fadein" :projects="visibleProjects" />
     <!-- Course heading -->
     <div
         class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center my-6"

@@ -29,7 +29,8 @@ const { user } = storeToRefs(useAuthStore());
                     v-if="
                         props.detail &&
                         user?.isTeacher() &&
-                        !(userValue.hasRoles('teacher') && course.teachers?.length == 1)
+                        // Explicit check on role, because the roles field in not initialized in the user object
+                        !(userValue.getRole() === 'types.roles.teacher' && course.teachers?.length == 1)
                     "
                 />
             </div>

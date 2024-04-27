@@ -38,7 +38,7 @@ const formattedDate = computed(() => {
 const projectsWithDeadline = computed<Project[] | null>(() => {
     return (
         projects.value?.filter((project) => {
-            return moment(project.deadline).isSame(moment(selectedDate.value), 'day');
+            return moment(project.deadline).isSame(moment(selectedDate.value), 'day') && (! user.value?.isStudent() || project.visible);
         }) ?? null
     );
 });
@@ -104,7 +104,7 @@ function hasDeadline(date: CalendarDateSlotOptions): boolean {
 
     return (
         projects.value?.some((project) => {
-            return moment(project.deadline).isSame(moment(dateObj), 'day');
+            return moment(project.deadline).isSame(moment(dateObj), 'day') && (! user.value?.isStudent() || project.visible);
         }) ?? false
     );
 }
@@ -119,7 +119,7 @@ function countDeadlines(date: CalendarDateSlotOptions): number {
 
     return (
         projects.value?.filter((project) => {
-            return moment(project.deadline).isSame(moment(dateObj), 'day');
+            return moment(project.deadline).isSame(moment(dateObj), 'day') && (! user.value?.isStudent() || project.visible);
         }).length ?? 0
     );
 }
