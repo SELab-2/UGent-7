@@ -125,6 +125,7 @@
                 "faculty": "Faculty",
                 "year": "Academic year",
                 "placeholder": "Search a course by name",
+                "placeholderByLink": "Find a course using the registration link",
                 "title": "Search a course",
                 "results": "{0} courses found for set filters"
             }

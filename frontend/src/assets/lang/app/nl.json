@@ -125,6 +125,7 @@
                 "faculty": "Faculteit",
                 "year": "Academiejaar",
                 "placeholder": "Zoek een vak op naam",
+                "placeholderByLink": "Zoek een vak gebruik makende van een uitnodigingslink",
                 "title": "Zoek een vak",
                 "results": "{0} vakken gevonden voor ingestelde filters"
             }
