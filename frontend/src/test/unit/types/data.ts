@@ -128,10 +128,10 @@ export const submissionData = {
     id: 'submission1_id',
     submission_number: 1,
     submission_time: new Date('November 1, 2024 04:20:00'),
-    structure_checks_passed: true,
-    group: null,
     files: [],
-    extra_checks_results: [],
+    extra_check_results: [],
+    structure_check_results: [],
+    is_valid: true,
 };
 
 export const extraCheckResultData = {

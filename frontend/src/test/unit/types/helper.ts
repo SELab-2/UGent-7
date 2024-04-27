@@ -157,17 +157,17 @@ export function createSubmissionStatus(submissionStatusData: any): SubmissionSta
     );
 }
 
-// export function createSubmission(submissionData: any): Submission {
-//     return new Submission(
-//         submissionData.id,
-//         submissionData.submission_number,
-//         submissionData.submission_time,
-//         submissionData.files.slice(),
-//         submissionData.extra_checks_results.slice(),
-//         submissionData.structure_checks_results.slice(),
-//         submissionData.is_valid,
-//     );
-// }
+export function createSubmission(submissionData: any): Submission {
+    return new Submission(
+        submissionData.id,
+        submissionData.submission_number,
+        submissionData.submission_time,
+        submissionData.files.slice(),
+        submissionData.extra_check_results.slice(),
+        submissionData.structure_check_results.slice(),
+        submissionData.is_valid,
+    );
+}
 
 export function createExtraCheckResult(extraCheckResultData: any): ExtraCheckResult {
     return new ExtraCheckResult(
