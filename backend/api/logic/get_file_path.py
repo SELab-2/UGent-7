@@ -8,8 +8,7 @@ if TYPE_CHECKING:
     from api.models.checks import ExtraCheck
     from api.models.docker import DockerImage
     from api.models.project import Project
-    from api.models.submission import (ExtraChecksResult, Submission,
-                                       SubmissionFile)
+    from api.models.submission import ExtraCheckResult, SubmissionFile
 
 
 def _get_uuid() -> str:
@@ -30,7 +29,7 @@ def get_extra_check_file_path(instance: ExtraCheck, _: str) -> str:
     return f"{get_project_file_path(instance.project)}checks/{_get_uuid()}"
 
 
-def get_extra_check_result_file_path(instance: ExtraChecksResult, _: str) -> str:
+def get_extra_check_result_file_path(instance: ExtraCheckResult, _: str) -> str:
     return (f"{get_project_file_path(instance.submission.group.project)}"
             f"submissions/{instance.submission.group.id}/{instance.submission.id}/{_get_uuid()}")
 
