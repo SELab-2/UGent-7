@@ -20,12 +20,12 @@ describe('submission type', () => {
 
     it('create a submission instance from JSON data', () => {
         const responseSubmissionJSON = {
-                id: 'submission1_id',
-                submission_number: 1,
-                submission_time: new Date('November 1, 2024 04:20:00'),
-                files: [],
-                results: [],
-                is_valid: true,
+            id: 'submission1_id',
+            submission_number: 1,
+            submission_time: new Date('November 1, 2024 04:20:00'),
+            files: [],
+            results: [],
+            is_valid: true,
         };
 
         const submission = Submission.fromJSON(responseSubmissionJSON);
