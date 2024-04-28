@@ -55,7 +55,7 @@ const meterItems = computed(() => {
             </MeterGroup>
         </template>
         <template v-else>
-            {{ t('components.card.noSubmissions') }}
+            <p class="mb-0">{{ t('components.card.noSubmissions') }}</p>
         </template>
     </template>
     <template v-else>

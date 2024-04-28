@@ -3,8 +3,8 @@ version: "3.9"
 ############################# NETWORKS
 
 networks:
-  selab_network:
-    name: selab_network
+  selab_network_prod:
+    name: selab_network_prod
     driver: bridge
     ipam:
       config:
@@ -14,7 +14,7 @@ networks:
 
 x-common-keys-selab: &common-keys-selab
   networks:
-    - selab_network
+    - selab_network_prod
   security_opt:
     - no-new-privileges:true
   restart: unless-stopped
@@ -24,6 +24,10 @@ x-common-keys-selab: &common-keys-selab
     PGID: $PGID
   env_file:
     - .env
+  dns:
+    - 1.1.1.1
+    - 4.4.4.4
+    - 8.8.8.8
 
 ############################# SERVICES
 
@@ -31,7 +35,7 @@ services:
   nginx:
     <<: *common-keys-selab
     image: nginx:latest
-    container_name: nginx
+    container_name: nginx_prod
     ports:
       - 80:80
       - 443:443
@@ -45,47 +49,35 @@ services:
   postgres:
     <<: *common-keys-selab
     image: postgres:15.2
-    container_name: postgres
-    networks:
-      selab_network:
-        ipv4_address: $POSTGRES_IP
+    container_name: postgres_prod
     environment:
       POSTGRES_DB: $POSTGRES_DB
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-    expose:
-      - $POSTGRES_PORT
     volumes:
       - ${DATA_DIR}/postgres:/var/lib/postgresql/data
 
   backend:
     <<: *common-keys-selab
-    container_name: backend
+    container_name: backend_prod
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
     command: sh -c "./setup.sh && gunicorn --config gunicorn_config.py ypovoli.wsgi:application"
-    expose:
-      - 8080
     depends_on:
       - postgres
 
   redis:
     <<: *common-keys-selab
-    container_name: redis
+    container_name: redis_prod
     image: redis:latest
-    networks:
-      selab_network:
-        ipv4_address: $REDIS_IP
-    expose:
-      - $REDIS_PORT
     entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     volumes:
       - ${DATA_DIR}/redis:/data
 
   celery:
     <<: *common-keys-selab
-    container_name: celery
+    container_name: celery_prod
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
@@ -98,11 +90,9 @@ services:
 
   frontend:
     <<: *common-keys-selab
-    container_name: frontend
+    container_name: frontend_prod
     build:
       context: $FRONTEND_DIR
       dockerfile: Dockerfile.prod
-    expose:
-      - 3000
     depends_on:
       - backend

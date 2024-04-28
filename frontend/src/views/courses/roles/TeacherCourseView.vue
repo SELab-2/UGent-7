@@ -47,7 +47,7 @@ const cloneTeachers = ref<boolean>(false);
 async function handleClone(): Promise<void> {
     // Show a confirmation dialog before cloning the course
     confirm.require({
-        message: t('confirmations.clone_course'),
+        message: t('confirmations.cloneCourse'),
         header: t('views.courses.clone'),
         accept: () => {
             cloneCourse(props.course.id, cloneAssistants.value, cloneTeachers.value);
@@ -92,12 +92,12 @@ watch(
                             <span class="font-bold text-2xl">{{ message.header }}</span>
                             <p class="mb-4">{{ message.message }}</p>
                             <div class="flex items-center mb-4">
-                                <label for="cloneTeachers" class="mr-2">{{ t('views.courses.clone_teachers') }}</label>
+                                <label for="cloneTeachers" class="mr-2">{{ t('views.courses.cloneTeachers') }}</label>
                                 <InputSwitch v-model="cloneTeachers" id="cloneTeachers" class="p-inputswitch-sm" />
                             </div>
                             <div class="flex items-center mb-4">
                                 <label for="cloneAssistants" class="mr-2">{{
-                                    t('views.courses.clone_assistants')
+                                    t('views.courses.cloneAssistants')
                                 }}</label>
                                 <InputSwitch v-model="cloneAssistants" id="cloneAssistants" class="p-inputswitch-sm" />
                             </div>
@@ -132,13 +132,21 @@ watch(
         </div>
     </div>
     <!-- Project list body -->
-    <ProjectList :projects="projects" />
+    <ProjectList :projects="projects">
+        <template #empty>
+            <p>
+                {{ t('views.courses.noProjects') }}
+            </p>
+
+            <ProjectCreateButton :courses="[course]" :label="t('components.button.createProject')" />
+        </template>
+    </ProjectList>
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
-        <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
+        <Title class="m-0">{{ t('views.courses.teachersAndAssistants.title') }}</Title>
 
-        <div v-tooltip.top="t('views.courses.teachers_and_assistants.edit')">
+        <div v-tooltip.top="t('views.courses.teachersAndAssistants.edit')">
             <TeacherAssistantUpdateButton :course="props.course" />
         </div>
     </div>

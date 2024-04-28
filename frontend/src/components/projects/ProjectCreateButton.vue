@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n';
 import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
 import { ref } from 'vue';
-import CourseList from '@/components/courses/CourseList.vue';
+import CourseList from '@/components/courses/CourseDetailList.vue';
 import { useRouter } from 'vue-router';
 
 /* Composable injections */
@@ -53,7 +53,7 @@ const handleCreateButton = (): void => {
         >
             <template #header>
                 <h2 class="my-3 text-primary">
-                    {{ t('views.dashboard.select_course') }}
+                    {{ t('components.button.selectCourse') }}
                 </h2>
             </template>
             <template #default>

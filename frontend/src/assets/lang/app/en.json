@@ -14,7 +14,7 @@
                 "help": "help"
             },
             "language": {
-                "nl": "Dutch",
+                "nl": "Nederlands",
                 "en": "English"
             }
         }
@@ -22,12 +22,10 @@
     "views": {
         "dashboard": {
             "courses": "My courses",
-            "projects": "Current projects",
-            "noProjects": "No projects available for this academic year.",
-            "noIncomingProjects": "No projects with a deadline within 7 days.",
-            "noCourses": "No courses available for this academic year.",
-            "select_course": "Select the course for which you want to create a project:",
-            "showPastProjects": "Projects with passed deadline"
+            "projects": "Current projects"
+        },
+        "verify": {
+            "redirect": "You are being redirected..."
         },
         "login": {
             "title": "Login",
@@ -66,11 +64,12 @@
             "description": "Description",
             "start_date": "Start project",
             "group_size": "Number of students in a group (1 for an individual project)",
+            "number_of_groups": "Number of groups (optional, otherwise #students / group size)",
             "max_score": "Maximum score that can be achieved",
             "visibility": "Make project visible to students",
-            "score_visibility": "Make score, when uploaded, automatically visible to students",
-            "docker_upload": "Upload a Dockerfile",
-            "submission_structure": "Structure of how a submission should be made",
+            "scoreVisibility": "Make score, when uploaded, automatically visible to students",
+            "dockerUpload": "Upload a Dockerfile",
+            "submissionStructure": "Structure of how a submission should be made",
             "noStudents": "No students in this group"
         },
         "submissions": {
@@ -96,8 +95,8 @@
             "create": "Create course",
             "edit": "Edit course",
             "clone": "Clone course",
-            "clone_assistants": "Clone assistants:",
-            "clone_teachers": "Clone teachers:",
+            "cloneAssistants": "Clone assistants:",
+            "cloneTeachers": "Clone teachers:",
             "name": "Course name",
             "description": "Description",
             "excerpt": "Short description",
@@ -105,7 +104,8 @@
             "year": "Academic year",
             "enroll": "Enroll",
             "leave": "Leave",
-            "teachers_and_assistants": {
+            "noProjects": "No projects available for this course",
+            "teachersAndAssistants": {
                 "title": "People linked to this course",
                 "enroll": "Add as {0}",
                 "leave": "Remove from course",
@@ -114,6 +114,7 @@
                     "search": "Search",
                     "faculty": "Faculty",
                     "role": "Role",
+                    "no_role": "None",
                     "placeholder": "Search a user by name",
                     "title": "Find users to link to this course",
                     "results": "{0} users found for set filters"
@@ -147,8 +148,10 @@
     },
     "components": {
         "button": {
-            "academic_year": "Academic year {0}",
-            "createProject": "Create a new project"
+            "academicYear": "Academic year {0}",
+            "createProject": "Create a new project",
+            "searchCourse": "Search a course",
+            "createCourse": "Create a new course"
         },
         "card": {
             "open": "Details",
@@ -159,6 +162,20 @@
             "testsSucceed": "Succeeded tests",
             "testsFail": "Failed tests",
             "submit": "Submit"
+        },
+        "list": {
+            "noProjects": {
+                "student": "No current projects found for all registered subjects. Register for a public course using the search function, or use an invitation link from a teacher.",
+                "teacher": "No current projects found for all registered subjects. Create a new project for a course with the button below."
+            },
+            "noCourses":  {
+                "student": "No courses found. Register for a public course using the search function, or use an invitation link from a teacher.",
+                "teacher": "No courses found. Create a new course with the button below."
+            },
+            "noResults": "No results.",
+            "noIncomingProjects": "No projects with a deadline within 7 days.",
+            "selectCourse": "Select the course for which you want to create a project:",
+            "showPastProjects": "Projects with passed deadline"
         },
         "submission": "Submit"
     },
@@ -186,7 +203,7 @@
                     "success": "You have been successfully unenrolled for the course '{0}'",
                     "error": "An error occurred while unenrolling for the course '{0}'."
                 },
-                "teachers_and_assistants": {
+                "teachersAndAssistants": {
                     "enroll": {
                         "success": "{0} has been successfully added as {1} to the course.",
                         "error": "An error occurred while adding {0} as {1} to the course."
@@ -208,8 +225,8 @@
         "deadline": "The deadline must be after the start date"
     },
     "confirmations": {
-        "clone_course": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
-        "leave_course": "Are you sure you want to leave this course? You will no longer have access to this course."
+        "cloneCourse": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
+        "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course."
     },
     "admin": {
         "title": "Admin",

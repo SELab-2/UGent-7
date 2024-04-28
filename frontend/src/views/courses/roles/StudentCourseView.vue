@@ -37,13 +37,15 @@ const instructors = computed(() => {
     return null;
 });
 
+const visibleProjects = computed(() => projects.value?.filter((project) => project.visible) ?? null);
+
 /**
  * Leave the course as a student.
  */
 async function leaveCourse(): Promise<void> {
     // Show a confirmation dialog before leaving the course, to prevent accidental clicks
     confirm.require({
-        message: t('confirmations.leave_course'),
+        message: t('confirmations.leaveCourse'),
         header: t('views.courses.leave'),
         accept: (): void => {
             if (user.value !== null) {
@@ -83,11 +85,17 @@ watch(
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
     </div>
     <!-- Project list body -->
-    <ProjectList :projects="projects" />
+    <ProjectList :projects="visibleProjects">
+        <template #empty>
+            <p>
+                {{ t('views.courses.noProjects') }}
+            </p>
+        </template>
+    </ProjectList>
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
-        <Title class="m-0">{{ t('views.courses.teachers_and_assistants.title') }}</Title>
+        <Title class="m-0">{{ t('views.courses.teachersAndAssistants.title') }}</Title>
     </div>
 
     <!-- List with teachers and assistants -->

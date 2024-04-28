@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
-import CourseList from '@/components/courses/CourseList.vue';
+import CourseList from '@/components/courses/CourseDetailList.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
 import { type Student } from '@/types/users/Student.ts';
 import { useI18n } from 'vue-i18n';
@@ -28,6 +28,8 @@ const filteredCourses = computed(
     () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? null,
 );
 
+const visibleProjects = computed(() => projects.value?.filter((project) => project.visible) ?? null);
+
 /* Watchers */
 watch(
     props.student,
@@ -49,7 +51,7 @@ watch(
     </div>
 
     <!-- Project list body -->
-    <ProjectList class="fadein" :projects="projects" />
+    <ProjectList class="fadein" :projects="visibleProjects" />
     <!-- Course heading -->
     <div
         class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center my-6"
