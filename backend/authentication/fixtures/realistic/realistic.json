@@ -1,0 +1,15 @@
+[
+  {"model": "authentication.user",
+  "pk": "0",
+  "fields":
+  {
+    "last_login": "2024-04-28T13:40:08.657Z",
+    "username": "SteffiUrlus", "is_staff": true,
+    "email": "SteffiUrlus@ugent.be",
+    "first_name": "Steffi",
+    "last_name": "Urlus",
+    "last_enrolled": 2024,
+    "create_time": "2024-04-28T13:40:08.657Z",
+    "faculties": []
+  }
+}]

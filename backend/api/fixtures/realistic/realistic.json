@@ -1,0 +1,21 @@
+[
+  {
+    "model": "api.dockerimage",
+    "pk": 1,
+    "fields":
+      {
+        "name": "miss.jpeg",
+        "file": "/now/move",
+        "owner": "8",
+        "public": true
+      }
+  },
+  {
+    "model": "api.fileextension",
+    "pk": 1,
+    "fields":
+    {
+      "extension": "pdf"
+    }
+  }
+]

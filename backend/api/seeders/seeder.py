@@ -269,7 +269,7 @@ def seed_projects(
         visible_prob=80,
         archived_prob=10,
         score_visible_prob=30,
-        locked_groups_prob=30,
+        locked_groups_prob=0,
         min_max_score=1,
         max_max_score=100,
         min_group_size=1,
