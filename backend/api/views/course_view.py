@@ -83,6 +83,9 @@ class CourseViewSet(viewsets.ModelViewSet):
         if faculties:
             queryset = queryset.filter(faculty__in=faculties)
 
+        # Filter the queryset so that only public courses are shown
+        queryset = queryset.filter(private_course=False)
+
         # Serialize the resulting queryset
         serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
             "request": request

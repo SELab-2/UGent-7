@@ -53,7 +53,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "description",
             "faculty",
             "parent_course",
-            "private",
+            "private_course",
             "teachers",
             "assistants",
             "students",

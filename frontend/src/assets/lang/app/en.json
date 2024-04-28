@@ -95,6 +95,7 @@
             "create": "Create course",
             "edit": "Edit course",
             "clone": "Clone course",
+            "share": "Create invitation link",
             "cloneAssistants": "Clone assistants:",
             "cloneTeachers": "Clone teachers:",
             "name": "Course name",
@@ -230,7 +231,8 @@
     },
     "confirmations": {
         "cloneCourse": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
-        "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course."
+        "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course.",
+        "shareCourse": "By creating an invitation link, you allow students in possession of this link to enroll in this course."
     },
     "admin": {
         "title": "Admin",

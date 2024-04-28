@@ -6,6 +6,7 @@ import Textarea from 'primevue/textarea';
 import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
+import InputSwitch from 'primevue/inputswitch';
 import { reactive, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -33,7 +34,9 @@ onMounted(async () => {
     if (course.value !== null) {
         form.name = course.value.name;
         form.description = course.value.description ?? '';
+        form.excerpt = course.value.excerpt ?? '';
         form.faculty = course.value.faculty ?? new Faculty('', '');
+        form.private = course.value.private_course;
         form.year = `${course.value.academic_startyear} - ${course.value.academic_startyear + 1}`;
     }
 });
@@ -44,6 +47,7 @@ const form = reactive({
     description: '',
     excerpt: '',
     faculty: new Faculty('', ''), // Default value for the dropdown
+    private: false,
     year: '',
 });
 
@@ -73,6 +77,7 @@ const submitCourse = async (): Promise<void> => {
                 form.description,
                 form.excerpt,
                 course.value.academic_startyear,
+                form.private,
                 course.value.parent_course,
                 form.faculty,
             ),
@@ -130,6 +135,14 @@ const submitCourse = async (): Promise<void> => {
                     <div class="mb-4">
                         <label for="courseYear">{{ t('views.courses.year') }}</label>
                         <InputText id="courseYear" v-model="form.year" readonly class="readonly-input" />
+                    </div>
+
+                    <!-- Course visibility -->
+                    <div class="grid">
+                        <div class="flex align-items-center field-checkbox col-12">
+                            <InputSwitch id="private" v-model="form.private" />
+                            <label for="private">{{ t('views.courses.private') }}</label>
+                        </div>
                     </div>
 
                     <!-- Submit button -->
