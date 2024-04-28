@@ -17,11 +17,12 @@ const { t } = useI18n();
 const meterItems = computed(() => {
     const groups = props.submissionStatus !== null ? props.submissionStatus.non_empty_groups : 0;
     const groupsSubmitted = props.submissionStatus !== null ? props.submissionStatus.groups_submitted : 0;
-    const submissionsPassed = props.submissionStatus !== null ? props.submissionStatus.submissions_passed : 0;
-    const submissionsFailed = groupsSubmitted - submissionsPassed;
+    const structureChecksPassed = props.submissionStatus !== null ? props.submissionStatus.structure_checks_passed : 0;
+    const extraChecksPassed = props.submissionStatus !== null ? props.submissionStatus.extra_checks_passed : 0;
+    const submissionsFailed = groupsSubmitted - extraChecksPassed;
     return [
         {
-            value: (submissionsPassed / groups) * 100,
+            value: (extraChecksPassed / groups) * 100,
             color: '#749b68',
             label: t('components.card.testsSucceed'),
             icon: 'pi pi-check',
