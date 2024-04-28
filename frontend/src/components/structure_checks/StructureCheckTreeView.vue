@@ -155,6 +155,10 @@ const onNodeSelect = (event: TreeNode_struct) => {
     editedNode.value = event;
 };
 
+const unselectNode = (event: TreeNode_struct) => {
+    editedNode.value = null;
+};
+
 const editSelectedNode = () => {
     if (editedNode.value && editedNode.value.sort != "empty"){
         editedNode.value.label = editedNodeName.value;
@@ -180,6 +184,15 @@ const addSelectedNode = () => { //TODO make also work to add in root and if ther
                 return order[a.sort] - order[b.sort];
             });
         }
+    }else{
+        let node: TreeNode_struct = {
+                key: `_${counter}_obligated_${editedNodeName.value}`,
+                label: editedNodeName.value,
+                sort: editedNodeType.value.value,
+                children: [],
+                parrent: null
+            }
+        nodes.value.push(node)
     }
 };
 
@@ -331,6 +344,16 @@ function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
             icon="pi pi-refresh"
             iconPos="right"
             @click="saveSelectedNode"
+            rounded
+        />
+
+        <Button
+            v-if="$props.editable"
+            :label="t('structure_checks.unselect')"
+            type="button"
+            icon="pi pi-refresh"
+            iconPos="right"
+            @click="unselectNode"
             rounded
         />
 

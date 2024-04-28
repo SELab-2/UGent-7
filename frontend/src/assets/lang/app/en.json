@@ -4,7 +4,8 @@
         "add": "Add node",
         "delete": "Delete node",
         "reload": "Reload Structure checks",
-        "save": "Save structure checks"
+        "save": "Save structure checks",
+        "unselect": "Unselect the selected node"
     },
     "layout": {
         "header": {
