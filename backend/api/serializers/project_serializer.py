@@ -134,7 +134,8 @@ class TeacherCreateGroupSerializer(serializers.Serializer):
 class SubmissionStatusSerializer(serializers.Serializer):
     non_empty_groups = serializers.IntegerField(read_only=True)
     groups_submitted = serializers.IntegerField(read_only=True)
-    submissions_passed = serializers.IntegerField(read_only=True)
+    structure_checks_passed = serializers.IntegerField(read_only=True)
+    extra_checks_passed = serializers.IntegerField(read_only=True)
 
 
 class SubmissionAddSerializer(SubmissionSerializer):

@@ -178,11 +178,13 @@ class ProjectViewSet(CreateModelMixin,
         print(f"Passed structure checks: {structure_checks_passed}")
         print(f"Passed extra checks: {extra_checks_passed}")
 
-        submissions_passed = 5
+        structure_checks_passed = 5
+        extra_checks_passed = 2
         serializer = SubmissionStatusSerializer({
             "non_empty_groups": non_empty_groups,
             "groups_submitted": groups_submitted,
-            "submissions_passed": submissions_passed,
+            "structure_checks_passed": structure_checks_passed,
+            "extra_checks_passed": extra_checks_passed
         })
 
         return Response(serializer.data)
