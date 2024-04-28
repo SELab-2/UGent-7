@@ -1,6 +1,6 @@
 from api.models.group import Group
 from api.models.project import Project
-from api.models.submission import Submission
+from api.models.submission import Submission, StructureCheckResult, ExtraCheckResult, StateEnum
 from api.permissions.project_permissions import (ProjectGroupPermission,
                                                  ProjectPermission)
 from api.serializers.checks_serializer import (ExtraCheckSerializer,
@@ -171,8 +171,14 @@ class ProjectViewSet(CreateModelMixin,
         project = self.get_object()
         non_empty_groups = project.groups.filter(students__isnull=False).count()
         groups_submitted = Submission.objects.filter(group__project=project).count()
-        submissions_passed = Submission.objects.filter(group__project=project, is_valid=True).count()
+        
+        structure_checks_passed = StructureCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).order_by('submission__group', '-submission__submission_time').distinct('submission__group')
+        extra_checks_passed = ExtraCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).order_by('submission__group', '-submission__submission_time').distinct('submission__group')
 
+        print(f"Passed structure checks: {structure_checks_passed}")
+        print(f"Passed extra checks: {extra_checks_passed}")
+
+        submissions_passed = 5
         serializer = SubmissionStatusSerializer({
             "non_empty_groups": non_empty_groups,
             "groups_submitted": groups_submitted,
