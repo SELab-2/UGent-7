@@ -18,12 +18,12 @@ const { t, locale } = useI18n();
 /* Props */
 defineProps({
     items: {
-        type: Array as () => {label: string, route: string, icon: string}[],
-        default: () => []
+        type: Array as () => Array<{ label: string; route: string; icon: string }>,
+        default: () => [],
     },
     roleSelect: {
         type: Boolean,
-        default: () => false
+        default: () => false,
     },
 });
 

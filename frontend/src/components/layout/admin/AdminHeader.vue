@@ -11,7 +11,7 @@ const items = computed(() => [
     {
         label: t('admin.users.title'),
         route: 'admin-users',
-    }
+    },
 ]);
 </script>
 
