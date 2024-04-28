@@ -4,6 +4,7 @@ import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
+import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue'
 import InputText from 'primevue/inputtext';
 import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
@@ -123,6 +124,7 @@ async function submitProject(): Promise<void> {
         });
     }
 }
+let projectId:string = params.projectId as string;
 </script>
 
 <template>
@@ -261,6 +263,13 @@ async function submitProject(): Promise<void> {
                             :multiple="false"
                             @select="onZipStructureUpload"
                         />
+                    </div>
+
+                    <!-- tree view for structure checks -->
+                    <div>
+                        <StructureCheckTreeView :projectId=projectId  :editable=true>
+
+                        </StructureCheckTreeView>
                     </div>
                 </div>
             </div>

@@ -108,7 +108,7 @@ async function submitProject(): Promise<void> {
         await push({ name: 'dashboard' });
     }
 }
-let projectId:string = "1235"
+let projectId:string = "975"
 </script>
 
 <template>

@@ -28,7 +28,7 @@ interface TreeNode_struct {
         children?: TreeNode_struct[];
         key: string;
         sort: string;
-        parrent: TreeNode_struct|null;
+        parrent: TreeNode_struct|null; //TODO is this needed
     }
 
 // Define a method to compute the style for each node
@@ -225,46 +225,51 @@ async function saveSelectedNode() {
 
 function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
     const structureChecks: any[] = [];
-    let structure_parrent: StructureCheck|null = null;
 
     // Recursive function to traverse tree nodes and build structure checks
     function traverse(node: TreeNode_struct, parentPath: string = '') {
         // Generate the full path by concatenating parent paths and current node label
-        const fullPath = parentPath === '' ? node.label : `${parentPath}/${node.label}`;
-
-        // Add obligated and blocked extensions if they exist
-        if (node.sort === 'obligated') {
-            if(structure_parrent && structure_parrent.obligated_extensions){ //TODO check if works for root
-                structure_parrent.obligated_extensions.push({ extension: node.label });
-            }
-        } else if (node.sort === 'blocked') {
-            if(structure_parrent && structure_parrent.blocked_extensions){
-                structure_parrent.blocked_extensions.push({ extension: node.label });
-            }
+        let fullPath;
+        if(node.sort == "file"){
+            fullPath = parentPath === '' ? node.label : `${parentPath}/${node.label}`;
         }else{
-            // Create structure check object based on node properties
-            const structureCheck: any = {
+            fullPath = parentPath;
+        }
+
+        // Search for an existing structure check with the same name as fullPath
+        let structureCheck = structureChecks.find(check => check.name === fullPath);
+
+        // If no existing structure check is found, create a new one
+        if (!structureCheck) {
+            structureCheck = {
                 name: fullPath,
                 obligated_extensions: [],
                 blocked_extensions: [],
                 // Add other properties as needed
             };
-            structure_parrent = structureCheck;
-            // Recursively traverse children
-            if (node.children) {
-                node.children.forEach(child => traverse(child, fullPath));
-            }
-
-            // Add the structure check object to the array
             structureChecks.push(structureCheck);
-            }
         }
+
+        // Add obligated and blocked extensions if they exist for the current node
+        if (node.sort === 'obligated' && node.label !== '.') {
+            structureCheck.obligated_extensions.push({ extension: node.label });
+        } else if (node.sort === 'blocked' && node.label !== '.') {
+            structureCheck.blocked_extensions.push({ extension: node.label });
+        }
+
+        // Recursively traverse children
+        if (node.children) {
+            node.children.forEach(child => traverse(child, fullPath));
+        }
+    }
 
     // Start traversing from the root nodes
     nodes.forEach(node => traverse(node));
 
     return structureChecks;
 }
+
+
 </script>
 
 <template>
