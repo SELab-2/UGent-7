@@ -20,7 +20,7 @@ export class StructureCheck {
             structureCheck.id,
             structureCheck.name,
             structureCheck.obligated_extensions,
-            structureCheck.blocked_extensions
+            structureCheck.blocked_extensions,
         );
     }
 }

@@ -89,7 +89,7 @@ async function loadStudentGroups(): Promise<void> {
                 <Skeleton height="30rem" />
             </template>
         </div>
-        <StructureCheckTreeView v-if="props.project" :projectId="`${props.project.id}`"  :editable=false>
+        <StructureCheckTreeView v-if="props.project" :projectId="`${props.project.id}`" :editable="false">
         </StructureCheckTreeView>
     </div>
 </template>

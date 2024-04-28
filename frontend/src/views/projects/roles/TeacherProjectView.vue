@@ -55,7 +55,7 @@ watch(
         <div class="col-12 md:col-4">
             <ProjectMeter :submission-status="submissionStatus" />
         </div>
-        <StructureCheckTreeView v-if="props.project" :projectId="`${props.project.id}`"  :editable=false>
+        <StructureCheckTreeView v-if="props.project" :projectId="`${props.project.id}`" :editable="false">
         </StructureCheckTreeView>
     </div>
 </template>

@@ -4,7 +4,7 @@ import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
-import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue'
+import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue';
 import InputText from 'primevue/inputtext';
 import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
@@ -27,7 +27,6 @@ const { params } = useRoute();
 /* Service injection */
 const { createProject } = useProject();
 const { course, getCourseByID } = useCourses();
-
 
 /* Form content */
 const form = reactive({
@@ -108,7 +107,7 @@ async function submitProject(): Promise<void> {
         await push({ name: 'dashboard' });
     }
 }
-let projectId:string = "975"
+const projectId: string = '975';
 </script>
 
 <template>
@@ -260,9 +259,7 @@ let projectId:string = "975"
 
                     <!-- tree view for structure checks -->
                     <div>
-                        <StructureCheckTreeView :projectId=projectId  :editable=true>
-
-                        </StructureCheckTreeView>
+                        <StructureCheckTreeView :projectId="projectId" :editable="true"> </StructureCheckTreeView>
                     </div>
                 </div>
             </div>
