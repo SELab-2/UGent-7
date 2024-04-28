@@ -28,4 +28,8 @@ body {
     a {
         text-decoration: none;
     }
+
+    .p-toast{
+        max-width: calc(100vw - 40px);
+    }
 }

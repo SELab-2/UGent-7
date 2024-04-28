@@ -21,7 +21,6 @@ from django.utils.translation import gettext_lazy as _
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, "data/production"))
 
-# TODO: What does this do?
 TESTING_BASE_LINK = "http://testserver"
 
 # SECURITY WARNING: keep the secret key used in production secret!

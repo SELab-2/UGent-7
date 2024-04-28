@@ -14,7 +14,7 @@ interface ProjectState {
     getProjectsByAssistant: (assistantId: string) => Promise<void>;
     getProjectsByTeacher: (teacherId: string) => Promise<void>;
     getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date) => Promise<void>;
-    createProject: (projectData: Project, courseId: string) => Promise<void>;
+    createProject: (projectData: Project, courseId: string, numberOfGroups: number) => Promise<void>;
     updateProject: (projectData: Project) => Promise<void>;
     deleteProject: (id: string) => Promise<void>;
 }
@@ -73,7 +73,7 @@ export function useProject(): ProjectState {
             });
     }
 
-    async function createProject(projectData: Project, courseId: string): Promise<void> {
+    async function createProject(projectData: Project, courseId: string, numberOfGroups: number): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
         await create<Project>(
             endpoint,
@@ -88,6 +88,7 @@ export function useProject(): ProjectState {
                 max_score: projectData.max_score,
                 score_visible: projectData.score_visible,
                 group_size: projectData.group_size,
+                number_groups: numberOfGroups,
                 zip_structure: projectData.structure_file,
             },
             project,

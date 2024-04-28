@@ -36,6 +36,7 @@ const form = reactive({
     startDate: new Date(),
     deadline: new Date(),
     groupSize: 1,
+    numberOfGroups: null,
     maxScore: 10,
     visibility: true,
     scoreVisibility: false,
@@ -100,6 +101,7 @@ async function submitProject(): Promise<void> {
                 form.submissionStructure,
             ),
             params.courseId as string,
+            form.numberOfGroups ?? 0,
         );
 
         // Redirect to the dashboard overview
@@ -183,8 +185,17 @@ let projectId:string = "1235"
                             <ErrorMessage :field="v$.groupSize" />
                         </div>
 
-                        <!-- Max score for the project -->
                         <div class="field col">
+                            <label for="numberOfGroups">
+                                {{ t('views.projects.number_of_groups') }}
+                            </label>
+                            <InputNumber id="numberOfGroups" class="w-full" v-model="form.numberOfGroups" :min="1" />
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <!-- Max score for the project -->
+                        <div class="field col-6">
                             <label for="maxScore">{{ t('views.projects.max_score') }}</label>
                             <InputNumber id="maxScore" class="w-full" v-model="form.maxScore" :min="1" />
                             <ErrorMessage :field="v$.maxScore" />
@@ -203,7 +214,7 @@ let projectId:string = "1235"
                     <div class="grid">
                         <div class="flex align-items-center field-checkbox col-12">
                             <InputSwitch id="scoreVisibility" v-model="form.scoreVisibility" />
-                            <label for="scoreVisibility">{{ t('views.projects.score_visibility') }}</label>
+                            <label for="scoreVisibility">{{ t('views.projects.scoreVisibility') }}</label>
                         </div>
                     </div>
 
@@ -221,7 +232,7 @@ let projectId:string = "1235"
                     <!-- Upload field for docker script -->
                     <div class="field col">
                         <label for="dockerScript">
-                            {{ t('views.projects.docker_upload') }}
+                            {{ t('views.projects.dockerUpload') }}
                         </label>
                         <FileUpload
                             input="dockerScript"
@@ -236,7 +247,7 @@ let projectId:string = "1235"
                     <!-- Upload field for a zip file that contains the submission structure -->
                     <div class="field col">
                         <label for="submissionStructure">
-                            {{ t('views.projects.submission_structure') }}
+                            {{ t('views.projects.submissionStructure') }}
                         </label>
                         <FileUpload
                             id="submissionStructure"

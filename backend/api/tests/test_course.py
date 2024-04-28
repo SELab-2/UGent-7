@@ -668,6 +668,7 @@ class CourseModelTestsAsTeacher(APITestCase):
         Teacher should be able to remove him/herself from a course.
         """
         course = get_course()
+        course.teachers.add(get_teacher())
         course.teachers.add(self.user)
 
         response = self.client.delete(
@@ -876,6 +877,7 @@ class CourseModelTestsAsTeacher(APITestCase):
                 "days": 50,
                 "deadline": timezone.now() + timezone.timedelta(days=50),
                 "start_date": timezone.now(),
+                "group_size": 3,
                 "number_groups": 5
             },
             follow=True,

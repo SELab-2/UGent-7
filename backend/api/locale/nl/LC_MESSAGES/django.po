@@ -135,6 +135,10 @@ msgstr "De lesgever bevindt zich al in de opleiding."
 msgid "courses.error.teachers.not_present"
 msgstr "De lesgever bevindt zich niet in de opleiding."
 
+#: serializers/course_serializer.py:171
+msgid "courses.error.teachers.last_teacher"
+msgstr "De opleiding moet minstens één lesgever hebben."
+
 #: serializers/docker_serializer.py:19
 msgid "docker.errors.custom"
 msgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"

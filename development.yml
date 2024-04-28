@@ -8,7 +8,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.90.0/24
+        - subnet: 192.168.91.0/24
 
 ############################# EXTENSIONS
 
@@ -24,14 +24,18 @@ x-common-keys-selab: &common-keys-selab
     PGID: $PGID
   env_file:
     - .env
+  dns:
+    - 1.1.1.1
+    - 4.4.4.4
+    - 8.8.8.8
 
 ############################# SERVICES
 
 services:
   nginx:
     <<: *common-keys-selab
-    image: nginx:latest
     container_name: nginx
+    image: nginx:latest
     ports:
       - 80:80
       - 443:443
@@ -49,9 +53,7 @@ services:
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
-    command: sh -c "./setup.sh; python manage.py runsslserver 192.168.90.2:8080"
-    expose:
-      - 8080
+    command: sh -c "./setup.sh; python manage.py runsslserver 0.0.0.0:8000"
     volumes:
       - ${BACKEND_DIR}:/code
 
@@ -76,8 +78,6 @@ services:
       context: $FRONTEND_DIR
       dockerfile: Dockerfile.dev
     command: sh -c "npm install && npm run host"
-    expose:
-      - 5173
     volumes:
       - ${FRONTEND_DIR}:/app
     depends_on:
@@ -87,9 +87,6 @@ services:
     <<: *common-keys-selab
     container_name: redis
     image: redis:latest
-    networks:
-      selab_network:
-        ipv4_address: $REDIS_IP
     expose:
       - $REDIS_PORT
     entrypoint: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
