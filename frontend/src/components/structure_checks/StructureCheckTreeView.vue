@@ -166,7 +166,7 @@ const editSelectedNode = () => {
 };
 
 let counter = 0;
-const addSelectedNode = () => { //TODO make also work to add in root and if there are no items already
+const addSelectedNode = () => {
     if(editedNode.value && editedNode.value.children){
         if (editedNode.value.sort != "empty"){
             counter += 1;
@@ -232,8 +232,6 @@ async function saveSelectedNode() {
     console.log(structureChecks);
     // TODO pack into 1 call
     await Promise.all(checks.map(check => createStructureCheck(check, props.projectId)));
-    
-    //TODO realy save them
 }
 
 function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
