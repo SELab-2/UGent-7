@@ -23,8 +23,8 @@ describe('structureCheck type', () => {
         expect(structureCheck).toBeInstanceOf(StructureCheck);
         expect(structureCheck.id).toBe(structureCheckData.id);
         expect(structureCheck.name).toBe(structureCheckData.name);
-        expect(structureCheck.obligated_extensions).toBeNull();
-        expect(structureCheck.blocked_extensions).toBeNull();
+        expect(structureCheck.obligated_extensions).toBe([]);
+        expect(structureCheck.blocked_extensions).toBe([]);
         expect(structureCheck.project).toStrictEqual(structureCheckData.project);
     });
 });
