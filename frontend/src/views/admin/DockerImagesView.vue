@@ -3,6 +3,8 @@ import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import InputSwitch from 'primevue/inputswitch';
 import SelectButton from 'primevue/selectbutton';
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import Body from '@/components/layout/Body.vue';
@@ -21,10 +23,13 @@ import IconField from "primevue/iconfield";
 /* Injection */
 const { t } = useI18n();
 const { query } = useRoute();
-const { pagination, dockerImages, getDockerImages, searchDockerImages, createDockerImage } = useDockerImages();
+const { pagination, dockerImages, getDockerImages, searchDockerImages, patchDockerImage, createDockerImage } = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
 
-const addItem = ref<DockerImage>(DockerImage.blankDockerImage())
+const dataTable = ref();
+
+const editItem = ref<DockerImage>(DockerImage.blankDockerImage());
+const addItem = ref<DockerImage>(DockerImage.blankDockerImage());
 
 const selectOptions = ref(['admin.list', 'admin.add']);
 const selected = ref<string>(t(selectOptions.value[0]));
@@ -33,8 +38,25 @@ const columns = ref([
     { field: 'id', header: 'admin.id' },
     { field: 'name', header: 'admin.docker_images.name' },
     { field: 'owner', header: 'admin.docker_images.owner' },
-    { field: 'public', header: 'admin.docker_images.public' },
+
 ]);
+const publicOptions = ref<{ value: any, label: string }[]>([
+    {value: true, label: 'public'},
+    {value: false, label: 'private'}
+]);
+const showSafetyGuard = ref<boolean>(false);
+
+const changePublicStatus = async (dockerData: DockerImage): Promise<void> => {
+    showSafetyGuard.value = false;
+    await patchDockerImage(dockerData);
+};
+
+const toggleSafetyGuard = (data: any): void => {
+    editItem.value.public = data.public;
+    editItem.value.id = data.id;
+    showSafetyGuard.value = true;
+    console.log(data);
+}
 
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
@@ -57,7 +79,8 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                     :get="getDockerImages"
                     :search="searchDockerImages"
                     :filter="filter"
-                    :on-filter="onFilter">
+                    :on-filter="onFilter"
+                    ref="dataTable">
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField iconPosition="left">
@@ -74,7 +97,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         :field="column.field"
                         :header="t(column.header)"
                         :show-filter-menu="false"
-                        :style="{ minWidth: '14rem' }"
+                        :style="{ maxWidth: '3rem' }"
                     >
                         <template #filter>
                             <IconField
@@ -86,6 +109,21 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                                 </InputIcon>
                                 <InputText v-model="filter[column.field]" :placeholder="t('admin.search.search')" />
                             </IconField>
+                        </template>
+                    </Column>
+                    <Column
+                        key="public"
+                        field="public"
+                        :header="t('admin.docker_images.public')"
+                        :style="{ maxWidth: '3rem' }">
+                        <template #body="{ data }">
+                            <SelectButton
+                                class="mb-3 gap-3"
+                                v-model="data.public"
+                                @click="toggleSafetyGuard"
+                                :options="publicOptions"
+                                option-value="value"
+                                option-label="label"/>
                         </template>
                     </Column>
                 </LazyDataTable>
@@ -111,6 +149,13 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
             </div>
         </Body>
     </AdminLayout>
+    <Dialog v-model:visible="showSafetyGuard" :style="{ width: '26rem' }">
+        <h3>Are you sure?</h3>
+        <div class="p-d-flex p-jc-end">
+            <Button label="No" @click="showSafetyGuard = false" />
+            <Button label="Yes" @click="() => changePublicStatus(editItem)" />
+        </div>
+    </Dialog>
 </template>
 
 <style scoped lang="scss"></style>

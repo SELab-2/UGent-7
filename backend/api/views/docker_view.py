@@ -1,13 +1,12 @@
 from api.models.docker import DockerImage
 from api.permissions.docker_permissions import DockerPermission
-from api.permissions.role_permissions import IsAssistant, IsTeacher
 from api.serializers.docker_serializer import DockerImageSerializer
+from rest_framework.permissions import IsAdminUser
 from django.db.models import Q
 from django.db.models.manager import BaseManager
 from rest_framework.decorators import action
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
                                    RetrieveModelMixin, UpdateModelMixin)
-from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -19,7 +18,8 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
 
     queryset = DockerImage.objects.all()
     serializer_class = DockerImageSerializer
-    permission_classes = [DockerPermission]
+    permission_classes = [DockerPermission, IsAdminUser]
+
 
     @action(detail=False)
     def search(self, request: Request) -> Response:
@@ -51,6 +51,19 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
         })
 
         return self.get_paginated_response(serializer.data)
+
+
+    @action(detail=True, permission_classes=[IsAdminUser])
+    def patch_public(self, request: Request, *_) -> Response:
+        docker_image = self.get_object()
+        serializer = DockerImageSerializer(docker_image, data=request.data, partial=True)
+
+        if serializer.is_valid:
+            serializer.save()
+
+        return Response(serializer.data)
+
+
 
     # TODO: Maybe not necessary
     # https://www.django-rest-framework.org/api-guide/permissions/#overview-of-access-restriction-methods

@@ -21,6 +21,7 @@ export const endpoints = {
     dockerImages: {
         index: '/api/docker-images/',
         search: '/api/docker-images/search/',
+        patch: 'api/docker-images/{id}/',
     },
     students: {
         index: '/api/students/',

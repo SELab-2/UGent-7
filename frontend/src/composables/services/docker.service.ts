@@ -3,7 +3,7 @@ import { Response } from "@/types/Response.ts";
 import { endpoints } from '@/config/endpoints.ts';
 import { type Ref, ref } from "vue";
 import { Filter } from "@/types/filter/Filter.ts";
-import {create, getList, getPaginatedList} from "@/composables/services/helpers.ts";
+import {create, getList, getPaginatedList, patch} from "@/composables/services/helpers.ts";
 import {PaginatorResponse} from "@/types/filter/Paginator.ts";
 
 
@@ -13,6 +13,7 @@ interface DockerImagesState {
     response: Ref<Response | null>;
     getDockerImages: () => Promise<void>;
     searchDockerImages: (filters: Filter, page: number, pageSize: number) => Promise<void>;
+    patchDockerImage: (dockerData: DockerImage) => Promise<void>;
     createDockerImage: (dockerData: DockerImage, file: File) => Promise<void>;
 }
 
@@ -30,6 +31,11 @@ export function useDockerImages(): DockerImagesState {
     async function searchDockerImages(filters: Filter, page: number, pageSize: number): Promise<void> {
         const endpoint = endpoints.dockerImages.search;
         await getPaginatedList<DockerImage>(endpoint, filters, page, pageSize, pagination, DockerImage.fromJSON);
+    }
+
+    async function patchDockerImage(dockerData: DockerImage): Promise<void> {
+        const endpoint = endpoints.dockerImages.patch.replace('{id}', dockerData.id);
+        await patch(endpoint, {public: dockerData.public }, response);
     }
 
     async function createDockerImage(dockerData: DockerImage, file: File): Promise<void> {
@@ -54,6 +60,7 @@ export function useDockerImages(): DockerImagesState {
 
         getDockerImages,
         searchDockerImages,
+        patchDockerImage,
         createDockerImage
     }
 }
