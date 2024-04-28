@@ -5,9 +5,9 @@ export class File_extension {
     /**
      * Convert a file extension object to a faculty instance.
      *
-     * @param file_extension
+     * @param fileExtension
      */
-    static fromJSON(file_extension: File_extension): File_extension {
-        return new File_extension(file_extension.extension);
+    static fromJSON(fileExtension: File_extension): File_extension {
+        return new File_extension(fileExtension.extension);
     }
 }

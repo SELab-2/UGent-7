@@ -6,7 +6,6 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { parseArgs } from 'util';
 import { StructureCheck } from '@/types/StructureCheck';
 
 /* Props */
@@ -32,7 +31,7 @@ interface TreeNode_struct {
 }
 
 // Define a method to compute the style for each node
-function getNodeStyle(node: TreeNode_struct) {
+function getNodeStyle(node: TreeNode_struct): any {
     // Check if the node meets a certain condition, e.g., has a specific label
     if (node.sort === 'file') return { color: 'black' };
     if (node.sort === 'obligated') return { color: 'green' };
@@ -47,7 +46,7 @@ const nodes = ref<TreeNode_struct[]>([]);
 type StringToIntDict = Record<string, number>;
 
 // Function to load structure checks into nodes
-async function loadStructureChecks() {
+async function loadStructureChecks(): any {
     await getStructureCheckByProject(props.projectId); // 3001
 
     // Initialize an empty array for the result
@@ -57,7 +56,7 @@ async function loadStructureChecks() {
     const level = { result };
 
     // Iterate over each path
-    (structureChecks.value || []).forEach((structureCheck) => {
+    (structureChecks.value ?? []).forEach((structureCheck) => {
         let path = structureCheck.name;
         const obligated = structureCheck.obligated_extensions;
         const blocked = structureCheck.blocked_extensions;
@@ -120,7 +119,7 @@ async function loadStructureChecks() {
 
     // Assign the fetched data to the nodes
     if (result[0]) {
-        nodes.value = result[0].children || [];
+        nodes.value = result[0].children ?? [];
     }
 }
 
@@ -145,24 +144,24 @@ const fileOption: DropdownOption = {
 const nodeTypes: DropdownOption[] = [fileOption, obligatedOption, blockedOption];
 const editedNodeType = ref<DropdownOption>(nodeTypes[0]);
 
-const onNodeSelect = (event: TreeNode_struct) => {
+const onNodeSelect = (event: TreeNode_struct): any => {
     editedNode.value = event;
 };
 
-const unselectNode = (event: TreeNode_struct) => {
+const unselectNode = (event: TreeNode_struct): any => {
     editedNode.value = null;
 };
 
-const editSelectedNode = () => {
-    if (editedNode.value && editedNode.value.sort != 'empty') {
+const editSelectedNode = (): any => {
+    if (editedNode.value && editedNode.value.sort !== 'empty') {
         editedNode.value.label = editedNodeName.value;
     }
 };
 
 let counter = 0;
-const addSelectedNode = () => {
+const addSelectedNode = (): any => {
     if (editedNode.value?.children) {
-        if (editedNode.value.sort != 'empty') {
+        if (editedNode.value.sort !== 'empty') {
             counter += 1;
             const node: TreeNode_struct = {
                 key: `${editedNode.value.label}_${counter}_obligated_${editedNodeName.value}`,
@@ -190,9 +189,9 @@ const addSelectedNode = () => {
     }
 };
 
-const deleteSelectedNode = () => {
+const deleteSelectedNode = (): any => {
     if (editedNode.value) {
-        if (editedNode.value.sort != 'empty') {
+        if (editedNode.value.sort !== 'empty') {
             // Find the index of the selected node in the parent's children array
             if (editedNode.value.parrent?.children) {
                 const index = editedNode.value.parrent.children.findIndex((child) => child === editedNode.value);
@@ -216,7 +215,7 @@ const deleteSelectedNode = () => {
     }
 };
 
-async function saveSelectedNode() {
+async function saveSelectedNode(): Promise<any> {
     const checks = parseNodesToStructureChecks(nodes.value);
     console.log(checks);
     await getStructureCheckByProject(props.projectId);
@@ -230,7 +229,7 @@ async function saveSelectedNode() {
     console.log(structureChecks);
     // TODO pack into 1 call
     await Promise.all(
-        checks.map(async (check) => {
+        checks.map(async (check: StructureCheck) => {
             await createStructureCheck(check, props.projectId);
         }),
     );
@@ -240,10 +239,10 @@ function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
     const structureChecks: any[] = [];
 
     // Recursive function to traverse tree nodes and build structure checks
-    function traverse(node: TreeNode_struct, parentPath: string = '') {
+    function traverse(node: TreeNode_struct, parentPath: string = ''): any {
         // Generate the full path by concatenating parent paths and current node label
         let fullPath;
-        if (node.sort == 'file') {
+        if (node.sort === 'file') {
             fullPath = parentPath === '' ? node.label : `${parentPath}/${node.label}`;
         } else {
             fullPath = parentPath;
