@@ -120,8 +120,9 @@ export const structureCheckData = {
 
 export const submissionStatusData = {
     non_empty_groups: 5,
-    groups_submitted: 2,
-    submissions_passed: 1,
+    groups_submitted: 4,
+    structure_checks_passed: 3,
+    extra_checks_passed: 1,
 };
 
 export const submissionData = {
