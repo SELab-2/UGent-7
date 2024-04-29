@@ -4,7 +4,7 @@ import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
-import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue';
+// import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue';
 import InputText from 'primevue/inputtext';
 import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
@@ -107,7 +107,7 @@ async function submitProject(): Promise<void> {
         await push({ name: 'dashboard' });
     }
 }
-const projectId: string = '975';
+// const projectId: string = '975'
 </script>
 
 <template>
@@ -258,9 +258,9 @@ const projectId: string = '975';
                     </div>
 
                     <!-- tree view for structure checks -->
-                    <div>
+                    <!-- <div>
                         <StructureCheckTreeView :projectId="projectId" :editable="true"> </StructureCheckTreeView>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </form>
