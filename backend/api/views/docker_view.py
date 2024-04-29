@@ -53,12 +53,12 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
         return self.get_paginated_response(serializer.data)
 
 
-    @action(detail=True, permission_classes=[IsAdminUser])
-    def patch_public(self, request: Request, *_) -> Response:
+    @action(detail=True, methods=['PATCH'], url_path='public', permission_classes=[IsAdminUser])
+    def patch_public(self, request: Request, **_) -> Response:
         docker_image = self.get_object()
         serializer = DockerImageSerializer(docker_image, data=request.data, partial=True)
 
-        if serializer.is_valid:
+        if serializer.is_valid():
             serializer.save()
 
         return Response(serializer.data)

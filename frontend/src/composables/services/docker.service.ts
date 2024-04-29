@@ -35,7 +35,7 @@ export function useDockerImages(): DockerImagesState {
 
     async function patchDockerImage(dockerData: DockerImage): Promise<void> {
         const endpoint = endpoints.dockerImages.patch.replace('{id}', dockerData.id);
-        await patch(endpoint, {public: dockerData.public }, response);
+        await patch(endpoint, {public: dockerData.public}, response);
     }
 
     async function createDockerImage(dockerData: DockerImage, file: File): Promise<void> {

@@ -46,18 +46,16 @@ const publicOptions = ref<{ value: any, label: string }[]>([
 ]);
 const showSafetyGuard = ref<boolean>(false);
 
-const changePublicStatus = async (dockerData: DockerImage): Promise<void> => {
-    showSafetyGuard.value = false;
-    await patchDockerImage(dockerData);
-};
-
 const toggleSafetyGuard = (data: any): void => {
     editItem.value.public = data.public;
     editItem.value.id = data.id;
     showSafetyGuard.value = true;
-    console.log(data);
-}
-
+    console.log(editItem.value);
+};
+const changePublicStatus = async (dockerData: DockerImage): Promise<void> => {
+    showSafetyGuard.value = false;
+    await patchDockerImage(dockerData);
+};
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
     await createDockerImage(addItem.value, files[0]);
@@ -120,7 +118,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                             <SelectButton
                                 class="mb-3 gap-3"
                                 v-model="data.public"
-                                @click="toggleSafetyGuard"
+                                @click="() => toggleSafetyGuard(data)"
                                 :options="publicOptions"
                                 option-value="value"
                                 option-label="label"/>
@@ -149,9 +147,9 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
             </div>
         </Body>
     </AdminLayout>
-    <Dialog v-model:visible="showSafetyGuard" :style="{ width: '26rem' }">
+    <Dialog v-model:visible="showSafetyGuard" :style="{ width: '15rem' }">
         <h3>Are you sure?</h3>
-        <div class="p-d-flex p-jc-end">
+        <div class="flex justify-content-between">
             <Button label="No" @click="showSafetyGuard = false" />
             <Button label="Yes" @click="() => changePublicStatus(editItem)" />
         </div>
