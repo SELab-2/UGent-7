@@ -154,6 +154,38 @@ const routes: RouteRecordRaw[] = [
         ],
     },
 
+    // help
+    {
+        path: '/help',
+        children: [
+            {
+                path: '',
+                component: Dummy,
+                name: 'help-dashboard',
+            },
+            {
+                path: 'student',
+                component: Dummy,
+                name: 'help-student',
+            },
+            {
+                path: 'teacher',
+                component: Dummy,
+                name: 'help-teacher',
+            },
+            {
+                path: 'assistant',
+                component: Dummy,
+                name: 'help-assistant',
+            },
+            {
+                path: 'admin',
+                component: Dummy,
+                name: 'help-admin',
+            }
+        ],
+    },
+
     // Page not found: redirect to dashboard
     { path: '/:pathMatch(.*)*', redirect: { name: 'dashboard' } },
 ];
