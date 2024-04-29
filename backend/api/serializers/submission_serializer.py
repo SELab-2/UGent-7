@@ -1,9 +1,14 @@
+from django.utils.translation import gettext
+from rest_framework.exceptions import ValidationError
+
 from api.models.submission import (CheckResult, ExtraCheckResult,
                                    StructureCheckResult, Submission,
                                    SubmissionFile)
 from django.db.models import Max
 from rest_framework import serializers
 from rest_polymorphic.serializers import PolymorphicSerializer
+
+from api.serializers.feedback_serializer import FeedbackSerializer
 
 
 class SubmissionFileSerializer(serializers.ModelSerializer):
@@ -39,9 +44,13 @@ class CheckResultPolymorphicSerializer(PolymorphicSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
-
     group = serializers.HyperlinkedRelatedField(
         many=False, read_only=True, view_name="group-detail"
+    )
+
+    feedback = serializers.HyperlinkedIdentityField(
+        view_name="submission-feedback",
+        read_only=True,
     )
 
     files = SubmissionFileSerializer(many=True, read_only=True)
@@ -94,3 +103,11 @@ class SubmissionSerializer(serializers.ModelSerializer):
         submission.save()
 
         return submission
+
+
+class AddFeedBackSerializer(FeedbackSerializer):
+
+    def validate(self, data):
+        if "submission" not in self.context:
+            # TODO aanmaken
+            raise ValidationError(gettext("submission.error.context"))

@@ -6,8 +6,13 @@ import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 <template>
     <BaseLayout>
         <div class="grid">
-            <div class="col-6 md:col-4">
-                <Title>File(s)</Title>
+            <div class="col-6 md:col-4 m-3">
+                <div>
+                    <Title>Status</Title>
+                </div>
+                <div>
+                    <Title>File(s)</Title>
+                </div>
             </div>
             <div class="col-8 md:col-6">
                 <Title>File(s)</Title>
