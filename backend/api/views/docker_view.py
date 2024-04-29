@@ -36,15 +36,16 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
         queryset2 = self.get_queryset().filter(
             name__icontains=search
         )
-        # queryset3 = self.get_queryset().filter(
-        #     owner__icontains=search
-        # )
+        queryset3 = self.get_queryset().filter(
+            owner__id__icontains=search
+        )
         queryset1 = queryset1.union(queryset2)
         queryset = self.get_queryset().filter(
             id__icontains=identifier,
             name__icontains=name,
+            owner__id__contains=owner
         )
-        queryset = queryset.union(queryset1)
+        queryset = queryset.intersection(queryset1)
 
         serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
             "request": request
@@ -56,7 +57,7 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
     @action(detail=True, methods=['PATCH'], url_path='public', permission_classes=[IsAdminUser])
     def patch_public(self, request: Request, **_) -> Response:
         docker_image = self.get_object()
-        serializer = DockerImageSerializer(docker_image, data=request.data, partial=True)
+        serializer = DockerImageSerializer(docker_image, data=request.data, partial=True, context={"request": request})
 
         if serializer.is_valid():
             serializer.save()

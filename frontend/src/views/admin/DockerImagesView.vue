@@ -2,6 +2,7 @@
 import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import InputSwitch from 'primevue/inputswitch';
+import ToggleButton from 'primevue/togglebutton';
 import SelectButton from 'primevue/selectbutton';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
@@ -47,14 +48,14 @@ const publicOptions = ref<{ value: any, label: string }[]>([
 const showSafetyGuard = ref<boolean>(false);
 
 const toggleSafetyGuard = (data: any): void => {
-    editItem.value.public = data.public;
+    editItem.value.public = !data.public;
     editItem.value.id = data.id;
     showSafetyGuard.value = true;
-    console.log(editItem.value);
 };
 const changePublicStatus = async (dockerData: DockerImage): Promise<void> => {
     showSafetyGuard.value = false;
     await patchDockerImage(dockerData);
+    await dataTable.value.fetch();
 };
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
@@ -115,13 +116,12 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         :header="t('admin.docker_images.public')"
                         :style="{ maxWidth: '3rem' }">
                         <template #body="{ data }">
-                            <SelectButton
+                            <ToggleButton
                                 class="mb-3 gap-3"
-                                v-model="data.public"
+                                :model-value="data.public"
                                 @click="() => toggleSafetyGuard(data)"
-                                :options="publicOptions"
-                                option-value="value"
-                                option-label="label"/>
+                                :on-label="t('admin.docker_images.public')"
+                                :off-label="t('admin.docker_images.private')"/>
                         </template>
                     </Column>
                 </LazyDataTable>

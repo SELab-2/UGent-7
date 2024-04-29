@@ -1,10 +1,10 @@
 export class DockerImage {
-    public public: string;
+    public public: boolean;
     constructor(
         public id: string,
         public name: string,
         public file: string, // in the form of a uri
-        public publicStatus: string,
+        public publicStatus: boolean,
         public owner: string,
     ) {
         this.public = publicStatus;
@@ -21,6 +21,6 @@ export class DockerImage {
     }
 
     static blankDockerImage(): DockerImage {
-        return new DockerImage('', '', '', '', '');
+        return new DockerImage('', '', '', false, '');
     }
 }

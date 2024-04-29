@@ -266,7 +266,8 @@
             "name_input": "Name of docker image",
             "name": "Name",
             "owner": "Owner ID",
-            "public": "Public"
+            "public": "Public",
+            "private": "Private"
         }
     },
     "primevue": {

@@ -266,7 +266,8 @@
             "name_input": "Naam van docker image",
             "name": "Naam",
             "owner": "Eigenaar ID",
-            "public": "Publiek"
+            "public": "Publiek",
+            "private": "Privaat"
         }
     },
     "primevue": {
