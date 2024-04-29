@@ -102,11 +102,22 @@
   },
   {
     "model": "api.submission",
+    "pk": 1,
+    "fields":
+    {
+      "group": 0,
+      "submission_number": 6,
+      "submission_time": "2024-04-15T00:00:00Z",
+      "is_valid": true
+    }
+  },
+  {
+    "model": "api.submission",
     "pk": 0,
     "fields":
     {
       "group": 0,
-      "submission_number": 0,
+      "submission_number": 5,
       "submission_time": "2024-04-15T00:00:00Z",
       "is_valid": true
     }
@@ -143,7 +154,7 @@
     "pk": 0,
     "fields":
     {
-      "polymorphic_ctype": 0,
+      "polymorphic_ctype": 19,
       "submission": 0,
       "result": "SUCCESS",
       "error_message": null
@@ -155,6 +166,27 @@
     "fields":
     {
       "structure_check": 0
+    }
+  },
+  {
+    "model": "api.extracheck",
+    "pk": 0,
+    "fields":
+    {
+      "docker_image": 0,
+      "project": 0,
+      "file": "/now/move"
+    }
+  },
+  {
+    "model": "api.extracheckresult",
+    "pk": 0,
+    "fields":
+    {
+      "submission": 1,
+      "extra_check": 0,
+      "result": "SUCCESS",
+      "error_message": null
     }
   }
 ]

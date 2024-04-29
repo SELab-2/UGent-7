@@ -21,6 +21,7 @@ import SubmissionView from '@/views/submissions/SubmissionView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 import ProjectsView from '@/views/projects/ProjectsView.vue';
+import SubmissionsView from '@/views/submissions/SubmissionsView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -72,9 +73,24 @@ const routes: RouteRecordRaw[] = [
                                                 children: [
                                                     { path: '', component: Dummy, name: 'project-group' },
                                                     {
-                                                        path: 'submission',
-                                                        component: SubmissionView,
-                                                        name: 'submission',
+                                                        path: 'submissions',
+                                                        children: [
+                                                            {
+                                                                path: '',
+                                                                component: SubmissionsView,
+                                                                name: 'submissions',
+                                                            },
+                                                            {
+                                                                path: ':submissionId',
+                                                                children: [
+                                                                    {
+                                                                        path: '',
+                                                                        component: SubmissionView,
+                                                                        name: 'submission',
+                                                                    },
+                                                                ],
+                                                            },
+                                                        ],
                                                     },
                                                 ],
                                             },

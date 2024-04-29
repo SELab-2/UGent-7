@@ -4,6 +4,7 @@ import { Submission } from '@/types/submission/Submission.ts';
 import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
 import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 import { useI18n } from 'vue-i18n';
+import router from "@/router/router.ts";
 
 const { t } = useI18n();
 const tempSubmissions = ref<Submission[]>([]);
@@ -52,7 +53,7 @@ const props = defineProps<{
 }>();
 
 onMounted(async () => {
-    tempSubmissions.value = [...(props.submissions ?? []), ...testSubmissions.value].reverse();
+    tempSubmissions.value = [...testSubmissions.value.reverse(), ...(props.submissions ?? [])];
 });
 
 watch(
@@ -111,6 +112,10 @@ const getExtraSubmissionInformation = (
     }
 };
 
+/**
+ * Returns the time parsed since the submission
+ * @param submissionDate
+ */
 const timeSince = (submissionDate: Date): string => {
     const today = new Date();
     const diffTime = new Date(today.getTime() - submissionDate.getTime());
@@ -126,6 +131,14 @@ const timeSince = (submissionDate: Date): string => {
         return t('views.submissions.timeSince.monthAgo');
     }
 };
+
+/**
+ * Navigates to the submission with the given id
+ * @param submissionId
+ */
+const navigateToSubmission = (submissionId: string): void => {
+    router.push({ name: 'submission', params: { submissionId } });
+};
 </script>
 
 <template>
@@ -135,6 +148,7 @@ const timeSince = (submissionDate: Date): string => {
             :key="submission.id"
             class="flex submission align-content-center align-items-center"
             v-tooltip="submission.hoverText"
+            @click="navigateToSubmission(submission.id)"
         >
             <p
                 :class="'font-semibold m-2 p-1 pi pi-' + submission.iconName"
@@ -150,6 +164,7 @@ const timeSince = (submissionDate: Date): string => {
 @import '@/assets/scss/theme/theme.scss';
 .submission {
     border-bottom: 1.5px solid var(--primary-color);
+    cursor: pointer;
 }
 .submission:last-child {
     border-bottom: none;
