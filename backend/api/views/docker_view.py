@@ -20,7 +20,6 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
     serializer_class = DockerImageSerializer
     permission_classes = [DockerPermission, IsAdminUser]
 
-
     @action(detail=False)
     def search(self, request: Request) -> Response:
         self.pagination_class = BasicPagination
@@ -53,7 +52,6 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
 
         return self.get_paginated_response(serializer.data)
 
-
     @action(detail=True, methods=['PATCH'], url_path='public', permission_classes=[IsAdminUser])
     def patch_public(self, request: Request, **_) -> Response:
         docker_image = self.get_object()
@@ -63,8 +61,6 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
             serializer.save()
 
         return Response(serializer.data)
-
-
 
     # TODO: Maybe not necessary
     # https://www.django-rest-framework.org/api-guide/permissions/#overview-of-access-restriction-methods

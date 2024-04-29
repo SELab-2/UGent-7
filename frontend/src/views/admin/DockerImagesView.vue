@@ -41,13 +41,13 @@ const columns = ref([
     { field: 'name', header: 'admin.docker_images.name' },
     { field: 'owner', header: 'admin.docker_images.owner' },
 ]);
-const publicOptions = ref<Array<{ value: any; label: string }>>([
-    { value: true, label: 'public' },
-    { value: false, label: 'private' },
-]);
+// const publicOptions = ref<Array<{ value: any; label: string }>>([
+//     { value: true, label: 'public' },
+//     { value: false, label: 'private' },
+// ]);
 const showSafetyGuard = ref<boolean>(false);
 
-const toggleSafetyGuard = (data: any): void => {
+const toggleSafetyGuard = (data: DockerImage): void => {
     editItem.value.public = !data.public;
     editItem.value.id = data.id;
     showSafetyGuard.value = true;
