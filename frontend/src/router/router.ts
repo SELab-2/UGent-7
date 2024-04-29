@@ -2,6 +2,7 @@
 // TODO: after pinia setup is done
 
 import DashboardView from '@/views/dashboard/DashboardView.vue';
+import HelpDashboard from '@/views/help/HelpDashboard.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import CreateCourseView from '@/views/courses/CreateCourseView.vue';
 import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
@@ -160,7 +161,7 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: '',
-                component: Dummy,
+                component: HelpDashboard,
                 name: 'help-dashboard',
             },
             {
