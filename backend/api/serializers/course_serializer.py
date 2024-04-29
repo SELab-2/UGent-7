@@ -1,4 +1,6 @@
 from nh3 import clean
+from datetime import timedelta
+from django.utils import timezone
 from django.utils.translation import gettext
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -108,7 +110,7 @@ class CourseCloneSerializer(serializers.Serializer):
 
 class SaveInvitationLinkSerializer(serializers.Serializer):
     invitation_link = serializers.CharField(required=True)
-    invite_link_expires = serializers.DateField(required=True)
+    link_duration = serializers.IntegerField(required=True)
 
     def validate(self, data):
         # Check if there is no course with the same invitation link.
@@ -125,8 +127,11 @@ class SaveInvitationLinkSerializer(serializers.Serializer):
         course: Course = self.context["course"]
 
         course.invitation_link = validated_data["invitation_link"]
-        course.invite_link_expires = validated_data["invite_link_expires"]
+
+        # Save the expiration date as the current date + the invite link expires parameter in days.
+        course.invitation_link_expires = timezone.now() + timedelta(days=validated_data["link_duration"])
         course.save()
+
         return course
 
 

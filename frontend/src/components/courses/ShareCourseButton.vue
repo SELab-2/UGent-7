@@ -6,10 +6,12 @@ import InputText from 'primevue/inputtext';
 import { useI18n } from 'vue-i18n';
 import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useCourses } from '@/composables/services/course.service';
 
 /* Composable injections */
 const { t } = useI18n();
+const { saveInvitationLink } = useCourses();
 
 /* Props */
 const props = defineProps<{ course: Course }>();
@@ -24,11 +26,21 @@ const link = ref<string>('KVC Westerlo');
 const linkDuration = ref<number>(7);
 
 /**
+ * Opens the dialog to share the course, and generates a random invitation link.
+ */
+function openShareCourseDialog(): void {
+    link.value = generateRandomInvitationLink();
+    displayShareCourse.value = true;
+}
+
+/**
  * Creates an invitation link for the course.
  */
  async function handleShare(): Promise<void> {
-    // Show a confirmation dialog
-    console.log('Share course');
+    // Save the invitation link for the course
+    await saveInvitationLink(props.course.id, link.value, linkDuration.value);
+
+    // Close the dialog
     displayShareCourse.value = false;
 }
 
@@ -43,6 +55,19 @@ function copyToClipboard(): void {
     });
 }
 
+/**
+ * Generates a random invitation link for the course.
+ */
+function generateRandomInvitationLink() {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 20; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 
 </script>
 
@@ -53,7 +78,7 @@ function copyToClipboard(): void {
             icon-pos="right"
             class="custom-button"
             style="height: 51px; width: 51px"
-            @click="displayShareCourse = true"
+            @click="openShareCourseDialog"
             v-if="props.course.private_course"
             />
             <Dialog
@@ -83,8 +108,9 @@ function copyToClipboard(): void {
                 <div class="grid">
                     <div class="flex align-items-center col-12 gap-2">
                         <label for="link">{{ t('views.courses.share.link') }}</label>
-                        <InputText v-model="link" disabled />
+                        <InputText v-model="link" disabled style="width: 25%" />
                         <Button @click="copyToClipboard()" icon="pi pi-copy" class="p-button-text no-outline" />
+                        <Button @click="link = generateRandomInvitationLink()" icon="pi pi-refresh" class="p-button-text no-outline" />
                     </div>
                 </div>
 

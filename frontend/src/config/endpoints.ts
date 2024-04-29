@@ -14,6 +14,7 @@ export const endpoints = {
         search: '/api/courses/search/',
         retrieve: '/api/courses/{id}/',
         clone: '/api/courses/{courseId}/clone/',
+        invitationLink: '/api/courses/{courseId}/invitation_link/',
         byStudent: '/api/students/{studentId}/courses/',
         byTeacher: '/api/teachers/{teacherId}/courses/',
         byAssistant: '/api/assistants/{assistantId}/courses/',
