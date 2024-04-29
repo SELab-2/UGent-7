@@ -106,6 +106,30 @@ class CourseCloneSerializer(serializers.Serializer):
     clone_assistants = serializers.BooleanField()
 
 
+class SaveInvitationLinkSerializer(serializers.Serializer):
+    invitation_link = serializers.CharField(required=True)
+    invite_link_expires = serializers.DateField(required=True)
+
+    def validate(self, data):
+        # Check if there is no course with the same invitation link.
+        if Course.objects.filter(invitation_link=data["invitation_link"]).exists():
+            raise ValidationError(gettext("courses.error.invitation_link"))
+
+        return data
+
+    def create(self, validated_data):
+        # Save the invitation link and the expiration date.
+        if "course" not in self.context:
+            raise ValidationError(gettext("courses.error.context"))
+
+        course: Course = self.context["course"]
+
+        course.invitation_link = validated_data["invitation_link"]
+        course.invite_link_expires = validated_data["invite_link_expires"]
+        course.save()
+        return course
+
+
 class StudentJoinSerializer(StudentIDSerializer):
     def validate(self, data):
         # The validator needs the course context.

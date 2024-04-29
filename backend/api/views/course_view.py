@@ -1,3 +1,4 @@
+import string
 from api.models.course import Course
 from api.models.assistant import Assistant
 from api.models.teacher import Teacher
@@ -10,6 +11,7 @@ from api.permissions.role_permissions import IsTeacher, is_teacher
 from api.serializers.assistant_serializer import (AssistantIDSerializer,
                                                   AssistantSerializer)
 from api.serializers.course_serializer import (CourseCloneSerializer,
+                                               SaveInvitationLinkSerializer,
                                                CourseSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
@@ -23,6 +25,7 @@ from api.serializers.teacher_serializer import TeacherSerializer
 from authentication.serializers import UserIDSerializer
 from django.utils.translation import gettext
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -376,3 +379,31 @@ class CourseViewSet(viewsets.ModelViewSet):
         course_serializer = CourseSerializer(course, context={"request": request})
 
         return Response(course_serializer.data)
+
+    @action(detail=True, methods=["get"])
+    def invitation_link(self, request, **__):
+        """Return a unique link that can be used to join the course"""
+        # Generate a unique link for the course
+        unique_link = None
+
+        while not unique_link:
+            unique_link = get_random_string(20, allowed_chars=string.ascii_letters + string.digits)
+
+            # Make sure there is no course with the same link
+            if Course.objects.filter(invitation_link=unique_link).exists():
+                unique_link = None
+
+        return Response({"invitation_link": unique_link})
+
+    @invitation_link.mapping.post
+    @invitation_link.mapping.put
+    @swagger_auto_schema(request_body=SaveInvitationLinkSerializer)
+    def _save_invitation_link(self, request, **_):
+        """Save the invitation link to the course"""
+        course = self.get_object()
+        course.invitation_link = request.data["invitation_link"]
+        course.save()
+
+        return Response({
+            "message": gettext("courses.success.invitation_link.save")
+        })

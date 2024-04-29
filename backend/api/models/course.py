@@ -47,6 +47,9 @@ class Course(models.Model):
     # Field that contains the invite link for the course
     invite_link = models.CharField(max_length=100, blank=True, null=True)
 
+    # Date when the invite link expires
+    invite_link_expires = models.DateField(blank=True, null=True)
+
     def __str__(self) -> str:
         """The string representation of the course."""
         return str(self.name)
