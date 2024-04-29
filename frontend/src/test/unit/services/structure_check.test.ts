@@ -45,7 +45,7 @@ describe('structureCheck', (): void => {
 
         expect(structureChecks.value?.[1]?.name).toBe('folder1');
         expect(structureChecks.value?.[1]?.project).toBeNull();
-        expect(structureChecks.value?.[1]?.obligated_extensions).toStrictEqual([ { extension: 'pdf' } ]);
+        expect(structureChecks.value?.[1]?.obligated_extensions).toStrictEqual([{ extension: 'pdf' }]);
         expect(structureChecks.value?.[1]?.blocked_extensions).toStrictEqual([]);
 
         expect(structureChecks.value?.[2]?.name).toBe('folder3');
@@ -55,7 +55,7 @@ describe('structureCheck', (): void => {
 
         expect(structureChecks.value?.[3]?.name).toBe('folder3/folder3-1');
         expect(structureChecks.value?.[3]?.project).toBeNull();
-        expect(structureChecks.value?.[3]?.obligated_extensions).toStrictEqual([ { extension: 'gif' } ]);
+        expect(structureChecks.value?.[3]?.obligated_extensions).toStrictEqual([{ extension: 'gif' }]);
         expect(structureChecks.value?.[3]?.blocked_extensions).toStrictEqual([]);
     });
 });

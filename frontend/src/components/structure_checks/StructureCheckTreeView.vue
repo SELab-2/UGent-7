@@ -6,7 +6,7 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { StructureCheck } from '@/types/StructureCheck';
+import { type StructureCheck } from '@/types/StructureCheck';
 
 /* Props */
 const props = defineProps<{
@@ -71,7 +71,7 @@ async function loadStructureChecks(): any {
         let parrent: TreeNode_struct | null = null;
         path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
             // Check if the current part doesn't exist in the hierarchy
-            if (!r[name]) {
+            if (r[name] !== undefined) {
                 // Create a new node for the current part
                 r[name] = { result: [] };
                 // Add the node to the result array
@@ -88,7 +88,7 @@ async function loadStructureChecks(): any {
                 r.result.push(newNode);
 
                 if (i === a.length - 1) {
-                    if (obligated) {
+                    if (obligated !== null) {
                         // If it's the deepest path and there are obligated extensions, add them as children
                         obligated.forEach((ext: any, index: number) => {
                             r[name].result.push({
@@ -99,7 +99,7 @@ async function loadStructureChecks(): any {
                             });
                         });
                     }
-                    if (blocked) {
+                    if (blocked !== null) {
                         // If it's the deepest path and there are blocked extensions, add them as children
                         blocked.forEach((ext: any, index: number) => {
                             r[name].result.push({
@@ -118,7 +118,7 @@ async function loadStructureChecks(): any {
     });
 
     // Assign the fetched data to the nodes
-    if (result[0]) {
+    if (result[0] !== undefined && result[0] !== null) {
         nodes.value = result[0].children ?? [];
     }
 }
@@ -153,14 +153,14 @@ const unselectNode = (event: TreeNode_struct): any => {
 };
 
 const editSelectedNode = (): any => {
-    if (editedNode.value && editedNode.value.sort !== 'empty') {
+    if (editedNode.value !== null && editedNode.value.sort !== 'empty') {
         editedNode.value.label = editedNodeName.value;
     }
 };
 
 let counter = 0;
 const addSelectedNode = (): any => {
-    if (editedNode.value?.children) {
+    if (editedNode.value?.children !== undefined && editedNode.value?.children !== null) {
         if (editedNode.value.sort !== 'empty') {
             counter += 1;
             const node: TreeNode_struct = {
@@ -190,10 +190,10 @@ const addSelectedNode = (): any => {
 };
 
 const deleteSelectedNode = (): any => {
-    if (editedNode.value) {
+    if (editedNode.value !== null) {
         if (editedNode.value.sort !== 'empty') {
             // Find the index of the selected node in the parent's children array
-            if (editedNode.value.parrent?.children) {
+            if (editedNode.value.parrent?.children !== undefined && editedNode.value.parrent?.children !== null) {
                 const index = editedNode.value.parrent.children.findIndex((child) => child === editedNode.value);
 
                 // If the selected node is found in the parent's children array
@@ -219,7 +219,7 @@ async function saveSelectedNode(): Promise<any> {
     const checks = parseNodesToStructureChecks(nodes.value);
     console.log(checks);
     await getStructureCheckByProject(props.projectId);
-    if (structureChecks.value) {
+    if (structureChecks.value !== null) {
         await Promise.all(
             structureChecks.value.map(async (check) => {
                 await deleteStructureCheck(check.id);
@@ -252,7 +252,7 @@ function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
         let structureCheck = structureChecks.find((check) => check.name === fullPath);
 
         // If no existing structure check is found, create a new one
-        if (!structureCheck) {
+        if (structureCheck === undefined || structureCheck === null) {
             structureCheck = {
                 name: fullPath,
                 obligated_extensions: [],
@@ -270,7 +270,7 @@ function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
         }
 
         // Recursively traverse children
-        if (node.children) {
+        if (node.children !== undefined) {
             node.children.forEach((child) => {
                 traverse(child, fullPath);
             });
