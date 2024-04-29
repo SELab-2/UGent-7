@@ -168,6 +168,18 @@ const routes: RouteRecordRaw[] = [
                 path: 'student',
                 component: Dummy,
                 name: 'help-student',
+                children: [
+                    {
+                        path: 'login-out',
+                        component: Dummy,
+                        name: 'help-student-login_out',
+                    },
+                    {
+                        path: 'change-lang',
+                        component: Dummy,
+                        name: 'help-student-change_lang',
+                    },
+                ]
             },
             {
                 path: 'teacher',
