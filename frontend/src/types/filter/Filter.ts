@@ -1,4 +1,4 @@
-import {type LocationQuery} from 'vue-router';
+import { type LocationQuery } from 'vue-router';
 
 export type UserFilter = {
     id: string;
@@ -18,7 +18,7 @@ export type DockerImageFilter = {
     id: string;
     name: string;
     owner: string;
-} & Filter
+} & Filter;
 
 export interface Filter {
     search: string;
@@ -80,7 +80,7 @@ export function getCourseFilters(query: LocationQuery): CourseFilter {
  *
  * @param query
  */
-export function getDockerImageFilters(query:LocationQuery): DockerImageFilter {
+export function getDockerImageFilters(query: LocationQuery): DockerImageFilter {
     return {
         search: query.search?.toString() ?? '',
         id: query.id?.toString() ?? '',

@@ -11,20 +11,21 @@ import Title from '@/components/layout/Title.vue';
 import Body from '@/components/layout/Body.vue';
 import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
-import { useFilter } from "@/composables/filters/filter.ts";
+import { useFilter } from '@/composables/filters/filter.ts';
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
-import { useRoute } from "vue-router";
-import { DockerImage } from "@/types/DockerImage.ts";
-import { getDockerImageFilters } from "@/types/filter/Filter.ts";
-import InputIcon from "primevue/inputicon";
-import Column from "primevue/column";
-import IconField from "primevue/iconfield";
+import { useRoute } from 'vue-router';
+import { DockerImage } from '@/types/DockerImage.ts';
+import { getDockerImageFilters } from '@/types/filter/Filter.ts';
+import InputIcon from 'primevue/inputicon';
+import Column from 'primevue/column';
+import IconField from 'primevue/iconfield';
 
 /* Injection */
 const { t } = useI18n();
 const { query } = useRoute();
-const { pagination, dockerImages, getDockerImages, searchDockerImages, patchDockerImage, createDockerImage } = useDockerImages();
+const { pagination, dockerImages, getDockerImages, searchDockerImages, patchDockerImage, createDockerImage } =
+    useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
 
 const dataTable = ref();
@@ -39,11 +40,10 @@ const columns = ref([
     { field: 'id', header: 'admin.id' },
     { field: 'name', header: 'admin.docker_images.name' },
     { field: 'owner', header: 'admin.docker_images.owner' },
-
 ]);
-const publicOptions = ref<{ value: any, label: string }[]>([
-    {value: true, label: 'public'},
-    {value: false, label: 'private'}
+const publicOptions = ref<Array<{ value: any; label: string }>>([
+    { value: true, label: 'public' },
+    { value: false, label: 'private' },
 ]);
 const showSafetyGuard = ref<boolean>(false);
 
@@ -79,7 +79,8 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                     :search="searchDockerImages"
                     :filter="filter"
                     :on-filter="onFilter"
-                    ref="dataTable">
+                    ref="dataTable"
+                >
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField iconPosition="left">
@@ -99,10 +100,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         :style="{ maxWidth: '3rem' }"
                     >
                         <template #filter>
-                            <IconField
-                                iconPosition="left"
-                                class="flex align-items-center"
-                            >
+                            <IconField iconPosition="left" class="flex align-items-center">
                                 <InputIcon>
                                     <i class="pi pi-search flex justify-content-center" />
                                 </InputIcon>
@@ -114,31 +112,32 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         key="public"
                         field="public"
                         :header="t('admin.docker_images.public')"
-                        :style="{ maxWidth: '3rem' }">
+                        :style="{ maxWidth: '3rem' }"
+                    >
                         <template #body="{ data }">
                             <ToggleButton
                                 class="mb-3 gap-3"
                                 :model-value="data.public"
                                 @click="() => toggleSafetyGuard(data)"
                                 :on-label="t('admin.docker_images.public')"
-                                :off-label="t('admin.docker_images.private')"/>
+                                :off-label="t('admin.docker_images.private')"
+                            />
                         </template>
                     </Column>
                 </LazyDataTable>
             </div>
             <div v-else>
-                <InputText class="mb-3 gap-3" v-model:model-value="addItem.name" :placeholder="t('admin.docker_images.name_input')" />
+                <InputText
+                    class="mb-3 gap-3"
+                    v-model:model-value="addItem.name"
+                    :placeholder="t('admin.docker_images.name_input')"
+                />
                 <div v-if="addItem.name.length > 0">
                     <div class="flex align-items-center mb-3 gap-3">
                         <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
                         <InputSwitch v-model:model-value="addItem.public" />
                     </div>
-                    <FileUpload
-                        class="mb-3 gap-3"
-                        :custom-upload="true"
-                        @uploader="upload"
-                        :file-limit="1"
-                    >
+                    <FileUpload class="mb-3 gap-3" :custom-upload="true" @uploader="upload" :file-limit="1">
                         <template #empty>
                             <strong>No file selected.</strong>
                         </template>

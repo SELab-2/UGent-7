@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import DataTable, {type DataTableSelectAllChangeEvent} from "primevue/datatable";
-import { onMounted, watch, ref, defineExpose, toRef } from "vue";
-import { PaginatorResponse } from '@/types/filter/Paginator.ts'
+import DataTable, { type DataTableSelectAllChangeEvent } from 'primevue/datatable';
+import { onMounted, watch, ref, defineExpose, toRef } from 'vue';
+import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
-import { Filter } from "@/types/filter/Filter.ts";
-import Column from "primevue/column";
+import { type Filter } from '@/types/filter/Filter.ts';
+import Column from 'primevue/column';
 
 /* Properties */
 const props = defineProps<{
-    pagination: PaginatorResponse<any> | null
-    entities: any[] | null // list containing all the entities displayed by data table after executing get method
-    get: () => Promise<void> // get method for backend
-    search: (filters: Filter, page: number, pageSize: number) => Promise<void>
-    filter: Filter
-    onFilter: (callback: () => Promise<void>, debounce?: (number | undefined), immediate?: (boolean | undefined)) => void
-}>()
+    pagination: PaginatorResponse<any> | null;
+    entities: any[] | null; // list containing all the entities displayed by data table after executing get method
+    get: () => Promise<void>; // get method for backend
+    search: (filters: Filter, page: number, pageSize: number) => Promise<void>;
+    filter: Filter;
+    onFilter: (callback: () => Promise<void>, debounce?: number | undefined, immediate?: boolean | undefined) => void;
+}>();
 
 /* Injections */
 const { page, first, pageSize, onPaginate, resetPagination } = usePaginator();
@@ -48,7 +48,7 @@ const fetch = async (): Promise<void> => {
     loading.value = true;
     props.search(props.filter, page.value, pageSize.value).then(() => {
         loading.value = false;
-    })
+    });
 };
 const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
     selectAll.value = event.checked;
@@ -70,7 +70,7 @@ const onRowUnselect = (): void => {
     selectAll.value = false;
 };
 
-defineExpose({fetch})
+defineExpose({ fetch });
 </script>
 
 <template>
@@ -105,6 +105,4 @@ defineExpose({fetch})
     </div>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -42,7 +42,7 @@ const createFunctions = ref<Array<(arg: any) => Promise<void>>>([createStudent, 
 const destroyers = ref<Record<Role, (arg: any) => Promise<void>>>({});
 const destroyFunctions = ref<Array<(arg: any) => Promise<void>>>([deleteStudent, deleteAssistant, deleteTeacher]);
 
-const dataTable = ref()
+const dataTable = ref();
 const editItem = ref<User>(User.blankUser());
 const popupEdit = ref<boolean>(false);
 
@@ -142,7 +142,8 @@ const saveItem = async (): Promise<void> => {
                     :search="searchUsers"
                     :filter="filter"
                     :on-filter="onFilter"
-                    ref="dataTable">
+                    ref="dataTable"
+                >
                     <template #header>
                         <div class="flex justify-content-end">
                             <IconField iconPosition="left">

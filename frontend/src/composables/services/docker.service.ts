@@ -1,11 +1,10 @@
 import { DockerImage } from '@/types/DockerImage.ts';
-import { Response } from "@/types/Response.ts";
+import { Response } from '@/types/Response.ts';
 import { endpoints } from '@/config/endpoints.ts';
-import { type Ref, ref } from "vue";
-import { Filter } from "@/types/filter/Filter.ts";
-import {create, getList, getPaginatedList, patch} from "@/composables/services/helpers.ts";
-import {PaginatorResponse} from "@/types/filter/Paginator.ts";
-
+import { type Ref, ref } from 'vue';
+import { type Filter } from '@/types/filter/Filter.ts';
+import { create, getList, getPaginatedList, patch } from '@/composables/services/helpers.ts';
+import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 
 interface DockerImagesState {
     pagination: Ref<PaginatorResponse<DockerImage> | null>;
@@ -16,7 +15,6 @@ interface DockerImagesState {
     patchDockerImage: (dockerData: DockerImage) => Promise<void>;
     createDockerImage: (dockerData: DockerImage, file: File) => Promise<void>;
 }
-
 
 export function useDockerImages(): DockerImagesState {
     const pagination = ref<PaginatorResponse<DockerImage> | null>(null);
@@ -35,7 +33,7 @@ export function useDockerImages(): DockerImagesState {
 
     async function patchDockerImage(dockerData: DockerImage): Promise<void> {
         const endpoint = endpoints.dockerImages.patch.replace('{id}', dockerData.id);
-        await patch(endpoint, {public: dockerData.public}, response);
+        await patch(endpoint, { public: dockerData.public }, response);
     }
 
     async function createDockerImage(dockerData: DockerImage, file: File): Promise<void> {
@@ -43,9 +41,9 @@ export function useDockerImages(): DockerImagesState {
         await create<Response>(
             endpoint,
             {
-                file: file,
+                file,
                 name: dockerData.name,
-                public: dockerData.public
+                public: dockerData.public,
             },
             response,
             Response.fromJSON,
@@ -61,6 +59,6 @@ export function useDockerImages(): DockerImagesState {
         getDockerImages,
         searchDockerImages,
         patchDockerImage,
-        createDockerImage
-    }
+        createDockerImage,
+    };
 }

@@ -11,13 +11,7 @@ export class DockerImage {
     }
 
     static fromJSON(dockerData: DockerImage): DockerImage {
-        return new DockerImage(
-            dockerData.id,
-            dockerData.name,
-            dockerData.file,
-            dockerData.public,
-            dockerData.owner
-        );
+        return new DockerImage(dockerData.id, dockerData.name, dockerData.file, dockerData.public, dockerData.owner);
     }
 
     static blankDockerImage(): DockerImage {

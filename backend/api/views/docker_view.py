@@ -39,7 +39,7 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
         queryset3 = self.get_queryset().filter(
             owner__id__icontains=search
         )
-        queryset1 = queryset1.union(queryset2)
+        queryset1 = queryset1.union(queryset2, queryset3)
         queryset = self.get_queryset().filter(
             id__icontains=identifier,
             name__icontains=name,
