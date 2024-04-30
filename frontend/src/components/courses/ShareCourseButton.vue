@@ -6,7 +6,7 @@ import InputText from 'primevue/inputtext';
 import { useI18n } from 'vue-i18n';
 import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useCourses } from '@/composables/services/course.service';
 
 /* Composable injections */
@@ -36,7 +36,7 @@ function openShareCourseDialog(): void {
 /**
  * Creates an invitation link for the course.
  */
- async function handleShare(): Promise<void> {
+async function handleShare(): Promise<void> {
     // Save the invitation link for the course
     await saveInvitationLink(props.course.id, link.value, linkDuration.value);
 
@@ -48,17 +48,20 @@ function openShareCourseDialog(): void {
  * Copies the invitation link to the clipboard.
  */
 function copyToClipboard(): void {
-    navigator.clipboard.writeText(link.value).then(() => {
-        console.log('Link copied to clipboard');
-    }).catch(err => {
-        console.error('Failed to copy text: ', err);
-    });
+    navigator.clipboard
+        .writeText(link.value)
+        .then(() => {
+            console.log('Link copied to clipboard');
+        })
+        .catch((err) => {
+            console.error('Failed to copy text: ', err);
+        });
 }
 
 /**
  * Generates a random invitation link for the course.
  */
-function generateRandomInvitationLink() {
+function generateRandomInvitationLink(): string {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
@@ -67,8 +70,6 @@ function generateRandomInvitationLink() {
     }
     return result;
 }
-
-
 </script>
 
 <template>
@@ -80,14 +81,14 @@ function generateRandomInvitationLink() {
             style="height: 51px; width: 51px"
             @click="openShareCourseDialog"
             v-if="props.course.private_course"
-            />
-            <Dialog
+        />
+        <Dialog
             v-model:visible="displayShareCourse"
             class="m-3"
             :draggable="false"
             :contentStyle="{ 'min-width': '50vw', 'max-width': '1080px' }"
             modal
-            >
+        >
             <template #header>
                 <h2 class="my-3 text-primary">
                     {{ t('views.courses.share.title') }}
@@ -110,7 +111,11 @@ function generateRandomInvitationLink() {
                         <label for="link">{{ t('views.courses.share.link') }}</label>
                         <InputText v-model="link" disabled style="width: 25%" />
                         <Button @click="copyToClipboard()" icon="pi pi-copy" class="p-button-text no-outline" />
-                        <Button @click="link = generateRandomInvitationLink()" icon="pi pi-refresh" class="p-button-text no-outline" />
+                        <Button
+                            @click="link = generateRandomInvitationLink()"
+                            icon="pi pi-refresh"
+                            class="p-button-text no-outline"
+                        />
                     </div>
                 </div>
 
@@ -119,7 +124,7 @@ function generateRandomInvitationLink() {
                     <Button @click="handleShare()" rounded>{{ t('views.courses.share.title') }}</Button>
                 </div>
             </template>
-            </Dialog>
+        </Dialog>
     </div>
 </template>
 
@@ -127,6 +132,5 @@ function generateRandomInvitationLink() {
 .no-outline:focus,
 .no-outline:active {
     box-shadow: none !important;
-    
 }
 </style>

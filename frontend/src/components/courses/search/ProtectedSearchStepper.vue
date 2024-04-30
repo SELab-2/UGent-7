@@ -13,32 +13,50 @@ const { t } = useI18n();
         <StepperPanel :header="t('protectedCourses.screen1.title')">
             <template #content="{ nextCallback }">
                 <div class="flex flex-column h-12rem">
-                    <div class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center">
+                    <div
+                        class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center"
+                    >
                         {{ t('protectedCourses.screen1.content') }}
                     </div>
                 </div>
                 <div class="flex py-4 justify-content-end">
-                    <Button icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" text class="p-button-rounded" />
+                    <Button
+                        icon="pi pi-arrow-right"
+                        iconPos="right"
+                        @click="nextCallback"
+                        text
+                        class="p-button-rounded"
+                    />
                 </div>
             </template>
         </StepperPanel>
         <StepperPanel :header="t('protectedCourses.screen2.title')">
             <template #content="{ prevCallback, nextCallback }">
                 <div class="flex flex-column h-12rem">
-                    <div class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center">
+                    <div
+                        class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center"
+                    >
                         {{ t('protectedCourses.screen2.content') }}
                     </div>
                 </div>
                 <div class="flex py-4 gap-2">
                     <Button icon="pi pi-arrow-left" @click="prevCallback" text class="p-button-rounded" />
-                    <Button icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" text class="p-button-rounded" />
+                    <Button
+                        icon="pi pi-arrow-right"
+                        iconPos="right"
+                        @click="nextCallback"
+                        text
+                        class="p-button-rounded"
+                    />
                 </div>
             </template>
         </StepperPanel>
         <StepperPanel :header="t('protectedCourses.screen3.title')">
             <template #content="{ prevCallback }">
                 <div class="flex flex-column h-12rem">
-                    <div class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center">
+                    <div
+                        class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center"
+                    >
                         {{ t('protectedCourses.screen3.content') }}
                     </div>
                 </div>
@@ -50,11 +68,4 @@ const { t } = useI18n();
     </Stepper>
 </template>
 
-<style scoped lang="scss">
-/* Custom styles for text display */
-.font-medium {
-    font-size: 1.2rem; /* Adjust font size as needed */
-    font-weight: 500; /* Adjust font weight for emphasis */
-    color: #333; /* Adjust text color */
-}
-</style>
+<style scoped lang="scss"></style>

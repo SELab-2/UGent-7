@@ -157,6 +157,7 @@
         }
     },
     "components": {
+        "submission" : "Submit",
         "button": {
             "academicYear": "Academic year {0}",
             "createProject": "Create a new project",
@@ -188,8 +189,7 @@
             "noIncomingProjects": "No projects with a deadline within 7 days.",
             "selectCourse": "Select the course for which you want to create a project:",
             "showPastProjects": "Projects with passed deadline"
-        },
-        "submission": "Submit"
+        }
     },
     "types": {
         "roles": {
@@ -248,7 +248,7 @@
         },
         "screen2": {
             "title": "Search course",
-            "content": "Use the invitation link to search a course. If you can't find the course, ask the teacher to reshare the link."
+            "content": "Use the invitation link to search a course. If you can't find the course, ask the teacher to share a new link."
 
         },
         "screen3": {

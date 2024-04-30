@@ -8,7 +8,6 @@ import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import InputSwitch from 'primevue/inputswitch';
 import ConfirmDialog from 'primevue/confirmdialog';
-import Dialog from 'primevue/dialog';
 import { useConfirm } from 'primevue/useconfirm';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';

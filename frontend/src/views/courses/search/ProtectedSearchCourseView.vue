@@ -13,7 +13,6 @@ import { useFilter } from '@/composables/filters/filter.ts';
 import { getPrivateCourseFilters } from '@/types/filter/Filter.ts';
 import { useRoute } from 'vue-router';
 
-
 /* Composable injections */
 const { t } = useI18n();
 const { query } = useRoute();
@@ -28,7 +27,7 @@ const { filter, onFilter } = useFilter(getPrivateCourseFilters(query));
  * Fetch the courses based on the filter.
  */
 async function fetchCourses(): Promise<void> {
-    filter.value['invitationLink'] = searchQuery.value;
+    filter.value.invitationLink = searchQuery.value;
     await searchCourses(filter.value, page.value, pageSize.value);
 }
 
@@ -65,9 +64,14 @@ onMounted(async () => {
                 </div>
 
                 <span class="relative flex mt-4">
-                    <InputText v-model="searchQuery" :placeholder="t('views.courses.searchByLink.placeholder')" style="width: 80%;" type="search" />
+                    <InputText
+                        v-model="searchQuery"
+                        :placeholder="t('views.courses.searchByLink.placeholder')"
+                        style="width: 80%"
+                        type="search"
+                    />
                     <Button @click="fetchCourses" icon="pi pi-search" class="p-button-primary" />
-                </span> 
+                </span>
 
                 <!-- Founded courses -->
                 <CourseGeneralList class="mt-3" :courses="pagination?.results ?? null" :cols="3" />
@@ -76,5 +80,4 @@ onMounted(async () => {
     </BaseLayout>
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

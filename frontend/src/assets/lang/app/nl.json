@@ -243,11 +243,11 @@
     "protectedCourses": {
         "screen1": {
             "title": "Bemachtigen link",
-            "content": "Professoren kunnen kiezen om hun vakken niet publiek te maken. Vraag de prof om de link van het vak te delen, om te kunnen toetreden tot het vak."
+            "content": "Professoren kunnen kiezen om hun vakken niet publiek te maken. Vraag de prof om een invitatielink te delen om te kunnen toetreden tot het vak."
         },
         "screen2": {
             "title": "Vak zoeken",
-            "content": "Gebruik de link om het vak te zoeken. Als je het vak niet kan vinden, kan je de prof vragen om de link opnieuw te delen."
+            "content": "Gebruik de link om het vak te zoeken. Als je het vak niet kan vinden, kan je de prof vragen om een nieuwe link te delen."
 
         },
         "screen3": {

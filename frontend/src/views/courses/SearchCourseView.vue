@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n';
 import PublicSearchCourseView from './search/PublicSearchCourseView.vue';
 import ProtectedSearchCourseView from './search/ProtectedSearchCourseView.vue';
 
-
 /* Composable injections */
 const { t } = useI18n();
 
@@ -17,7 +16,6 @@ const options = computed(() => [
     { label: t('components.button.public'), value: true },
     { label: t('components.button.protected'), value: false },
 ]);
-
 </script>
 
 <template>
@@ -30,7 +28,7 @@ const options = computed(() => [
                 option-value="value"
                 option-label="label"
                 :allow-empty="false"
-            />       
+            />
         </template>
     </PublicSearchCourseView>
 
@@ -43,11 +41,9 @@ const options = computed(() => [
                 option-value="value"
                 option-label="label"
                 :allow-empty="false"
-            />       
+            />
         </template>
     </ProtectedSearchCourseView>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

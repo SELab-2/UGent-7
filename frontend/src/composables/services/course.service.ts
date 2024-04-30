@@ -114,13 +114,14 @@ export function useCourses(): CoursesState {
 
     async function saveInvitationLink(courseId: string, invitationLink: string, linkDuration: number): Promise<void> {
         const endpoint = endpoints.courses.invitationLink.replace('{courseId}', courseId);
-        await create<Course>(endpoint, 
+        await create<Course>(
+            endpoint,
             {
                 invitation_link: invitationLink,
                 link_duration: linkDuration,
             },
             course,
-            Course.fromJSON
+            Course.fromJSON,
         );
     }
 
