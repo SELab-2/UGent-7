@@ -37,7 +37,7 @@ export function useDockerImages(): DockerImagesState {
     }
 
     async function createDockerImage(dockerData: DockerImage, file: File): Promise<void> {
-        const endpoint = endpoints.courses.index;
+        const endpoint = endpoints.dockerImages.index;
         await create<Response>(
             endpoint,
             {
