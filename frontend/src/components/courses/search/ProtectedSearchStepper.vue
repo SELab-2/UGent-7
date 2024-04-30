@@ -14,7 +14,7 @@ const { t } = useI18n();
             <template #content="{ nextCallback }">
                 <div class="flex flex-column h-12rem">
                     <div class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center">
-                        Professoren kunnen kiezen om hun vakken niet publiek te maken. Vraag de prof om de link van het vak te delen, om te kunnen toetreden tot het vak.
+                        {{ t('protectedCourses.screen1.content') }}
                     </div>
                 </div>
                 <div class="flex py-4 justify-content-end">
@@ -22,11 +22,11 @@ const { t } = useI18n();
                 </div>
             </template>
         </StepperPanel>
-        <StepperPanel header="Vak zoeken">
+        <StepperPanel :header="t('protectedCourses.screen2.title')">
             <template #content="{ prevCallback, nextCallback }">
                 <div class="flex flex-column h-12rem">
                     <div class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center">
-                        Gebruik de link om het vak te zoeken. Als je het vak niet kan vinden, kan je de prof vragen om de link opnieuw te delen.
+                        {{ t('protectedCourses.screen2.content') }}
                     </div>
                 </div>
                 <div class="flex py-4 gap-2">
@@ -35,11 +35,11 @@ const { t } = useI18n();
                 </div>
             </template>
         </StepperPanel>
-        <StepperPanel header="Inschrijven">
+        <StepperPanel :header="t('protectedCourses.screen3.title')">
             <template #content="{ prevCallback }">
                 <div class="flex flex-column h-12rem">
                     <div class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center">
-                        Schrijf je in voor het vak. Je kan nu de lopende projecten raadplegen.
+                        {{ t('protectedCourses.screen3.content') }}
                     </div>
                 </div>
                 <div class="flex py-4 justify-content-start">

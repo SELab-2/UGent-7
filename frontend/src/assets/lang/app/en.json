@@ -243,12 +243,17 @@
     },
     "protectedCourses": {
         "screen1": {
-            "title": "Obtain invitation link"
+            "title": "Obtain invitation link",
+            "content": "Teachers can choose to make their courses private. This means you have to ask the teacher for an invitation link, to be able to join the course."
         },
         "screen2": {
+            "title": "Search course",
+            "content": "Use the invitation link to search a course. If you can't find the course, ask the teacher to reshare the link."
 
         },
         "screen3": {
+            "title": "Enroll",
+            "content": "Enroll in the course. Now you can see all the current projects, deadlines, ..."
 
         }
     },
