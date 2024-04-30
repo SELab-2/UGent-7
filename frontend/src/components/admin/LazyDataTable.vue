@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DataTable, { type DataTableSelectAllChangeEvent } from 'primevue/datatable';
 import { onMounted, watch, ref, defineExpose, toRef } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
@@ -17,6 +18,7 @@ const props = defineProps<{
 }>();
 
 /* Injections */
+const { t } = useI18n();
 const { page, first, pageSize, onPaginate, resetPagination } = usePaginator();
 
 const loading = ref(false);
@@ -97,8 +99,8 @@ defineExpose({ fetch });
             <template #header>
                 <slot name="header" />
             </template>
-            <template #empty>No matching data.</template>
-            <template #loading>Loading data. Please wait.</template>
+            <template #empty>{{ t('admin.none_found') }}</template>
+            <template #loading>{{ t('admin.loading') }}</template>
             <Column selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center"></Column>
             <slot />
         </DataTable>

@@ -262,13 +262,15 @@
         "teacher": "Teacher",
         "catalog": "Catalog",
         "docker_images": {
-            "title": "Docker images",
+            "title": "Docker Images",
             "name_input": "Name of docker image",
             "name": "Name",
             "owner": "Owner ID",
             "public": "Public",
             "private": "Private"
-        }
+        },
+        "none_found": "No matching data.",
+        "loading": "Loading data. Please wait."
     },
     "primevue": {
         "startsWith": "Starts with",

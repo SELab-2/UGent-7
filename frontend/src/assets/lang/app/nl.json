@@ -262,13 +262,15 @@
         "teacher": "Prof",
         "catalog": "Catalogus",
         "docker_images": {
-            "title": "Docker images",
+            "title": "Docker Images",
             "name_input": "Naam van docker image",
             "name": "Naam",
             "owner": "Eigenaar ID",
             "public": "Publiek",
             "private": "Privaat"
-        }
+        },
+        "none_found": "Geen overeenkomende data gevonden.",
+        "loading": "Aan het laden. Wacht een momentje aub."
     },
     "primevue": {
         "accept": "Ja",
