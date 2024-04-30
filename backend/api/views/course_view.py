@@ -74,8 +74,11 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         # If the invitation link was passed, then only the private course with the invitation link should be returned
         if invitation_link != "none":
+
+            # Filter based on invitation link, and that the invitation link is not expired
             queryset = self.get_queryset().filter(
-                invitation_link=invitation_link
+                invitation_link=invitation_link,
+                invitation_link_expires__gte=timezone.now()
             )
 
             # Serialize the resulting queryset
