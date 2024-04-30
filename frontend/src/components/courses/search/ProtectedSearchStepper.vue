@@ -2,11 +2,15 @@
 import Stepper from 'primevue/stepper';
 import StepperPanel from 'primevue/stepperpanel';
 import Button from 'primevue/button';
+import { useI18n } from 'vue-i18n';
+
+/* Composable injections */
+const { t } = useI18n();
 </script>
 
 <template>
     <Stepper orientation="vertical">
-        <StepperPanel header="Bemachtigen link">
+        <StepperPanel :header="t('protectedCourses.screen1.title')">
             <template #content="{ nextCallback }">
                 <div class="flex flex-column h-12rem">
                     <div class="border-4 surface-border border-round flex-auto flex justify-content-center align-items-center">

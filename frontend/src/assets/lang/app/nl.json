@@ -161,7 +161,9 @@
             "academicYear": "Academiejaar {0}",
             "createProject": "Creëer nieuw project",
             "searchCourse": "Zoek een vak",
-            "createCourse": "Maak een vak"
+            "createCourse": "Maak een vak",
+            "public": "Publiek",
+            "protected": "Besloten"
         },
         "card": {
             "open": "Details",
@@ -237,6 +239,17 @@
         "cloneCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
         "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak.",
         "shareCourse": "Door het creëren van een invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Creëer invitatielink\" klikt zal deze link geldig worden."
+    },
+    "protectedCourses": {
+        "screen1": {
+            "title": "Bemachtigen link"
+        },
+        "screen2": {
+
+        },
+        "screen3": {
+
+        }
     },
     "admin": {
         "title": "Beheerder",

@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import SelectButton from 'primevue/selectbutton';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import PublicSearchCourseView from './search/PublicSearchCourseView.vue';
 import ProtectedSearchCourseView from './search/ProtectedSearchCourseView.vue';
 
+
+/* Composable injections */
+const { t } = useI18n();
 
 /* State of the public/protected course */
 const publicCourses = ref<boolean>(true);
 
 /* Options for the select button */
-const options = [
-    { label: 'Public', value: true },
-    { label: 'Protected', value: false },
-];
+const options = computed(() => [
+    { label: t('components.button.public'), value: true },
+    { label: t('components.button.protected'), value: false },
+]);
 
 </script>
 
