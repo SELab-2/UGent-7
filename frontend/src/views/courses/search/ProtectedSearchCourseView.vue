@@ -5,22 +5,49 @@ import ProtectedSearchStepper from '@/components/courses/search/ProtectedSearchS
 import Title from '@/components/layout/Title.vue';
 import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import CourseGeneralList from '@/components/courses/CourseGeneralList.vue';
+import { useCourses } from '@/composables/services/course.service.ts';
+import { usePaginator } from '@/composables/filters/paginator.ts';
+import { useFilter } from '@/composables/filters/filter.ts';
+import { getPrivateCourseFilters } from '@/types/filter/Filter.ts';
+import { useRoute } from 'vue-router';
+
 
 /* Composable injections */
 const { t } = useI18n();
+const { query } = useRoute();
 
 /* State */
 const searchQuery = ref('');
+const { pagination, searchCourses } = useCourses();
+const { onPaginate, resetPagination, page, pageSize } = usePaginator();
+const { filter, onFilter } = useFilter(getPrivateCourseFilters(query));
 
 /**
  * Fetch the courses based on the filter.
  */
-async function searchCourses(): Promise<void> {
-    console.log('Searching courses...');
+async function fetchCourses(): Promise<void> {
+    filter.value['invitationLink'] = searchQuery.value;
+    await searchCourses(filter.value, page.value, pageSize.value);
 }
 
+onMounted(async () => {
+    /* Search courses on page change */
+    onPaginate(fetchCourses);
 
+    /* Search courses on filter change */
+    onFilter(fetchCourses);
+
+    /* Reset pagination on filter change */
+    onFilter(
+        async () => {
+            await resetPagination([pagination]);
+        },
+        0,
+        false,
+    );
+});
 </script>
 
 <template>
@@ -39,9 +66,11 @@ async function searchCourses(): Promise<void> {
 
                 <span class="relative flex mt-4">
                     <InputText v-model="searchQuery" :placeholder="t('views.courses.searchByLink.placeholder')" style="width: 80%;" type="search" />
-                    <Button @click="searchCourses" icon="pi pi-search" class="p-button-primary" />
+                    <Button @click="fetchCourses" icon="pi pi-search" class="p-button-primary" />
                 </span> 
-       
+
+                <!-- Founded courses -->
+                <CourseGeneralList class="mt-3" :courses="pagination?.results ?? null" :cols="3" />
             </div>
         </div>
     </BaseLayout>

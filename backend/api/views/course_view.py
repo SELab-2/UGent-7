@@ -68,8 +68,22 @@ class CourseViewSet(viewsets.ModelViewSet):
     def search(self, request: Request) -> Response:
         # Extract filter params
         search = request.query_params.get("search", "")
+        invitation_link = request.query_params.get("invitationLink", "")
         years = request.query_params.getlist("years[]")
         faculties = request.query_params.getlist("faculties[]")
+
+        # If the invitation link was passed, then only the private course with the invitation link should be returned
+        if invitation_link != "none":
+            queryset = self.get_queryset().filter(
+                invitation_link=invitation_link
+            )
+
+            # Serialize the resulting queryset
+            serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+                "request": request
+            })
+
+            return self.get_paginated_response(serializer.data)
 
         # Filter the queryset based on the search term
         queryset = self.get_queryset().filter(
@@ -84,7 +98,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         if faculties:
             queryset = queryset.filter(faculty__in=faculties)
 
-        # Filter the queryset so that only public courses are shown
+        # No invitation link was passed, so filter out private courses
         queryset = queryset.filter(private_course=False)
 
         # Serialize the resulting queryset
