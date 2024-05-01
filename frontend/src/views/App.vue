@@ -21,7 +21,7 @@ watch(message, () => {
         }
 
         // Add the message to the toast.
-        add({ ...message.value, life: 5000000 });
+        add({ ...message.value, life: 4000 });
     }
 });
 </script>
