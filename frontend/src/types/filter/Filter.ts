@@ -14,6 +14,12 @@ export type CourseFilter = {
     years: string[];
 } & Filter;
 
+export type DockerImageFilter = {
+    id: string;
+    name: string;
+    owner: string;
+} & Filter;
+
 export interface Filter {
     search: string;
     [key: string]: string | string[];
@@ -67,6 +73,20 @@ export function getCourseFilters(query: LocationQuery): CourseFilter {
     }
 
     return filters;
+}
+
+/**
+ * Get the docker image filters from the query.
+ *
+ * @param query
+ */
+export function getDockerImageFilters(query: LocationQuery): DockerImageFilter {
+    return {
+        search: query.search?.toString() ?? '',
+        id: query.id?.toString() ?? '',
+        name: query.id?.toString() ?? '',
+        owner: query.id?.toString() ?? '',
+    };
 }
 
 /**

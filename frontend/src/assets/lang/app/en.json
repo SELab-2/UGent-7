@@ -231,6 +231,9 @@
     "admin": {
         "title": "Admin",
         "keyword": "Keyword",
+        "id": "ID",
+        "list": "List",
+        "add": "Add",
         "search": {
             "search": "Search",
             "general": "Search by general keyword"
@@ -240,7 +243,6 @@
         "save": "Save",
         "users": {
             "title": "Users",
-            "id": "ID",
             "username": "Username",
             "email": "Email",
             "roles": "Roles"
@@ -257,7 +259,18 @@
         "teachers": {
             "title": "Teachers"
         },
-        "teacher": "Teacher"
+        "teacher": "Teacher",
+        "catalog": "Catalog",
+        "docker_images": {
+            "title": "Docker Images",
+            "name_input": "Name of docker image",
+            "name": "Name",
+            "owner": "Owner ID",
+            "public": "Public",
+            "private": "Private"
+        },
+        "none_found": "No matching data.",
+        "loading": "Loading data. Please wait."
     },
     "primevue": {
         "startsWith": "Starts with",
