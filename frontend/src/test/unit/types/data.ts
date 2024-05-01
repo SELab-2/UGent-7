@@ -65,6 +65,8 @@ export const courseData = {
     excerpt: 'course1_excerpt',
     description: 'course1_description',
     academic_startyear: 2024,
+    private_course: false,
+    invitation_link: null,
     parent_course: null,
     faculty: null,
     teachers: [],

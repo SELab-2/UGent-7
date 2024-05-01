@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DataTable, { type DataTableSelectAllChangeEvent } from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import InputSwitch from 'primevue/inputswitch';
@@ -11,14 +10,14 @@ import MultiSelect from 'primevue/multiselect';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import Body from '@/components/layout/Body.vue';
-import { ref, onMounted, watch, computed } from 'vue';
+import LazyDataTable from '@/components/admin/LazyDataTable.vue';
+import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUser } from '@/composables/services/users.service.ts';
 import { useStudents } from '@/composables/services/student.service.ts';
 import { useAssistant } from '@/composables/services/assistant.service.ts';
 import { useTeacher } from '@/composables/services/teacher.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
-import { usePaginator } from '@/composables/filters/paginator.ts';
 
 import { roles, type Role, User } from '@/types/users/User.ts';
 import { getUserFilters } from '@/types/filter/Filter.ts';
@@ -32,31 +31,10 @@ const { createStudent, deleteStudent } = useStudents();
 const { createAssistant, deleteAssistant } = useAssistant();
 const { createTeacher, deleteTeacher } = useTeacher();
 const { filter, onFilter } = useFilter(getUserFilters(query));
-const { page, first, pageSize, onPaginate, resetPagination } = usePaginator();
 
 onMounted(async () => {
     fillCreators();
     fillDestroyers();
-
-    onPaginate(fetchUsers);
-
-    watch(
-        filter,
-        () => {
-            loading.value = true;
-        },
-        { deep: true },
-    );
-
-    onFilter(fetchUsers);
-
-    onFilter(
-        async () => {
-            await resetPagination([pagination]);
-        },
-        0,
-        false,
-    );
 });
 
 const creators = ref<Record<Role, (arg: any) => Promise<void>>>({});
@@ -64,14 +42,12 @@ const createFunctions = ref<Array<(arg: any) => Promise<void>>>([createStudent, 
 const destroyers = ref<Record<Role, (arg: any) => Promise<void>>>({});
 const destroyFunctions = ref<Array<(arg: any) => Promise<void>>>([deleteStudent, deleteAssistant, deleteTeacher]);
 
-const loading = ref(false);
-const selectedUsers = ref();
-const selectAll = ref(false);
+const dataTable = ref();
 const editItem = ref<User>(User.blankUser());
 const popupEdit = ref<boolean>(false);
 
 const columns = ref([
-    { field: 'id', header: 'admin.users.id' },
+    { field: 'id', header: 'admin.id' },
     { field: 'username', header: 'admin.users.username' },
     { field: 'email', header: 'admin.users.email' },
     { field: 'roles', header: 'admin.users.roles' },
@@ -93,32 +69,6 @@ const fillDestroyers = (): void => {
         destroyers.value[role] = destroyFunctions.value[i - 1];
     }
 };
-const fetchUsers = async (): Promise<void> => {
-    loading.value = true;
-    await searchUsers(filter.value, page.value, pageSize.value).then(() => {
-        loading.value = false;
-    });
-};
-const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
-    selectAll.value = event.checked;
-
-    if (selectAll.value) {
-        getUsers().then(() => {
-            selectAll.value = true;
-            selectedUsers.value = users.value;
-        });
-    } else {
-        selectAll.value = false;
-        selectedUsers.value = [];
-    }
-};
-const onRowSelect = (): void => {
-    selectAll.value = selectedUsers.value.length === (pagination.value?.count ?? 0);
-};
-const onRowUnselect = (): void => {
-    selectAll.value = false;
-};
-
 const showPopup = (data: any): void => {
     editItem.value = JSON.parse(JSON.stringify(data)); // I do this to get a deep copy of the role array
     popupEdit.value = true;
@@ -169,7 +119,8 @@ const saveItem = async (): Promise<void> => {
         // update admin status
         await toggleAdmin(editItem.value.id, editItem.value.is_staff);
         // update locally
-        await fetchUsers();
+        console.log(dataTable.value);
+        await dataTable.value.fetch();
     } else {
         // raise error TODO
     }
@@ -184,24 +135,14 @@ const saveItem = async (): Promise<void> => {
         </Title>
         <Body>
             <div class="card p-fluid">
-                <DataTable
-                    :value="pagination?.results"
-                    lazy
-                    paginator
-                    v-model:first="first"
-                    :rows="pageSize"
-                    dataKey="id"
-                    auto-layout
-                    :totalRecords="pagination?.count"
-                    :loading="loading"
-                    @page="loading = true"
-                    filterDisplay="row"
-                    v-model:selection="selectedUsers"
-                    :selectAll="selectAll"
-                    @select-all-change="onSelectAllChange"
-                    @row-select="onRowSelect"
-                    @row-unselect="onRowUnselect"
-                    tableStyle="min-width: 75rem"
+                <LazyDataTable
+                    :pagination="pagination"
+                    :entities="users"
+                    :get="getUsers"
+                    :search="searchUsers"
+                    :filter="filter"
+                    :on-filter="onFilter"
+                    ref="dataTable"
                 >
                     <template #header>
                         <div class="flex justify-content-end">
@@ -215,7 +156,6 @@ const saveItem = async (): Promise<void> => {
                     </template>
                     <template #empty>No matching data.</template>
                     <template #loading>Loading data. Please wait.</template>
-                    <Column selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center"></Column>
                     <Column
                         v-for="column in columns"
                         :key="column.field"
@@ -252,7 +192,7 @@ const saveItem = async (): Promise<void> => {
                             <Button @click="() => showPopup(data)">{{ t('admin.edit') }}</Button>
                         </template>
                     </Column>
-                </DataTable>
+                </LazyDataTable>
             </div>
         </Body>
     </AdminLayout>

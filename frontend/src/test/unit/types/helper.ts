@@ -90,6 +90,8 @@ export function createCourse(courseData: any): Course {
         courseData.excerpt,
         courseData.description,
         courseData.academic_startyear,
+        courseData.private_course,
+        courseData.invitation_link,
         courseData.parent_course,
         courseData.faculty,
         courseData.teachers.slice(),
