@@ -19,13 +19,19 @@ const meterItems = computed(() => {
     const groupsSubmitted = props.submissionStatus !== null ? props.submissionStatus.groups_submitted : 0;
     const structureChecksPassed = props.submissionStatus !== null ? props.submissionStatus.structure_checks_passed : 0;
     const extraChecksPassed = props.submissionStatus !== null ? props.submissionStatus.extra_checks_passed : 0;
-    const submissionsFailed = groupsSubmitted - extraChecksPassed;
+    const submissionsFailed = groupsSubmitted - structureChecksPassed;
     return [
         {
             value: (extraChecksPassed / groups) * 100,
             color: '#749b68',
-            label: t('components.card.testsSucceed'),
+            label: t('components.card.extraTestsSucceed'),
             icon: 'pi pi-check',
+        },
+        {
+            value: (structureChecksPassed / groups) * 100,
+            color: '#fa9746',
+            label: t('components.card.structureTestsSucceed'),
+            icon: 'pi pi-exclamation-circle',
         },
         {
             value: (submissionsFailed / groups) * 100,

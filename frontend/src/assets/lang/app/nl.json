@@ -171,7 +171,8 @@
             "noSubmissions": "Dit project heeft geen indieningen",
             "submissions": "Indiening | Indieningen",
             "groups": "Groep | Groepen",
-            "testsSucceed": "Geslaagde testen",
+            "structureTestsSucceed": "Geslaagde structuur testen",
+            "extraTestsSucceed": "Geslaagde extra testen",
             "testsFail": "Gefaalde testen",
             "submit": "Indienen"
         },

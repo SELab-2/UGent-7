@@ -172,7 +172,8 @@
             "noSubmissions": "This project does not have any submissions",
             "submissions": "Submission | Submissions",
             "groups": "Group | Groups",
-            "testsSucceed": "Succeeded tests",
+            "structureTestsSucceed": "Succeeded strucutre tests",
+            "extraTestsSucceed": "Succeeded extra tests",
             "testsFail": "Failed tests",
             "submit": "Submit"
         },
