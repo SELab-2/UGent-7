@@ -170,11 +170,14 @@ class ProjectViewSet(CreateModelMixin,
         """
         project = self.get_object()
 
-        non_empty_groups = project.groups.filter(students__isnull=False).count()
-        
+        non_empty_groups = Group.objects.filter(project=project, students__isnull=False).distinct().count()
+
         groups_submitted_ids = Submission.objects.filter(group__project=project).values_list('group__id', flat=True)
         unique_groups = set(groups_submitted_ids)
         groups_submitted = len(unique_groups)
+
+        if (groups_submitted > non_empty_groups):
+            non_empty_groups = groups_submitted
         
         passed_structure_checks_submission_ids = StructureCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).values_list('submission__id', flat=True)
         passed_structure_checks_group_ids = Submission.objects.filter(id__in=passed_structure_checks_submission_ids).values_list('group_id', flat=True)
@@ -185,6 +188,11 @@ class ProjectViewSet(CreateModelMixin,
         passed_extra_checks_group_ids = Submission.objects.filter(id__in=passed_extra_checks_submission_ids).values_list('group_id', flat=True)
         unique_groups = set(passed_extra_checks_group_ids)
         extra_checks_passed = len(unique_groups)
+
+        # The total number of passed extra checks combined with the number of passed structure checks 
+        # can never exceed the total number of submissions (the seeder does not account for this restriction)
+        if (structure_checks_passed + extra_checks_passed > groups_submitted):
+            extra_checks_passed = groups_submitted - structure_checks_passed
 
         print(f"non_empty_groups: {non_empty_groups}")
         print(f"groups_submitted: {groups_submitted}")
