@@ -169,17 +169,28 @@ class ProjectViewSet(CreateModelMixin,
             - The amount of submissions that passed the basic tests
         """
         project = self.get_object()
+
         non_empty_groups = project.groups.filter(students__isnull=False).count()
-        groups_submitted = Submission.objects.filter(group__project=project).count()
         
-        structure_checks_passed = StructureCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).order_by('submission__group', '-submission__submission_time').distinct('submission__group')
-        extra_checks_passed = ExtraCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).order_by('submission__group', '-submission__submission_time').distinct('submission__group')
+        groups_submitted_ids = Submission.objects.filter(group__project=project).values_list('group__id', flat=True)
+        unique_groups = set(groups_submitted_ids)
+        groups_submitted = len(unique_groups)
+        
+        passed_structure_checks_submission_ids = StructureCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).values_list('submission__id', flat=True)
+        passed_structure_checks_group_ids = Submission.objects.filter(id__in=passed_structure_checks_submission_ids).values_list('group_id', flat=True)
+        unique_groups = set(passed_structure_checks_group_ids)
+        structure_checks_passed = len(unique_groups)
 
-        print(f"Passed structure checks: {structure_checks_passed}")
-        print(f"Passed extra checks: {extra_checks_passed}")
+        passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).values_list('submission__id', flat=True)
+        passed_extra_checks_group_ids = Submission.objects.filter(id__in=passed_extra_checks_submission_ids).values_list('group_id', flat=True)
+        unique_groups = set(passed_extra_checks_group_ids)
+        extra_checks_passed = len(unique_groups)
 
-        structure_checks_passed = 5
-        extra_checks_passed = 2
+        print(f"non_empty_groups: {non_empty_groups}")
+        print(f"groups_submitted: {groups_submitted}")
+        print(f"structure_checks_passed: {structure_checks_passed}")
+        print(f"extra_checks_passed: {extra_checks_passed}")
+
         serializer = SubmissionStatusSerializer({
             "non_empty_groups": non_empty_groups,
             "groups_submitted": groups_submitted,
