@@ -39,7 +39,7 @@ const { t } = useI18n();
                         {{ t('protectedCourses.screen2.content') }}
                     </div>
                 </div>
-                <div class="flex py-4 gap-2">
+                <div class="flex py-4 gap-2 justify-content-between">
                     <Button icon="pi pi-arrow-left" @click="prevCallback" text class="p-button-rounded" />
                     <Button
                         icon="pi pi-arrow-right"
