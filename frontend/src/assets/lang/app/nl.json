@@ -258,6 +258,9 @@
     "admin": {
         "title": "Beheerder",
         "keyword": "Trefwoord",
+        "id": "ID",
+        "list": "Lijst",
+        "add": "Voeg toe",
         "search": {
             "search": "Zoeken",
             "general": "Zoek op algemeen trefwoord"
@@ -267,7 +270,6 @@
         "save": "Sla op",
         "users": {
             "title": "Gebruikers",
-            "id": "ID",
             "username": "Gebruikersnaam",
             "email": "E-mail",
             "roles": "Functies"
@@ -284,7 +286,18 @@
         "teachers": {
             "title": "Proffen"
         },
-        "teacher": "Prof"
+        "teacher": "Prof",
+        "catalog": "Catalogus",
+        "docker_images": {
+            "title": "Docker Images",
+            "name_input": "Naam van docker image",
+            "name": "Naam",
+            "owner": "Eigenaar ID",
+            "public": "Publiek",
+            "private": "Privaat"
+        },
+        "none_found": "Geen overeenkomende data gevonden.",
+        "loading": "Aan het laden. Wacht een momentje aub."
     },
     "primevue": {
         "accept": "Ja",
