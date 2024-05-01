@@ -19,6 +19,7 @@ interface CoursesState {
     createCourse: (courseData: Course) => Promise<void>;
     updateCourse: (courseData: Course) => Promise<void>;
     cloneCourse: (courseId: string, cloneAssistants: boolean, cloneTeachers: boolean) => Promise<void>;
+    saveInvitationLink: (courseId: string, invitationLink: string, linkDuration: number) => Promise<void>;
     deleteCourse: (id: string) => Promise<void>;
 }
 
@@ -68,6 +69,7 @@ export function useCourses(): CoursesState {
                 description: courseData.description,
                 excerpt: courseData.excerpt,
                 academic_startyear: courseData.academic_startyear,
+                private_course: courseData.private_course,
                 faculty: courseData.faculty?.id,
             },
             course,
@@ -86,6 +88,7 @@ export function useCourses(): CoursesState {
                 name: courseData.name,
                 description: courseData.description,
                 faculty: courseData.faculty?.id,
+                private_course: courseData.private_course,
             },
             response,
         );
@@ -109,6 +112,19 @@ export function useCourses(): CoursesState {
         await deleteId<Course>(endpoint, course, Course.fromJSON);
     }
 
+    async function saveInvitationLink(courseId: string, invitationLink: string, linkDuration: number): Promise<void> {
+        const endpoint = endpoints.courses.invitationLink.replace('{courseId}', courseId);
+        await create<Course>(
+            endpoint,
+            {
+                invitation_link: invitationLink,
+                link_duration: linkDuration,
+            },
+            course,
+            Course.fromJSON,
+        );
+    }
+
     return {
         pagination,
         courses,
@@ -125,5 +141,6 @@ export function useCourses(): CoursesState {
         updateCourse,
         cloneCourse,
         deleteCourse,
+        saveInvitationLink,
     };
 }

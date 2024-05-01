@@ -101,6 +101,7 @@
             "description": "Description",
             "excerpt": "Short description",
             "faculty": "Faculty",
+            "private": "Private course (students can only enroll with an invitation link)",
             "year": "Academic year",
             "enroll": "Enroll",
             "leave": "Leave",
@@ -127,7 +128,16 @@
                 "placeholder": "Search a course by name",
                 "title": "Search a course",
                 "results": "{0} courses found for set filters"
+            },
+            "searchByLink": {
+                "placeholder": "Find a course using the registration link"
+            },
+            "share": {
+                "title": "Create invitation link",
+                "duration": "Validity period link (in days):",
+                "link": "Invitation link:"
             }
+
         }
     },
     "composables": {
@@ -147,11 +157,14 @@
         }
     },
     "components": {
+        "submission" : "Submit",
         "button": {
             "academicYear": "Academic year {0}",
             "createProject": "Create a new project",
             "searchCourse": "Search a course",
-            "createCourse": "Create a new course"
+            "createCourse": "Create a new course",
+            "public": "Public",
+            "protected": "Protected"
         },
         "card": {
             "open": "Details",
@@ -176,8 +189,7 @@
             "noIncomingProjects": "No projects with a deadline within 7 days.",
             "selectCourse": "Select the course for which you want to create a project:",
             "showPastProjects": "Projects with passed deadline"
-        },
-        "submission": "Submit"
+        }
     },
     "types": {
         "roles": {
@@ -226,7 +238,24 @@
     },
     "confirmations": {
         "cloneCourse": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
-        "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course."
+        "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course.",
+        "shareCourse": "By creating an invitation link, you allow students in possession of this link to enroll in this course. Please copy the generated link, only when you click on \"Create invitation link\" will this link become valid."
+    },
+    "protectedCourses": {
+        "screen1": {
+            "title": "Obtain invitation link",
+            "content": "Teachers can choose to make their courses private. This means you have to ask the teacher for an invitation link, to be able to join the course."
+        },
+        "screen2": {
+            "title": "Search course",
+            "content": "Use the invitation link to search a course. If you can't find the course, ask the teacher to share a new link."
+
+        },
+        "screen3": {
+            "title": "Enroll",
+            "content": "Enroll in the course. Now you can see all the current projects, deadlines, ..."
+
+        }
     },
     "admin": {
         "title": "Admin",

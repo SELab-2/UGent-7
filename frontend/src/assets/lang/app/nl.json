@@ -101,6 +101,7 @@
             "description": "Beschrijving",
             "excerpt": "Korte beschrijving",
             "faculty": "Faculteit",
+            "private": "Gesloten vak (studenten kunnen enkel inschrijven via uitnodigingslink)",
             "year": "Academiejaar",
             "enroll": "Inschrijven",
             "leave": "Uitschrijven",
@@ -127,6 +128,14 @@
                 "placeholder": "Zoek een vak op naam",
                 "title": "Zoek een vak",
                 "results": "{0} vakken gevonden voor ingestelde filters"
+            },
+            "searchByLink": {
+                "placeholder": "Zoek een vak gebruik makende van een uitnodigingslink"
+            },
+            "share": {
+                "title": "Creëer invitatielink",
+                "duration": "Geldigheidsduur link (in dagen):",
+                "link": "Invitatielink:"
             }
       }
     },
@@ -152,7 +161,9 @@
             "academicYear": "Academiejaar {0}",
             "createProject": "Creëer nieuw project",
             "searchCourse": "Zoek een vak",
-            "createCourse": "Maak een vak"
+            "createCourse": "Maak een vak",
+            "public": "Publiek",
+            "protected": "Besloten"
         },
         "card": {
             "open": "Details",
@@ -226,7 +237,23 @@
     },
     "confirmations": {
         "cloneCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
-        "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
+        "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak.",
+        "shareCourse": "Door het creëren van een invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Creëer invitatielink\" klikt zal deze link geldig worden."
+    },
+    "protectedCourses": {
+        "screen1": {
+            "title": "Bemachtigen link",
+            "content": "Professoren kunnen kiezen om hun vakken niet publiek te maken. Vraag de prof om een invitatielink te delen om te kunnen toetreden tot het vak."
+        },
+        "screen2": {
+            "title": "Vak zoeken",
+            "content": "Gebruik de link om het vak te zoeken. Als je het vak niet kan vinden, kan je de prof vragen om een nieuwe link te delen."
+
+        },
+        "screen3": {
+            "title": "Inschrijven",
+            "content": "Schrijf je in voor het vak. Je kan nu een overzicht raadplegen van alle lopende projecten, deadlines, ..."
+        }
     },
     "admin": {
         "title": "Beheerder",

@@ -14,6 +14,10 @@ export type CourseFilter = {
     years: string[];
 } & Filter;
 
+export type PrivateCourseFilter = {
+    invitationLink: string;
+} & Filter;
+
 export type DockerImageFilter = {
     id: string;
     name: string;
@@ -60,6 +64,7 @@ export function getUserFilters(query: LocationQuery): UserFilter {
 export function getCourseFilters(query: LocationQuery): CourseFilter {
     const filters: CourseFilter = {
         search: query.search?.toString() ?? '',
+        invitationLink: 'none',
         faculties: [],
         years: [],
     };
@@ -71,6 +76,20 @@ export function getCourseFilters(query: LocationQuery): CourseFilter {
     if (query.years !== undefined) {
         filters.years = getQueryList(query.years as string | string[]);
     }
+
+    return filters;
+}
+
+/**
+ * Get the private course filters from the query.
+ *
+ * @param query
+ */
+export function getPrivateCourseFilters(query: LocationQuery): PrivateCourseFilter {
+    const filters: PrivateCourseFilter = {
+        search: query.search?.toString() ?? '',
+        invitationLink: query.invitationLink?.toString() ?? '',
+    };
 
     return filters;
 }
