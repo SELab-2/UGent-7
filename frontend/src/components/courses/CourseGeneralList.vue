@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CourseGeneralCard from '@/components/courses/CourseGeneralCard.vue';
 import Skeleton from 'primevue/skeleton';
+import Button from 'primevue/button';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { watch } from 'vue';

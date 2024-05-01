@@ -33,4 +33,4 @@ watch(message, () => {
 
 <style lang="scss">
 @import '@/main.scss';
-</styl
+</style>

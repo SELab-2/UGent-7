@@ -5,6 +5,7 @@ import Title from '@/components/layout/Title.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Textarea from 'primevue/textarea';
+import InputSwitch from 'primevue/inputswitch';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import Editor from '@/components/forms/Editor.vue';
 import { reactive, computed, onMounted } from 'vue';
@@ -35,6 +36,7 @@ const form = reactive({
     description: '',
     excerpt: '',
     faculty: null,
+    private: false,
 });
 
 // Define validation rules for each form field
@@ -63,6 +65,7 @@ async function submitCourse(): Promise<void> {
                 form.excerpt,
                 form.description,
                 getAcademicYear(),
+                form.private,
                 null, // No parent course
                 form.faculty,
             ),
@@ -114,6 +117,14 @@ async function submitCourse(): Promise<void> {
                             v-if="faculties"
                         />
                         <ErrorMessage :field="v$.faculty" />
+                    </div>
+
+                    <!-- Course visibility -->
+                    <div class="grid">
+                        <div class="flex align-items-center field-checkbox col-12">
+                            <InputSwitch id="private" v-model="form.private" />
+                            <label for="private">{{ t('views.courses.private') }}</label>
+                        </div>
                     </div>
 
                     <!-- Submit button -->

@@ -1,6 +1,7 @@
 from api.models.course import Course
 from api.models.assistant import Assistant
 from api.models.teacher import Teacher
+from api.models.group import Group
 from api.permissions.course_permissions import (CourseAssistantPermission,
                                                 CoursePermission,
                                                 CourseStudentPermission,
@@ -9,6 +10,7 @@ from api.permissions.role_permissions import IsTeacher, is_teacher
 from api.serializers.assistant_serializer import (AssistantIDSerializer,
                                                   AssistantSerializer)
 from api.serializers.course_serializer import (CourseCloneSerializer,
+                                               SaveInvitationLinkSerializer,
                                                CourseSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
@@ -21,6 +23,7 @@ from api.serializers.student_serializer import StudentSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
 from authentication.serializers import UserIDSerializer
 from django.utils.translation import gettext
+from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -65,8 +68,25 @@ class CourseViewSet(viewsets.ModelViewSet):
     def search(self, request: Request) -> Response:
         # Extract filter params
         search = request.query_params.get("search", "")
+        invitation_link = request.query_params.get("invitationLink", "")
         years = request.query_params.getlist("years[]")
         faculties = request.query_params.getlist("faculties[]")
+
+        # If the invitation link was passed, then only the private course with the invitation link should be returned
+        if invitation_link != "none":
+
+            # Filter based on invitation link, and that the invitation link is not expired
+            queryset = self.get_queryset().filter(
+                invitation_link=invitation_link,
+                invitation_link_expires__gte=timezone.now()
+            )
+
+            # Serialize the resulting queryset
+            serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+                "request": request
+            })
+
+            return self.get_paginated_response(serializer.data)
 
         # Filter the queryset based on the search term
         queryset = self.get_queryset().filter(
@@ -80,6 +100,9 @@ class CourseViewSet(viewsets.ModelViewSet):
         # Filter the queryset based on selected faculties
         if faculties:
             queryset = queryset.filter(faculty__in=faculties)
+
+        # No invitation link was passed, so filter out private courses
+        queryset = queryset.filter(private_course=False)
 
         # Serialize the resulting queryset
         serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
@@ -190,6 +213,33 @@ class CourseViewSet(viewsets.ModelViewSet):
                 serializer.validated_data["student"]
             )
 
+            # If there are individual projects, add the student to a new group
+            individual_projects = course.projects.filter(group_size=1)
+
+            for project in individual_projects:
+                # Check if the start date of the project is in the future
+                if project.start_date > timezone.now():
+                    group = Group.objects.create(
+                        project=project
+                    )
+
+                    group.students.add(
+                        serializer.validated_data["student"]
+                    )
+
+            # If there are now more students for a project then places in groups, create a new group
+            all_projects = course.projects.exclude(group_size=1)
+
+            for project in all_projects:
+                # Check if the start date of the project is in the future
+                if project.start_date > timezone.now():
+                    number_groups = project.groups.count()
+
+                    if project.group_size * number_groups < course.students.count():
+                        Group.objects.create(
+                            project=project
+                        )
+
         return Response({
             "message": gettext("courses.success.students.add")
         })
@@ -280,10 +330,6 @@ class CourseViewSet(viewsets.ModelViewSet):
                 teacher
             )
 
-            # If this was the last course of the teacher, deactivate the teacher role
-            if not teacher.courses.exists():
-                teacher.deactivate()
-
         return Response({
             "message": gettext("courses.success.teachers.remove")
         })
@@ -343,6 +389,25 @@ class CourseViewSet(viewsets.ModelViewSet):
                     clone_teachers=serializer.validated_data["clone_teachers"],
                     clone_assistants=serializer.validated_data["clone_assistants"]
                 )
+
+        # Return serialized cloned course
+        course_serializer = CourseSerializer(course, context={"request": request})
+
+        return Response(course_serializer.data)
+
+    @action(detail=True, methods=["post"])
+    @swagger_auto_schema(request_body=SaveInvitationLinkSerializer)
+    def invitation_link(self, request, **_):
+        """Save the invitation link to the course"""
+        course = self.get_object()
+
+        serializer = SaveInvitationLinkSerializer(
+            data=request.data,
+            context={"course": course}
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
 
         # Return serialized cloned course
         course_serializer = CourseSerializer(course, context={"request": request})

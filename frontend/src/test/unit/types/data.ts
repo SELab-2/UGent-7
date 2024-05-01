@@ -65,6 +65,8 @@ export const courseData = {
     excerpt: 'course1_excerpt',
     description: 'course1_description',
     academic_startyear: 2024,
+    private_course: false,
+    invitation_link: null,
     parent_course: null,
     faculty: null,
     teachers: [],
@@ -128,8 +130,27 @@ export const submissionData = {
     id: 'submission1_id',
     submission_number: 1,
     submission_time: new Date('November 1, 2024 04:20:00'),
-    structure_checks_passed: true,
-    group: null,
     files: [],
-    extra_checks_results: [],
+    extra_check_results: [],
+    structure_check_results: [],
+    is_valid: true,
+};
+
+export const extraCheckResultData = {
+    id: 'extraCheckResult1_id',
+    result: 'extraCheckResult1_result',
+    error_message: 'extraCheckResult1_error_message',
+    log_file: null,
+    submission: 1,
+    extra_check: 1,
+    resourcetype: 'extraCheckResult1_resourcetype',
+};
+
+export const structureCheckResultData = {
+    id: 'structureCheckResult1_id',
+    result: 'structureCheckResult1_result',
+    error_message: 'structureCheckResult1_error_message',
+    submission: 1,
+    structure_check: 1,
+    resourcetype: 'structureCheckResult1_resourcetype',
 };

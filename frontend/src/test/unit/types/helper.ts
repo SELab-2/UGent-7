@@ -10,7 +10,9 @@ import { Project } from '@/types/Project';
 import { Response } from '@/types/Response';
 import { StructureCheck } from '@/types/StructureCheck';
 import { SubmissionStatus } from '@/types/SubmisionStatus';
-import { Submission } from '@/types/submission/Submission.ts';
+import { Submission } from '@/types/submission/Submission';
+import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
+import { StructureCheckResult } from '@/types/submission/StructureCheckResult';
 
 export function createStudent(studentData: any): Student {
     return new Student(
@@ -88,6 +90,8 @@ export function createCourse(courseData: any): Course {
         courseData.excerpt,
         courseData.description,
         courseData.academic_startyear,
+        courseData.private_course,
+        courseData.invitation_link,
         courseData.parent_course,
         courseData.faculty,
         courseData.teachers.slice(),
@@ -160,9 +164,32 @@ export function createSubmission(submissionData: any): Submission {
         submissionData.id,
         submissionData.submission_number,
         submissionData.submission_time,
-        submissionData.structure_checks_passed,
-        submissionData.group,
         submissionData.files.slice(),
-        submissionData.extra_checks_results.slice(),
+        submissionData.extra_check_results.slice(),
+        submissionData.structure_check_results.slice(),
+        submissionData.is_valid,
+    );
+}
+
+export function createExtraCheckResult(extraCheckResultData: any): ExtraCheckResult {
+    return new ExtraCheckResult(
+        extraCheckResultData.id,
+        extraCheckResultData.result,
+        extraCheckResultData.error_message,
+        extraCheckResultData.log_file,
+        extraCheckResultData.submission,
+        extraCheckResultData.extra_check,
+        extraCheckResultData.resourcetype,
+    );
+}
+
+export function createStructureCheckResult(structureCheckResultData: any): StructureCheckResult {
+    return new StructureCheckResult(
+        structureCheckResultData.id,
+        structureCheckResultData.result,
+        structureCheckResultData.error_message,
+        structureCheckResultData.submission,
+        structureCheckResultData.structure_check,
+        structureCheckResultData.resourcetype,
     );
 }
