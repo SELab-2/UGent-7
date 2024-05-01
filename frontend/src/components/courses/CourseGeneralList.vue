@@ -61,13 +61,12 @@ watch(user, loadCourses, { immediate: true });
             <template v-else>
                 <div class="w-30rem text-center mx-auto">
                     <span class="pi pi-exclamation-circle text-6xl text-primary" />
-                    <p>{{ t('components.list.noCourses') }}</p>
-                    <RouterLink :to="{ name: 'courses' }" v-if="user?.isStudent()">
-                        <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
-                    </RouterLink>
-                    <RouterLink :to="{ name: 'course-create' }" v-else>
-                        <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
-                    </RouterLink>
+                    <slot name="empty">
+                        <p>{{ t('components.list.noCourses') }}</p>
+                        <RouterLink :to="{ name: 'courses' }">
+                            <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
+                        </RouterLink>
+                    </slot>
                 </div>
             </template>
         </template>

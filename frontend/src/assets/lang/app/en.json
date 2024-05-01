@@ -70,7 +70,9 @@
             "scoreVisibility": "Make score, when uploaded, automatically visible to students",
             "dockerUpload": "Upload a Dockerfile",
             "submissionStructure": "Structure of how a submission should be made",
-            "noStudents": "No students in this group"
+            "noStudents": "No students in this group",
+            "locked": "Closed",
+            "unlocked": "Open"
         },
         "submissions": {
             "title": "Submissions",
@@ -97,6 +99,7 @@
             "clone": "Clone course",
             "cloneAssistants": "Clone assistants:",
             "cloneTeachers": "Clone teachers:",
+            "cloneCourse": "Clone teachers:",
             "name": "Course name",
             "description": "Description",
             "excerpt": "Short description",
