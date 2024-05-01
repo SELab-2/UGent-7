@@ -69,7 +69,9 @@
             "scoreVisibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
             "dockerUpload": "Upload een Dockerfile",
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
-            "noStudents": "Geen studenten in deze groep"
+            "noStudents": "Geen studenten in deze groep",
+            "locked": "Gesloten",
+            "unlocked": "Open"
         },
         "submissions": {
             "title": "Inzendingen",

@@ -14,6 +14,16 @@ const { t } = useI18n();
 <template>
     <div class="flex align-items-center flex-wrap gap-3 surface-50 p-3">
         <span class="flex align-items-center">
+            <template v-if="project.isLocked()">
+                <i class="pi pi-lock mr-2"/>
+                {{ t('views.projects.locked') }}
+            </template>
+            <template v-else>
+                <i class="pi pi-unlock mr-2"/>
+                {{ t('views.projects.unlocked') }}
+            </template>
+        </span>
+        <span class="flex align-items-center">
             <i class="pi pi-play mr-2" />
             {{ project.getFormattedStartDate() }}
         </span>
