@@ -1,7 +1,7 @@
 from django.db.models.functions import Concat
-from django.db.models import Value
+from django.db.models import Value, Q
 from api.permissions.notification_permissions import NotificationPermission
-from api.permissions.role_permissions import IsSameUser
+from api.permissions.role_permissions import IsSameUser, IsTeacher
 from api.views.pagination.basic_pagination import BasicPagination
 from authentication.models import User
 from authentication.serializers import UserSerializer
@@ -33,68 +33,42 @@ class UserViewSet(ReadOnlyModelViewSet):
 
         return Response(status=HTTP_200_OK)
 
-    @action(detail=False)
+    @action(detail=False, pagination_class=BasicPagination, permission_classes=[IsAdminUser|IsTeacher])
     def search(self, request: Request) -> Response:
-        self.pagination_class = BasicPagination
-
         search = request.query_params.get("search", "")
         identifier = request.query_params.get("id", "")
         username = request.query_params.get("username", "")
         email = request.query_params.get("email", "")
-        roles = request.query_params.getlist("roles[]")
+        name = request.query_params.get("name", "")
+        roles = request.query_params.getlist("roles[]", [])
+        faculties = request.query_params.getlist("faculties[]", [])
 
-        # Search parameters for a simple name + faculty filter
-        name = request.query_params.get("name", None)
-        faculties = request.query_params.getlist("faculties[]")
-
-        # If name is provided, just filter by the name (and faculties if provided)
-        if name or faculties:
-            queryset = self.get_queryset().annotate(
-                full_name=Concat('first_name', Value(' '), 'last_name')
-            ).filter(
-                full_name__icontains=name
-            )
-
-            # Filter the queryset based on selected faculties
-            if faculties:
-                queryset = queryset.filter(faculties__id__in=faculties)
-
-            serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
-                "request": request
-            })
-
-            return self.get_paginated_response(serializer.data)
-
-        # Otherwise, search by the provided search term
-        queryset1 = self.get_queryset().filter(
-            id__icontains=search
+        # Setup the queryset
+        queryset = self.get_queryset().annotate(
+            full_name=Concat('first_name', Value(' '), 'last_name')
+        ).filter(
+            Q(id__icontains=search) |
+            Q(username__icontains=search) |
+            Q(email__icontains=search) |
+            Q(full_name__icontains=search)
         )
-        queryset2 = self.get_queryset().filter(
-            username__icontains=search
-        )
-        queryset3 = self.get_queryset().filter(
-            email__icontains=search
-        )
-        queryset4 = self.get_queryset().all()
-        if "student" in roles:
-            queryset4 = queryset4.intersection(
-                self.get_queryset().filter(student__isnull=False, student__is_active=True)
-            )
-        if "assistant" in roles:
-            queryset4 = queryset4.intersection(
-                self.get_queryset().filter(assistant__isnull=False, assistant__is_active=True)
-            )
-        if "teacher" in roles:
-            queryset4 = queryset4.intersection(
-                self.get_queryset().filter(teacher__isnull=False, teacher__is_active=True)
-            )
-        queryset1 = queryset1.union(queryset2, queryset3)
-        queryset = self.get_queryset().filter(
+
+        # Filter the queryset based on selected roles
+        role_filters = Q()
+
+        for role in roles:
+            role_filters |= Q(**{f"{role}__isnull": False, f"{role}__is_active": True})
+
+        queryset = queryset.filter(
+            role_filters,
             id__icontains=identifier,
             username__icontains=username,
-            email__icontains=email
+            email__icontains=email,
+            full_name__icontains=name
         )
-        queryset = queryset.intersection(queryset1, queryset4)
+
+        if len(faculties) > 0:
+            queryset = queryset.filter(faculties__id__in=faculties)
 
         serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
             "request": request
@@ -118,7 +92,7 @@ class UserViewSet(ReadOnlyModelViewSet):
         permission_classes=[NotificationPermission],
         url_path="notifications/read",
     )
-    def read(self, request: Request, pk: str):
+    def read(self, _: Request, pk: str):
         """Marks all notifications as read for the given user"""
         notifications = Notification.objects.filter(user=pk)
         notifications.update(is_read=True)

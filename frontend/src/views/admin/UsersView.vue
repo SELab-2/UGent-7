@@ -63,12 +63,14 @@ const fillCreators = (): void => {
         creators.value[role] = createFunctions.value[i - 1];
     }
 };
+
 const fillDestroyers = (): void => {
     for (let i = 1; i < roles.length; i++) {
         const role: Role = roles[i];
         destroyers.value[role] = destroyFunctions.value[i - 1];
     }
 };
+
 const showPopup = (data: any): void => {
     editItem.value = JSON.parse(JSON.stringify(data)); // I do this to get a deep copy of the role array
     popupEdit.value = true;
@@ -87,9 +89,8 @@ const updateRole = (role: Role): void => {
 
 const saveItem = async (): Promise<void> => {
     const value = pagination.value;
-    if (value?.results !== null) {
+    if (value !== null && value.results !== null) {
         const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
-        // update remotely TODO
         const paginationItem = value.results[index];
 
         for (let i = 1; i < roles.length; i++) {
@@ -101,7 +102,6 @@ const saveItem = async (): Promise<void> => {
                 const func = creators.value[role];
 
                 if (role === 'student') {
-                    console.log('student reported');
                     const data: Record<string, any> = {
                         ...editItem.value,
                         studentId: editItem.value.id,
@@ -131,9 +131,9 @@ const saveItem = async (): Promise<void> => {
 <template>
     <AdminLayout>
         <Title>
-            <div class="gap-3 mb-3">{{ t('admin.users.title') }}</div>
+            {{ t('admin.users.title') }}
         </Title>
-        <Body>
+        <Body class="w-full">
             <div class="card p-fluid">
                 <LazyDataTable
                     :pagination="pagination"
@@ -173,7 +173,7 @@ const saveItem = async (): Promise<void> => {
                                 <InputIcon>
                                     <i class="pi pi-search flex justify-content-center" />
                                 </InputIcon>
-                                <InputText v-model="filter[column.field]" :placeholder="t('admin.search.search')" />
+                                <InputText v-model="filter[column.field] as string" :placeholder="t('admin.search.search')" />
                             </IconField>
                             <MultiSelect
                                 v-else
@@ -203,7 +203,7 @@ const saveItem = async (): Promise<void> => {
             class="flex align-items-center gap-3 mb-3"
         >
             <label class="font-semibold w-10rem">{{ t(data.header) }}</label>
-            <span>{{ editItem[data.field] }}</span>
+            <span>{{ (editItem as any)[data.field] }}</span>
         </div>
         <div v-for="role in roles.toSpliced(0, 1)" :key="role" class="flex align-items-center gap-3 mb-3">
             <label class="font-semibold w-10rem">{{ t('admin.' + role) }}</label>
