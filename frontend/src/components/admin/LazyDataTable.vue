@@ -99,8 +99,16 @@ defineExpose({ fetch });
             <template #header>
                 <slot name="header" />
             </template>
-            <template #empty>{{ t('admin.none_found') }}</template>
-            <template #loading>{{ t('admin.loading') }}</template>
+            <template #empty>
+                <slot name="empty">
+                    {{ t('admin.none_found') }}
+                </slot>
+            </template>
+            <template #loading>
+                <slot name="loading">
+                    {{ t('admin.loading') }}
+                </slot>
+            </template>
             <Column selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center"></Column>
             <slot />
         </DataTable>

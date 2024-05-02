@@ -89,7 +89,7 @@ const updateRole = (role: Role): void => {
 
 const saveItem = async (): Promise<void> => {
     const value = pagination.value;
-    if (value !== null && value.results !== null) {
+    if (value?.results !== null) {
         const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
         const paginationItem = value.results[index];
 
@@ -119,7 +119,6 @@ const saveItem = async (): Promise<void> => {
         // update admin status
         await toggleAdmin(editItem.value.id, editItem.value.is_staff);
         // update locally
-        console.log(dataTable.value);
         await dataTable.value.fetch();
     } else {
         // raise error TODO
@@ -154,8 +153,6 @@ const saveItem = async (): Promise<void> => {
                             </IconField>
                         </div>
                     </template>
-                    <template #empty>No matching data.</template>
-                    <template #loading>Loading data. Please wait.</template>
                     <Column
                         v-for="column in columns"
                         :key="column.field"
@@ -173,7 +170,10 @@ const saveItem = async (): Promise<void> => {
                                 <InputIcon>
                                     <i class="pi pi-search flex justify-content-center" />
                                 </InputIcon>
-                                <InputText v-model="filter[column.field] as string" :placeholder="t('admin.search.search')" />
+                                <InputText
+                                    v-model="filter[column.field] as string"
+                                    :placeholder="t('admin.search.search')"
+                                />
                             </IconField>
                             <MultiSelect
                                 v-else
