@@ -4,12 +4,13 @@ from rest_framework.exceptions import ValidationError
 from api.permissions.role_permissions import is_student
 from api.models.group import Group
 from api.models.student import Student
+from api.serializers.project_serializer import ProjectSerializer
 from api.serializers.student_serializer import StudentIDSerializer
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    project = serializers.HyperlinkedRelatedField(
-        many=False, read_only=True, view_name="project-detail"
+    project = ProjectSerializer(
+        read_only=True,
     )
 
     students = serializers.HyperlinkedIdentityField(
