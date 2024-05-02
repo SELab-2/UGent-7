@@ -2,9 +2,7 @@
 import { describe, it, expect } from 'vitest';
 
 describe('placeholder', (): void => {
-    it('aaaaaaaa', () => {
-        
-    })
+    it('aaaaaaaa', () => {});
 });
 
 // import { describe, it, expect } from 'vitest';
