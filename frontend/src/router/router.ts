@@ -181,7 +181,7 @@ const routes: RouteRecordRaw[] = [
                         component: Dummy,
                         name: 'help-student-change_lang',
                     },
-                ]
+                ],
             },
             {
                 path: 'teacher',
@@ -197,7 +197,7 @@ const routes: RouteRecordRaw[] = [
                 path: 'admin',
                 component: Dummy,
                 name: 'help-admin',
-            }
+            },
         ],
     },
 

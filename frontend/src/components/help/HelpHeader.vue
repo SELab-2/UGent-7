@@ -30,22 +30,22 @@ const logo = computed(() => {
 /* Navigation items */
 const items = computed(() => [
     {
-        icon: 'person', //TODO
+        icon: 'person', // TODO
         label: t('info.header.student'),
         route: 'help-student',
     },
     {
-        icon: 'calendar', //TODO
+        icon: 'calendar', // TODO
         label: t('info.header.teacher'),
         route: 'help-teacher',
     },
     {
-        icon: 'book', //TODO
+        icon: 'book', // TODO
         label: t('info.header.assistant'),
         route: 'help-assistant',
     },
     {
-        icon: 'bookmark', //TODO
+        icon: 'bookmark', // TODO
         label: t('info.header.admin'),
         route: 'help-admin',
     },
