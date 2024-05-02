@@ -7,15 +7,15 @@ Deze pagina beschrijft hoe u als gebruiker met Ypovoli interageert.
 
 **Login**
 
-- Op de login pagina staat een knop met tekst Ugent login.
+- Op de login pagina staat een knop met tekst UGent login.
 
 ![login knop](../assets/login-button.png)
-- Druk op deze knop. U wordt doorverwezen naar de inlogpagina van de Ugent.
-- Selecteer het gewenste acount en volg de login stappen. U wordt doorverwezen naar het dashboard.
+- Druk op deze knop. U wordt doorverwezen naar de UGent inlogpagina.
+- Selecteer het gewenste account en volg de login stappen. U wordt doorverwezen naar het dashboard.
 
 **Logout**
 
-- Druk op u naam in de navigatiebalk.
+- Druk op uw naam in de navigatiebalk.
 
 ![logout knop](../assets/nl/logout-button.png)
 
@@ -28,7 +28,7 @@ Deze pagina beschrijft hoe u als gebruiker met Ypovoli interageert.
 ## Modus veranderen
 
 ::: danger Opgepast!
-- Aleen mogelijk indien user meerdere is van student teacher of assistant of admin.
+- Aleen mogelijk indien gebruiker meerdere van de volgende rollen heeft: student, assistent, prof of admin.
 :::
 
 - Druk in de navigatiebalk bovenaan op het pijltje naast de momenteel geselecteerde rol.
@@ -56,22 +56,21 @@ Deze pagina beschrijft hoe u als gebruiker met Ypovoli interageert.
   - Zoek het correcte vak via de filters links op de pagina.
   - Klik op de uitschrijven knop bij het correcte vak.
   - U bent succesvol uitgeschreven voor dit vak. 
-  <!-- TODO is uitegschreven just ? -->
 - Optie 2:
-  - Ga naar de detail page.
+  - Ga naar de detail pagina.
   - Klik onderaan op de knop uitschrijven.
   - Er verschijnt een pop up.
-  - Bevestig hier door op de knop uitschrijven te drukken of anuleer met de anuleer knop.
+  - Bevestig met de knop uitschrijven.
 
 ## Vak details
 - Druk in de navigatiebalk op Dashboard.
-- scrol naar beneden naar de "mijn vakken" sectie.
+- Scrol naar de sectie "Mijn vakken".
 - Klik op de details knop bij het gekozen vak.
 
 ![vak kaart](../assets/course-card.png)
 
 ::: tip
-- indien u een vak van een vorig academiejaar wilt bekijken selecteer het correcte jaar in de academiejaar selector
+- Indien u een vak van een vorig academiejaar wil bekijken, selecteer het correcte jaar in de academiejaar selector.
 :::
 
 ## Projecten bekijken
@@ -87,49 +86,53 @@ Deze pagina beschrijft hoe u als gebruiker met Ypovoli interageert.
   :::
 - Optie 2:
   - Druk in de navigatiebalk op "Kalender".
-  - U ziet links een kalender met in een rood cirkeltje het aantal projecten u hebt elke dag indien deze er zijn.
+  - Op de kalender wordt, met behulp van een rode cirkel, een indicatie gegeven van het aantal deadlines op een bepaalde dag. 
   - Selecteer een dag met projecten en klik op het gewenste project.
 - Optie 3:
   - Druk in de navigatiebalk op "Dashboard".
-  - Scrol naar beneden naar de sectie "Mijn vakken".
+  - Scrol naar de sectie "Mijn vakken".
   - Druk hier op het vak van het gezochte project.
-  - Onder de sectie "Lopende projecten" ziet u alle projecten voor dit speciefieke vak.
+  - Onder de sectie "Lopende projecten" ziet u alle projecten voor dit specifieke vak.
 - Optie 4: 
   - Druk in de navigatiebalk op "Projecten".
-  - U ziet een overzicht van al u projecten.
+  - U ziet een overzicht van al uw projecten.
 
 ::: info Project kaart uitleg
 <!-- TODO maybey ne fotoke en me numerkes aanduide -->
 ![project kaart](../assets/nl/project-card.png)
-- Bovenaan deze kaart staat de naam van het vak waarvoor dit project uitgevaardigd is. Hieronder staat de beschrijving van het vak. De startdatum en deadline van het project staan daaronder. Hieronder staat een voortgangsbalk voor de hele klas. Links staat hoeveel indieningen de klas al heeft gedaan en rechts hoeveel groepen er zijn.
-Onder deze voortgangsbalk staat de status van de tests van deze indienigen.
+De kaart is als volgt ingedeeld:
+- Naam van het bijhorende vak.
+- Korte beschrijving van dit vak.
+- Startdatum en deadline van het project.
+- Balk met de voortgang van alle studenten, met hierbij het aantal indieningen en het aantal groepen.
+- Status van de uitgevoerde testen voor deze indieningen.
 :::
 
 ## Lesgevers van een vak opzoeken
-- Ga naar detail page van vak.
+- Ga naar de detail pagina van het vak.
 - Scrol naar de sectie "Lesgevers gelinkt aan dit vak".
 - Hier vindt u een lijst van de lesgevers voor dit vak.
 
-## Groep in/uitschrijeven
+## Groep in/uitschrijven
 
   **Inschrijven**
 
   ![groep inschrijven](../assets/nl/group-join.png)
 - Ga naar de detail pagina voor het gekozen project.
-- Druk op de gekozen groep en druk op "Kies groep".
+- Druk op de gekozen groep en klik op "Kies groep".
 - U bent succesvol ingeschreven in deze groep.
 
 **Uitschrijven**
   ![groep uitschrijven](../assets/nl/group-leave.png)
-- Ga naar project detail pagina.
-- Druk op verlaat groep.
+- Ga naar de detail pagina van het project.
+- Druk op "Verlaat groep".
 
-## indiening maken
-- Ga naar project detail pagina.
-- Druk op "indienen".
+## Indiening maken
+- Ga naar de detail pagina van het project.
+- Druk op "Indienen".
 - Voeg de bestanden toe met de knop "Kies bestanden".
-- Maak de indiening met de knop "Upload".
+- Maak een indiening met de knop "Upload".
 
-## status vorige indieningen bekijken
+## Status vorige indieningen bekijken
 - Ga naar indien pagina.
 - Staat daar bij. !!! TODO !!!
