@@ -41,14 +41,14 @@ def check_zip_file(project, dir_path, restrict_extra_folders=False):
     project_structure_checks = StructureCheck.objects.filter(project=project.id)
     structuur = {}
     for struct in project_structure_checks:
-        structuur[struct.name] = {
+        structuur[struct.path] = {
             'obligated_extensions': set(),
             'blocked_extensions': set()
         }
         for ext in struct.obligated_extensions.all():
-            structuur[struct.name]["obligated_extensions"].add(ext.extension)
+            structuur[struct.path]["obligated_extensions"].add(ext.extension)
         for ext in struct.blocked_extensions.all():
-            structuur[struct.name]["blocked_extensions"].add(ext.extension)
+            structuur[struct.path]["blocked_extensions"].add(ext.extension)
     return check_zip_structure(
         structuur, dir_path, restrict_extra_folders=restrict_extra_folders)
 

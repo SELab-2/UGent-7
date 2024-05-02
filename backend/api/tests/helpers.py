@@ -1,14 +1,14 @@
-from django.utils import timezone
-from api.models.course import Course
-from api.models.student import Student
 from api.models.assistant import Assistant
-from api.models.teacher import Teacher
+from api.models.checks import ExtraCheck, StructureCheck
+from api.models.course import Course
 from api.models.extension import FileExtension
-from api.models.checks import StructureCheck, ExtraCheck
-from api.models.project import Project
 from api.models.group import Group
+from api.models.project import Project
+from api.models.student import Student
 from api.models.submission import Submission
+from api.models.teacher import Teacher
 from authentication.models import Faculty, User
+from django.utils import timezone
 
 
 def create_faculty(name: str | int) -> Faculty:
@@ -131,9 +131,9 @@ def create_file_extension(extension):
     return FileExtension.objects.create(extension=extension)
 
 
-def create_structure_check(name, project, obligated_extensions, blocked_extensions):
+def create_structure_check(path, project, obligated_extensions, blocked_extensions):
     """Create a StructureCheck with the given arguments."""
-    check = StructureCheck.objects.create(name=name, project=project)
+    check = StructureCheck.objects.create(path=path, project=project)
 
     for ext in obligated_extensions:
         check.obligated_extensions.add(ext)
