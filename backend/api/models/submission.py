@@ -1,4 +1,3 @@
-
 from api.logic.get_file_path import (get_extra_check_result_file_path,
                                      get_submission_file_path)
 from api.models.checks import ExtraCheck, StructureCheck
