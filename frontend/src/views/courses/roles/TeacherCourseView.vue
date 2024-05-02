@@ -4,6 +4,7 @@ import ProjectList from '@/components/projects/ProjectList.vue';
 import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import TeacherAssistantUpdateButton from '@/components/teachers_assistants/TeacherAssistantUpdateButton.vue';
+import ShareCourseButton from '@/components/courses/ShareCourseButton.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import InputSwitch from 'primevue/inputswitch';
@@ -16,7 +17,6 @@ import { PrimeIcons } from 'primevue/api';
 import { useCourses } from '@/composables/services/course.service';
 import { useProject } from '@/composables/services/project.service.ts';
 import { computed, ref, watch } from 'vue';
-import ShareCourseButton from '@/components/courses/ShareCourseButton.vue';
 
 /* Props */
 const props = defineProps<{

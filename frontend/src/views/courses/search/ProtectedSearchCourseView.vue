@@ -74,7 +74,11 @@ onMounted(async () => {
                 </span>
 
                 <!-- Founded courses -->
-                <CourseGeneralList class="mt-3" :courses="pagination?.results ?? null" :cols="3" />
+                <CourseGeneralList class="mt-3" :courses="pagination?.results ?? null" :cols="3">
+                    <template #empty>
+                        <p>{{ t('components.list.noCourses.search') }}</p>
+                    </template>
+                </CourseGeneralList>
             </div>
         </div>
     </BaseLayout>
