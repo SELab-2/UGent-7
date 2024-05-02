@@ -2,7 +2,8 @@
 import moment from 'moment';
 import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
-import ProjectCard from '@/components/projects/ProjectCard.vue';
+import ProjectDetailCard from '@/components/projects/ProjectDetailCard.vue';
+import ProjectDeadlineCard from '@/components/projects/ProjectDeadlineCard.vue';
 import Button from 'primevue/button';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -98,14 +99,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                         <template v-if="incomingProjects !== null">
                             <template v-if="incomingProjects.length > 0">
                                 <div class="col-12" v-for="project in incomingProjects" :key="project.id">
-                                    <ProjectCard
-                                        type="small"
-                                        :project="project"
-                                        :course="project.course"
-                                        :projectGroups="project.groups"
-                                        :studentGroups="getUserGroups()"
-                                        v-if="project.course !== null"
-                                    />
+                                    <ProjectDeadlineCard type="small" :project="project" :course="project.course" />
                                 </div>
                             </template>
                             <template v-else>
@@ -128,13 +122,11 @@ const incomingProjects = computed<Project[] | null>(() => {
                     <div class="grid">
                         <template v-if="sortedProjects !== null">
                             <div class="col-12" v-for="project in sortedProjects" :key="project.id">
-                                <ProjectCard
+                                <ProjectDetailCard
                                     class="h-100"
                                     :project="project"
                                     :course="project.course"
-                                    :projectGroups="project.groups"
                                     :studentGroups="getUserGroups()"
-                                    v-if="project.course !== null"
                                 />
                             </div>
                         </template>
