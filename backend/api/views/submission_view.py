@@ -18,7 +18,7 @@ class SubmissionViewSet(viewsets.ModelViewSet):
     serializer_class = SubmissionSerializer
 
     @action(detail=True, methods=["get"])
-    def feedback(self, request, **_)  -> Response:
+    def feedback(self, request, **_) -> Response:
         """Returns all the feedback for the given submission"""
         submission = self.get_object()
         feedback = submission.feedback.all()
@@ -31,5 +31,17 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @feedback.mapping.post
-    @feedback.mappint.put
-    @swagger_auto_schema(request_body=)
+    @feedback.mapping.put
+    def _add_feedback(self, request, **_) -> Response:
+        """Adds feedback to the given submission"""
+        submission = self.get_object()
+        serializer = FeedbackSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(submission=submission)
+            return Response({
+                "message": "Success",
+                "feedback": serializer.data
+            })
+
+        return Response(serializer.errors, status=400)

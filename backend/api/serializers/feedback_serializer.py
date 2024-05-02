@@ -1,18 +1,15 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from api.serializers.submission_serializer import SubmissionSerializer
+from api.serializers.teacher_serializer import TeacherSerializer
 
 
 class FeedbackSerializer(serializers.Serializer):
     """Serializer for the feedback message"""
-    message = serializers.CharField()
-    author = serializers.HyperlinkedIdentityField(
-        view_name="user-detail",
-        read_only=True
-    )
+    message = serializers.CharField(required=True)
+    author = TeacherSerializer(read_only=True)
+    submission = SubmissionSerializer(read_only=True)
 
-    def validate(self, data):
-        """Validate the serializer data"""
-        if "message" not in data:
-            raise ValidationError("message is required")
+    def to_internal_value(self, data):
+        data["author"] = self.context["request"].user.teacher
+        return super().to_internal_value(data)
 
-        return data

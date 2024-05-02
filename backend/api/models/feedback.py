@@ -1,5 +1,6 @@
 from django.db import models
 
+from api.models.submission import Submission
 from authentication.models import User
 
 
@@ -25,6 +26,14 @@ class Feedback(models.Model):
     creation_date = models.DateTimeField(
         # The default value is the current date and time
         auto_now_add=True,
+        blank=False,
+        null=False
+    )
+
+    submission = models.ForeignKey(
+        Submission,
+        on_delete=models.CASCADE,
+        related_name="feedback",
         blank=False,
         null=False
     )
