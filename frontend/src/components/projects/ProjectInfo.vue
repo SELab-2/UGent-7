@@ -29,14 +29,26 @@ const { t } = useI18n();
         </span>
         <span class="flex align-items-center">
             <i class="pi pi-clock mr-2" />
-            {{ project.getFormattedDeadline() }}
-            ({{
-                t(
-                    'views.projects.days',
-                    { hour: project.getFormattedDeadlineHour() },
-                    project.getDaysLeft(),
-                ).toLowerCase()
-            }})
+            <span class="mr-2">
+                {{ project.getFormattedDeadline() }}
+            </span>
+            <span v-if="project.getDaysLeft() >= 0">
+                ({{
+                    t(
+                        'views.projects.days',
+                        { hour: project.getFormattedDeadlineHour() },
+                        project.getDaysLeft(),
+                    ).toLowerCase()
+                }})
+            </span>
+            <span v-else>
+                ({{
+                    t(
+                        'views.projects.ago',
+                        project.getDaysLeft() * -1,
+                    ).toLowerCase()
+                }})
+            </span>
         </span>
         <span class="flex align-items-center">
             <i class="pi pi-users mr-2" />

@@ -46,6 +46,7 @@
             "coming": "Near deadlines",
             "deadline": "Deadline",
             "days": "Today at {hour} | Tomorrow at {hour} | In {count} days",
+            "ago": "{count} days ago",
             "groupName": "Group name",
             "groupPopulation": "Size",
             "groupStatus": "Status",
