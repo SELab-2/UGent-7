@@ -166,14 +166,6 @@ class ProjectViewSet(CreateModelMixin,
             - The amount of submissions that passed the basic tests
         """
         project = self.get_object()
-        non_empty_groups = project.groups.filter(students__isnull=False).count()
-        groups_submitted = Submission.objects.filter(group__project=project).count()
-        submissions_passed = Submission.objects.filter(group__project=project, is_valid=True).count()
-
-        serializer = SubmissionStatusSerializer({
-            "non_empty_groups": non_empty_groups,
-            "groups_submitted": groups_submitted,
-            "submissions_passed": submissions_passed,
-        })
+        serializer = SubmissionStatusSerializer(project)
 
         return Response(serializer.data)

@@ -21,6 +21,8 @@ import SubmissionView from '@/views/submissions/SubmissionView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 import ProjectsView from '@/views/projects/ProjectsView.vue';
+import SubmissionsView from "@/views/submissions/SubmissionsView.vue";
+import DockerImagesView from "@/views/admin/DockerImagesView.vue";
 
 const routes: RouteRecordRaw[] = [
     // Authentication
