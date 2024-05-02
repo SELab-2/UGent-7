@@ -1,5 +1,4 @@
 from django.db import models
-
 from api.models.submission import Submission
 from authentication.models import User
 
@@ -10,7 +9,7 @@ class Feedback(models.Model):
     # ID should be generated automatically
 
     # Feedback message
-    message = models.TextField(blank=False, null=False)
+    message = models.TextField(null=False)
 
     # Feedback message author
     author = models.ForeignKey(
