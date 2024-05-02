@@ -11,10 +11,10 @@ hero:
       text: Student
       link: /nl/student-examples
     - theme: brand
-      text: Teacher
+      text: professor
       link: /nl/teacher-examples
     - theme: brand
-      text: Assistant
+      text: Assistent
       link: /nl/assistant-examples
     - theme: brand
       text: Admin
@@ -22,7 +22,7 @@ hero:
 
 features:
   - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+    details: lorem nederlands
   - title: Feature B
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
   - title: Feature C

@@ -1,85 +1,76 @@
-# Markdown Extension Examples
+# student help pagina
 
-This page demonstrates some of the built-in markdown extensions provided by VitePress.
+Deze pagina beschrijft hoe u als gebruiker met Ypovoli interagert.
 
-## Syntax Highlighting
 
-VitePress provides Syntax Highlighting powered by [Shiki](https://github.com/shikijs/shiki), with additional features like line-highlighting:
+## Login/Logout:
 
-**Input**
+**Login**
 
-````md
-```js{4}
-export default {
-  data () {
-    return {
-      msg: 'Highlighted!'
-    }
-  }
-}
-```
-````
+- Op de login pagina staat een knop met tekst Ugent login.
+- Druk op deze knop. U wordt doorverwezen naar de inlogpagina van de Ugent.
+- Selecteer het gewenste acount en volg de login stappen. U wordt doorverwezen naar het dashboard.
 
-**Output**
+**Logout**
 
-```js{4}
-export default {
-  data () {
-    return {
-      msg: 'Highlighted!'
-    }
-  }
-}
-```
+- Druk op u naam in de navigatiebalk.
 
-## Custom Containers
+## taal veranderen:
 
-**Input**
+- Druk bovenaan in de navigatiebalk op het pijltje naast NL en selecteer de gewenste taal.
 
-```md
-::: info
-This is an info box.
-:::
-
-::: tip
-This is a tip.
-:::
-
-::: warning
-This is a warning.
-:::
+## modus veranderen:
 
 ::: danger
-This is a dangerous warning.
+Aleen mogelijk indien user meerdere is van student teacher of assistant of admin.
 :::
 
-::: details
-This is a details block.
-:::
-```
+- Druk in de navigatiebalk bovenaan op het pijltje naast de momenteel geselecteerde rol.
+- Kies de niewe rol waarmee u de pagina wil bekijken.
 
-**Output**
+## inschrijven/uitschrijven voor vak:
 
-::: info
-This is an info box.
-:::
+**inschrijven**
 
-::: tip
-This is a tip.
-:::
+- Druk in de navigatiebalk op vakken.
+- Zoek het correcte vak via de filters links op de pagina.
+- Klik op de inschrijven knop bij het correcte vak.
+- U bent succesvol ingeschreven voor dit vak.
 
-::: warning
-This is a warning.
-:::
+**uitschrijven**
+- optie 1:
+  - Druk in de navigatiebalk op vakken.
+  - Zoek het correcte vak via de filters links op de pagina.
+  - Klik op de uitschrijven knop bij het correcte vak.
+  - U bent succesvol uitgeschreven voor dit vak. 
+  <!-- TODO is uitegschreven just ? -->
+- optie 2:
+  - ga naar de detail page
+  - Klik onderaan op de knop uitschrijven.
+  - Er verschijnt een pop up.
+  - Bevestig hier door op de knop uitschrijven te drukken of anuleer met de anuleer knop.
 
-::: danger
-This is a dangerous warning.
-:::
-
-::: details
-This is a details block.
-:::
 
 ## More
 
 Check out the documentation for the [full list of markdown extensions](https://vitepress.dev/guide/markdown).
+
+::: info
+This is an info box.
+:::
+
+::: tip
+This is a tip.
+:::
+
+::: warning
+This is a warning.
+:::
+
+::: danger
+This is a dangerous warning.
+:::
+
+::: details
+This is a details block.
+:::
