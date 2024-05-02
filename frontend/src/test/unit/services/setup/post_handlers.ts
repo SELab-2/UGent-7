@@ -68,12 +68,15 @@ export const postHandlers = [
         projects.push(newProject);
         return HttpResponse.json(projects);
     }),
-    http.post(baseUrl + endpoints.structureChecks.byProject.replace('{projectId}', ':id'), async ({ request, params }) => {
-        const buffer = await request.arrayBuffer();
-        const requestBody = new TextDecoder().decode(buffer);
-        const newStructureCheck = JSON.parse(requestBody);
-        newStructureCheck.project = params.id
-        structureChecks.push(newStructureCheck);
-        return HttpResponse.json(structureChecks);
-    })
+    http.post(
+        baseUrl + endpoints.structureChecks.byProject.replace('{projectId}', ':id'),
+        async ({ request, params }) => {
+            const buffer = await request.arrayBuffer();
+            const requestBody = new TextDecoder().decode(buffer);
+            const newStructureCheck = JSON.parse(requestBody);
+            newStructureCheck.project = params.id;
+            structureChecks.push(newStructureCheck);
+            return HttpResponse.json(structureChecks);
+        },
+    ),
 ];

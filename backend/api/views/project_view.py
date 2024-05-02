@@ -176,30 +176,41 @@ class ProjectViewSet(CreateModelMixin,
         unique_groups = set(groups_submitted_ids)
         groups_submitted = len(unique_groups)
 
-        #  The total amount of groups with at least one submission should never exceed the total number of non empty groups 
+        #  The total amount of groups with at least one submission should never exceed the total number of non empty groups
         # (the seeder does not account for this restriction)
         if (groups_submitted > non_empty_groups):
             non_empty_groups = groups_submitted
-        
-        passed_structure_checks_submission_ids = StructureCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).values_list('submission__id', flat=True)
-        passed_structure_checks_group_ids = Submission.objects.filter(id__in=passed_structure_checks_submission_ids).values_list('group_id', flat=True)
+
+        passed_structure_checks_submission_ids = StructureCheckResult.objects.filter(
+            submission__group__project=project,
+            submission__is_valid=True,
+            result=StateEnum.SUCCESS
+        ).values_list('submission__id', flat=True)
+
+        passed_structure_checks_group_ids = Submission.objects.filter(
+            id__in=passed_structure_checks_submission_ids
+        ).values_list('group_id', flat=True)
+
         unique_groups = set(passed_structure_checks_group_ids)
         structure_checks_passed = len(unique_groups)
 
-        passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(submission__group__project=project, submission__is_valid=True, result=StateEnum.SUCCESS).values_list('submission__id', flat=True)
-        passed_extra_checks_group_ids = Submission.objects.filter(id__in=passed_extra_checks_submission_ids).values_list('group_id', flat=True)
+        passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(
+            submission__group__project=project,
+            submission__is_valid=True,
+            result=StateEnum.SUCCESS
+        ).values_list('submission__id', flat=True)
+
+        passed_extra_checks_group_ids = Submission.objects.filter(
+            id__in=passed_extra_checks_submission_ids
+        ).values_list('group_id', flat=True)
+
         unique_groups = set(passed_extra_checks_group_ids)
         extra_checks_passed = len(unique_groups)
 
-        # The total number of passed extra checks combined with the number of passed structure checks 
+        # The total number of passed extra checks combined with the number of passed structure checks
         # can never exceed the total number of submissions (the seeder does not account for this restriction)
         if (structure_checks_passed + extra_checks_passed > groups_submitted):
             extra_checks_passed = groups_submitted - structure_checks_passed
-
-        print(f"non_empty_groups: {non_empty_groups}")
-        print(f"groups_submitted: {groups_submitted}")
-        print(f"structure_checks_passed: {structure_checks_passed}")
-        print(f"extra_checks_passed: {extra_checks_passed}")
 
         serializer = SubmissionStatusSerializer({
             "non_empty_groups": non_empty_groups,

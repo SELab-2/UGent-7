@@ -68,16 +68,16 @@ describe('structureCheck', (): void => {
             'structure_check_name', // name
             [], // blocked extensions
             [], // obligated extensions
-            null // project
-        )
+            null, // project
+        );
 
         await getStructureCheckByProject('123456');
         expect(structureChecks).not.toBeNull();
         expect(Array.isArray(structureChecks.value)).toBe(true);
         const prevLength = structureChecks.value?.length ?? 0;
 
-        await createStructureCheck(exampleStructureCheck, "123456");
-        await getStructureCheckByProject("123456")
+        await createStructureCheck(exampleStructureCheck, '123456');
+        await getStructureCheckByProject('123456');
 
         expect(structureChecks).not.toBeNull();
         expect(Array.isArray(structureChecks.value)).toBe(true);
@@ -95,7 +95,7 @@ describe('structureCheck', (): void => {
         expect(Array.isArray(structureChecks.value)).toBe(true);
         const prevLength = structureChecks.value?.length ?? 0;
 
-        let structureCheckId = ''
+        let structureCheckId = '';
         if (structureChecks.value?.[2]?.id !== undefined && structureChecks.value?.[2].id !== null) {
             structureCheckId = structureChecks.value?.[2]?.id;
         }
