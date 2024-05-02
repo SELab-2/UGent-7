@@ -19,7 +19,8 @@ from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, "data/production"))
+ROOT_DIR = environ.get("DJANGO_ROOT_DIR", "")
+MEDIA_ROOT = os.path.normpath(os.path.join("data/production"))
 
 TESTING_BASE_LINK = "http://testserver"
 

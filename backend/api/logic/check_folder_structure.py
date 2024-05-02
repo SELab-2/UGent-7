@@ -22,7 +22,6 @@ def parse_zip_file(project: Project, dir_path: str) -> bool:  # TODO block paths
     for index, key in enumerate(sorted_keys):
         value = struct[key]
         check = StructureCheck.objects.create(
-            name=f"structure check {index}",
             path=key,
             project=project
         )

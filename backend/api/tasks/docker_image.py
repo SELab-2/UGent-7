@@ -6,6 +6,7 @@ from celery import shared_task
 from ypovoli.settings import MEDIA_ROOT
 
 
+# TODO: Remove built image when it's deleted from the database
 @shared_task
 def task_docker_image_build(docker_image: DockerImage):
     # Set state
@@ -13,13 +14,12 @@ def task_docker_image_build(docker_image: DockerImage):
     docker_image.save()
 
     # Build the image
-    client = docker.from_env()
     try:
+        client = docker.from_env()
         client.images.build(path=MEDIA_ROOT, dockerfile=docker_image.file.path,
                             tag=get_docker_image_tag(docker_image), rm=True, quiet=True, forcerm=True)
         docker_image.state = StateEnum.READY
-    except (docker.errors.BuildError, docker.errors.APIError, TypeError) as e:
-        print(e, flush=True)
+    except (docker.errors.APIError, docker.errors.BuildError, docker.errors.APIError, TypeError) as e:
         docker_image.state = StateEnum.ERROR
         # TODO: Sent notification
 

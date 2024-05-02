@@ -10,8 +10,6 @@ class StateEnum(models.TextChoices):
     READY = "READY", _("dockerimage.state.eady")
     ERROR = "ERROR", _("dockerimage.state.error")
 
-# TODO: Build als we binnenkrijgen
-
 
 class DockerImage(models.Model):
     """
