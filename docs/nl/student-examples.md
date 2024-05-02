@@ -100,6 +100,7 @@ Deze pagina beschrijft hoe u als gebruiker met Ypovoli interageert.
 ::: info Project kaart uitleg
 <!-- TODO maybey ne fotoke en me numerkes aanduide -->
 ![project kaart](../assets/nl/project-card.png)
+
 De kaart is als volgt ingedeeld:
 - Naam van het bijhorende vak.
 - Korte beschrijving van dit vak.
