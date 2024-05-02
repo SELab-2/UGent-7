@@ -182,7 +182,8 @@
             },
             "noCourses": {
                 "student": "Geen vakken gevonden. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
-                "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop."
+                "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop.",
+                "search": "Geen vakken gevonden voor de gegeven zoekcriteria."
             },
             "noResults": "Geen resultaten.",
             "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",

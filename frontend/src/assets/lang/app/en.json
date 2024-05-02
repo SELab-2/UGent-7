@@ -185,7 +185,8 @@
             },
             "noCourses":  {
                 "student": "No courses found. Register for a public course using the search function, or use an invitation link from a teacher.",
-                "teacher": "No courses found. Create a new course with the button below."
+                "teacher": "No courses found. Create a new course with the button below.",
+                "search": "No courses found for the given search criteria."
             },
             "noResults": "No results.",
             "noIncomingProjects": "No projects with a deadline within 7 days.",

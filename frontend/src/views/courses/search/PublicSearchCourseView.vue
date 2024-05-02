@@ -114,7 +114,11 @@ onMounted(async () => {
                     {{ t('views.courses.search.results', [pagination.count]) }}
                 </p>
 
-                <CourseGeneralList class="mt-3" :courses="pagination?.results ?? null" :cols="3" />
+                <CourseGeneralList class="mt-3" :courses="pagination?.results ?? null" :cols="3">
+                    <template #empty>
+                        <p>{{ t('components.list.noCourses.search') }}</p>
+                    </template>
+                </CourseGeneralList>
 
                 <Paginator :rows="pageSize" :total-records="pagination?.count" v-model:first="first" />
             </div>
