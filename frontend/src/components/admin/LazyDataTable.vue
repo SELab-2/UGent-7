@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DataTable, { type DataTableSelectAllChangeEvent } from 'primevue/datatable';
-import { onMounted, watch, ref, defineExpose, toRef } from 'vue';
+import { onMounted, watch, ref, toRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
