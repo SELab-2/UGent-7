@@ -1,148 +1,141 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect } from 'vitest';
+import { Project } from '@/types/Project';
+import { type Ref, ref } from 'vue';
+import { endpoints } from '@/config/endpoints.ts';
+import axios from 'axios';
+import { create, deleteId, get, getList, patch, processError } from '@/composables/services/helpers.ts';
+import { type Response } from '@/types/Response.ts';
 
-describe('placeholder', (): void => {
-    it('aaaaaaaa', () => {});
-});
+interface ProjectState {
+    projects: Ref<Project[] | null>;
+    project: Ref<Project | null>;
+    getProjectByID: (id: string) => Promise<void>;
+    getProjectsByCourse: (courseId: string) => Promise<void>;
+    getProjectsByStudent: (studentId: string) => Promise<void>;
+    getProjectsByAssistant: (assistantId: string) => Promise<void>;
+    getProjectsByTeacher: (teacherId: string) => Promise<void>;
+    getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date) => Promise<void>;
+    createProject: (projectData: Project, courseId: string, numberOfGroups: number) => Promise<void>;
+    updateProject: (projectData: Project) => Promise<void>;
+    deleteProject: (id: string) => Promise<void>;
+}
 
-// import { Project } from '@/types/Project';
-// import { type Ref, ref } from 'vue';
-// import { endpoints } from '@/config/endpoints.ts';
-// import axios from 'axios';
-// import { create, deleteId, get, getList, patch, processError } from '@/composables/services/helpers.ts';
-// import { type Response } from '@/types/Response.ts';
+export function useProject(): ProjectState {
+    const projects = ref<Project[] | null>(null);
+    const project = ref<Project | null>(null);
+    const response = ref<Response | null>(null);
 
-// interface ProjectState {
-//     projects: Ref<Project[] | null>;
-//     project: Ref<Project | null>;
-//     getProjectByID: (id: string) => Promise<void>;
-//     getProjectsByCourse: (courseId: string) => Promise<void>;
-//     getProjectsByStudent: (studentId: string) => Promise<void>;
-//     getProjectsByAssistant: (assistantId: string) => Promise<void>;
-//     getProjectsByTeacher: (teacherId: string) => Promise<void>;
-//     getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date) => Promise<void>;
-//     createProject: (projectData: Project, courseId: string, numberOfGroups: number) => Promise<void>;
-//     updateProject: (projectData: Project) => Promise<void>;
-//     deleteProject: (id: string) => Promise<void>;
-// }
+    async function getProjectByID(id: string): Promise<void> {
+        const endpoint = endpoints.projects.retrieve.replace('{id}', id);
+        await get<Project>(endpoint, project, Project.fromJSON);
+    }
 
-// export function useProject(): ProjectState {
-//     const projects = ref<Project[] | null>(null);
-//     const project = ref<Project | null>(null);
-//     const response = ref<Response | null>(null);
+    async function getProjectsByCourse(courseId: string): Promise<void> {
+        const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
+        await getList<Project>(endpoint, projects, Project.fromJSON);
+    }
 
-//     async function getProjectByID(id: string): Promise<void> {
-//         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
-//         await get<Project>(endpoint, project, Project.fromJSON);
-//     }
+    async function getProjectsByStudent(studentId: string): Promise<void> {
+        const endpoint = endpoints.projects.byStudent.replace('{studentId}', studentId);
+        await getList<Project>(endpoint, projects, Project.fromJSON);
+    }
 
-//     async function getProjectsByCourse(courseId: string): Promise<void> {
-//         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
-//         await getList<Project>(endpoint, projects, Project.fromJSON);
-//     }
+    async function getProjectsByAssistant(assistantId: string): Promise<void> {
+        const endpoint = endpoints.projects.byAssistant.replace('{assistantId}', assistantId);
+        await getList<Project>(endpoint, projects, Project.fromJSON);
+    }
 
-//     async function getProjectsByStudent(studentId: string): Promise<void> {
-//         const endpoint = endpoints.projects.byStudent.replace('{studentId}', studentId);
-//         await getList<Project>(endpoint, projects, Project.fromJSON);
-//     }
+    async function getProjectsByTeacher(teacherId: string): Promise<void> {
+        const endpoint = endpoints.projects.byTeacher.replace('{teacherId}', teacherId);
+        await getList<Project>(endpoint, projects, Project.fromJSON);
+    }
 
-//     async function getProjectsByAssistant(assistantId: string): Promise<void> {
-//         const endpoint = endpoints.projects.byAssistant.replace('{assistantId}', assistantId);
-//         await getList<Project>(endpoint, projects, Project.fromJSON);
-//     }
+    async function getProjectsByCourseAndDeadline(courseId: string, deadlineDate: Date): Promise<void> {
+        const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
 
-//     async function getProjectsByTeacher(teacherId: string): Promise<void> {
-//         const endpoint = endpoints.projects.byTeacher.replace('{teacherId}', teacherId);
-//         await getList<Project>(endpoint, projects, Project.fromJSON);
-//     }
+        await axios
+            .get(endpoint)
+            .then((response) => {
+                const allProjects = response.data.map((projectData: Project) => Project.fromJSON(projectData));
 
-//     async function getProjectsByCourseAndDeadline(courseId: string, deadlineDate: Date): Promise<void> {
-//         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
+                // Filter projects based on the deadline date
+                // Update the projects ref with the filtered projects
+                projects.value = allProjects.filter((project: Project) => {
+                    return project.deadline.toDateString() === deadlineDate.toDateString();
+                });
+            })
+            .catch((error) => {
+                if (axios.isAxiosError(error)) {
+                    processError(error);
+                    console.log(error.response?.data);
+                } else {
+                    console.error('An unexpected error ocurred: ', error);
+                }
+            });
+    }
 
-//         await axios
-//             .get(endpoint)
-//             .then((response) => {
-//                 const allProjects = response.data.map((projectData: Project) => Project.fromJSON(projectData));
+    async function createProject(projectData: Project, courseId: string, numberOfGroups: number): Promise<void> {
+        const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
+        await create<Project>(
+            endpoint,
+            {
+                name: projectData.name,
+                description: projectData.description,
+                visible: projectData.visible,
+                archived: projectData.archived,
+                locked_groups: projectData.locked_groups,
+                start_date: projectData.start_date,
+                deadline: projectData.deadline,
+                max_score: projectData.max_score,
+                score_visible: projectData.score_visible,
+                group_size: projectData.group_size,
+                number_groups: numberOfGroups,
+                zip_structure: projectData.structure_file,
+            },
+            project,
+            Project.fromJSON,
+            'multipart/form-data',
+        );
+    }
 
-//                 // Filter projects based on the deadline date
-//                 // Update the projects ref with the filtered projects
-//                 projects.value = allProjects.filter((project: Project) => {
-//                     return project.deadline.toDateString() === deadlineDate.toDateString();
-//                 });
-//             })
-//             .catch((error) => {
-//                 if (axios.isAxiosError(error)) {
-//                     processError(error);
-//                     console.log(error.response?.data);
-//                 } else {
-//                     console.error('An unexpected error ocurred: ', error);
-//                 }
-//             });
-//     }
+    async function updateProject(projectData: Project): Promise<void> {
+        const endpoint = endpoints.projects.retrieve.replace('{id}', projectData.id);
+        await patch(
+            endpoint,
+            {
+                name: projectData.name,
+                description: projectData.description,
+                visible: projectData.visible,
+                archived: projectData.archived,
+                locked_groups: projectData.locked_groups,
+                start_date: projectData.start_date,
+                deadline: projectData.deadline,
+                max_score: projectData.max_score,
+                score_visible: projectData.score_visible,
+                group_size: projectData.group_size,
+                zip_structure: projectData.structure_file,
+            },
+            response,
+            'multipart/form-data',
+        );
+    }
 
-//     async function createProject(projectData: Project, courseId: string, numberOfGroups: number): Promise<void> {
-//         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
-//         await create<Project>(
-//             endpoint,
-//             {
-//                 name: projectData.name,
-//                 description: projectData.description,
-//                 visible: projectData.visible,
-//                 archived: projectData.archived,
-//                 locked_groups: projectData.locked_groups,
-//                 start_date: projectData.start_date,
-//                 deadline: projectData.deadline,
-//                 max_score: projectData.max_score,
-//                 score_visible: projectData.score_visible,
-//                 group_size: projectData.group_size,
-//                 number_groups: numberOfGroups,
-//                 zip_structure: projectData.structure_file,
-//             },
-//             project,
-//             Project.fromJSON,
-//             'multipart/form-data',
-//         );
-//     }
+    async function deleteProject(id: string): Promise<void> {
+        const endpoint = endpoints.projects.retrieve.replace('{id}', id);
+        await deleteId<Project>(endpoint, project, Project.fromJSON);
+    }
 
-//     async function updateProject(projectData: Project): Promise<void> {
-//         const endpoint = endpoints.projects.retrieve.replace('{id}', projectData.id);
-//         await patch(
-//             endpoint,
-//             {
-//                 name: projectData.name,
-//                 description: projectData.description,
-//                 visible: projectData.visible,
-//                 archived: projectData.archived,
-//                 locked_groups: projectData.locked_groups,
-//                 start_date: projectData.start_date,
-//                 deadline: projectData.deadline,
-//                 max_score: projectData.max_score,
-//                 score_visible: projectData.score_visible,
-//                 group_size: projectData.group_size,
-//                 zip_structure: projectData.structure_file,
-//             },
-//             response,
-//             'multipart/form-data',
-//         );
-//     }
+    return {
+        projects,
+        project,
+        getProjectByID,
+        getProjectsByCourse,
+        getProjectsByCourseAndDeadline,
+        getProjectsByStudent,
+        getProjectsByTeacher,
+        getProjectsByAssistant,
 
-//     async function deleteProject(id: string): Promise<void> {
-//         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
-//         await deleteId<Project>(endpoint, project, Project.fromJSON);
-//     }
-
-//     return {
-//         projects,
-//         project,
-//         getProjectByID,
-//         getProjectsByCourse,
-//         getProjectsByCourseAndDeadline,
-//         getProjectsByStudent,
-//         getProjectsByTeacher,
-//         getProjectsByAssistant,
-
-//         createProject,
-//         updateProject,
-//         deleteProject,
-//     };
-// }
+        createProject,
+        updateProject,
+        deleteProject,
+    };
+}
