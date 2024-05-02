@@ -45,19 +45,19 @@ Deze pagina beschrijft hoe u als gebruiker met Ypovoli interageert.
 
 **Inschrijven**
 
-- Druk in de navigatiebalk op vakken.
+- Druk in de navigatiebalk op "Vakken".
 - Zoek het correcte vak via de filters links op de pagina.
 - Klik op de inschrijven knop bij het correcte vak.
 - U bent succesvol ingeschreven voor dit vak.
 
 **Uitschrijven**
 - Optie 1:
-  - Druk in de navigatiebalk op vakken.
+  - Druk in de navigatiebalk op "Vakken".
   - Zoek het correcte vak via de filters links op de pagina.
   - Klik op de uitschrijven knop bij het correcte vak.
   - U bent succesvol uitgeschreven voor dit vak. 
 - Optie 2:
-  - Ga naar de detail pagina.
+  - Ga naar de detail pagina van het vak (zie [Vak details](#vak-details)).
   - Klik onderaan op de knop uitschrijven.
   - Er verschijnt een pop up.
   - Bevestig met de knop uitschrijven.
@@ -109,7 +109,7 @@ De kaart is als volgt ingedeeld:
 :::
 
 ## Lesgevers van een vak opzoeken
-- Ga naar de detail pagina van het vak.
+- Ga naar de detail pagina van het vak (zie [Vak details](#vak-details)).
 - Scrol naar de sectie "Lesgevers gelinkt aan dit vak".
 - Hier vindt u een lijst van de lesgevers voor dit vak.
 

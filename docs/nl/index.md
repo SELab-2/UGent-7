@@ -11,7 +11,7 @@ hero:
       text: Student
       link: /nl/student-examples
     - theme: brand
-      text: professor
+      text: Professor
       link: /nl/teacher-examples
     - theme: brand
       text: Assistent
