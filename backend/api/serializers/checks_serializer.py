@@ -46,7 +46,7 @@ class StructureCheckAddSerializer(StructureCheckSerializer):
 
     def validate(self, attrs):
         project: Project = self.context["project"]
-        if project.structure_checks.filter(name=attrs["name"]).count():
+        if project.structure_checks.filter(path=attrs["path"]).count():
             raise ValidationError(_("project.error.structure_checks.already_existing"))
 
         obl_ext = set()
