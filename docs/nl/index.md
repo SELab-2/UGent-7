@@ -9,16 +9,16 @@ hero:
   actions:
     - theme: brand
       text: Student
-      link: /student-examples
+      link: /nl/student-examples
     - theme: brand
       text: Teacher
-      link: /teacher-examples
+      link: /nl/teacher-examples
     - theme: brand
       text: Assistant
-      link: /assistant-examples
+      link: /nl/assistant-examples
     - theme: brand
       text: Admin
-      link: /admin-examples
+      link: /nl/admin-examples
 
 features:
   - title: Feature A
