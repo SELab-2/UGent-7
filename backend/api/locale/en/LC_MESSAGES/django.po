@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 15:06+0200\n"
+"POT-Creation-Date: 2024-05-02 17:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,118 +18,140 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: logic/check_folder_structure.py:143
+#: logic/check_folder_structure.py:157
 msgid "zip.errors.invalid_structure.blocked_extension_found"
 msgstr "The submitted zip file contains a file with a non-allowed extension."
 
-#: logic/check_folder_structure.py:147 logic/check_folder_structure.py:198
+#: logic/check_folder_structure.py:161 logic/check_folder_structure.py:213
 msgid "zip.success"
 msgstr "The submitted zip file succeeds in all checks."
 
-#: logic/check_folder_structure.py:150
+#: logic/check_folder_structure.py:164
 msgid "zip.errors.invalid_structure.obligated_extension_not_found"
 msgstr ""
 "The submitted zip file doesn't have any file with a certain file extension "
 "that's obligated."
 
-#: logic/check_folder_structure.py:177
+#: logic/check_folder_structure.py:191
 msgid "zip.errors.invalid_structure.directory_not_defined"
 msgstr "An obligated directory was not found in the submitted zip file."
 
-#: logic/check_folder_structure.py:197
+#: logic/check_folder_structure.py:212
 msgid "zip.errors.invalid_structure.directory_not_found_in_template"
 msgstr ""
 "There was a directory found in the submitted zip file, which was not asked "
 "for."
 
-#: models/submission.py:65
+#: models/docker.py:8
+msgid "dockerimage.state.queued"
+msgstr "Docker image is in the queue"
+
+#: models/docker.py:9
+msgid "dockerimage.state.building"
+msgstr "Docker image is building"
+
+#: models/docker.py:10
+msgid "dockerimage.state.eady"
+msgstr "Docker image is ready"
+
+#: models/docker.py:11
+msgid "dockerimage.state.error"
+msgstr "Docker image failed to build"
+
+#: models/submission.py:67
 msgid "submission.state.queued"
 msgstr "Queued"
 
-#: models/submission.py:66
+#: models/submission.py:68
 msgid "submission.state.running"
 msgstr "Running"
 
-#: models/submission.py:67
+#: models/submission.py:69
 msgid "submission.state.success"
 msgstr "Success"
 
-#: models/submission.py:68
+#: models/submission.py:70
 msgid "submission.state.failed"
 msgstr "Failed"
 
-#: models/submission.py:73
+#: models/submission.py:75
 msgid "submission.error.blockedextension"
 msgstr "The zip file contains a file with a non-allowed extension."
 
-#: models/submission.py:74
+#: models/submission.py:76
 msgid "submission.error.obligatedextensionnotfound"
-msgstr "The submitted zip file doesn't have any file with an obligated file extension."
+msgstr ""
+"The submitted zip file doesn't have any file with an obligated file "
+"extension."
 
-#: models/submission.py:75
+#: models/submission.py:77
 msgid "submission.error.obligateddirectorynotfound"
 msgstr "The submitted zip file doesn't have an obligated directory."
 
-#: models/submission.py:76
+#: models/submission.py:78
 msgid "submission.error.unaskeddirectory"
 msgstr "The zip file contains a non allowed directory."
 
-#: models/submission.py:79
+#: models/submission.py:81
+msgid "submission.error.dockerimageerror"
+msgstr "try again later."
+
+#: models/submission.py:82
 msgid "submission.error.timelimit"
 msgstr "Timelimit exceeded."
 
-#: models/submission.py:80
+#: models/submission.py:83
 msgid "submission.error.memorylimit"
 msgstr "Memorylimit exceeded."
 
-#: models/submission.py:81
+#: models/submission.py:84
 msgid "submission.error.runtimeerror"
 msgstr "Crashed."
 
-#: models/submission.py:82
-msgid "submission.error.outputlimit"
-msgstr "Outputlimit exceeded."
-
-#: models/submission.py:83
-msgid "submission.error.internalerror"
-msgstr "Internal error."
-
-#: models/submission.py:84
+#: models/submission.py:85
 msgid "submission.error.unknown"
 msgstr "Unkown error."
 
-#: serializers/checks_serializer.py:60
+#: serializers/checks_serializer.py:50 tests/test_project.py:494
+msgid "project.error.structure_checks.already_existing"
+msgstr "The structure check is already present in the project."
+
+#: serializers/checks_serializer.py:66 tests/test_project.py:528
+msgid "project.error.structure_checks.extension_blocked_and_obligated"
+msgstr "An extension can't be blocked and obligated at the same time."
+
+#: serializers/checks_serializer.py:103
 msgid "extra_check.error.docker_image"
 msgstr "The field 'docker_image' is required."
 
-#: serializers/checks_serializer.py:63
+#: serializers/checks_serializer.py:106
 msgid "extra_check.error.timeout"
 msgstr "The field 'timeout' cannot be greater than 1000."
 
-#: serializers/course_serializer.py:59 serializers/course_serializer.py:78
-#: serializers/course_serializer.py:97 serializers/course_serializer.py:116
+#: serializers/course_serializer.py:100 serializers/course_serializer.py:119
+#: serializers/course_serializer.py:138 serializers/course_serializer.py:157
 msgid "courses.error.context"
 msgstr "The course is not supplied in the context."
 
-#: serializers/course_serializer.py:65 tests/test_locale.py:28
+#: serializers/course_serializer.py:106 tests/test_locale.py:28
 #: tests/test_locale.py:38
 msgid "courses.error.students.already_present"
 msgstr "The student is already present in the course."
 
-#: serializers/course_serializer.py:69 serializers/course_serializer.py:88
-#: serializers/course_serializer.py:107 serializers/course_serializer.py:126
+#: serializers/course_serializer.py:110 serializers/course_serializer.py:129
+#: serializers/course_serializer.py:148 serializers/course_serializer.py:167
 msgid "courses.error.past_course"
 msgstr "The course is from a past year, thus cannot be manipulated."
 
-#: serializers/course_serializer.py:84
+#: serializers/course_serializer.py:125
 msgid "courses.error.students.not_present"
 msgstr "The student is not present in the course."
 
-#: serializers/course_serializer.py:103
+#: serializers/course_serializer.py:144
 msgid "courses.error.teachers.already_present"
 msgstr "The teacher is already present in the course."
 
-#: serializers/course_serializer.py:122
+#: serializers/course_serializer.py:163
 msgid "courses.error.teachers.not_present"
 msgstr "The teacher is not present in the course."
 
@@ -173,39 +195,35 @@ msgstr "The student is already in the group."
 msgid "group.errors.not_present"
 msgstr "The student is currently not in the group."
 
-#: serializers/project_serializer.py:49
+#: serializers/project_serializer.py:46
 msgid "project.errors.context"
 msgstr "The project is not supplied in the context."
 
-#: serializers/project_serializer.py:53
+#: serializers/project_serializer.py:50
 msgid "project.errors.start_date_in_past"
 msgstr "The start date of the project lies in the past."
 
-#: serializers/project_serializer.py:66
+#: serializers/project_serializer.py:63
 msgid "project.errors.deadline_before_start_date"
 msgstr "The deadline of the project lies before the start date of the project."
 
-#: serializers/project_serializer.py:116 tests/test_submission.py:332
+#: serializers/project_serializer.py:108
+msgid "project.errors.zip_structure"
+msgstr "Error while parsing the provided zip."
+
+#: serializers/project_serializer.py:141 tests/test_submission.py:333
 msgid "project.error.submissions.past_project"
 msgstr "The deadline of the project has already passed."
 
-#: serializers/project_serializer.py:119 tests/test_submission.py:403
+#: serializers/project_serializer.py:144 tests/test_submission.py:404
 msgid "project.error.submissions.non_visible_project"
 msgstr "The project is currently in a non-visible state."
 
-#: serializers/project_serializer.py:122 tests/test_submission.py:433
+#: serializers/project_serializer.py:147 tests/test_submission.py:434
 msgid "project.error.submissions.archived_project"
 msgstr "The project is archived."
 
-#: serializers/project_serializer.py:131 tests/test_project.py:512
-msgid "project.error.structure_checks.already_existing"
-msgstr "The structure check is already present in the project."
-
-#: serializers/project_serializer.py:147 tests/test_project.py:546
-msgid "project.error.structure_checks.extension_blocked_and_obligated"
-msgstr ""
-
-#: tests/test_project.py:450 views/project_view.py:124
+#: tests/test_project.py:432
 msgid "project.success.structure_check.add"
 msgstr "A strucure check was successfully created for the project."
 
@@ -213,70 +231,62 @@ msgstr "A strucure check was successfully created for the project."
 msgid "admins.success.add"
 msgstr "The admin was successfully added."
 
-#: views/assistant_view.py:32 views/teacher_view.py:32
+#: views/assistant_view.py:37 views/teacher_view.py:38
 msgid "teachers.success.add"
 msgstr "The teacher was successfully added."
 
-#: views/assistant_view.py:41 views/teacher_view.py:41
+#: views/assistant_view.py:70 views/teacher_view.py:71
 msgid "teachers.success.destroy"
 msgstr "The teacher was successfully destroyed."
 
-#: views/course_view.py:48
-msgid "courses.success.create"
-msgstr "The course was successfully created."
-
-#: views/course_view.py:112
+#: views/course_view.py:133
 msgid "courses.success.assistants.add"
 msgstr "The assistant was successfully added to the course."
 
-#: views/course_view.py:132
+#: views/course_view.py:160
 msgid "courses.success.assistants.remove"
 msgstr "The assistant was successfully removed from the course."
 
-#: views/course_view.py:167
+#: views/course_view.py:222
 msgid "courses.success.students.add"
 msgstr "The student was successfully added to the course."
 
-#: views/course_view.py:188
+#: views/course_view.py:243
 msgid "courses.success.students.remove"
 msgstr "The student was successfully removed from the course."
 
-#: views/course_view.py:223
+#: views/course_view.py:288
 msgid "courses.success.teachers.add"
 msgstr "The teacher was successfully added to the course."
 
-#: views/course_view.py:244
+#: views/course_view.py:312
 msgid "courses.success.teachers.remove"
 msgstr "The teacher was successfully removed from the course."
 
-#: views/course_view.py:280
-msgid "course.success.project.add"
-msgstr "The project was successfully added to the course."
-
-#: views/group_view.py:71
+#: views/group_view.py:75
 msgid "group.success.students.add"
 msgstr "The student was successfully added to the group."
 
-#: views/group_view.py:91
+#: views/group_view.py:95
 msgid "group.success.students.remove"
 msgstr "The student was successfully removed from the group."
 
-#: views/group_view.py:110
+#: views/group_view.py:114
 msgid "group.success.submissions.add"
 msgstr "The submission was successfully added to the group."
 
-#: views/project_view.py:87
+#: views/project_view.py:86
 msgid "project.success.groups.created"
 msgstr "A group was successfully created for the project."
 
-#: views/project_view.py:158
+#: views/project_view.py:156
 msgid "project.success.extra_check.add"
 msgstr "The extra check check was successfully added to the project."
 
-#: views/student_view.py:33
+#: views/student_view.py:36
 msgid "students.success.add"
 msgstr "The student was successfully added."
 
-#: views/student_view.py:42
+#: views/student_view.py:45
 msgid "students.success.destroy"
 msgstr "The student was successfully destroyed."
