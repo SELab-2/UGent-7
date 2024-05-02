@@ -21,6 +21,7 @@ class GroupModelTests(APITestCase):
         project = create_project(
             name="Project 1", description="Description 1", days=7, course=course
         )
+
         student = create_student(
             id=5, first_name="John", last_name="Doe", email="john.doe@example.com"
         )
@@ -36,12 +37,8 @@ class GroupModelTests(APITestCase):
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        expected_project_url = settings.TESTING_BASE_LINK + reverse(
-            "project-detail", args=[str(project.id)]
-        )
-
         self.assertEqual(int(content_json["id"]), group.id)
-        self.assertEqual(content_json["project"], expected_project_url)
+        self.assertEqual(content_json["project"]["id"], group.project.id)
         self.assertEqual(content_json["score"], group.score)
 
     def test_group_project(self):
@@ -69,16 +66,8 @@ class GroupModelTests(APITestCase):
         self.assertEqual(int(content_json["id"]), group.id)
         self.assertEqual(content_json["score"], group.score)
 
-        response = self.client.get(content_json["project"], follow=True)
-
-        # Check if the response was successful
-        self.assertEqual(response.status_code, 200)
-
-        # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
-
         # Parse the JSON content from the response
-        content_json = json.loads(response.content.decode("utf-8"))
+        content_json = content_json["project"]
 
         self.assertEqual(content_json["name"], project.name)
         self.assertEqual(content_json["description"], project.description)
