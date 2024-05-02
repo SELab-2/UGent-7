@@ -31,6 +31,11 @@ const items = computed(() => [
         label: t('admin.users.title'),
         route: 'admin-users',
     },
+    {
+        icon: 'file',
+        label: t('admin.docker_images.title'),
+        route: 'admin-dockerImages',
+    }
 ]);
 </script>
 
