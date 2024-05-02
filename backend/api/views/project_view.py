@@ -176,6 +176,8 @@ class ProjectViewSet(CreateModelMixin,
         unique_groups = set(groups_submitted_ids)
         groups_submitted = len(unique_groups)
 
+        #  The total amount of groups with at least one submission should never exceed the total number of non empty groups 
+        # (the seeder does not account for this restriction)
         if (groups_submitted > non_empty_groups):
             non_empty_groups = groups_submitted
         
