@@ -14,9 +14,15 @@ export const endpoints = {
         search: '/api/courses/search/',
         retrieve: '/api/courses/{id}/',
         clone: '/api/courses/{courseId}/clone/',
+        invitationLink: '/api/courses/{courseId}/invitation_link/',
         byStudent: '/api/students/{studentId}/courses/',
         byTeacher: '/api/teachers/{teacherId}/courses/',
         byAssistant: '/api/assistants/{assistantId}/courses/',
+    },
+    dockerImages: {
+        index: '/api/docker-images/',
+        search: '/api/docker-images/search/',
+        patch: '/api/docker-images/{id}/public/',
     },
     students: {
         index: '/api/students/',

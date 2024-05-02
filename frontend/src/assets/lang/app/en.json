@@ -1,11 +1,4 @@
 {
-    "structure_checks": {
-        "edit": "Edit node",
-        "add": "Add node",
-        "delete": "Delete node",
-        "reload": "Reload Structure checks",
-        "save": "Save structure checks"
-    },
     "layout": {
         "header": {
             "logo": "Ghent University logo",
@@ -53,6 +46,7 @@
             "coming": "Near deadlines",
             "deadline": "Deadline",
             "days": "Today at {hour} | Tomorrow at {hour} | In {count} days",
+            "ago": "{count} days ago",
             "groupName": "Group name",
             "groupPopulation": "Size",
             "groupStatus": "Status",
@@ -77,7 +71,9 @@
             "scoreVisibility": "Make score, when uploaded, automatically visible to students",
             "dockerUpload": "Upload a Dockerfile",
             "submissionStructure": "Structure of how a submission should be made",
-            "noStudents": "No students in this group"
+            "noStudents": "No students in this group",
+            "locked": "Closed",
+            "unlocked": "Open"
         },
         "submissions": {
             "title": "Submissions",
@@ -104,10 +100,12 @@
             "clone": "Clone course",
             "cloneAssistants": "Clone assistants:",
             "cloneTeachers": "Clone teachers:",
+            "cloneCourse": "Clone teachers:",
             "name": "Course name",
             "description": "Description",
             "excerpt": "Short description",
             "faculty": "Faculty",
+            "private": "Private course (students can only enroll with an invitation link)",
             "year": "Academic year",
             "enroll": "Enroll",
             "leave": "Leave",
@@ -134,6 +132,14 @@
                 "placeholder": "Search a course by name",
                 "title": "Search a course",
                 "results": "{0} courses found for set filters"
+            },
+            "searchByLink": {
+                "placeholder": "Find a course using the registration link"
+            },
+            "share": {
+                "title": "Create invitation link",
+                "duration": "Validity period link (in days):",
+                "link": "Invitation link:"
             }
         }
     },
@@ -154,11 +160,14 @@
         }
     },
     "components": {
+        "submission" : "Submit",
         "button": {
             "academicYear": "Academic year {0}",
             "createProject": "Create a new project",
             "searchCourse": "Search a course",
-            "createCourse": "Create a new course"
+            "createCourse": "Create a new course",
+            "public": "Public",
+            "protected": "Protected"
         },
         "card": {
             "open": "Details",
@@ -177,14 +186,14 @@
             },
             "noCourses":  {
                 "student": "No courses found. Register for a public course using the search function, or use an invitation link from a teacher.",
-                "teacher": "No courses found. Create a new course with the button below."
+                "teacher": "No courses found. Create a new course with the button below.",
+                "search": "No courses found for the given search criteria."
             },
             "noResults": "No results.",
             "noIncomingProjects": "No projects with a deadline within 7 days.",
             "selectCourse": "Select the course for which you want to create a project:",
             "showPastProjects": "Projects with passed deadline"
-        },
-        "submission": "Submit"
+        }
     },
     "types": {
         "roles": {
@@ -233,11 +242,31 @@
     },
     "confirmations": {
         "cloneCourse": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
-        "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course."
+        "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course.",
+        "shareCourse": "By creating an invitation link, you allow students in possession of this link to enroll in this course. Please copy the generated link, only when you click on \"Create invitation link\" will this link become valid."
+    },
+    "protectedCourses": {
+        "screen1": {
+            "title": "Obtain invitation link",
+            "content": "Teachers can choose to make their courses private. This means you have to ask the teacher for an invitation link, to be able to join the course."
+        },
+        "screen2": {
+            "title": "Search course",
+            "content": "Use the invitation link to search a course. If you can't find the course, ask the teacher to share a new link."
+
+        },
+        "screen3": {
+            "title": "Enroll",
+            "content": "Enroll in the course. Now you can see all the current projects, deadlines, ..."
+
+        }
     },
     "admin": {
         "title": "Admin",
         "keyword": "Keyword",
+        "id": "ID",
+        "list": "List",
+        "add": "Add",
         "search": {
             "search": "Search",
             "general": "Search by general keyword"
@@ -247,7 +276,6 @@
         "save": "Save",
         "users": {
             "title": "Users",
-            "id": "ID",
             "username": "Username",
             "email": "Email",
             "roles": "Roles"
@@ -264,7 +292,18 @@
         "teachers": {
             "title": "Teachers"
         },
-        "teacher": "Teacher"
+        "teacher": "Teacher",
+        "catalog": "Catalog",
+        "docker_images": {
+            "title": "Docker Images",
+            "name_input": "Name of docker image",
+            "name": "Name",
+            "owner": "Owner ID",
+            "public": "Public",
+            "private": "Private"
+        },
+        "none_found": "No matching data.",
+        "loading": "Loading data. Please wait."
     },
     "primevue": {
         "startsWith": "Starts with",

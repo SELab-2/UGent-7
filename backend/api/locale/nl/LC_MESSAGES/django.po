@@ -139,6 +139,10 @@ msgstr "De lesgever bevindt zich niet in de opleiding."
 msgid "courses.error.teachers.last_teacher"
 msgstr "De opleiding moet minstens één lesgever hebben."
 
+#: serializers/course_serializer.py:116
+msgid "courses.error.invitation_link"
+msgstr "De uitnodigingslink is niet uniek, probeer het opnieuw."
+
 #: serializers/docker_serializer.py:19
 msgid "docker.errors.custom"
 msgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"
@@ -202,7 +206,7 @@ msgstr "De structuur check was al aanwezig."
 
 #: serializers/project_serializer.py:147 tests/test_project.py:546
 msgid "project.error.structure_checks.extension_blocked_and_obligated"
-msgstr "Extensie is zowel verplicht als geblokkeerd."
+msgstr ""
 
 #: tests/test_project.py:450 views/project_view.py:124
 msgid "project.success.structure_check.add"

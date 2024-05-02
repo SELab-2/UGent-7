@@ -14,19 +14,34 @@ const { t } = useI18n();
 <template>
     <div class="flex align-items-center flex-wrap gap-3 surface-50 p-3">
         <span class="flex align-items-center">
+            <template v-if="project.isLocked()">
+                <i class="pi pi-lock mr-2" />
+                {{ t('views.projects.locked') }}
+            </template>
+            <template v-else>
+                <i class="pi pi-unlock mr-2" />
+                {{ t('views.projects.unlocked') }}
+            </template>
+        </span>
+        <span class="flex align-items-center">
             <i class="pi pi-play mr-2" />
             {{ project.getFormattedStartDate() }}
         </span>
         <span class="flex align-items-center">
             <i class="pi pi-clock mr-2" />
-            {{ project.getFormattedDeadline() }}
-            ({{
-                t(
-                    'views.projects.days',
-                    { hour: project.getFormattedDeadlineHour() },
-                    project.getDaysLeft(),
-                ).toLowerCase()
-            }})
+            <span class="mr-2">
+                {{ project.getFormattedDeadline() }}
+            </span>
+            <span v-if="project.getDaysLeft() >= 0">
+                ({{
+                    t(
+                        'views.projects.days',
+                        { hour: project.getFormattedDeadlineHour() },
+                        project.getDaysLeft(),
+                    ).toLowerCase()
+                }})
+            </span>
+            <span v-else> ({{ t('views.projects.ago', project.getDaysLeft() * -1).toLowerCase() }}) </span>
         </span>
         <span class="flex align-items-center">
             <i class="pi pi-users mr-2" />

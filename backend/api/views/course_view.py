@@ -10,6 +10,7 @@ from api.permissions.role_permissions import IsTeacher, is_teacher
 from api.serializers.assistant_serializer import (AssistantIDSerializer,
                                                   AssistantSerializer)
 from api.serializers.course_serializer import (CourseCloneSerializer,
+                                               SaveInvitationLinkSerializer,
                                                CourseSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
@@ -67,8 +68,25 @@ class CourseViewSet(viewsets.ModelViewSet):
     def search(self, request: Request) -> Response:
         # Extract filter params
         search = request.query_params.get("search", "")
+        invitation_link = request.query_params.get("invitationLink", "")
         years = request.query_params.getlist("years[]")
         faculties = request.query_params.getlist("faculties[]")
+
+        # If the invitation link was passed, then only the private course with the invitation link should be returned
+        if invitation_link != "none":
+
+            # Filter based on invitation link, and that the invitation link is not expired
+            queryset = self.get_queryset().filter(
+                invitation_link=invitation_link,
+                invitation_link_expires__gte=timezone.now()
+            )
+
+            # Serialize the resulting queryset
+            serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
+                "request": request
+            })
+
+            return self.get_paginated_response(serializer.data)
 
         # Filter the queryset based on the search term
         queryset = self.get_queryset().filter(
@@ -82,6 +100,9 @@ class CourseViewSet(viewsets.ModelViewSet):
         # Filter the queryset based on selected faculties
         if faculties:
             queryset = queryset.filter(faculty__in=faculties)
+
+        # No invitation link was passed, so filter out private courses
+        queryset = queryset.filter(private_course=False)
 
         # Serialize the resulting queryset
         serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
@@ -368,6 +389,25 @@ class CourseViewSet(viewsets.ModelViewSet):
                     clone_teachers=serializer.validated_data["clone_teachers"],
                     clone_assistants=serializer.validated_data["clone_assistants"]
                 )
+
+        # Return serialized cloned course
+        course_serializer = CourseSerializer(course, context={"request": request})
+
+        return Response(course_serializer.data)
+
+    @action(detail=True, methods=["post"])
+    @swagger_auto_schema(request_body=SaveInvitationLinkSerializer)
+    def invitation_link(self, request, **_):
+        """Save the invitation link to the course"""
+        course = self.get_object()
+
+        serializer = SaveInvitationLinkSerializer(
+            data=request.data,
+            context={"course": course}
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
 
         # Return serialized cloned course
         course_serializer = CourseSerializer(course, context={"request": request})

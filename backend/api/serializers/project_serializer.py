@@ -4,6 +4,7 @@ from api.models.checks import FileExtension
 from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
+from api.models.submission import Submission
 from api.serializers.checks_serializer import StructureCheckSerializer
 from api.serializers.course_serializer import CourseSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
@@ -15,9 +16,45 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 
+class SubmissionStatusSerializer(serializers.Serializer):
+    non_empty_groups = serializers.IntegerField(read_only=True)
+    groups_submitted = serializers.IntegerField(read_only=True)
+    submissions_passed = serializers.IntegerField(read_only=True)
+
+    def to_representation(self, instance: Project):
+        """Return the submission status of the project"""
+        if not isinstance(instance, Project):
+            raise ValidationError(gettext("project.errors.invalid_instance"))
+
+        non_empty_groups = instance.groups.filter(students__isnull=False).count()
+        groups_submitted = Submission.objects.filter(group__project=instance).count()
+        submissions_passed = Submission.objects.filter(group__project=instance, is_valid=True).count()
+
+        return {
+            "non_empty_groups": non_empty_groups,
+            "groups_submitted": groups_submitted,
+            "submissions_passed": submissions_passed,
+        }
+
+    class Meta:
+        fields = [
+            "non_empty_groups",
+            "groups_submitted",
+            "submissions_passed",
+        ]
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     # We want the course to be eager loaded
-    course = CourseSerializer(read_only=True)
+    course = CourseSerializer(
+        read_only=True
+    )
+
+    # We want the status to be eager loaded
+    status = SubmissionStatusSerializer(
+        source="*",
+        read_only=True
+    )
 
     structure_checks = serializers.HyperlinkedIdentityField(
         view_name="project-structure-checks",
@@ -129,12 +166,6 @@ class CreateProjectSerializer(ProjectSerializer):
 
 class TeacherCreateGroupSerializer(serializers.Serializer):
     number_groups = serializers.IntegerField(min_value=1)
-
-
-class SubmissionStatusSerializer(serializers.Serializer):
-    non_empty_groups = serializers.IntegerField(read_only=True)
-    groups_submitted = serializers.IntegerField(read_only=True)
-    submissions_passed = serializers.IntegerField(read_only=True)
 
 
 class SubmissionAddSerializer(SubmissionSerializer):
