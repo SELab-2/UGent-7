@@ -54,18 +54,26 @@ export const postHandlers = [
         faculties.push(newFaculty);
         return HttpResponse.json(faculties);
     }),
-    http.post(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'), async ({ request, params }) => {
+    http.post(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'), async ({ request }) => {
         const buffer = await request.arrayBuffer();
         const requestBody = new TextDecoder().decode(buffer);
         const newGroup = JSON.parse(requestBody);
         groups.push(newGroup);
         return HttpResponse.json(groups);
     }),
-    http.post(baseUrl + endpoints.projects.byCourse.replace('{courseId}', ':id'), async ({ request, params }) => {
+    http.post(baseUrl + endpoints.projects.byCourse.replace('{courseId}', ':id'), async ({ request }) => {
         const buffer = await request.arrayBuffer();
         const requestBody = new TextDecoder().decode(buffer);
         const newProject = JSON.parse(requestBody);
         projects.push(newProject);
         return HttpResponse.json(projects);
     }),
+    http.post(baseUrl + endpoints.structureChecks.byProject.replace('{projectId}', ':id'), async ({ request, params }) => {
+        const buffer = await request.arrayBuffer();
+        const requestBody = new TextDecoder().decode(buffer);
+        const newStructureCheck = JSON.parse(requestBody);
+        newStructureCheck.project = params.id
+        structureChecks.push(newStructureCheck);
+        return HttpResponse.json(structureChecks);
+    })
 ];
