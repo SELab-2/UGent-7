@@ -95,6 +95,7 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
             logs = ""
             try:
                 logs = cast(str, container.logs(stream=False, timestamps=False))
+                container.remove(v=False)
             except docker.errors.APIError:
                 logs = "Could not retrieve logs"
             finally:
