@@ -22,6 +22,7 @@ import SubmissionView from '@/views/submissions/SubmissionView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 import ProjectsView from '@/views/projects/ProjectsView.vue';
+import DockerImagesView from '@/views/admin/DockerImagesView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -152,6 +153,7 @@ const routes: RouteRecordRaw[] = [
         children: [
             { path: '', component: AdminView, name: 'admin' },
             { path: 'users', component: UsersView, name: 'admin-users' },
+            { path: 'docker-images', component: DockerImagesView, name: 'admin-dockerImages' },
         ],
     },
 

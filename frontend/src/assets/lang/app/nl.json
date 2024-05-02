@@ -101,6 +101,7 @@
             "description": "Beschrijving",
             "excerpt": "Korte beschrijving",
             "faculty": "Faculteit",
+            "private": "Gesloten vak (studenten kunnen enkel inschrijven via uitnodigingslink)",
             "year": "Academiejaar",
             "enroll": "Inschrijven",
             "leave": "Uitschrijven",
@@ -127,6 +128,14 @@
                 "placeholder": "Zoek een vak op naam",
                 "title": "Zoek een vak",
                 "results": "{0} vakken gevonden voor ingestelde filters"
+            },
+            "searchByLink": {
+                "placeholder": "Zoek een vak gebruik makende van een uitnodigingslink"
+            },
+            "share": {
+                "title": "Creëer invitatielink",
+                "duration": "Geldigheidsduur link (in dagen):",
+                "link": "Invitatielink:"
             }
       }
     },
@@ -152,7 +161,9 @@
             "academicYear": "Academiejaar {0}",
             "createProject": "Creëer nieuw project",
             "searchCourse": "Zoek een vak",
-            "createCourse": "Maak een vak"
+            "createCourse": "Maak een vak",
+            "public": "Publiek",
+            "protected": "Besloten"
         },
         "card": {
             "open": "Details",
@@ -171,7 +182,8 @@
             },
             "noCourses": {
                 "student": "Geen vakken gevonden. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
-                "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop."
+                "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop.",
+                "search": "Geen vakken gevonden voor de gegeven zoekcriteria."
             },
             "noResults": "Geen resultaten.",
             "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
@@ -226,11 +238,30 @@
     },
     "confirmations": {
         "cloneCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
-        "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak."
+        "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak.",
+        "shareCourse": "Door het creëren van een invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Creëer invitatielink\" klikt zal deze link geldig worden."
+    },
+    "protectedCourses": {
+        "screen1": {
+            "title": "Bemachtigen link",
+            "content": "Professoren kunnen kiezen om hun vakken niet publiek te maken. Vraag de prof om een invitatielink te delen om te kunnen toetreden tot het vak."
+        },
+        "screen2": {
+            "title": "Vak zoeken",
+            "content": "Gebruik de link om het vak te zoeken. Als je het vak niet kan vinden, kan je de prof vragen om een nieuwe link te delen."
+
+        },
+        "screen3": {
+            "title": "Inschrijven",
+            "content": "Schrijf je in voor het vak. Je kan nu een overzicht raadplegen van alle lopende projecten, deadlines, ..."
+        }
     },
     "admin": {
         "title": "Beheerder",
         "keyword": "Trefwoord",
+        "id": "ID",
+        "list": "Lijst",
+        "add": "Voeg toe",
         "search": {
             "search": "Zoeken",
             "general": "Zoek op algemeen trefwoord"
@@ -240,7 +271,6 @@
         "save": "Sla op",
         "users": {
             "title": "Gebruikers",
-            "id": "ID",
             "username": "Gebruikersnaam",
             "email": "E-mail",
             "roles": "Functies"
@@ -257,7 +287,18 @@
         "teachers": {
             "title": "Proffen"
         },
-        "teacher": "Prof"
+        "teacher": "Prof",
+        "catalog": "Catalogus",
+        "docker_images": {
+            "title": "Docker Images",
+            "name_input": "Naam van docker image",
+            "name": "Naam",
+            "owner": "Eigenaar ID",
+            "public": "Publiek",
+            "private": "Privaat"
+        },
+        "none_found": "Geen overeenkomende data gevonden.",
+        "loading": "Aan het laden. Wacht een momentje aub."
     },
     "primevue": {
         "accept": "Ja",
