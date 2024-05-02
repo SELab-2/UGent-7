@@ -4,6 +4,7 @@ import ProjectList from '@/components/projects/ProjectList.vue';
 import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import TeacherAssistantUpdateButton from '@/components/teachers_assistants/TeacherAssistantUpdateButton.vue';
+import ShareCourseButton from '@/components/courses/ShareCourseButton.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
 import InputSwitch from 'primevue/inputswitch';
@@ -71,7 +72,7 @@ watch(
         <!-- Course title -->
         <Title class="m-0">{{ props.course.name }}</Title>
 
-        <ButtonGroup class="flex align-items-center space-x-2">
+        <ButtonGroup class="flex align-items-center gap-2">
             <!-- Update course button -->
             <div v-tooltip.top="t('views.courses.edit')">
                 <RouterLink :to="{ name: 'course-edit', params: { courseId: props.course.id } }">
@@ -79,18 +80,19 @@ watch(
                         :icon="PrimeIcons.PENCIL"
                         icon-pos="right"
                         class="custom-button"
-                        style="height: 51px; width: 51px; margin-right: 10px"
+                        style="height: 51px; width: 51px"
                     />
                 </RouterLink>
             </div>
 
             <!-- Clone button to clone the course -->
             <div v-tooltip.top="t('views.courses.clone')">
-                <ConfirmDialog>
+                <ConfirmDialog :key="props.course.id">
                     <template #container="{ message, acceptCallback, rejectCallback }">
                         <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
                             <span class="font-bold text-2xl">{{ message.header }}</span>
                             <p class="mb-4">{{ message.message }}</p>
+
                             <div class="flex items-center mb-4">
                                 <label for="cloneTeachers" class="mr-2">{{ t('views.courses.cloneTeachers') }}</label>
                                 <InputSwitch v-model="cloneTeachers" id="cloneTeachers" class="p-inputswitch-sm" />
@@ -116,6 +118,9 @@ watch(
                     @click="handleClone()"
                 />
             </div>
+
+            <!-- Share button to create a invitation link, only if the course is private -->
+            <ShareCourseButton :course="props.course" v-if="props.course.private_course" />
         </ButtonGroup>
     </div>
     <!-- Description -->

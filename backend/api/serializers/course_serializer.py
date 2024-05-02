@@ -1,4 +1,6 @@
 from nh3 import clean
+from datetime import timedelta
+from django.utils import timezone
 from django.utils.translation import gettext
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -45,7 +47,20 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = "__all__"
+        fields = [
+            "id",
+            "name",
+            "academic_startyear",
+            "excerpt",
+            "description",
+            "faculty",
+            "parent_course",
+            "private_course",
+            "teachers",
+            "assistants",
+            "students",
+            "projects",
+        ]
 
 
 class CreateCourseSerializer(CourseSerializer):
@@ -91,6 +106,33 @@ class CourseIDSerializer(serializers.Serializer):
 class CourseCloneSerializer(serializers.Serializer):
     clone_teachers = serializers.BooleanField()
     clone_assistants = serializers.BooleanField()
+
+
+class SaveInvitationLinkSerializer(serializers.Serializer):
+    invitation_link = serializers.CharField(required=True)
+    link_duration = serializers.IntegerField(required=True)
+
+    def validate(self, data):
+        # Check if there is no course with the same invitation link.
+        if Course.objects.filter(invitation_link=data["invitation_link"]).exists():
+            raise ValidationError(gettext("courses.error.invitation_link"))
+
+        return data
+
+    def create(self, validated_data):
+        # Save the invitation link and the expiration date.
+        if "course" not in self.context:
+            raise ValidationError(gettext("courses.error.context"))
+
+        course: Course = self.context["course"]
+
+        course.invitation_link = validated_data["invitation_link"]
+
+        # Save the expiration date as the current date + the invite link expires parameter in days.
+        course.invitation_link_expires = timezone.now() + timedelta(days=validated_data["link_duration"])
+        course.save()
+
+        return course
 
 
 class StudentJoinSerializer(StudentIDSerializer):
