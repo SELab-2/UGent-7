@@ -19,7 +19,7 @@ def task_docker_image_build(docker_image: DockerImage):
         client.images.build(path=MEDIA_ROOT, dockerfile=docker_image.file.path,
                             tag=get_docker_image_tag(docker_image), rm=True, quiet=True, forcerm=True)
         docker_image.state = StateEnum.READY
-    except (docker.errors.APIError, docker.errors.BuildError, docker.errors.APIError, TypeError) as e:
+    except (docker.errors.APIError, docker.errors.BuildError, docker.errors.APIError, TypeError):
         docker_image.state = StateEnum.ERROR
         # TODO: Sent notification
 
