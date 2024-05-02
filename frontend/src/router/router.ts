@@ -2,6 +2,7 @@
 // TODO: after pinia setup is done
 
 import DashboardView from '@/views/dashboard/DashboardView.vue';
+import HelpDashboard from '@/views/help/HelpDashboard.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import CreateCourseView from '@/views/courses/CreateCourseView.vue';
 import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
@@ -169,6 +170,50 @@ const routes: RouteRecordRaw[] = [
             { path: '', component: AdminView, name: 'admin' },
             { path: 'users', component: UsersView, name: 'admin-users' },
             { path: 'docker-images', component: DockerImagesView, name: 'admin-dockerImages' },
+        ],
+    },
+
+    // help
+    {
+        path: '/help',
+        children: [
+            {
+                path: '',
+                component: HelpDashboard,
+                name: 'help-dashboard',
+            },
+            {
+                path: 'student',
+                component: Dummy,
+                name: 'help-student',
+                children: [
+                    {
+                        path: 'login-out',
+                        component: Dummy,
+                        name: 'help-student-login_out',
+                    },
+                    {
+                        path: 'change-lang',
+                        component: Dummy,
+                        name: 'help-student-change_lang',
+                    },
+                ],
+            },
+            {
+                path: 'teacher',
+                component: Dummy,
+                name: 'help-teacher',
+            },
+            {
+                path: 'assistant',
+                component: Dummy,
+                name: 'help-assistant',
+            },
+            {
+                path: 'admin',
+                component: Dummy,
+                name: 'help-admin',
+            },
         ],
     },
 
