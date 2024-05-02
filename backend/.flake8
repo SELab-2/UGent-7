@@ -1,7 +1,7 @@
 [flake8]
 
 # Ignore unused imports
-ignore = F401
+ignore = F401,W503
 
 max-line-length = 125
 
