@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import moment from 'moment';
 import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Calendar, { type CalendarDateSlotOptions } from 'primevue/calendar';
