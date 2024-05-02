@@ -99,11 +99,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                         <template v-if="incomingProjects !== null">
                             <template v-if="incomingProjects.length > 0">
                                 <div class="col-12" v-for="project in incomingProjects" :key="project.id">
-                                    <ProjectDeadlineCard
-                                        type="small"
-                                        :project="project"
-                                        :course="project.course"
-                                    />
+                                    <ProjectDeadlineCard type="small" :project="project" :course="project.course" />
                                 </div>
                             </template>
                             <template v-else>

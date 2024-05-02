@@ -2,9 +2,9 @@
 import Card from 'primevue/card';
 import ProjectMeter from '@/components/projects/ProjectMeter.vue';
 import Button from 'primevue/button';
-import { Project } from '@/types/Project.ts';
+import { type Project } from '@/types/Project.ts';
 import { PrimeIcons } from 'primevue/api';
-import { Course } from '@/types/Course.ts';
+import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import type { Group } from '@/types/Group.ts';
 
@@ -57,12 +57,12 @@ function isInGroup(): boolean {
             <div class="flex justify-content-between">
                 <RouterLink
                     :to="{
-                            name: 'course-project',
-                            params: {
-                                courseId: course.id,
-                                projectId: project.id,
-                            },
-                        }"
+                        name: 'course-project',
+                        params: {
+                            courseId: course.id,
+                            projectId: project.id,
+                        },
+                    }"
                 >
                     <Button
                         class="align-self-end"
@@ -75,13 +75,13 @@ function isInGroup(): boolean {
                 <RouterLink
                     v-if="isInGroup()"
                     :to="{
-                            name: 'submission',
-                            params: {
-                                courseId: course.id,
-                                projectId: project.id,
-                                groupId: '5',
-                            },
-                        }"
+                        name: 'submission',
+                        params: {
+                            courseId: course.id,
+                            projectId: project.id,
+                            groupId: '5',
+                        },
+                    }"
                 >
                     <Button
                         class="align-self-end"

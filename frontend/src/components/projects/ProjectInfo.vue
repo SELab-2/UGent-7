@@ -41,14 +41,7 @@ const { t } = useI18n();
                     ).toLowerCase()
                 }})
             </span>
-            <span v-else>
-                ({{
-                    t(
-                        'views.projects.ago',
-                        project.getDaysLeft() * -1,
-                    ).toLowerCase()
-                }})
-            </span>
+            <span v-else> ({{ t('views.projects.ago', project.getDaysLeft() * -1).toLowerCase() }}) </span>
         </span>
         <span class="flex align-items-center">
             <i class="pi pi-users mr-2" />

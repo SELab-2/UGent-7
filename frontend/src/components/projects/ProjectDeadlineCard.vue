@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Project } from '@/types/Project.ts';
-import { Course } from '@/types/Course.ts';
+import { type Project } from '@/types/Project.ts';
+import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 
 /* Props */
@@ -17,12 +17,12 @@ const { t } = useI18n();
     <RouterLink
         class="text-color"
         :to="{
-                name: 'course-project',
-                params: {
-                    courseId: course.id,
-                    projectId: project.id,
-                },
-            }"
+            name: 'course-project',
+            params: {
+                courseId: course.id,
+                projectId: project.id,
+            },
+        }"
     >
         <div class="p-5 surface-300 border-round">
             <div class="flex align-items-center gap-5">
@@ -41,12 +41,7 @@ const { t } = useI18n();
                             }}
                         </span>
                         <span v-else>
-                            {{
-                                t(
-                                    'views.projects.ago',
-                                    project.getDaysLeft() * -1,
-                                )
-                            }}
+                            {{ t('views.projects.ago', project.getDaysLeft() * -1) }}
                         </span>
                     </div>
                 </div>
@@ -55,6 +50,4 @@ const { t } = useI18n();
     </RouterLink>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -8,9 +8,8 @@ export class Group {
         public score: number = -1,
         public project: Project,
         public students: Student[] | null = null,
-        public submissions: Submission[] | null = null
-    ) {
-    }
+        public submissions: Submission[] | null = null,
+    ) {}
 
     /**
      * Check if the group is locked.
