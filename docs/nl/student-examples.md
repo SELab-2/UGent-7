@@ -1,6 +1,6 @@
 # Studenten help pagina
 
-Deze pagina beschrijft hoe u als gebruiker met Ypovoli interagert.
+Deze pagina beschrijft hoe u als gebruiker met Ypovoli interageert.
 
 
 ## Login/Logout
@@ -98,7 +98,7 @@ Deze pagina beschrijft hoe u als gebruiker met Ypovoli interagert.
   - Druk in de navigatiebalk op "Projecten".
   - U ziet een overzicht van al u projecten.
 
-::: info project kaart uitleg: 
+::: info Project kaart uitleg
 <!-- TODO maybey ne fotoke en me numerkes aanduide -->
 ![project kaart](../assets/nl/project-card.png)
 - Bovenaan deze kaart staat de naam van het vak waarvoor dit project uitgevaardigd is. Hieronder staat de beschrijving van het vak. De startdatum en deadline van het project staan daaronder. Hieronder staat een voortgangsbalk voor de hele klas. Links staat hoeveel indieningen de klas al heeft gedaan en rechts hoeveel groepen er zijn.
@@ -130,30 +130,6 @@ Onder deze voortgangsbalk staat de status van de tests van deze indienigen.
 - Voeg de bestanden toe met de knop "Kies bestanden".
 - Maak de indiening met de knop "Upload".
 
-## status vorige indieningen bekijken:
+## status vorige indieningen bekijken
 - Ga naar indien pagina.
-- Staat daar bij.
-
-## More
-
-Check out the documentation for the [full list of markdown extensions](https://vitepress.dev/guide/markdown).
-
-::: info
-This is an info box.
-:::
-
-::: tip
-This is a tip.
-:::
-
-::: warning
-This is a warning.
-:::
-
-::: danger
-This is a dangerous warning.
-:::
-
-::: details
-This is a details block.
-:::
+- Staat daar bij. !!! TODO !!!

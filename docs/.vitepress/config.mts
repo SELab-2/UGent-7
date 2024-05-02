@@ -10,10 +10,8 @@ export default defineConfig({
     },
     nl: {
       label: 'Nederlands',
-      lang: 'nl', // optional, will be added  as `lang` attribute on `html` tag
-      link: '/nl' // default /fr/ -- shows on navbar translations menu, can be external
-
-      // other locale specific properties...
+      lang: 'nl',
+      link: '/nl'
     }
   },
   title: "Ypovoli",
@@ -29,14 +27,14 @@ export default defineConfig({
       {
         text: 'Algemeen',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          // { text: 'Markdown Examples', link: '/markdown-examples' },
+          // { text: 'Runtime API Examples', link: '/api-examples' }
         ]
       }
     ],
 
     socialLinks: [
-      // { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/SELab-2/UGent-7' }
     ]
   }
 })
