@@ -1,4 +1,4 @@
-# student help pagina
+# Studenten help pagina
 
 Deze pagina beschrijft hoe u als gebruiker met Ypovoli interagert.
 
@@ -15,11 +15,11 @@ Deze pagina beschrijft hoe u als gebruiker met Ypovoli interagert.
 
 - Druk op u naam in de navigatiebalk.
 
-## taal veranderen:
+## Taal veranderen:
 
 - Druk bovenaan in de navigatiebalk op het pijltje naast NL en selecteer de gewenste taal.
 
-## modus veranderen:
+## Modus veranderen:
 
 ::: danger
 Aleen mogelijk indien user meerdere is van student teacher of assistant of admin.
@@ -28,23 +28,23 @@ Aleen mogelijk indien user meerdere is van student teacher of assistant of admin
 - Druk in de navigatiebalk bovenaan op het pijltje naast de momenteel geselecteerde rol.
 - Kies de niewe rol waarmee u de pagina wil bekijken.
 
-## inschrijven/uitschrijven voor vak:
+## Inschrijven/uitschrijven voor vak:
 
-**inschrijven**
+**Inschrijven**
 
 - Druk in de navigatiebalk op vakken.
 - Zoek het correcte vak via de filters links op de pagina.
 - Klik op de inschrijven knop bij het correcte vak.
 - U bent succesvol ingeschreven voor dit vak.
 
-**uitschrijven**
-- optie 1:
+**Uitschrijven**
+- Optie 1:
   - Druk in de navigatiebalk op vakken.
   - Zoek het correcte vak via de filters links op de pagina.
   - Klik op de uitschrijven knop bij het correcte vak.
   - U bent succesvol uitgeschreven voor dit vak. 
   <!-- TODO is uitegschreven just ? -->
-- optie 2:
+- Optie 2:
   - ga naar de detail page
   - Klik onderaan op de knop uitschrijven.
   - Er verschijnt een pop up.
