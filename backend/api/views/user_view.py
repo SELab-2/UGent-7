@@ -33,7 +33,7 @@ class UserViewSet(ReadOnlyModelViewSet):
 
         return Response(status=HTTP_200_OK)
 
-    @action(detail=False, pagination_class=BasicPagination, permission_classes=[IsAdminUser|IsTeacher])
+    @action(detail=False, pagination_class=BasicPagination, permission_classes=[IsAdminUser | IsTeacher])
     def search(self, request: Request) -> Response:
         search = request.query_params.get("search", "")
         identifier = request.query_params.get("id", "")
@@ -47,10 +47,10 @@ class UserViewSet(ReadOnlyModelViewSet):
         queryset = self.get_queryset().annotate(
             full_name=Concat('first_name', Value(' '), 'last_name')
         ).filter(
-            Q(id__icontains=search) |
-            Q(username__icontains=search) |
-            Q(email__icontains=search) |
-            Q(full_name__icontains=search)
+            Q(id__icontains=search)
+            | Q(username__icontains=search)
+            | Q(email__icontains=search)
+            | Q(full_name__icontains=search)
         )
 
         # Filter the queryset based on selected roles
