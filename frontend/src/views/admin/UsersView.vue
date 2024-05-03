@@ -161,11 +161,7 @@ const saveItem = async (): Promise<void> => {
                     :style="{ minWidth: '14rem' }"
                 >
                     <template #filter>
-                        <IconField
-                            v-if="column.field != 'roles'"
-                            iconPosition="left"
-                            class="flex align-items-center"
-                        >
+                        <IconField v-if="column.field != 'roles'" iconPosition="left" class="flex align-items-center">
                             <InputIcon>
                                 <i class="pi pi-search flex justify-content-center" />
                             </InputIcon>
