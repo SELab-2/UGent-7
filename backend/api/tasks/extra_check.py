@@ -94,11 +94,10 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
         if container:
             logs = ""
             try:
-                logs = cast(str, container.logs(stream=False, timestamps=False))
+                logs = cast(str, container.logs(stream=False, timestamps=False).decode())
                 container.remove(v=False)
             except docker.errors.APIError:
                 logs = "Could not retrieve logs"
             finally:
                 extra_check_result.log_file.save("logs.txt", content=ContentFile(logs), save=False)
-
         extra_check_result.save()
