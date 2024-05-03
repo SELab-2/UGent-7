@@ -1,6 +1,6 @@
 [flake8]
 
-# Ignore unused imports
+# Ignore unused imports; W503 and W504 conflict with each-other
 ignore = F401,W504
 
 max-line-length = 125

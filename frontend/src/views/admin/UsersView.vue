@@ -133,67 +133,65 @@ const saveItem = async (): Promise<void> => {
             {{ t('admin.users.title') }}
         </Title>
         <Body class="w-full">
-            <div class="card p-fluid">
-                <LazyDataTable
-                    :pagination="pagination"
-                    :entities="users"
-                    :get="getUsers"
-                    :search="searchUsers"
-                    :filter="filter"
-                    :on-filter="onFilter"
-                    ref="dataTable"
+            <LazyDataTable
+                :pagination="pagination"
+                :entities="users"
+                :get="getUsers"
+                :search="searchUsers"
+                :filter="filter"
+                :on-filter="onFilter"
+                ref="dataTable"
+            >
+                <template #header>
+                    <div class="flex justify-content-end">
+                        <IconField iconPosition="left">
+                            <InputIcon>
+                                <i class="pi pi-search" />
+                            </InputIcon>
+                            <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
+                        </IconField>
+                    </div>
+                </template>
+                <Column
+                    v-for="column in columns"
+                    :key="column.field"
+                    :field="column.field"
+                    :header="t(column.header)"
+                    :show-filter-menu="false"
+                    :style="{ minWidth: '14rem' }"
                 >
-                    <template #header>
-                        <div class="flex justify-content-end">
-                            <IconField iconPosition="left">
-                                <InputIcon>
-                                    <i class="pi pi-search" />
-                                </InputIcon>
-                                <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
-                            </IconField>
-                        </div>
-                    </template>
-                    <Column
-                        v-for="column in columns"
-                        :key="column.field"
-                        :field="column.field"
-                        :header="t(column.header)"
-                        :show-filter-menu="false"
-                        :style="{ minWidth: '14rem' }"
-                    >
-                        <template #filter>
-                            <IconField
-                                v-if="column.field != 'roles'"
-                                iconPosition="left"
-                                class="flex align-items-center"
-                            >
-                                <InputIcon>
-                                    <i class="pi pi-search flex justify-content-center" />
-                                </InputIcon>
-                                <InputText
-                                    v-model="filter[column.field] as string"
-                                    :placeholder="t('admin.search.search')"
-                                />
-                            </IconField>
-                            <MultiSelect
-                                v-else
-                                class="flex align-items-center h-3rem"
-                                v-model="filter.roles"
-                                :options="roleOptions"
-                                :option-label="(role: Role) => t('admin.' + role)"
+                    <template #filter>
+                        <IconField
+                            v-if="column.field != 'roles'"
+                            iconPosition="left"
+                            class="flex align-items-center"
+                        >
+                            <InputIcon>
+                                <i class="pi pi-search flex justify-content-center" />
+                            </InputIcon>
+                            <InputText
+                                v-model="filter[column.field] as string"
+                                :placeholder="t('admin.search.search')"
                             />
-                        </template>
-                        <template #body="{ data }" v-if="column.field == 'roles'">
-                            {{ data.roles.map((role: Role) => t('admin.' + role)).join(', ') }}
-                        </template>
-                    </Column>
-                    <Column>
-                        <template #body="{ data }">
-                            <Button @click="() => showPopup(data)">{{ t('admin.edit') }}</Button>
-                        </template>
-                    </Column>
-                </LazyDataTable>
-            </div>
+                        </IconField>
+                        <MultiSelect
+                            v-else
+                            class="flex align-items-center h-3rem"
+                            v-model="filter.roles"
+                            :options="roleOptions"
+                            :option-label="(role: Role) => t('admin.' + role)"
+                        />
+                    </template>
+                    <template #body="{ data }" v-if="column.field == 'roles'">
+                        {{ data.roles.map((role: Role) => t('admin.' + role)).join(', ') }}
+                    </template>
+                </Column>
+                <Column>
+                    <template #body="{ data }">
+                        <Button @click="() => showPopup(data)">{{ t('admin.edit') }}</Button>
+                    </template>
+                </Column>
+            </LazyDataTable>
         </Body>
     </AdminLayout>
     <Dialog v-model:visible="popupEdit" header="Edit user" :style="{ width: '28rem' }" class="flex" id="editDialog">
