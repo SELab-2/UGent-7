@@ -3,12 +3,13 @@
     "model": "api.dockerimage",
     "pk": 0,
     "fields":
-      {
-        "name": "miss.jpeg",
-        "file": "/now/move",
+    {
+      "name": "Python",
+        "file": "./fixtures/data/docker_python",
         "owner": "0",
-        "public": true
-      }
+        "public": false,
+        "state": "READY"
+    }
   },
   {
     "model": "api.course",
@@ -143,7 +144,6 @@
     "pk": 0,
     "fields":
     {
-      "name": "/effect/morning/back/reality",
       "project": 0,
       "obligated_extensions": [0],
       "blocked_extensions": [1]
