@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 17:27+0200\n"
+"POT-Creation-Date: 2024-05-03 14:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,108 +125,113 @@ msgid "extra_check.error.docker_image"
 msgstr "Het veld 'docker_image' is vereist."
 
 #: serializers/checks_serializer.py:106
-msgid "extra_check.error.timeout"
-msgstr "Het veld 'timeout' mag niet groter zijn dan 1000"
+msgid "extra_check.error.time_limit"
+msgstr "Het veld 'time_limit' moet tussen 10 en 1000 liggen."
 
-#: serializers/course_serializer.py:100 serializers/course_serializer.py:119
-#: serializers/course_serializer.py:138 serializers/course_serializer.py:157
+#: serializers/checks_serializer.py:109
+msgid "extra_check.error.memory_limit"
+msgstr "Het veld 'memory_limit' moet tussen 100 en 1024 liggen."
+
+#: serializers/course_serializer.py:118
+msgid "courses.error.invitation_link"
+msgstr "De uitnodigingslink is niet uniek, probeer het opnieuw."
+
+#: serializers/course_serializer.py:125 serializers/course_serializer.py:142
+#: serializers/course_serializer.py:161 serializers/course_serializer.py:180
+#: serializers/course_serializer.py:199
 msgid "courses.error.context"
 msgstr "De opleiding is niet meegeleverd als context."
 
-#: serializers/course_serializer.py:106 tests/test_locale.py:28
+#: serializers/course_serializer.py:148 tests/test_locale.py:28
 #: tests/test_locale.py:38
 msgid "courses.error.students.already_present"
 msgstr "De student bevindt zich al in de opleiding."
 
-#: serializers/course_serializer.py:110 serializers/course_serializer.py:129
-#: serializers/course_serializer.py:148 serializers/course_serializer.py:167
+#: serializers/course_serializer.py:152 serializers/course_serializer.py:171
+#: serializers/course_serializer.py:190 serializers/course_serializer.py:209
 msgid "courses.error.past_course"
 msgstr "De opleiding die men probeert te manipuleren is van een vorig jaar."
 
-#: serializers/course_serializer.py:125
+#: serializers/course_serializer.py:167
 msgid "courses.error.students.not_present"
 msgstr "De student bevindt zich niet in de opleiding."
 
-#: serializers/course_serializer.py:144
+#: serializers/course_serializer.py:186
 msgid "courses.error.teachers.already_present"
 msgstr "De lesgever bevindt zich al in de opleiding."
 
-#: serializers/course_serializer.py:163
+#: serializers/course_serializer.py:205
 msgid "courses.error.teachers.not_present"
 msgstr "De lesgever bevindt zich niet in de opleiding."
 
-#: serializers/course_serializer.py:171
+#: serializers/course_serializer.py:213
 msgid "courses.error.teachers.last_teacher"
 msgstr "De opleiding moet minstens één lesgever hebben."
-
-#: serializers/course_serializer.py:116
-msgid "courses.error.invitation_link"
-msgstr "De uitnodigingslink is niet uniek, probeer het opnieuw."
 
 #: serializers/docker_serializer.py:19
 msgid "docker.errors.custom"
 msgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"
 
-#: serializers/group_serializer.py:47
+#: serializers/group_serializer.py:48
 msgid "group.errors.score_exceeds_max"
 msgstr "De score van de groep is groter dan de maximum score."
 
-#: serializers/group_serializer.py:57 serializers/group_serializer.py:87
+#: serializers/group_serializer.py:58 serializers/group_serializer.py:88
 msgid "group.error.context"
 msgstr "De groep is niet meegegeven als context waar dat nodig is."
 
-#: serializers/group_serializer.py:65 serializers/group_serializer.py:99
+#: serializers/group_serializer.py:66 serializers/group_serializer.py:100
 msgid "group.errors.locked"
 msgstr "De groep is momenteel vergrendeld."
 
-#: serializers/group_serializer.py:69
+#: serializers/group_serializer.py:70
 msgid "group.errors.full"
 msgstr "De groep is al vol."
 
-#: serializers/group_serializer.py:73
+#: serializers/group_serializer.py:74
 msgid "group.errors.not_in_course"
 msgstr ""
 "De student bevindt zich niet in de opleiding waartoe het project hoort."
 
-#: serializers/group_serializer.py:77
+#: serializers/group_serializer.py:78
 msgid "group.errors.already_in_group"
 msgstr "De student bevindt zich al in de groep."
 
-#: serializers/group_serializer.py:95
+#: serializers/group_serializer.py:96
 msgid "group.errors.not_present"
 msgstr "De student bevindt zich niet in de groep."
 
-#: serializers/project_serializer.py:46
+#: serializers/project_serializer.py:25
+msgid "project.errors.invalid_instance"
+msgstr "Error tijdens de zip te overlopen."
+
+#: serializers/project_serializer.py:84
 msgid "project.errors.context"
 msgstr "Het project is niet meegegeven als context waar dat nodig is."
 
-#: serializers/project_serializer.py:50
+#: serializers/project_serializer.py:88
 msgid "project.errors.start_date_in_past"
 msgstr "De startdatum van het project ligt in het verleden."
 
-#: serializers/project_serializer.py:63
+#: serializers/project_serializer.py:101
 msgid "project.errors.deadline_before_start_date"
 msgstr "De uiterste inleverdatum voor het project ligt voor de startdatum."
 
-#: serializers/project_serializer.py:108
+#: serializers/project_serializer.py:146
 msgid "project.errors.zip_structure"
 msgstr "Error tijdens de zip te overlopen."
 
-#: serializers/project_serializer.py:141 tests/test_submission.py:333
+#: serializers/project_serializer.py:173 tests/test_submission.py:333
 msgid "project.error.submissions.past_project"
 msgstr "De uiterste inleverdatum voor het project is gepasseerd."
 
-#: serializers/project_serializer.py:144 tests/test_submission.py:404
+#: serializers/project_serializer.py:176 tests/test_submission.py:404
 msgid "project.error.submissions.non_visible_project"
 msgstr "Het project is niet zichtbaar."
 
-#: serializers/project_serializer.py:147 tests/test_submission.py:434
+#: serializers/project_serializer.py:179 tests/test_submission.py:434
 msgid "project.error.submissions.archived_project"
 msgstr "Het project is gearchiveerd."
-
-#: tests/test_project.py:432
-msgid "project.success.structure_check.add"
-msgstr "De structuur check is succesvol toegevoegd aan het project."
 
 #: views/admin_view.py:29
 msgid "admins.success.add"
@@ -240,27 +245,27 @@ msgstr "De lesgever is successvol toegevoegd."
 msgid "teachers.success.destroy"
 msgstr "De lesgever is succesvol verwijderd."
 
-#: views/course_view.py:133
+#: views/course_view.py:154
 msgid "courses.success.assistants.add"
 msgstr "De assistent is succesvol toegevoegd aan de opleiding."
 
-#: views/course_view.py:160
+#: views/course_view.py:181
 msgid "courses.success.assistants.remove"
 msgstr "De assistent is succesvol verwijderd uit de opleiding."
 
-#: views/course_view.py:222
+#: views/course_view.py:243
 msgid "courses.success.students.add"
 msgstr "De student is succesvol toegevoegd aan de opleiding."
 
-#: views/course_view.py:243
+#: views/course_view.py:264
 msgid "courses.success.students.remove"
 msgstr "De student is succesvol verwijderd uit de opleiding."
 
-#: views/course_view.py:288
+#: views/course_view.py:309
 msgid "courses.success.teachers.add"
 msgstr "De lesgever is succesvol toegevoegd aan de opleiding."
 
-#: views/course_view.py:312
+#: views/course_view.py:333
 msgid "courses.success.teachers.remove"
 msgstr "De lesgever is succesvol verwijderd uit de opleiding."
 

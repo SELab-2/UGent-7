@@ -102,7 +102,10 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
             if "docker_image" not in data:
                 raise serializers.ValidationError(_("extra_check.error.docker_image"))
 
-        if "timeout" in data and data["timeout"] > 1000:
-            raise serializers.ValidationError(_("extra_check.error.timeout"))
+        if "time_limit" in data and not 10 <= data["time_limit"] <= 1000:
+            raise serializers.ValidationError(_("extra_check.error.time_limit"))
+
+        if "memory_limit" in data and not 100 <= data["memory_limit"] <= 1024:
+            raise serializers.ValidationError(_("extra_check.error.memory_limit"))
 
         return data
