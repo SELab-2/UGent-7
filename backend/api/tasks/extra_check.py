@@ -61,13 +61,39 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
         # Wait for container to finish
         container.wait(timeout=extra_check_result.extra_check.time_limit)
 
-        if client.api.inspect_container(container.id)["State"]["OOMKilled"]:
-            # Memory limit
+        # Check for possible (custom) error types / codes
+        container_info: dict = client.api.inspect_container(container.id)
+
+        # Memory limit
+        if container_info["State"]["OOMKilled"]:
             extra_check_result.result = StateEnum.FAILED
             extra_check_result.error_message = ErrorMessageEnum.MEMORYLIMIT
-        else:
-            # Succes!
-            extra_check_result.result = StateEnum.SUCCESS
+
+        # Exit codes
+        match container_info["State"]["ExitCode"]:
+            # Success!
+            case 0:
+                extra_check_result.result = StateEnum.SUCCESS
+
+            # Custom check error
+            case 1:
+                extra_check_result.result = StateEnum.FAILED
+                extra_check_result.error_message = ErrorMessageEnum.CHECKERROR
+
+            # Time limit
+            case 2:
+                extra_check_result.result = StateEnum.FAILED
+                extra_check_result.error_message = ErrorMessageEnum.TIMELIMIT
+
+            # Memory limit
+            case 3:
+                extra_check_result.result = StateEnum.FAILED
+                extra_check_result.error_message = ErrorMessageEnum.MEMORYLIMIT
+
+            # Catch all non zero exit codes
+            case _:
+                extra_check_result.result = StateEnum.FAILED
+                extra_check_result.error_message = ErrorMessageEnum.RUNTIMEERROR
 
     # Docker image error
     except (docker.errors.APIError, docker.errors.ImageNotFound):
@@ -91,13 +117,13 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
 
     # Cleanup and data saving
     finally:
+        logs: str = "Could not retrieve logs"
         if container:
-            logs = ""
             try:
-                logs = cast(str, container.logs(stream=False, timestamps=False).decode())
+                logs = container.logs(stream=False, timestamps=False).decode()
                 container.remove(v=False)
             except docker.errors.APIError:
-                logs = "Could not retrieve logs"
-            finally:
-                extra_check_result.log_file.save("logs.txt", content=ContentFile(logs), save=False)
+                pass
+
+        extra_check_result.log_file.save("logs.txt", content=ContentFile(logs), save=False)
         extra_check_result.save()

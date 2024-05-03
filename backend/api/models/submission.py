@@ -81,6 +81,7 @@ class ErrorMessageEnum(models.TextChoices):
     DOCKER_IMAGE_ERROR = "DOCKER_IMAGE_ERROR", _("submission.error.dockerimageerror")
     TIMELIMIT = "TIMELIMIT", _("submission.error.timelimit")
     MEMORYLIMIT = "MEMORYLIMIT", _("submission.error.memorylimit")
+    CHECKERROR = "CHECKERROR", _("submission.error.checkerror")
     RUNTIMEERROR = "RUNTIMEERROR", _("submission.error.runtimeerror")
     UNKNOWN = "UNKNOWN", _("submission.error.unknown")
 
