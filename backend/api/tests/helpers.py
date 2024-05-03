@@ -180,5 +180,4 @@ def create_submission(submission_number: int, group: Group, structure_checks_pas
     return Submission.objects.create(
         submission_number=submission_number,
         group=group,
-        structure_checks_passed=structure_checks_passed,
     )

@@ -148,6 +148,13 @@ msgstr "De lesgever bevindt zich niet in de opleiding."
 msgid "courses.error.teachers.last_teacher"
 msgstr "De opleiding moet minstens één lesgever hebben."
 
+#: serializers/course_serializer.py:116
+msgid "courses.error.invitation_link"
+msgstr "De uitnodigingslink is niet uniek, probeer het opnieuw."
+
+msgid "feedback.error.no_teacher"
+msgstr "De gebruiker is geen lesgever."
+
 #: serializers/docker_serializer.py:19
 msgid "docker.errors.custom"
 msgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"
