@@ -9,6 +9,7 @@ from ..serializers.submission_serializer import (SubmissionFileSerializer,
                                                  SubmissionSerializer)
 
 
+# TODO: Permission to ask for logs
 class SubmissionFileViewSet(viewsets.ModelViewSet):
     queryset = SubmissionFile.objects.all()
     serializer_class = SubmissionFileSerializer

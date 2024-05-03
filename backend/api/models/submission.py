@@ -77,11 +77,10 @@ class ErrorMessageEnum(models.TextChoices):
     UNASKED_DIRECTORY = "UNASKED_DIRECTORY", _("submission.error.unaskeddirectory")
 
     # Extra checks errors
+    DOCKER_IMAGE_ERROR = "DOCKER_IMAGE_ERROR", _("submission.error.dockerimageerror")
     TIMELIMIT = "TIMELIMIT", _("submission.error.timelimit")
     MEMORYLIMIT = "MEMORYLIMIT", _("submission.error.memorylimit")
     RUNTIMEERROR = "RUNTIMEERROR", _("submission.error.runtimeerror")
-    OUTPUTLIMIT = "OUTPUTLIMIT", _("submission.error.outputlimit")
-    INTERNALERROR = "INTERNALERROR", _("submission.error.internalerror")
     UNKNOWN = "UNKNOWN", _("submission.error.unknown")
 
 
@@ -97,18 +96,18 @@ class CheckResult(PolymorphicModel):
 
     result = models.CharField(
         max_length=256,
-        choices=StateEnum,
+        choices=StateEnum.choices,
         default=StateEnum.QUEUED,
         blank=False,
         null=False
-    )  # type: ignore
+    )
 
     error_message = models.CharField(
         max_length=256,
-        choices=ErrorMessageEnum,
+        choices=ErrorMessageEnum.choices,
         blank=True,
         null=True
-    )  # type: ignore
+    )
 
 
 class StructureCheckResult(CheckResult):

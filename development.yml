@@ -67,6 +67,8 @@ services:
     command: sh -c "./setup.sh && celery -A ypovoli worker -l DEBUG"
     volumes:
       - ${BACKEND_DIR}:/code
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/overlay2:/var/lib/docker/overlay2
     depends_on:
       - backend
       - redis

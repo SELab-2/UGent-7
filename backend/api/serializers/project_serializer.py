@@ -1,7 +1,4 @@
 from api.logic.check_folder_structure import parse_zip_file
-from nh3 import clean
-from api.models.checks import FileExtension
-from api.models.course import Course
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import Submission
@@ -12,6 +9,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils import timezone
 from django.utils.translation import gettext
+from nh3 import clean
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -102,31 +100,30 @@ class ProjectSerializer(serializers.ModelSerializer):
         if "deadline" in data and data["deadline"] < start_date:
             raise ValidationError(gettext("project.errors.deadline_before_start_date"))
 
-        data['description'] = clean(data['description'])
+        if "description" in data:
+            data['description'] = clean(data['description'])
 
         return data
-
-    class Meta:
-        model = Project
-        fields = "__all__"
-
-
-class CreateProjectSerializer(ProjectSerializer):
-    number_groups = serializers.IntegerField(min_value=0, required=False)
-    zip_structure = serializers.FileField(required=False, read_only=True)
 
     def create(self, validated_data):
         # Pop the 'number_groups' field from validated_data
         number_groups = validated_data.pop('number_groups', None)
 
         # Get the zip structure file from the request
+        # TODO: ?
         request = self.context.get('request')
         zip_structure = request.FILES.get('zip_structure')
 
         # Create the project object without passing 'number_groups' field
         project = super().create(validated_data)
 
-        if project.group_size == 1:
+        # Create groups for the project, if specified
+        if number_groups is not None:
+
+            for _ in range(number_groups):
+                Group.objects.create(project=project)
+
+        elif project.group_size == 1:
             # If the group_size is set to one, create a group for each student
             students = project.course.students.all()
 
@@ -151,17 +148,30 @@ class CreateProjectSerializer(ProjectSerializer):
                     group = Group.objects.create(project=project)
 
         # If a zip_structure is provided, parse it to create the structure checks
+        # TODO: Move to background celery
         if zip_structure is not None:
             # Define the temporary storage location
             temp_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
             # Save the file to the temporary location
             temp_file_path = temp_storage.save(f"tmp/{zip_structure.name}", zip_structure)
             # Pass the full path to the parse_zip_file function
-            parse_zip_file(project, temp_file_path)
+            result = parse_zip_file(project, temp_file_path)
             # Delete the temporary file
             temp_storage.delete(temp_file_path)
+            if not result:
+                raise ValidationError(gettext("project.errors.zip_structure"))
 
         return project
+
+    class Meta:
+        model = Project
+        fields = "__all__"
+
+
+class CreateProjectSerializer(ProjectSerializer):
+    # Only require these fields when creating a project
+    number_groups = serializers.IntegerField(min_value=1, required=False)
+    zip_structure = serializers.FileField(required=False, read_only=True)
 
 
 class TeacherCreateGroupSerializer(serializers.Serializer):

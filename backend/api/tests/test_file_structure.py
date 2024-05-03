@@ -1,12 +1,14 @@
 import json
 import os
+
+from api.logic.check_folder_structure import check_zip_file, parse_zip_file
+from api.tests.helpers import (create_course, create_file_extension,
+                               create_project, create_structure_check)
+from authentication.models import User
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework.test import APITestCase
-from api.logic.check_folder_structure import check_zip_file, parse_zip_file
-from api.tests.helpers import create_course, create_file_extension, create_project, create_structure_check
-from authentication.models import User
 
 
 class FileTestsTests(APITestCase):
@@ -60,43 +62,43 @@ class FileTestsTests(APITestCase):
         )
 
         content = content_json[0]
-        self.assertEqual(content["name"], ".")
+        self.assertEqual(content["path"], ".")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 0)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[1]
-        self.assertEqual(content["name"], "folder_struct1")
+        self.assertEqual(content["path"], "folder_struct1")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 1)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[2]
-        self.assertEqual(content["name"], "folder_struct1/submap1")
+        self.assertEqual(content["path"], "folder_struct1/submap1")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 2)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[3]
-        self.assertEqual(content["name"], "folder_struct1/submap1/templates")
+        self.assertEqual(content["path"], "folder_struct1/submap1/templates")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 1)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[4]
-        self.assertEqual(content["name"], "folder_struct1/submap2")
+        self.assertEqual(content["path"], "folder_struct1/submap2")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 1)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[5]
-        self.assertEqual(content["name"], "folder_struct1/submap2/src")
+        self.assertEqual(content["path"], "folder_struct1/submap2/src")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 3)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[6]
-        self.assertEqual(content["name"], "folder_struct1/submap3")
+        self.assertEqual(content["path"], "folder_struct1/submap3")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 2)
         self.assertEqual(len(content["blocked_extensions"]), 0)
@@ -126,43 +128,43 @@ class FileTestsTests(APITestCase):
         fileExtensionTSX = create_file_extension(extension="tsx")
 
         create_structure_check(
-            name=".",
+            path=".",
             project=project,
             obligated_extensions=[],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1",
+            path="folder_struct1",
             project=project,
             obligated_extensions=[fileExtensionHS],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1",
+            path="folder_struct1/submap1",
             project=project,
             obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1/templates",
+            path="folder_struct1/submap1/templates",
             project=project,
             obligated_extensions=[fileExtensionLATEX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2",
+            path="folder_struct1/submap2",
             project=project,
             obligated_extensions=[fileExtensionMD],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2/src",
+            path="folder_struct1/submap2/src",
             project=project,
             obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap3",
+            path="folder_struct1/submap3",
             project=project,
             obligated_extensions=[fileExtensionTS, fileExtensionTSX],
             blocked_extensions=[])
@@ -194,43 +196,43 @@ class FileTestsTests(APITestCase):
         fileExtensionTSX = create_file_extension(extension="tsx")
 
         create_structure_check(
-            name=".",
+            path=".",
             project=project,
             obligated_extensions=[],
             blocked_extensions=[fileExtensionDOCX])
 
         create_structure_check(
-            name="folder_struct1",
+            path="folder_struct1",
             project=project,
             obligated_extensions=[fileExtensionHS],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1",
+            path="folder_struct1/submap1",
             project=project,
             obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1/templates",
+            path="folder_struct1/submap1/templates",
             project=project,
             obligated_extensions=[fileExtensionLATEX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2",
+            path="folder_struct1/submap2",
             project=project,
             obligated_extensions=[fileExtensionMD],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2/src",
+            path="folder_struct1/submap2/src",
             project=project,
             obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap3",
+            path="folder_struct1/submap3",
             project=project,
             obligated_extensions=[fileExtensionTS, fileExtensionTSX],
             blocked_extensions=[])
@@ -261,43 +263,43 @@ class FileTestsTests(APITestCase):
         fileExtensionTSX = create_file_extension(extension="tsx")
 
         create_structure_check(
-            name=".",
+            path=".",
             project=project,
             obligated_extensions=[],
             blocked_extensions=[fileExtensionDOCX])
 
         create_structure_check(
-            name="folder_struct1",
+            path="folder_struct1",
             project=project,
             obligated_extensions=[fileExtensionHS],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1",
+            path="folder_struct1/submap1",
             project=project,
             obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1/templates",
+            path="folder_struct1/submap1/templates",
             project=project,
             obligated_extensions=[fileExtensionLATEX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2",
+            path="folder_struct1/submap2",
             project=project,
             obligated_extensions=[fileExtensionMD],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2/src",
+            path="folder_struct1/submap2/src",
             project=project,
             obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap3",
+            path="folder_struct1/submap3",
             project=project,
             obligated_extensions=[fileExtensionTS, fileExtensionTSX],
             blocked_extensions=[])
@@ -328,43 +330,43 @@ class FileTestsTests(APITestCase):
         fileExtensionTSX = create_file_extension(extension="tsx")
 
         create_structure_check(
-            name=".",
+            path=".",
             project=project,
             obligated_extensions=[],
             blocked_extensions=[fileExtensionDOCX])
 
         create_structure_check(
-            name="folder_struct1",
+            path="folder_struct1",
             project=project,
             obligated_extensions=[fileExtensionHS],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1",
+            path="folder_struct1/submap1",
             project=project,
             obligated_extensions=[fileExtensionDOCX],
             blocked_extensions=[fileExtensionPDF])
 
         create_structure_check(
-            name="folder_struct1/submap1/templates",
+            path="folder_struct1/submap1/templates",
             project=project,
             obligated_extensions=[fileExtensionLATEX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2",
+            path="folder_struct1/submap2",
             project=project,
             obligated_extensions=[fileExtensionMD],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2/src",
+            path="folder_struct1/submap2/src",
             project=project,
             obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap3",
+            path="folder_struct1/submap3",
             project=project,
             obligated_extensions=[fileExtensionTS, fileExtensionTSX],
             blocked_extensions=[])
@@ -396,43 +398,43 @@ class FileTestsTests(APITestCase):
         fileExtensionTSX = create_file_extension(extension="tsx")
 
         create_structure_check(
-            name=".",
+            path=".",
             project=project,
             obligated_extensions=[],
             blocked_extensions=[fileExtensionDOCX])
 
         create_structure_check(
-            name="folder_struct1",
+            path="folder_struct1",
             project=project,
             obligated_extensions=[fileExtensionHS],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1",
+            path="folder_struct1/submap1",
             project=project,
             obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap1/templates",
+            path="folder_struct1/submap1/templates",
             project=project,
             obligated_extensions=[fileExtensionLATEX],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2",
+            path="folder_struct1/submap2",
             project=project,
             obligated_extensions=[fileExtensionMD],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap2/src",
+            path="folder_struct1/submap2/src",
             project=project,
             obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
             blocked_extensions=[])
 
         create_structure_check(
-            name="folder_struct1/submap3",
+            path="folder_struct1/submap3",
             project=project,
             obligated_extensions=[fileExtensionTS, fileExtensionTSX],
             blocked_extensions=[])

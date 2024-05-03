@@ -14,9 +14,9 @@ class StructureCheck(models.Model):
 
     # ID should be generated automatically
 
-    # Name of the directory the structure check checks in
-    name = models.CharField(
-        max_length=100,
+    # Path from the root of the project to the location where the structure check is run
+    path = models.CharField(
+        max_length=255,
         blank=False,
         null=False
     )
@@ -51,6 +51,13 @@ class ExtraCheck(models.Model):
 
     # ID should be generated automatically
 
+    # Name of the extra check
+    name = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
+
     # Link to the project
     project = models.ForeignKey(
         Project,
@@ -77,14 +84,22 @@ class ExtraCheck(models.Model):
         null=False
     )
 
-    # Maximum time the script can run for
-    timeout = models.PositiveSmallIntegerField(
-        default=60,
+    # Maximum time the container runs for in seconds
+    time_limit = models.PositiveSmallIntegerField(
+        default=30,
         blank=False,
         null=False
     )
 
-    # Whether the log files should be kept and made available to the user
+    # Maximum memory the container uses in MB
+    # TODO: Set max and min
+    memory_limit = models.PositiveSmallIntegerField(
+        default=128,
+        blank=False,
+        null=False
+    )
+
+    # Whether the log files should made available to the student
     show_log = models.BooleanField(
         default=True,
         blank=False,
