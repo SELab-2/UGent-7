@@ -30,7 +30,9 @@ const generateCSVAndDownload = async () => {
     // construct for every group's student a csv line according to ufora grade csv standard
     // and concatenate them all into one csv
     csv_content.value = groups.value?.map(group => {
+        console.log(group);
         return group.students?.map(student => {
+            console.log(student);
             return `#${student.studentId},${student.last_name},${student.first_name},${student.email},${group.score},#`
         }).join('\n');
     }).join('\n');
