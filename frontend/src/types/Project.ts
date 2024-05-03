@@ -93,8 +93,12 @@ export class Project {
      * @returns True if the project is locked, false otherwise.
      */
     public isLocked(): boolean {
-        console.log(moment(this.start_date).isBefore());
-        return !this.visible || this.archived || this.locked_groups || moment(this.start_date).isBefore(moment().startOf('day'));
+        return (
+            !this.visible ||
+            this.archived ||
+            this.locked_groups ||
+            moment(this.start_date).isBefore(moment().startOf('day'))
+        );
     }
 
     /**

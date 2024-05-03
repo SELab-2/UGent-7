@@ -141,6 +141,9 @@ msgstr "The course must have at least one teacher."
 msgid "courses.error.invitation_link"
 msgstr "The invitation link is not unique, please try again."
 
+msgid "feedback.error.no_teacher"
+msgstr "The user is no teacher."
+
 #: serializers/docker_serializer.py:19
 msgid "docker.errors.custom"
 msgstr "User is not allowed to create public images"

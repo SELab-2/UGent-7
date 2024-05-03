@@ -81,7 +81,7 @@ async function loadStudentGroups(): Promise<void> {
                 </template>
                 <template v-else>
                     <SubmissionCard class="mb-3" :group="group" />
-                    <JoinedGroupCard :group="group" @group-left="loadStudentGroups"></JoinedGroupCard>
+                    <JoinedGroupCard v-if="project.group_size !== 1" :group="group" @group-left="loadStudentGroups"></JoinedGroupCard>
                 </template>
             </template>
             <template v-else>
