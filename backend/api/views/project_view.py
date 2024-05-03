@@ -212,6 +212,11 @@ class ProjectViewSet(CreateModelMixin,
         if (structure_checks_passed + extra_checks_passed > groups_submitted):
             extra_checks_passed = groups_submitted - structure_checks_passed
 
+        print(f"non_empty_groups: {non_empty_groups}")
+        print(f"groups_submitted: {groups_submitted}")
+        print(f"structure_checks_passed: {structure_checks_passed}")
+        print(f"extra_checks_passed: {extra_checks_passed}")
+
         serializer = SubmissionStatusSerializer({
             "non_empty_groups": non_empty_groups,
             "groups_submitted": groups_submitted,
