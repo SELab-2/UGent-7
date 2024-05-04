@@ -23,17 +23,10 @@ const displayShareCourse = ref(false);
 const linkDuration = ref<number>(7);
 
 /**
- * Opens the dialog to share the course, and generates a random invitation link.
- */
-function openShareCourseDialog(): void {
-    displayShareCourse.value = true;
-}
-
-/**
  * Activates the invitation link for the course, with the specified duration.
  */
 async function handleShare(): Promise<void> {
-    // Save the invitation link for the course
+    // Activates the invitation link by setting an expiration date
     await activateInvitationLink(props.course.id, linkDuration.value);
 
     // Close the dialog
@@ -46,13 +39,7 @@ async function handleShare(): Promise<void> {
 function copyToClipboard(): void {
     if (props.course.invitation_link){
         navigator.clipboard
-            .writeText(invitationLink.value)
-            .then(() => {
-                console.log('Link copied to clipboard');
-            })
-            .catch((err) => {
-                console.error('Failed to copy text: ', err);
-            });
+            .writeText(invitationLink.value);
     }
 }
 
@@ -72,7 +59,7 @@ const invitationLink = computed(() => {
             icon-pos="right"
             class="custom-button"
             style="height: 51px; width: 51px"
-            @click="openShareCourseDialog"
+            @click="displayShareCourse = true"
             v-if="props.course.private_course"
         />
         <Dialog
@@ -102,7 +89,7 @@ const invitationLink = computed(() => {
                 <div class="grid">
                     <div class="flex align-items-center col-12 gap-2">
                         <label for="link">{{ t('views.courses.share.link') }}</label>
-                        <InputText v-model="invitationLink" disabled style="width: 70%" />
+                        <InputText v-model="invitationLink" disabled style="width: 50%" />
                         <Button @click="copyToClipboard()" icon="pi pi-copy" class="p-button-text no-outline" />
                     </div>
                 </div>

@@ -137,7 +137,7 @@
                 "placeholder": "Find a course using the registration link"
             },
             "share": {
-                "title": "Create invitation link",
+                "title": "Activate invitation link",
                 "duration": "Validity period link (in days):",
                 "link": "Invitation link:"
             }
@@ -244,7 +244,7 @@
         "cloneCourse": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
         "joinCourse": "Are you sure you want to enroll in this course? This will give you access to all projects, assignments, ...",
         "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course.",
-        "shareCourse": "By creating an invitation link, you allow students in possession of this link to enroll in this course. Please copy the generated link, only when you click on \"Create invitation link\" will this link become valid."
+        "shareCourse": "By activating the invitation link, you allow students in possession of this link to enroll in this course. Please copy the generated link, only when you click on \"Activate invitation link\" will this link become active."
     },
     "protectedCourses": {
         "screen1": {
