@@ -7,6 +7,7 @@ const { locale } = i18n.global;
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.xsrfCookieName = 'csrftoken';
 
+// Todo: wrap with setupCache.
 export const client = axios.create({
     headers: {
         'Content-Type': 'application/json',

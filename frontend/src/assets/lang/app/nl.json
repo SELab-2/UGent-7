@@ -46,6 +46,7 @@
             "coming": "Aankomende deadlines",
             "deadline": "Deadline",
             "days": "Vandaag om {hour} | Morgen om {hour} | Over {count} dagen",
+            "ago": "{count} dagen geleden",
             "groupName": "Groepsnaam",
             "groupPopulation": "Grootte",
             "groupStatus": "Status",
