@@ -1,4 +1,4 @@
-from passlib.hash import pbkdf2_sha256
+import hashlib
 from nh3 import clean
 from datetime import timedelta
 from django.utils import timezone
@@ -77,13 +77,17 @@ class CreateCourseSerializer(CourseSerializer):
         # Create the course
         course = super().create(validated_data)
 
+        # Compute the invitation link hash
+        course.invitation_link = hashlib.sha256(f'{course.id}{course.academic_startyear}'.encode()).hexdigest()
+        course.invitation_link_expires = timezone.now()
+
         # Link the faculty, if specified
         if faculty is not None:
             course.faculty = faculty
             course.save()
-
-        # Compute the invitation link hash, with a size
-        course.invitation_link = pbkdf2_sha256.hash(f'{course.id}{course.academic_startyear}', salt_size=16)
+        else:
+            course.faculty = "noo"
+            course.save()
 
         return course
 

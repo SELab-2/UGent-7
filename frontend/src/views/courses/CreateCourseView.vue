@@ -66,6 +66,7 @@ async function submitCourse(): Promise<void> {
                 form.description,
                 getAcademicYear(),
                 form.private,
+                null, // No invitation link
                 null, // No parent course
                 form.faculty,
             ),
