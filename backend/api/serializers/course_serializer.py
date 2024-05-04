@@ -98,9 +98,6 @@ class CreateCourseSerializer(CourseSerializer):
         if faculty is not None:
             course.faculty = faculty
             course.save()
-        else:
-            course.faculty = "noo"
-            course.save()
 
         return course
 
@@ -139,7 +136,7 @@ class SaveInvitationLinkSerializer(serializers.Serializer):
 
         course: Course = self.context["course"]
 
-        # Save the expiration date as the current date + the invite link expires parameter in days.
+        # Save the expiration date as the current date + the invite link duration parameter in days.
         course.invitation_link_expires = timezone.now() + timedelta(days=validated_data["link_duration"])
         course.save()
 

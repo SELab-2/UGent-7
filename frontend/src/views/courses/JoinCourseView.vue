@@ -77,22 +77,17 @@ onMounted(async () => {
                 push({ name: 'dashboard' });
             } else {
                 // Get assistants and teachers
-                if (course.value !== null) {
-                    await getAssistantsByCourse(course.value.id);
-                    await getTeachersByCourse(course.value.id);
+                await getAssistantsByCourse(course.value.id);
+                await getTeachersByCourse(course.value.id);
 
-                    // Set the course's assistants and teachers
-                    course.value.assistants = assistants.value ?? [];
-                    course.value.teachers = teachers.value ?? [];
-                }
+                // Set the course's assistants and teachers
+                course.value.assistants = assistants.value ?? [];
+                course.value.teachers = teachers.value ?? [];
             }
         } else {
             // Redirect to the dashboard, meaning the course has no invitation link set
             push({ name: 'dashboard' });
         }
-    } else {
-        // Redirect to the dashboard, meaning the course does not exist
-        push({ name: 'dashboard' });
     }
 });
 </script>
