@@ -114,13 +114,12 @@ export function useCourses(): CoursesState {
 
     async function activateInvitationLink(courseId: string, linkDuration: number): Promise<void> {
         const endpoint = endpoints.courses.invitationLink.replace('{courseId}', courseId);
-        await create<Course>(
+        await patch(
             endpoint,
             {
                 link_duration: linkDuration,
             },
-            course,
-            Course.fromJSON,
+            response,
         );
     }
 

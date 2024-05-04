@@ -378,7 +378,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response(course_serializer.data)
 
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["patch"])
     @swagger_auto_schema(request_body=SaveInvitationLinkSerializer)
     def invitation_link(self, request, **_):
         """Save the invitation link to the course"""

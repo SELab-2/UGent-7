@@ -129,15 +129,7 @@ class CourseCloneSerializer(serializers.Serializer):
 
 
 class SaveInvitationLinkSerializer(serializers.Serializer):
-    invitation_link = serializers.CharField(required=True)
     link_duration = serializers.IntegerField(required=True)
-
-    def validate(self, data):
-        # Check if there is no course with the same invitation link.
-        if Course.objects.filter(invitation_link=data["invitation_link"]).exists():
-            raise ValidationError(gettext("courses.error.invitation_link"))
-
-        return data
 
     def create(self, validated_data):
         # Save the invitation link and the expiration date.
@@ -145,8 +137,6 @@ class SaveInvitationLinkSerializer(serializers.Serializer):
             raise ValidationError(gettext("courses.error.context"))
 
         course: Course = self.context["course"]
-
-        course.invitation_link = validated_data["invitation_link"]
 
         # Save the expiration date as the current date + the invite link expires parameter in days.
         course.invitation_link_expires = timezone.now() + timedelta(days=validated_data["link_duration"])
