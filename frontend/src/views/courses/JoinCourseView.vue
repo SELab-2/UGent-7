@@ -62,60 +62,77 @@ const instructors = computed(() => {
 }
 
 onMounted(async () => {
-    await getCourseByID(params.courseId as string);
+    await getCourseByID(params.courseId as string);    
 
-    console.log(course.value);
+    // Make sure the invitation link is valid and not expired
+    if (course.value !== null && course.value.invitation_link !== null && course.value.invitation_link_expires !== null) {
 
-    // Get assistants and teachers
-    if (course.value !== null) {
-        await getAssistantsByCourse(course.value.id);
-        await getTeachersByCourse(course.value.id);
+        // Get the expiration date and the current date
+        const expirationDate = new Date(course.value.invitation_link_expires);
+        const currentDate = new Date();
 
-        // Set the course's assistants and teachers
-        course.value.assistants = assistants.value ?? [];
-        course.value.teachers = teachers.value ?? [];
+        // If the expiration date is in the past, or the invitation link does not match, redirect to the dashboard
+        if (expirationDate <= currentDate || params.invitationLink !== course.value.invitation_link) {
+            // Redirect to the dashboard
+            push({ name: 'dashboard' });
+
+        }else {
+            // Get assistants and teachers
+            if (course.value !== null) {
+                await getAssistantsByCourse(course.value.id);
+                await getTeachersByCourse(course.value.id);
+
+                // Set the course's assistants and teachers
+                course.value.assistants = assistants.value ?? [];
+                course.value.teachers = teachers.value ?? [];
+            }
+        }
+    }else{
+        // Redirect to the dashboard, meaning the course has no invitation link set
+        push({ name: 'dashboard' });
     }
 });
 </script>
 
 <template>
     <BaseLayout>
-        <!-- Course heading -->
-        <div class="flex justify-content-between align-items-center mb-6">
-            <!-- Course title -->
-            <Title class="m-0">{{ course?.name }}</Title>
+        <div v-if="course">
+            <!-- Course heading -->
+            <div class="flex justify-content-between align-items-center mb-6">
+                <!-- Course title -->
+                <Title class="m-0">{{ course?.name }}</Title>
 
-            
-            <!-- Button to join the course -->
-            <div class="text-right" v-if="user?.isStudent()">
-                <ConfirmDialog>
-                    <template #container="{ message, acceptCallback, rejectCallback }">
-                        <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
-                            <span class="font-bold text-2xl">{{ message.header }}</span>
-                            <p class="mb-4">{{ message.message }}</p>
-                            <div class="flex gap-2 justify-content-end">
-                                <Button outlined rounded @click="rejectCallback">{{ t('primevue.cancel') }}</Button>
-                                <Button @click="acceptCallback" rounded>{{ t('views.courses.enroll') }}</Button>
+                
+                <!-- Button to join the course -->
+                <div class="text-right" v-if="user?.isStudent()">
+                    <ConfirmDialog>
+                        <template #container="{ message, acceptCallback, rejectCallback }">
+                            <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
+                                <span class="font-bold text-2xl">{{ message.header }}</span>
+                                <p class="mb-4">{{ message.message }}</p>
+                                <div class="flex gap-2 justify-content-end">
+                                    <Button outlined rounded @click="rejectCallback">{{ t('primevue.cancel') }}</Button>
+                                    <Button @click="acceptCallback" rounded>{{ t('views.courses.enroll') }}</Button>
+                                </div>
                             </div>
-                        </div>
-                    </template>
-                </ConfirmDialog>
+                        </template>
+                    </ConfirmDialog>
 
-                <Button @click="joinCourse" icon="pi pi-sign-in" :label="t('views.courses.enroll')"></Button>
+                    <Button @click="joinCourse" icon="pi pi-sign-in" :label="t('views.courses.enroll')"></Button>
+                </div>
             </div>
+
+            <!-- Description -->
+            <div class="surface-300 px-4 py-3" v-html="course?.description"></div>
+
+            <!-- Heading for teachers and assistants -->
+            <div class="flex justify-content-between align-items-center my-6">
+                <Title class="m-0">{{ t('views.courses.teachersAndAssistants.title') }}</Title>
+            </div>
+
+            <!-- List with teachers and assistants -->
+            <TeacherAssistantList :course="course" :users="instructors" v-if="course" />
         </div>
-
-        <!-- Description -->
-        <div class="surface-300 px-4 py-3" v-html="course?.description"></div>
-
-        <!-- Heading for teachers and assistants -->
-        <div class="flex justify-content-between align-items-center my-6">
-            <Title class="m-0">{{ t('views.courses.teachersAndAssistants.title') }}</Title>
-        </div>
-
-        <!-- List with teachers and assistants -->
-        <TeacherAssistantList :course="course" :users="instructors" v-if="course" />
-
     </BaseLayout>
 </template>
 

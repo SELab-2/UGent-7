@@ -55,6 +55,7 @@ class CourseSerializer(serializers.ModelSerializer):
             # Teacher can only see the invitation link if they are part of the course
             if instance.teachers.filter(id=self.context["request"].user.id).exists():
                 data["invitation_link"] = instance.invitation_link
+                data["invitation_link_expires"] = instance.invitation_link_expires
 
         return data
 
