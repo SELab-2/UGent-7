@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
-import { ref } from "vue";
 import { useI18n } from 'vue-i18n';
 import { useGroup } from '@/composables/services/group.service.ts';
-
+import { useStudents } from '@/composables/services/student.service.ts';
 
 /* Props */
 const props = defineProps<{
-    projectId: string
-    projectName: string
+    projectId: string;
+    projectName: string;
 }>();
 
 /* Injections */
 const { t } = useI18n();
 const { groups, getGroupsByProject } = useGroup();
-
-/* State */
-const csv_content = ref<string|undefined>(undefined);
+const { students, getStudentsByGroup } = useStudents();
 
 /* Functions */
 /**
@@ -24,37 +21,43 @@ const csv_content = ref<string|undefined>(undefined);
  * with the projectId in this component's props.
  * After generating a csv, a download link is created and clicked.
  */
-const generateCSVAndDownload = async () => {
+const generateCSVAndDownload = async (): Promise<void> => {
     // retrieve all the groups associated with a given project
     await getGroupsByProject(props.projectId);
     // construct for every group's student a csv line according to ufora grade csv standard
     // and concatenate them all into one csv
-    csv_content.value = groups.value?.map(group => {
-        console.log(group);
-        return group.students?.map(student => {
-            console.log(student);
-            return `#${student.studentId},${student.last_name},${student.first_name},${student.email},${group.score},#`
-        }).join('\n');
-    }).join('\n');
+    const csvPromises =
+        groups.value?.map(async (group) => {
+            await getStudentsByGroup(group.id);
+            return (
+                students.value
+                    ?.map((student) => {
+                        // single csv line
+                        return `#${student.id},${student.last_name},${student.first_name},${student.email},${group.score},#`;
+                    })
+                    .join('\n') ?? ''
+            );
+        }) ?? [];
 
-    if (csv_content.value !== undefined) {
-        // create a blob from the csv content
-        const blob = new Blob([csv_content.value], {type: 'text/plain'})
+    const csvList = await Promise.all(csvPromises);
+    const csvContent = csvList.join('\n');
 
-        // create a download url for this blob
-        const url = URL.createObjectURL(blob);
+    // create a blob from the csv content
+    const blob = new Blob([csvContent], { type: 'text/plain' });
 
-        // create an anchor element for downloading the file
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = (props.projectName ?? props.projectId) + '.scores';
+    // create a download url for this blob
+    const url = URL.createObjectURL(blob);
 
-        // click anchor element
-        a.click();
+    // create an anchor element for downloading the file
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (props.projectName ?? props.projectId) + '.scores';
 
-        // clean up URL
-        URL.revokeObjectURL(url);
-    }
+    // click anchor element
+    a.click();
+
+    // clean up URL
+    URL.revokeObjectURL(url);
 };
 </script>
 

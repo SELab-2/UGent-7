@@ -39,7 +39,7 @@ defineProps<{
         </div>
         <div class="col-12">
             <template v-if="project !== null">
-                <DownloadCSV :project-id="project.id" :project-name="project.name"/>
+                <DownloadCSV :project-id="project.id" :project-name="project.name" />
             </template>
         </div>
     </div>
