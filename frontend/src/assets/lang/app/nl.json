@@ -239,6 +239,7 @@
     },
     "confirmations": {
         "cloneCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
+        "joinCourse": "Ben je zeker dat je jezelf wil inschrijven voor dit vak? Dit zal je toegang geven tot alle projecten, opdrachten, ...",
         "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak.",
         "shareCourse": "Door het creëren van een invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Creëer invitatielink\" klikt zal deze link geldig worden."
     },
