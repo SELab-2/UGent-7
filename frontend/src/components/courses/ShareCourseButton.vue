@@ -37,9 +37,8 @@ async function handleShare(): Promise<void> {
  * Copies the invitation link to the clipboard.
  */
 function copyToClipboard(): void {
-    if (props.course.invitation_link){
-        navigator.clipboard
-            .writeText(invitationLink.value);
+    if (props.course.invitation_link !== null) {
+        navigator.clipboard.writeText(invitationLink.value);
     }
 }
 
@@ -47,9 +46,8 @@ function copyToClipboard(): void {
  * Returns the course's invitation link, formatted as the full URL.
  */
 const invitationLink = computed(() => {
-    return `${window.location}/join/${props.course.invitation_link}`;
+    return `${window.location.toString()}/join/${props.course.invitation_link}`;
 });
-
 </script>
 
 <template>

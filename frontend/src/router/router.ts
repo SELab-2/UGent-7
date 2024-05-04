@@ -54,11 +54,9 @@ const routes: RouteRecordRaw[] = [
                 children: [
                     { path: '', component: CourseView, name: 'course' },
                     { path: 'edit', component: UpdateCourseView, name: 'course-edit' },
-                    { 
-                        path: 'join', 
-                        children: [
-                            {path: ':invitationLink', component: JoinCourseView, name: 'course-join'},
-                        ]
+                    {
+                        path: 'join',
+                        children: [{ path: ':invitationLink', component: JoinCourseView, name: 'course-join' }],
                     },
                     // Projects
                     {
