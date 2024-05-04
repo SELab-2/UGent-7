@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from api.permissions.role_permissions import is_teacher
 from api.serializers.student_serializer import StudentIDSerializer
 from api.serializers.teacher_serializer import TeacherIDSerializer
 from api.serializers.faculty_serializer import FacultySerializer
@@ -45,6 +46,17 @@ class CourseSerializer(serializers.ModelSerializer):
         """Extra custom validation for course serializer"""
         attrs['description'] = clean(attrs['description'])
         return attrs
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # If you are a teacher, you can see the invitation link of the course
+        if is_teacher(self.context["request"].user):
+            # Teacher can only see the invitation link if they are part of the course
+            if instance.teachers.filter(id=self.context["request"].user.id).exists():
+                data["invitation_link"] = instance.invitation_link
+
+        return data
 
     class Meta:
         model = Course

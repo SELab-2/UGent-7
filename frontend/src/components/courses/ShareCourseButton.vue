@@ -6,21 +6,18 @@ import InputText from 'primevue/inputtext';
 import { useI18n } from 'vue-i18n';
 import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useCourses } from '@/composables/services/course.service';
 
 /* Composable injections */
 const { t } = useI18n();
-const { saveInvitationLink } = useCourses();
+const { activateInvitationLink } = useCourses();
 
 /* Props */
 const props = defineProps<{ course: Course }>();
 
 /* State for the dialog to share a course */
 const displayShareCourse = ref(false);
-
-/* Invitation link for the course */
-const link = ref<string>('KVC Westerlo');
 
 /* Number of days the invitation link is valid */
 const linkDuration = ref<number>(7);
@@ -29,16 +26,15 @@ const linkDuration = ref<number>(7);
  * Opens the dialog to share the course, and generates a random invitation link.
  */
 function openShareCourseDialog(): void {
-    link.value = generateRandomInvitationLink();
     displayShareCourse.value = true;
 }
 
 /**
- * Creates an invitation link for the course.
+ * Activates the invitation link for the course, with the specified duration.
  */
 async function handleShare(): Promise<void> {
     // Save the invitation link for the course
-    await saveInvitationLink(props.course.id, link.value, linkDuration.value);
+    await activateInvitationLink(props.course.id, linkDuration.value);
 
     // Close the dialog
     displayShareCourse.value = false;
@@ -48,28 +44,25 @@ async function handleShare(): Promise<void> {
  * Copies the invitation link to the clipboard.
  */
 function copyToClipboard(): void {
-    navigator.clipboard
-        .writeText(link.value)
-        .then(() => {
-            console.log('Link copied to clipboard');
-        })
-        .catch((err) => {
-            console.error('Failed to copy text: ', err);
-        });
+    if (props.course.invitation_link){
+        navigator.clipboard
+            .writeText(invitationLink.value)
+            .then(() => {
+                console.log('Link copied to clipboard');
+            })
+            .catch((err) => {
+                console.error('Failed to copy text: ', err);
+            });
+    }
 }
 
 /**
- * Generates a random invitation link for the course.
+ * Returns the course's invitation link, formatted as the full URL.
  */
-function generateRandomInvitationLink(): string {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < 20; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-}
+const invitationLink = computed(() => {
+    return `${window.location}/join/${props.course.invitation_link}`;
+});
+
 </script>
 
 <template>
@@ -109,13 +102,8 @@ function generateRandomInvitationLink(): string {
                 <div class="grid">
                     <div class="flex align-items-center col-12 gap-2">
                         <label for="link">{{ t('views.courses.share.link') }}</label>
-                        <InputText v-model="link" disabled style="width: 25%" />
+                        <InputText v-model="invitationLink" disabled style="width: 70%" />
                         <Button @click="copyToClipboard()" icon="pi pi-copy" class="p-button-text no-outline" />
-                        <Button
-                            @click="link = generateRandomInvitationLink()"
-                            icon="pi pi-refresh"
-                            class="p-button-text no-outline"
-                        />
                     </div>
                 </div>
 
