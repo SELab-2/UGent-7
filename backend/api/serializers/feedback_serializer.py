@@ -8,6 +8,10 @@ from api.serializers.teacher_serializer import TeacherSerializer
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
+
+    submission = SubmissionSerializer(read_only=True)
+    author = TeacherSerializer(read_only=True)
+
     """Serializer for the feedback message"""
     def to_internal_value(self, data):
         if "user" in self.context:

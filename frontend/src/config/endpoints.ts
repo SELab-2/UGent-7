@@ -78,4 +78,9 @@ export const endpoints = {
         retrieve: '/api/structure-checks/{id}',
         byProject: '/api/projects/{projectId}/structure_checks/',
     },
+    feedbacks: {
+        retrieve: '/api/feedback/{id}/',
+        bySubmission: '/api/submissions/{submissionId}/feedback/',
+    }
+
 };

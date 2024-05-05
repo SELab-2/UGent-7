@@ -5,6 +5,7 @@ from api.views.checks_view import (ExtraCheckViewSet, FileExtensionViewSet,
 from api.views.course_view import CourseViewSet
 from api.views.docker_view import DockerImageViewSet
 from api.views.faculty_view import FacultyViewSet
+from api.views.feedback_view import FeedbackViewSet
 from api.views.group_view import GroupViewSet
 from api.views.project_view import ProjectViewSet
 from api.views.student_view import StudentViewSet
@@ -29,6 +30,7 @@ router.register(r"extra-checks", ExtraCheckViewSet, basename="extra-check")
 router.register(r"file-extensions", FileExtensionViewSet, basename="file-extension")
 router.register(r"faculties", FacultyViewSet, basename="faculty")
 router.register(r"docker-images", DockerImageViewSet, basename="docker-image")
+router.register(r"feedback", FeedbackViewSet, basename="feedback")
 
 urlpatterns = [
     path("", include(router.urls)),

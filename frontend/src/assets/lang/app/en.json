@@ -92,6 +92,13 @@
               "daysAgo": "day(s) ago",
               "weekAgo": "More than a week ago",
               "monthAgo": "More than a month ago"
+            },
+            "feedback": {
+                "writeFeedback": "Write your feedback here",
+                "addFeedback": "Add feedback",
+                "dateAndAuthor": "On {0} wrote {1}:",
+                "edit": "Edit feedback",
+                "noFeedback": "No feedback given yet"
             }
         },
         "courses": {
@@ -156,6 +163,9 @@
                 "networkDetail": "Unable to reach the server.",
                 "request": "request error",
                 "requestDetail": "An error occurred while creating the request."
+            },
+            "success": {
+                "creation": "A {0} is correctly created."
             }
         }
     },

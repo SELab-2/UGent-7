@@ -31,7 +31,8 @@ class SubmissionViewSet(RetrieveModelMixin, viewsets.GenericViewSet):
     def _add_feedback(self, request, **_) -> Response:
         """Adds feedback to the given submission"""
         submission = self.get_object()
-        serializer = FeedbackSerializer(data=request.data)
+        context = {"request": request, "user": request.user, "submission": submission}
+        serializer = FeedbackSerializer(data=request.data, context=context)
 
         if serializer.is_valid():
             serializer.save(submission=submission)
