@@ -51,7 +51,7 @@ const generateCSVAndDownload = async (): Promise<void> => {
     // create an anchor element for downloading the file
     const a = document.createElement('a');
     a.href = url;
-    a.download = (props.projectName ?? props.projectId) + '.scores';
+    a.download = props.projectName + '.csv';
 
     // click anchor element
     a.click();
