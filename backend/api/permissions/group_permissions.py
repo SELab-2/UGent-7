@@ -1,8 +1,9 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from api.permissions.role_permissions import (is_assistant, is_student,
+                                              is_teacher)
+from authentication.models import User
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 from rest_framework.request import Request
 from rest_framework.viewsets import ViewSet
-from authentication.models import User
-from api.permissions.role_permissions import is_student, is_assistant, is_teacher
 
 
 class GroupPermission(BasePermission):
@@ -47,7 +48,7 @@ class GroupStudentPermission(BasePermission):
             return teacher_or_assistant or (is_student(user) and user.student.courses.filter(id=course.id).exists())
 
         # Students can only add and remove themselves from a group.
-        if is_student(user) and request.data.get("student") == user.id:
+        if is_student(user) and request.data.get("student") == user.id:  # type: ignore
             # Make sure the student is actually part of the course.
             return user.student.courses.filter(id=course.id).exists()
 
@@ -63,12 +64,13 @@ class GroupSubmissionPermission(BasePermission):
         course = group.project.course
         teacher_or_assitant = is_teacher(user) and user.teacher.courses.filter(
             id=course.id).exists() or is_assistant(user) and user.assistant.courses.filter(id=course.id).exists()
+
         if request.method in SAFE_METHODS:
             # Users related to the group can view the submissions of the group
             return teacher_or_assitant or (is_student(user) and user.student.groups.filter(id=group.id).exists())
 
         # Student can only add submissions to their own group
-        if is_student(user) and request.data.get("student") == user.id and view.action == "create":
-            return user.student.course.filter(id=course.id).exists()
+        if is_student(user) and request.data.get("student") == user.id and view.action == "create":  # type: ignore
+            return user.student.courses.filter(id=course.id).exists()
 
-        # Removing a Submissions is not possible for teachers and assistants
+        return teacher_or_assitant

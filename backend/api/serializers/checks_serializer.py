@@ -1,6 +1,5 @@
-from api.models.checks import ExtraCheck, StructureCheck
+from api.models.checks import ExtraCheck, FileExtension, StructureCheck
 from api.models.docker import DockerImage
-from api.models.extension import FileExtension
 from api.models.project import Project
 from django.utils.translation import gettext as _
 from rest_framework import serializers

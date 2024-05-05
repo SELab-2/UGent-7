@@ -15,7 +15,15 @@ from requests.exceptions import ConnectionError
 
 
 @shared_task
-def task_extra_check_start(extra_check_result: ExtraCheckResult):
+def task_extra_check_start(structure_check_result: bool, extra_check_result: ExtraCheckResult):
+    # Check if the structure checks were succesful
+    if not structure_check_result:
+        extra_check_result.result = StateEnum.FAILED
+        extra_check_result.error_message = ErrorMessageEnum.FAILED_STRUCTURE_CHECK
+        extra_check_result.save()
+
+        return False
+
     # Start the process
     extra_check_result.result = StateEnum.RUNNING
     extra_check_result.save()
@@ -26,7 +34,7 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
         extra_check_result.error_message = ErrorMessageEnum.DOCKER_IMAGE_ERROR
         extra_check_result.save()
 
-        return
+        return True
 
     container: Container | None = None
 
@@ -67,7 +75,7 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
         # Memory limit
         if container_info["State"]["OOMKilled"]:
             extra_check_result.result = StateEnum.FAILED
-            extra_check_result.error_message = ErrorMessageEnum.MEMORYLIMIT
+            extra_check_result.error_message = ErrorMessageEnum.MEMORY_LIMIT
 
         # Exit codes
         match container_info["State"]["ExitCode"]:
@@ -78,22 +86,22 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
             # Custom check error
             case 1:
                 extra_check_result.result = StateEnum.FAILED
-                extra_check_result.error_message = ErrorMessageEnum.CHECKERROR
+                extra_check_result.error_message = ErrorMessageEnum.CHECK_ERROR
 
             # Time limit
             case 2:
                 extra_check_result.result = StateEnum.FAILED
-                extra_check_result.error_message = ErrorMessageEnum.TIMELIMIT
+                extra_check_result.error_message = ErrorMessageEnum.TIME_LIMIT
 
             # Memory limit
             case 3:
                 extra_check_result.result = StateEnum.FAILED
-                extra_check_result.error_message = ErrorMessageEnum.MEMORYLIMIT
+                extra_check_result.error_message = ErrorMessageEnum.MEMORY_LIMIT
 
             # Catch all non zero exit codes
             case _:
                 extra_check_result.result = StateEnum.FAILED
-                extra_check_result.error_message = ErrorMessageEnum.RUNTIMEERROR
+                extra_check_result.error_message = ErrorMessageEnum.RUNTIME_ERROR
 
     # Docker image error
     except (docker.errors.APIError, docker.errors.ImageNotFound):
@@ -103,12 +111,12 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
     # Runtime error
     except docker.errors.ContainerError:
         extra_check_result.result = StateEnum.FAILED
-        extra_check_result.error_message = ErrorMessageEnum.RUNTIMEERROR
+        extra_check_result.error_message = ErrorMessageEnum.RUNTIME_ERROR
 
     # Timeout error
     except ConnectionError:
         extra_check_result.result = StateEnum.FAILED
-        extra_check_result.error_message = ErrorMessageEnum.TIMELIMIT
+        extra_check_result.error_message = ErrorMessageEnum.TIME_LIMIT
 
     # Unknown error
     except Exception:
@@ -127,3 +135,5 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
 
         extra_check_result.log_file.save("logs.txt", content=ContentFile(logs), save=False)
         extra_check_result.save()
+
+    return True

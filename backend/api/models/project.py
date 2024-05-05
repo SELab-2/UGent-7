@@ -1,14 +1,21 @@
-from django.db import models
 from datetime import timedelta
-from django.utils import timezone
+from typing import TYPE_CHECKING
+
 from api.models.course import Course
+from django.db import models
+from django.utils import timezone
+
+if TYPE_CHECKING:
+    from api.models.checks import ExtraCheck, StructureCheck
+    from api.models.group import Group
+    from django.db.models.manager import RelatedManager
 
 
 # TODO max submission size
 class Project(models.Model):
     """Model that represents a project."""
 
-    # ID should be generated automatically
+    id = models.AutoField(auto_created=True, primary_key=True)
 
     name = models.CharField(max_length=100, blank=False, null=False)
 
@@ -99,3 +106,8 @@ class Project(models.Model):
     def increase_deadline(self, days):
         self.deadline = self.deadline + timedelta(days=days)
         self.save()
+
+    if TYPE_CHECKING:
+        groups: RelatedManager['Group']
+        structure_checks: RelatedManager['StructureCheck']
+        extra_checks: RelatedManager['ExtraCheck']

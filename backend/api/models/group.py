@@ -1,12 +1,18 @@
-from django.db import models
+from typing import TYPE_CHECKING
+
 from api.models.project import Project
 from api.models.student import Student
+from django.db import models
+
+if TYPE_CHECKING:
+    from api.models.submission import Submission
+    from django.db.models.manager import RelatedManager
 
 
 class Group(models.Model):
     """Model for group of students that work together on a project."""
 
-    # ID should be generated automatically
+    id = models.AutoField(auto_created=True, primary_key=True)
 
     project = models.ForeignKey(
         Project,
@@ -32,3 +38,6 @@ class Group(models.Model):
     def is_full(self) -> bool:
         """Check if the group is full."""
         return self.students.count() >= self.project.group_size
+
+    if TYPE_CHECKING:
+        submissions: RelatedManager['Submission']

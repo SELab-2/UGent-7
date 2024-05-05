@@ -1,9 +1,10 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from api.models.course import Course
+from api.permissions.role_permissions import (is_assistant, is_student,
+                                              is_teacher)
+from authentication.models import User
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 from rest_framework.request import Request
 from rest_framework.viewsets import ViewSet
-from authentication.models import User
-from api.permissions.role_permissions import is_student, is_assistant, is_teacher
-from api.models.course import Course
 
 
 class CoursePermission(BasePermission):
@@ -49,6 +50,7 @@ class CourseAssistantPermission(CoursePermission):
 
 class CourseStudentPermission(CoursePermission):
     """Permission class for student related endpoints."""
+
     def has_permission(self, request: Request, view: ViewSet) -> bool:
         return request.user and request.user.is_authenticated
 
@@ -60,7 +62,7 @@ class CourseStudentPermission(CoursePermission):
             return user.is_authenticated
 
         # Only students can add or remove themselves from a course.
-        if is_student(user) and request.data.get("student") == user.id:
+        if is_student(user) and request.data.get("student") == user.id:  # type: ignore
             return True
 
         # Teachers and assistants can add and remove any student.
@@ -69,6 +71,7 @@ class CourseStudentPermission(CoursePermission):
 
 class CourseTeacherPermission(CoursePermission):
     """Permission class for teacher related endpoints."""
+
     def has_object_permission(self, request: Request, view: ViewSet, course: Course):
         user: User = request.user
 

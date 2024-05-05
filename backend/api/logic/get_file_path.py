@@ -10,8 +10,7 @@ if TYPE_CHECKING:
     from api.models.checks import ExtraCheck
     from api.models.docker import DockerImage
     from api.models.project import Project
-    from api.models.submission import (ExtraCheckResult, Submission,
-                                       SubmissionFile)
+    from api.models.submission import ExtraCheckResult, Submission
 
 
 def _get_uuid() -> str:
@@ -28,9 +27,9 @@ def get_submission_full_dir_path(instance: Submission) -> str:
             f"submissions/{instance.group.id}/{instance.id}")
 
 
-def get_submission_file_path(instance: SubmissionFile, name: str) -> str:
-    return (f"{_get_project_dir_path(instance.submission.group.project)}"
-            f"submissions/{instance.submission.group.id}/{instance.submission.id}/{name}")
+def get_submission_file_path(instance: Submission, name: str) -> str:
+    return (f"{_get_project_dir_path(instance.group.project)}"
+            f"submissions/{instance.group.id}/{_get_uuid()}/{name}")
 
 
 # Absolute path starting from outside the container to the extra check file
