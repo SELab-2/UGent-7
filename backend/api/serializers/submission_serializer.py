@@ -49,8 +49,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Submission
-        # fields = "__all__"
-        exclude = ["zip"]
+        fields = "__all__"
         extra_kwargs = {
             "submission_number": {
                 "required": False,
