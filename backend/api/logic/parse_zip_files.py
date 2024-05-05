@@ -37,7 +37,8 @@ def create_check(project: Project, directory_path: str, files: list[str]):
     files_in_directory = [
         file for file
         in files
-        if file.startswith(directory_path) and file != directory_path and '/' not in file[len(directory_path):]
+        if file.startswith(directory_path) and file != directory_path
+        and '/' not in file[len(directory_path):]
     ]
 
     # Add for each file the (blocked or obligated) extension to the check

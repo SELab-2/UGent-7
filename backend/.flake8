@@ -1,15 +1,15 @@
 [flake8]
 
 # Ignore unused imports; W503 and W504 conflict with each-other
-ignore = F401,W504
+ignore =    F401
+            W504
 
 max-line-length = 125
 
 max-complexity = 10
 
-exclude = .git, 
-          __pycache__,
-          .venv,
-          venv,
-          migrations
-
+exclude =   .git,
+            __pycache__,
+            .venv,
+            venv,
+            migrations

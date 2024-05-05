@@ -9,24 +9,16 @@ from celery import shared_task
 @shared_task()
 def task_structure_check_start(structure_check_results: list[StructureCheckResult]):
     all_checks_passed = True  # Boolean to check if all structure checks passed
-    name_ext: dict[str, str]  # Dict with file name and extension
-
-    # Get all files inside the zip
-    with zipfile.ZipFile(structure_check_results[0].submission.zip.path, 'r') as zip:
-        file_list = zip.namelist()
-
-        if len(file_list) == 1:
-            # There's a chance that we zipped a submitted zip file
-            zip_data = BytesIO(zip.read(file_list[0]))
-            if zipfile.is_zipfile(zip_data):
-                with zipfile.ZipFile(zip_data, 'r') as inner_zip:
-                    file_list = inner_zip.namelist()
-
-        name_ext = {file: file.split('.')[-1] for file in file_list}
+    name_ext = _get_all_name_ext(structure_check_results[0].submission.zip.path)  # Dict with file name and extension
 
     # Check each structure check
     for structure_check_result in structure_check_results:
-        extensions = [ext for (name, ext) in name_ext.items() if name.startswith(structure_check_result.structure_check.path)]
+        extensions = [
+            ext for (name, ext)
+            in name_ext.items()
+            if name.startswith(structure_check_result.structure_check.path)
+            and '/' not in name[len(structure_check_result.structure_check.path):]
+        ]
 
         structure_check_result.result = StateEnum.SUCCESS
 
@@ -53,3 +45,18 @@ def task_structure_check_start(structure_check_results: list[StructureCheckResul
         structure_check_result.save()
 
     return all_checks_passed
+
+
+def _get_all_name_ext(path: str) -> dict[str, str]:
+    # Get all files inside the zip
+    with zipfile.ZipFile(path, 'r') as zip:
+        file_list = zip.namelist()
+
+        if len(file_list) == 1:
+            # There's a chance that we zipped a submitted zip file
+            zip_data = BytesIO(zip.read(file_list[0]))
+            if zipfile.is_zipfile(zip_data):
+                with zipfile.ZipFile(zip_data, 'r') as inner_zip:
+                    file_list = inner_zip.namelist()
+
+    return {file: file.split('.')[-1] for file in file_list}
