@@ -135,7 +135,7 @@
             },
             "share": {
                 "title": "Activeer invitatielink",
-                "duration": "Geldigheidsduur link (in dagen):",
+                "duration": "Geldigheidsduur van link (in dagen):",
                 "link": "Invitatielink:"
             }
       }

@@ -138,7 +138,7 @@
             },
             "share": {
                 "title": "Activate invitation link",
-                "duration": "Validity period link (in days):",
+                "duration": "Validity period of link (in days):",
                 "link": "Invitation link:"
             }
         }
