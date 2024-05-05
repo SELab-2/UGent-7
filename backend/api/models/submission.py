@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from api.logic.get_file_path import (get_extra_check_result_file_path,
+from api.logic.get_file_path import (get_extra_check_log_file_path,
                                      get_submission_file_path)
 from api.models.checks import ExtraCheck, StructureCheck
 from api.models.group import Group
@@ -46,6 +46,8 @@ class Submission(models.Model):
         blank=True,
         null=True
     )
+
+    running_checks = False
 
     class Meta:  # type: ignore
         # A group can only have one submission with a specific number
@@ -130,7 +132,7 @@ class ExtraCheckResult(CheckResult):
 
     # File path for the log file of the extra checks
     log_file = models.FileField(
-        upload_to=get_extra_check_result_file_path,
+        upload_to=get_extra_check_log_file_path,
         max_length=256,
         blank=False,
         null=True

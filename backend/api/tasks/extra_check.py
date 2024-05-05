@@ -1,3 +1,6 @@
+import shutil
+import zipfile
+from time import sleep
 from typing import cast
 
 import docker
@@ -22,11 +25,7 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
         extra_check_result.error_message = ErrorMessageEnum.FAILED_STRUCTURE_CHECK
         extra_check_result.save()
 
-        return False
-
-    # Start the process
-    extra_check_result.result = StateEnum.RUNNING
-    extra_check_result.save()
+        return structure_check_result
 
     # Check if the docker image is ready
     if extra_check_result.extra_check.docker_image.state != DockerStateEnum.READY:
@@ -34,15 +33,33 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
         extra_check_result.error_message = ErrorMessageEnum.DOCKER_IMAGE_ERROR
         extra_check_result.save()
 
-        return True
+        return structure_check_result
+
+    # Will probably never happen but doesn't hurt to check
+    while extra_check_result.submission.running_checks:
+        sleep(1)
+
+    # Lock
+    extra_check_result.submission.running_checks = True
+
+    # Start the process
+    extra_check_result.result = StateEnum.RUNNING
+    extra_check_result.save()
+
+    submission_directory = "/".join(extra_check_result.submission.zip.path.split("/")
+                                    [:-1]) + "/submission/"  # Directory where the files will be extracted
+    extra_check_name = extra_check_result.extra_check.file.name.split("/")[-1]  # Name of the extra check file
+    submission_uuid = extra_check_result.submission.zip.path.split("/")[-2]  # Uuid of the submission
+
+    # Unzip the files
+    with zipfile.ZipFile(extra_check_result.submission.zip.path, 'r') as zip:
+        zip.extractall(submission_directory)
 
     container: Container | None = None
 
     try:
         # Get docker client
         client: docker.DockerClient = docker.from_env()
-        # Get the name of the extra check file
-        extra_check_name = extra_check_result.extra_check.file.name.split("/")[-1]
 
         # Create and run container
         container = cast(Container, client.containers.run(
@@ -56,7 +73,7 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             stdout=True,
             stderr=True,
             volumes={
-                get_submission_full_dir_path(extra_check_result.submission): {
+                get_submission_full_dir_path(extra_check_result.submission, submission_uuid): {
                     "bind": "/submission", "mode": "rw"
                 },
                 get_extra_check_file_full_path(extra_check_result.extra_check, extra_check_name): {
@@ -133,7 +150,16 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             except docker.errors.APIError:
                 pass
 
-        extra_check_result.log_file.save("logs.txt", content=ContentFile(logs), save=False)
+        extra_check_result.log_file.save(submission_uuid, content=ContentFile(logs), save=False)
         extra_check_result.save()
+
+    # Remove directory
+    try:
+        shutil.rmtree(submission_directory)
+    except Exception:
+        pass
+
+    # Release
+    extra_check_result.submission.running_checks = False
 
     return True

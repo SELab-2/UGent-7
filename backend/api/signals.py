@@ -72,7 +72,7 @@ def _run_extra_checks(submission: Submission, **_):
     extra_check_results = get_extra_check_results(submission)
 
     for extra_check_result in extra_check_results:
-        task_extra_check_start.apply_async((extra_check_result,))
+        task_extra_check_start.apply_async((True, extra_check_result,))
 
 
 # Hooks

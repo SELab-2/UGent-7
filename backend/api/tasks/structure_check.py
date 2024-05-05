@@ -1,5 +1,6 @@
 import zipfile
 from io import BytesIO
+from time import sleep
 
 from api.models.submission import (ErrorMessageEnum, StateEnum,
                                    StructureCheckResult)
@@ -8,6 +9,16 @@ from celery import shared_task
 
 @shared_task()
 def task_structure_check_start(structure_check_results: list[StructureCheckResult]):
+    if len(structure_check_results) == 0:
+        return True
+
+    # Will probably never happen but doesn't hurt to check
+    while structure_check_results[0].submission.running_checks:
+        sleep(1)
+
+    # Lock
+    structure_check_results[0].submission.running_checks = True
+
     all_checks_passed = True  # Boolean to check if all structure checks passed
     name_ext = _get_all_name_ext(structure_check_results[0].submission.zip.path)  # Dict with file name and extension
 
@@ -43,6 +54,9 @@ def task_structure_check_start(structure_check_results: list[StructureCheckResul
 
         all_checks_passed = all_checks_passed and structure_check_result.result == StateEnum.SUCCESS
         structure_check_result.save()
+
+    # Release
+    structure_check_results[0].submission.running_checks = False
 
     return all_checks_passed
 
