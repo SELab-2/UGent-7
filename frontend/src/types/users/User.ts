@@ -1,6 +1,6 @@
 import { type Faculty } from '../Faculty.ts';
 
-export const roles = ['user', 'student', 'assistant', 'teacher'] as const;
+export const roles: string[] = ['user', 'student', 'assistant', 'teacher'];
 export type Role = (typeof roles)[number];
 
 export class User {
