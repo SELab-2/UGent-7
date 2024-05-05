@@ -1,13 +1,10 @@
 import json
 from datetime import timedelta
 
-from api.models.course import Course
-from api.models.group import Group
 from api.models.project import Project
-from api.models.submission import Submission, SubmissionFile
+from api.models.submission import Submission
 from api.tests.helpers import create_course, create_group, create_project
 from authentication.models import User
-from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.utils import timezone
@@ -32,9 +29,9 @@ def create_submission(group, submission_number):
     )
 
 
-def create_submission_file(submission, file):
-    """Create an SubmissionFile with the given arguments."""
-    return SubmissionFile.objects.create(submission=submission, file=file)
+# def create_submission_file(submission, file):
+#     """Create an SubmissionFile with the given arguments."""
+#     return SubmissionFile.objects.create(submission=submission, file=file)
 
 
 class SubmissionModelTests(APITestCase):
