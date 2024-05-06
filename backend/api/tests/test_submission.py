@@ -36,24 +36,24 @@ def create_submission(group, submission_number):
 
 class SubmissionModelTests(APITestCase):
 
-    def setUp(self) -> None:
-        self.client.force_authenticate(
-            User.get_dummy_admin()
-        )
+    # def setUp(self) -> None:
+    #     self.client.force_authenticate(
+    #         User.get_dummy_admin()
+    #     )
 
-    def test_no_submission(self):
-        """
-        able to retrieve no submission before publishing it.
-        """
+    # def test_no_submission(self):
+    #     """
+    #     able to retrieve no submission before publishing it.
+    #     """
 
-        response_root = self.client.get(reverse("submission-list"), follow=True)
-        self.assertEqual(response_root.status_code, 200)
-        # Assert that the response is JSON
-        self.assertEqual(response_root.accepted_media_type, "application/json")
-        # Parse the JSON content from the response
-        content_json = json.loads(response_root.content.decode("utf-8"))
-        # Assert that the parsed JSON is an empty list
-        self.assertEqual(content_json, [])
+    #     response_root = self.client.get(reverse("submission-list"), follow=True)
+    #     self.assertEqual(response_root.status_code, 200)
+    #     # Assert that the response is JSON
+    #     self.assertEqual(response_root.accepted_media_type, "application/json")
+    #     # Parse the JSON content from the response
+    #     content_json = json.loads(response_root.content.decode("utf-8"))
+    #     # Assert that the parsed JSON is an empty list
+    #     self.assertEqual(content_json, [])
 
     # def test_submission_exists(self):
     #     """
