@@ -1,5 +1,5 @@
-from django.db import models
 from authentication.models import User
+from django.db import models
 
 
 class RoleMixin(models.Model):
@@ -9,7 +9,7 @@ class RoleMixin(models.Model):
     )
 
     @classmethod
-    def create(cls, user: User, **attributes) -> None:
+    def create(cls, user: User, **attributes):
         """Create a model role for the given user"""
         model = cls.objects.filter(id=user.id).first()
 

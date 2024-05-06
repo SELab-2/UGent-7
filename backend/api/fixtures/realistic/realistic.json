@@ -1,0 +1,192 @@
+[
+  {
+    "model": "api.dockerimage",
+    "pk": 0,
+    "fields":
+      {
+        "name": "miss.jpeg",
+        "file": "/now/move",
+        "owner": "0",
+        "public": true
+      }
+  },
+  {
+    "model": "api.course",
+    "pk": 0,
+    "fields":
+    {
+      "name": "Front-line even-keeled concept",
+      "academic_startyear": 2023,
+      "excerpt": "Guess shoulder step training everyone.",
+      "description": "Because eye push it knowledge. Environmental room north area sport beat.",
+      "faculty": "Letteren_Wijsbegeerte",
+      "parent_course": null
+    }
+  },
+  {
+    "model": "api.teacher",
+    "pk": "0",
+    "fields":
+    {
+      "is_active": true,
+      "courses": [0]
+    }
+  },
+  {
+    "model": "api.project",
+    "pk": 0,
+    "fields":
+    {
+      "name": "Intuitive bi-directional knowledgebase",
+      "description": "Activity word film including its. Gun its carry future. Recently fact trouble civil and firm.",
+      "visible": true,
+      "archived": false,
+      "locked_groups": false,
+      "start_date": "2024-05-07T08:35:49.346Z",
+      "deadline": "2024-06-15T08:35:49.346Z",
+      "max_score": 100,
+      "score_visible": false,
+      "group_size": 5,
+      "course": 0
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "1",
+    "fields":
+    {
+      "is_active": true,
+      "student_id": "1",
+      "courses": [0]
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "2",
+    "fields":
+    {
+      "is_active": true,
+      "student_id": "2",
+      "courses": [0]
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "3",
+    "fields":
+    {
+      "is_active": true,
+      "student_id": "3",
+      "courses": [0]
+    }
+  },
+  {
+    "model": "api.student",
+    "pk": "4",
+    "fields":
+    {
+      "is_active": true,
+      "student_id": "4",
+      "courses": [0]
+    }
+  },
+  {
+    "model": "api.group",
+    "pk": 0,
+    "fields":
+    {
+      "project": 0,
+      "score": 0.0,
+      "students": ["1", "2", "3", "4"]
+    }
+  },
+  {
+    "model": "api.submission",
+    "pk": 1,
+    "fields":
+    {
+      "group": 0,
+      "submission_number": 6,
+      "submission_time": "2024-04-15T00:00:00Z",
+      "is_valid": true
+    }
+  },
+  {
+    "model": "api.submission",
+    "pk": 0,
+    "fields":
+    {
+      "group": 0,
+      "submission_number": 5,
+      "submission_time": "2024-04-15T00:00:00Z",
+      "is_valid": true
+    }
+  },
+  {
+    "model": "api.fileextension",
+    "pk": 0,
+    "fields":
+    {
+      "extension": "pdf"
+    }
+  },
+  {
+    "model": "api.fileextension",
+    "pk": 1,
+    "fields":
+    {
+      "extension": "txt"
+    }
+  },
+  {
+    "model": "api.structurecheck",
+    "pk": 0,
+    "fields":
+    {
+      "path": "/effect/morning/back/reality",
+      "project": 0,
+      "obligated_extensions": [0],
+      "blocked_extensions": [1]
+    }
+  },
+  {
+    "model": "api.checkresult",
+    "pk": 0,
+    "fields":
+    {
+      "polymorphic_ctype": 19,
+      "submission": 0,
+      "result": "SUCCESS",
+      "error_message": null
+    }
+  },
+  {
+    "model": "api.structurecheckresult",
+    "pk": 0,
+    "fields":
+    {
+      "structure_check": 0
+    }
+  },
+  {
+    "model": "api.extracheck",
+    "pk": 0,
+    "fields":
+    {
+      "docker_image": 0,
+      "project": 0,
+      "file": "/now/move"
+    }
+  },
+  {
+    "model": "api.extracheckresult",
+    "pk": 0,
+    "fields":
+    {
+      "submission": 1,
+      "extra_check": 0,
+      "result": "SUCCESS",
+      "error_message": null
+    }
+  }
+]

@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.viewsets import ViewSet
 
 
-class ExtraCheckPermission(BasePermission):
+class CheckPermission(BasePermission):
     def has_permission(self, request: Request, view: ViewSet):
         user: User = request.user
 

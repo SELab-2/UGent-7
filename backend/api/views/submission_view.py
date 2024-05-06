@@ -1,15 +1,11 @@
 from rest_framework import viewsets
+from rest_framework.mixins import RetrieveModelMixin
 
-from ..models.submission import Submission, SubmissionFile
-from ..serializers.submission_serializer import (SubmissionFileSerializer,
-                                                 SubmissionSerializer)
-
-
-class SubmissionFileViewSet(viewsets.ModelViewSet):
-    queryset = SubmissionFile.objects.all()
-    serializer_class = SubmissionFileSerializer
+from ..models.submission import Submission
+from ..serializers.submission_serializer import SubmissionSerializer
 
 
-class SubmissionViewSet(viewsets.ModelViewSet):
+# TODO: Permission to ask for logs
+class SubmissionViewSet(RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer

@@ -1,7 +1,7 @@
-from django.db import models
-from authentication.models import User
 from api.models.course import Course
 from api.models.mixins.role import RoleMixin
+from authentication.models import User
+from django.db import models
 
 
 class Assistant(RoleMixin, User):

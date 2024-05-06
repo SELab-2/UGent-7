@@ -1,18 +1,18 @@
-from django.db.models.functions import Concat
-from django.db.models import Value, Q
 from api.permissions.notification_permissions import NotificationPermission
 from api.permissions.role_permissions import IsSameUser, IsTeacher
 from api.views.pagination.basic_pagination import BasicPagination
 from authentication.models import User
 from authentication.serializers import UserSerializer
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
 from notifications.models import Notification
 from notifications.serializers import NotificationSerializer
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.permissions import IsAdminUser
 
 
 class UserViewSet(ReadOnlyModelViewSet):
@@ -26,7 +26,7 @@ class UserViewSet(ReadOnlyModelViewSet):
         Update the user's admin status with is_staff in request query parameters
         """
         # request.data needs to contain user id in 'user' field
-        if request.data.get("is_staff"):
+        if request.data.get("is_staff"):  # type: ignore
             self.get_object().make_admin()
         else:
             self.get_object().remove_admin()
@@ -47,10 +47,10 @@ class UserViewSet(ReadOnlyModelViewSet):
         queryset = self.get_queryset().annotate(
             full_name=Concat('first_name', Value(' '), 'last_name')
         ).filter(
-            Q(id__icontains=search) |
-            Q(username__icontains=search) |
-            Q(email__icontains=search) |
-            Q(full_name__icontains=search)
+            Q(id__icontains=search)
+            | Q(username__icontains=search)
+            | Q(email__icontains=search)
+            | Q(full_name__icontains=search)
         )
 
         # Filter the queryset based on selected roles

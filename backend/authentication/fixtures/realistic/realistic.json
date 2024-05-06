@@ -1,0 +1,109 @@
+[
+  {
+    "model": "authentication.user",
+    "pk": "0",
+    "fields":
+    {
+      "last_login": "2024-04-28T13:40:08.657Z",
+      "username": "SteffiUrlus", "is_staff": true,
+      "email": "SteffiUrlus@ugent.be",
+      "first_name": "Steffi",
+      "last_name": "Urlus",
+      "last_enrolled": 2024,
+      "create_time": "2024-04-28T13:40:08.657Z",
+      "faculties": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": "1",
+    "fields": {
+      "last_login": "2024-04-28T13:40:08.657Z",
+      "username": "DriesSnellings",
+      "is_staff": false,
+      "email": "DriesSnellings@ugent.be",
+      "first_name": "Dries",
+      "last_name": "Snellings",
+      "last_enrolled": 2024,
+      "create_time": "2024-04-28T13:40:08.657Z",
+      "faculties": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": "2",
+    "fields": {
+      "last_login": "2024-04-28T13:40:08.657Z",
+      "username": "SiebeTernest",
+      "is_staff": false,
+      "email": "SiebeTernest@ugent.be",
+      "first_name": "Siebe",
+      "last_name": "Ternest",
+      "last_enrolled": 2024,
+      "create_time": "2024-04-28T13:40:08.657Z",
+      "faculties": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": "3",
+    "fields": {
+      "last_login": "2024-04-28T13:40:08.657Z",
+      "username": "FilMartens",
+      "is_staff": true,
+      "email": "FilMartens@ugent.be",
+      "first_name": "Fil",
+      "last_name": "Martens",
+      "last_enrolled": 2024,
+      "create_time": "2024-04-28T13:40:08.657Z",
+      "faculties": []
+    }
+  },
+  {
+    "model": "authentication.user",
+    "pk": "4",
+    "fields": {
+      "last_login": "2024-04-28T13:40:08.657Z",
+      "username": "JonathanVerheyen",
+      "is_staff": false,
+      "email": "JonathanVerheyen@ugent.be",
+      "first_name": "Jonathan",
+      "last_name": "Verheyen",
+      "last_enrolled": 2024,
+      "create_time": "2024-04-28T13:40:08.657Z",
+      "faculties": []
+    }
+  },
+  {
+    "model": "authentication.faculty",
+    "pk": "Bio-ingenieurswetenschappen",
+    "fields":
+    {
+      "name": "faculties.bioscience_engineering"
+    }
+  },
+  {
+    "model": "authentication.faculty",
+    "pk": "Diergeneeskunde",
+    "fields":
+    {
+      "name": "faculties.veterinary_medicine"
+    }
+  },
+  {
+    "model": "authentication.faculty",
+    "pk": "Economie_Bedrijfskunde",
+    "fields":
+    {
+      "name": "faculties.economics_business_administration"
+    }
+  },
+  {
+    "model": "authentication.faculty",
+    "pk": "Farmaceutische_Wetenschappen",
+    "fields":
+    {
+      "name": "faculties.pharmaceutical_sciences"
+    }
+  }, {"model": "authentication.faculty", "pk": "Geneeskunde_Gezondheidswetenschappen", "fields": {"name": "faculties.medicine_health_sciences"}}, {"model": "authentication.faculty", "pk": "Ingenieurswetenschappen_Architectuur", "fields": {"name": "faculties.engineering_architecture"}}, {"model": "authentication.faculty", "pk": "Letteren_Wijsbegeerte", "fields": {"name": "faculties.arts_philosophy"}}, {"model": "authentication.faculty", "pk": "Politieke_Sociale_Wetenschappen", "fields": {"name": "faculties.political_social_sciences"}}, {"model": "authentication.faculty", "pk": "Psychologie_PedagogischeWetenschappen", "fields": {"name": "faculties.psychology_educational_sciences"}}, {"model": "authentication.faculty", "pk": "Recht_Criminologie", "fields": {"name": "faculties.law_criminology"}}, {"model": "authentication.faculty", "pk": "Wetenschappen", "fields": {"name": "faculties.sciences"}}
+]

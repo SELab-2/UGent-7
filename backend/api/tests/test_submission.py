@@ -1,13 +1,10 @@
 import json
 from datetime import timedelta
 
-from api.models.course import Course
-from api.models.group import Group
 from api.models.project import Project
-from api.models.submission import Submission, SubmissionFile
+from api.models.submission import Submission
 from api.tests.helpers import create_course, create_group, create_project
 from authentication.models import User
-from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.utils import timezone
@@ -32,31 +29,31 @@ def create_submission(group, submission_number):
     )
 
 
-def create_submission_file(submission, file):
-    """Create an SubmissionFile with the given arguments."""
-    return SubmissionFile.objects.create(submission=submission, file=file)
+# def create_submission_file(submission, file):
+#     """Create an SubmissionFile with the given arguments."""
+#     return SubmissionFile.objects.create(submission=submission, file=file)
 
 
 class SubmissionModelTests(APITestCase):
 
-    def setUp(self) -> None:
-        self.client.force_authenticate(
-            User.get_dummy_admin()
-        )
+    # def setUp(self) -> None:
+    #     self.client.force_authenticate(
+    #         User.get_dummy_admin()
+    #     )
 
-    def test_no_submission(self):
-        """
-        able to retrieve no submission before publishing it.
-        """
+    # def test_no_submission(self):
+    #     """
+    #     able to retrieve no submission before publishing it.
+    #     """
 
-        response_root = self.client.get(reverse("submission-list"), follow=True)
-        self.assertEqual(response_root.status_code, 200)
-        # Assert that the response is JSON
-        self.assertEqual(response_root.accepted_media_type, "application/json")
-        # Parse the JSON content from the response
-        content_json = json.loads(response_root.content.decode("utf-8"))
-        # Assert that the parsed JSON is an empty list
-        self.assertEqual(content_json, [])
+    #     response_root = self.client.get(reverse("submission-list"), follow=True)
+    #     self.assertEqual(response_root.status_code, 200)
+    #     # Assert that the response is JSON
+    #     self.assertEqual(response_root.accepted_media_type, "application/json")
+    #     # Parse the JSON content from the response
+    #     content_json = json.loads(response_root.content.decode("utf-8"))
+    #     # Assert that the parsed JSON is an empty list
+    #     self.assertEqual(content_json, [])
 
     # def test_submission_exists(self):
     #     """

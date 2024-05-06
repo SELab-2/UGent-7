@@ -1,7 +1,7 @@
-from api.models.course import Course
 from api.models.assistant import Assistant
-from api.models.teacher import Teacher
+from api.models.course import Course
 from api.models.group import Group
+from api.models.teacher import Teacher
 from api.permissions.course_permissions import (CourseAssistantPermission,
                                                 CoursePermission,
                                                 CourseStudentPermission,
@@ -12,26 +12,25 @@ from api.serializers.assistant_serializer import (AssistantIDSerializer,
 from api.serializers.course_serializer import (CourseCloneSerializer,
                                                SaveInvitationLinkSerializer,
                                                CourseSerializer,
+                                               CreateCourseSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
                                                TeacherJoinSerializer,
-                                               TeacherLeaveSerializer,
-                                               CreateCourseSerializer)
+                                               TeacherLeaveSerializer)
 from api.serializers.project_serializer import (CreateProjectSerializer,
                                                 ProjectSerializer)
 from api.serializers.student_serializer import StudentSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
+from api.views.pagination.course_pagination import CoursePagination
 from authentication.serializers import UserIDSerializer
-from django.utils.translation import gettext
 from django.utils import timezone
+from django.utils.translation import gettext
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
-
-from api.views.pagination.course_pagination import CoursePagination
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -331,7 +330,6 @@ class CourseViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @projects.mapping.post
-    @projects.mapping.put
     @swagger_auto_schema(request_body=CreateProjectSerializer)
     def _add_project(self, request, **_):
         """Add a project to the course"""
