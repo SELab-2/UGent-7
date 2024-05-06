@@ -72,7 +72,7 @@ onMounted(async () => {
                     </IconField>
                 </AccordionTab>
                 <AccordionTab :header="t('views.courses.teachersAndAssistants.search.faculty')" v-if="faculties">
-                    <div v-for="faculty in faculties" :key="faculty.id" class="flex align-items-centFupder mb-2">
+                    <div v-for="faculty in faculties" :key="faculty.id" class="flex align-items-center mb-2">
                         <Checkbox
                             v-model="filter.faculties"
                             :inputId="faculty.id"

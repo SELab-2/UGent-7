@@ -2,7 +2,6 @@
 import Footer from '@/components/layout/Footer.vue';
 import Body from '@/components/layout/Body.vue';
 import AdminHeader from '@/components/layout/admin/AdminHeader.vue';
-import AdminSidebar from '@/components/layout/admin/AdminSidebar.vue';
 </script>
 
 <template>
@@ -11,12 +10,7 @@ import AdminSidebar from '@/components/layout/admin/AdminSidebar.vue';
 
         <Body id="body">
             <div class="grid">
-                <div class="w-3">
-                    <AdminSidebar />
-                </div>
-                <div class="w-9">
-                    <slot />
-                </div>
+                <slot />
             </div>
         </Body>
 

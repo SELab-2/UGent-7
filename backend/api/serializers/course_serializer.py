@@ -1,9 +1,11 @@
+import hashlib
 from nh3 import clean
 from datetime import timedelta
 from django.utils import timezone
 from django.utils.translation import gettext
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from api.permissions.role_permissions import is_teacher
 from api.serializers.student_serializer import StudentIDSerializer
 from api.serializers.teacher_serializer import TeacherIDSerializer
 from api.serializers.faculty_serializer import FacultySerializer
@@ -45,6 +47,18 @@ class CourseSerializer(serializers.ModelSerializer):
         attrs['description'] = clean(attrs['description'])
         return attrs
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # If you are a teacher, you can see the invitation link of the course
+        if is_teacher(self.context["request"].user):
+            # Teacher can only see the invitation link if they are part of the course
+            if instance.teachers.filter(id=self.context["request"].user.id).exists():
+                data["invitation_link"] = instance.invitation_link
+                data["invitation_link_expires"] = instance.invitation_link_expires
+
+        return data
+
     class Meta:
         model = Course
         fields = [
@@ -75,6 +89,10 @@ class CreateCourseSerializer(CourseSerializer):
 
         # Create the course
         course = super().create(validated_data)
+
+        # Compute the invitation link hash
+        course.invitation_link = hashlib.sha256(f'{course.id}{course.academic_startyear}'.encode()).hexdigest()
+        course.invitation_link_expires = timezone.now()
 
         # Link the faculty, if specified
         if faculty is not None:
@@ -109,15 +127,7 @@ class CourseCloneSerializer(serializers.Serializer):
 
 
 class SaveInvitationLinkSerializer(serializers.Serializer):
-    invitation_link = serializers.CharField(required=True)
     link_duration = serializers.IntegerField(required=True)
-
-    def validate(self, data):
-        # Check if there is no course with the same invitation link.
-        if Course.objects.filter(invitation_link=data["invitation_link"]).exists():
-            raise ValidationError(gettext("courses.error.invitation_link"))
-
-        return data
 
     def create(self, validated_data):
         # Save the invitation link and the expiration date.
@@ -126,9 +136,7 @@ class SaveInvitationLinkSerializer(serializers.Serializer):
 
         course: Course = self.context["course"]
 
-        course.invitation_link = validated_data["invitation_link"]
-
-        # Save the expiration date as the current date + the invite link expires parameter in days.
+        # Save the expiration date as the current date + the invite link duration parameter in days.
         course.invitation_link_expires = timezone.now() + timedelta(days=validated_data["link_duration"])
         course.save()
 

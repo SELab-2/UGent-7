@@ -13,6 +13,7 @@ export class Course {
         public academic_startyear: number,
         public private_course: boolean = false,
         public invitation_link: string | null = null,
+        public invitation_link_expires: Date | null = null,
         public parent_course: Course | null = null,
         public faculty: Faculty | null = null,
         public teachers: Teacher[] | null = null,
@@ -55,6 +56,7 @@ export class Course {
             course.academic_startyear,
             course.private_course,
             course.invitation_link,
+            course.invitation_link_expires,
             course.parent_course,
             faculty,
         );

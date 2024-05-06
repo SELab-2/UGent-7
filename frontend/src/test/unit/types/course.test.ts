@@ -16,6 +16,7 @@ describe('course type', () => {
         expect(course.academic_startyear).toBe(courseData.academic_startyear);
         expect(course.private_course).toBe(courseData.private_course);
         expect(course.invitation_link).toBe(courseData.invitation_link);
+        expect(course.invitation_link_expires).toBe(courseData.invitation_link_expires);
         expect(course.parent_course).toBe(courseData.parent_course);
         expect(course.faculty).toBe(courseData.faculty);
         expect(course.teachers).toStrictEqual(courseData.teachers);
