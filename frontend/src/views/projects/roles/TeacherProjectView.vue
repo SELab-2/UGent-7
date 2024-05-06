@@ -11,7 +11,6 @@ defineProps<{
     teacher: Teacher;
     project: Project | null;
 }>();
-
 </script>
 
 <template>
