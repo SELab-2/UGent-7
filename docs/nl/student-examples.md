@@ -1,6 +1,6 @@
-# Studenten help pagina
+# Student help pagina
 
-Deze pagina beschrijft hoe u als gebruiker met Ypovoli interageert.
+Deze pagina beschrijft hoe u als student met Ypovoli interageert.
 
 
 ## Login/Logout
