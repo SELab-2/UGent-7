@@ -67,6 +67,7 @@ export const courseData = {
     academic_startyear: 2024,
     private_course: false,
     invitation_link: null,
+    invitation_link_expires: null,
     parent_course: null,
     faculty: null,
     teachers: [],
