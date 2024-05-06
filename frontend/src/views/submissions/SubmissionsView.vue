@@ -32,6 +32,7 @@ onMounted(async () => {
 
 const onUpload = async (callback: () => void): Promise<void> => {
     if (group.value !== null) {
+        console.log(files.value)
         await createSubmission(files.value as File[], group.value.id);
         if (submission.value != null) {
             submissions.value = [...(submissions.value ?? []), submission.value];
@@ -61,9 +62,15 @@ function formatDate(deadline: Date): string {
         <div class="grid">
             <div class="col-8 md:col-6">
                 <div class="flex-column">
-                    <Title> {{ t(`views.submissions.title`) }}: {{ project ? project.name : 'Loading' }} </Title>
-                    <p v-if="course">{{ t(`views.submissions.course`) }}: {{ course.name }}</p>
-                    <p v-if="project?.deadline">Deadline: {{ project ? formatDate(project.deadline) : 'Loading' }}</p>
+                    <!-- Project info column -->
+                    <div>
+                        <Title> {{ t(`views.submissions.title`) }}: {{ project ? project.name : 'Loading' }} </Title>
+                        <p v-if="course">{{ t(`views.submissions.course`) }}: {{ course.name }}</p>
+                        <p v-if="project?.deadline">
+                            Deadline: {{ project ? formatDate(project.deadline) : 'Loading' }}
+                        </p>
+                    </div>
+                    <!-- Submission upload -->
                     <div class="py-2">
                         <h1 class="pb-2">
                             {{ t(`views.submissions.submit`) }}
@@ -113,6 +120,7 @@ function formatDate(deadline: Date): string {
                     </div>
                 </div>
             </div>
+            <!-- Overview of all given submissions -->
             <div class="col-5 col-offset-1">
                 <AllSubmission v-if="group && submissions" :group="group" :submissions="submissions"></AllSubmission>
             </div>
