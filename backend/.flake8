@@ -3,6 +3,7 @@
 # Ignore unused imports; W503 and W504 conflict with each-other
 ignore =    F401
             W504
+            W503
 
 max-line-length = 125
 
