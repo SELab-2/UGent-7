@@ -1,4 +1,3 @@
-
 import { describe, it } from 'vitest';
 /*
 import { Submission } from '@/types/submission/Submission.ts';
@@ -7,9 +6,7 @@ import { createSubmission } from './helper';
  */
 /* TODO change files to zip */
 describe('submission type', () => {
-    it('create instance of submission with correct properties', () => {
-
-    });
+    it('create instance of submission with correct properties', () => {});
 });
 /*
 describe('submission type', () => {
