@@ -10,8 +10,7 @@ if TYPE_CHECKING:
     from api.models.checks import ExtraCheck
     from api.models.docker import DockerImage
     from api.models.project import Project
-    from api.models.submission import (ExtraCheckResult, Submission,
-                                       SubmissionFile)
+    from api.models.submission import ExtraCheckResult, Submission
 
 
 def _get_uuid() -> str:
@@ -23,14 +22,14 @@ def _get_project_dir_path(instance: Project) -> str:
 
 
 # Absolute path starting from outside the container to the submission directory
-def get_submission_full_dir_path(instance: Submission) -> str:
+def get_submission_full_dir_path(instance: Submission, uuid: str) -> str:
     return (f"{ROOT_DIR}/{MEDIA_ROOT}/{_get_project_dir_path(instance.group.project)}"
-            f"submissions/{instance.group.id}/{instance.id}")
+            f"submissions/{instance.group.id}/{uuid}/submission/")
 
 
-def get_submission_file_path(instance: SubmissionFile, name: str) -> str:
-    return (f"{_get_project_dir_path(instance.submission.group.project)}"
-            f"submissions/{instance.submission.group.id}/{instance.submission.id}/{name}")
+def get_submission_file_path(instance: Submission, name: str) -> str:
+    return (f"{_get_project_dir_path(instance.group.project)}"
+            f"submissions/{instance.group.id}/{_get_uuid()}/{name}")
 
 
 # Absolute path starting from outside the container to the extra check file
@@ -42,9 +41,9 @@ def get_extra_check_file_path(instance: ExtraCheck, _: str) -> str:
     return f"{_get_project_dir_path(instance.project)}checks/{_get_uuid()}"
 
 
-def get_extra_check_result_file_path(instance: ExtraCheckResult, _: str) -> str:
+def get_extra_check_log_file_path(instance: ExtraCheckResult, uuid: str) -> str:
     return (f"{_get_project_dir_path(instance.submission.group.project)}"
-            f"submissions/{instance.submission.group.id}/{instance.submission.id}/{_get_uuid()}")
+            f"submissions/{instance.submission.group.id}/{uuid}/logs/{_get_uuid()}.txt")
 
 
 def get_docker_image_file_path(instance: DockerImage, _: str) -> str:

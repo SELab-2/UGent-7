@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('checkresult_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
                  parent_link=True, primary_key=True, serialize=False, to='api.checkresult')),
                 ('log_file', models.FileField(max_length=256, null=True,
-                 upload_to=api.logic.get_file_path.get_extra_check_result_file_path)),
+                 upload_to=api.logic.get_file_path.get_extra_check_log_file_path)),
                 ('extra_check', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='results', to='api.extracheck')),
             ],
             options={

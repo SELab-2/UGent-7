@@ -12,9 +12,8 @@ from api.seeders.seeder import (fillFaculties, seed_assistants, seed_courses,
                                 seed_docker_images, seed_extra_checks,
                                 seed_file_extensions, seed_groups,
                                 seed_projects, seed_structure_checks,
-                                seed_students, seed_submission_files,
-                                seed_submission_results, seed_submissions,
-                                seed_teachers)
+                                seed_students, seed_submission_results,
+                                seed_submissions, seed_teachers)
 from authentication.models import User
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -117,7 +116,6 @@ class Command(BaseCommand):
             amount_of_structure_checks = 2
             amount_of_extra_checks = 1
             amount_of_submissions = 10
-            amount_of_submission_files = 20
         elif size == "medium":
             amount_of_students = 5_000
             amount_of_assistants = 500
@@ -130,7 +128,6 @@ class Command(BaseCommand):
             amount_of_structure_checks = 250
             amount_of_extra_checks = 125
             amount_of_submissions = 500
-            amount_of_submission_files = 1_000
         elif size == "large":
             amount_of_students = 50_000
             amount_of_assistants = 5_000
@@ -143,7 +140,6 @@ class Command(BaseCommand):
             amount_of_structure_checks = 1_500
             amount_of_extra_checks = 750
             amount_of_submissions = 3_000
-            amount_of_submission_files = 6_000
         else:
             self.stdout.write(self.style.ERROR("give a size from small, medium or large!"))
             return
@@ -186,9 +182,6 @@ class Command(BaseCommand):
 
         # Seed submissions
         seed_submissions(faker(), amount_of_submissions)
-
-        # Seed submission files
-        seed_submission_files(faker(), amount_of_submission_files)
 
         # Seed submission results
         seed_submission_results(faker())

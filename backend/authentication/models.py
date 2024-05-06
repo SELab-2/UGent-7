@@ -1,9 +1,17 @@
 from datetime import MINYEAR
-from django.db import models
+from typing import TYPE_CHECKING
+
 from django.apps import apps
+from django.contrib.auth.models import AbstractBaseUser
+from django.db import models
+from django.db.models import (BooleanField, CharField, DateTimeField,
+                              EmailField, IntegerField)
 from django.utils.functional import cached_property
-from django.db.models import CharField, EmailField, IntegerField, DateTimeField, BooleanField, Model
-from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
+
+if TYPE_CHECKING:
+    from api.models.assistant import Assistant
+    from api.models.student import Student
+    from api.models.teacher import Teacher
 
 
 class User(AbstractBaseUser):
@@ -70,6 +78,11 @@ class User(AbstractBaseUser):
             email="nikkus@ypovoli.be",
             is_staff=True
         )
+
+    if TYPE_CHECKING:
+        assistant: Assistant
+        student: Student
+        teacher: Teacher
 
 
 class Faculty(models.Model):

@@ -1,3 +1,6 @@
+import shutil
+import zipfile
+from time import sleep
 from typing import cast
 
 import docker
@@ -15,10 +18,14 @@ from requests.exceptions import ConnectionError
 
 
 @shared_task
-def task_extra_check_start(extra_check_result: ExtraCheckResult):
-    # Start the process
-    extra_check_result.result = StateEnum.RUNNING
-    extra_check_result.save()
+def task_extra_check_start(structure_check_result: bool, extra_check_result: ExtraCheckResult):
+    # Check if the structure checks were succesful
+    if not structure_check_result:
+        extra_check_result.result = StateEnum.FAILED
+        extra_check_result.error_message = ErrorMessageEnum.FAILED_STRUCTURE_CHECK
+        extra_check_result.save()
+
+        return structure_check_result
 
     # Check if the docker image is ready
     if extra_check_result.extra_check.docker_image.state != DockerStateEnum.READY:
@@ -26,15 +33,33 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
         extra_check_result.error_message = ErrorMessageEnum.DOCKER_IMAGE_ERROR
         extra_check_result.save()
 
-        return
+        return structure_check_result
+
+    # Will probably never happen but doesn't hurt to check
+    while extra_check_result.submission.running_checks:
+        sleep(1)
+
+    # Lock
+    extra_check_result.submission.running_checks = True
+
+    # Start the process
+    extra_check_result.result = StateEnum.RUNNING
+    extra_check_result.save()
+
+    submission_directory = "/".join(extra_check_result.submission.zip.path.split("/")
+                                    [:-1]) + "/submission/"  # Directory where the files will be extracted
+    extra_check_name = extra_check_result.extra_check.file.name.split("/")[-1]  # Name of the extra check file
+    submission_uuid = extra_check_result.submission.zip.path.split("/")[-2]  # Uuid of the submission
+
+    # Unzip the files
+    with zipfile.ZipFile(extra_check_result.submission.zip.path, 'r') as zip:
+        zip.extractall(submission_directory)
 
     container: Container | None = None
 
     try:
         # Get docker client
         client: docker.DockerClient = docker.from_env()
-        # Get the name of the extra check file
-        extra_check_name = extra_check_result.extra_check.file.name.split("/")[-1]
 
         # Create and run container
         container = cast(Container, client.containers.run(
@@ -48,7 +73,7 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
             stdout=True,
             stderr=True,
             volumes={
-                get_submission_full_dir_path(extra_check_result.submission): {
+                get_submission_full_dir_path(extra_check_result.submission, submission_uuid): {
                     "bind": "/submission", "mode": "rw"
                 },
                 get_extra_check_file_full_path(extra_check_result.extra_check, extra_check_name): {
@@ -61,13 +86,39 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
         # Wait for container to finish
         container.wait(timeout=extra_check_result.extra_check.time_limit)
 
-        if client.api.inspect_container(container.id)["State"]["OOMKilled"]:
-            # Memory limit
+        # Check for possible (custom) error types / codes
+        container_info: dict = client.api.inspect_container(container.id)
+
+        # Memory limit
+        if container_info["State"]["OOMKilled"]:
             extra_check_result.result = StateEnum.FAILED
-            extra_check_result.error_message = ErrorMessageEnum.MEMORYLIMIT
-        else:
-            # Succes!
-            extra_check_result.result = StateEnum.SUCCESS
+            extra_check_result.error_message = ErrorMessageEnum.MEMORY_LIMIT
+
+        # Exit codes
+        match container_info["State"]["ExitCode"]:
+            # Success!
+            case 0:
+                extra_check_result.result = StateEnum.SUCCESS
+
+            # Custom check error
+            case 1:
+                extra_check_result.result = StateEnum.FAILED
+                extra_check_result.error_message = ErrorMessageEnum.CHECK_ERROR
+
+            # Time limit
+            case 2:
+                extra_check_result.result = StateEnum.FAILED
+                extra_check_result.error_message = ErrorMessageEnum.TIME_LIMIT
+
+            # Memory limit
+            case 3:
+                extra_check_result.result = StateEnum.FAILED
+                extra_check_result.error_message = ErrorMessageEnum.MEMORY_LIMIT
+
+            # Catch all non zero exit codes
+            case _:
+                extra_check_result.result = StateEnum.FAILED
+                extra_check_result.error_message = ErrorMessageEnum.RUNTIME_ERROR
 
     # Docker image error
     except (docker.errors.APIError, docker.errors.ImageNotFound):
@@ -77,12 +128,12 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
     # Runtime error
     except docker.errors.ContainerError:
         extra_check_result.result = StateEnum.FAILED
-        extra_check_result.error_message = ErrorMessageEnum.RUNTIMEERROR
+        extra_check_result.error_message = ErrorMessageEnum.RUNTIME_ERROR
 
     # Timeout error
     except ConnectionError:
         extra_check_result.result = StateEnum.FAILED
-        extra_check_result.error_message = ErrorMessageEnum.TIMELIMIT
+        extra_check_result.error_message = ErrorMessageEnum.TIME_LIMIT
 
     # Unknown error
     except Exception:
@@ -91,13 +142,24 @@ def task_extra_check_start(extra_check_result: ExtraCheckResult):
 
     # Cleanup and data saving
     finally:
+        logs: str = "Could not retrieve logs"
         if container:
-            logs = ""
             try:
-                logs = cast(str, container.logs(stream=False, timestamps=False).decode())
+                logs = container.logs(stream=False, timestamps=False).decode()
                 container.remove(v=False)
             except docker.errors.APIError:
-                logs = "Could not retrieve logs"
-            finally:
-                extra_check_result.log_file.save("logs.txt", content=ContentFile(logs), save=False)
+                pass
+
+        extra_check_result.log_file.save(submission_uuid, content=ContentFile(logs), save=False)
         extra_check_result.save()
+
+    # Remove directory
+    try:
+        shutil.rmtree(submission_directory)
+    except Exception:
+        pass
+
+    # Release
+    extra_check_result.submission.running_checks = False
+
+    return True

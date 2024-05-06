@@ -23,6 +23,7 @@ import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 import ProjectsView from '@/views/projects/ProjectsView.vue';
 import DockerImagesView from '@/views/admin/DockerImagesView.vue';
+import JoinCourseView from '@/views/courses/JoinCourseView.vue';
 
 const routes: RouteRecordRaw[] = [
     // Authentication
@@ -53,6 +54,10 @@ const routes: RouteRecordRaw[] = [
                 children: [
                     { path: '', component: CourseView, name: 'course' },
                     { path: 'edit', component: UpdateCourseView, name: 'course-edit' },
+                    {
+                        path: 'join',
+                        children: [{ path: ':invitationLink', component: JoinCourseView, name: 'course-join' }],
+                    },
                     // Projects
                     {
                         path: 'projects',

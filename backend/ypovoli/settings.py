@@ -15,7 +15,11 @@ from datetime import timedelta
 from os import environ
 from pathlib import Path
 
+import django_stubs_ext
 from django.utils.translation import gettext_lazy as _
+
+# Typings for Pylance in VSCode
+django_stubs_ext.monkeypatch()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

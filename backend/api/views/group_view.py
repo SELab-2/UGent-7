@@ -5,7 +5,6 @@ from api.permissions.group_permissions import (GroupPermission,
 from api.serializers.group_serializer import (GroupSerializer,
                                               StudentJoinGroupSerializer,
                                               StudentLeaveGroupSerializer)
-from api.serializers.project_serializer import SubmissionAddSerializer
 from api.serializers.student_serializer import StudentSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
 from django.utils.translation import gettext
@@ -97,13 +96,13 @@ class GroupViewSet(CreateModelMixin,
 
     @submissions.mapping.post
     @submissions.mapping.put
-    @swagger_auto_schema(request_body=SubmissionAddSerializer)
+    @swagger_auto_schema(request_body=SubmissionSerializer)
     def _add_submission(self, request: Request, **_):
         """Add a submission to the group"""
         group: Group = self.get_object()
 
         # Add submission to course
-        serializer = SubmissionAddSerializer(
+        serializer = SubmissionSerializer(
             data=request.data, context={"group": group, "request": request}
         )
 

@@ -1,6 +1,5 @@
-from api.models.checks import ExtraCheck, StructureCheck
+from api.models.checks import ExtraCheck, FileExtension, StructureCheck
 from api.models.docker import DockerImage
-from api.models.extension import FileExtension
 from api.models.project import Project
 from django.utils.translation import gettext as _
 from rest_framework import serializers
@@ -105,7 +104,7 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
         if "time_limit" in data and not 10 <= data["time_limit"] <= 1000:
             raise serializers.ValidationError(_("extra_check.error.time_limit"))
 
-        if "memory_limit" in data and not 100 <= data["memory_limit"] <= 1024:
+        if "memory_limit" in data and not 50 <= data["memory_limit"] <= 1024:
             raise serializers.ValidationError(_("extra_check.error.memory_limit"))
 
         return data

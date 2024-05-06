@@ -1,7 +1,6 @@
 from api.models.assistant import Assistant
-from api.models.checks import ExtraCheck, StructureCheck
+from api.models.checks import FileExtension, StructureCheck
 from api.models.course import Course
-from api.models.extension import FileExtension
 from api.models.group import Group
 from api.models.project import Project
 from api.models.student import Student

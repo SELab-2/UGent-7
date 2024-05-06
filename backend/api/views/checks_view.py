@@ -1,7 +1,4 @@
-import re
-
-from api.models.checks import ExtraCheck, StructureCheck
-from api.models.extension import FileExtension
+from api.models.checks import ExtraCheck, FileExtension, StructureCheck
 from api.permissions.check_permission import CheckPermission
 from api.serializers.checks_serializer import (ExtraCheckSerializer,
                                                FileExtensionSerializer,

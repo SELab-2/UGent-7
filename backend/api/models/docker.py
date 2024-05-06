@@ -16,7 +16,7 @@ class DockerImage(models.Model):
     Models that represents the different docker environments to run tests in
     """
 
-    # ID should be generated automatically
+    id = models.AutoField(auto_created=True, primary_key=True)
 
     # Name of the docker image
     name = models.CharField(

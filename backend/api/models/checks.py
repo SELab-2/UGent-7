@@ -1,18 +1,28 @@
 from api.logic.get_file_path import get_extra_check_file_path
 from api.models.docker import DockerImage
-from api.models.extension import FileExtension
 from api.models.project import Project
 from django.db import models
 
 
+class FileExtension(models.Model):
+    """Model that represents a file extension."""
+
+    id = models.AutoField(auto_created=True, primary_key=True)
+
+    extension = models.CharField(
+        max_length=10,
+        unique=True
+    )
+
 # TODO: Remove zip.* translations
-# TODO: How it the zip structure checked?
+
+
 class StructureCheck(models.Model):
     """Model that represents a structure check for a project.
        This means that the structure of a submission is checked.
        These checks are obligated to pass."""
 
-    # ID should be generated automatically
+    id = models.AutoField(auto_created=True, primary_key=True)
 
     # Path from the root of the project to the location where the structure check is run
     path = models.CharField(
@@ -42,14 +52,19 @@ class StructureCheck(models.Model):
         blank=True
     )
 
-    # ID check should be generated automatically
-
 
 class ExtraCheck(models.Model):
     """Model that represents an extra check for a project.
        These checks are not obligated to pass."""
 
-    # ID should be generated automatically
+    id = models.AutoField(auto_created=True, primary_key=True)
+
+    # Name of the extra check
+    name = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False
+    )
 
     # Name of the extra check
     name = models.CharField(

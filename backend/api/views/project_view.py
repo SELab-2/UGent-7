@@ -105,7 +105,6 @@ class ProjectViewSet(RetrieveModelMixin,
 
         project: Project = self.get_object()
 
-        print(request.data, flush=True)
         serializer = StructureCheckAddSerializer(
             data=request.data,
             context={

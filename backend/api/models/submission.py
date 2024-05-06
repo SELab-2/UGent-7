@@ -1,5 +1,6 @@
+from typing import TYPE_CHECKING
 
-from api.logic.get_file_path import (get_extra_check_result_file_path,
+from api.logic.get_file_path import (get_extra_check_log_file_path,
                                      get_submission_file_path)
 from api.models.checks import ExtraCheck, StructureCheck
 from api.models.group import Group
@@ -7,11 +8,14 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
 
+if TYPE_CHECKING:
+    from django.db.models.manager import RelatedManager
+
 
 class Submission(models.Model):
     """Model for submission of a project by a group of students."""
 
-    # Submission ID should be generated automatically
+    id = models.AutoField(auto_created=True, primary_key=True)
 
     group = models.ForeignKey(
         Group,
@@ -36,31 +40,21 @@ class Submission(models.Model):
         null=False
     )
 
-    class Meta:
+    zip = models.FileField(
+        upload_to=get_submission_file_path,
+        max_length=265,
+        blank=True,
+        null=True
+    )
+
+    running_checks = False
+
+    class Meta:  # type: ignore
         # A group can only have one submission with a specific number
         unique_together = ("group", "submission_number")
 
-
-class SubmissionFile(models.Model):
-    """Model for a file that is part of a submission."""
-
-    # File ID should be generated automatically
-
-    submission = models.ForeignKey(
-        Submission,
-        # If the submission is deleted, the file should be deleted as well
-        on_delete=models.CASCADE,
-        related_name="files",
-        blank=False,
-        null=False,
-    )
-
-    file = models.FileField(
-        upload_to=get_submission_file_path,
-        max_length=265,
-        blank=False,
-        null=False
-    )
+    if TYPE_CHECKING:
+        results: RelatedManager['CheckResult']
 
 
 class StateEnum(models.TextChoices):
@@ -74,18 +68,21 @@ class ErrorMessageEnum(models.TextChoices):
     # Structure checks errors
     BLOCKED_EXTENSION = "BLOCKED_EXTENSION", _("submission.error.blockedextension")
     OBLIGATED_EXTENSION_NOT_FOUND = "OBLIGATED_EXTENSION_NOT_FOUND", _("submission.error.obligatedextensionnotfound")
-    OBLIGATED_DIRECTORY_NOT_FOUND = "OBLIGATED_DIRECTORY_NOT_FOUND", _("submission.error.obligateddirectorynotfound")
-    UNASKED_DIRECTORY = "UNASKED_DIRECTORY", _("submission.error.unaskeddirectory")
+    FILE_DIR_NOT_FOUND = "FILE_DIR_NOT_FOUND", _("submission.error.filedirnotfound")
 
     # Extra checks errors
     DOCKER_IMAGE_ERROR = "DOCKER_IMAGE_ERROR", _("submission.error.dockerimageerror")
-    TIMELIMIT = "TIMELIMIT", _("submission.error.timelimit")
-    MEMORYLIMIT = "MEMORYLIMIT", _("submission.error.memorylimit")
-    RUNTIMEERROR = "RUNTIMEERROR", _("submission.error.runtimeerror")
+    TIME_LIMIT = "TIME_LIMIT", _("submission.error.timelimit")
+    MEMORY_LIMIT = "MEMORY_LIMIT", _("submission.error.memorylimit")
+    CHECK_ERROR = "CHECK_ERROR", _("submission.error.checkerror")
+    RUNTIME_ERROR = "RUNTIME_ERROR", _("submission.error.runtimeerror")
     UNKNOWN = "UNKNOWN", _("submission.error.unknown")
+    FAILED_STRUCTURE_CHECK = "FAILED_STRUCTURE_CHECK", _("submission.error.failedstructurecheck")
 
 
 class CheckResult(PolymorphicModel):
+
+    id = models.AutoField(auto_created=True, primary_key=True)
 
     submission = models.ForeignKey(
         Submission,
@@ -135,7 +132,7 @@ class ExtraCheckResult(CheckResult):
 
     # File path for the log file of the extra checks
     log_file = models.FileField(
-        upload_to=get_extra_check_result_file_path,
+        upload_to=get_extra_check_log_file_path,
         max_length=256,
         blank=False,
         null=True

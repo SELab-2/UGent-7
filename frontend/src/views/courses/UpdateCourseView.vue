@@ -74,10 +74,12 @@ const submitCourse = async (): Promise<void> => {
             new Course(
                 course.value.id,
                 form.name,
-                form.description,
                 form.excerpt,
+                form.description,
                 course.value.academic_startyear,
                 form.private,
+                course.value.invitation_link,
+                course.value.invitation_link_expires,
                 course.value.parent_course,
                 form.faculty,
             ),

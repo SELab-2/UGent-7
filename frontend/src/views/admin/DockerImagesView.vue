@@ -69,8 +69,8 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
         <Title>
             <div class="gap-3 mb-3">{{ t('admin.docker_images.title') }}</div>
         </Title>
-        <Body>
-            <SelectButton class="mb-3 gap-3" v-model="selected" :options="selectOptions.map(t)" />
+        <Body class="w-full">
+            <SelectButton class="mb-3 gap-3 w-3" v-model="selected" :options="selectOptions.map(t)" />
             <div v-if="selected === t(selectOptions[0])">
                 <LazyDataTable
                     :pagination="pagination"
