@@ -33,6 +33,7 @@ nh3 = "^0.2.17"
 coverage = "^7.4.4"
 django-types = "^0.19.1"
 django-stubs-ext = "^5.0.0"
+drf-typed = "^0.3.0"
 
 
 [build-system]

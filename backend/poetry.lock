@@ -657,6 +657,16 @@ ssh = ["paramiko (>=2.4.3)"]
 websockets = ["websocket-client (>=1.3.0)"]
 
 [[package]]
+name = "drf-typed"
+version = "0.3.0"
+description = "Use type annotations for request validation and serializer fields in Django REST Framework"
+optional = false
+python-versions = "*"
+files = [
+    {file = "drf-typed-0.3.0.tar.gz", hash = "sha256:a128e64dc66d4cc865324fd9bfeb88754ef8794d68bc43d6a2f123a4b1e0f97f"},
+]
+
+[[package]]
 name = "drf-yasg"
 version = "1.21.7"
 description = "Automated generation of real Swagger/OpenAPI 2.0 schemas from Django Rest Framework code."
@@ -1616,4 +1626,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11.4"
-content-hash = "431aa779fd16c25b346da54a346f0405e975071c11480a7a482327dae99a5f9a"
+content-hash = "eb154813d38b776ea62b72172e5127abd79f4006005d097421c14dfe40c557df"
