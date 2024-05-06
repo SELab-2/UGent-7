@@ -32,6 +32,7 @@ onMounted(async () => {
 
 const onUpload = async (callback: () => void): Promise<void> => {
     if (group.value !== null) {
+        console.log(files.value as File[])
         await createSubmission(files.value as File[], group.value.id);
         if (submission.value != null) {
             submissions.value = [...(submissions.value ?? []), submission.value];

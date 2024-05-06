@@ -4,31 +4,14 @@ import Skeleton from 'primevue/skeleton';
 import { type Teacher } from '@/types/users/Teacher.ts';
 import { type Project } from '@/types/Project.ts';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
-import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
-import { watch } from 'vue';
 import ProjectMeter from '@/components/projects/ProjectMeter.vue';
 
 /* Props */
-const props = defineProps<{
+defineProps<{
     teacher: Teacher;
     project: Project | null;
 }>();
 
-/* Composable injections */
-const { submissionStatus, getSubmissionStatusByProject } = useSubmissionStatus();
-
-/* Watchers */
-watch(
-    () => props.project,
-    () => {
-        if (props.project !== null) {
-            getSubmissionStatusByProject(props.project.id);
-        }
-    },
-    {
-        immediate: true,
-    },
-);
 </script>
 
 <template>
@@ -52,7 +35,7 @@ watch(
             </template>
         </div>
         <div class="col-12 md:col-4">
-            <ProjectMeter :submission-status="submissionStatus" />
+            <ProjectMeter :project="project" />
         </div>
     </div>
 </template>
