@@ -1,7 +1,7 @@
-from django.db import models
 from api.models.course import Course
 from api.models.mixins.role import RoleMixin
 from authentication.models import User
+from django.db import models
 
 
 class Teacher(RoleMixin, User):
@@ -25,9 +25,9 @@ class Teacher(RoleMixin, User):
 
 def make_teacher(user: User) -> Teacher:
     """Activates the Teacher role for the given user."""
-    teacher: Teacher = Teacher.objects.filter(id=user.id).first()
+    teacher = Teacher.objects.filter(id=user.id).first()
 
-    if teacher is not None:
+    if teacher:
         teacher.is_active = True
         teacher.save()
         return teacher

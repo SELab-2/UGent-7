@@ -4,18 +4,18 @@ from api.models.submission import Submission
 from api.permissions.project_permissions import (ProjectGroupPermission,
                                                  ProjectPermission)
 from api.serializers.checks_serializer import (ExtraCheckSerializer,
+                                               StructureCheckAddSerializer,
                                                StructureCheckSerializer)
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.project_serializer import (ProjectSerializer,
-                                                StructureCheckAddSerializer,
                                                 SubmissionStatusSerializer,
                                                 TeacherCreateGroupSerializer)
 from api.serializers.submission_serializer import SubmissionSerializer
 from django.utils.translation import gettext
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   RetrieveModelMixin, UpdateModelMixin)
+from rest_framework.mixins import (DestroyModelMixin, RetrieveModelMixin,
+                                   UpdateModelMixin)
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -23,8 +23,7 @@ from rest_framework.viewsets import GenericViewSet
 
 
 # TODO: Error message when creating a project with wrongly formatted date looks a bit weird
-class ProjectViewSet(CreateModelMixin,
-                     RetrieveModelMixin,
+class ProjectViewSet(RetrieveModelMixin,
                      UpdateModelMixin,
                      DestroyModelMixin,
                      GenericViewSet):
@@ -100,7 +99,6 @@ class ProjectViewSet(CreateModelMixin,
         return Response(serializer.data)
 
     @structure_checks.mapping.post
-    @structure_checks.mapping.put
     @swagger_auto_schema(request_body=StructureCheckAddSerializer)
     def _add_structure_check(self, request: Request, **_):
         """Add a structure_check to the project"""
@@ -112,15 +110,15 @@ class ProjectViewSet(CreateModelMixin,
             context={
                 "project": project,
                 "request": request,
+                "obligated": request.data.getlist('obligated_extensions') if "obligated_extensions" in request.data else [],
+                "blocked": request.data.getlist('blocked_extensions') if "blocked_extensions" in request.data else []
             }
         )
 
         if serializer.is_valid(raise_exception=True):
             serializer.save(project=project)
 
-        return Response({
-            "message": gettext("project.success.structure_check.add")
-        })
+        return Response(serializer.data)
 
     @action(detail=True, methods=["get"])
     def extra_checks(self, request, **_):
@@ -166,6 +164,14 @@ class ProjectViewSet(CreateModelMixin,
             - The amount of submissions that passed the basic tests
         """
         project = self.get_object()
-        serializer = SubmissionStatusSerializer(project)
+        non_empty_groups = project.groups.filter(students__isnull=False).count()
+        groups_submitted = Submission.objects.filter(group__project=project).count()
+        submissions_passed = Submission.objects.filter(group__project=project, is_valid=True).count()
+
+        serializer = SubmissionStatusSerializer({
+            "non_empty_groups": non_empty_groups,
+            "groups_submitted": groups_submitted,
+            "submissions_passed": submissions_passed,
+        })
 
         return Response(serializer.data)

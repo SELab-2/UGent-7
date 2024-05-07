@@ -1,16 +1,17 @@
 import hashlib
-from nh3 import clean
 from datetime import timedelta
-from django.utils import timezone
-from django.utils.translation import gettext
-from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+
+from api.models.course import Course
 from api.permissions.role_permissions import is_teacher
+from api.serializers.faculty_serializer import FacultySerializer
 from api.serializers.student_serializer import StudentIDSerializer
 from api.serializers.teacher_serializer import TeacherIDSerializer
-from api.serializers.faculty_serializer import FacultySerializer
-from api.models.course import Course
 from authentication.models import Faculty
+from django.utils import timezone
+from django.utils.translation import gettext
+from nh3 import clean
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -129,6 +130,13 @@ class CourseCloneSerializer(serializers.Serializer):
 class SaveInvitationLinkSerializer(serializers.Serializer):
     link_duration = serializers.IntegerField(required=True)
 
+    def validate(self, attrs):
+        # Check if there is no course with the same invitation link.
+        if Course.objects.filter(invitation_link=attrs["invitation_link"]).exists():
+            raise ValidationError(gettext("courses.error.invitation_link"))
+
+        return attrs
+
     def create(self, validated_data):
         # Save the invitation link and the expiration date.
         if "course" not in self.context:
@@ -144,7 +152,7 @@ class SaveInvitationLinkSerializer(serializers.Serializer):
 
 
 class StudentJoinSerializer(StudentIDSerializer):
-    def validate(self, data):
+    def validate(self, attrs):
         # The validator needs the course context.
         if "course" not in self.context:
             raise ValidationError(gettext("courses.error.context"))
@@ -152,18 +160,18 @@ class StudentJoinSerializer(StudentIDSerializer):
         course: Course = self.context["course"]
 
         # Check if the student isn't already enrolled.
-        if course.students.contains(data["student"]):
+        if course.students.contains(attrs["student"]):
             raise ValidationError(gettext("courses.error.students.already_present"))
 
         # Check if the course is not from a past academic year.
         if course.is_past():
             raise ValidationError(gettext("courses.error.past_course"))
 
-        return data
+        return attrs
 
 
 class StudentLeaveSerializer(StudentIDSerializer):
-    def validate(self, data):
+    def validate(self, attrs):
         # The validator needs the course context.
         if "course" not in self.context:
             raise ValidationError(gettext("courses.error.context"))
@@ -171,18 +179,18 @@ class StudentLeaveSerializer(StudentIDSerializer):
         course: Course = self.context["course"]
 
         # Make sure the student is enrolled.
-        if not course.students.contains(data["student"]):
+        if not course.students.contains(attrs["student"]):
             raise ValidationError(gettext("courses.error.students.not_present"))
 
         # Check if the course is not from a past academic year.
         if course.is_past():
             raise ValidationError(gettext("courses.error.past_course"))
 
-        return data
+        return attrs
 
 
 class TeacherJoinSerializer(TeacherIDSerializer):
-    def validate(self, data):
+    def validate(self, attrs):
         # The validator needs the course context.
         if "course" not in self.context:
             raise ValidationError(gettext("courses.error.context"))
@@ -190,18 +198,18 @@ class TeacherJoinSerializer(TeacherIDSerializer):
         course: Course = self.context["course"]
 
         # Check if the teacher isn't already enrolled.
-        if course.teachers.contains(data["teacher"]):
+        if course.teachers.contains(attrs["teacher"]):
             raise ValidationError(gettext("courses.error.teachers.already_present"))
 
         # Check if the course is not from a past academic year.
         if course.is_past():
             raise ValidationError(gettext("courses.error.past_course"))
 
-        return data
+        return attrs
 
 
 class TeacherLeaveSerializer(TeacherIDSerializer):
-    def validate(self, data):
+    def validate(self, attrs):
         # The validator needs the course context.
         if "course" not in self.context:
             raise ValidationError(gettext("courses.error.context"))
@@ -209,7 +217,7 @@ class TeacherLeaveSerializer(TeacherIDSerializer):
         course: Course = self.context["course"]
 
         # Make sure the teacher is enrolled.
-        if not course.teachers.contains(data["teacher"]):
+        if not course.teachers.contains(attrs["teacher"]):
             raise ValidationError(gettext("courses.error.teachers.not_present"))
 
         # Check if the course is not from a past academic year.
@@ -220,4 +228,4 @@ class TeacherLeaveSerializer(TeacherIDSerializer):
         if course.teachers.count() == 1:
             raise ValidationError(gettext("courses.error.teachers.last_teacher"))
 
-        return data
+        return attrs

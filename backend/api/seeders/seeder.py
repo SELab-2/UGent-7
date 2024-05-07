@@ -1,6 +1,7 @@
 from functools import wraps
 from random import choice, randint, sample
 from time import time
+from typing import Literal
 
 from api.models.submission import StructureCheckResult
 from api.models.submission import ExtraCheckResult
@@ -183,13 +184,15 @@ def seed_courses(faker,
                 faker.paragraph(),
                 timezone.now().year + faker.random_int(min=year_dev_min, max=year_dev_max),
                 choice(faculties),
-                faker.sentence()
+                faker.sentence(),
+                faker.pybool()
             ] for _ in range(count)
         ]
 
         # Insert courses
         cursor.executemany(
-            "INSERT INTO api_course(name, description, academic_startyear, faculty_id, excerpt) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO api_course(name, description, academic_startyear, faculty_id, excerpt, private_course) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
             courses
         )
 
@@ -387,18 +390,21 @@ def seed_docker_images(faker, count: int = 50):
             cursor.execute(sql="SELECT id FROM authentication_user").fetchall()
         )
 
+        states = ["QUEUED", "BUILDING", "SUCCESS", "FAILED"]
+
         docker_images = [
             [
                 faker.file_name(category="image"),
                 faker.file_path(extension="", depth=faker.random_int(min=0, max=5)),
                 choice(users)[0],
-                True
+                True,
+                choice(states)[0]
             ]
             for _ in range(count)
         ]
 
         cursor.executemany(
-            "INSERT INTO api_dockerimage(name, file, owner_id, public) VALUES (?, ?, ?, ?)",
+            "INSERT INTO api_dockerimage(name, file, owner_id, public, state) VALUES (?, ?, ?, ?, ?)",
             docker_images
         )
 
@@ -437,7 +443,7 @@ def seed_structure_checks(faker, count: int = 1_500):
                 blocked_extensions.append([project, extension])
 
         cursor.executemany(
-            "INSERT INTO api_structurecheck(id, name, project_id) VALUES (?, ?, ?)",
+            "INSERT INTO api_structurecheck(id, path, project_id) VALUES (?, ?, ?)",
             structure_checks
         )
         cursor.executemany(
@@ -465,16 +471,19 @@ def seed_extra_checks(faker, count: int = 750):
         extra_checks = [
             [
                 choice(projects)[0],
+                faker.word(),
                 faker.boolean(chance_of_getting_true=50),
                 choice(docker_images)[0],
                 faker.file_path(extension="", depth=faker.random_int(min=0, max=5)),
-                faker.pyint(min_value=100, max_value=1000),
+                faker.pyint(min_value=10, max_value=1000),
+                faker.pyint(min_value=50, max_value=1024),
             ]
             for _ in range(count)
         ]
 
         cursor.executemany(
-            "INSERT INTO api_extracheck(project_id, show_log, docker_image_id, file, timeout) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO api_extracheck(project_id, name, show_log, docker_image_id, file, time_limit, memory_limit) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
             extra_checks
         )
 
@@ -493,36 +502,16 @@ def seed_submissions(faker, count: int = 4_000):
             [
                 faker.date_this_month(),
                 choice(groups),
-                faker.boolean(chance_of_getting_true=80)
+                faker.boolean(chance_of_getting_true=80),
+                faker.file_path(extension=faker.file_extension(), depth=faker.random_int(min=0, max=5))
             ]
             for _ in range(count)
         ]
 
         # Insert submissions
         cursor.executemany(
-            "INSERT INTO api_submission(submission_time, group_id, is_valid) VALUES (?, ?, ?)",
+            "INSERT INTO api_submission(submission_time, group_id, is_valid, zip) VALUES (?, ?, ?, ?)",
             submissions
-        )
-
-
-@timer
-def seed_submission_files(faker, count: int = 10_000):
-    """Seed submission files into the database"""
-    with connection.cursor() as cursor:
-        submissions = list(
-            cursor.execute(sql="SELECT id FROM api_submission").fetchall()
-        )
-
-        files = [
-            [
-                choice(submissions)[0],
-                faker.file_path(extension=faker.file_extension(), depth=faker.random_int(min=0, max=5)),
-            ]
-        ]
-
-        cursor.executemany(
-            "INSERT INTO api_submissionfile(submission_id, file) VALUES (?, ?)",
-            files
         )
 
 
@@ -544,8 +533,9 @@ def seed_submission_results(faker):
 
         check_result = ("QUEUED", "RUNNING", "SUCCESS", "FAILED")
         error_structure = ("BLOCKED_EXTENSION", "OBLIGATED_EXTENSION_NOT_FOUND",
-                           "OBLIGATED_DIRECTORY_NOT_FOUND", "UNASKED_DIRECTORY")
-        error_extra = ("TIMEOUT", "MEMORYLIMIT", "RUNTIMEERROR", "OUTPUTLIMIT", "INTERNALERROR", "UNKNOWN")
+                           "FILE_DIR_NOT_FOUND")
+        error_extra = ("DOCKER_IMAGE_ERROR", "TIME_LIMIT", "MEMORY_LIMIT",
+                       "CHECK_ERROR", "RUNTIME_ERROR", "UNKNOWN", "FAILED_STRUCTURE_CHECK")
 
         results = []
         structure_results = []
