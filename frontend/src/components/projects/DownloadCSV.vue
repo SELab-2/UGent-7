@@ -36,7 +36,7 @@ const generateCSVAndDownload = async (): Promise<void> => {
                 students.value
                     ?.map((student) => {
                         // single csv line
-                        return `#${student.student_id},${student.last_name},${student.first_name},${student.email},${group.score * 10 / props.project.max_score},#`;
+                        return `#${student.student_id},${student.last_name},${student.first_name},${student.email},${(group.score * 10) / props.project.max_score},#`;
                     })
                     .join('\n') ?? ''
             );
