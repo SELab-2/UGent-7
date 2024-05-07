@@ -172,13 +172,13 @@ class Command(BaseCommand):
         seed_file_extensions(faker(), amount_of_file_extensions)
 
         # Seed docker images
-        seed_docker_images(faker(), amount_of_docker_images)
+        # seed_docker_images(faker(), amount_of_docker_images)
 
         # Seed structure checks
         seed_structure_checks(faker(), amount_of_structure_checks)
 
         # Seed extra checks
-        seed_extra_checks(faker(), amount_of_extra_checks)
+        # seed_extra_checks(faker(), amount_of_extra_checks)
 
         # Seed submissions
         seed_submissions(faker(), amount_of_submissions)
