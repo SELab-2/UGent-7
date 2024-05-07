@@ -25,7 +25,7 @@ export function createStudent(studentData: any): Student {
         studentData.last_enrolled,
         studentData.create_time,
         studentData.last_login,
-        studentData.studentId,
+        studentData.student_id,
         studentData.roles.slice(),
         studentData.courses.slice(),
         studentData.groups.slice(),

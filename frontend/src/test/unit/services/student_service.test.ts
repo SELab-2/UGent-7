@@ -181,7 +181,7 @@ describe('students', (): void => {
             2024, // last_enrolled
             new Date(), // create_time
             null, // last_login
-            'studentId', // studentId
+            'student_id', // student_id
             [],
             [],
             [],
@@ -202,6 +202,6 @@ describe('students', (): void => {
 
         // Only check for fields that are sent to the backend
         expect(students.value?.[prevLength]?.id).toBe('id');
-        expect(students.value?.[prevLength]?.student_id).toBe('studentId');
+        expect(students.value?.[prevLength]?.student_id).toBe('student_id');
     });
 });
