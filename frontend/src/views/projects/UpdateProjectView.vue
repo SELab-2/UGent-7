@@ -244,7 +244,6 @@ async function submitProject(): Promise<void> {
                             mode="basic"
                             accept=".sh"
                             :multiple="false"
-                            title="hellaur"
                             @select="onDockerScriptUpload"
                         />
                     </div>

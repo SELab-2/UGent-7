@@ -9,6 +9,7 @@ import InputSwitch from 'primevue/inputswitch';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
+import { DockerImage } from '@/types/DockerImage';
 import { useI18n } from 'vue-i18n';
 import { ref, reactive, computed, onMounted } from 'vue';
 import { required, helpers } from '@vuelidate/validators';
@@ -75,8 +76,21 @@ function onBashScriptUpload(event: any): void {
 /**
  * Function to upload the docker image
  */
-function onDockerImageUpload(event: any): void {
-    form.dockerImage = event.files[0];
+async function onDockerImageUpload(event: any): Promise<void> {
+    // Create a new docker image
+    const dockerImage = new DockerImage(
+        '',    // The ID is not needed
+        event.files[0].name,
+        '',    // File string is not needed
+        false, // Docker image should be private, no possibility to upload public images
+        '',    // No owner is needed
+    );
+
+    // Create the docker image in the backend
+    await createDockerImage(dockerImage, event.files[0]);
+
+    // Refresh the list of docker images
+    await getDockerImages();
 }
 
 /**
@@ -134,7 +148,6 @@ onMounted(async () => {
                                     mode="basic"
                                     accept=".sh"
                                     :multiple="false"
-                                    title="hellaur"
                                     @select="onBashScriptUpload"
                                 />
                             </div>
@@ -175,16 +188,24 @@ onMounted(async () => {
                             <label for="dockerImage">
                                 {{ t('views.projects.extraChecks.dockerImage') }}
                             </label>
-                            <DataTable v-model:selection="form.dockerImage" :value="dockerImages" selectionMode="single" dataKey="id" tableStyle="min-width: 30rem" id="dockerImage" class="w-full mt-2 mb-2">
+                            <DataTable v-model:selection="form.dockerImage" :value="dockerImages" selectionMode="single" dataKey="id" tableStyle="min-width: 30rem" id="dockerImage" class="w-full mt-2 mb-2" scrollable scrollHeight="300px">
                                 <Column field="name" header="Name"></Column>
                                 <Column field="public" header="Public">
                                     <template #body="slotProps">
-                                        <!-- Use conditional rendering to display a check or cross -->
-                                        <span v-if="slotProps.data.public">&#10003;</span> <!-- Check mark for true -->
-                                        <span v-else>&#10005;</span> <!-- Cross mark for false -->
+                                        <!-- Use check and cross icons to indicate if the image is public or not -->
+                                        <i v-if="slotProps.data.public" class="pi pi-check"/>
+                                        <i v-else class="pi pi-times"/>
                                     </template>
                                 </Column>                            
                             </DataTable>
+
+                            <!-- Button to add a private docker image for this project -->
+                            <FileUpload
+                                mode="basic"
+                                :multiple="false"
+                                :auto="true"
+                                @select="onDockerImageUpload"
+                            />
                         </div>
                     </div>
                 </div>
