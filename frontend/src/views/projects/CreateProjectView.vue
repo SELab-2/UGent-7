@@ -18,6 +18,7 @@ import { useProject } from '@/composables/services/project.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { useCourses } from '@/composables/services/course.service';
+import ExtraChecksUpload from '@/components/projects/ExtraChecksUpload.vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -39,7 +40,6 @@ const form = reactive({
     maxScore: 10,
     visibility: true,
     scoreVisibility: false,
-    bashScript: null,
     submissionStructure: null,
 });
 
@@ -56,11 +56,6 @@ const rules = computed(() => {
         maxScore: { required: helpers.withMessage(t('validations.required'), required) },
     };
 });
-
-// Function to handle the file upload of a bash script
-const onBashScriptUpload = (event: any): void => {
-    form.bashScript = event.files[0];
-};
 
 // Function to handle the file upload of a zip file containing the submission structure
 const onZipStructureUpload = (event: any): void => {
@@ -229,18 +224,11 @@ async function submitProject(): Promise<void> {
 
                 <div class="col-12 lg:col-6">
                     <!-- Upload field for bash script -->
-                    <div class="field col">
-                        <label for="bashScript">
-                            {{ t('views.projects.bashUpload') }}
+                    <div class="field col-8">
+                        <label for="extraChecks">
+                            {{ t('views.projects.extraChecks.title') }}
                         </label>
-                        <FileUpload
-                            input="bashScript"
-                            mode="basic"
-                            accept=".sh"
-                            :multiple="false"
-                            title="hellaur"
-                            @select="onBashScriptUpload"
-                        />
+                        <ExtraChecksUpload id="extraChecks" />
                     </div>
 
                     <!-- Upload field for a zip file that contains the submission structure -->

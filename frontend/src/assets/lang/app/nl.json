@@ -69,9 +69,18 @@
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
             "scoreVisibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
-            "dockerUpload": "Upload een Dockerfile",
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
-            "noStudents": "Geen studenten in deze groep"
+            "noStudents": "Geen studenten in deze groep",
+            "extraChecks": {
+                "title": "Voeg een automatische check toe",
+                "add": "Nieuwe check",
+                "name": "Naam",
+                "bashScript": "Bash script",
+                "dockerImage": "Docker image",
+                "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",
+                "memoryLimit": "Geheugenlimiet voor de uitvoering (in MB)",
+                "showLog": "Toon logbestand aan studenten"
+            }
         },
         "submissions": {
             "title": "Inzendingen",
