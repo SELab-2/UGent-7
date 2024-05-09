@@ -11,7 +11,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from rest_framework.status import HTTP_301_MOVED_PERMANENTLY
+from rest_framework.status import HTTP_200_OK
 from ypovoli import settings
 
 
@@ -84,7 +84,8 @@ def create_user(self, request) -> Response:
 
     login(request, user)
 
-    return Response(status=HTTP_301_MOVED_PERMANENTLY, headers={"Location": "/"})
+    return Response('<!DOCTYPE html><html></html>',
+                    status=HTTP_200_OK, headers={"Location": "/"}, content_type="text/html")
 
 
 class TestUser(ViewSet):
