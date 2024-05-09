@@ -22,7 +22,7 @@ describe('login', () => {
         cy.get('#logout').click();
     });
     it('redirects to login page after logging out', () => {
-       // log in as a test student
+        // log in as a test student
         cy.visit('/api/auth/test-user/student/');
         // visit dashboard
         cy.visit('/');
