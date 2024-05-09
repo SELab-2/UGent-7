@@ -6,14 +6,18 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import FileUpload from 'primevue/fileupload';
 import InputSwitch from 'primevue/inputswitch';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import { useI18n } from 'vue-i18n';
-import { type Course } from '@/types/Course.ts';
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { useDockerImages } from '@/composables/services/docker.service.ts';
 
 /* Composable injections */
 const { t } = useI18n();
+const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
 
 /* Props */
 // const props = defineProps<{ course: Course }>();
@@ -74,6 +78,13 @@ function onBashScriptUpload(event: any): void {
 function onDockerImageUpload(event: any): void {
     form.dockerImage = event.files[0];
 }
+
+/**
+ * Load the docker images when the component is mounted
+ */
+onMounted(async () => {
+    await getDockerImages();
+});
 </script>
 
 <template>
@@ -160,20 +171,20 @@ function onDockerImageUpload(event: any): void {
 
                     <div class="col-12 lg:col-6">
                         <!-- List to select/add the docker image -->
-                        <div class="grid">
-                            <!-- Docker image -->
-                            <div class="field col">
-                                <label for="dockerImage">
-                                    {{ t('views.projects.extraChecks.dockerImage') }}
-                                </label>
-                                <FileUpload
-                                    input="dockerImage"
-                                    mode="basic"
-                                    :multiple="false"
-                                    title="hellaur"
-                                    @select="onDockerImageUpload"
-                                />
-                            </div>
+                        <div class="grid formgrid">
+                            <label for="dockerImage">
+                                {{ t('views.projects.extraChecks.dockerImage') }}
+                            </label>
+                            <DataTable v-model:selection="form.dockerImage" :value="dockerImages" selectionMode="single" dataKey="id" tableStyle="min-width: 30rem" id="dockerImage" class="w-full mt-2 mb-2">
+                                <Column field="name" header="Name"></Column>
+                                <Column field="public" header="Public">
+                                    <template #body="slotProps">
+                                        <!-- Use conditional rendering to display a check or cross -->
+                                        <span v-if="slotProps.data.public">&#10003;</span> <!-- Check mark for true -->
+                                        <span v-else>&#10005;</span> <!-- Cross mark for false -->
+                                    </template>
+                                </Column>                            
+                            </DataTable>
                         </div>
                     </div>
                 </div>
