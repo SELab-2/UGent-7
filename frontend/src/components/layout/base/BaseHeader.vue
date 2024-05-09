@@ -81,7 +81,7 @@ const items = computed(() => [
                     <div>
                         <!-- User information -->
                         <template v-if="user !== null">
-                            <RouterLink :to="{ name: 'logout' }" class="text-white">
+                            <RouterLink :to="{ name: 'logout' }" class="text-white" id="logout">
                                 <span class="hidden md:inline">
                                     {{ t('layout.header.user', [user.getFullName()]) }}
                                 </span>
