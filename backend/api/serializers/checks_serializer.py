@@ -25,15 +25,22 @@ class FileExtensionHyperLinkedRelatedField(serializers.HyperlinkedRelatedField):
 
 # TODO: Support partial updates
 class StructureCheckSerializer(serializers.ModelSerializer):
-
     project = serializers.HyperlinkedRelatedField(
         view_name="project-detail",
         read_only=True
     )
 
-    obligated_extensions = FileExtensionSerializer(many=True, required=False, default=[])
+    obligated_extensions = FileExtensionSerializer(
+        many=True,
+        required=False,
+        default=[]
+    )
 
-    blocked_extensions = FileExtensionSerializer(many=True, required=False, default=[])
+    blocked_extensions = FileExtensionSerializer(
+        many=True,
+        required=False,
+        default=[]
+    )
 
     class Meta:
         model = StructureCheck
@@ -81,7 +88,6 @@ class DockerImagerHyperLinkedRelatedField(serializers.HyperlinkedRelatedField):
 
 
 class ExtraCheckSerializer(serializers.ModelSerializer):
-
     project = serializers.HyperlinkedRelatedField(
         view_name="project-detail",
         read_only=True

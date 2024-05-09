@@ -6,11 +6,11 @@ import { Faculty } from '@/types/Faculty.ts';
 
 export class Course {
     constructor(
-        public id: string,
-        public name: string,
-        public excerpt: string,
-        public description: string | null,
-        public academic_startyear: number,
+        public id: string = '',
+        public name: string = '',
+        public excerpt: string = '',
+        public description: string | null = '',
+        public academic_startyear: number = getAcademicYear(),
         public private_course: boolean = false,
         public invitation_link: string | null = null,
         public invitation_link_expires: Date | null = null,
@@ -40,6 +40,24 @@ export class Course {
     }
 
     /**
+     * Check if the course has a given teacher.
+     * @param teacher
+     */
+    public hasTeacher(teacher: Teacher): boolean {
+        const teachers = this.teachers ?? [];
+        return teachers.some((t) => t.id === teacher.id);
+    }
+
+    /**
+     * Check if the course has a given assistant.
+     * @param assistant
+     */
+    public hasAssistant(assistant: Assistant): boolean {
+        const assistants = this.assistants ?? [];
+        return assistants.some((a) => a.id === assistant.id);
+    }
+
+    /**
      * Convert a course object to a course instance.
      *
      * @param course
@@ -60,24 +78,6 @@ export class Course {
             course.parent_course,
             faculty,
         );
-    }
-
-    /**
-     * Check if the course has a given teacher.
-     * @param teacher
-     */
-    public hasTeacher(teacher: Teacher): boolean {
-        const teachers = this.teachers ?? [];
-        return teachers.some((t) => t.id === teacher.id);
-    }
-
-    /**
-     * Check if the course has a given assistant.
-     * @param assistant
-     */
-    public hasAssistant(assistant: Assistant): boolean {
-        const assistants = this.assistants ?? [];
-        return assistants.some((a) => a.id === assistant.id);
     }
 }
 

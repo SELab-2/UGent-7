@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Editor from 'primevue/editor';
 
-const model = defineModel();
+const model = defineModel<string>();
 </script>
 
 <template>
@@ -30,6 +30,8 @@ const model = defineModel();
 
 <style lang="scss">
 .ql-editor {
+    font-size: 16px;
+
     p,
     h1,
     h2,
@@ -38,6 +40,14 @@ const model = defineModel();
     h5,
     h6 {
         margin-bottom: 1rem !important;
+    }
+
+    ul, ol {
+        margin: 1rem 0;
+
+        li {
+            margin-bottom: .5rem;
+        }
     }
 }
 </style>
