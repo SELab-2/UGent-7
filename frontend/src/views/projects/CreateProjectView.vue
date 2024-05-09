@@ -10,7 +10,7 @@ import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
 import { SubmissionStatus } from '@/types/SubmisionStatus';
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Project } from '@/types/Project';
@@ -28,6 +28,9 @@ const { params } = useRoute();
 /* Service injection */
 const { createProject } = useProject();
 const { course, getCourseByID } = useCourses();
+
+/* State */
+const createExtraChecksBackend = ref<boolean>(false);
 
 /* Form content */
 const form = reactive({
@@ -98,6 +101,9 @@ async function submitProject(): Promise<void> {
             params.courseId as string,
             form.numberOfGroups ?? 0,
         );
+
+        // Make sure the extra checks are created in the backend
+        createExtraChecksBackend.value = true;
 
         // Redirect to the dashboard overview
         await push({ name: 'dashboard' });
@@ -224,11 +230,11 @@ async function submitProject(): Promise<void> {
 
                 <div class="col-12 lg:col-6">
                     <!-- Upload field for bash script -->
-                    <div class="field col-8">
+                    <div class="field col">
                         <label for="extraChecks">
                             {{ t('views.projects.extraChecks.title') }}
                         </label>
-                        <ExtraChecksUpload id="extraChecks" />
+                        <ExtraChecksUpload id="extraChecks" :create-checks-backend="createExtraChecksBackend" />
                     </div>
 
                     <!-- Upload field for a zip file that contains the submission structure -->

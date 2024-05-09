@@ -72,7 +72,7 @@
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
             "noStudents": "Geen studenten in deze groep",
             "extraChecks": {
-                "title": "Voeg een automatische check toe",
+                "title": "Automatische checks voor project",
                 "add": "Nieuwe check",
                 "name": "Naam",
                 "bashScript": "Bash script",

@@ -8,10 +8,13 @@ import FileUpload from 'primevue/fileupload';
 import InputSwitch from 'primevue/inputswitch';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import DataView from 'primevue/dataview';
+import ButtonGroup from 'primevue/buttongroup';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import { DockerImage } from '@/types/DockerImage';
+import { ExtraCheck } from '@/types/ExtraCheck';
 import { useI18n } from 'vue-i18n';
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, watch } from 'vue';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
@@ -21,10 +24,13 @@ const { t } = useI18n();
 const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
 
 /* Props */
-// const props = defineProps<{ course: Course }>();
+const props = defineProps<{ createChecksBackend: Boolean }>();
 
 /* State for the dialog to create an extra check */
 const displayExtraCheckCreation = ref(false);
+
+/* List with the extra checks */
+const extraChecks = ref<ExtraCheck[]>([]);
 
 /* Form content */
 const form = reactive({
@@ -54,16 +60,39 @@ const v$ = useVuelidate(rules, form);
  * Function to save the extra check
  */
  async function saveExtraCheck(): Promise<void> {
-    // // Validate the form
-    // const validated = await v$.value.$validate();
+    // Validate the form
+    const validated = await v$.value.$validate();
 
-    // // Get the course object from the course ID
-    // await getCourseByID(params.courseId as string);
+    // Save the extra checks component
+    if (validated) {
+        // Create the extra check
+        const extraCheck = new ExtraCheck(
+            '',    // The ID is not needed
+            form.name,
+            form.dockerImage,
+            form.bashFile,
+            form.timeLimit,
+            form.memoryLimit,
+            form.showLog,
+        );
 
-    // // Only submit the form if the validation was successful
-    // if (validated && course.value !== null) {
+        // Add the extra check to the list with checks that should be created, if the creation is successful
+        extraChecks.value.push(extraCheck);
 
-    // }
+        // Close the dialog
+        displayExtraCheckCreation.value = false;
+
+        // Reset the form
+        form.name = '';
+        form.dockerImage = null;
+        form.bashFile = null;
+        form.timeLimit = 30;
+        form.memoryLimit = 128;
+        form.showLog = true;
+
+        // Reset the validation
+        v$.value.$reset();
+    }
 }
 
 /**
@@ -94,6 +123,19 @@ async function onDockerImageUpload(event: any): Promise<void> {
 }
 
 /**
+ * Watcher to create the checks in the backend when the signal is received
+ */
+watch(() => props.createChecksBackend, async (value) => {
+    if (value) {
+        // Create the extra checks in the backend
+        extraChecks.value.forEach(async (extraCheck) => {
+            // Create the extra check in the backend
+            // await createExtraCheck(extraCheck);
+        });
+    }
+});
+
+/**
  * Load the docker images when the component is mounted
  */
 onMounted(async () => {
@@ -102,6 +144,20 @@ onMounted(async () => {
 </script>
 
 <template>
+    <!-- List with the extra checks -->
+    <DataView :value="extraChecks" data-key="id">
+        <template #list="slotProps">
+            <div v-for="(item, index) in slotProps.items" :key="index" class="flex align-items-center justify-content-between mr-6">
+                <p class="text-lg font-semibold">{{ item.name }}</p>
+
+                <ButtonGroup class="flex gap-2">
+                    <Button icon="pi pi-times" class="p-button-rounded p-button-danger" @click="extraChecks.splice(index, 1)" />
+                </ButtonGroup>
+            </div>
+        </template>
+    </DataView>
+
+    <!-- Button to add a new extra check -->
     <Button
         class="p-button-primary"
         @click="displayExtraCheckCreation = true"
@@ -150,6 +206,7 @@ onMounted(async () => {
                                     :multiple="false"
                                     @select="onBashScriptUpload"
                                 />
+                                <ErrorMessage :field="v$.bashFile" />
                             </div>
                         </div>
 
@@ -185,27 +242,31 @@ onMounted(async () => {
                     <div class="col-12 lg:col-6">
                         <!-- List to select/add the docker image -->
                         <div class="grid formgrid">
-                            <label for="dockerImage">
-                                {{ t('views.projects.extraChecks.dockerImage') }}
-                            </label>
-                            <DataTable v-model:selection="form.dockerImage" :value="dockerImages" selectionMode="single" dataKey="id" tableStyle="min-width: 30rem" id="dockerImage" class="w-full mt-2 mb-2" scrollable scrollHeight="300px">
-                                <Column field="name" header="Name"></Column>
-                                <Column field="public" header="Public">
-                                    <template #body="slotProps">
-                                        <!-- Use check and cross icons to indicate if the image is public or not -->
-                                        <i v-if="slotProps.data.public" class="pi pi-check"/>
-                                        <i v-else class="pi pi-times"/>
-                                    </template>
-                                </Column>                            
-                            </DataTable>
+                            <div class="col">
+                                <label for="dockerImage">
+                                    {{ t('views.projects.extraChecks.dockerImage') }}
+                                </label>
+                                <DataTable v-model:selection="form.dockerImage" :value="dockerImages" selectionMode="single" dataKey="id" tableStyle="min-width: 30rem" id="dockerImage" class="w-full mt-2 mb-2" scrollable scrollHeight="300px">
+                                    <Column field="name" header="Name"></Column>
+                                    <Column field="public" header="Public">
+                                        <template #body="slotProps">
+                                            <!-- Use check and cross icons to indicate if the image is public or not -->
+                                            <i v-if="slotProps.data.public" class="pi pi-check"/>
+                                            <i v-else class="pi pi-times"/>
+                                        </template>
+                                    </Column>                            
+                                </DataTable>
+                                <ErrorMessage :field="v$.dockerImage" />
 
-                            <!-- Button to add a private docker image for this project -->
-                            <FileUpload
-                                mode="basic"
-                                :multiple="false"
-                                :auto="true"
-                                @select="onDockerImageUpload"
-                            />
+                                <!-- Button to add a private docker image for this project -->
+                                <FileUpload
+                                    mode="basic"
+                                    :multiple="false"
+                                    :auto="true"
+                                    @select="onDockerImageUpload"
+                                    :chooseLabel="t('views.projects.extraChecks.dockerImage')"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,7 @@ import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
+import { SubmissionStatus } from '@/types/SubmisionStatus';
 import { reactive, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -112,6 +113,7 @@ async function submitProject(): Promise<void> {
                 form.scoreVisibility,
                 form.groupSize,
                 course.value,
+                new SubmissionStatus(0, 0, 0), // Default submission status
                 form.submissionStructure,
             ),
         );
