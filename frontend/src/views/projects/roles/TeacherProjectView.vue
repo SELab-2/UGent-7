@@ -37,8 +37,7 @@ defineProps<{
         <div class="col-12 md:col-4">
             <ProjectMeter :project="project" />
         </div>
-        <StructureCheckTreeView v-if="props.project" :projectId="`${props.project.id}`"  :editable=false>
-        </StructureCheckTreeView>
+        <StructureCheckTreeView v-if="project" :projectId="`${project.id}`" :editable="false"> </StructureCheckTreeView>
     </div>
 </template>
 

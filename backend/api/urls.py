@@ -32,6 +32,8 @@ router.register(r"faculties", FacultyViewSet, basename="faculty")
 router.register(r"docker-images", DockerImageViewSet, basename="docker-image")
 router.register(r"feedback", FeedbackViewSet, basename="feedback")
 
+
 urlpatterns = [
+    path('submissions/<int:pk>/download/', SubmissionViewSet.as_view({'get': 'download'}), name='submission-download'),
     path("", include(router.urls)),
 ]

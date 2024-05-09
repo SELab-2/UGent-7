@@ -1,3 +1,5 @@
+from django.core.files import File
+from django.http import FileResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -5,6 +7,7 @@ from rest_framework.request import Request
 from rest_framework.mixins import RetrieveModelMixin
 
 from ..models.submission import Submission
+from ..serializers.feedback_serializer import FeedbackSerializer
 from ..serializers.submission_serializer import SubmissionSerializer
 
 
@@ -42,3 +45,14 @@ class SubmissionViewSet(RetrieveModelMixin, viewsets.GenericViewSet):
             })
 
         return Response(serializer.errors, status=400)
+
+    @action(detail=True, methods=["get"])
+    def download(self, request: Request, **_) -> FileResponse:
+        """Downloads the submission"""
+        submission = self.get_object()
+        file: File = submission.zip
+
+        response = FileResponse(file.file.open(), filename="submission_" + str(submission.pk) + ".zip")
+        response["Conent-Length"] = file.file.size
+        response['Content-Disposition'] = 'attachment; filename="%s"' % f'submission_{str(submission.pk)}.zip'
+        return response

@@ -1,6 +1,8 @@
 import io
 import zipfile
 
+from rest_framework.reverse import reverse
+
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import (CheckResult, ExtraCheckResult,
@@ -46,6 +48,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
     )
 
     results = CheckResultPolymorphicSerializer(many=True, read_only=True)
+    zip = serializers.SerializerMethodField()
 
     class Meta:
         model = Submission
@@ -56,6 +59,13 @@ class SubmissionSerializer(serializers.ModelSerializer):
                 "default": 0,
             }
         }
+
+    def get_zip(self, obj):
+        if obj.zip:
+            request = self.context.get("request")
+            if request:
+                return request.build_absolute_uri(reverse('submission-download', args=[obj.pk]))
+        return None
 
     def validate(self, attrs):
 

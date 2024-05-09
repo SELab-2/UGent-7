@@ -2,7 +2,6 @@
 // TODO: after pinia setup is done
 
 import DashboardView from '@/views/dashboard/DashboardView.vue';
-import HelpDashboard from '@/views/help/HelpDashboard.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import CreateCourseView from '@/views/courses/CreateCourseView.vue';
 import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
@@ -22,8 +21,8 @@ import SubmissionView from '@/views/submissions/SubmissionView.vue';
 import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 import ProjectsView from '@/views/projects/ProjectsView.vue';
-import SubmissionsView from "@/views/submissions/SubmissionsView.vue";
-import DockerImagesView from "@/views/admin/DockerImagesView.vue";
+import SubmissionsView from '@/views/submissions/SubmissionsView.vue';
+import DockerImagesView from '@/views/admin/DockerImagesView.vue';
 import JoinCourseView from '@/views/courses/JoinCourseView.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -182,11 +181,6 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/help',
         children: [
-            {
-                path: '',
-                component: HelpDashboard,
-                name: 'help-dashboard',
-            },
             {
                 path: 'student',
                 component: Dummy,

@@ -13,7 +13,7 @@ import { type Feedback } from '@/types/Feedback.ts';
 import { User } from '@/types/users/User.ts';
 import moment from 'moment/moment';
 import { PrimeIcons } from 'primevue/api';
-import {useSubmission} from "@/composables/services/submission.service.ts";
+import { useSubmission } from '@/composables/services/submission.service.ts';
 
 /* Composable injections */
 const route = useRoute();
@@ -82,9 +82,7 @@ watch(
                     <!-- TODO change this to zip -->
                     {{ submission! }}
                     <div v-if="submission">
-                        <a :href="submission.files[0].webkitRelativePath" download class="download-link">
-                            Download Submission
-                        </a>
+
                     </div>
                 </div>
             </div>
