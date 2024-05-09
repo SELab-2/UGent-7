@@ -1,7 +1,9 @@
 from authentication.cas.client import client
 from authentication.permissions import IsDebug
 from authentication.serializers import CASTokenObtainSerializer, UserSerializer
-from django.contrib.auth import logout
+from authentication.models import User
+from authentication.signals import user_created
+from django.contrib.auth import logout, login
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 from rest_framework.exceptions import AuthenticationFailed
@@ -9,6 +11,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
+from rest_framework.status import HTTP_301_MOVED_PERMANENTLY
 from ypovoli import settings
 
 
@@ -59,3 +62,40 @@ class CASViewSet(ViewSet):
             return Response(token_serializer.validated_data)
 
         raise AuthenticationFailed(token_serializer.errors)
+
+
+data = {
+    "id": "1234",
+    "username": "test",
+    "email": "test@test",
+    "first_name": "test",
+    "last_name": "test",
+}
+
+attributes = dict(data)
+attributes["ugentStudentID"] = "1234"
+
+
+def create_user(self, request) -> Response:
+    user, created = User.objects.get_or_create(id=data["id"], defaults=data)
+
+    if created:
+        user_created.send(sender=self, attributes=attributes, user=user)
+
+    login(request, user)
+
+    return Response(status=HTTP_301_MOVED_PERMANENTLY, headers={"Location": "/"})
+
+
+class TestUser(ViewSet):
+    permission_classes = [IsDebug]
+
+    @action(detail=False, methods=['GET'], permission_classes=[IsDebug], url_path='admin')
+    def login_admin(self, request, *__) -> Response:
+        data["is_staff"] = True
+        return create_user(self, request)
+
+    @action(detail=False, methods=['GET'], permission_classes=[IsDebug], url_path='student')
+    def login_student(self, request, *__) -> Response:
+        data["is_staff"] = False
+        return create_user(self, request)
