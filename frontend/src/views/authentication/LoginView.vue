@@ -27,7 +27,7 @@ const { t } = useI18n();
                             :icon="PrimeIcons.ARROW_RIGHT"
                             :label="t('views.login.button')"
                             severity="secondary"
-                            id="button"
+                            id="login"
                         />
                     </a>
                 </div>
