@@ -9,6 +9,7 @@ import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
+import { SubmissionStatus } from '@/types/SubmisionStatus';
 import { reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -38,7 +39,7 @@ const form = reactive({
     maxScore: 10,
     visibility: true,
     scoreVisibility: false,
-    dockerScript: null,
+    bashScript: null,
     submissionStructure: null,
 });
 
@@ -56,9 +57,9 @@ const rules = computed(() => {
     };
 });
 
-// Function to handle the file upload of a docker script
-const onDockerScriptUpload = (event: any): void => {
-    form.dockerScript = event.files[0];
+// Function to handle the file upload of a bash script
+const onBashScriptUpload = (event: any): void => {
+    form.bashScript = event.files[0];
 };
 
 // Function to handle the file upload of a zip file containing the submission structure
@@ -96,6 +97,7 @@ async function submitProject(): Promise<void> {
                 form.scoreVisibility,
                 form.groupSize,
                 course.value,
+                new SubmissionStatus(0, 0, 0), // Default submission status
                 form.submissionStructure,
             ),
             params.courseId as string,
@@ -226,18 +228,18 @@ async function submitProject(): Promise<void> {
                 </div>
 
                 <div class="col-12 lg:col-6">
-                    <!-- Upload field for docker script -->
+                    <!-- Upload field for bash script -->
                     <div class="field col">
-                        <label for="dockerScript">
-                            {{ t('views.projects.dockerUpload') }}
+                        <label for="bashScript">
+                            {{ t('views.projects.bashUpload') }}
                         </label>
                         <FileUpload
-                            input="dockerScript"
+                            input="bashScript"
                             mode="basic"
                             accept=".sh"
                             :multiple="false"
                             title="hellaur"
-                            @select="onDockerScriptUpload"
+                            @select="onBashScriptUpload"
                         />
                     </div>
 

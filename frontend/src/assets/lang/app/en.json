@@ -69,7 +69,7 @@
             "max_score": "Maximum score that can be achieved",
             "visibility": "Make project visible to students",
             "scoreVisibility": "Make score, when uploaded, automatically visible to students",
-            "dockerUpload": "Upload a Dockerfile",
+            "bashUpload": "Upload a bash script for automatic testing",
             "submissionStructure": "Structure of how a submission should be made",
             "noStudents": "No students in this group",
             "locked": "Closed",
