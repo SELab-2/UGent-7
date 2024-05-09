@@ -77,26 +77,35 @@ attributes["ugentStudentID"] = "1234"
 
 
 def create_user(self, request) -> Response:
+    """General function to create a user, log them in and which returns an empty html page"""
+    # log in user, or retrieve if they already exist
     user, created = User.objects.get_or_create(id=data["id"], defaults=data)
 
+    # if it has just been created, send the signal to user_created Signal(), to also activate it as a student
     if created:
         user_created.send(sender=self, attributes=attributes, user=user)
 
+    # login the user
     login(request, user)
 
+    # return Response with empty html page
     return Response('<!DOCTYPE html><html></html>',
                     status=HTTP_200_OK, headers={"Location": "/"}, content_type="text/html")
 
 
 class TestUser(ViewSet):
+    """View meant to be able to log in quickly for tests on server in debug mode"""
+
     permission_classes = [IsDebug]
 
     @action(detail=False, methods=['GET'], permission_classes=[IsDebug], url_path='admin')
     def login_admin(self, request, *__) -> Response:
+        """This endpoint lets you log in an admin"""
         data["is_staff"] = True
         return create_user(self, request)
 
     @action(detail=False, methods=['GET'], permission_classes=[IsDebug], url_path='student')
     def login_student(self, request, *__) -> Response:
+        """This endpoint lets you log in as a student who's not an admin"""
         data["is_staff"] = False
         return create_user(self, request)
