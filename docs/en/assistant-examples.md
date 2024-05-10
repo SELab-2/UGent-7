@@ -94,3 +94,8 @@ The card is divided as follows:
 - Progress bar of all students, including the number of submissions and the number of groups.
 - Status of the tests performed for these submissions.
 :::
+
+## Searching for Course Instructors
+- Go to the detail page of the course (see [Course Details](#course-details)).
+- Scroll to the "Instructors Linked to This Course" section.
+- Here you will find a list of the instructors for this course.

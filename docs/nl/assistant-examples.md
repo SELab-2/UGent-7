@@ -94,3 +94,9 @@ De kaart is als volgt ingedeeld:
 - Balk met de voortgang van alle studenten, met hierbij het aantal indieningen en het aantal groepen.
 - Status van de uitgevoerde testen voor deze indieningen.
 :::
+
+
+## Lesgevers van een vak opzoeken
+- Ga naar de detail pagina van het vak (zie [Vak details](#vak-details)).
+- Scrol naar de sectie "Lesgevers gelinkt aan dit vak".
+- Hier vindt u een lijst van de lesgevers voor dit vak.
