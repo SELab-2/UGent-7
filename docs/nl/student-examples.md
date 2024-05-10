@@ -34,15 +34,14 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
 - Druk in de navigatiebalk bovenaan op het pijltje naast de momenteel geselecteerde rol.
 - Kies de niewe rol waarmee u de pagina wil bekijken.
 
-![modus keuze knop](../assets/modus-change.png)
+![modus keuze knop](../assets/student/modus-change.png)
 
 ## In/uitschrijven voor vak
 
 <div style="display: flex; align-items: center;">
-    <img src="../assets/nl/join-course.png" alt="vak inschrijf knop" style="width: auto; height: auto; margin-right: 10px;">
-    <img src="../assets/nl/leave-course.png" alt="vak verlaat knop" style="width: auto; height: auto;">
+    <img src="../assets/student/nl/join-course.png" alt="vak inschrijf knop" style="width: auto; height: auto; margin-right: 10px;">
+    <img src="../assets/student/nl/leave-course.png" alt="vak verlaat knop" style="width: auto; height: auto;">
 </div>
-
 **Inschrijven**
 
 - Druk in de navigatiebalk op "Vakken".
@@ -118,13 +117,13 @@ De kaart is als volgt ingedeeld:
 
   **Inschrijven**
 
-  ![groep inschrijven](../assets/nl/group-join.png)
+  ![groep inschrijven](../assets/student/nl/group-join.png)
 - Ga naar de detail pagina voor het gekozen project.
 - Druk op de gekozen groep en klik op "Kies groep".
 - U bent succesvol ingeschreven in deze groep.
 
 **Uitschrijven**
-  ![groep uitschrijven](../assets/nl/group-leave.png)
+  ![groep uitschrijven](../assets/student/nl/group-leave.png)
 - Ga naar de detail pagina van het project.
 - Druk op "Verlaat groep".
 
