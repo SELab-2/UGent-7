@@ -63,7 +63,7 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
   - Bevestig met de knop uitschrijven.
 
 ## Vak details
-- Druk in de navigatiebalk op Dashboard.
+- Druk in de navigatiebalk op "Dashboard".
 - Scrol naar de sectie "Mijn vakken".
 - Klik op de details knop bij het gekozen vak.
 
@@ -78,7 +78,7 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
 ![projecten lijst](../assets/nl/project-list.png)
 
 - Optie 1:
-  - Druk in de naviegatiebalk op Dashboard.
+  - Druk in de naviegatiebalk op "Dashboard".
   - Bovenaan de pagina staat een sectie "Lopende projecten".
   ::: info
   - Hier staan links alle projecten met een deadline binnen de 7 dagen en rechts alle projecten.

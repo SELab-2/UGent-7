@@ -1,4 +1,4 @@
-# admin help pagina
+# Admin help pagina
 
 Deze pagina beschrijft hoe u als administrator met Ypovoli interageert.
 

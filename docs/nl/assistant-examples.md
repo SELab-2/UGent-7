@@ -35,28 +35,10 @@ Deze pagina beschrijft hoe u als assistent met Ypovoli interageert.
 
 ![modus keuze knop](../assets/assistant/nl/modus-change.png)
 
-## Aanmaken vak
-- Druk in de navigatiebalk op Dashboard.
-- Scrol naar de sectie "Mijn vakken".
-- Klik op de + knop.
-
-![vak aanmaak knop](../assets/teacher/nl/course-create-button.png)
-
-:::info
-Wilt u u vak enkel beschikbaar plaatsen via een uitnodigingslink kan u dat via deze knop.
-![vak aanmaak knop](../assets/teacher/nl/private-course-button.png)
-
-:::danger
-- Activeer deze link via de share knop. (maximum geldigheid is 28 dagen)
-<div style="display: flex; align-items: center;">
-    <img src="../assets/teacher/course-share-button.png" alt="vak deel knop" style="width: auto; height: 75px; margin-right: 10px;">
-</div>
-:::
-
 ## Vak details
-- Druk in de navigatiebalk op Dashboard.
+- Druk in de navigatiebalk op "Dashboard".
 - Scrol naar de sectie "Mijn vakken".
-- Klik op de details knop bij het gekozen vak.
+- Klik op de "Details" knop bij het gekozen vak.
 
 ![vak kaart](../assets/course-card.png)
 
@@ -67,10 +49,10 @@ Wilt u u vak enkel beschikbaar plaatsen via een uitnodigingslink kan u dat via d
 ## Aanmaken project
 
 - Optie 1
-    - Druk in de navigatiebalk op Dashboard.
+    - Druk in de navigatiebalk op "Dashboard".
     - Druk op "Creëer nieuw project".
 - Optie 2
-    - Druk in de navigatiebalk op Kalender.
+    - Druk in de navigatiebalk op "Kalender".
     - Druk op "Creëer nieuw project".
 - Optie 3
     - Ga naar detail pagina van een vak (zie [Vak details](#vak-details)).
@@ -82,7 +64,7 @@ Wilt u u vak enkel beschikbaar plaatsen via een uitnodigingslink kan u dat via d
 ![projecten lijst](../assets/nl/project-list.png)
 
 - Optie 1:
-  - Druk in de naviegatiebalk op Dashboard.
+  - Druk in de naviegatiebalk op "Dashboard".
   - Bovenaan de pagina staat een sectie "Lopende projecten".
   ::: info
   - Hier staan links alle projecten met een deadline binnen de 7 dagen en rechts alle projecten.
@@ -111,14 +93,4 @@ De kaart is als volgt ingedeeld:
 - Startdatum en deadline van het project.
 - Balk met de voortgang van alle studenten, met hierbij het aantal indieningen en het aantal groepen.
 - Status van de uitgevoerde testen voor deze indieningen.
-:::
-
-## Lesgevers van een vak opzoeken en aanpasen
-- Ga naar de detail pagina van het vak (zie [Vak details](#vak-details)).
-- Scrol naar de sectie "Lesgevers gelinkt aan dit vak".
-- Hier vindt u een lijst van de lesgevers voor dit vak.
-
-::: info
-- Via de knop bewerken kan u lesgevers toevoegen aan (of verwijderen van) dit vak.
-- Via het vuilbak icoontje kan u lesgevers verwijderen van dit vak. (enige resterende lesgever kan onmogelijk verwijderd worden)
 :::
