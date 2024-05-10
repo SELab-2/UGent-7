@@ -18,13 +18,15 @@ import { ref, reactive, computed, onMounted, watch } from 'vue';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
+import { useProject } from '@/composables/services/project.service.ts';
 
 /* Composable injections */
 const { t } = useI18n();
 const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
+const { addExtraCheck } = useProject();
 
 /* Props */
-const props = defineProps<{ createChecksBackend: Boolean }>();
+const props = defineProps<{ projectId: string, createChecksBackend: Boolean }>();
 
 /* State for the dialog to create an extra check */
 const displayExtraCheckCreation = ref(false);
@@ -130,7 +132,7 @@ watch(() => props.createChecksBackend, async (value) => {
         // Create the extra checks in the backend
         extraChecks.value.forEach(async (extraCheck) => {
             // Create the extra check in the backend
-            // await createExtraCheck(extraCheck);
+            await addExtraCheck(extraCheck, props.projectId);
         });
     }
 });

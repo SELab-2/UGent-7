@@ -4,6 +4,7 @@ import { endpoints } from '@/config/endpoints.ts';
 import axios from 'axios';
 import { create, deleteId, get, getList, patch, processError } from '@/composables/services/helpers.ts';
 import { type Response } from '@/types/Response.ts';
+import { ExtraCheck } from '@/types/ExtraCheck';
 
 interface ProjectState {
     projects: Ref<Project[] | null>;
@@ -17,11 +18,13 @@ interface ProjectState {
     createProject: (projectData: Project, courseId: string, numberOfGroups: number) => Promise<void>;
     updateProject: (projectData: Project) => Promise<void>;
     deleteProject: (id: string) => Promise<void>;
+    addExtraCheck: (extraCheckData: ExtraCheck, projectId: string) => Promise<void>;
 }
 
 export function useProject(): ProjectState {
     const projects = ref<Project[] | null>(null);
     const project = ref<Project | null>(null);
+    const extraCheck = ref<ExtraCheck | null>(null);
     const response = ref<Response | null>(null);
 
     async function getProjectByID(id: string): Promise<void> {
@@ -132,6 +135,23 @@ export function useProject(): ProjectState {
         await deleteId<Project>(endpoint, project, Project.fromJSON);
     }
 
+    async function addExtraCheck(extraCheckData: ExtraCheck, projectId: string): Promise<void> {
+        const endpoint = endpoints.projects.extraChecks.replace('{projectId}', projectId);
+        await create<ExtraCheck>(
+            endpoint, 
+            {
+                name: extraCheckData.name,
+                docker_image: extraCheckData.dockerImage?.id,
+                file: extraCheckData.bashFile,
+                time_limit: extraCheckData.timeLimit,
+                memory_limit: extraCheckData.memoryLimit,
+                show_log: extraCheckData.showLog,
+            },
+            extraCheck, 
+            ExtraCheck.fromJSON
+        );
+    }
+
     return {
         projects,
         project,
@@ -145,5 +165,7 @@ export function useProject(): ProjectState {
         createProject,
         updateProject,
         deleteProject,
+
+        addExtraCheck,
     };
 }

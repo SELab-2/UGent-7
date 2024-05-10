@@ -26,11 +26,12 @@ const { push } = useRouter();
 const { params } = useRoute();
 
 /* Service injection */
-const { createProject } = useProject();
+const { project, createProject } = useProject();
 const { course, getCourseByID } = useCourses();
 
 /* State */
 const createExtraChecksBackend = ref<boolean>(false);
+const projectId = ref<string>('');
 
 /* Form content */
 const form = reactive({
@@ -74,6 +75,8 @@ const v$ = useVuelidate(rules, form);
 async function submitProject(): Promise<void> {
     // Validate the form
     const validated = await v$.value.$validate();
+    console.log('validated', validated);
+    console.log(v$.value.$errors);
 
     // Get the course object from the course ID
     await getCourseByID(params.courseId as string);
@@ -103,7 +106,10 @@ async function submitProject(): Promise<void> {
         );
 
         // Make sure the extra checks are created in the backend
-        createExtraChecksBackend.value = true;
+        if (project.value !== null){
+            projectId.value = project.value.id;
+            createExtraChecksBackend.value = true;
+        }
 
         // Redirect to the dashboard overview
         await push({ name: 'dashboard' });
@@ -234,7 +240,7 @@ async function submitProject(): Promise<void> {
                         <label for="extraChecks">
                             {{ t('views.projects.extraChecks.title') }}
                         </label>
-                        <ExtraChecksUpload id="extraChecks" :create-checks-backend="createExtraChecksBackend" />
+                        <ExtraChecksUpload id="extraChecks" :create-checks-backend="createExtraChecksBackend" :project-id="projectId" />
                     </div>
 
                     <!-- Upload field for a zip file that contains the submission structure -->

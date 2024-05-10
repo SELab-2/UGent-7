@@ -67,6 +67,7 @@ export const endpoints = {
         byStudent: '/api/students/{studentId}/projects/',
         byTeacher: '/api/teachers/{teacherId}/projects/',
         byAssistant: '/api/assistants/{assistantId}/projects/',
+        extraChecks: '/api/projects/{projectId}/extra_checks/',
     },
     submissions: {
         retrieve: '/api/submissions/{id}',
