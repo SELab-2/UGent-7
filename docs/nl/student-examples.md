@@ -42,6 +42,7 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
     <img src="../assets/student/nl/join-course.png" alt="vak inschrijf knop" style="width: auto; height: auto; margin-right: 10px;">
     <img src="../assets/student/nl/leave-course.png" alt="vak verlaat knop" style="width: auto; height: auto;">
 </div>
+
 **Inschrijven**
 
 - Druk in de navigatiebalk op "Vakken".
