@@ -55,6 +55,7 @@ fi
 if ! [ -f .env ]; then
   cp .dev.env .env
   sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
+  sed -i "s,^DJANGO_ROOT_DIR=.*,DJANGO_ROOT_DIR=$PWD/backend," .env
   echo "Created environment file"
 fi
 

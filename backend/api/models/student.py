@@ -1,7 +1,13 @@
-from django.db import models
-from authentication.models import User
+from typing import TYPE_CHECKING
+
 from api.models.course import Course
 from api.models.mixins.role import RoleMixin
+from authentication.models import User
+from django.db import models
+
+if TYPE_CHECKING:
+    from api.models.group import Group
+    from django.db.models.manager import RelatedManager
 
 
 class Student(RoleMixin, User):
@@ -24,3 +30,6 @@ class Student(RoleMixin, User):
     def is_enrolled_in_group(self, project):
         """Check if the student is enrolled in a group for the given project."""
         return self.groups.filter(project=project).exists()
+
+    if TYPE_CHECKING:
+        groups: RelatedManager['Group']

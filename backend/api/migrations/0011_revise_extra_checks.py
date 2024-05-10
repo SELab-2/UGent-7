@@ -1,6 +1,6 @@
 from api.logic.get_file_path import (get_docker_image_file_path,
                                      get_extra_check_file_path,
-                                     get_extra_check_result_file_path,
+                                     get_extra_check_log_file_path,
                                      get_submission_file_path)
 from django.db import migrations, models
 
@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="extrachecksresult",
             name="log_file",
-            field=models.FileField(upload_to=get_extra_check_result_file_path, max_length=256, blank=False, null=True)
+            field=models.FileField(upload_to=get_extra_check_log_file_path, max_length=256, blank=False, null=True)
         ),
         migrations.AddField(
             model_name="extrachecksresult",
