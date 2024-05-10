@@ -1,7 +1,6 @@
-# Student help pagina
+# Assistent help pagina
 
-Deze pagina beschrijft hoe u als student met Ypovoli interageert.
-
+Deze pagina beschrijft hoe u als assistent met Ypovoli interageert.
 
 ## Login/Logout
 
@@ -34,44 +33,31 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
 - Druk in de navigatiebalk bovenaan op het pijltje naast de momenteel geselecteerde rol.
 - Kies de niewe rol waarmee u de pagina wil bekijken.
 
-![modus keuze knop](../assets/student/modus-change.png)
-
-## In/uitschrijven voor vak
-
-<div style="display: flex; align-items: center;">
-    <img src="../assets/student/nl/join-course.png" alt="vak inschrijf knop" style="width: auto; height: auto; margin-right: 10px;">
-    <img src="../assets/student/nl/leave-course.png" alt="vak verlaat knop" style="width: auto; height: auto;">
-</div>
-
-**Inschrijven**
-
-- Druk in de navigatiebalk op "Vakken".
-- Zoek het correcte vak via de filters links op de pagina.
-- Klik op de inschrijven knop bij het correcte vak.
-- U bent succesvol ingeschreven voor dit vak.
-
-**Uitschrijven**
-- Optie 1:
-  - Druk in de navigatiebalk op "Vakken".
-  - Zoek het correcte vak via de filters links op de pagina.
-  - Klik op de uitschrijven knop bij het correcte vak.
-  - U bent succesvol uitgeschreven voor dit vak. 
-- Optie 2:
-  - Ga naar de detail pagina van het vak (zie [Vak details](#vak-details)).
-  - Klik onderaan op de knop uitschrijven.
-  - Er verschijnt een pop up.
-  - Bevestig met de knop uitschrijven.
+![modus keuze knop](../assets/assistant/nl/modus-change.png)
 
 ## Vak details
 - Druk in de navigatiebalk op "Dashboard".
 - Scrol naar de sectie "Mijn vakken".
-- Klik op de details knop bij het gekozen vak.
+- Klik op de "Details" knop bij het gekozen vak.
 
 ![vak kaart](../assets/course-card.png)
 
 ::: tip
 - Indien u een vak van een vorig academiejaar wil bekijken, selecteer het correcte jaar in de academiejaar selector.
 :::
+
+## Aanmaken project
+
+- Optie 1
+    - Druk in de navigatiebalk op "Dashboard".
+    - Druk op "Creëer nieuw project".
+- Optie 2
+    - Druk in de navigatiebalk op "Kalender".
+    - Druk op "Creëer nieuw project".
+- Optie 3
+    - Ga naar detail pagina van een vak (zie [Vak details](#vak-details)).
+    - Scrol naar "Lopende projecten".
+    - Klik op de + knop.
 
 ## Projecten bekijken
 
@@ -109,31 +95,8 @@ De kaart is als volgt ingedeeld:
 - Status van de uitgevoerde testen voor deze indieningen.
 :::
 
+
 ## Lesgevers van een vak opzoeken
 - Ga naar de detail pagina van het vak (zie [Vak details](#vak-details)).
 - Scrol naar de sectie "Lesgevers gelinkt aan dit vak".
 - Hier vindt u een lijst van de lesgevers voor dit vak.
-
-## Groep in/uitschrijven
-
-  **Inschrijven**
-
-  ![groep inschrijven](../assets/student/nl/group-join.png)
-- Ga naar de detail pagina voor het gekozen project.
-- Druk op de gekozen groep en klik op "Kies groep".
-- U bent succesvol ingeschreven in deze groep.
-
-**Uitschrijven**
-  ![groep uitschrijven](../assets/student/nl/group-leave.png)
-- Ga naar de detail pagina van het project.
-- Druk op "Verlaat groep".
-
-## Indiening maken
-- Ga naar de detail pagina van het project.
-- Druk op "Indienen".
-- Voeg de bestanden toe met de knop "Kies bestanden".
-- Maak een indiening met de knop "Upload".
-
-## Status vorige indieningen bekijken
-- Ga naar indien pagina.
-- Staat daar bij. !!! TODO !!!

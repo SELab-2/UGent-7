@@ -96,3 +96,10 @@ services:
       dockerfile: Dockerfile.prod
     depends_on:
       - backend
+
+  docs:
+    <<: *common-keys-selab
+    container_name: docs_prod
+    build:
+      context: $DOCS_DIR
+      dockerfile: Dockerfile.prod

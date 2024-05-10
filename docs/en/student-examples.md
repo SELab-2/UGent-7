@@ -34,13 +34,13 @@ This page describes how to interact with Ypovoli as a student.
 - Click on the arrow next to the currently selected role at the top of the navigation bar.
 - Choose the new role with which you want to view the page.
 
-![mode choice button](../assets/modus-change.png)
+![mode choice button](../assets/student/modus-change.png)
 
 ## Enroll in/Leave Course
 
 <div style="display: flex; align-items: center;">
-    <img src="../assets/en/join-course.png" alt="course enroll button" style="width: auto; height: auto; margin-right: 10px;">
-    <img src="../assets/en/leave-course.png" alt="course leave button" style="width: auto; height: auto;">
+    <img src="../assets/student/en/join-course.png" alt="course enroll button" style="width: auto; height: auto; margin-right: 10px;">
+    <img src="../assets/student/en/leave-course.png" alt="course leave button" style="width: auto; height: auto;">
 </div>
 
 **Enroll**
@@ -117,13 +117,13 @@ This page describes how to interact with Ypovoli as a student.
 
   **Join**
 
-  ![group join](../assets/en/group-join.png)
+  ![group join](../assets/student/en/group-join.png)
 - Go to the detail page for the chosen project.
 - Click on the chosen group and click on "Choose group".
 - You are successfully enrolled in this group.
 
 **Leave**
-  ![group leave](../assets/en/group-leave.png)
+  ![group leave](../assets/student/en/group-leave.png)
 - Go to the project detail page.
 - Click on leave group.
 

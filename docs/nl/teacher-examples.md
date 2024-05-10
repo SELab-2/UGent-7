@@ -1,7 +1,6 @@
-# Student help pagina
+# Professor help pagina
 
-Deze pagina beschrijft hoe u als student met Ypovoli interageert.
-
+Deze pagina beschrijft hoe u als professor met Ypovoli interageert.
 
 ## Login/Logout
 
@@ -26,7 +25,6 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
 ![taal keuze knop](../assets/nl/lang-change.png)
 
 ## Modus veranderen
-
 ::: danger Opgepast!
 - Aleen mogelijk indien gebruiker meerdere van de volgende rollen heeft: student, assistent, prof of admin.
 :::
@@ -34,33 +32,25 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
 - Druk in de navigatiebalk bovenaan op het pijltje naast de momenteel geselecteerde rol.
 - Kies de niewe rol waarmee u de pagina wil bekijken.
 
-![modus keuze knop](../assets/student/modus-change.png)
+![modus keuze knop](../assets/teacher/nl/modus-change.png)
 
-## In/uitschrijven voor vak
+## Aanmaken vak
+- Druk in de navigatiebalk op "Dashboard".
+- Scrol naar de sectie "Mijn vakken".
+- Klik op de + knop.
 
+![vak aanmaak knop](../assets/teacher/nl/course-create-button.png)
+
+:::info
+Wilt u uw vak enkel beschikbaar plaatsen via een uitnodigingslink, kan u dat via deze knop.
+![vak aanmaak knop](../assets/teacher/nl/private-course-button.png)
+
+:::danger
+- Activeer deze link via de share knop (maximum geldigheid van 28 dagen).
 <div style="display: flex; align-items: center;">
-    <img src="../assets/student/nl/join-course.png" alt="vak inschrijf knop" style="width: auto; height: auto; margin-right: 10px;">
-    <img src="../assets/student/nl/leave-course.png" alt="vak verlaat knop" style="width: auto; height: auto;">
+    <img src="../assets/teacher/course-share-button.png" alt="vak deel knop" style="width: auto; height: 75px; margin-right: 10px;">
 </div>
-
-**Inschrijven**
-
-- Druk in de navigatiebalk op "Vakken".
-- Zoek het correcte vak via de filters links op de pagina.
-- Klik op de inschrijven knop bij het correcte vak.
-- U bent succesvol ingeschreven voor dit vak.
-
-**Uitschrijven**
-- Optie 1:
-  - Druk in de navigatiebalk op "Vakken".
-  - Zoek het correcte vak via de filters links op de pagina.
-  - Klik op de uitschrijven knop bij het correcte vak.
-  - U bent succesvol uitgeschreven voor dit vak. 
-- Optie 2:
-  - Ga naar de detail pagina van het vak (zie [Vak details](#vak-details)).
-  - Klik onderaan op de knop uitschrijven.
-  - Er verschijnt een pop up.
-  - Bevestig met de knop uitschrijven.
+:::
 
 ## Vak details
 - Druk in de navigatiebalk op "Dashboard".
@@ -72,6 +62,19 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
 ::: tip
 - Indien u een vak van een vorig academiejaar wil bekijken, selecteer het correcte jaar in de academiejaar selector.
 :::
+
+## Aanmaken project
+
+- Optie 1
+    - Druk in de navigatiebalk op Dashboard.
+    - Druk op "Creëer nieuw project".
+- Optie 2
+    - Druk in de navigatiebalk op "Kalender".
+    - Druk op "Creëer nieuw project".
+- Optie 3
+    - Ga naar detail pagina van een vak (zie [Vak details](#vak-details)).
+    - Scrol naar "Lopende projecten".
+    - Klik op de + knop.
 
 ## Projecten bekijken
 
@@ -109,31 +112,12 @@ De kaart is als volgt ingedeeld:
 - Status van de uitgevoerde testen voor deze indieningen.
 :::
 
-## Lesgevers van een vak opzoeken
+## Lesgevers van een vak opzoeken en aanpassen
 - Ga naar de detail pagina van het vak (zie [Vak details](#vak-details)).
 - Scrol naar de sectie "Lesgevers gelinkt aan dit vak".
 - Hier vindt u een lijst van de lesgevers voor dit vak.
 
-## Groep in/uitschrijven
-
-  **Inschrijven**
-
-  ![groep inschrijven](../assets/student/nl/group-join.png)
-- Ga naar de detail pagina voor het gekozen project.
-- Druk op de gekozen groep en klik op "Kies groep".
-- U bent succesvol ingeschreven in deze groep.
-
-**Uitschrijven**
-  ![groep uitschrijven](../assets/student/nl/group-leave.png)
-- Ga naar de detail pagina van het project.
-- Druk op "Verlaat groep".
-
-## Indiening maken
-- Ga naar de detail pagina van het project.
-- Druk op "Indienen".
-- Voeg de bestanden toe met de knop "Kies bestanden".
-- Maak een indiening met de knop "Upload".
-
-## Status vorige indieningen bekijken
-- Ga naar indien pagina.
-- Staat daar bij. !!! TODO !!!
+::: info
+- Via de knop bewerken kan u lesgevers toevoegen aan (of verwijderen van) dit vak.
+- Via het vuilbak icoontje kan u lesgevers verwijderen van dit vak (enige resterende lesgever kan onmogelijk verwijderd worden).
+:::

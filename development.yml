@@ -85,6 +85,16 @@ services:
     depends_on:
       - backend
 
+  docs:
+    <<: *common-keys-selab
+    container_name: docs
+    build:
+      context: $DOCS_DIR
+      dockerfile: Dockerfile.dev
+    command: sh -c "npm install && npm run host"
+    volumes:
+      - ${DOCS_DIR}:/docs
+
   redis:
     <<: *common-keys-selab
     container_name: redis
