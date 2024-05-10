@@ -66,17 +66,28 @@ const onZipStructureUpload = (event: any): void => {
     form.submissionStructure = event.files[0];
 };
 
-// useVuelidate function to perform form validation
+// Vuelidate validation
 const v$ = useVuelidate(rules, form);
+
+// Validate the create project form
+const validateForm = () => {
+    v$.value.name.$touch();
+    v$.value.startDate.$touch();
+    v$.value.deadline.$touch();
+    v$.value.groupSize.$touch();
+    v$.value.maxScore.$touch();
+    return ! v$.value.name.$invalid && ! v$.value.startDate.$invalid && ! v$.value.deadline.$invalid 
+    && ! v$.value.groupSize.$invalid && ! v$.value.maxScore.$invalid;
+};
 
 /**
  * Function to submit the project form.
  */
 async function submitProject(): Promise<void> {
     // Validate the form
-    const validated = await v$.value.$validate();
-    console.log('validated', validated);
-    console.log(v$.value.$errors);
+    const validated = validateForm();
+
+    console.log('validated', v$.value.$errors);
 
     // Get the course object from the course ID
     await getCourseByID(params.courseId as string);

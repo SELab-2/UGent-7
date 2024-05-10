@@ -148,7 +148,8 @@ export function useProject(): ProjectState {
                 show_log: extraCheckData.showLog,
             },
             extraCheck, 
-            ExtraCheck.fromJSON
+            ExtraCheck.fromJSON,
+            'multipart/form-data',
         );
     }
 
