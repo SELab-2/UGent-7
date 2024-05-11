@@ -137,15 +137,15 @@ watch(
             // If this is the case, the check should not be created again.
             extraChecksList.value.forEach((extraCheck) => {
                 // Create the extra check in the backend, if the check has no id yet
-                if (extraCheck.id === ''){
+                if (extraCheck.id === '') {
                     addExtraCheck(extraCheck, props.projectId);
                 }
             });
 
-            // Delete all the extra checks that are in the backend list, but not in the extra checks list. 
+            // Delete all the extra checks that are in the backend list, but not in the extra checks list.
             // This means that the user has removed the extra check from the list and it should be deleted from the backend.
             extraChecksInBackendList.value.forEach((extraCheck) => {
-                if (!extraChecksList.value.includes(extraCheck)){
+                if (!extraChecksList.value.includes(extraCheck)) {
                     // Delete the extra check from the backend
                     deleteExtraCheck(extraCheck.id);
                 }
@@ -161,13 +161,13 @@ onMounted(async () => {
     await getDockerImages();
 
     // If a project ID is provided, load the extra checks for this project
-    if (props.projectId){
+    if (props.projectId !== '') {
         // Load the extra checks for the project
         await getExtraChecksByProject(props.projectId);
 
         // Save the extra checks in the list
         extraChecksList.value = extraChecks.value ?? [];
-        
+
         // Save the checks that are already in the backend in a separate list (to avoid duplicated / enable deletion)
         extraChecksInBackendList.value = extraChecks.value?.slice() ?? [];
     }

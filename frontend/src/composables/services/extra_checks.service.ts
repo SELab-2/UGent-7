@@ -43,7 +43,7 @@ export function useExtraCheck(): ExtraCheckState {
     async function deleteExtraCheck(extraCheckId: string): Promise<void> {
         const endpoint = endpoints.extraChecks.retrieve.replace('{id}', extraCheckId);
         await deleteId(endpoint, response, Response.fromJSON);
-    }    
+    }
 
     return {
         extraCheck,
