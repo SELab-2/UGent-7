@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 class StateEnum(models.TextChoices):
     QUEUED = "QUEUED", _("dockerimage.state.queued")
     BUILDING = "BUILDING", _("dockerimage.state.building")
-    READY = "READY", _("dockerimage.state.eady")
+    READY = "READY", _("dockerimage.state.ready")
     ERROR = "ERROR", _("dockerimage.state.error")
 
 

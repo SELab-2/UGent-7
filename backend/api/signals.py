@@ -113,6 +113,13 @@ def hook_submission(sender, instance: Submission, created: bool, **kwargs):
         run_all_checks.send(sender=Submission, submission=instance)
         pass
 
+
+@receiver(post_save, sender=DockerImage)
+def hook_docker_image(sender, instance: DockerImage, created: bool, **kwargs):
+    # Run when it's created
+    if created:
+        run_docker_image_build.send(sender=DockerImage, docker_image=instance)
+
 # Helpers
 
 

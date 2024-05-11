@@ -1,0 +1,173 @@
+# faculties
+- model: authentication.faculty
+  pk: 0
+  fields:
+    name: Law Criminology
+- model: authentication.faculty
+  pk: 1
+  fields:
+    name: Bio Ingenieurswetenschappen
+- model: authentication.faculty
+  pk: 2
+  fields:
+    name: Diergeneeskunde
+- model: authentication.faculty
+  pk: 3
+  fields:
+    name: Wetenschappen
+- model: authentication.faculty
+  pk: 4
+  fields:
+    name: Arts Philosophy
+- model: authentication.faculty
+  pk: 5
+  fields:
+    name: Psychologie PedagogischeWetenschappen
+- model: authentication.faculty
+  pk: 6
+  fields:
+    name: Farmaceutische Wetenschappen
+- model: authentication.faculty
+  pk: 7
+  fields:
+    name: Medicine Health Sciences
+# 1 Admin
+- model: authentication.user
+  pk: 0
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: aloralie
+    is_staff: true
+    email: alexander.oralie@ugent.be
+    first_name: Alexander
+    last_name: Oralie
+    last_enrolled: 2018
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 0
+# 2 Professors
+- model: authentication.user
+  pk: 1
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: bryavian
+    is_staff: false
+    email: brycenviana@ugent.be
+    first_name: Brycen
+    last_name: Aviana
+    last_enrolled: 2004
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 1
+      - 2
+      - 3
+- model: authentication.user
+  pk: 2
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: renastu
+    is_staff: false
+    email: enatu@ugent.be
+    first_name: Rena
+    last_name: Stu
+    last_enrolled: 2009
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 4
+      - 3
+# 3 Assistants
+- model: authentication.user
+  pk: 3
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: cawatson
+    is_staff: false
+    email: camillaatson@ugent.be
+    first_name: Camilla
+    last_name: Watson
+    last_enrolled: 2022
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 5
+      - 3
+- model: authentication.user
+  pk: 4
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: averluna
+    is_staff: false
+    email: averyuna@ugent.be
+    first_name: Avery
+    last_name: Luna
+    last_enrolled: 2023
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 3
+- model: authentication.user
+  pk: 5
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: czachery
+    is_staff: false
+    email: chetachery@ugent.be
+    first_name: Chet
+    last_name: Zachery
+    last_enrolled: 2021
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 3
+# 4 Students
+- model: authentication.user
+  pk: 6
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: jostammy
+    is_staff: false
+    email: osephineammy@ugent.be
+    first_name: Josephine
+    last_name: Tammy
+    last_enrolled: 2024
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 3
+- model: authentication.user
+  pk: 7
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: chdeitra
+    is_staff: false
+    email: christobaleitra@ugent.be
+    first_name: Christobal
+    last_name: Deitra
+    last_enrolled: 2023
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 6
+      - 3
+- model: authentication.user
+  pk: 8
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: thjoetta
+    is_staff: false
+    email: thaddeusoetta@ugent.be
+    first_name: Thaddeus
+    last_name: Joetta
+    last_enrolled: 2023
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 3
+- model: authentication.user
+  pk: 9
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: kelenora
+    is_staff: false
+    email: keldalenora@ugent.be
+    first_name: Kelda
+    last_name: Elenora
+    last_enrolled: 2022
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - 7
+      - 3
