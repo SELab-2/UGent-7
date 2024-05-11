@@ -1,4 +1,4 @@
-import { DockerImage } from "./DockerImage";
+import { type DockerImage } from './DockerImage';
 
 export class ExtraCheck {
     constructor(

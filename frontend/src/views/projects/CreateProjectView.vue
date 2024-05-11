@@ -70,14 +70,19 @@ const onZipStructureUpload = (event: any): void => {
 const v$ = useVuelidate(rules, form);
 
 // Validate the create project form
-const validateForm = () => {
+const validateForm = (): boolean => {
     v$.value.name.$touch();
     v$.value.startDate.$touch();
     v$.value.deadline.$touch();
     v$.value.groupSize.$touch();
     v$.value.maxScore.$touch();
-    return ! v$.value.name.$invalid && ! v$.value.startDate.$invalid && ! v$.value.deadline.$invalid 
-    && ! v$.value.groupSize.$invalid && ! v$.value.maxScore.$invalid;
+    return (
+        !v$.value.name.$invalid &&
+        !v$.value.startDate.$invalid &&
+        !v$.value.deadline.$invalid &&
+        !v$.value.groupSize.$invalid &&
+        !v$.value.maxScore.$invalid
+    );
 };
 
 /**
@@ -115,7 +120,7 @@ async function submitProject(): Promise<void> {
         );
 
         // Make sure the extra checks are created in the backend
-        if (project.value !== null){
+        if (project.value !== null) {
             projectId.value = project.value.id;
             createExtraChecksBackend.value = true;
         }
@@ -247,7 +252,11 @@ async function submitProject(): Promise<void> {
                     <!-- Upload field for bash script -->
                     <div class="field col">
                         <label for="extraChecks">{{ t('views.projects.extraChecks.title') }}</label>
-                        <ExtraChecksUpload id="extraChecks" :create-checks-backend="createExtraChecksBackend" :project-id="projectId" />
+                        <ExtraChecksUpload
+                            id="extraChecks"
+                            :create-checks-backend="createExtraChecksBackend"
+                            :project-id="projectId"
+                        />
                     </div>
 
                     <!-- Upload field for a zip file that contains the submission structure -->

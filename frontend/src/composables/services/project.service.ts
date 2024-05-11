@@ -99,13 +99,7 @@ export function useProject(): ProjectState {
             requestData.number_groups = numberOfGroups;
         }
 
-        await create<Project>(
-            endpoint,
-            requestData,
-            project,
-            Project.fromJSON,
-            'multipart/form-data',
-        );
+        await create<Project>(endpoint, requestData, project, Project.fromJSON, 'multipart/form-data');
     }
 
     async function updateProject(projectData: Project): Promise<void> {
@@ -138,7 +132,7 @@ export function useProject(): ProjectState {
     async function addExtraCheck(extraCheckData: ExtraCheck, projectId: string): Promise<void> {
         const endpoint = endpoints.projects.extraChecks.replace('{projectId}', projectId);
         await create<ExtraCheck>(
-            endpoint, 
+            endpoint,
             {
                 name: extraCheckData.name,
                 docker_image: extraCheckData.dockerImage?.id,
@@ -147,7 +141,7 @@ export function useProject(): ProjectState {
                 memory_limit: extraCheckData.memoryLimit,
                 show_log: extraCheckData.showLog,
             },
-            extraCheck, 
+            extraCheck,
             ExtraCheck.fromJSON,
             'multipart/form-data',
         );

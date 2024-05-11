@@ -26,7 +26,7 @@ const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
 const { addExtraCheck } = useProject();
 
 /* Props */
-const props = defineProps<{ projectId: string, createChecksBackend: Boolean }>();
+const props = defineProps<{ projectId: string; createChecksBackend: boolean }>();
 
 /* State for the dialog to create an extra check */
 const displayExtraCheckCreation = ref(false);
@@ -61,7 +61,7 @@ const v$ = useVuelidate(rules, form);
 /**
  * Function to save the extra check
  */
- async function saveExtraCheck(): Promise<void> {
+async function saveExtraCheck(): Promise<void> {
     // Validate the form
     const validated = await v$.value.$validate();
 
@@ -69,7 +69,7 @@ const v$ = useVuelidate(rules, form);
     if (validated) {
         // Create the extra check
         const extraCheck = new ExtraCheck(
-            '',    // The ID is not needed
+            '', // The ID is not needed
             form.name,
             form.dockerImage,
             form.bashFile,
@@ -110,15 +110,15 @@ function onBashScriptUpload(event: any): void {
 async function onDockerImageUpload(event: any): Promise<void> {
     // Create a new docker image
     const dockerImage = new DockerImage(
-        '',    // The ID is not needed
-        event.files[0].name,
-        '',    // File string is not needed
+        '', // The ID is not needed
+        event.files[0].name as string,
+        '', // File string is not needed
         false, // Docker image should be private, no possibility to upload public images
-        '',    // No owner is needed
+        '', // No owner is needed
     );
 
     // Create the docker image in the backend
-    await createDockerImage(dockerImage, event.files[0]);
+    await createDockerImage(dockerImage, event.files[0] as File);
 
     // Refresh the list of docker images
     await getDockerImages();
@@ -127,15 +127,18 @@ async function onDockerImageUpload(event: any): Promise<void> {
 /**
  * Watcher to create the checks in the backend when the signal is received
  */
-watch(() => props.createChecksBackend, async (value) => {
-    if (value) {
-        // Create the extra checks in the backend
-        extraChecks.value.forEach(async (extraCheck) => {
-            // Create the extra check in the backend
-            await addExtraCheck(extraCheck, props.projectId);
-        });
-    }
-});
+watch(
+    () => props.createChecksBackend,
+    async (value) => {
+        if (value) {
+            // Create the extra checks in the backend
+            extraChecks.value.forEach((extraCheck) => {
+                // Create the extra check in the backend
+                await addExtraCheck(extraCheck, props.projectId);
+            });
+        }
+    },
+);
 
 /**
  * Load the docker images when the component is mounted
@@ -149,7 +152,11 @@ onMounted(async () => {
     <!-- List with the extra checks -->
     <DataView :value="extraChecks" data-key="id" v-if="extraChecks.length > 0">
         <template #list="slotProps">
-            <div v-for="(item, index) in slotProps.items" :key="index" class="flex align-items-center justify-content-between mr-6">
+            <div
+                v-for="(item, index) in slotProps.items"
+                :key="index"
+                class="flex align-items-center justify-content-between mr-6"
+            >
                 <p class="text-lg font-semibold">{{ item.name }}</p>
 
                 <ButtonGroup class="flex gap-2">
@@ -158,7 +165,6 @@ onMounted(async () => {
             </div>
         </template>
     </DataView>
-    
 
     <!-- Button to add a new extra check -->
     <Button
@@ -219,7 +225,13 @@ onMounted(async () => {
                                 <label for="timeLimit">
                                     {{ t('views.projects.extraChecks.timeLimit') }}
                                 </label>
-                                <InputNumber id="timeLimit" class="w-full" v-model="form.timeLimit" :min="10" :max="1000" />
+                                <InputNumber
+                                    id="timeLimit"
+                                    class="w-full"
+                                    v-model="form.timeLimit"
+                                    :min="10"
+                                    :max="1000"
+                                />
                                 <ErrorMessage :field="v$.timeLimit" />
                             </div>
 
@@ -227,7 +239,13 @@ onMounted(async () => {
                                 <label for="memoryLimit">
                                     {{ t('views.projects.extraChecks.memoryLimit') }}
                                 </label>
-                                <InputNumber id="numberOfGroups" class="w-full" v-model="form.memoryLimit" :min="50" :max="1024" />
+                                <InputNumber
+                                    id="numberOfGroups"
+                                    class="w-full"
+                                    v-model="form.memoryLimit"
+                                    :min="50"
+                                    :max="1024"
+                                />
                                 <ErrorMessage :field="v$.memoryLimit" />
                             </div>
                         </div>
@@ -239,7 +257,6 @@ onMounted(async () => {
                                 <label for="showLog">{{ t('views.projects.extraChecks.showLog') }}</label>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="col-12 lg:col-6">
@@ -249,15 +266,25 @@ onMounted(async () => {
                                 <label for="dockerImage">
                                     {{ t('views.projects.extraChecks.dockerImage') }}
                                 </label>
-                                <DataTable v-model:selection="form.dockerImage" :value="dockerImages" selectionMode="single" dataKey="id" tableStyle="min-width: 30rem" id="dockerImage" class="w-full mt-2 mb-2" scrollable scrollHeight="300px">
+                                <DataTable
+                                    v-model:selection="form.dockerImage"
+                                    :value="dockerImages"
+                                    selectionMode="single"
+                                    dataKey="id"
+                                    tableStyle="min-width: 30rem"
+                                    id="dockerImage"
+                                    class="w-full mt-2 mb-2"
+                                    scrollable
+                                    scrollHeight="300px"
+                                >
                                     <Column field="name" :header="t('views.projects.extraChecks.name')"></Column>
                                     <Column field="public" :header="t('views.projects.extraChecks.public')">
                                         <template #body="slotProps">
                                             <!-- Use check and cross icons to indicate if the image is public or not -->
-                                            <i v-if="slotProps.data.public" class="pi pi-check"/>
-                                            <i v-else class="pi pi-times"/>
+                                            <i v-if="slotProps.data.public" class="pi pi-check" />
+                                            <i v-else class="pi pi-times" />
                                         </template>
-                                    </Column>                            
+                                    </Column>
                                 </DataTable>
                                 <ErrorMessage :field="v$.dockerImage" />
 
