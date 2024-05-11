@@ -87,8 +87,6 @@ async function submitProject(): Promise<void> {
     // Validate the form
     const validated = validateForm();
 
-    console.log('validated', v$.value.$errors);
-
     // Get the course object from the course ID
     await getCourseByID(params.courseId as string);
 
@@ -245,12 +243,10 @@ async function submitProject(): Promise<void> {
                     />
                 </div>
 
-                <div class="col-12 lg:col-6">
+                <div class="col-12 lg:col-6 checks">
                     <!-- Upload field for bash script -->
                     <div class="field col">
-                        <label for="extraChecks">
-                            {{ t('views.projects.extraChecks.title') }}
-                        </label>
+                        <label for="extraChecks">{{ t('views.projects.extraChecks.title') }}</label>
                         <ExtraChecksUpload id="extraChecks" :create-checks-backend="createExtraChecksBackend" :project-id="projectId" />
                     </div>
 
@@ -273,5 +269,9 @@ async function submitProject(): Promise<void> {
     </BaseLayout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.checks .field.col > * {
+    display: block;
+}
+</style>
 @/types/Project

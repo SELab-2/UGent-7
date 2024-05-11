@@ -72,9 +72,10 @@
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
             "noStudents": "Geen studenten in deze groep",
             "extraChecks": {
-                "title": "Automatische checks voor project",
+                "title": "Automatische checks op een indiening",
                 "add": "Nieuwe check",
                 "name": "Naam",
+                "public": "Publiek",
                 "bashScript": "Bash script",
                 "dockerImage": "Docker image",
                 "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",

@@ -147,17 +147,18 @@ onMounted(async () => {
 
 <template>
     <!-- List with the extra checks -->
-    <DataView :value="extraChecks" data-key="id">
+    <DataView :value="extraChecks" data-key="id" v-if="extraChecks.length > 0">
         <template #list="slotProps">
             <div v-for="(item, index) in slotProps.items" :key="index" class="flex align-items-center justify-content-between mr-6">
                 <p class="text-lg font-semibold">{{ item.name }}</p>
 
                 <ButtonGroup class="flex gap-2">
-                    <Button icon="pi pi-times" class="p-button-rounded p-button-danger" @click="extraChecks.splice(index, 1)" />
+                    <Button icon="pi pi-times" class="p-button p-button-danger" @click="extraChecks.splice(index, 1)" />
                 </ButtonGroup>
             </div>
         </template>
     </DataView>
+    
 
     <!-- Button to add a new extra check -->
     <Button
@@ -249,8 +250,8 @@ onMounted(async () => {
                                     {{ t('views.projects.extraChecks.dockerImage') }}
                                 </label>
                                 <DataTable v-model:selection="form.dockerImage" :value="dockerImages" selectionMode="single" dataKey="id" tableStyle="min-width: 30rem" id="dockerImage" class="w-full mt-2 mb-2" scrollable scrollHeight="300px">
-                                    <Column field="name" header="Name"></Column>
-                                    <Column field="public" header="Public">
+                                    <Column field="name" :header="t('views.projects.extraChecks.name')"></Column>
+                                    <Column field="public" :header="t('views.projects.extraChecks.public')">
                                         <template #body="slotProps">
                                             <!-- Use check and cross icons to indicate if the image is public or not -->
                                             <i v-if="slotProps.data.public" class="pi pi-check"/>
