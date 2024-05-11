@@ -86,7 +86,7 @@ class ProjectViewSet(RetrieveModelMixin,
             "message": gettext("project.success.groups.created"),
         })
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True)
     def structure_checks(self, request, **_):
         """Returns the structure checks for the given project"""
         project = self.get_object()
@@ -120,7 +120,7 @@ class ProjectViewSet(RetrieveModelMixin,
 
         return Response(serializer.data)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True)
     def extra_checks(self, request, **_):
         """Returns the extra checks for the given project"""
         project = self.get_object()
@@ -155,7 +155,7 @@ class ProjectViewSet(RetrieveModelMixin,
             "message": gettext("project.success.extra_check.add")
         })
 
-    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | ProjectGroupPermission])
+    @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission])
     def submission_status(self, request, **_):
         """Returns the current submission status for the given project
         This includes:
