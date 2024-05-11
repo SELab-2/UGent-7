@@ -9,7 +9,6 @@ import InputSwitch from 'primevue/inputswitch';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import DataView from 'primevue/dataview';
-import ButtonGroup from 'primevue/buttongroup';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import { DockerImage } from '@/types/DockerImage';
 import { ExtraCheck } from '@/types/ExtraCheck';
@@ -18,12 +17,12 @@ import { ref, reactive, computed, onMounted, watch } from 'vue';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
-import { useProject } from '@/composables/services/project.service.ts';
+import { useExtraCheck } from '@/composables/services/extra_checks.service';
 
 /* Composable injections */
 const { t } = useI18n();
 const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
-const { addExtraCheck } = useProject();
+const { extraChecks, getExtraChecksByProject, addExtraCheck, deleteExtraCheck } = useExtraCheck();
 
 /* Props */
 const props = defineProps<{ projectId: string; createChecksBackend: boolean }>();
@@ -31,8 +30,11 @@ const props = defineProps<{ projectId: string; createChecksBackend: boolean }>()
 /* State for the dialog to create an extra check */
 const displayExtraCheckCreation = ref(false);
 
-/* List with the extra checks */
-const extraChecks = ref<ExtraCheck[]>([]);
+/* List with all the extra checks */
+const extraChecksList = ref<ExtraCheck[]>([]);
+
+/* List with the extra checks that are already in the backend */
+const extraChecksInBackendList = ref<ExtraCheck[]>([]);
 
 /* Form content */
 const form = reactive({
@@ -78,8 +80,8 @@ async function saveExtraCheck(): Promise<void> {
             form.showLog,
         );
 
-        // Add the extra check to the list with checks that should be created, if the creation is successful
-        extraChecks.value.push(extraCheck);
+        // Add the extra check to the list with checks
+        extraChecksList.value.push(extraCheck);
 
         // Close the dialog
         displayExtraCheckCreation.value = false;
@@ -114,7 +116,7 @@ async function onDockerImageUpload(event: any): Promise<void> {
         event.files[0].name as string,
         '', // File string is not needed
         false, // Docker image should be private, no possibility to upload public images
-        '', // No owner is needed
+        '', // Owner is not needed
     );
 
     // Create the docker image in the backend
@@ -131,26 +133,50 @@ watch(
     () => props.createChecksBackend,
     async (value) => {
         if (value) {
-            // Create the extra checks in the backend
-            extraChecks.value.forEach((extraCheck) => {
-                // Create the extra check in the backend
-                await addExtraCheck(extraCheck, props.projectId);
+            // Create the extra checks in the backend. If a check has already an id, this means that the check is already in the backend.
+            // If this is the case, the check should not be created again.
+            extraChecksList.value.forEach((extraCheck) => {
+                // Create the extra check in the backend, if the check has no id yet
+                if (extraCheck.id === ''){
+                    addExtraCheck(extraCheck, props.projectId);
+                }
+            });
+
+            // Delete all the extra checks that are in the backend list, but not in the extra checks list. 
+            // This means that the user has removed the extra check from the list and it should be deleted from the backend.
+            extraChecksInBackendList.value.forEach((extraCheck) => {
+                if (!extraChecksList.value.includes(extraCheck)){
+                    // Delete the extra check from the backend
+                    deleteExtraCheck(extraCheck.id);
+                }
             });
         }
     },
 );
 
 /**
- * Load the docker images when the component is mounted
+ * Load the docker images and extra checks when the component is mounted
  */
 onMounted(async () => {
     await getDockerImages();
+
+    // If a project ID is provided, load the extra checks for this project
+    if (props.projectId){
+        // Load the extra checks for the project
+        await getExtraChecksByProject(props.projectId);
+
+        // Save the extra checks in the list
+        extraChecksList.value = extraChecks.value ?? [];
+        
+        // Save the checks that are already in the backend in a separate list (to avoid duplicated / enable deletion)
+        extraChecksInBackendList.value = extraChecks.value?.slice() ?? [];
+    }
 });
 </script>
 
 <template>
     <!-- List with the extra checks -->
-    <DataView :value="extraChecks" data-key="id" v-if="extraChecks.length > 0">
+    <DataView :value="extraChecksList" data-key="id" v-if="extraChecksList.length > 0">
         <template #list="slotProps">
             <div
                 v-for="(item, index) in slotProps.items"
@@ -159,9 +185,7 @@ onMounted(async () => {
             >
                 <p class="text-lg font-semibold">{{ item.name }}</p>
 
-                <ButtonGroup class="flex gap-2">
-                    <Button icon="pi pi-times" class="p-button p-button-danger" @click="extraChecks.splice(index, 1)" />
-                </ButtonGroup>
+                <Button icon="pi pi-times" class="p-button p-button-danger" @click="extraChecksList.splice(index, 1)" />
             </div>
         </template>
     </DataView>
@@ -174,6 +198,7 @@ onMounted(async () => {
         :label="t('views.projects.extraChecks.add')"
         icon-pos="left"
     />
+    <!-- Dialog with a form to create a new extra check -->
     <Dialog
         v-model:visible="displayExtraCheckCreation"
         class="m-3"
@@ -266,6 +291,7 @@ onMounted(async () => {
                                 <label for="dockerImage">
                                     {{ t('views.projects.extraChecks.dockerImage') }}
                                 </label>
+                                <!-- Data table with the docker images -->
                                 <DataTable
                                     v-model:selection="form.dockerImage"
                                     :value="dockerImages"

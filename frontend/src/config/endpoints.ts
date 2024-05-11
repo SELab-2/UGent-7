@@ -67,7 +67,6 @@ export const endpoints = {
         byStudent: '/api/students/{studentId}/projects/',
         byTeacher: '/api/teachers/{teacherId}/projects/',
         byAssistant: '/api/assistants/{assistantId}/projects/',
-        extraChecks: '/api/projects/{projectId}/extra_checks/',
     },
     submissions: {
         retrieve: '/api/submissions/{id}',
@@ -78,5 +77,9 @@ export const endpoints = {
     structureChecks: {
         retrieve: '/api/structureChecks/{id}',
         byProject: '/api/projects/{projectId}/structureChecks/',
+    },
+    extraChecks: {
+        retrieve: '/api/extra-checks/{id}/',
+        byProject: '/api/projects/{projectId}/extra_checks/',
     },
 };

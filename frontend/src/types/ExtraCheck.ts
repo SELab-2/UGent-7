@@ -4,11 +4,11 @@ export class ExtraCheck {
     constructor(
         public id: string,
         public name: string,
-        public dockerImage: DockerImage | null,
-        public bashFile: File | null,
-        public timeLimit: number,
-        public memoryLimit: number,
-        public showLog: boolean,
+        public docker_image: DockerImage | null,
+        public file: File | null,
+        public time_limit: number,
+        public memory_limit: number,
+        public show_log: boolean,
     ) {}
 
     /**
@@ -20,11 +20,11 @@ export class ExtraCheck {
         return new ExtraCheck(
             extraCheck.id,
             extraCheck.name,
-            null,
-            null,
-            extraCheck.timeLimit,
-            extraCheck.memoryLimit,
-            extraCheck.showLog,
+            extraCheck.docker_image,
+            extraCheck.file,
+            extraCheck.time_limit,
+            extraCheck.memory_limit,
+            extraCheck.show_log,
         );
     }
 }

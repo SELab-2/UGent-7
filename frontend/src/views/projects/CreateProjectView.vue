@@ -9,6 +9,7 @@ import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
+import ExtraChecksUpload from '@/components/projects/ExtraChecksUpload.vue';
 import { SubmissionStatus } from '@/types/SubmisionStatus';
 import { reactive, computed, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -18,7 +19,6 @@ import { useProject } from '@/composables/services/project.service';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { useCourses } from '@/composables/services/course.service';
-import ExtraChecksUpload from '@/components/projects/ExtraChecksUpload.vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -249,7 +249,7 @@ async function submitProject(): Promise<void> {
                 </div>
 
                 <div class="col-12 lg:col-6 checks">
-                    <!-- Upload field for bash script -->
+                    <!-- Extra checks upload -->
                     <div class="field col">
                         <label for="extraChecks">{{ t('views.projects.extraChecks.title') }}</label>
                         <ExtraChecksUpload
