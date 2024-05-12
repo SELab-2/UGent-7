@@ -1,13 +1,14 @@
 import json
 
 from api.models.checks import ExtraCheck, StructureCheck
+from api.models.docker import DockerImage
 from api.models.project import Project
 from api.models.student import Student
 from api.models.teacher import Teacher
-from api.tests.helpers import (create_course, create_file_extension,
-                               create_group, create_project,
-                               create_structure_check, create_student,
-                               create_submission)
+from api.tests.helpers import (create_admin, create_course,
+                               create_file_extension, create_group,
+                               create_project, create_structure_check,
+                               create_student, create_submission)
 from authentication.models import User
 from django.conf import settings
 from django.urls import reverse
@@ -18,7 +19,7 @@ from rest_framework.test import APITestCase
 
 class ProjectModelTests(APITestCase):
     def setUp(self) -> None:
-        self.client.force_authenticate(User.get_dummy_admin())
+        self.client.force_authenticate(User.get_dummy_admin())  # type: ignore
 
     def test_toggle_visible(self):
         """
@@ -273,7 +274,7 @@ class ProjectModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -305,7 +306,7 @@ class ProjectModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -349,7 +350,7 @@ class ProjectModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -367,7 +368,7 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))[0]
@@ -428,7 +429,7 @@ class ProjectModelTests(APITestCase):
         project.refresh_from_db()
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
         # self.assertEqual(json.loads(response.content), {'message': gettext('project.success.structure_check.add')})
 
         upd: StructureCheck = project.structure_checks.all()[0]
@@ -489,7 +490,7 @@ class ProjectModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
         self.assertEqual(json.loads(response.content), {
             'non_field_errors': [gettext("project.error.structure_checks.already_existing")]})
 
@@ -523,60 +524,62 @@ class ProjectModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
         self.assertEqual(json.loads(response.content), {
             'non_field_errors': [gettext("project.error.structure_checks.extension_blocked_and_obligated")]})
 
-    # def test_project_extra_checks(self):
-    #     """
-    #     Able to retrieve an extra check of a project after creating it.
-    #     """
-    #     course = create_course(id=3, name="test course", academic_startyear=2024)
-    #     project = create_project(
-    #         name="test project",
-    #         description="test description",
-    #         visible=True,
-    #         archived=False,
-    #         days=7,
-    #         course=course,
-    #     )
-    #     checks = ExtraCheck.objects.create(
-    #         id=5,
-    #         project=project,
-    #         run_script="testscript.sh",
-    #     )
+    def test_project_extra_checks(self):
+        """
+        Able to retrieve an extra check of a project after creating it.
+        """
+        course = create_course(name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+        docker_image = DockerImage.objects.create(
+            name="Python",
+            file="docker_images/Dockerfile.python",
+            owner=create_admin(
+                id=55,
+                first_name="John",
+                last_name="Doe",
+                email="john@doe.com"
+            )
+        )
+        check = ExtraCheck.objects.create(
+            name="test extra check",
+            project=project,
+            docker_image=docker_image,
+            file="testscript.sh",
+        )
 
-    #     response = self.client.get(
-    #         reverse("project-detail", args=[str(project.id)]), follow=True
-    #     )
+        response = self.client.get(
+            reverse("extra-check-detail", args=[str(check.id)]), follow=True
+        )
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
-    #     content_json = json.loads(response.content.decode("utf-8"))
+        content_json = json.loads(response.content.decode("utf-8"))
 
-    #     retrieved_project = content_json
-
-    #     response = self.client.get(retrieved_project["extra_checks"], follow=True)
-
-    #     # Check if the response was successful
-    #     self.assertEqual(response.status_code, 200)
-
-    #     # Assert that the response is JSON
-    #     self.assertEqual(response.accepted_media_type, "application/json")
-
-    #     # Parse the JSON content from the response
-    #     content_json = json.loads(response.content.decode("utf-8"))[0]
-
-    #     self.assertEqual(int(content_json["id"]), checks.id)
-    #     self.assertEqual(
-    #         content_json["project"],
-    #         settings.TESTING_BASE_LINK + reverse("project-detail", args=[str(project.id)]),
-    #     )
-    #     self.assertEqual(
-    #         content_json["run_script"],
-    #         settings.TESTING_BASE_LINK + checks.run_script.url,
-    #     )
+        self.assertEqual(int(content_json["id"]), check.id)
+        self.assertEqual(
+            content_json["project"],
+            settings.TESTING_BASE_LINK + reverse("project-detail", args=[str(project.id)]),
+        )
+        self.assertEqual(
+            content_json["docker_image"],
+            settings.TESTING_BASE_LINK + reverse("docker-image-detail", args=[str(docker_image.id)]),
+        )
+        self.assertEqual(
+            content_json["file"],
+            settings.TESTING_BASE_LINK + check.file.url,
+        )
 
     def test_project_groups(self):
         """
@@ -600,7 +603,7 @@ class ProjectModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -609,39 +612,39 @@ class ProjectModelTests(APITestCase):
         self.assertEqual(int(content_json[0]["id"]), group1.id)
         self.assertEqual(int(content_json[1]["id"]), group2.id)
 
-    # def test_project_submissions(self):
-    #     """
-    #     Able to retrieve a list of submissions of a project after creating it.
-    #     """
-    #     course = create_course(name="test course", academic_startyear=2024)
-    #     project = create_project(
-    #         name="test project",
-    #         description="test description",
-    #         visible=True,
-    #         archived=False,
-    #         days=7,
-    #         course=course,
-    #     )
+    def test_project_submissions(self):
+        """
+        Able to retrieve a list of submissions of a project after creating it.
+        """
+        course = create_course(name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test project",
+            description="test description",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
 
-    #     group1 = create_group(project=project, score=0)
-    #     group2 = create_group(project=project, score=0)
+        group1 = create_group(project=project, score=0)
+        group2 = create_group(project=project, score=0)
 
-    #     submission1 = create_submission(submission_number=1, group=group1, structure_checks_passed=True)
-    #     submission2 = create_submission(submission_number=2, group=group2, structure_checks_passed=False)
+        submission1 = create_submission(group=group1, zip="group1.zip")
+        submission2 = create_submission(group=group2, zip="group2.zip")
 
-    #     response = self.client.get(
-    #         reverse("project-submissions", args=[str(project.id)]), follow=True
-    #     )
+        response = self.client.get(
+            reverse("project-submissions", args=[str(project.id)]), follow=True
+        )
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
-    #     content_json = json.loads(response.content.decode("utf-8"))
+        content_json = json.loads(response.content.decode("utf-8"))
 
-    #     self.assertEqual(len(content_json), 2)
+        self.assertEqual(len(content_json), 2)
 
-    #     self.assertEqual(int(content_json[0]["id"]), submission1.id)
-    #     self.assertEqual(int(content_json[1]["id"]), submission2.id)
+        self.assertEqual(int(content_json[0]["id"]), submission1.id)
+        self.assertEqual(int(content_json[1]["id"]), submission2.id)
 
     def test_cant_join_locked_groups(self):
         """Should not be able to add a student to a group if the groups are locked."""
@@ -712,7 +715,7 @@ class ProjectModelTestsAsTeacher(APITestCase):
             email="Test@gmail.com",
         )
 
-        self.client.force_authenticate(self.user)
+        self.client.force_authenticate(self.user)  # type: ignore
 
     def test_create_groups(self):
         """Able to create groups for a project."""
@@ -749,147 +752,152 @@ class ProjectModelTestsAsTeacher(APITestCase):
         # Assert that the groups were created
         self.assertEqual(project.groups.count(), 3)
 
-    # def test_submission_status_non_empty_groups(self):
-    #     """Submission status returns the correct amount of non empty groups participating in the project."""
-    #     course = create_course(name="test course", academic_startyear=2024)
-    #     project = create_project(
-    #         name="test",
-    #         description="descr",
-    #         visible=True,
-    #         archived=False,
-    #         days=7,
-    #         course=course,
-    #     )
+    def test_submission_status_non_empty_groups(self):
+        """Submission status returns the correct amount of non empty groups participating in the project."""
+        course = create_course(name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
 
-    #     response = self.client.get(
-    #         reverse("project-groups", args=[str(project.id)]), follow=True
-    #     )
+        response = self.client.get(
+            reverse("project-groups", args=[str(project.id)]), follow=True
+        )
 
-    #     # Make sure you cannot retrieve the submission status for a project that is not yours
-    #     self.assertEqual(response.status_code, 403)
+        # Make sure you cannot retrieve the submission status for a project that is not yours
+        self.assertEqual(response.status_code, 403)
 
-    #     # Add the teacher to the course
-    #     course.teachers.add(self.user)
+        # Add the teacher to the course
+        course.teachers.add(self.user)
 
-    #     # Create example students
-    #     student1 = create_student(
-    #         id=1, first_name="John", last_name="Doe", email="john.doe@example.com", student_id="0100"
-    #     )
-    #     student2 = create_student(
-    #         id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com", student_id="0200"
-    #     )
+        # Create example students
+        student1 = create_student(
+            id=1, first_name="John", last_name="Doe", email="john.doe@example.com", student_id="0100"
+        )
+        student2 = create_student(
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com", student_id="0200"
+        )
 
-    #     # Create example groups
-    #     group1 = create_group(project=project)
-    #     group2 = create_group(project=project)
-    #     group3 = create_group(project=project)  # noqa: F841
+        # Create example groups
+        group1 = create_group(project=project)
+        group2 = create_group(project=project)
+        group3 = create_group(project=project)  # noqa: F841
 
-    #     # Add the students to some of the groups
-    #     group1.students.add(student1)
-    #     group2.students.add(student2)
+        # Add the students to some of the groups
+        group1.students.add(student1)
+        group2.students.add(student2)
 
-    #     response = self.client.get(
-    #         reverse("project-submission-status", args=[str(project.id)]), follow=True
-    #     )
+        response = self.client.get(
+            reverse("project-detail", args=[str(project.id)]), follow=True
+        )
 
-    #     self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
-    #     # Only two of the three created groups contain at least one student
-    #     self.assertEqual(
-    #         response.data,
-    #         {"non_empty_groups": 2, "groups_submitted": 0, "submissions_passed": 0},
-    #     )
+        content_json = json.loads(response.content.decode("utf-8"))
 
-    # def test_submission_status_groups_submitted_and_passed_checks(self):
-    #     """Retrieve the submission status for a project."""
-    #     course = create_course(name="test course", academic_startyear=2024)
-    #     project = create_project(
-    #         name="test",
-    #         description="descr",
-    #         visible=True,
-    #         archived=False,
-    #         days=7,
-    #         course=course,
-    #     )
+        # Only two of the three created groups contain at least one student
+        self.assertEqual(
+            content_json["status"],
+            {"non_empty_groups": 2, "groups_submitted": 0, "submissions_passed": 0},
+        )
 
-    #     response = self.client.get(
-    #         reverse("project-groups", args=[str(project.id)]), follow=True
-    #     )
+    def test_submission_status_groups_submitted_and_passed_checks(self):
+        """Retrieve the submission status for a project."""
+        course = create_course(name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
 
-    #     # Make sure you cannot retrieve the submission status for a project that is not yours
-    #     self.assertEqual(response.status_code, 403)
+        response = self.client.get(
+            reverse("project-groups", args=[str(project.id)]), follow=True
+        )
 
-    #     # Add the teacher to the course
-    #     course.teachers.add(self.user)
+        # Make sure you cannot retrieve the submission status for a project that is not yours
+        self.assertEqual(response.status_code, 403)
 
-    #     # Create example students
-    #     student1 = create_student(
-    #         id=1, first_name="John", last_name="Doe", email="john.doe@example.com", student_id="0100"
-    #     )
-    #     student2 = create_student(
-    #         id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com", student_id="0200"
-    #     )
-    #     student3 = create_student(
-    #         id=3, first_name="Joe", last_name="Doe", email="Joe.doe@example.com"
-    #     )
+        # Add the teacher to the course
+        course.teachers.add(self.user)
 
-    #     # Create example groups
-    #     group1 = create_group(project=project)
-    #     group2 = create_group(project=project)
-    #     group3 = create_group(project=project)
+        # Create example students
+        student1 = create_student(
+            id=1, first_name="John", last_name="Doe", email="john.doe@example.com", student_id="0100"
+        )
+        student2 = create_student(
+            id=2, first_name="Jane", last_name="Doe", email="jane.doe@example.com", student_id="0200"
+        )
+        student3 = create_student(
+            id=3, first_name="Joe", last_name="Doe", email="Joe.doe@example.com"
+        )
 
-    #     # Add students to the groups
-    #     group1.students.add(student1)
-    #     group2.students.add(student2)
-    #     group3.students.add(student3)
+        # Create example groups
+        group1 = create_group(project=project)
+        group2 = create_group(project=project)
+        group3 = create_group(project=project)
 
-    #     # Create submissions for certain groups
-    #     create_submission(
-    #         submission_number=1, group=group1, structure_checks_passed=True
-    #     )
-    #     create_submission(
-    #         submission_number=2, group=group3, structure_checks_passed=False
-    #     )
+        # Add students to the groups
+        group1.students.add(student1)
+        group2.students.add(student2)
+        group3.students.add(student3)
 
-    #     response = self.client.get(
-    #         reverse("project-submission-status", args=[str(project.id)]), follow=True
-    #     )
+        # Create submissions for certain groups
+        create_submission(
+            group=group1, zip="group1.zip"
+        )
+        create_submission(
+            group=group3, zip="group3.zip"
+        )
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(
-    #         response.data,
-    #         {"non_empty_groups": 3, "groups_submitted": 2, "submissions_passed": 1},
-    #     )
+        response = self.client.get(
+            reverse("project-detail", args=[str(project.id)]), follow=True
+        )
 
-    # def test_retrieve_list_submissions(self):
-    #     """Able to retrieve a list of submissions for a project."""
-    #     course = create_course(name="test course", academic_startyear=2024)
-    #     project = create_project(
-    #         name="test",
-    #         description="descr",
-    #         visible=True,
-    #         archived=False,
-    #         days=7,
-    #         course=course,
-    #     )
-    #     course.teachers.add(self.user)
+        self.assertEqual(response.status_code, 200)
 
-    #     group = create_group(project=project)
+        content_json = json.loads(response.content.decode("utf-8"))
 
-    #     create_submission(
-    #         submission_number=1, group=group, structure_checks_passed=True
-    #     )
+        self.assertEqual(
+            content_json["status"],
+            {"non_empty_groups": 3, "groups_submitted": 2, "submissions_passed": 2},
+        )
 
-    #     response = self.client.get(
-    #         reverse("project-submissions", args=[str(project.id)]), follow=True
-    #     )
+    def test_retrieve_list_submissions(self):
+        """Able to retrieve a list of submissions for a project."""
+        course = create_course(name="test course", academic_startyear=2024)
+        project = create_project(
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=7,
+            course=course,
+        )
+        course.teachers.add(self.user)
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(response.accepted_media_type, "application/json")
+        group = create_group(project=project)
 
-    #     content_json = json.loads(response.content.decode("utf-8"))
+        create_submission(
+            group=group, zip="group.zip"
+        )
 
-    #     self.assertEqual(len(content_json), 1)
+        response = self.client.get(
+            reverse("project-submissions", args=[str(project.id)]), follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
+
+        content_json = json.loads(response.content.decode("utf-8"))
+
+        self.assertEqual(len(content_json), 1)
 
 
 class ProjectModelTestsAsStudent(APITestCase):
@@ -902,7 +910,7 @@ class ProjectModelTestsAsStudent(APITestCase):
             email="Bobke.Peeters@gmail.com",
         )
 
-        self.client.force_authenticate(self.user)
+        self.client.force_authenticate(self.user)  # type: ignore
 
     def test_try_to_create_groups(self):
         """Not able to create groups for a project."""
