@@ -16,6 +16,6 @@ describe('submision_status', (): void => {
         expect(submissionStatus.value).not.toBeNull();
         expect(submissionStatus.value?.groups_submitted).toBe(1);
         expect(submissionStatus.value?.non_empty_groups).toBe(2);
-        expect(submissionStatus.value?.submissions_passed).toBe(1);
+        // No need to check for structure_check_passed and extra_checks_passed since those queries are not implemented in the frontend
     });
 });

@@ -156,7 +156,8 @@ export function createSubmissionStatus(submissionStatusData: any): SubmissionSta
     return new SubmissionStatus(
         submissionStatusData.non_empty_groups,
         submissionStatusData.groups_submitted,
-        submissionStatusData.submissions_passed,
+        submissionStatusData.structure_checks_passed,
+        submissionStatusData.extra_checks_passed,
     );
 }
 
