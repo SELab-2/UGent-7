@@ -28,19 +28,19 @@ Om verder te navigeren naar het admin paneel kan u dit via "/admin".
 
 ![taal keuze knop](../assets/nl/lang-change.png)
 
-## Rollen van gebruiker aanpasen
+## Rollen van gebruiker aanpassen
 - Druk in de navigatiebalk op "Gebruikers".
 - Druk op bewerken bij de gekozen gebruiker.
 - Pas de rollen aan en sla op via de knop "Sla op".
 
 ![admin gebruikers voorpagina](../assets/admin/nl/admin-users-frontpage.png)
 
-## Docker images bekijken en beheeren
+## Docker images bekijken en beheren
 - Druk in de navigatiebalk op "Docker images".
 ![admin docker voorpagina](../assets/admin/nl/admin-docker-frontpage.png)
 
 ::: info
-Pas de status (Prive of Publiek) aan via de knop in de kolom "Publiek".
+Pas de status (Privé of Publiek) aan via de knop in de kolom "Publiek".
 :::
 
 ::: info
