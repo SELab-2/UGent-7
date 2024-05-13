@@ -117,12 +117,10 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         class="p-col"
                     >
                         <template #body="{ data }">
-                            <ToggleButton
-                                class="mb-3 gap-3"
+                            <InputSwitch
+                                class="mb-3 gap-3 justify-content-center"
                                 :model-value="data.public"
                                 @click="() => toggleSafetyGuard(data)"
-                                :on-label="t('admin.docker_images.public')"
-                                :off-label="t('admin.docker_images.private')"
                             />
                         </template>
                     </Column>
