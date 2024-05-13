@@ -15,13 +15,30 @@ from datetime import timedelta
 from os import environ
 from pathlib import Path
 
+import django_stubs_ext
 from django.utils.translation import gettext_lazy as _
+
+# Typings for Pylance in VSCode
+django_stubs_ext.monkeypatch()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, "data/production"))
+ROOT_DIR = environ.get("DJANGO_ROOT_DIR", "")
+MEDIA_ROOT = os.path.normpath(os.path.join("data"))
 
+# TESTING
 TESTING_BASE_LINK = "http://testserver"
+TEST_USER_DATA = {
+    "id": "1234",
+    "username": "test",
+    "email": "test@test",
+    "first_name": "test",
+    "last_name": "test",
+}
+TEST_USER_ATTRIBUTES = {
+    **TEST_USER_DATA,
+    "ugentStudentID": "1234"
+}
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
@@ -179,3 +196,5 @@ FILE_PATHS = {
     "extra_checks": "../data/extra_checks/",
     "log_file": "../data/log_files/"
 }
+
+DOCKER_BUILD_ROOT_NAME = "ypovoli_docker_build"

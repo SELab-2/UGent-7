@@ -1,17 +1,12 @@
-from api.logic.check_folder_structure import parse_zip_file
-from nh3 import clean
-from api.models.checks import FileExtension
-from api.models.course import Course
+from api.logic.parse_zip_files import parse_zip
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import Submission, StructureCheckResult, ExtraCheckResult, StateEnum
-from api.serializers.checks_serializer import StructureCheckSerializer
-from api.serializers.course_serializer import CourseSerializer
-from api.serializers.submission_serializer import SubmissionSerializer
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
+from api.serializers.checks_serializer import StructureCheckSerializer, CourseSerializer
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
 from django.utils.translation import gettext
+from nh3 import clean
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -116,56 +111,47 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    def validate(self, data):
+    def validate(self, attrs):
         """Validate the serializer data"""
         if not self.partial:
             # Only require course if it is not a partial update
             if "course" in self.context:
-                data["course_id"] = self.context["course"].id
+                attrs["course_id"] = self.context["course"].id
             else:
                 raise ValidationError(gettext("project.errors.context"))
 
         # Check if start date of the project is not in the past
-        if "start_date" in data and data["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
+        if "start_date" in attrs and not self.partial and \
+                attrs["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
             raise ValidationError(gettext("project.errors.start_date_in_past"))
 
         # Set the start date depending on if it is a partial update and whether it was given by the user
-        if "start_date" not in data:
+        if "start_date" not in attrs:
             if self.partial:
+                self.instance: Project
                 start_date = self.instance.start_date
             else:
                 start_date = timezone.now()
         else:
-            start_date = data["start_date"]
+            start_date = attrs["start_date"]
 
         # Check if deadline of the project is before the start date
-        if "deadline" in data and data["deadline"] < start_date:
+        if "deadline" in attrs and attrs["deadline"] < start_date:
             raise ValidationError(gettext("project.errors.deadline_before_start_date"))
 
-        data['description'] = clean(data['description'])
+        if "description" in attrs:
+            attrs['description'] = clean(attrs['description'])
 
-        return data
-
-    class Meta:
-        model = Project
-        fields = "__all__"
-
-
-class CreateProjectSerializer(ProjectSerializer):
-    number_groups = serializers.IntegerField(min_value=0, required=False)
-    zip_structure = serializers.FileField(required=False, read_only=True)
+        return attrs
 
     def create(self, validated_data):
         # Pop the 'number_groups' field from validated_data
         number_groups = validated_data.pop('number_groups', None)
 
-        # Get the zip structure file from the request
-        request = self.context.get('request')
-        zip_structure = request.FILES.get('zip_structure')
-
         # Create the project object without passing 'number_groups' field
         project = super().create(validated_data)
 
+        # Create groups for the project, if specified
         if project.group_size == 1:
             # If the group_size is set to one, create a group for each student
             students = project.course.students.all()
@@ -174,34 +160,39 @@ class CreateProjectSerializer(ProjectSerializer):
                 group = Group.objects.create(project=project)
                 group.students.add(student)
 
-        elif number_groups is not None:
-            # Create groups for the project, if specified
+        elif number_groups:
 
-            if number_groups > 0:
-                # Create the number of groups specified
-                for _ in range(number_groups):
-                    Group.objects.create(project=project)
+            for _ in range(number_groups):
+                Group.objects.create(project=project)
 
-            else:
-                # If the number of groups is set to zero, create #students / group_size groups
-                number_students = project.course.students.count()
-                group_size = project.group_size
+        else:
+            # If no number of groups is passed, create #students / group_size groups
+            number_students = project.course.students.count()
+            group_size = project.group_size
 
-                for _ in range(0, number_students, group_size):
-                    group = Group.objects.create(project=project)
+            for _ in range(0, number_students, group_size):
+                group = Group.objects.create(project=project)
 
         # If a zip_structure is provided, parse it to create the structure checks
-        if zip_structure is not None:
-            # Define the temporary storage location
-            temp_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
-            # Save the file to the temporary location
-            temp_file_path = temp_storage.save(f"tmp/{zip_structure.name}", zip_structure)
-            # Pass the full path to the parse_zip_file function
-            parse_zip_file(project, temp_file_path)
-            # Delete the temporary file
-            temp_storage.delete(temp_file_path)
+        zip_structure: InMemoryUploadedFile | None = self.context['request'].FILES.get('zip_structure')
+        if zip_structure:
+            result = parse_zip(project, zip_structure)
+
+            if not result:
+                raise ValidationError(gettext("project.errors.zip_structure"))
 
         return project
+
+    class Meta:
+        model = Project
+        fields = "__all__"
+
+
+# TODO: Use same structure for other serializers
+class CreateProjectSerializer(ProjectSerializer):
+    # Only require these fields when creating a project
+    number_groups = serializers.IntegerField(min_value=1, required=False)
+    zip_structure = serializers.FileField(required=False, read_only=True)
 
 
 class TeacherCreateGroupSerializer(serializers.Serializer):

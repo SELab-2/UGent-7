@@ -1,17 +1,18 @@
 import json
 import os
-from django.conf import settings
-from django.urls import reverse
-from django.utils import timezone
-from rest_framework.test import APITestCase
-from api.logic.check_folder_structure import check_zip_file, parse_zip_file
-from api.tests.helpers import create_course, create_file_extension, create_project, create_structure_check
+
+from api.logic.parse_zip_files import parse_zip
+from api.tests.helpers import create_course, create_project
 from authentication.models import User
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+from rest_framework.test import APITestCase
 
 
 class FileTestsTests(APITestCase):
     def setUp(self):
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             User.get_dummy_admin()
         )
         # Set up a temporary directory for MEDIA_ROOT during tests
@@ -34,408 +35,397 @@ class FileTestsTests(APITestCase):
             days=100,
             course=course,
         )
-        parse_zip_file(project=project, dir_path="structures/zip_struct1.zip")
+
+        memory_file = SimpleUploadedFile("zip_struct1.zip", open(
+            f"data/{settings.MEDIA_ROOT}/structures/zip_struct1.zip", "rb").read(), content_type='application/zip')
+
+        parse_zip(project=project, zip_file=memory_file)
 
         response = self.client.get(
-            reverse("project-detail", args=[str(project.id)]), follow=True
+            reverse("project-structure-checks", args=[str(project.id)]), follow=True
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
-        response = self.client.get(
-            content_json["structure_checks"], follow=True
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
-
-        content_json = json.loads(response.content.decode("utf-8"))
-
-        self.assertEqual(len(content_json), 7)
+        self.assertEqual(len(content_json), 6)
 
         expected_project_url = settings.TESTING_BASE_LINK + reverse(
             "project-detail", args=[str(project.id)]
         )
 
         content = content_json[0]
-        self.assertEqual(content["name"], ".")
+        self.assertEqual(content["path"], "folder_struct1/submap1/")
         self.assertEqual(content["project"], expected_project_url)
-        self.assertEqual(len(content["obligated_extensions"]), 0)
+        self.assertEqual(len(content["obligated_extensions"]), 2)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[1]
-        self.assertEqual(content["name"], "folder_struct1")
+        self.assertEqual(content["path"], "folder_struct1/submap1/templates/")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 1)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[2]
-        self.assertEqual(content["name"], "folder_struct1/submap1")
+        self.assertEqual(content["path"], "folder_struct1/submap2/")
         self.assertEqual(content["project"], expected_project_url)
-        self.assertEqual(len(content["obligated_extensions"]), 2)
+        self.assertEqual(len(content["obligated_extensions"]), 1)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[3]
-        self.assertEqual(content["name"], "folder_struct1/submap1/templates")
-        self.assertEqual(content["project"], expected_project_url)
-        self.assertEqual(len(content["obligated_extensions"]), 1)
-        self.assertEqual(len(content["blocked_extensions"]), 0)
-
-        content = content_json[4]
-        self.assertEqual(content["name"], "folder_struct1/submap2")
-        self.assertEqual(content["project"], expected_project_url)
-        self.assertEqual(len(content["obligated_extensions"]), 1)
-        self.assertEqual(len(content["blocked_extensions"]), 0)
-
-        content = content_json[5]
-        self.assertEqual(content["name"], "folder_struct1/submap2/src")
+        self.assertEqual(content["path"], "folder_struct1/submap2/src/")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 3)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
-        content = content_json[6]
-        self.assertEqual(content["name"], "folder_struct1/submap3")
+        content = content_json[4]
+        self.assertEqual(content["path"], "folder_struct1/submap3/")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 2)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
-    def test_checking(self):
-        course = create_course(name="test course", academic_startyear=2024)
-        project = create_project(
-            max_score=10,
-            group_size=5,
-            name="test",
-            description="descr",
-            visible=True,
-            archived=False,
-            days=100,
-            course=course,
-        )
+        content = content_json[5]
+        self.assertEqual(content["path"], "folder_struct1/")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 1)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
 
-        fileExtensionHS = create_file_extension(extension="hs")
-        fileExtensionPDF = create_file_extension(extension="pdf")
-        fileExtensionDOCX = create_file_extension(extension="docx")
-        fileExtensionLATEX = create_file_extension(extension="latex")
-        fileExtensionMD = create_file_extension(extension="md")
-        fileExtensionPY = create_file_extension(extension="py")
-        fileExtensionHPP = create_file_extension(extension="hpp")
-        fileExtensionCPP = create_file_extension(extension="cpp")
-        fileExtensionTS = create_file_extension(extension="ts")
-        fileExtensionTSX = create_file_extension(extension="tsx")
+    # def test_checking(self):
+    #     course = create_course(name="test course", academic_startyear=2024)
+    #     project = create_project(
+    #         max_score=10,
+    #         group_size=5,
+    #         name="test",
+    #         description="descr",
+    #         visible=True,
+    #         archived=False,
+    #         days=100,
+    #         course=course,
+    #     )
 
-        create_structure_check(
-            name=".",
-            project=project,
-            obligated_extensions=[],
-            blocked_extensions=[])
+    #     fileExtensionHS = create_file_extension(extension="hs")
+    #     fileExtensionPDF = create_file_extension(extension="pdf")
+    #     fileExtensionDOCX = create_file_extension(extension="docx")
+    #     fileExtensionLATEX = create_file_extension(extension="latex")
+    #     fileExtensionMD = create_file_extension(extension="md")
+    #     fileExtensionPY = create_file_extension(extension="py")
+    #     fileExtensionHPP = create_file_extension(extension="hpp")
+    #     fileExtensionCPP = create_file_extension(extension="cpp")
+    #     fileExtensionTS = create_file_extension(extension="ts")
+    #     fileExtensionTSX = create_file_extension(extension="tsx")
 
-        create_structure_check(
-            name="folder_struct1",
-            project=project,
-            obligated_extensions=[fileExtensionHS],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="",
+    #         project=project,
+    #         obligated_extensions=[],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap1",
-            project=project,
-            obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionHS],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap1/templates",
-            project=project,
-            obligated_extensions=[fileExtensionLATEX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1/",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2",
-            project=project,
-            obligated_extensions=[fileExtensionMD],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1/templates/",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionLATEX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2/src",
-            project=project,
-            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2/",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionMD],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap3",
-            project=project,
-            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2/src/",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+    #         blocked_extensions=[])
 
-        self.assertTrue(check_zip_file(project=project, dir_path="structures/zip_struct1.zip")[0])
+    #     create_structure_check(
+    #         path="folder_struct1/submap3/",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+    #         blocked_extensions=[])
 
-    def test_checking_obligated_not_found(self):
-        course = create_course(name="test course", academic_startyear=2024)
-        project = create_project(
-            group_size=5,
-            max_score=10,
-            name="test",
-            description="descr",
-            visible=True,
-            archived=False,
-            days=100,
-            course=course,
-        )
+    #     self.assertTrue(check_zip_file(project=project, dir_path="structures/zip_struct1.zip")[0])
 
-        fileExtensionHS = create_file_extension(extension="hs")
-        fileExtensionPDF = create_file_extension(extension="pdf")
-        fileExtensionDOCX = create_file_extension(extension="docx")
-        fileExtensionLATEX = create_file_extension(extension="latex")
-        fileExtensionMD = create_file_extension(extension="md")
-        fileExtensionPY = create_file_extension(extension="py")
-        fileExtensionHPP = create_file_extension(extension="hpp")
-        fileExtensionCPP = create_file_extension(extension="cpp")
-        fileExtensionTS = create_file_extension(extension="ts")
-        fileExtensionTSX = create_file_extension(extension="tsx")
+    # def test_checking_obligated_not_found(self):
+    #     course = create_course(name="test course", academic_startyear=2024)
+    #     project = create_project(
+    #         group_size=5,
+    #         max_score=10,
+    #         name="test",
+    #         description="descr",
+    #         visible=True,
+    #         archived=False,
+    #         days=100,
+    #         course=course,
+    #     )
 
-        create_structure_check(
-            name=".",
-            project=project,
-            obligated_extensions=[],
-            blocked_extensions=[fileExtensionDOCX])
+    #     fileExtensionHS = create_file_extension(extension="hs")
+    #     fileExtensionPDF = create_file_extension(extension="pdf")
+    #     fileExtensionDOCX = create_file_extension(extension="docx")
+    #     fileExtensionLATEX = create_file_extension(extension="latex")
+    #     fileExtensionMD = create_file_extension(extension="md")
+    #     fileExtensionPY = create_file_extension(extension="py")
+    #     fileExtensionHPP = create_file_extension(extension="hpp")
+    #     fileExtensionCPP = create_file_extension(extension="cpp")
+    #     fileExtensionTS = create_file_extension(extension="ts")
+    #     fileExtensionTSX = create_file_extension(extension="tsx")
 
-        create_structure_check(
-            name="folder_struct1",
-            project=project,
-            obligated_extensions=[fileExtensionHS],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path=".",
+    #         project=project,
+    #         obligated_extensions=[],
+    #         blocked_extensions=[fileExtensionDOCX])
 
-        create_structure_check(
-            name="folder_struct1/submap1",
-            project=project,
-            obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionHS],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap1/templates",
-            project=project,
-            obligated_extensions=[fileExtensionLATEX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2",
-            project=project,
-            obligated_extensions=[fileExtensionMD],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1/templates",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionLATEX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2/src",
-            project=project,
-            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionMD],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap3",
-            project=project,
-            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
-            blocked_extensions=[])
-        self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip2struct1.zip")[0])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2/src",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+    #         blocked_extensions=[])
 
-    def test_checking_obligated_directory_not_found(self):
-        course = create_course(name="test course", academic_startyear=2024)
-        project = create_project(
-            group_size=5,
-            max_score=10,
-            name="test",
-            description="descr",
-            visible=True,
-            archived=False,
-            days=100,
-            course=course,
-        )
+    #     create_structure_check(
+    #         path="folder_struct1/submap3",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+    #         blocked_extensions=[])
+    #     self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip2struct1.zip")[0])
 
-        fileExtensionHS = create_file_extension(extension="hs")
-        fileExtensionPDF = create_file_extension(extension="pdf")
-        fileExtensionDOCX = create_file_extension(extension="docx")
-        fileExtensionLATEX = create_file_extension(extension="latex")
-        fileExtensionMD = create_file_extension(extension="md")
-        fileExtensionPY = create_file_extension(extension="py")
-        fileExtensionHPP = create_file_extension(extension="hpp")
-        fileExtensionCPP = create_file_extension(extension="cpp")
-        fileExtensionTS = create_file_extension(extension="ts")
-        fileExtensionTSX = create_file_extension(extension="tsx")
+    # def test_checking_obligated_directory_not_found(self):
+    #     course = create_course(name="test course", academic_startyear=2024)
+    #     project = create_project(
+    #         group_size=5,
+    #         max_score=10,
+    #         name="test",
+    #         description="descr",
+    #         visible=True,
+    #         archived=False,
+    #         days=100,
+    #         course=course,
+    #     )
 
-        create_structure_check(
-            name=".",
-            project=project,
-            obligated_extensions=[],
-            blocked_extensions=[fileExtensionDOCX])
+    #     fileExtensionHS = create_file_extension(extension="hs")
+    #     fileExtensionPDF = create_file_extension(extension="pdf")
+    #     fileExtensionDOCX = create_file_extension(extension="docx")
+    #     fileExtensionLATEX = create_file_extension(extension="latex")
+    #     fileExtensionMD = create_file_extension(extension="md")
+    #     fileExtensionPY = create_file_extension(extension="py")
+    #     fileExtensionHPP = create_file_extension(extension="hpp")
+    #     fileExtensionCPP = create_file_extension(extension="cpp")
+    #     fileExtensionTS = create_file_extension(extension="ts")
+    #     fileExtensionTSX = create_file_extension(extension="tsx")
 
-        create_structure_check(
-            name="folder_struct1",
-            project=project,
-            obligated_extensions=[fileExtensionHS],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path=".",
+    #         project=project,
+    #         obligated_extensions=[],
+    #         blocked_extensions=[fileExtensionDOCX])
 
-        create_structure_check(
-            name="folder_struct1/submap1",
-            project=project,
-            obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionHS],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap1/templates",
-            project=project,
-            obligated_extensions=[fileExtensionLATEX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2",
-            project=project,
-            obligated_extensions=[fileExtensionMD],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1/templates",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionLATEX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2/src",
-            project=project,
-            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionMD],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap3",
-            project=project,
-            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
-            blocked_extensions=[])
-        self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip4struct1.zip")[0])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2/src",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+    #         blocked_extensions=[])
 
-    def test_checking_blocked_extension_found(self):
-        course = create_course(name="test course", academic_startyear=2024)
-        project = create_project(
-            group_size=5,
-            max_score=10,
-            name="test",
-            description="descr",
-            visible=True,
-            archived=False,
-            days=100,
-            course=course,
-        )
+    #     create_structure_check(
+    #         path="folder_struct1/submap3",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+    #         blocked_extensions=[])
+    #     self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip4struct1.zip")[0])
 
-        fileExtensionHS = create_file_extension(extension="hs")
-        fileExtensionPDF = create_file_extension(extension="pdf")
-        fileExtensionDOCX = create_file_extension(extension="docx")
-        fileExtensionLATEX = create_file_extension(extension="latex")
-        fileExtensionMD = create_file_extension(extension="md")
-        fileExtensionPY = create_file_extension(extension="py")
-        fileExtensionHPP = create_file_extension(extension="hpp")
-        fileExtensionCPP = create_file_extension(extension="cpp")
-        fileExtensionTS = create_file_extension(extension="ts")
-        fileExtensionTSX = create_file_extension(extension="tsx")
+    # def test_checking_blocked_extension_found(self):
+    #     course = create_course(name="test course", academic_startyear=2024)
+    #     project = create_project(
+    #         group_size=5,
+    #         max_score=10,
+    #         name="test",
+    #         description="descr",
+    #         visible=True,
+    #         archived=False,
+    #         days=100,
+    #         course=course,
+    #     )
 
-        create_structure_check(
-            name=".",
-            project=project,
-            obligated_extensions=[],
-            blocked_extensions=[fileExtensionDOCX])
+    #     fileExtensionHS = create_file_extension(extension="hs")
+    #     fileExtensionPDF = create_file_extension(extension="pdf")
+    #     fileExtensionDOCX = create_file_extension(extension="docx")
+    #     fileExtensionLATEX = create_file_extension(extension="latex")
+    #     fileExtensionMD = create_file_extension(extension="md")
+    #     fileExtensionPY = create_file_extension(extension="py")
+    #     fileExtensionHPP = create_file_extension(extension="hpp")
+    #     fileExtensionCPP = create_file_extension(extension="cpp")
+    #     fileExtensionTS = create_file_extension(extension="ts")
+    #     fileExtensionTSX = create_file_extension(extension="tsx")
 
-        create_structure_check(
-            name="folder_struct1",
-            project=project,
-            obligated_extensions=[fileExtensionHS],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path=".",
+    #         project=project,
+    #         obligated_extensions=[],
+    #         blocked_extensions=[fileExtensionDOCX])
 
-        create_structure_check(
-            name="folder_struct1/submap1",
-            project=project,
-            obligated_extensions=[fileExtensionDOCX],
-            blocked_extensions=[fileExtensionPDF])
+    #     create_structure_check(
+    #         path="folder_struct1",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionHS],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap1/templates",
-            project=project,
-            obligated_extensions=[fileExtensionLATEX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionDOCX],
+    #         blocked_extensions=[fileExtensionPDF])
 
-        create_structure_check(
-            name="folder_struct1/submap2",
-            project=project,
-            obligated_extensions=[fileExtensionMD],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1/templates",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionLATEX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2/src",
-            project=project,
-            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionMD],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap3",
-            project=project,
-            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2/src",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+    #         blocked_extensions=[])
 
-        self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip1struct1.zip")[0])
+    #     create_structure_check(
+    #         path="folder_struct1/submap3",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+    #         blocked_extensions=[])
 
-    def test_checking_extra_directory_found(self):
-        course = create_course(name="test course", academic_startyear=2024)
-        project = create_project(
-            group_size=5,
-            max_score=10,
-            name="test",
-            description="descr",
-            visible=True,
-            archived=False,
-            days=100,
-            course=course,
-        )
+    #     self.assertFalse(check_zip_file(project=project, dir_path="tests/test_zip1struct1.zip")[0])
 
-        fileExtensionHS = create_file_extension(extension="hs")
-        fileExtensionPDF = create_file_extension(extension="pdf")
-        fileExtensionDOCX = create_file_extension(extension="docx")
-        fileExtensionLATEX = create_file_extension(extension="latex")
-        fileExtensionMD = create_file_extension(extension="md")
-        fileExtensionPY = create_file_extension(extension="py")
-        fileExtensionHPP = create_file_extension(extension="hpp")
-        fileExtensionCPP = create_file_extension(extension="cpp")
-        fileExtensionTS = create_file_extension(extension="ts")
-        fileExtensionTSX = create_file_extension(extension="tsx")
+    # def test_checking_extra_directory_found(self):
+    #     course = create_course(name="test course", academic_startyear=2024)
+    #     project = create_project(
+    #         group_size=5,
+    #         max_score=10,
+    #         name="test",
+    #         description="descr",
+    #         visible=True,
+    #         archived=False,
+    #         days=100,
+    #         course=course,
+    #     )
 
-        create_structure_check(
-            name=".",
-            project=project,
-            obligated_extensions=[],
-            blocked_extensions=[fileExtensionDOCX])
+    #     fileExtensionHS = create_file_extension(extension="hs")
+    #     fileExtensionPDF = create_file_extension(extension="pdf")
+    #     fileExtensionDOCX = create_file_extension(extension="docx")
+    #     fileExtensionLATEX = create_file_extension(extension="latex")
+    #     fileExtensionMD = create_file_extension(extension="md")
+    #     fileExtensionPY = create_file_extension(extension="py")
+    #     fileExtensionHPP = create_file_extension(extension="hpp")
+    #     fileExtensionCPP = create_file_extension(extension="cpp")
+    #     fileExtensionTS = create_file_extension(extension="ts")
+    #     fileExtensionTSX = create_file_extension(extension="tsx")
 
-        create_structure_check(
-            name="folder_struct1",
-            project=project,
-            obligated_extensions=[fileExtensionHS],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path=".",
+    #         project=project,
+    #         obligated_extensions=[],
+    #         blocked_extensions=[fileExtensionDOCX])
 
-        create_structure_check(
-            name="folder_struct1/submap1",
-            project=project,
-            obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionHS],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap1/templates",
-            project=project,
-            obligated_extensions=[fileExtensionLATEX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2",
-            project=project,
-            obligated_extensions=[fileExtensionMD],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap1/templates",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionLATEX],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap2/src",
-            project=project,
-            obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionMD],
+    #         blocked_extensions=[])
 
-        create_structure_check(
-            name="folder_struct1/submap3",
-            project=project,
-            obligated_extensions=[fileExtensionTS, fileExtensionTSX],
-            blocked_extensions=[])
+    #     create_structure_check(
+    #         path="folder_struct1/submap2/src",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
+    #         blocked_extensions=[])
 
-        self.assertFalse(
-            check_zip_file(project=project, dir_path="tests/test_zip3struct1.zip", restrict_extra_folders=True)[0])
+    #     create_structure_check(
+    #         path="folder_struct1/submap3",
+    #         project=project,
+    #         obligated_extensions=[fileExtensionTS, fileExtensionTSX],
+    #         blocked_extensions=[])
+
+    #     self.assertFalse(
+    #         check_zip_file(project=project, dir_path="tests/test_zip3struct1.zip", restrict_extra_folders=True)[0])

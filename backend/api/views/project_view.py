@@ -4,18 +4,18 @@ from api.models.submission import Submission, StructureCheckResult, ExtraCheckRe
 from api.permissions.project_permissions import (ProjectGroupPermission,
                                                  ProjectPermission)
 from api.serializers.checks_serializer import (ExtraCheckSerializer,
+                                               StructureCheckAddSerializer,
                                                StructureCheckSerializer)
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.project_serializer import (ProjectSerializer,
-                                                StructureCheckAddSerializer,
                                                 SubmissionStatusSerializer,
                                                 TeacherCreateGroupSerializer)
 from api.serializers.submission_serializer import SubmissionSerializer
 from django.utils.translation import gettext
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   RetrieveModelMixin, UpdateModelMixin)
+from rest_framework.mixins import (DestroyModelMixin, RetrieveModelMixin,
+                                   UpdateModelMixin)
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -23,8 +23,7 @@ from rest_framework.viewsets import GenericViewSet
 
 
 # TODO: Error message when creating a project with wrongly formatted date looks a bit weird
-class ProjectViewSet(CreateModelMixin,
-                     RetrieveModelMixin,
+class ProjectViewSet(RetrieveModelMixin,
                      UpdateModelMixin,
                      DestroyModelMixin,
                      GenericViewSet):
@@ -87,7 +86,7 @@ class ProjectViewSet(CreateModelMixin,
             "message": gettext("project.success.groups.created"),
         })
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True)
     def structure_checks(self, request, **_):
         """Returns the structure checks for the given project"""
         project = self.get_object()
@@ -100,32 +99,28 @@ class ProjectViewSet(CreateModelMixin,
         return Response(serializer.data)
 
     @structure_checks.mapping.post
-    @structure_checks.mapping.put
     @swagger_auto_schema(request_body=StructureCheckAddSerializer)
     def _add_structure_check(self, request: Request, **_):
         """Add a structure_check to the project"""
 
         project: Project = self.get_object()
 
-        # TODO: Crashes when requesting without any fields, shouldn't be given as context. Validator needs to check it
         serializer = StructureCheckAddSerializer(
             data=request.data,
             context={
                 "project": project,
                 "request": request,
-                "obligated": request.data.getlist('obligated_extensions'),
-                "blocked": request.data.getlist('blocked_extensions')
+                "obligated": request.data.getlist('obligated_extensions') if "obligated_extensions" in request.data else [],
+                "blocked": request.data.getlist('blocked_extensions') if "blocked_extensions" in request.data else []
             }
         )
 
         if serializer.is_valid(raise_exception=True):
             serializer.save(project=project)
 
-        return Response({
-            "message": gettext("project.success.structure_check.add")
-        })
+        return Response(serializer.data)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True)
     def extra_checks(self, request, **_):
         """Returns the extra checks for the given project"""
         project = self.get_object()
@@ -160,7 +155,7 @@ class ProjectViewSet(CreateModelMixin,
             "message": gettext("project.success.extra_check.add")
         })
 
-    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | ProjectGroupPermission])
+    @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission])
     def submission_status(self, request, **_):
         """Returns the current submission status for the given project
         This includes:

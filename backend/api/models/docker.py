@@ -1,16 +1,22 @@
 from api.logic.get_file_path import get_docker_image_file_path
 from authentication.models import User
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
-# TODO: registry
-# TODO: Build als we binnenkrijgen
+class StateEnum(models.TextChoices):
+    QUEUED = "QUEUED", _("dockerimage.state.queued")
+    BUILDING = "BUILDING", _("dockerimage.state.building")
+    READY = "READY", _("dockerimage.state.ready")
+    ERROR = "ERROR", _("dockerimage.state.error")
+
+
 class DockerImage(models.Model):
     """
     Models that represents the different docker environments to run tests in
     """
 
-    # ID should be generated automatically
+    id = models.AutoField(auto_created=True, primary_key=True)
 
     # Name of the docker image
     name = models.CharField(
@@ -40,6 +46,14 @@ class DockerImage(models.Model):
     # Whether the image can be used by everyone
     public = models.BooleanField(
         default=False,
+        blank=False,
+        null=False
+    )
+
+    state = models.CharField(
+        max_length=256,
+        choices=StateEnum.choices,
+        default=StateEnum.QUEUED,
         blank=False,
         null=False
     )

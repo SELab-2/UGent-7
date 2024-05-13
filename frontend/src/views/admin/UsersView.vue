@@ -63,12 +63,14 @@ const fillCreators = (): void => {
         creators.value[role] = createFunctions.value[i - 1];
     }
 };
+
 const fillDestroyers = (): void => {
     for (let i = 1; i < roles.length; i++) {
         const role: Role = roles[i];
         destroyers.value[role] = destroyFunctions.value[i - 1];
     }
 };
+
 const showPopup = (data: any): void => {
     editItem.value = JSON.parse(JSON.stringify(data)); // I do this to get a deep copy of the role array
     popupEdit.value = true;
@@ -89,7 +91,6 @@ const saveItem = async (): Promise<void> => {
     const value = pagination.value;
     if (value?.results !== null) {
         const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
-        // update remotely TODO
         const paginationItem = value.results[index];
 
         for (let i = 1; i < roles.length; i++) {
@@ -101,10 +102,9 @@ const saveItem = async (): Promise<void> => {
                 const func = creators.value[role];
 
                 if (role === 'student') {
-                    console.log('student reported');
                     const data: Record<string, any> = {
                         ...editItem.value,
-                        studentId: editItem.value.id,
+                        student_id: editItem.value.id,
                     };
                     await func(data);
                 } else {
@@ -119,7 +119,6 @@ const saveItem = async (): Promise<void> => {
         // update admin status
         await toggleAdmin(editItem.value.id, editItem.value.is_staff);
         // update locally
-        console.log(dataTable.value);
         await dataTable.value.fetch();
     } else {
         // raise error TODO
@@ -131,69 +130,64 @@ const saveItem = async (): Promise<void> => {
 <template>
     <AdminLayout>
         <Title>
-            <div class="gap-3 mb-3">{{ t('admin.users.title') }}</div>
+            {{ t('admin.users.title') }}
         </Title>
-        <Body>
-            <div class="card p-fluid">
-                <LazyDataTable
-                    :pagination="pagination"
-                    :entities="users"
-                    :get="getUsers"
-                    :search="searchUsers"
-                    :filter="filter"
-                    :on-filter="onFilter"
-                    ref="dataTable"
+        <Body class="w-full">
+            <LazyDataTable
+                :pagination="pagination"
+                :entities="users"
+                :get="getUsers"
+                :search="searchUsers"
+                :filter="filter"
+                :on-filter="onFilter"
+                ref="dataTable"
+            >
+                <template #header>
+                    <div class="flex justify-content-end">
+                        <IconField iconPosition="left">
+                            <InputIcon>
+                                <i class="pi pi-search" />
+                            </InputIcon>
+                            <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
+                        </IconField>
+                    </div>
+                </template>
+                <Column
+                    v-for="column in columns"
+                    :key="column.field"
+                    :field="column.field"
+                    :header="t(column.header)"
+                    :show-filter-menu="false"
+                    :style="{ minWidth: '14rem' }"
                 >
-                    <template #header>
-                        <div class="flex justify-content-end">
-                            <IconField iconPosition="left">
-                                <InputIcon>
-                                    <i class="pi pi-search" />
-                                </InputIcon>
-                                <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
-                            </IconField>
-                        </div>
-                    </template>
-                    <template #empty>No matching data.</template>
-                    <template #loading>Loading data. Please wait.</template>
-                    <Column
-                        v-for="column in columns"
-                        :key="column.field"
-                        :field="column.field"
-                        :header="t(column.header)"
-                        :show-filter-menu="false"
-                        :style="{ minWidth: '14rem' }"
-                    >
-                        <template #filter>
-                            <IconField
-                                v-if="column.field != 'roles'"
-                                iconPosition="left"
-                                class="flex align-items-center"
-                            >
-                                <InputIcon>
-                                    <i class="pi pi-search flex justify-content-center" />
-                                </InputIcon>
-                                <InputText v-model="filter[column.field]" :placeholder="t('admin.search.search')" />
-                            </IconField>
-                            <MultiSelect
-                                v-else
-                                class="flex align-items-center h-3rem"
-                                v-model="filter.roles"
-                                :options="roleOptions"
-                                :option-label="(role: Role) => t('admin.' + role)"
+                    <template #filter>
+                        <IconField v-if="column.field != 'roles'" iconPosition="left" class="flex align-items-center">
+                            <InputIcon>
+                                <i class="pi pi-search flex justify-content-center" />
+                            </InputIcon>
+                            <InputText
+                                v-model="filter[column.field] as string"
+                                :placeholder="t('admin.search.search')"
                             />
-                        </template>
-                        <template #body="{ data }" v-if="column.field == 'roles'">
-                            {{ data.roles.map((role: Role) => t('admin.' + role)).join(', ') }}
-                        </template>
-                    </Column>
-                    <Column>
-                        <template #body="{ data }">
-                            <Button @click="() => showPopup(data)">{{ t('admin.edit') }}</Button>
-                        </template>
-                    </Column>
-                </LazyDataTable>
-            </div>
+                        </IconField>
+                        <MultiSelect
+                            v-else
+                            class="flex align-items-center h-3rem"
+                            v-model="filter.roles"
+                            :options="roleOptions"
+                            :option-label="(role: Role) => t('admin.' + role)"
+                        />
+                    </template>
+                    <template #body="{ data }" v-if="column.field == 'roles'">
+                        {{ data.roles.map((role: Role) => t('admin.' + role)).join(', ') }}
+                    </template>
+                </Column>
+                <Column>
+                    <template #body="{ data }">
+                        <Button @click="() => showPopup(data)">{{ t('admin.edit') }}</Button>
+                    </template>
+                </Column>
+            </LazyDataTable>
         </Body>
     </AdminLayout>
     <Dialog v-model:visible="popupEdit" header="Edit user" :style="{ width: '28rem' }" class="flex" id="editDialog">
@@ -203,7 +197,7 @@ const saveItem = async (): Promise<void> => {
             class="flex align-items-center gap-3 mb-3"
         >
             <label class="font-semibold w-10rem">{{ t(data.header) }}</label>
-            <span>{{ editItem[data.field] }}</span>
+            <span>{{ (editItem as any)[data.field] }}</span>
         </div>
         <div v-for="role in roles.toSpliced(0, 1)" :key="role" class="flex align-items-center gap-3 mb-3">
             <label class="font-semibold w-10rem">{{ t('admin.' + role) }}</label>

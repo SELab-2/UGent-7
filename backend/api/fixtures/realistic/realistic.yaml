@@ -1,0 +1,531 @@
+# MARK: Courses
+- model: api.course
+  pk: 0
+  fields:
+    name: Introduction to Computer Science
+    academic_startyear: 2024
+    excerpt: This course is an introduction to computer science.
+    description: This course will teach you the basics of computer science by showing you the wonders of Golang.
+    faculty: Wetenschappen
+    parent_course: null
+    private_course: false
+    invitation_link: null
+    invitation_link_expires: null
+- model: api.course
+  pk: 1
+  fields:
+    name: The frog and its anatomy
+    academic_startyear: 2024
+    excerpt: This course is an introduction to biology.
+    description: This course will teach you the basics of biology by showing you the wonders of the human body.
+    faculty: Wetenschappen
+    parent_course: null
+    private_course: false
+    invitation_link: null
+    invitation_link_expires: null
+
+# MARK: Projects
+- model: api.project
+  pk: 0
+  fields:
+    name: Learn Python
+    description: This project will teach you the basics of Python.
+    visible: true
+    archived: false
+    locked_groups: false
+    start_date: 2024-12-12T00:00:00Z
+    deadline: 2025-01-01T00:00:00Z
+    max_score: 100
+    score_visible: false
+    group_size: 3
+    course: 0
+- model: api.project
+  pk: 1
+  fields:
+    name: Lean Java
+    description: This project will teach you the basics of Object Oriented Programming by using Java.
+    visible: true
+    archived: false
+    locked_groups: false
+    start_date: 2023-01-01T00:00:00Z
+    deadline: 2025-01-01T00:00:00Z
+    max_score: 20
+    score_visible: true
+    group_size: 3
+    course: 0
+- model: api.project
+  pk: 2
+  fields:
+    name: Lean Javascript
+    description: This project will show you would you should avoid javascript at all cost.
+    visible: true
+    archived: false
+    locked_groups: true
+    start_date: 2022-01-01T00:00:00Z
+    deadline: 2023-01-01T00:00:00Z
+    max_score: 20
+    score_visible: true
+    group_size: 1
+    course: 0
+- model: api.project
+  pk: 3
+  fields:
+    name: Dissect a frog
+    description: Study the anatomy of a frog by dissecting it.
+    visible: true
+    archived: false
+    locked_groups: true
+    start_date: 2023-01-01T00:00:00Z
+    deadline: 2025-01-01T00:00:00Z
+    max_score: 50
+    score_visible: false
+    group_size: 2
+    course: 1
+
+# MARK: File Extensions
+- model: api.fileextension
+  pk: 0
+  fields:
+    extension: py
+- model: api.fileextension
+  pk: 1
+  fields:
+    extension: java
+- model: api.fileextension
+  pk: 2
+  fields:
+    extension: class
+- model: api.fileextension
+  pk: 3
+  fields:
+    extension: pdf
+
+# MARK: Docker images
+- model: api.dockerimage
+  pk: 0
+  fields:
+    name: Python 3.11.4
+    file: fixtures/realistic/docker_images/public/python_3.11.4
+    owner: "0"
+    public: true
+    state: QUEUED
+- model: api.dockerimage
+  pk: 1
+  fields:
+    name: Node 18.17.1
+    file: fixtures/realistic/docker_images/public/node_18.17.1
+    owner: "0"
+    public: true
+    state: QUEUED
+- model: api.dockerimage
+  pk: 2
+  fields:
+    name: Ubuntu 22.04
+    file: fixtures/realistic/docker_images/public/ubuntu_22.04
+    owner: "0"
+    public: true
+    state: QUEUED
+
+# MARK: Structure checks
+- model: api.structurecheck
+  pk: 0
+  fields:
+    path: ""
+    project: 0
+    obligated_extensions:
+      - 0
+    blocked_extensions: []
+- model: api.structurecheck
+  pk: 1
+  fields:
+    path: src/
+    project: 1
+    obligated_extensions:
+      - 1
+    blocked_extensions:
+      - 2
+- model: api.structurecheck
+  pk: 2
+  fields:
+    path: verslag/
+    project: 1
+    obligated_extensions:
+      - 3
+    blocked_extensions: []
+- model: api.structurecheck
+  pk: 3
+  fields:
+    path: ""
+    project: 3
+    obligated_extensions:
+      - 3
+    blocked_extensions: []
+
+# MARK: Extra checks
+- model: api.extracheck
+  pk: 0
+  fields:
+    name: Run Main.py
+    project: 0
+    docker_image: 0
+    file: fixtures/realistic/projects/0/0/checks/run_main.sh
+    time_limit: 10
+    memory_limit: 50
+    show_log: false
+- model: api.extracheck
+  pk: 1
+  fields:
+    name: Generate Gibberish
+    project: 0
+    docker_image: 2
+    file: fixtures/realistic/projects/0/0/checks/generate_gibberish.sh
+    time_limit: 30
+    memory_limit: 128
+    show_log: true
+
+# MARK: Students
+- model: api.student
+  pk: 6
+  fields:
+    is_active: true
+    student_id: 6
+    courses:
+      - 0
+      - 1
+- model: api.student
+  pk: 7
+  fields:
+    is_active: true
+    student_id: 7
+    courses:
+      - 0
+- model: api.student
+  pk: 8
+  fields:
+    is_active: true
+    student_id: 8
+    courses:
+      - 0
+- model: api.student
+  pk: 9
+  fields:
+    is_active: true
+    student_id: 9
+    courses:
+      - 0
+
+# MARK: Groups
+- model: api.group
+  pk: 0
+  fields:
+    project: 0
+    score: 0
+    students:
+      - 6
+      - 7
+- model: api.group
+  pk: 1
+  fields:
+    project: 0
+    score: 0
+    students:
+      - 8
+      - 9
+- model: api.group
+  pk: 2
+  fields:
+    project: 0
+    score:
+    students: []
+- model: api.group
+  pk: 3
+  fields:
+    project: 1
+    score: 0
+    students:
+      - 6
+      - 7
+      - 8
+- model: api.group
+  pk: 4
+  fields:
+    project: 1
+    score: 0
+    students:
+      - 9
+- model: api.group
+  pk: 5
+  fields:
+    project: 2
+    score: 5
+    students:
+      - 6
+- model: api.group
+  pk: 6
+  fields:
+    project: 2
+    score: 8
+    students:
+      - 7
+- model: api.group
+  pk: 7
+  fields:
+    project: 2
+    score: 13
+    students:
+      - 8
+- model: api.group
+  pk: 8
+  fields:
+    project: 2
+    score: 18
+    students:
+      - 9
+- model: api.group
+  pk: 9
+  fields:
+    project: 3
+    score: 0
+    students:
+      - 6
+
+# MARK: Submissions
+- model: api.submission
+  pk: 1
+  fields:
+    group: 0
+    submission_number: 1
+    submission_time: 2024-05-11 12:04:54.440044+00:00
+    is_valid: false
+    zip: fixtures/realistic/projects/0/0/submissions/0/submission_1/submission.zip
+- model: api.submission
+  pk: 2
+  fields:
+    group: 0
+    submission_number: 2
+    submission_time: 2024-05-11 12:06:55.337691+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/0/submission_2/submission.zip
+- model: api.submission
+  pk: 3
+  fields:
+    group: 1
+    submission_number: 3
+    submission_time: 2024-05-11 12:07:42.139433+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/1/submission_1/submission.zip
+- model: api.submission
+  pk: 4
+  fields:
+    group: 1
+    submission_number: 4
+    submission_time: 2024-05-11 12:08:21.147551+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/1/submission_2/submission.zip
+
+# MARK: Check Result
+- model: api.checkresult
+  pk: 1
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 1
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 2
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 1
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 3
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 1
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 4
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 2
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 5
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 2
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 6
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 2
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 7
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 3
+    result: FAILED
+    error_message: OBLIGATED_EXTENSION_NOT_FOUND
+- model: api.checkresult
+  pk: 8
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 3
+    result: FAILED
+    error_message: FAILED_STRUCTURE_CHECK
+- model: api.checkresult
+  pk: 9
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 3
+    result: FAILED
+    error_message: FAILED_STRUCTURE_CHECK
+- model: api.checkresult
+  pk: 10
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 4
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 11
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 4
+    result: FAILED
+    error_message: CHECK_ERROR
+- model: api.checkresult
+  pk: 12
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 4
+    result: SUCCESS
+    error_message: null
+
+# MARK: Strucure Check results
+- model: api.structurecheckresult
+  pk: 1
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 4
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 7
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 10
+  fields:
+    structure_check: 0
+
+# MARK: Extra Check Results
+- model: api.extracheckresult
+  pk: 2
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/0/submission_1/logs/log_extra_check_0.txt
+- model: api.extracheckresult
+  pk: 3
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/0/submission_1/logs/log_extra_check_1.txt
+- model: api.extracheckresult
+  pk: 5
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/0/submission_2/logs/log_extra_check_0.txt
+- model: api.extracheckresult
+  pk: 6
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/0/submission_2/logs/log_extra_check_1.txt
+- model: api.extracheckresult
+  pk: 8
+  fields:
+    extra_check: 0
+    log_file: ""
+- model: api.extracheckresult
+  pk: 9
+  fields:
+    extra_check: 1
+    log_file: ""
+- model: api.extracheckresult
+  pk: 11
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_0.txt
+- model: api.extracheckresult
+  pk: 12
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+
+# MARK: Teachers
+- model: api.teacher
+  pk: 1
+  fields:
+    is_active: true
+    courses:
+      - 0
+- model: api.teacher
+  pk: 2
+  fields:
+    is_active: true
+    courses:
+      - 0
+      - 1
+
+# MARK: Assistants
+- model: api.assistant
+  pk: 3
+  fields:
+    is_active: true
+    courses:
+      - 0
+      - 1
+- model: api.assistant
+  pk: 4
+  fields:
+    is_active: true
+    courses:
+      - 0
+      - 1
+- model: api.assistant
+  pk: 5
+  fields:
+    is_active: true
+    courses:
+      - 0

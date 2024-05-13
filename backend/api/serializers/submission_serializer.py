@@ -1,15 +1,18 @@
+import io
+import zipfile
+
+from api.models.group import Group
+from api.models.project import Project
 from api.models.submission import (CheckResult, ExtraCheckResult,
-                                   StructureCheckResult, Submission,
-                                   SubmissionFile)
+                                   StructureCheckResult, Submission)
+from django.core.files import File
 from django.db.models import Max
+from django.http import HttpRequest
+from django.urls import reverse
+from django.utils.translation import gettext as _
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_polymorphic.serializers import PolymorphicSerializer
-
-
-class SubmissionFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubmissionFile
-        fields = ["file"]
 
 
 class CheckResultSerializer(serializers.ModelSerializer):
@@ -29,6 +32,17 @@ class ExtraCheckResultSerializer(serializers.ModelSerializer):
         model = ExtraCheckResult
         exclude = ["polymorphic_ctype"]
 
+    def to_representation(self, instance: ExtraCheckResult) -> dict | None:
+        request: HttpRequest | None = self.context.get('request')
+        if request is not None:
+            representation: dict = super().to_representation(instance)
+            representation["log_file"] = request.build_absolute_uri(
+                reverse("extra-check-result-detail", args=[str(instance.id)]) + "log/"
+            )
+            return representation
+
+        return None
+
 
 class CheckResultPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
@@ -44,8 +58,6 @@ class SubmissionSerializer(serializers.ModelSerializer):
         many=False, read_only=True, view_name="group-detail"
     )
 
-    files = SubmissionFileSerializer(many=True, read_only=True)
-
     results = CheckResultPolymorphicSerializer(many=True, read_only=True)
 
     class Meta:
@@ -58,11 +70,43 @@ class SubmissionSerializer(serializers.ModelSerializer):
             }
         }
 
-    def create(self, validated_data):
-        # Extract files from the request
-        request = self.context.get('request')
-        files_data = request.FILES.getlist('files')
+    def to_representation(self, instance: Submission) -> dict | None:
+        request: HttpRequest | None = self.context.get('request')
+        if request is not None:
+            representation: dict = super().to_representation(instance)
+            representation['zip'] = request.build_absolute_uri(
+                reverse("submission-detail", args=[str(instance.id)]) + "zip/"
+            )
+            return representation
 
+        return None
+
+    def get_zip(self, obj):
+        return self.context["request"].build_absolute_uri(
+            reverse("submission-detail", args=[str(obj.id)]) + "zip/"
+        )
+
+    def validate(self, attrs):
+
+        group: Group = self.context["group"]
+        project: Project = group.project
+
+        # Check if the project's deadline is not passed.
+        if project.deadline_passed():
+            raise ValidationError(_("project.error.submissions.past_project"))
+
+        if not project.is_visible():
+            raise ValidationError(_("project.error.submissions.non_visible_project"))
+
+        if project.is_archived():
+            raise ValidationError(_("project.error.submissions.archived_project"))
+
+        if "files" not in self.context["request"].FILES or len(self.context["request"].FILES.getlist("files")) == 0:
+            raise ValidationError(_("project.error.submissions.no_files"))
+
+        return attrs
+
+    def create(self, validated_data):
         # Get the group for the submission
         group = validated_data['group']
 
@@ -80,17 +124,16 @@ class SubmissionSerializer(serializers.ModelSerializer):
         # Required otherwise the default value isn't used
         validated_data["is_valid"] = True
 
+        # Zip all the files into a single file
+        memory_zip = io.BytesIO()
+        with zipfile.ZipFile(memory_zip, 'w') as zip:
+            for file in self.context["request"].FILES.getlist("files"):
+                zip.writestr(file.name, file.read())
+        memory_zip.seek(0)
+
+        validated_data["zip"] = File(memory_zip, name="submission.zip")
+
         # Create the Submission instance without the files
         submission = Submission.objects.create(**validated_data)
-
-        # Create SubmissionFile instances for each file and check if none fail structure checks
-        for file in files_data:
-            SubmissionFile.objects.create(submission=submission, file=file)
-            # TODO: Run checks as a background task
-            # status, _ = check_zip_file(submission.group.project, submissionFile.file.path)
-            # if not status:
-            #     passed = False
-
-        submission.save()
 
         return submission

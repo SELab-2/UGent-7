@@ -78,4 +78,8 @@ export const endpoints = {
         retrieve: '/api/structureChecks/{id}',
         byProject: '/api/projects/{projectId}/structureChecks/',
     },
+    extraChecks: {
+        retrieve: '/api/extra-checks/{id}/',
+        byProject: '/api/projects/{projectId}/extra_checks/',
+    },
 };

@@ -18,12 +18,10 @@ const { t, locale } = useI18n();
 
 /* State */
 const showSidebar = ref(false);
-
 const logo = computed(() => {
     if (locale.value === 'nl') {
         return nl;
     }
-
     return en;
 });
 
@@ -83,7 +81,7 @@ const items = computed(() => [
                     <div>
                         <!-- User information -->
                         <template v-if="user !== null">
-                            <RouterLink :to="{ name: 'logout' }" class="text-white">
+                            <RouterLink :to="{ name: 'logout' }" class="text-white" id="logout">
                                 <span class="hidden md:inline">
                                     {{ t('layout.header.user', [user.getFullName()]) }}
                                 </span>
@@ -163,19 +161,16 @@ const items = computed(() => [
 <style lang="scss">
 #header {
     background: var(--primary-color);
-
     #language,
     #view {
         background: transparent;
         color: var(--primary-color-text);
         border: none;
         padding: 0.25rem;
-
         .p-inputtext {
             padding: 0;
             color: var(--primary-color-text);
         }
-
         .p-dropdown-trigger {
             width: auto;
             color: var(--primary-color-text);
@@ -183,11 +178,9 @@ const items = computed(() => [
         }
     }
 }
-
 .nav-item {
     position: relative;
     z-index: 1;
-
     &::after {
         content: '';
         display: block;
@@ -199,7 +192,6 @@ const items = computed(() => [
         background: var(--primary-color);
         transition: width 0.3s;
     }
-
     &:hover::after,
     &.active::after {
         width: calc(100% - 1rem);

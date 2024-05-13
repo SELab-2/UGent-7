@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DataTable, { type DataTableSelectAllChangeEvent } from 'primevue/datatable';
-import { onMounted, watch, ref, defineExpose, toRef } from 'vue';
+import { onMounted, watch, ref, toRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { usePaginator } from '@/composables/filters/paginator.ts';
@@ -99,8 +99,16 @@ defineExpose({ fetch });
             <template #header>
                 <slot name="header" />
             </template>
-            <template #empty>{{ t('admin.none_found') }}</template>
-            <template #loading>{{ t('admin.loading') }}</template>
+            <template #empty>
+                <slot name="empty">
+                    {{ t('admin.none_found') }}
+                </slot>
+            </template>
+            <template #loading>
+                <slot name="loading">
+                    {{ t('admin.loading') }}
+                </slot>
+            </template>
             <Column selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center"></Column>
             <slot />
         </DataTable>

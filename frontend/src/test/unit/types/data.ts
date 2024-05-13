@@ -26,7 +26,7 @@ export const studentData = {
     courses: [],
     create_time: new Date(),
     last_login: null,
-    studentId: '1',
+    student_id: '1',
     groups: [],
 };
 
@@ -67,6 +67,7 @@ export const courseData = {
     academic_startyear: 2024,
     private_course: false,
     invitation_link: null,
+    invitation_link_expires: null,
     parent_course: null,
     faculty: null,
     teachers: [],

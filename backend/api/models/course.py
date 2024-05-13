@@ -1,15 +1,24 @@
+from __future__ import annotations
+
 from datetime import datetime
-from typing import Self
-from django.db import models
+from typing import TYPE_CHECKING
 
 from authentication.models import Faculty
+from django.db import models
+
+if TYPE_CHECKING:
+    from api.models.assistant import Assistant
+    from api.models.project import Project
+    from api.models.student import Student
+    from api.models.teacher import Teacher
+    from django.db.models.manager import RelatedManager
 
 
 class Course(models.Model):
     """This model represents a single course.
     It contains all the information about a course."""
 
-    # ID of the course should automatically be generated
+    id = models.AutoField(auto_created=True, primary_key=True)
 
     name = models.CharField(max_length=100, blank=False, null=False)
 
@@ -58,7 +67,7 @@ class Course(models.Model):
         """Returns whether the course is from a past academic year"""
         return datetime(self.academic_startyear + 1, 10, 1) < datetime.now()
 
-    def clone(self, clone_teachers=True, clone_assistants=True) -> Self:
+    def clone(self, clone_teachers=True, clone_assistants=True) -> Course:
         """Clone the course to the next academic start year"""
         course = Course.objects.create(
             name=self.name,
@@ -84,3 +93,9 @@ class Course(models.Model):
     def academic_year(self) -> str:
         """The academic year of the course."""
         return f"{self.academic_startyear}-{self.academic_startyear + 1}"
+
+    if TYPE_CHECKING:
+        assistants: RelatedManager['Assistant']
+        projects: RelatedManager['Project']
+        students: RelatedManager['Student']
+        teachers: RelatedManager['Teacher']

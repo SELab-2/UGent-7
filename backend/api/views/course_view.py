@@ -1,7 +1,7 @@
-from api.models.course import Course
 from api.models.assistant import Assistant
-from api.models.teacher import Teacher
+from api.models.course import Course
 from api.models.group import Group
+from api.models.teacher import Teacher
 from api.permissions.course_permissions import (CourseAssistantPermission,
                                                 CoursePermission,
                                                 CourseStudentPermission,
@@ -12,26 +12,25 @@ from api.serializers.assistant_serializer import (AssistantIDSerializer,
 from api.serializers.course_serializer import (CourseCloneSerializer,
                                                SaveInvitationLinkSerializer,
                                                CourseSerializer,
+                                               CreateCourseSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
                                                TeacherJoinSerializer,
-                                               TeacherLeaveSerializer,
-                                               CreateCourseSerializer)
+                                               TeacherLeaveSerializer)
 from api.serializers.project_serializer import (CreateProjectSerializer,
                                                 ProjectSerializer)
 from api.serializers.student_serializer import StudentSerializer
 from api.serializers.teacher_serializer import TeacherSerializer
+from api.views.pagination.course_pagination import CoursePagination
 from authentication.serializers import UserIDSerializer
-from django.utils.translation import gettext
 from django.utils import timezone
+from django.utils.translation import gettext
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
-
-from api.views.pagination.course_pagination import CoursePagination
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -68,25 +67,8 @@ class CourseViewSet(viewsets.ModelViewSet):
     def search(self, request: Request) -> Response:
         # Extract filter params
         search = request.query_params.get("search", "")
-        invitation_link = request.query_params.get("invitationLink", "")
         years = request.query_params.getlist("years[]")
         faculties = request.query_params.getlist("faculties[]")
-
-        # If the invitation link was passed, then only the private course with the invitation link should be returned
-        if invitation_link != "none":
-
-            # Filter based on invitation link, and that the invitation link is not expired
-            queryset = self.get_queryset().filter(
-                invitation_link=invitation_link,
-                invitation_link_expires__gte=timezone.now()
-            )
-
-            # Serialize the resulting queryset
-            serializer = self.serializer_class(self.paginate_queryset(queryset), many=True, context={
-                "request": request
-            })
-
-            return self.get_paginated_response(serializer.data)
 
         # Filter the queryset based on the search term
         queryset = self.get_queryset().filter(
@@ -101,7 +83,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         if faculties:
             queryset = queryset.filter(faculty__in=faculties)
 
-        # No invitation link was passed, so filter out private courses
+        # Public courses search so filter out private courses
         queryset = queryset.filter(private_course=False)
 
         # Serialize the resulting queryset
@@ -348,7 +330,6 @@ class CourseViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @projects.mapping.post
-    @projects.mapping.put
     @swagger_auto_schema(request_body=CreateProjectSerializer)
     def _add_project(self, request, **_):
         """Add a project to the course"""
@@ -395,7 +376,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         return Response(course_serializer.data)
 
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["patch"])
     @swagger_auto_schema(request_body=SaveInvitationLinkSerializer)
     def invitation_link(self, request, **_):
         """Save the invitation link to the course"""

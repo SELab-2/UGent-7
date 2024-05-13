@@ -69,9 +69,19 @@
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
             "scoreVisibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
-            "dockerUpload": "Upload een Dockerfile",
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
-            "noStudents": "Geen studenten in deze groep"
+            "noStudents": "Geen studenten in deze groep",
+            "extraChecks": {
+                "title": "Automatische checks op een indiening",
+                "add": "Nieuwe check",
+                "name": "Naam",
+                "public": "Publiek",
+                "bashScript": "Bash script",
+                "dockerImage": "Docker image",
+                "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",
+                "memoryLimit": "Geheugenlimiet voor de uitvoering (in MB)",
+                "showLog": "Maak de extra logs van de docker container zichtbaar voor de studenten"
+            }
         },
         "submissions": {
             "title": "Inzendingen",
@@ -134,8 +144,8 @@
                 "placeholder": "Zoek een vak gebruik makende van een uitnodigingslink"
             },
             "share": {
-                "title": "Creëer invitatielink",
-                "duration": "Geldigheidsduur link (in dagen):",
+                "title": "Activeer invitatielink",
+                "duration": "Geldigheidsduur van link (in dagen):",
                 "link": "Invitatielink:"
             }
       }
@@ -164,7 +174,8 @@
             "searchCourse": "Zoek een vak",
             "createCourse": "Maak een vak",
             "public": "Publiek",
-            "protected": "Besloten"
+            "protected": "Besloten",
+            "csv": "Download punten als een .csv bestand"
         },
         "card": {
             "open": "Details",
@@ -240,8 +251,9 @@
     },
     "confirmations": {
         "cloneCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
+        "joinCourse": "Ben je zeker dat je jezelf wil inschrijven voor dit vak? Dit zal je toegang geven tot alle projecten, opdrachten, ...",
         "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak.",
-        "shareCourse": "Door het creëren van een invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Creëer invitatielink\" klikt zal deze link geldig worden."
+        "shareCourse": "Door het activeren van de invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Activeer invitatielink\" klikt zal deze link actief worden."
     },
     "protectedCourses": {
         "screen1": {

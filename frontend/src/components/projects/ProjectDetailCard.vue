@@ -50,7 +50,7 @@ function isInGroup(): boolean {
                 >: {{ project.getFormattedDeadline() }}<br />
             </div>
             <div>
-                <ProjectMeter :submission-status="project.status" />
+                <ProjectMeter :project="project" />
             </div>
         </template>
         <template #footer>

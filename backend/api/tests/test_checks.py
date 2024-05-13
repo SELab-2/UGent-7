@@ -1,8 +1,13 @@
 import json
+
+from api.tests.helpers import (create_admin, create_course,
+                               create_docker_image, create_extra_check,
+                               create_file_extension, create_project,
+                               create_structure_check)
+from authentication.models import User
 from django.urls import reverse
 from rest_framework.test import APITestCase
-from authentication.models import User
-from api.tests.helpers import create_structure_check, create_file_extension, create_project, create_course
+from ypovoli.settings import TESTING_BASE_LINK
 
 
 def get_project():
@@ -23,7 +28,7 @@ def get_project():
 
 class FileExtensionModelTests(APITestCase):
     def setUp(self) -> None:
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             User.get_dummy_admin()
         )
 
@@ -34,7 +39,7 @@ class FileExtensionModelTests(APITestCase):
         response_root = self.client.get(reverse("file-extension-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
-        self.assertEqual(response_root.accepted_media_type, "application/json")
+        self.assertEqual(response_root.accepted_media_type, "application/json")  # type: ignore
         # Parse the JSON content from the response
         content_json = json.loads(response_root.content.decode("utf-8"))
         # Assert that the parsed JSON is an empty list
@@ -53,7 +58,7 @@ class FileExtensionModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -81,7 +86,7 @@ class FileExtensionModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -116,7 +121,7 @@ class FileExtensionModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -128,56 +133,42 @@ class FileExtensionModelTests(APITestCase):
 
 class StructureCheckModelTests(APITestCase):
     def setUp(self) -> None:
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             User.get_dummy_admin()
         )
 
-    def test_no_checks(self):
-        """
-        Able to retrieve no Checks before publishing it.
-        """
-        response_root = self.client.get(reverse("structure-check-list"), follow=True)
-        self.assertEqual(response_root.status_code, 200)
-        self.assertEqual(response_root.accepted_media_type, "application/json")
-        content_json = json.loads(response_root.content.decode("utf-8"))
-        self.assertEqual(content_json, [])
-
     def test_structure_checks_exists(self):
         """
-        Able to retrieve a single Checks after creating it.
+        Able to retrieve a single check after creating it.
         """
         # Create a Checks instance with some file extensions
         file_extension1 = create_file_extension(extension="jpg")
         file_extension2 = create_file_extension(extension="png")
         file_extension3 = create_file_extension(extension="tar")
         file_extension4 = create_file_extension(extension="wfp")
-        checks = create_structure_check(
-            name=".",
+        check = create_structure_check(
+            path="",
             project=get_project(),
             obligated_extensions=[file_extension1, file_extension4],
             blocked_extensions=[file_extension2, file_extension3],
         )
 
         # Make a GET request to retrieve the Checks
-        response = self.client.get(reverse("structure-check-list"), follow=True)
+        response = self.client.get(reverse("structure-check-detail", args=[str(check.id)]), follow=True)
 
         # Check if the response was successful
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
 
-        # Assert that the parsed JSON is a list with one Checks
-        self.assertEqual(len(content_json), 1)
-
         # Assert the details of the retrieved Checks match the created Checks
-        retrieved_checks = content_json[0]
-        self.assertEqual(int(retrieved_checks["id"]), checks.id)
+        self.assertEqual(int(content_json["id"]), check.id)
 
         # Assert the file extensions of the retrieved
         # Checks match the created file extensions
-        retrieved_obligated_file_extensions = retrieved_checks["obligated_extensions"]
+        retrieved_obligated_file_extensions = content_json["obligated_extensions"]
 
         self.assertEqual(len(retrieved_obligated_file_extensions), 2)
         self.assertEqual(
@@ -187,7 +178,7 @@ class StructureCheckModelTests(APITestCase):
             retrieved_obligated_file_extensions[1]["extension"], file_extension4.extension
         )
 
-        retrieved_blocked_file_extensions = retrieved_checks[
+        retrieved_blocked_file_extensions = content_json[
             "blocked_extensions"
         ]
         self.assertEqual(len(retrieved_blocked_file_extensions), 2)
@@ -201,44 +192,31 @@ class StructureCheckModelTests(APITestCase):
         )
 
 
-# class ExtraCheckModelTests(APITestCase):
-#     def setUp(self) -> None:
-#         self.client.force_authenticate(
-#             User.get_dummy_admin()
-#         )
+class ExtraCheckModelTests(APITestCase):
+    def setUp(self) -> None:
+        self.client.force_authenticate(  # type: ignore
+            User.get_dummy_admin()
+        )
 
-#     def test_no_checks(self):
-#         """
-#         Able to retrieve no Checks before publishing it.
-#         """
-#         response_root = self.client.get(reverse("extra-check-list"), follow=True)
-#         self.assertEqual(response_root.status_code, 200)
-#         self.assertEqual(response_root.accepted_media_type, "application/json")
-#         content_json = json.loads(response_root.content.decode("utf-8"))
-#         self.assertEqual(content_json, [])
+    def test_extra_checks_exists(self):
+        """
+        Able to retrieve a single check after creating it.
+        """
+        admin = create_admin(50, "John", "Doe", "John@Doe.com", [])
+        check = create_extra_check(
+            project=get_project(), docker_image=create_docker_image("", admin), file="test.sh"
+        )
 
-#     def test_extra_checks_exists(self):
-#         """
-#         Able to retrieve a single Checks after creating it.
-#         """
-#         checks = create_extra_check(
-#              project=get_project(), run_script="test.sh"
-#         )
+        # Make a GET request to retrieve the Checks
+        response = self.client.get(reverse("extra-check-detail", args=[str(check.id)]), follow=True)
 
-#         # Make a GET request to retrieve the Checks
-#         response = self.client.get(reverse("extra-check-list"), follow=True)
+        # Check if the response was successful
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
-#         # Check if the response was successful
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.accepted_media_type, "application/json")
+        # Parse the JSON content from the response
+        content_json = json.loads(response.content.decode("utf-8"))
 
-#         # Parse the JSON content from the response
-#         content_json = json.loads(response.content.decode("utf-8"))
-
-#         # Assert that the parsed JSON is a list with one Checks
-#         self.assertEqual(len(content_json), 1)
-
-#         # Assert the details of the retrieved Checks match the created Checks
-#         retrieved_checks = content_json[0]
-#         self.assertEqual(int(retrieved_checks["id"]), checks.id)
-#         self.assertEqual(retrieved_checks["run_script"], settings.TESTING_BASE_LINK + checks.run_script.url)
+        # Assert the details of the retrieved Checks match the created Checks
+        self.assertEqual(int(content_json["id"]), check.id)
+        self.assertEqual(content_json["file"], TESTING_BASE_LINK + check.file.url)

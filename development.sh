@@ -23,11 +23,16 @@ while getopts ":bfcsd:" opt; do
       ;;
     d )
       case "$OPTARG" in
-        small|medium|large)
-          data="$OPTARG"
+        small|medium|large|real)
+          if [ "$OPTARG" = "real" ]; then
+            data="realistic"
+          else
+            data="$OPTARG"
+          fi
+          echo "$data"
           ;;
         * )
-          echo "Invalid data size provided. Size must be 'small', 'medium', or 'large'."
+          echo "Invalid data size provided. Size must be 'small', 'medium', 'large' or 'real."
           exit 1
           ;;
       esac
@@ -55,6 +60,7 @@ fi
 if ! [ -f .env ]; then
   cp .dev.env .env
   sed -i "s/^DJANGO_SECRET_KEY=.*/DJANGO_SECRET_KEY=totally_random_key_string/" .env
+  sed -i "s,^DJANGO_ROOT_DIR=.*,DJANGO_ROOT_DIR=$PWD/backend," .env
   echo "Created environment file"
 fi
 
@@ -70,17 +76,6 @@ if [ ! -f "data/nginx/ssl/private.key" ] || [ ! -f "data/nginx/ssl/certificate.c
   echo "SSL certificates generated."
 else
   echo "SSL certificates already exist, skipping generation."
-fi
-
-# Seed database if data size is provided
-if [ "$data" != "" ]; then
-  echo "--------------------------"
-  echo "Filling the database."
-  echo "This can take some time..."
-  echo "--------------------------"
-
-  docker run -v backend:/code ugent-7_backend sh -c "python manage.py flush --no-input; python manage.py migrate; python manage.py loaddata */fixtures/$data/*" > /dev/null 2>&1
-  echo "Database filled."
 fi
 
 # Build Docker images
@@ -126,6 +121,26 @@ if [ "$seed" = true ]; then
   docker-compose -f development.yml down
   echo "Done."
   exit 0
+fi
+
+# Seed database if data size is provided
+if [ "$data" != "" ]; then
+  echo "--------------------------"
+  echo "Filling the database."
+  echo "This can take some time..."
+  echo "--------------------------"
+
+  echo "Starting the required services"
+  docker-compose -f development.yml up -d backend redis celery
+
+  echo "Clearing, Migrating & Populating the database"
+  # We have nog fixtures for notification yet.
+  docker-compose -f development.yml run backend sh -c "python manage.py flush --no-input; python manage.py migrate; python manage.py loaddata authentication/fixtures/$data/*; python manage.py loaddata api/fixtures/$data/*;"
+
+  echo "Stopping the services"
+  docker-compose -f development.yml down
+
+  echo "Database filled."
 fi
 
 # Start services
