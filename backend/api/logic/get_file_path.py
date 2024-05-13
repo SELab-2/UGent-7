@@ -56,3 +56,8 @@ def get_docker_image_file_path(instance: DockerImage, _: str) -> str:
 
 def get_docker_image_tag(instance: DockerImage) -> str:
     return f"{DOCKER_BUILD_ROOT_NAME}_{instance.id}"
+
+
+def get_extra_check_artifact_file_path(instance: ExtraCheckResult, uuid: str) -> str:
+    return (f"{_get_project_dir_path(instance.submission.group.project)}"
+            f"submissions/{instance.submission.group.id}/{uuid}/artifacts/{_get_uuid()}.zip")
