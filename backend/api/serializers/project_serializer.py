@@ -81,7 +81,8 @@ class ProjectSerializer(serializers.ModelSerializer):
                 raise ValidationError(gettext("project.errors.context"))
 
         # Check if start date of the project is not in the past
-        if "start_date" in attrs and attrs["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
+        if "start_date" in attrs and not self.partial and \
+                attrs["start_date"] < timezone.now().replace(hour=0, minute=0, second=0):
             raise ValidationError(gettext("project.errors.start_date_in_past"))
 
         # Set the start date depending on if it is a partial update and whether it was given by the user

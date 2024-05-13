@@ -80,7 +80,7 @@
                 "dockerImage": "Docker image",
                 "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",
                 "memoryLimit": "Geheugenlimiet voor de uitvoering (in MB)",
-                "showLog": "Toon logbestand aan studenten"
+                "showLog": "Maak de extra logs van de docker container zichtbaar voor de studenten"
             }
         },
         "submissions": {

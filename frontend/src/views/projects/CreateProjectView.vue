@@ -250,8 +250,8 @@ async function submitProject(): Promise<void> {
 
                 <div class="col-12 lg:col-6 checks">
                     <!-- Extra checks upload -->
-                    <div class="field col">
-                        <label for="extraChecks">{{ t('views.projects.extraChecks.title') }}</label>
+                    <div class="field col-8">
+                        <label for="extraChecks" class="mr-4">{{ t('views.projects.extraChecks.title') }}</label>
                         <ExtraChecksUpload
                             id="extraChecks"
                             :create-checks-backend="createExtraChecksBackend"
