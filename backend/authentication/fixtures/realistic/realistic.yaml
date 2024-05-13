@@ -1,4 +1,4 @@
-# faculties
+# MARK: faculties
 - model: authentication.faculty
   pk: Bio-ingenieurswetenschappen
   fields:
@@ -43,7 +43,7 @@
   pk: Wetenschappen
   fields:
     name: faculties.sciences
-# 1 Admin
+# MARK: 1 Admin
 - model: authentication.user
   pk: "0"
   fields:
@@ -56,8 +56,9 @@
     last_enrolled: 2018
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Bio-ingenieurswetenschappen"
-# 2 Professors
+      - Bio-ingenieurswetenschappen
+      - Wetenschappen
+# MARK: 2 Professors
 - model: authentication.user
   pk: "1"
   fields:
@@ -70,8 +71,9 @@
     last_enrolled: 2004
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Diergeneeskunde"
-      - "Economie_Bedrijfskunde"
+      - Diergeneeskunde
+      - Economie_Bedrijfskunde
+      - Wetenschappen
 - model: authentication.user
   pk: "2"
   fields:
@@ -84,9 +86,10 @@
     last_enrolled: 2009
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Farmaceutische_Wetenschappen"
-      - "Economie_Bedrijfskunde"
-# 3 Assistants
+      - Farmaceutische_Wetenschappen
+      - Economie_Bedrijfskunde
+      - Wetenschappen
+# MARK: 3 Assistants
 - model: authentication.user
   pk: "3"
   fields:
@@ -99,8 +102,9 @@
     last_enrolled: 2022
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Geneeskunde_Gezondheidswetenschappen"
-      - "Economie_Bedrijfskunde"
+      - Geneeskunde_Gezondheidswetenschappen
+      - Economie_Bedrijfskunde
+      - Wetenschappen
 - model: authentication.user
   pk: "4"
   fields:
@@ -113,7 +117,8 @@
     last_enrolled: 2023
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Economie_Bedrijfskunde"
+      - Economie_Bedrijfskunde
+      - Wetenschappen
 - model: authentication.user
   pk: "5"
   fields:
@@ -126,8 +131,9 @@
     last_enrolled: 2021
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Economie_Bedrijfskunde"
-# 4 Students
+      - Economie_Bedrijfskunde
+      - Wetenschappen
+# MARK: 4 Students
 - model: authentication.user
   pk: "6"
   fields:
@@ -140,7 +146,8 @@
     last_enrolled: 2024
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Economie_Bedrijfskunde"
+      - Economie_Bedrijfskunde
+      - Wetenschappen
 - model: authentication.user
   pk: "7"
   fields:
@@ -153,8 +160,9 @@
     last_enrolled: 2023
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Ingenieurswetenschappen_Architectuur"
-      - "Economie_Bedrijfskunde"
+      - Ingenieurswetenschappen_Architectuur
+      - Economie_Bedrijfskunde
+      - Wetenschappen
 - model: authentication.user
   pk: "8"
   fields:
@@ -167,7 +175,8 @@
     last_enrolled: 2023
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Economie_Bedrijfskunde"
+      - Economie_Bedrijfskunde
+      - Wetenschappen
 - model: authentication.user
   pk: "9"
   fields:
@@ -180,5 +189,6 @@
     last_enrolled: 2022
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - "Letteren_Wijsbegeerte"
-      - "Economie_Bedrijfskunde"
+      - Letteren_Wijsbegeerte
+      - Economie_Bedrijfskunde
+      - Wetenschappen
