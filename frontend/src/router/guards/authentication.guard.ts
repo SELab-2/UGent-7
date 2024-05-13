@@ -10,7 +10,6 @@ export async function AuthenticationGuard(to: RouteLocationNormalized): Promise<
     const { refreshUser } = useAuthStore();
     const { intent, isAuthenticated } = storeToRefs(useAuthStore());
 
-    console.log(to.name as string);
     if (!isAuthenticated.value && !['login', 'verify'].includes(to.name as string)) {
         try {
             await refreshUser();
