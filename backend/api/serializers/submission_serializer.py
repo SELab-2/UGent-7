@@ -74,7 +74,9 @@ class SubmissionSerializer(serializers.ModelSerializer):
         request: HttpRequest | None = self.context.get('request')
         if request is not None:
             representation: dict = super().to_representation(instance)
-            representation['zip'] = request.build_absolute_uri(reverse("submission-detail", args=[str(instance.id)]) + "zip/")
+            representation['zip'] = request.build_absolute_uri(
+                reverse("submission-detail", args=[str(instance.id)]) + "zip/"
+            )
             return representation
 
         return None
