@@ -5,7 +5,6 @@ from authentication.models import User
 from authentication.signals import user_created
 from django.contrib.auth import logout, login
 from django.shortcuts import redirect
-from django.conf import settings
 from rest_framework.decorators import action
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny, IsAuthenticated
