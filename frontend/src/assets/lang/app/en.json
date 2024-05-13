@@ -178,7 +178,8 @@
             "searchCourse": "Search a course",
             "createCourse": "Create a new course",
             "public": "Public",
-            "protected": "Protected"
+            "protected": "Protected",
+            "csv": "Download grades as a .csv file"
         },
         "card": {
             "open": "Details",

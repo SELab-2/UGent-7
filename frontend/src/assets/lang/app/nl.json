@@ -174,7 +174,8 @@
             "searchCourse": "Zoek een vak",
             "createCourse": "Maak een vak",
             "public": "Publiek",
-            "protected": "Besloten"
+            "protected": "Besloten",
+            "csv": "Download punten als een .csv bestand"
         },
         "card": {
             "open": "Details",
