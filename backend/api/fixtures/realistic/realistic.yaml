@@ -1,20 +1,3 @@
-# MARK: Polymorphic shit
-- model: contenttypes.contenttype
-  pk: 16
-  fields:
-    app_label: api
-    model: checkresult
-- model: contenttypes.contenttype
-  pk: 17
-  fields:
-    app_label: api
-    model: structurecheckresult
-- model: contenttypes.contenttype
-  pk: 18
-  fields:
-    app_label: api
-    model: extracheckresult
-
 # MARK: Courses
 - model: api.course
   pk: 0
@@ -344,84 +327,108 @@
 - model: api.checkresult
   pk: 1
   fields:
-    polymorphic_ctype: 17
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
     submission: 1
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 2
   fields:
-    polymorphic_ctype: 18
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 1
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 3
   fields:
-    polymorphic_ctype: 18
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 1
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 4
   fields:
-    polymorphic_ctype: 17
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
     submission: 2
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 5
   fields:
-    polymorphic_ctype: 18
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 2
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 6
   fields:
-    polymorphic_ctype: 18
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 2
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 7
   fields:
-    polymorphic_ctype: 17
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
     submission: 3
     result: FAILED
     error_message: OBLIGATED_EXTENSION_NOT_FOUND
 - model: api.checkresult
   pk: 8
   fields:
-    polymorphic_ctype: 18
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 3
     result: FAILED
     error_message: FAILED_STRUCTURE_CHECK
 - model: api.checkresult
   pk: 9
   fields:
-    polymorphic_ctype: 18
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 3
     result: FAILED
     error_message: FAILED_STRUCTURE_CHECK
 - model: api.checkresult
   pk: 10
   fields:
-    polymorphic_ctype: 17
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
     submission: 4
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 11
   fields:
-    polymorphic_ctype: 18
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 4
     result: FAILED
     error_message: CHECK_ERROR
 - model: api.checkresult
   pk: 12
   fields:
-    polymorphic_ctype: 18
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 4
     result: SUCCESS
     error_message: null

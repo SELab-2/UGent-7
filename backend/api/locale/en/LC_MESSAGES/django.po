@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-11 15:01+0200\n"
+"POT-Creation-Date: 2024-05-11 18:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -279,3 +279,11 @@ msgstr "The student was successfully added."
 #: views/student_view.py:45
 msgid "students.success.destroy"
 msgstr "The student was successfully destroyed."
+
+#: views/submission_view.py:28
+msgid "submission.download.zip"
+msgstr "No zip file available."
+
+#: views/submission_view.py:49
+msgid "extra_check_result.download.log"
+msgstr "No log file available."
