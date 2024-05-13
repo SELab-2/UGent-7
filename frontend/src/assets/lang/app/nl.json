@@ -283,6 +283,7 @@
         "edit": "Bewerken",
         "cancel": "Annuleer",
         "save": "Sla op",
+        "delete": "Verwijder",
         "users": {
             "title": "Gebruikers",
             "username": "Gebruikersnaam",
@@ -312,7 +313,8 @@
             "private": "Privaat"
         },
         "none_found": "Geen overeenkomende data gevonden.",
-        "loading": "Aan het laden. Wacht een momentje aub."
+        "loading": "Aan het laden. Wacht een momentje aub.",
+        "safeGuard": "Ben je het zeker?"
     },
     "primevue": {
         "accept": "Ja",

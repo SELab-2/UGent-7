@@ -2,7 +2,6 @@
 import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import InputSwitch from 'primevue/inputswitch';
-import ToggleButton from 'primevue/togglebutton';
 import SelectButton from 'primevue/selectbutton';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
@@ -24,7 +23,7 @@ import IconField from 'primevue/iconfield';
 /* Injection */
 const { t } = useI18n();
 const { query } = useRoute();
-const { pagination, dockerImages, getDockerImages, searchDockerImages, patchDockerImage, createDockerImage } =
+const { pagination, dockerImages, getDockerImages, searchDockerImages, patchDockerImage, createDockerImage, deleteDockerImage } =
     useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
 
@@ -46,22 +45,35 @@ const columns = ref([
 //     { value: false, label: 'private' },
 // ]);
 const showSafetyGuard = ref<boolean>(false);
+const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
-const toggleSafetyGuard = (data: DockerImage): void => {
+const safetyGuardCleanup = async ():  Promise<void> => {
+    showSafetyGuard.value = false;
+    await safetyGuardFunction.value();
+    await dataTable.value.fetch();
+};
+const toggleSafetyGuardEdit = (data: DockerImage): void => {
     editItem.value.public = !data.public;
     editItem.value.id = data.id;
+    safetyGuardFunction.value = changePublicStatus;
     showSafetyGuard.value = true;
 };
-const changePublicStatus = async (dockerData: DockerImage): Promise<void> => {
-    showSafetyGuard.value = false;
-    await patchDockerImage(dockerData);
-    await dataTable.value.fetch();
+const changePublicStatus = async (): Promise<void> => {
+    await patchDockerImage(editItem.value);
 };
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
     await createDockerImage(addItem.value, files[0]);
     addItem.value.name = '';
 };
+const toggleSafetyGuardRemove = (data: DockerImage): void => {
+    editItem.value = data;
+    safetyGuardFunction.value = removeItem;
+    showSafetyGuard.value = true;
+}
+const removeItem = async (): Promise<void> => {
+    await deleteDockerImage(editItem.value.id);
+}
 </script>
 
 <template>
@@ -113,15 +125,22 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         key="public"
                         field="public"
                         :header="t('admin.docker_images.public')"
-                        :header-style="{ width: '25%' }"
+                        :header-style="{ width: '12%' }"
                         class="p-col"
                     >
                         <template #body="{ data }">
                             <InputSwitch
                                 class="mb-3 gap-3 justify-content-center"
                                 :model-value="data.public"
-                                @click="() => toggleSafetyGuard(data)"
+                                @click="() => toggleSafetyGuardEdit(data)"
                             />
+                        </template>
+                    </Column>
+                    <Column key="remove" :header-style="{ width: '13%'}" class="p-col">
+                        <template #body="{ data }">
+                            <Button @click="() => toggleSafetyGuardRemove(data)" class="justify-content-center">
+                                {{ t('admin.delete') }}
+                            </Button>
                         </template>
                     </Column>
                 </LazyDataTable>
@@ -135,7 +154,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                 <div v-if="addItem.name.length > 0">
                     <div class="flex align-items-center mb-3 gap-3">
                         <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
-                        <InputSwitch v-model:model-value="addItem.public" />
+                        <InputSwitch :model-value="addItem.public" />
                     </div>
                     <FileUpload class="mb-3 gap-3" :custom-upload="true" @uploader="upload" :file-limit="1">
                         <template #empty>
@@ -147,10 +166,10 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
         </Body>
     </AdminLayout>
     <Dialog v-model:visible="showSafetyGuard" :style="{ width: '15rem' }">
-        <h3>Are you sure?</h3>
+        <h3>{{ t('admin.safeGuard') }}</h3>
         <div class="flex justify-content-between">
-            <Button label="No" @click="showSafetyGuard = false" />
-            <Button label="Yes" @click="() => changePublicStatus(editItem)" />
+            <Button :label="t('primevue.reject')" @click="showSafetyGuard = false" />
+            <Button :label="t('primevue.accept')" @click="safetyGuardCleanup" />
         </div>
     </Dialog>
 </template>
