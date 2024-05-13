@@ -37,7 +37,7 @@ export const postHandlers = [
         const buffer = await request.arrayBuffer();
         const requestBody = new TextDecoder().decode(buffer);
         const newStudent = JSON.parse(requestBody);
-        students.push({ id: newStudent.user, studentId: newStudent.student_id, ...newStudent });
+        students.push({ id: newStudent.user, student_id: newStudent.student_id, ...newStudent });
         return HttpResponse.json(students);
     }),
     http.post(baseUrl + endpoints.courses.index, async ({ request }) => {
