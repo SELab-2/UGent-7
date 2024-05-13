@@ -36,14 +36,12 @@ class GroupSerializer(serializers.ModelSerializer):
         course_id = instance.project.course.id
 
         # If you are not a student, you can always see the score
-        # Same with being a student, but not being part of the course affiliated with this group
-        if is_student(user) and \
-                not ((is_assistant(user) or is_teacher(user)) and
-                     not user.student.courses.filter(id=course_id).exists()):
+        if is_student(user):
             student_in_course = user.student.courses.filter(id=course_id).exists()
-            # Student can not see the score if they are not part of the course associated with group,
-            # or it is not visible yet
-            if not student_in_course or \
+            # Student can not see the score if they are not part of the course associated with group and
+            # neither an assistant or a teacher,
+            # or it is not visible yet when they are part of the course associated with the group
+            if not student_in_course and not is_assistant(user) and not is_teacher(user) or \
                     not instance.project.score_visible and student_in_course:
                 data.pop("score")
 
