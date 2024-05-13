@@ -81,12 +81,11 @@ export const facultyData = {
     name: 'faculty1_name',
 };
 
-export const groupData = {
-    id: 'group1_id',
-    score: 10,
-    project: null,
-    students: [],
-    submissions: [],
+export const submissionStatusData = {
+    non_empty_groups: 5,
+    groups_submitted: 4,
+    structure_checks_passed: 3,
+    extra_checks_passed: 1,
 };
 
 export const projectData = {
@@ -103,9 +102,18 @@ export const projectData = {
     group_size: 3,
     structure_file: null,
     course: courseData,
+    status: submissionStatusData,
     structureChecks: [],
     extra_checks: [],
     groups: [],
+    submissions: [],
+};
+
+export const groupData = {
+    id: 'group1_id',
+    score: 10,
+    project: projectData,
+    students: [],
     submissions: [],
 };
 
@@ -119,13 +127,6 @@ export const structureCheckData = {
     obligated_extensions: [],
     blocked_extensions: [],
     project: null,
-};
-
-export const submissionStatusData = {
-    non_empty_groups: 5,
-    groups_submitted: 4,
-    structure_checks_passed: 3,
-    extra_checks_passed: 1,
 };
 
 export const submissionData = {
