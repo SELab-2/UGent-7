@@ -24,7 +24,7 @@ django_stubs_ext.monkeypatch()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = environ.get("DJANGO_ROOT_DIR", "")
-MEDIA_ROOT = os.path.normpath(os.path.join("data/production"))
+MEDIA_ROOT = os.path.normpath(os.path.join("data"))
 
 # TESTING
 TESTING_BASE_LINK = "http://testserver"

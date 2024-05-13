@@ -14,6 +14,8 @@ from rest_framework.viewsets import GenericViewSet
 from api.views.pagination.basic_pagination import BasicPagination
 
 
+# TODO: Remove update abilities, maybe?
+
 class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
 
     queryset = DockerImage.objects.all()
