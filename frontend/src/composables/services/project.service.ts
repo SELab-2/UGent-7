@@ -75,26 +75,28 @@ export function useProject(): ProjectState {
 
     async function createProject(projectData: Project, courseId: string, numberOfGroups: number): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
-        await create<Project>(
-            endpoint,
-            {
-                name: projectData.name,
-                description: projectData.description,
-                visible: projectData.visible,
-                archived: projectData.archived,
-                locked_groups: projectData.locked_groups,
-                start_date: projectData.start_date,
-                deadline: projectData.deadline,
-                max_score: projectData.max_score,
-                score_visible: projectData.score_visible,
-                group_size: projectData.group_size,
-                number_groups: numberOfGroups,
-                zip_structure: projectData.structure_file,
-            },
-            project,
-            Project.fromJSON,
-            'multipart/form-data',
-        );
+
+        // Initialize an empty object to hold the data to send
+        const requestData: Record<string, unknown> = {
+            name: projectData.name,
+            description: projectData.description,
+            visible: projectData.visible,
+            archived: projectData.archived,
+            locked_groups: projectData.locked_groups,
+            start_date: projectData.start_date,
+            deadline: projectData.deadline,
+            max_score: projectData.max_score,
+            score_visible: projectData.score_visible,
+            group_size: projectData.group_size,
+            zip_structure: projectData.structure_file,
+        };
+
+        // Check if the number of groups should be included, only if it is greater than 0
+        if (numberOfGroups > 0) {
+            requestData.number_groups = numberOfGroups;
+        }
+
+        await create<Project>(endpoint, requestData, project, Project.fromJSON, 'multipart/form-data');
     }
 
     async function updateProject(projectData: Project): Promise<void> {

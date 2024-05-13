@@ -111,17 +111,26 @@ class ProjectSerializer(serializers.ModelSerializer):
         project = super().create(validated_data)
 
         # Create groups for the project, if specified
-        if number_groups:
-            for _ in range(number_groups):
-                Group.objects.create(project=project)
-
-        elif project.group_size == 1:
+        if project.group_size == 1:
             # If the group_size is set to one, create a group for each student
             students = project.course.students.all()
 
             for student in students:
                 group = Group.objects.create(project=project)
                 group.students.add(student)
+
+        elif number_groups:
+
+            for _ in range(number_groups):
+                Group.objects.create(project=project)
+
+        else:
+            # If no number of groups is passed, create #students / group_size groups
+            number_students = project.course.students.count()
+            group_size = project.group_size
+
+            for _ in range(0, number_students, group_size):
+                group = Group.objects.create(project=project)
 
         # If a zip_structure is provided, parse it to create the structure checks
         zip_structure: InMemoryUploadedFile | None = self.context['request'].FILES.get('zip_structure')

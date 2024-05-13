@@ -9,7 +9,9 @@ import Editor from '@/components/forms/Editor.vue';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
-import { reactive, computed, onMounted } from 'vue';
+import ExtraChecksUpload from '@/components/projects/ExtraChecksUpload.vue';
+import { SubmissionStatus } from '@/types/SubmisionStatus';
+import { reactive, computed, onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Project } from '@/types/Project';
@@ -26,6 +28,9 @@ const { params } = useRoute();
 /* Service injection */
 const { course, getCourseByID } = useCourses();
 const { project, getProjectByID, updateProject } = useProject();
+
+/* State */
+const createExtraChecksBackend = ref<boolean>(false);
 
 /* Load project data */
 onMounted(async () => {
@@ -54,7 +59,6 @@ const form = reactive({
     maxScore: 10,
     visibility: true,
     scoreVisibility: false,
-    dockerScript: null,
     submissionStructure: null,
 });
 
@@ -72,11 +76,6 @@ const rules = computed(() => {
     };
 });
 
-// Function to handle the file upload of a docker script
-const onDockerScriptUpload = (event: any): void => {
-    form.dockerScript = event.files[0];
-};
-
 // Function to handle the file upload of a zip file containing the submission structure
 const onZipStructureUpload = (event: any): void => {
     form.submissionStructure = event.files[0];
@@ -85,12 +84,28 @@ const onZipStructureUpload = (event: any): void => {
 // useVuelidate function to perform form validation
 const v$ = useVuelidate(rules, form);
 
+// Validate the create project form
+const validateForm = (): boolean => {
+    v$.value.name.$touch();
+    v$.value.startDate.$touch();
+    v$.value.deadline.$touch();
+    v$.value.groupSize.$touch();
+    v$.value.maxScore.$touch();
+    return (
+        !v$.value.name.$invalid &&
+        !v$.value.startDate.$invalid &&
+        !v$.value.deadline.$invalid &&
+        !v$.value.groupSize.$invalid &&
+        !v$.value.maxScore.$invalid
+    );
+};
+
 /**
  * Function to submit the project form.
  */
 async function submitProject(): Promise<void> {
     // Validate the form
-    const validated = await v$.value.$validate();
+    const validated = validateForm();
 
     // Get the course object from the course ID
     await getCourseByID(params.courseId as string);
@@ -112,9 +127,13 @@ async function submitProject(): Promise<void> {
                 form.scoreVisibility,
                 form.groupSize,
                 course.value,
+                new SubmissionStatus(0, 0, 0), // Default submission status
                 form.submissionStructure,
             ),
         );
+
+        // Make sure the extra checks are updated in the backend
+        createExtraChecksBackend.value = true;
 
         // Redirect to the project overview
         await push({
@@ -133,7 +152,7 @@ async function submitProject(): Promise<void> {
         </Title>
 
         <!-- Project form -->
-        <form @submit.prevent="submitProject">
+        <form @submit.prevent="submitProject" v-if="project">
             <div class="grid">
                 <div class="col-12 lg:col-6">
                     <div class="grid formgrid">
@@ -233,19 +252,14 @@ async function submitProject(): Promise<void> {
                     />
                 </div>
 
-                <div class="col-12 lg:col-6">
-                    <!-- Upload field for docker script -->
+                <div class="col-12 lg:col-6 checks">
+                    <!-- Extra checks upload -->
                     <div class="field col">
-                        <label for="dockerScript">
-                            {{ t('views.projects.dockerUpload') }}
-                        </label>
-                        <FileUpload
-                            input="dockerScript"
-                            mode="basic"
-                            accept=".sh"
-                            :multiple="false"
-                            title="hellaur"
-                            @select="onDockerScriptUpload"
+                        <label for="extraChecks">{{ t('views.projects.extraChecks.title') }}</label>
+                        <ExtraChecksUpload
+                            id="extraChecks"
+                            :create-checks-backend="createExtraChecksBackend"
+                            :project-id="project.id"
                         />
                     </div>
 
@@ -268,5 +282,9 @@ async function submitProject(): Promise<void> {
     </BaseLayout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.checks .field.col > * {
+    display: block;
+}
+</style>
 @/types/Project

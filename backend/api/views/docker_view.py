@@ -20,7 +20,7 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
 
     queryset = DockerImage.objects.all()
     serializer_class = DockerImageSerializer
-    permission_classes = [DockerPermission, IsAdminUser]
+    permission_classes = [DockerPermission | IsAdminUser]
 
     @action(detail=False)
     def search(self, request: Request) -> Response:
