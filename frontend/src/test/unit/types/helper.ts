@@ -130,6 +130,7 @@ export function createProject(projectData: any): Project {
         projectData.score_visible,
         projectData.group_size,
         projectData.course,
+        projectData.status,
         projectData.structure_file,
         projectData.structureChecks.slice(),
         projectData.extra_checks.slice(),

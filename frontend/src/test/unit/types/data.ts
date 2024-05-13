@@ -100,7 +100,7 @@ export const projectData = {
     max_score: 10,
     score_visible: true,
     group_size: 3,
-    structure_file: null,
+    structure_file: [],
     course: courseData,
     status: submissionStatusData,
     structureChecks: [],
