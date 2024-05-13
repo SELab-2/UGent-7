@@ -1,13 +1,14 @@
 import json
-from django.urls import reverse
-from rest_framework.test import APITestCase
+
 from api.tests.helpers import create_admin, create_faculty
 from authentication.models import User
+from django.urls import reverse
+from rest_framework.test import APITestCase
 
 
 class AdminModelTests(APITestCase):
     def setUp(self):
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             User.get_dummy_admin()
         )
 
@@ -19,7 +20,7 @@ class AdminModelTests(APITestCase):
         response_root = self.client.get(reverse("admin-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
-        self.assertEqual(response_root.accepted_media_type, "application/json")
+        self.assertEqual(response_root.accepted_media_type, "application/json")  # type: ignore
         # Parse the JSON content from the response
         content_json = json.loads(response_root.content.decode("utf-8"))
         # Assert that the parsed JSON is an empty list
@@ -40,7 +41,7 @@ class AdminModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -75,7 +76,7 @@ class AdminModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -113,7 +114,7 @@ class AdminModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -147,7 +148,7 @@ class AdminModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -164,7 +165,7 @@ class AdminModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
