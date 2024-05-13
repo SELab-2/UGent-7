@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 17:42+0200\n"
+"POT-Creation-Date: 2024-05-11 15:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,68 +27,68 @@ msgid "dockerimage.state.building"
 msgstr "Docker image is building"
 
 #: models/docker.py:10
-msgid "dockerimage.state.eady"
+msgid "dockerimage.state.ready"
 msgstr "Docker image is ready"
 
 #: models/docker.py:11
 msgid "dockerimage.state.error"
 msgstr "Docker image failed to build"
 
-#: models/submission.py:59
+#: models/submission.py:61
 msgid "submission.state.queued"
 msgstr "Queued"
 
-#: models/submission.py:60
+#: models/submission.py:62
 msgid "submission.state.running"
 msgstr "Running"
 
-#: models/submission.py:61
+#: models/submission.py:63
 msgid "submission.state.success"
 msgstr "Success"
 
-#: models/submission.py:62
+#: models/submission.py:64
 msgid "submission.state.failed"
 msgstr "Failed"
 
-#: models/submission.py:67
+#: models/submission.py:69
 msgid "submission.error.blockedextension"
 msgstr "The zip file contains a file with a non-allowed extension."
 
-#: models/submission.py:68
+#: models/submission.py:70
 msgid "submission.error.obligatedextensionnotfound"
 msgstr ""
 "The submitted zip file doesn't have any file with an obligated file "
 "extension."
 
-#: models/submission.py:69
+#: models/submission.py:71
 msgid "submission.error.filedirnotfound"
 msgstr "The submitted zip file lacks an obligated directory."
 
-#: models/submission.py:72
+#: models/submission.py:74
 msgid "submission.error.dockerimageerror"
 msgstr "try again later."
 
-#: models/submission.py:73
+#: models/submission.py:75
 msgid "submission.error.timelimit"
 msgstr "Timelimit exceeded."
 
-#: models/submission.py:74
+#: models/submission.py:76
 msgid "submission.error.memorylimit"
 msgstr "Memorylimit exceeded."
 
-#: models/submission.py:75
+#: models/submission.py:77
 msgid "submission.error.checkerror"
 msgstr "A check failed."
 
-#: models/submission.py:76
+#: models/submission.py:78
 msgid "submission.error.runtimeerror"
 msgstr "Crashed."
 
-#: models/submission.py:77
+#: models/submission.py:79
 msgid "submission.error.unknown"
 msgstr "Unkown error."
 
-#: models/submission.py:78
+#: models/submission.py:80
 msgid "submission.error.failedstructurecheck"
 msgstr "The zip file doesn't have the right structure."
 
@@ -112,39 +112,39 @@ msgstr "The field 'time_limit' has to be between 10 and 1000."
 msgid "extra_check.error.memory_limit"
 msgstr "The field 'memory_limit' has to be between 100 and 1024."
 
-#: serializers/course_serializer.py:119
+#: serializers/course_serializer.py:136
 msgid "courses.error.invitation_link"
 msgstr "The invitation link is not unique, please try again."
 
-#: serializers/course_serializer.py:126 serializers/course_serializer.py:143
-#: serializers/course_serializer.py:162 serializers/course_serializer.py:181
-#: serializers/course_serializer.py:200
+#: serializers/course_serializer.py:143 serializers/course_serializer.py:158
+#: serializers/course_serializer.py:177 serializers/course_serializer.py:196
+#: serializers/course_serializer.py:215
 msgid "courses.error.context"
 msgstr "The course is not supplied in the context."
 
-#: serializers/course_serializer.py:149 tests/test_locale.py:28
+#: serializers/course_serializer.py:164 tests/test_locale.py:28
 #: tests/test_locale.py:38
 msgid "courses.error.students.already_present"
 msgstr "The student is already present in the course."
 
-#: serializers/course_serializer.py:153 serializers/course_serializer.py:172
-#: serializers/course_serializer.py:191 serializers/course_serializer.py:210
+#: serializers/course_serializer.py:168 serializers/course_serializer.py:187
+#: serializers/course_serializer.py:206 serializers/course_serializer.py:225
 msgid "courses.error.past_course"
 msgstr "The course is from a past year, thus cannot be manipulated."
 
-#: serializers/course_serializer.py:168
+#: serializers/course_serializer.py:183
 msgid "courses.error.students.not_present"
 msgstr "The student is not present in the course."
 
-#: serializers/course_serializer.py:187
+#: serializers/course_serializer.py:202
 msgid "courses.error.teachers.already_present"
 msgstr "The teacher is already present in the course."
 
-#: serializers/course_serializer.py:206
+#: serializers/course_serializer.py:221
 msgid "courses.error.teachers.not_present"
 msgstr "The teacher is not present in the course."
 
-#: serializers/course_serializer.py:214
+#: serializers/course_serializer.py:229
 msgid "courses.error.teachers.last_teacher"
 msgstr "The course must have at least one teacher."
 
@@ -200,19 +200,19 @@ msgstr "The deadline of the project lies before the start date of the project."
 msgid "project.errors.zip_structure"
 msgstr "Error while parsing the provided zip."
 
-#: serializers/submission_serializer.py:68 tests/test_submission.py:333
+#: serializers/submission_serializer.py:67 tests/test_submission.py:330
 msgid "project.error.submissions.past_project"
 msgstr "The deadline of the project has already passed."
 
-#: serializers/submission_serializer.py:71 tests/test_submission.py:404
+#: serializers/submission_serializer.py:70 tests/test_submission.py:401
 msgid "project.error.submissions.non_visible_project"
 msgstr "The project is currently in a non-visible state."
 
-#: serializers/submission_serializer.py:74 tests/test_submission.py:434
+#: serializers/submission_serializer.py:73 tests/test_submission.py:431
 msgid "project.error.submissions.archived_project"
 msgstr "The project is archived."
 
-#: serializers/submission_serializer.py:77
+#: serializers/submission_serializer.py:76
 msgid "project.error.submissions.no_files"
 msgstr "The submission is empty."
 
@@ -228,27 +228,27 @@ msgstr "The teacher was successfully added."
 msgid "teachers.success.destroy"
 msgstr "The teacher was successfully destroyed."
 
-#: views/course_view.py:154
+#: views/course_view.py:137
 msgid "courses.success.assistants.add"
 msgstr "The assistant was successfully added to the course."
 
-#: views/course_view.py:181
+#: views/course_view.py:164
 msgid "courses.success.assistants.remove"
 msgstr "The assistant was successfully removed from the course."
 
-#: views/course_view.py:243
+#: views/course_view.py:226
 msgid "courses.success.students.add"
 msgstr "The student was successfully added to the course."
 
-#: views/course_view.py:264
+#: views/course_view.py:247
 msgid "courses.success.students.remove"
 msgstr "The student was successfully removed from the course."
 
-#: views/course_view.py:309
+#: views/course_view.py:292
 msgid "courses.success.teachers.add"
 msgstr "The teacher was successfully added to the course."
 
-#: views/course_view.py:333
+#: views/course_view.py:316
 msgid "courses.success.teachers.remove"
 msgstr "The teacher was successfully removed from the course."
 

@@ -64,7 +64,7 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
         # Create and run container
         container = cast(Container, client.containers.run(
             image=get_docker_image_tag(extra_check_result.extra_check.docker_image),
-            command=f"bash {extra_check_name}",
+            command=f"sh {extra_check_name}",
             detach=True,
             log_config=LogConfig(type=LogConfig.types.JSON, config={"max-size": "50kb"}),
             mem_limit=f"{extra_check_result.extra_check.memory_limit}m",
@@ -73,10 +73,10 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             stdout=True,
             stderr=True,
             volumes={
-                get_submission_full_dir_path(extra_check_result.submission, submission_uuid): {
+                f"{get_submission_full_dir_path(extra_check_result.submission)}/submission": {
                     "bind": "/submission", "mode": "rw"
                 },
-                get_extra_check_file_full_path(extra_check_result.extra_check, extra_check_name): {
+                get_extra_check_file_full_path(extra_check_result.extra_check): {
                     "bind": f"/submission/{extra_check_name}", "mode": "ro"
                 }
             },
@@ -142,13 +142,15 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
 
     # Cleanup and data saving
     finally:
-        logs: str = "Could not retrieve logs"
+        logs: str
         if container:
             try:
                 logs = container.logs(stream=False, timestamps=False).decode()
                 container.remove(v=False)
             except docker.errors.APIError:
-                pass
+                logs = "Could not retrieve logs"
+        else:
+            logs = "Container error"
 
         extra_check_result.log_file.save(submission_uuid, content=ContentFile(logs), save=False)
         extra_check_result.save()

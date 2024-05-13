@@ -66,13 +66,6 @@ class ExtraCheck(models.Model):
         null=False
     )
 
-    # Name of the extra check
-    name = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False
-    )
-
     # Link to the project
     project = models.ForeignKey(
         Project,

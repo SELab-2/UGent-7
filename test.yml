@@ -59,7 +59,7 @@ services:
     build:
       context: $BACKEND_DIR
       dockerfile: Dockerfile
-    command: sh -c "poetry install && celery -A ypovoli worker -l DEBUG"
+    command: sh -c "./setup.sh && celery -A ypovoli worker -l DEBUG"
     volumes:
       - $BACKEND_DIR:/code
     depends_on:

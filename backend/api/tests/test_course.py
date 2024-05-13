@@ -1,18 +1,16 @@
 import json
-from django.utils import timezone
-from django.urls import reverse
-from rest_framework.test import APITestCase
-from authentication.models import User
+from typing import cast
+
 from api.models.course import Course
-from api.models.teacher import Teacher
 from api.models.student import Student
-from api.tests.helpers import (create_course,
-                               create_assistant,
-                               create_student,
-                               create_teacher,
-                               create_project,
-                               create_faculty)
+from api.models.teacher import Teacher
+from api.tests.helpers import (create_assistant, create_course, create_faculty,
+                               create_project, create_student, create_teacher)
+from authentication.models import Faculty, User
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+from django.utils import timezone
+from rest_framework.test import APITestCase
 
 
 def get_course():
@@ -47,7 +45,7 @@ def get_student():
 
 class CourseModelTests(APITestCase):
     def setUp(self) -> None:
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             User.get_dummy_admin()
         )
 
@@ -57,7 +55,7 @@ class CourseModelTests(APITestCase):
         """
         response_root = self.client.get(reverse("course-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
-        self.assertEqual(response_root.accepted_media_type, "application/json")
+        self.assertEqual(response_root.accepted_media_type, "application/json")  # type: ignore
         content_json = json.loads(response_root.content.decode("utf-8"))
         self.assertEqual(content_json, [])
 
@@ -74,7 +72,7 @@ class CourseModelTests(APITestCase):
         response = self.client.get(reverse("course-list"), follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -105,7 +103,7 @@ class CourseModelTests(APITestCase):
         response = self.client.get(reverse("course-list"), follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -139,7 +137,7 @@ class CourseModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -175,7 +173,7 @@ class CourseModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -189,7 +187,7 @@ class CourseModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -237,7 +235,7 @@ class CourseModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -251,7 +249,7 @@ class CourseModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -300,7 +298,7 @@ class CourseModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -314,7 +312,7 @@ class CourseModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -371,7 +369,7 @@ class CourseModelTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -385,7 +383,7 @@ class CourseModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -418,7 +416,7 @@ class CourseModelTestsAsStudent(APITestCase):
             email="Bobke.Peeters@gmail.com"
         )
 
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             self.user
         )
 
@@ -659,7 +657,7 @@ class CourseModelTestsAsTeacher(APITestCase):
             email="Bobke.Peeters@gmail.com"
         )
 
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             self.user
         )
 
@@ -798,7 +796,8 @@ class CourseModelTestsAsTeacher(APITestCase):
         self.assertTrue(course.teachers.filter(id=self.user.id).exists())
 
         # Make sure the course is linked to the faculty
-        self.assertEqual(course.faculty.id, faculty.id)
+        faculty: Faculty = cast(Faculty, course.faculty)
+        self.assertEqual(faculty.id, faculty.id)
 
     def test_create_project(self):
         """
