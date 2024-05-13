@@ -26,7 +26,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = environ.get("DJANGO_ROOT_DIR", "")
 MEDIA_ROOT = os.path.normpath(os.path.join("data/production"))
 
+# TESTING
 TESTING_BASE_LINK = "http://testserver"
+TEST_USER_DATA = {
+    "id": "1234",
+    "username": "test",
+    "email": "test@test",
+    "first_name": "test",
+    "last_name": "test",
+}
+TEST_USER_ATTRIBUTES = {
+    **TEST_USER_DATA,
+    "ugentStudentID": "1234"
+}
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")

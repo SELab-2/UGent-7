@@ -5,6 +5,7 @@ from authentication.models import User
 from authentication.signals import user_created
 from django.contrib.auth import logout, login
 from django.shortcuts import redirect
+from django.conf import settings
 from rest_framework.decorators import action
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -64,26 +65,14 @@ class CASViewSet(ViewSet):
         raise AuthenticationFailed(token_serializer.errors)
 
 
-data = {
-    "id": "1234",
-    "username": "test",
-    "email": "test@test",
-    "first_name": "test",
-    "last_name": "test",
-}
-
-attributes = dict(data)
-attributes["ugentStudentID"] = "1234"
-
-
 def create_user(self, request) -> Response:
     """General function to create a user, log them in and which returns an empty html page"""
     # log in user, or retrieve if they already exist
-    user, created = User.objects.get_or_create(id=data["id"], defaults=data)
+    user, created = User.objects.get_or_create(id=settings.TEST_USER_DATA["id"], defaults=settings.TEST_USER_DATA)
 
     # if it has just been created, send the signal to user_created Signal(), to also activate it as a student
     if created:
-        user_created.send(sender=self, attributes=attributes, user=user)
+        user_created.send(sender=self, attributes=settings.TEST_USER_ATTRIBUTES, user=user)
 
     # login the user
     login(request, user)
@@ -101,11 +90,11 @@ class TestUser(ViewSet):
     @action(detail=False, methods=['GET'], permission_classes=[IsDebug], url_path='admin')
     def login_admin(self, request, *__) -> Response:
         """This endpoint lets you log in an admin"""
-        data["is_staff"] = True
+        settings.TEST_USER_DATA["is_staff"] = True
         return create_user(self, request)
 
     @action(detail=False, methods=['GET'], permission_classes=[IsDebug], url_path='student')
     def login_student(self, request, *__) -> Response:
         """This endpoint lets you log in as a student who's not an admin"""
-        data["is_staff"] = False
+        settings.TEST_USER_DATA["is_staff"] = False
         return create_user(self, request)
