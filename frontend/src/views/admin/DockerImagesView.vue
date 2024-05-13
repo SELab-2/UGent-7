@@ -97,7 +97,8 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         :field="column.field"
                         :header="t(column.header)"
                         :show-filter-menu="false"
-                        :style="{ maxWidth: '3rem' }"
+                        :header-style="{ width: '25%' }"
+                        class="p-col"
                     >
                         <template #filter>
                             <IconField iconPosition="left" class="flex align-items-center">
@@ -112,7 +113,8 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         key="public"
                         field="public"
                         :header="t('admin.docker_images.public')"
-                        :style="{ maxWidth: '3rem' }"
+                        :header-style="{ width: '25%' }"
+                        class="p-col"
                     >
                         <template #body="{ data }">
                             <ToggleButton
