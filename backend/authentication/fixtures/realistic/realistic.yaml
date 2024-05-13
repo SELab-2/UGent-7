@@ -1,39 +1,51 @@
 # faculties
 - model: authentication.faculty
-  pk: 0
+  pk: Bio-ingenieurswetenschappen
   fields:
-    name: Law Criminology
+    name: faculties.bioscience_engineering
 - model: authentication.faculty
-  pk: 1
+  pk: Diergeneeskunde
   fields:
-    name: Bio Ingenieurswetenschappen
+    name: faculties.veterinary_medicine
 - model: authentication.faculty
-  pk: 2
+  pk: Economie_Bedrijfskunde
   fields:
-    name: Diergeneeskunde
+    name: faculties.economics_business_administration
 - model: authentication.faculty
-  pk: 3
+  pk: Farmaceutische_Wetenschappen
   fields:
-    name: Wetenschappen
+    name: faculties.pharmaceutical_sciences
 - model: authentication.faculty
-  pk: 4
+  pk: Geneeskunde_Gezondheidswetenschappen
   fields:
-    name: Arts Philosophy
+    name: faculties.medicine_health_sciences
 - model: authentication.faculty
-  pk: 5
+  pk: Ingenieurswetenschappen_Architectuur
   fields:
-    name: Psychologie PedagogischeWetenschappen
+    name: faculties.engineering_architecture
 - model: authentication.faculty
-  pk: 6
+  pk: Letteren_Wijsbegeerte
   fields:
-    name: Farmaceutische Wetenschappen
+    name: faculties.arts_philosophy
 - model: authentication.faculty
-  pk: 7
+  pk: Politieke_Sociale_Wetenschappen
   fields:
-    name: Medicine Health Sciences
+    name: faculties.political_social_sciences
+- model: authentication.faculty
+  pk: Psychologie_PedagogischeWetenschappen
+  fields:
+    name: faculties.psychology_educational_sciences
+- model: authentication.faculty
+  pk: Recht_Criminologie
+  fields:
+    name: faculties.law_criminology
+- model: authentication.faculty
+  pk: Wetenschappen
+  fields:
+    name: faculties.sciences
 # 1 Admin
 - model: authentication.user
-  pk: 0
+  pk: "0"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: aloralie
@@ -44,10 +56,10 @@
     last_enrolled: 2018
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 0
+      - "Bio-ingenieurswetenschappen"
 # 2 Professors
 - model: authentication.user
-  pk: 1
+  pk: "1"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: bryavian
@@ -58,11 +70,10 @@
     last_enrolled: 2004
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 1
-      - 2
-      - 3
+      - "Diergeneeskunde"
+      - "Economie_Bedrijfskunde"
 - model: authentication.user
-  pk: 2
+  pk: "2"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: renastu
@@ -73,11 +84,11 @@
     last_enrolled: 2009
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 4
-      - 3
+      - "Farmaceutische_Wetenschappen"
+      - "Economie_Bedrijfskunde"
 # 3 Assistants
 - model: authentication.user
-  pk: 3
+  pk: "3"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: cawatson
@@ -88,10 +99,10 @@
     last_enrolled: 2022
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 5
-      - 3
+      - "Geneeskunde_Gezondheidswetenschappen"
+      - "Economie_Bedrijfskunde"
 - model: authentication.user
-  pk: 4
+  pk: "4"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: averluna
@@ -102,9 +113,9 @@
     last_enrolled: 2023
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 3
+      - "Economie_Bedrijfskunde"
 - model: authentication.user
-  pk: 5
+  pk: "5"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: czachery
@@ -115,10 +126,10 @@
     last_enrolled: 2021
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 3
+      - "Economie_Bedrijfskunde"
 # 4 Students
 - model: authentication.user
-  pk: 6
+  pk: "6"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: jostammy
@@ -129,9 +140,9 @@
     last_enrolled: 2024
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 3
+      - "Economie_Bedrijfskunde"
 - model: authentication.user
-  pk: 7
+  pk: "7"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: chdeitra
@@ -142,10 +153,10 @@
     last_enrolled: 2023
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 6
-      - 3
+      - "Ingenieurswetenschappen_Architectuur"
+      - "Economie_Bedrijfskunde"
 - model: authentication.user
-  pk: 8
+  pk: "8"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: thjoetta
@@ -156,9 +167,9 @@
     last_enrolled: 2023
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 3
+      - "Economie_Bedrijfskunde"
 - model: authentication.user
-  pk: 9
+  pk: "9"
   fields:
     last_login: 2024-01-01T00:00:00Z
     username: kelenora
@@ -169,5 +180,5 @@
     last_enrolled: 2022
     create_time: 2001-01-01T00:00:00Z
     faculties:
-      - 7
-      - 3
+      - "Letteren_Wijsbegeerte"
+      - "Economie_Bedrijfskunde"
