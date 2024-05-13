@@ -1,0 +1,184 @@
+# faculties
+- model: authentication.faculty
+  pk: Bio-ingenieurswetenschappen
+  fields:
+    name: faculties.bioscience_engineering
+- model: authentication.faculty
+  pk: Diergeneeskunde
+  fields:
+    name: faculties.veterinary_medicine
+- model: authentication.faculty
+  pk: Economie_Bedrijfskunde
+  fields:
+    name: faculties.economics_business_administration
+- model: authentication.faculty
+  pk: Farmaceutische_Wetenschappen
+  fields:
+    name: faculties.pharmaceutical_sciences
+- model: authentication.faculty
+  pk: Geneeskunde_Gezondheidswetenschappen
+  fields:
+    name: faculties.medicine_health_sciences
+- model: authentication.faculty
+  pk: Ingenieurswetenschappen_Architectuur
+  fields:
+    name: faculties.engineering_architecture
+- model: authentication.faculty
+  pk: Letteren_Wijsbegeerte
+  fields:
+    name: faculties.arts_philosophy
+- model: authentication.faculty
+  pk: Politieke_Sociale_Wetenschappen
+  fields:
+    name: faculties.political_social_sciences
+- model: authentication.faculty
+  pk: Psychologie_PedagogischeWetenschappen
+  fields:
+    name: faculties.psychology_educational_sciences
+- model: authentication.faculty
+  pk: Recht_Criminologie
+  fields:
+    name: faculties.law_criminology
+- model: authentication.faculty
+  pk: Wetenschappen
+  fields:
+    name: faculties.sciences
+# 1 Admin
+- model: authentication.user
+  pk: "0"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: aloralie
+    is_staff: true
+    email: alexander.oralie@ugent.be
+    first_name: Alexander
+    last_name: Oralie
+    last_enrolled: 2018
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Bio-ingenieurswetenschappen"
+# 2 Professors
+- model: authentication.user
+  pk: "1"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: bryavian
+    is_staff: false
+    email: brycenviana@ugent.be
+    first_name: Brycen
+    last_name: Aviana
+    last_enrolled: 2004
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Diergeneeskunde"
+      - "Economie_Bedrijfskunde"
+- model: authentication.user
+  pk: "2"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: renastu
+    is_staff: false
+    email: enatu@ugent.be
+    first_name: Rena
+    last_name: Stu
+    last_enrolled: 2009
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Farmaceutische_Wetenschappen"
+      - "Economie_Bedrijfskunde"
+# 3 Assistants
+- model: authentication.user
+  pk: "3"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: cawatson
+    is_staff: false
+    email: camillaatson@ugent.be
+    first_name: Camilla
+    last_name: Watson
+    last_enrolled: 2022
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Geneeskunde_Gezondheidswetenschappen"
+      - "Economie_Bedrijfskunde"
+- model: authentication.user
+  pk: "4"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: averluna
+    is_staff: false
+    email: averyuna@ugent.be
+    first_name: Avery
+    last_name: Luna
+    last_enrolled: 2023
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Economie_Bedrijfskunde"
+- model: authentication.user
+  pk: "5"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: czachery
+    is_staff: false
+    email: chetachery@ugent.be
+    first_name: Chet
+    last_name: Zachery
+    last_enrolled: 2021
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Economie_Bedrijfskunde"
+# 4 Students
+- model: authentication.user
+  pk: "6"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: jostammy
+    is_staff: false
+    email: osephineammy@ugent.be
+    first_name: Josephine
+    last_name: Tammy
+    last_enrolled: 2024
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Economie_Bedrijfskunde"
+- model: authentication.user
+  pk: "7"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: chdeitra
+    is_staff: false
+    email: christobaleitra@ugent.be
+    first_name: Christobal
+    last_name: Deitra
+    last_enrolled: 2023
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Ingenieurswetenschappen_Architectuur"
+      - "Economie_Bedrijfskunde"
+- model: authentication.user
+  pk: "8"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: thjoetta
+    is_staff: false
+    email: thaddeusoetta@ugent.be
+    first_name: Thaddeus
+    last_name: Joetta
+    last_enrolled: 2023
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Economie_Bedrijfskunde"
+- model: authentication.user
+  pk: "9"
+  fields:
+    last_login: 2024-01-01T00:00:00Z
+    username: kelenora
+    is_staff: false
+    email: keldalenora@ugent.be
+    first_name: Kelda
+    last_name: Elenora
+    last_enrolled: 2022
+    create_time: 2001-01-01T00:00:00Z
+    faculties:
+      - "Letteren_Wijsbegeerte"
+      - "Economie_Bedrijfskunde"

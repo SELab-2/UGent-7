@@ -112,9 +112,9 @@ class Command(BaseCommand):
             amount_of_projects = 4
             amount_of_groups = 7
             amount_of_file_extensions = 5
-            amount_of_docker_images = 5
+            # amount_of_docker_images = 5
             amount_of_structure_checks = 2
-            amount_of_extra_checks = 1
+            # amount_of_extra_checks = 1
             amount_of_submissions = 10
         elif size == "medium":
             amount_of_students = 5_000
@@ -124,9 +124,9 @@ class Command(BaseCommand):
             amount_of_projects = 500
             amount_of_groups = 500
             amount_of_file_extensions = 32  # Max amount of file extensions in Faker
-            amount_of_docker_images = 50
+            # amount_of_docker_images = 50
             amount_of_structure_checks = 250
-            amount_of_extra_checks = 125
+            # amount_of_extra_checks = 125
             amount_of_submissions = 500
         elif size == "large":
             amount_of_students = 50_000
@@ -136,9 +136,9 @@ class Command(BaseCommand):
             amount_of_projects = 3_000
             amount_of_groups = 3_000
             amount_of_file_extensions = 32  # Max amount of file extensions in Faker
-            amount_of_docker_images = 50
+            # amount_of_docker_images = 50
             amount_of_structure_checks = 1_500
-            amount_of_extra_checks = 750
+            # amount_of_extra_checks = 750
             amount_of_submissions = 3_000
         else:
             self.stdout.write(self.style.ERROR("give a size from small, medium or large!"))
@@ -172,13 +172,13 @@ class Command(BaseCommand):
         seed_file_extensions(faker(), amount_of_file_extensions)
 
         # Seed docker images
-        seed_docker_images(faker(), amount_of_docker_images)
+        # seed_docker_images(faker(), amount_of_docker_images)
 
         # Seed structure checks
         seed_structure_checks(faker(), amount_of_structure_checks)
 
         # Seed extra checks
-        seed_extra_checks(faker(), amount_of_extra_checks)
+        # seed_extra_checks(faker(), amount_of_extra_checks)
 
         # Seed submissions
         seed_submissions(faker(), amount_of_submissions)

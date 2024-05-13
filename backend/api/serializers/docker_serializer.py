@@ -19,13 +19,3 @@ class DockerImageSerializer(serializers.ModelSerializer):
             raise ValidationError(_("docker.errors.custom"))
 
         return data
-
-    def create(self, validated_data):
-        docker_image = super().create(validated_data)
-        run_docker_image_build.send(sender=DockerImage, docker_image=docker_image)
-        return docker_image
-
-    def update(self, instance, validated_data):
-        docker_image = super().update(instance, validated_data)
-        run_docker_image_build.send(sender=DockerImage, docker_image=docker_image)
-        return docker_image

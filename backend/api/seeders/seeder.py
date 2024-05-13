@@ -181,7 +181,7 @@ def seed_courses(faker,
                 timezone.now().year + faker.random_int(min=year_dev_min, max=year_dev_max),
                 choice(faculties),
                 faker.sentence(),
-                faker.pybool()
+                faker.pybool(truth_probability=10)
             ] for _ in range(count)
         ]
 
