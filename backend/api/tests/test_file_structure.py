@@ -37,7 +37,7 @@ class FileTestsTests(APITestCase):
         )
 
         memory_file = SimpleUploadedFile("zip_struct1.zip", open(
-            f"{settings.MEDIA_ROOT}/structures/zip_struct1.zip", "rb").read(), content_type='application/zip')
+            f"data/{settings.MEDIA_ROOT}/structures/zip_struct1.zip", "rb").read(), content_type='application/zip')
 
         parse_zip(project=project, zip_file=memory_file)
 
