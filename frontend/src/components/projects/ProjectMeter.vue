@@ -17,22 +17,14 @@ const { t } = useI18n();
 const meterItems = computed(() => {
     const groups = props.project !== null ? props.project.status.non_empty_groups : 0;
     const groupsSubmitted = props.project !== null ? props.project.status.groups_submitted : 0;
-    const structureChecksPassed = props.project !== null ? props.project.status.structure_checks_passed : 0;
-    const extraChecksPassed = props.project !== null ? props.project.status.extra_checks_passed : 0;
-    const submissionsFailed = groupsSubmitted - structureChecksPassed;
-
+    const submissionsPassed = props.project !== null ? props.project.status.submissions_passed : 0;
+    const submissionsFailed = groupsSubmitted - submissionsPassed;
     return [
         {
-            value: (extraChecksPassed / groups) * 100,
+            value: (submissionsPassed / groups) * 100,
             color: '#749b68',
-            label: t('components.card.extraTestsSucceed'),
+            label: t('components.card.testsSucceed'),
             icon: 'pi pi-check',
-        },
-        {
-            value: (structureChecksPassed / groups) * 100,
-            color: '#fa9746',
-            label: t('components.card.structureTestsSucceed'),
-            icon: 'pi pi-exclamation-circle',
         },
         {
             value: (submissionsFailed / groups) * 100,
