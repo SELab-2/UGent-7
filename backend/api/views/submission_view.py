@@ -10,6 +10,7 @@ from django.http import FileResponse
 from django.utils.translation import gettext as _
 from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -41,7 +42,7 @@ class ExtraCheckResultViewSet(RetrieveModelMixin, GenericViewSet):
     serializer_class = ExtraCheckResultSerializer
     permission_classes = [ExtraCheckResultPermission]
 
-    @action(detail=True, permission_classes=[ExtraCheckResultLogPermission])
+    @action(detail=True, permission_classes=[IsAdminUser | ExtraCheckResultLogPermission])
     def log(self, request, **__):
         extra_check_result: ExtraCheckResult = self.get_object()
 

@@ -31,8 +31,8 @@ router.register(r"extra-checks", ExtraCheckViewSet, basename="extra-check")
 router.register(r"file-extensions", FileExtensionViewSet, basename="file-extension")
 router.register(r"faculties", FacultyViewSet, basename="faculty")
 router.register(r"docker-images", DockerImageViewSet, basename="docker-image")
-router.register(r"structure-check-results", StructureCheckResultViewSet, basename="structure-check-results")
-router.register(r"extra-check-results", ExtraCheckResultViewSet, basename="extra-check-results")
+router.register(r"structure-check-results", StructureCheckResultViewSet, basename="structure-check-result")
+router.register(r"extra-check-results", ExtraCheckResultViewSet, basename="extra-check-result")
 
 urlpatterns = [
     path("", include(router.urls)),
