@@ -69,7 +69,6 @@
             "max_score": "Maximum score that can be achieved",
             "visibility": "Make project visible to students",
             "scoreVisibility": "Make score, when uploaded, automatically visible to students",
-            "bashUpload": "Upload a bash script for automatic testing",
             "submissionStructure": "Structure of how a submission should be made",
             "noStudents": "No students in this group",
             "locked": "Closed",
@@ -83,7 +82,7 @@
                 "dockerImage": "Docker image",
                 "timeLimit": "Time limit for execution (in seconds)",
                 "memoryLimit": "Memory limit for execution (in MB)",
-                "showLog": "Show logfile to students"
+                "showLog": "Making the extra logs of the docker container visible to the students"
             }
         },
         "submissions": {

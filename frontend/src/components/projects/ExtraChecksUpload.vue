@@ -181,11 +181,11 @@ onMounted(async () => {
             <div
                 v-for="(item, index) in slotProps.items"
                 :key="index"
-                class="flex align-items-center justify-content-between mr-6"
             >
-                <p class="text-lg font-semibold">{{ item.name }}</p>
-
-                <Button icon="pi pi-times" class="p-button p-button-danger" @click="extraChecksList.splice(index, 1)" />
+                <div class="flex align-items-center justify-content-between">
+                    <p style="max-width: 300px">{{ item.name }}</p>
+                    <Button icon="pi pi-times" class="p-button-danger p-button-sm" @click="extraChecksList.splice(index, 1)" />
+                </div>
             </div>
         </template>
     </DataView>
@@ -277,8 +277,8 @@ onMounted(async () => {
 
                         <!-- Visibility of the log files for students -->
                         <div class="grid">
-                            <div class="flex align-items-center field-checkbox col-12">
-                                <InputSwitch id="showLog" v-model="form.showLog" />
+                            <div class="field-checkbox col-12">
+                                <InputSwitch id="showLog" v-model="form.showLog" style="min-width: 50px;"/>
                                 <label for="showLog">{{ t('views.projects.extraChecks.showLog') }}</label>
                             </div>
                         </div>
