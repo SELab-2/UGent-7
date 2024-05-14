@@ -1,0 +1,8 @@
+ARG CHROME_VERSION="114.0.5735.133-1"
+ARG NODE_VERSION="18.17.1"
+
+FROM cypress/factory
+
+WORKDIR /e2e
+
+RUN npm install --save-dev cypress
