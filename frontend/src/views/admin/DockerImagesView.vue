@@ -12,7 +12,7 @@ import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { useI18n } from 'vue-i18n';
-import { computed, ref} from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { DockerImage } from '@/types/DockerImage.ts';
 import { getDockerImageFilters } from '@/types/filter/Filter.ts';
@@ -23,8 +23,15 @@ import IconField from 'primevue/iconfield';
 /* Injection */
 const { t } = useI18n();
 const { query } = useRoute();
-const { pagination, dockerImages, getDockerImages, searchDockerImages, patchDockerImage, createDockerImage, deleteDockerImage } =
-    useDockerImages();
+const {
+    pagination,
+    dockerImages,
+    getDockerImages,
+    searchDockerImages,
+    patchDockerImage,
+    createDockerImage,
+    deleteDockerImage,
+} = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
 
 const dataTable = ref();
@@ -35,9 +42,7 @@ const addItem = ref<DockerImage>(DockerImage.blankDockerImage());
 const selectOptions = ref(['admin.list', 'admin.add']);
 const selected = ref<string>(t(selectOptions.value[0]));
 
-const multiRemove = computed(() => {
-
-})
+const multiRemove = ref<boolean>(false);
 
 const columns = ref([
     { field: 'id', header: 'admin.id' },
@@ -51,7 +56,7 @@ const columns = ref([
 const showSafetyGuard = ref<boolean>(false);
 const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
-const safetyGuardCleanup = async ():  Promise<void> => {
+const safetyGuardCleanup = async (): Promise<void> => {
     showSafetyGuard.value = false;
     await safetyGuardFunction.value();
     await dataTable.value.fetch();
@@ -74,10 +79,14 @@ const toggleSafetyGuardRemove = (data: DockerImage): void => {
     editItem.value = data;
     safetyGuardFunction.value = removeItem;
     showSafetyGuard.value = true;
-}
+};
 const removeItem = async (): Promise<void> => {
     await deleteDockerImage(editItem.value.id);
-}
+};
+
+const onSelect = (selected: any[] | null): void => {
+    multiRemove.value = (selected?.length === undefined || selected?.length === 0) ?? false;
+};
 </script>
 
 <template>
@@ -96,6 +105,7 @@ const removeItem = async (): Promise<void> => {
                     :filter="filter"
                     :on-filter="onFilter"
                     ref="dataTable"
+                    @select="onSelect"
                 >
                     <template #header>
                         <div class="mb-3 gap-3">
@@ -106,7 +116,7 @@ const removeItem = async (): Promise<void> => {
                                 <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
                             </IconField>
                         </div>
-                        <Button class="w-1 mb-3 gap-3" :disabled="">
+                        <Button class="w-1 mb-3 gap-3" :disabled="multiRemove">
                             {{ t('admin.delete') }}
                         </Button>
                     </template>
@@ -143,7 +153,7 @@ const removeItem = async (): Promise<void> => {
                             />
                         </template>
                     </Column>
-                    <Column key="remove" :header-style="{ width: '11%'}" class="p-col">
+                    <Column key="remove" :header-style="{ width: '11%' }" class="p-col">
                         <template #body="{ data }">
                             <Button @click="() => toggleSafetyGuardRemove(data)" class="justify-content-center">
                                 {{ t('admin.delete') }}

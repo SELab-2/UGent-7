@@ -18,7 +18,7 @@ const props = defineProps<{
 }>();
 
 /* Emits */
-const emit = defineEmits(['select'])
+const emit = defineEmits(['select']);
 
 /* Injections */
 const { t } = useI18n();
@@ -62,19 +62,21 @@ const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
         props.get().then(() => {
             selectAll.value = true;
             selected.value = props.entities;
+            emit('select', selected.value);
         });
     } else {
         selectAll.value = false;
         selected.value = [];
+        emit('select', selected.value);
     }
 };
 const onRowSelect = (): void => {
     selectAll.value = selected.value?.length === (props.pagination?.count ?? 0);
-    emit('select');
+    emit('select', selected.value);
 };
 const onRowUnselect = (): void => {
     selectAll.value = false;
-    emit('select');
+    emit('select', selected.value);
 };
 
 defineExpose({ fetch });
