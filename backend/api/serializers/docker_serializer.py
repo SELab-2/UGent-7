@@ -13,7 +13,8 @@ class DockerImageSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs=attrs)
 
-        data["owner"] = self.context["request"].user
+        if not self.partial:
+            data["owner"] = self.context["request"].user
 
         if "public" in data and data["public"] and not data["owner"].is_staff:
             raise ValidationError(_("docker.errors.custom"))
