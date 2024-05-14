@@ -1,22 +1,20 @@
 from api.models.docker import DockerImage
 from api.permissions.docker_permissions import DockerPermission
 from api.serializers.docker_serializer import DockerImageSerializer
-from rest_framework.permissions import IsAdminUser
+from api.views.pagination.basic_pagination import BasicPagination
 from django.db.models import Q
 from django.db.models.manager import BaseManager
 from rest_framework.decorators import action
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   RetrieveModelMixin, UpdateModelMixin)
+                                   ListModelMixin, RetrieveModelMixin,
+                                   UpdateModelMixin)
+from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from api.views.pagination.basic_pagination import BasicPagination
 
-
-# TODO: Remove update abilities, maybe?
-
-class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
+class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, DestroyModelMixin, GenericViewSet):
 
     queryset = DockerImage.objects.all()
     serializer_class = DockerImageSerializer
@@ -64,8 +62,6 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
 
         return Response(serializer.data)
 
-    # TODO: Maybe not necessary
-    # https://www.django-rest-framework.org/api-guide/permissions/#overview-of-access-restriction-methods
     def list(self, request: Request) -> Response:
         images: BaseManager[DockerImage] = DockerImage.objects.all()
         if not request.user.is_staff:
