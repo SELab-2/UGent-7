@@ -94,9 +94,10 @@ services:
     build:
       context: $FRONTEND_DIR
       dockerfile: Dockerfile.cypress
-    command: "npm run cypress:test"
+    command: sh -c "npm install && npm run cypress:test"
     working_dir: /e2e
     volumes:
       - ${FRONTEND_DIR}:/e2e
+      - /e2e/node_modules
     depends_on:
       - frontend
