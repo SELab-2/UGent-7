@@ -40,9 +40,10 @@ const editItem = ref<DockerImage>(DockerImage.blankDockerImage());
 const addItem = ref<DockerImage>(DockerImage.blankDockerImage());
 
 const selectOptions = ref(['admin.list', 'admin.add']);
-const selected = ref<string>(t(selectOptions.value[0]));
+const selectedOption = ref<string>(t(selectOptions.value[0]));
 
 const multiRemove = ref<boolean>(false);
+const selectedItems = ref<any[] | null>(null);
 
 const columns = ref([
     { field: 'id', header: 'admin.id' },
@@ -86,6 +87,7 @@ const removeItem = async (): Promise<void> => {
 
 const onSelect = (selected: any[] | null): void => {
     multiRemove.value = (selected?.length === undefined || selected?.length === 0) ?? false;
+    selectedItems.value = selected;
 };
 </script>
 
@@ -95,8 +97,8 @@ const onSelect = (selected: any[] | null): void => {
             <div class="gap-3 mb-3">{{ t('admin.docker_images.title') }}</div>
         </Title>
         <Body class="w-full">
-            <SelectButton class="mb-3 gap-3 w-3" v-model="selected" :options="selectOptions.map(t)" />
-            <div v-if="selected === t(selectOptions[0])">
+            <SelectButton class="mb-3 gap-3 w-3" v-model="selectedOption" :options="selectOptions.map(t)" />
+            <div v-if="selectedOption === t(selectOptions[0])">
                 <LazyDataTable
                     :pagination="pagination"
                     :entities="dockerImages"
