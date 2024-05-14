@@ -12,7 +12,7 @@ import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { computed, ref} from 'vue';
 import { useRoute } from 'vue-router';
 import { DockerImage } from '@/types/DockerImage.ts';
 import { getDockerImageFilters } from '@/types/filter/Filter.ts';
@@ -34,6 +34,10 @@ const addItem = ref<DockerImage>(DockerImage.blankDockerImage());
 
 const selectOptions = ref(['admin.list', 'admin.add']);
 const selected = ref<string>(t(selectOptions.value[0]));
+
+const multiRemove = computed(() => {
+
+})
 
 const columns = ref([
     { field: 'id', header: 'admin.id' },
@@ -94,14 +98,17 @@ const removeItem = async (): Promise<void> => {
                     ref="dataTable"
                 >
                     <template #header>
-                        <div class="flex justify-content-end">
+                        <div class="mb-3 gap-3">
                             <IconField iconPosition="left">
                                 <InputIcon>
-                                    <i class="pi pi-search" />
+                                    <i class="pi pi-search flex justify-content-center" />
                                 </InputIcon>
                                 <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
                             </IconField>
                         </div>
+                        <Button class="w-1 mb-3 gap-3" :disabled="">
+                            {{ t('admin.delete') }}
+                        </Button>
                     </template>
                     <Column
                         v-for="column in columns"
@@ -125,7 +132,7 @@ const removeItem = async (): Promise<void> => {
                         key="public"
                         field="public"
                         :header="t('admin.docker_images.public')"
-                        :header-style="{ width: '12%' }"
+                        :header-style="{ width: '10%' }"
                         class="p-col"
                     >
                         <template #body="{ data }">
@@ -136,7 +143,7 @@ const removeItem = async (): Promise<void> => {
                             />
                         </template>
                     </Column>
-                    <Column key="remove" :header-style="{ width: '13%'}" class="p-col">
+                    <Column key="remove" :header-style="{ width: '11%'}" class="p-col">
                         <template #body="{ data }">
                             <Button @click="() => toggleSafetyGuardRemove(data)" class="justify-content-center">
                                 {{ t('admin.delete') }}

@@ -17,6 +17,9 @@ const props = defineProps<{
     onFilter: (callback: () => Promise<void>, debounce?: number | undefined, immediate?: boolean | undefined) => void;
 }>();
 
+/* Emits */
+const emit = defineEmits(['select'])
+
 /* Injections */
 const { t } = useI18n();
 const { page, first, pageSize, onPaginate, resetPagination } = usePaginator();
@@ -67,9 +70,11 @@ const onSelectAllChange = (event: DataTableSelectAllChangeEvent): void => {
 };
 const onRowSelect = (): void => {
     selectAll.value = selected.value?.length === (props.pagination?.count ?? 0);
+    emit('select');
 };
 const onRowUnselect = (): void => {
     selectAll.value = false;
+    emit('select');
 };
 
 defineExpose({ fetch });
