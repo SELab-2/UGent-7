@@ -41,7 +41,7 @@ const editItem = ref<DockerImage>(DockerImage.blankDockerImage());
 const addItem = ref<DockerImage>(DockerImage.blankDockerImage());
 
 const selectOptions = ref(['admin.list', 'admin.add']);
-const selectedOption = ref<string>(t(selectOptions.value[0]));
+const selectedOption = ref<string>(selectOptions.value[0]);
 
 const multiRemove = ref<boolean>(false);
 const selectedItems = ref<any[] | null>(null);
@@ -53,6 +53,8 @@ const columns = ref([
 ]);
 const showSafetyGuard = ref<boolean>(false);
 const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
+
+const fileUpload = ref();
 
 /**
  * Hides safety guard, executes function that safety guard guards against and fetches data again
@@ -101,6 +103,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
     await createDockerImage(addItem.value, files[0]);
     addItem.value.name = '';
+    fileUpload.value = fileUpload.value;
 };
 
 
@@ -121,8 +124,13 @@ const onSelect = (selected: any[] | null): void => {
             <div class="gap-3 mb-3">{{ t('admin.docker_images.title') }}</div>
         </Title>
         <Body class="w-full">
-            <SelectButton class="mb-3 gap-3 w-3" v-model="selectedOption" :options="selectOptions.map(t)" />
-            <div v-if="selectedOption === t(selectOptions[0])">
+            <SelectButton
+                class="mb-3 gap-3 w-3"
+                v-model="selectedOption"
+                :options="selectOptions"
+                :option-label="(option: string) => t(option)"
+            />
+            <div v-if="selectedOption === selectOptions[0]">
                 <LazyDataTable
                     :pagination="pagination"
                     :entities="dockerImages"
@@ -201,13 +209,14 @@ const onSelect = (selected: any[] | null): void => {
                 </div>
                 <FileUpload
                     class="mb-3 gap-3"
-                    :custom-upload="true"
+                    ref="fileUpload"
+                    custom-upload
                     @uploader="upload"
                     :file-limit="1"
                     :disabled="addItem.name.length === 0"
                 >
                     <template #empty>
-                        <strong>No file selected.</strong>
+                        <strong>{{ t('primevue.emptyFileSelect') }}</strong>
                     </template>
                 </FileUpload>
             </div>

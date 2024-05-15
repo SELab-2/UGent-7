@@ -372,6 +372,7 @@
         "emptyMessage": "Geen resultaten gevonden",
         "emptySearchMessage": "Geen resultaten gevonden",
         "emptySelectionMessage": "Geen optie geselecteerd",
+        "emptyFileSelect": "Geen bestand geselecteerd",
         "endsWith": "Eindigt met",
         "equals": "Is gelijk aan",
         "fileSizeTypes": [
