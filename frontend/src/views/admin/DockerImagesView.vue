@@ -34,6 +34,7 @@ const {
 } = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
 
+/* State */
 const dataTable = ref();
 
 const editItem = ref<DockerImage>(DockerImage.blankDockerImage());
@@ -50,41 +51,64 @@ const columns = ref([
     { field: 'name', header: 'admin.docker_images.name' },
     { field: 'owner', header: 'admin.docker_images.owner' },
 ]);
-// const publicOptions = ref<Array<{ value: any; label: string }>>([
-//     { value: true, label: 'public' },
-//     { value: false, label: 'private' },
-// ]);
 const showSafetyGuard = ref<boolean>(false);
 const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
+/**
+ * Hides safety guard, executes function that safety guard guards against and fetches data again
+ */
 const safetyGuardCleanup = async (): Promise<void> => {
     showSafetyGuard.value = false;
     await safetyGuardFunction.value();
     await dataTable.value.fetch();
 };
+/**
+ * Show safety guard for changing public status and set up values for when confirmed
+ * @param data Docker Image data of docker image whose public status needs to be changed.
+ */
 const toggleSafetyGuardEdit = (data: DockerImage): void => {
     editItem.value.public = !data.public;
     editItem.value.id = data.id;
     safetyGuardFunction.value = changePublicStatus;
     showSafetyGuard.value = true;
 };
+/**
+ * Changes the public status in the backend of the docker image whose attributes are in editItem's value attribute
+ */
 const changePublicStatus = async (): Promise<void> => {
     await patchDockerImage(editItem.value);
 };
-const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
-    const files: File[] = event.files as File[];
-    await createDockerImage(addItem.value, files[0]);
-    addItem.value.name = '';
-};
+/**
+ * Show safety guard for removing a docker image from the backend and set up values for when confirmed
+ * @param data Docker Image data of docker image to be removed
+ */
 const toggleSafetyGuardRemove = (data: DockerImage): void => {
     editItem.value = data;
     safetyGuardFunction.value = removeItem;
     showSafetyGuard.value = true;
 };
+/**
+ * Removes the docker image in the backend whose attributes are in editItem's value attribute
+ */
 const removeItem = async (): Promise<void> => {
     await deleteDockerImage(editItem.value.id);
 };
+/**
+ * Handles an upload event containing docker image file and uploads this together with other attributes to backend
+ * @param event Event containing docker image file in files attributes
+ */
+const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
+    const files: File[] = event.files as File[];
+    await createDockerImage(addItem.value, files[0]);
+    addItem.value.name = '';
+};
 
+
+/**
+ * A function to be triggered when (an) item(s) are selected, and changes the multiRemove Button's disabled status
+ * accordingly.
+ * @param selected A list of all the selected docker images.
+ */
 const onSelect = (selected: any[] | null): void => {
     multiRemove.value = (selected?.length === undefined || selected?.length === 0) ?? false;
     selectedItems.value = selected;
