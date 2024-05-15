@@ -44,7 +44,7 @@ describe('project', (): void => {
         expect(project.value?.group_size).toBe(5);
         assertType(project.value?.course as Course);
         assertType(project.value?.status as SubmissionStatus);
-        expect(project.value?.structure_file).toBe(null);
+        assertType(project.value?.structure_file as File);
         expect(project.value?.structureChecks).toBe(null);
         expect(project.value?.extra_checks).toBe(null);
         assertType(Array.isArray(project.value?.groups));
