@@ -167,7 +167,7 @@ export function createSubmission(submissionData: any): Submission {
         submissionData.id,
         submissionData.submission_number,
         submissionData.submission_time,
-        submissionData.files.slice(),
+        submissionData.zip,
         submissionData.extra_check_results.slice(),
         submissionData.structure_check_results.slice(),
         submissionData.is_valid,
