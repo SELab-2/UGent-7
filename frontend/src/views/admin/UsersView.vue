@@ -34,11 +34,13 @@ const { createAssistant, deleteAssistant } = useAssistant();
 const { createTeacher, deleteTeacher } = useTeacher();
 const { filter, onFilter } = useFilter(getUserFilters(query));
 
+/* Initialization */
 onMounted(async () => {
     fillCreators();
     fillDestroyers();
 });
 
+/* State */
 const creators = ref<Record<Role, (arg: any) => Promise<void>>>({});
 const createFunctions = ref<Array<(arg: any) => Promise<void>>>([createStudent, createAssistant, createTeacher]);
 const destroyers = ref<Record<Role, (arg: any) => Promise<void>>>({});
@@ -59,25 +61,36 @@ const roleOptions = computed(() => {
     return roles.toSpliced(0, 1);
 });
 
+/**
+ * FillCreators fills a dictionary that links a role to the function that creates an instance of that role in the backend
+ */
 const fillCreators = (): void => {
     for (let i = 1; i < roles.length; i++) {
         const role: Role = roles[i];
         creators.value[role] = createFunctions.value[i - 1];
     }
 };
-
+/**
+ * FillDestroyers fills a dictionary that links a role to the function that destroys an instance of that role in the backend
+ */
 const fillDestroyers = (): void => {
     for (let i = 1; i < roles.length; i++) {
         const role: Role = roles[i];
         destroyers.value[role] = destroyFunctions.value[i - 1];
     }
 };
-
+/**
+ * A function to that shows a popup to edit the User item
+ * @param data This contains the attributes of the User item to be edited.
+ */
 const showPopup = (data: any): void => {
     editItem.value = JSON.parse(JSON.stringify(data)); // I do this to get a deep copy of the role array
     popupEdit.value = true;
 };
-
+/**
+ * Removes or adds role to roles list of User to be edited
+ * @param role
+ */
 const updateRole = (role: Role): void => {
     const index = editItem.value.roles.findIndex((role2: string) => role === role2);
     if (index !== -1) {
@@ -88,21 +101,27 @@ const updateRole = (role: Role): void => {
         editItem.value.roles.push(role);
     }
 };
-
+/**
+ * saveItem saves the editItem with its edited values to the backend
+ */
 const saveItem = async (): Promise<void> => {
     const value = pagination.value;
     if (value?.results !== null) {
+        // retrieve the original values of the User we're editing
         const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
         const paginationItem = value.results[index];
 
         for (let i = 1; i < roles.length; i++) {
             const role = roles[i];
+            // determine whether a role is in our original item and whether it's in our update item
+            // knowing this, we know which roles to destroy in the backend and which to create
             const paginationIncludes = paginationItem.roles.includes(role);
             const editIncludes = editItem.value.roles.includes(role);
             if (!paginationIncludes && editIncludes) {
                 // add role in backend
                 const func = creators.value[role];
 
+                // if the role that needs to be created is a student, a studentId needs to be supplied as well
                 if (role === 'student') {
                     const data: Record<string, any> = {
                         ...editItem.value,
@@ -125,6 +144,7 @@ const saveItem = async (): Promise<void> => {
     } else {
         addErrorMessage(t('admin.save.error.title'), t('admin.save.error.detail'));
     }
+    // stop showing popup
     popupEdit.value = false;
 };
 </script>
