@@ -12,7 +12,7 @@ import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { useI18n } from 'vue-i18n';
-import { computed, ref} from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { DockerImage } from '@/types/DockerImage.ts';
 import { getDockerImageFilters } from '@/types/filter/Filter.ts';
@@ -31,7 +31,7 @@ const {
     patchDockerImage,
     createDockerImage,
     deleteDockerImage,
-    deleteDockerImages
+    deleteDockerImages,
 } = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
 
@@ -108,7 +108,7 @@ const toggleSafetyGuardMultiRemove = (): void => {
     showSafetyGuard.value = true;
 };
 const removeItems = async (): Promise<void> => {
-    const ids = selectedItems.value?.map(item => item.id) ?? []
+    const ids = selectedItems.value?.map((item) => item.id) ?? [];
     await deleteDockerImages(ids);
     selectedItems.value = [];
 };
@@ -122,7 +122,6 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     addItem.value.name = '';
     selectedOption.value = selectOptions.value[0];
 };
-
 
 /**
  * A function to be triggered when (an) item(s) are selected, and changes the multiRemove Button's disabled status
