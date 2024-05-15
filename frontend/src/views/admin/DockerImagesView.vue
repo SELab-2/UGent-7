@@ -60,6 +60,9 @@ const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
 const fileUpload = ref();
 
+/**
+ * A function to make the confirmation dialog pop up
+ */
 const activateSafetyGuard = (): void => {
     confirm.require({
         message: t('admin.safeGuard'),
