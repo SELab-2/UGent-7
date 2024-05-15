@@ -21,7 +21,6 @@ import { useRoute } from 'vue-router';
 import { DockerImage } from '@/types/DockerImage.ts';
 import { getDockerImageFilters } from '@/types/filter/Filter.ts';
 
-
 /* Injection */
 const { t } = useI18n();
 const { query } = useRoute();
@@ -57,7 +56,6 @@ const columns = ref([
     { field: 'name', header: 'admin.docker_images.name' },
     { field: 'owner', header: 'admin.docker_images.owner' },
 ]);
-const showSafetyGuard = ref<boolean>(false);
 const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
 const fileUpload = ref();
@@ -67,9 +65,9 @@ const activateSafetyGuard = (): void => {
         message: t('admin.safeGuard'),
         rejectLabel: t('primevue.reject'),
         acceptLabel: t('primevue.accept'),
-        accept: safetyGuardCleanup
-    })
-}
+        accept: safetyGuardCleanup,
+    });
+};
 /**
  * Hides safety guard, executes function that safety guard guards against and fetches data again
  */
