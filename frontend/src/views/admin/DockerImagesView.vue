@@ -12,7 +12,7 @@ import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { computed, ref} from 'vue';
 import { useRoute } from 'vue-router';
 import { DockerImage } from '@/types/DockerImage.ts';
 import { getDockerImageFilters } from '@/types/filter/Filter.ts';
@@ -31,6 +31,7 @@ const {
     patchDockerImage,
     createDockerImage,
     deleteDockerImage,
+    deleteDockerImages
 } = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
 
@@ -43,8 +44,10 @@ const addItem = ref<DockerImage>(DockerImage.blankDockerImage());
 const selectOptions = ref(['admin.list', 'admin.add']);
 const selectedOption = ref<string>(selectOptions.value[0]);
 
-const multiRemove = ref<boolean>(false);
-const selectedItems = ref<any[] | null>(null);
+const multiRemove = computed(() => {
+    return (selectedItems.value?.length === undefined || selectedItems.value?.length === 0) ?? false;
+});
+const selectedItems = ref<DockerImage[] | null>(null);
 
 const columns = ref([
     { field: 'id', header: 'admin.id' },
@@ -100,6 +103,15 @@ const removeItem = async (): Promise<void> => {
         selectedItems.value?.splice(index, 1);
     }
 };
+const toggleSafetyGuardMultiRemove = (): void => {
+    safetyGuardFunction.value = removeItems;
+    showSafetyGuard.value = true;
+};
+const removeItems = async (): Promise<void> => {
+    const ids = selectedItems.value?.map(item => item.id) ?? []
+    await deleteDockerImages(ids);
+    selectedItems.value = [];
+};
 /**
  * Handles an upload event containing docker image file and uploads this together with other attributes to backend
  * @param event Event containing docker image file in files attributes
@@ -118,7 +130,6 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
  * @param selected A list of all the selected docker images.
  */
 const onSelect = (selected: any[] | null): void => {
-    multiRemove.value = (selected?.length === undefined || selected?.length === 0) ?? false;
     selectedItems.value = selected;
 };
 </script>
@@ -156,7 +167,7 @@ const onSelect = (selected: any[] | null): void => {
                                 <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
                             </IconField>
                         </div>
-                        <Button class="w-1 mb-3 gap-3" :disabled="multiRemove">
+                        <Button class="w-1 mb-3 gap-3" :disabled="multiRemove" @click="toggleSafetyGuardMultiRemove">
                             {{ t('admin.delete') }}
                         </Button>
                     </template>

@@ -3,7 +3,7 @@ import { Response } from '@/types/Response.ts';
 import { endpoints } from '@/config/endpoints.ts';
 import { type Ref, ref } from 'vue';
 import { type Filter } from '@/types/filter/Filter.ts';
-import { create, getList, getPaginatedList, patch, deleteId } from '@/composables/services/helpers.ts';
+import { create, getList, getPaginatedList, patch, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 
 interface DockerImagesState {
@@ -15,6 +15,7 @@ interface DockerImagesState {
     patchDockerImage: (dockerData: DockerImage) => Promise<void>;
     createDockerImage: (dockerData: DockerImage, file: File) => Promise<void>;
     deleteDockerImage: (id: string) => Promise<void>;
+    deleteDockerImages: (ids: string[]) => Promise<void>;
 }
 
 export function useDockerImages(): DockerImagesState {
@@ -57,6 +58,12 @@ export function useDockerImages(): DockerImagesState {
         await deleteId<Response>(endpoint, response, Response.fromJSON);
     }
 
+    async function deleteDockerImages(ids: string[]): Promise<void> {
+        const endpoint = endpoints.dockerImages.deleteMany;
+        const data = { 'ids': ids }
+        await deleteIdWithData<Response>(endpoint, data, response, Response.fromJSON);
+    }
+
     return {
         pagination,
         dockerImages,
@@ -67,5 +74,6 @@ export function useDockerImages(): DockerImagesState {
         patchDockerImage,
         createDockerImage,
         deleteDockerImage,
+        deleteDockerImages
     };
 }
