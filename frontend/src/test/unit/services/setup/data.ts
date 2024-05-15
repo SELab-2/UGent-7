@@ -1,17 +1,17 @@
 import { SubmissionStatus } from "@/types/SubmisionStatus";
 
-export const groups = [
+const groups = [
     {
         id: '0',
         score: 20,
-        project: '0',
         students: ['1', '2', '3', '000201247011'],
+        project: {},
     },
     {
         id: '1',
         score: 18,
-        project: '0',
         students: ['1', '2', '3', '000201247011'],
+        project: {},
     },
 ];
 
@@ -166,6 +166,11 @@ export const projects = [
         submissions: null,
     },
 ];
+
+groups[0].project = projects[0]
+groups[1].project = projects[0]
+
+export { groups }
 
 export const faculties = [
     { id: 'sciences', name: 'wetenschappen' },
