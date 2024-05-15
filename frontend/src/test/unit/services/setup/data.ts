@@ -1,3 +1,5 @@
+import { SubmissionStatus } from "@/types/SubmisionStatus";
+
 export const groups = [
     {
         id: '0',
@@ -107,38 +109,61 @@ export const courses = [
     },
 ];
 
+export const submissionStatuses = [
+    {
+        non_empty_groups: 5,
+        groups_submitted: 4,
+        structure_checks_passed: 3,
+        extra_checks_passed: 1,
+    },
+    {
+        non_empty_groups: 6,
+        groups_submitted: 5,
+        structure_checks_passed: 4,
+        extra_checks_passed: 2,
+    },
+];
+
 export const projects = [
     {
         id: '0',
-        course: courses[0],
-        name: 'sel2',
-        description: 'this is a test',
+        name: 'course0',
+        description: 'course0 description',
         visible: true,
         archived: false,
         locked_groups: false,
-        start_date: new Date('July 21, 2024 01:15:00'),
-        deadline: new Date('July 23, 2024 01:15:00'),
+        start_date: new Date('November 11, 2024 01:15:00'),
+        deadline: new Date('November 11, 2025 01:15:00'),
         max_score: 100,
         score_visible: true,
-        group_size: 8,
-        submissions: ['1', '2'],
-        groups: ['0', '1'],
+        group_size: 5,
+        course: courses[0],
+        status: submissionStatuses[0],
+        structure_file: null,
+        structureChecks: null,
+        extra_checks: null,
+        groups: [groups[0], groups[1]],
+        submissions: null,
     },
     {
-        id: 1,
-        course: courses[0],
-        name: 'sel3',
-        description: 'make a project',
+        id: '1',
+        name: 'course1',
+        description: 'course1 description',
         visible: true,
         archived: false,
         locked_groups: false,
-        start_date: new Date('July 21, 2024 01:15:00'),
-        deadline: new Date('July 23, 2024 01:15:00'),
-        max_score: 20,
+        start_date: new Date('December 11, 2024 01:15:00'),
+        deadline: new Date('December 11, 2025 01:15:00'),
+        max_score: 50,
         score_visible: false,
-        group_size: 3,
-        submissions: [],
-        groups: ['0', '1'],
+        group_size: 8,
+        course: courses[1],
+        status: submissionStatuses[1],
+        structure_file: null,
+        structureChecks: null,
+        extra_checks: null,
+        groups: [groups[0], groups[1]],
+        submissions: null,
     },
 ];
 
