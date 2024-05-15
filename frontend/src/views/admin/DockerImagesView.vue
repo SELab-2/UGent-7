@@ -94,6 +94,11 @@ const toggleSafetyGuardRemove = (data: DockerImage): void => {
  */
 const removeItem = async (): Promise<void> => {
     await deleteDockerImage(editItem.value.id);
+    // remove the item from the list of selectedItems
+    const index = selectedItems.value?.indexOf(editItem.value) ?? -1;
+    if (index !== -1) {
+        selectedItems.value?.splice(index, 1);
+    }
 };
 /**
  * Handles an upload event containing docker image file and uploads this together with other attributes to backend
