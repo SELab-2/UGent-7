@@ -18,6 +18,7 @@ import { useStudents } from '@/composables/services/student.service.ts';
 import { useAssistant } from '@/composables/services/assistant.service.ts';
 import { useTeacher } from '@/composables/services/teacher.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
+import { useMessagesStore } from '@/store/messages.store.ts';
 
 import { roles, type Role, User } from '@/types/users/User.ts';
 import { getUserFilters } from '@/types/filter/Filter.ts';
@@ -25,6 +26,7 @@ import { useRoute } from 'vue-router';
 
 /* Composable injections */
 const { t } = useI18n();
+const { addErrorMessage } = useMessagesStore();
 const { query } = useRoute();
 const { pagination, users, getUsers, searchUsers, toggleAdmin } = useUser();
 const { createStudent, deleteStudent } = useStudents();
@@ -121,7 +123,7 @@ const saveItem = async (): Promise<void> => {
         // update locally
         await dataTable.value.fetch();
     } else {
-        // raise error TODO
+        addErrorMessage(t('admin.save.error.title'), t('admin.save.error.detail'));
     }
     popupEdit.value = false;
 };
@@ -210,7 +212,7 @@ const saveItem = async (): Promise<void> => {
         </div>
         <div class="flex justify-content-end gap-2">
             <Button type="button" :label="t('admin.cancel')" severity="secondary" @click="popupEdit = false"></Button>
-            <Button type="button" :label="t('admin.save')" @click="saveItem"></Button>
+            <Button type="button" :label="t('admin.save.save')" @click="saveItem"></Button>
         </div>
     </Dialog>
 </template>

@@ -286,7 +286,13 @@
         },
         "edit": "Edit",
         "cancel": "Cancel",
-        "save": "Save",
+        "save": {
+            "save": "Save",
+            "error": {
+                "title": "Invalid Safe Operation",
+                "detail": "Trying to save while no item is selected"
+            }
+        },
         "delete": "Delete",
         "users": {
             "title": "Users",

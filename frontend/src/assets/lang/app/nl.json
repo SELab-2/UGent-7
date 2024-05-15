@@ -282,7 +282,13 @@
         },
         "edit": "Bewerken",
         "cancel": "Annuleer",
-        "save": "Sla op",
+        "save": {
+            "save": "Sla op",
+            "error": {
+                "title": "Ongeldige Opsla Operatie",
+                "detail": "Men kan niet opslaan wanneer geen item is geselecteerd"
+            }
+        },
         "delete": "Verwijder",
         "users": {
             "title": "Gebruikers",
