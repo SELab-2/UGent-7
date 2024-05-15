@@ -103,7 +103,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
     await createDockerImage(addItem.value, files[0]);
     addItem.value.name = '';
-    fileUpload.value = fileUpload.value;
+    selectedOption.value = selectOptions.value[0];
 };
 
 
