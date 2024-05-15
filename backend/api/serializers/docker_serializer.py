@@ -15,8 +15,8 @@ class DockerImageSerializer(serializers.ModelSerializer):
 
         if not self.partial:
             data["owner"] = self.context["request"].user
-        else:
-            data["owner"] = data["owner"] if "owner" in data else self.instance.owner
+        elif "owner" not in data:
+            data["owner"] = self.instance.owner
 
         if "public" in data and data["public"] and not data["owner"].is_staff:
             raise ValidationError(_("docker.errors.custom"))
