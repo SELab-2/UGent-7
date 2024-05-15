@@ -13,6 +13,7 @@ export function useSubmissionStatus(): SubmissionStatusState {
 
     async function getSubmissionStatusByProject(projectId: string): Promise<void> {
         const endpoint = endpoints.submissions.status.replace('{projectId}', projectId);
+        console.log("endpoint: " + JSON.stringify(endpoint));
         await get<SubmissionStatus>(endpoint, submissionStatus, SubmissionStatus.fromJSON);
     }
 

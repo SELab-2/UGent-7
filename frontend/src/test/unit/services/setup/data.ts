@@ -124,6 +124,27 @@ export const submissionStatuses = [
     },
 ];
 
+export const submissions = [
+    {
+        id: '1',
+        group: '1',
+        files: [],
+        extra_checks_results: [],
+        submission_number: 1,
+        submission_time: new Date('July 21, 2024 01:15:00'),
+        structureChecks_passed: true,
+    },
+    {
+        id: '2',
+        group: '1',
+        files: [],
+        extra_checks_results: [],
+        submission_number: 2,
+        submission_time: new Date('July 21, 2024 01:15:00'),
+        structureChecks_passed: true,
+    },
+];
+
 export const projects = [
     {
         id: '0',
@@ -143,7 +164,7 @@ export const projects = [
         structureChecks: null,
         extra_checks: null,
         groups: [groups[0], groups[1]],
-        submissions: null,
+        submissions: [submissions[0], submissions[1]],
     },
     {
         id: '1',
@@ -163,7 +184,7 @@ export const projects = [
         structureChecks: null,
         extra_checks: null,
         groups: [groups[0], groups[1]],
-        submissions: null,
+        submissions: [submissions[0], submissions[1]],
     },
 ];
 
@@ -358,26 +379,5 @@ export const structureChecks = [
         ],
         blocked_extensions: [],
         name: 'folder3/folder3-1',
-    },
-];
-
-export const submissions = [
-    {
-        id: '1',
-        group: '1',
-        files: [],
-        extra_checks_results: [],
-        submission_number: 1,
-        submission_time: new Date('July 21, 2024 01:15:00'),
-        structureChecks_passed: true,
-    },
-    {
-        id: '2',
-        group: '1',
-        files: [],
-        extra_checks_results: [],
-        submission_number: 2,
-        submission_time: new Date('July 21, 2024 01:15:00'),
-        structureChecks_passed: true,
     },
 ];

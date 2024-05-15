@@ -10,9 +10,9 @@ function resetService(): void {
 
 describe('submision_status', (): void => {
     it('gets submision status data by project', async () => {
-        // resetService();
+        resetService();
 
-        // await getSubmissionStatusByProject('0');
+        await getSubmissionStatusByProject('0');
         // expect(submissionStatus.value).not.toBeNull();
         // expect(submissionStatus.value?.groups_submitted).toBe(1);
         // expect(submissionStatus.value?.non_empty_groups).toBe(2);
