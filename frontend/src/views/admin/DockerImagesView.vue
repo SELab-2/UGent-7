@@ -103,10 +103,16 @@ const removeItem = async (): Promise<void> => {
         selectedItems.value?.splice(index, 1);
     }
 };
+/**
+ * Show safety guard for removing multiple docker images at once in the backend
+ */
 const toggleSafetyGuardMultiRemove = (): void => {
     safetyGuardFunction.value = removeItems;
     showSafetyGuard.value = true;
 };
+/**
+ * Removes the docker images in the backend described by the selectedItems variable
+ */
 const removeItems = async (): Promise<void> => {
     const ids = selectedItems.value?.map((item) => item.id) ?? [];
     await deleteDockerImages(ids);
