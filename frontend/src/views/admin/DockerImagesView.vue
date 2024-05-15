@@ -170,17 +170,21 @@ const onSelect = (selected: any[] | null): void => {
                     v-model:model-value="addItem.name"
                     :placeholder="t('admin.docker_images.name_input')"
                 />
-                <div v-if="addItem.name.length > 0">
-                    <div class="flex align-items-center mb-3 gap-3">
-                        <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
-                        <InputSwitch :model-value="addItem.public" />
-                    </div>
-                    <FileUpload class="mb-3 gap-3" :custom-upload="true" @uploader="upload" :file-limit="1">
-                        <template #empty>
-                            <strong>No file selected.</strong>
-                        </template>
-                    </FileUpload>
+                <div class="flex align-items-center mb-3 gap-3">
+                    <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
+                    <InputSwitch v-model="addItem.public" />
                 </div>
+                <FileUpload
+                    class="mb-3 gap-3"
+                    :custom-upload="true"
+                    @uploader="upload"
+                    :file-limit="1"
+                    :disabled="addItem.name.length === 0"
+                >
+                    <template #empty>
+                        <strong>No file selected.</strong>
+                    </template>
+                </FileUpload>
             </div>
         </Body>
     </AdminLayout>
