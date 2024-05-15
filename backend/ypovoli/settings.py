@@ -46,8 +46,8 @@ SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get("DJANGO_DEBUG", "False").lower() in ["true", "1", "t"]
 DOMAIN_NAME = environ.get("DJANGO_DOMAIN_NAME", "localhost")
-ALLOWED_HOSTS = [DOMAIN_NAME]
-CSRF_TRUSTED_ORIGINS = ["https://" + DOMAIN_NAME]
+ALLOWED_HOSTS = [DOMAIN_NAME, "nginx"]
+CSRF_TRUSTED_ORIGINS = ["https://" + DOMAIN_NAME, "https://nginx"]
 
 # Application definition
 INSTALLED_APPS = [
