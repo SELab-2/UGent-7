@@ -127,8 +127,8 @@ export const submissionStatuses = [
 export const projects = [
     {
         id: '0',
-        name: 'course0',
-        description: 'course0 description',
+        name: 'project0',
+        description: 'project0 description',
         visible: true,
         archived: false,
         locked_groups: false,
@@ -147,8 +147,8 @@ export const projects = [
     },
     {
         id: '1',
-        name: 'course1',
-        description: 'course1 description',
+        name: 'project1',
+        description: 'project1 description',
         visible: true,
         archived: false,
         locked_groups: false,
@@ -157,7 +157,7 @@ export const projects = [
         max_score: 50,
         score_visible: false,
         group_size: 8,
-        course: courses[1],
+        course: courses[0],
         status: submissionStatuses[1],
         structure_file: new File(['byte1', 'byte2'], 'submission.zip', { type: 'application/zip' }),
         structureChecks: null,
