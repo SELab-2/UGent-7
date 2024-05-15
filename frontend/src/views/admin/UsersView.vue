@@ -160,7 +160,7 @@ const saveItem = async (): Promise<void> => {
                     :field="column.field"
                     :header="t(column.header)"
                     :show-filter-menu="false"
-                    :header-style="{ width: '23%' }"
+                    :header-style="{ width: '22%' }"
                     class="p-col"
                 >
                     <template #filter>
@@ -185,9 +185,11 @@ const saveItem = async (): Promise<void> => {
                         {{ data.roles.map((role: Role) => t('admin.' + role)).join(', ') }}
                     </template>
                 </Column>
-                <Column :header-style="{ width: '8%' }" class="p-col">
+                <Column :header-style="{ width: '12%' }" class="p-col">
                     <template #body="{ data }">
-                        <Button @click="() => showPopup(data)">{{ t('admin.edit') }}</Button>
+                        <Button @click="() => showPopup(data)" class="justify-content-center">{{
+                            t('admin.edit')
+                        }}</Button>
                     </template>
                 </Column>
             </LazyDataTable>

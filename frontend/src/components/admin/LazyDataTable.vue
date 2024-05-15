@@ -8,14 +8,24 @@ import { type Filter } from '@/types/filter/Filter.ts';
 import Column from 'primevue/column';
 
 /* Properties */
-const props = defineProps<{
-    pagination: PaginatorResponse<any> | null;
-    entities: any[] | null; // list containing all the entities displayed by data table after executing get method
-    get: () => Promise<void>; // get method for backend
-    search: (filters: Filter, page: number, pageSize: number) => Promise<void>;
-    filter: Filter;
-    onFilter: (callback: () => Promise<void>, debounce?: number | undefined, immediate?: boolean | undefined) => void;
-}>();
+const props = withDefaults(
+    defineProps<{
+        pagination: PaginatorResponse<any> | null;
+        entities: any[] | null; // list containing all the entities displayed by data table after executing get method
+        get: () => Promise<void>; // get method for backend
+        search: (filters: Filter, page: number, pageSize: number) => Promise<void>;
+        filter: Filter;
+        onFilter: (
+            callback: () => Promise<void>,
+            debounce?: number | undefined,
+            immediate?: boolean | undefined,
+        ) => void;
+        select?: boolean;
+    }>(),
+    {
+        select: false,
+    },
+);
 
 /* Emits */
 const emit = defineEmits(['select']);
@@ -116,7 +126,7 @@ defineExpose({ fetch });
                     {{ t('admin.loading') }}
                 </slot>
             </template>
-            <Column selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center"></Column>
+            <Column v-if="select" selectionMode="multiple" headerStyle="width: 3rem" class="justify-content-center" />
             <slot />
         </DataTable>
     </div>

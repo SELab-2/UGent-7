@@ -107,6 +107,7 @@ const onSelect = (selected: any[] | null): void => {
                     :filter="filter"
                     :on-filter="onFilter"
                     ref="dataTable"
+                    select
                     @select="onSelect"
                 >
                     <template #header>
