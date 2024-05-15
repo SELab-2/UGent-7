@@ -16,9 +16,7 @@ import { type Filter } from '@/types/filter/Filter.ts';
  */
 export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
     try {
-        console.log("getting response...");
         const response = await client.get(endpoint);
-        console.log("response: " + JSON.stringify(response.data))
         ref.value = fromJson(response.data);
     } catch (error: any) {
         processError(error);

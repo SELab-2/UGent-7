@@ -84,11 +84,10 @@ export const getHandlers = [
     }),
     http.get(baseUrl + endpoints.submissions.status.replace('{projectId}', ':id'), ({ params }) => {
         const project = projects.find((x) => x.id === params.id);
-        console.log("project: " + JSON.stringify(project))
-        const groupIds = project !== null && project !== undefined ? project.groups : [];
-        console.log("groupIds: " + JSON.stringify(groupIds))
-        const submissionIds = project !== null && project !== undefined ? project.submissions : [];
-        console.log("submissionIds: " + JSON.stringify(submissionIds))
+        const groups = project !== null && project !== undefined ? project.groups : [];
+        const groupIds = groups.map(group => group.id);
+        const submissions = project !== null && project !== undefined ? project.submissions : [];
+        const submissionIds = submissions.map(submission => submission.id);
 
         return HttpResponse.json({
             groups_submitted: new Set(submissions.filter((x) => submissionIds.includes(x.id)).map((x) => x.group)).size,
