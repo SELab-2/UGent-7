@@ -3,8 +3,12 @@ import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import InputSwitch from 'primevue/inputswitch';
 import SelectButton from 'primevue/selectbutton';
-import Dialog from 'primevue/dialog';
+import ConfirmDialog from 'primevue/confirmdialog';
 import Button from 'primevue/button';
+import InputIcon from 'primevue/inputicon';
+import Column from 'primevue/column';
+import IconField from 'primevue/iconfield';
+import { useConfirm } from 'primevue/useconfirm';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import Body from '@/components/layout/Body.vue';
@@ -16,9 +20,7 @@ import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { DockerImage } from '@/types/DockerImage.ts';
 import { getDockerImageFilters } from '@/types/filter/Filter.ts';
-import InputIcon from 'primevue/inputicon';
-import Column from 'primevue/column';
-import IconField from 'primevue/iconfield';
+
 
 /* Injection */
 const { t } = useI18n();
@@ -34,6 +36,7 @@ const {
     deleteDockerImages,
 } = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
+const confirm = useConfirm();
 
 /* State */
 const dataTable = ref();
@@ -59,13 +62,21 @@ const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
 const fileUpload = ref();
 
+const activateSafetyGuard = (): void => {
+    confirm.require({
+        message: t('admin.safeGuard'),
+        rejectLabel: t('primevue.reject'),
+        acceptLabel: t('primevue.accept'),
+        accept: safetyGuardCleanup
+    })
+}
 /**
  * Hides safety guard, executes function that safety guard guards against and fetches data again
  */
-const safetyGuardCleanup = async (): Promise<void> => {
-    showSafetyGuard.value = false;
-    await safetyGuardFunction.value();
-    await dataTable.value.fetch();
+const safetyGuardCleanup = (): void => {
+    safetyGuardFunction.value().then(() => {
+        dataTable.value.fetch();
+    });
 };
 /**
  * Show safety guard for changing public status and set up values for when confirmed
@@ -75,7 +86,7 @@ const toggleSafetyGuardEdit = (data: DockerImage): void => {
     editItem.value.public = !data.public;
     editItem.value.id = data.id;
     safetyGuardFunction.value = changePublicStatus;
-    showSafetyGuard.value = true;
+    activateSafetyGuard();
 };
 /**
  * Changes the public status in the backend of the docker image whose attributes are in editItem's value attribute
@@ -90,7 +101,7 @@ const changePublicStatus = async (): Promise<void> => {
 const toggleSafetyGuardRemove = (data: DockerImage): void => {
     editItem.value = data;
     safetyGuardFunction.value = removeItem;
-    showSafetyGuard.value = true;
+    activateSafetyGuard();
 };
 /**
  * Removes the docker image in the backend whose attributes are in editItem's value attribute
@@ -108,7 +119,7 @@ const removeItem = async (): Promise<void> => {
  */
 const toggleSafetyGuardMultiRemove = (): void => {
     safetyGuardFunction.value = removeItems;
-    showSafetyGuard.value = true;
+    activateSafetyGuard();
 };
 /**
  * Removes the docker images in the backend described by the selectedItems variable
@@ -243,13 +254,7 @@ const onSelect = (selected: any[] | null): void => {
             </div>
         </Body>
     </AdminLayout>
-    <Dialog v-model:visible="showSafetyGuard" :style="{ width: '15rem' }">
-        <h3>{{ t('admin.safeGuard') }}</h3>
-        <div class="flex justify-content-between">
-            <Button :label="t('primevue.reject')" @click="showSafetyGuard = false" />
-            <Button :label="t('primevue.accept')" @click="safetyGuardCleanup" />
-        </div>
-    </Dialog>
+    <ConfirmDialog :style="{ width: '15rem' }" />
 </template>
 
 <style scoped lang="scss"></style>
