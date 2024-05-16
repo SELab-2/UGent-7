@@ -16,7 +16,6 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 
-# TODO: Permission to ask for logs
 class SubmissionViewSet(RetrieveModelMixin, GenericViewSet):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer

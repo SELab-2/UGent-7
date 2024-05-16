@@ -14,8 +14,6 @@ class FileExtension(models.Model):
         unique=True
     )
 
-# TODO: Remove zip.* translations
-
 
 class StructureCheck(models.Model):
     """Model that represents a structure check for a project.
@@ -100,7 +98,6 @@ class ExtraCheck(models.Model):
     )
 
     # Maximum memory the container uses in MB
-    # TODO: Set max and min
     memory_limit = models.PositiveSmallIntegerField(
         default=128,
         blank=False,
