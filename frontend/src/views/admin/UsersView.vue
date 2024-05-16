@@ -72,7 +72,7 @@ const fillCreatorsDestroyers = (): void => {
         creators.value[role] = createFunctions.value[i - 1];
         destroyers.value[role] = destroyFunctions.value[i - 1];
     }
-}
+};
 /**
  * A function to that shows a popup to edit the User item
  * @param data This contains the attributes of the User item to be edited.
