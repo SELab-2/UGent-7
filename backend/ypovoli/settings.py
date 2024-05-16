@@ -28,15 +28,30 @@ MEDIA_ROOT = os.path.normpath(os.path.join("data"))
 
 # TESTING
 TESTING_BASE_LINK = "http://testserver"
-TEST_USER_DATA = {
-    "id": "1234",
-    "username": "test",
-    "email": "test@test",
-    "first_name": "test",
-    "last_name": "test",
+TEST_ADMIN_DATA = {
+    "id": "0",
+    "username": "admin",
+    "email": "admin@test",
+    "first_name": "admin",
+    "last_name": "admin",
+    "is_staff": True
 }
-TEST_USER_ATTRIBUTES = {
-    **TEST_USER_DATA,
+TEST_STUDENT_DATA = {
+    "id": "1",
+    "username": "student",
+    "email": "student@test",
+    "first_name": "student",
+    "last_name": "student",
+}
+TEST_MULTI_DATA = {
+    "id": "2",
+    "username": "multi",
+    "email": "multi@test",
+    "first_name": "multi",
+    "last_name": "multi",
+}
+TEST_STUDENT_ATTRIBUTES = {
+    **TEST_STUDENT_DATA,
     "ugentStudentID": "1234"
 }
 

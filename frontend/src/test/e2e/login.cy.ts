@@ -7,7 +7,7 @@ describe('login', () => {
     });
     it('does not redirect to login page when logged in', () => {
         // log in as a test student
-        cy.visit('/api/auth/test-user/student/');
+        cy.request('POST', '/api/auth/test-user/student/');
         // visit dashboard
         cy.visit('/');
         // should not be redirected to login page
@@ -19,7 +19,7 @@ describe('login', () => {
         // intercept the retrieval of student info
         cy.intercept('/api/students/*/').as('student');
         // log in as a test student
-        cy.visit('/api/auth/test-user/student/');
+        cy.request('POST', '/api/auth/test-user/student/');
         // visit dashboard
         cy.visit('/');
         // wait for requests for student info to end

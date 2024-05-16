@@ -11,6 +11,7 @@
         "test": "vitest run",
         "cypress:open": "cypress open",
         "cypress:test": "cypress run",
+        "cypress:install": "cypress install",
         "lint": "eslint src --ext .ts,.vue",
         "lint-fix": "eslint src --ext .ts,.vue --fix"
     },

@@ -18,3 +18,9 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+before(() => {
+    // log in a user of every type
+    // non-staff: student (basic login); student + assistant + teacher
+    // staff user
+})
