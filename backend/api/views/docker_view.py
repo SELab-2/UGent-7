@@ -6,15 +6,14 @@ from django.db.models import Q
 from django.db.models.manager import BaseManager
 from rest_framework.decorators import action
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin, RetrieveModelMixin,
-                                   UpdateModelMixin)
+                                   RetrieveModelMixin, UpdateModelMixin)
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 
-class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, DestroyModelMixin, GenericViewSet):
+class DockerImageViewSet(RetrieveModelMixin, UpdateModelMixin, CreateModelMixin, DestroyModelMixin, GenericViewSet):
 
     queryset = DockerImage.objects.all()
     serializer_class = DockerImageSerializer
