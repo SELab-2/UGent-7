@@ -23,19 +23,19 @@ const meterItems = computed(() => {
 
     return [
         {
-            value: (extraChecksPassed / groups) * 100,
+            value: Math.round((extraChecksPassed / groups) * 100),
             color: '#749b68',
             label: t('components.card.extraTestsSucceed'),
             icon: 'pi pi-check',
         },
         {
-            value: (structureChecksPassed / groups) * 100,
+            value: Math.round((structureChecksPassed / groups) * 100),
             color: '#fa9746',
             label: t('components.card.structureTestsSucceed'),
             icon: 'pi pi-exclamation-circle',
         },
         {
-            value: (submissionsFailed / groups) * 100,
+            value: Math.round((submissionsFailed / groups) * 100),
             color: '#FF5445',
             label: t('components.card.testsFail'),
             icon: 'pi pi-times',
