@@ -127,7 +127,7 @@ async function submitProject(): Promise<void> {
                 form.scoreVisibility,
                 form.groupSize,
                 course.value,
-                new SubmissionStatus(0, 0, 0), // Default submission status
+                new SubmissionStatus(0, 0, 0, 0), // Default submission status
                 form.submissionStructure,
             ),
         );
