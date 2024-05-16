@@ -34,7 +34,7 @@ x-common-keys-selab_test: &common-keys-selab_test
 services:
   nginx:
     <<: *common-keys-selab_test
-    image: nginx:latest
+    image: nginx:alpine-slim
     container_name: nginx
     volumes:
       - ${DATA_DIR}/nginx/nginx.test.conf:/etc/nginx/nginx.conf:ro
@@ -48,7 +48,7 @@ services:
     container_name: backend
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: sh -c "./setup.sh && python manage.py runsslserver 0.0.0.0:8000"
     volumes:
       - $BACKEND_DIR:/code
