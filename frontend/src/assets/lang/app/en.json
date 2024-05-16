@@ -289,8 +289,8 @@
         "save": {
             "save": "Save",
             "error": {
-                "title": "Invalid Safe Operation",
-                "detail": "Trying to save while no item is selected"
+                "title": "Invalid Save Operation",
+                "detail": "You are trying to save an item without selecting it."
             }
         },
         "delete": "Delete",

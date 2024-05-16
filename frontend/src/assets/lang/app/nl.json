@@ -286,7 +286,7 @@
             "save": "Sla op",
             "error": {
                 "title": "Ongeldige Opsla Operatie",
-                "detail": "Men kan niet opslaan wanneer geen item is geselecteerd"
+                "detail": "U probeert een item op te slaan zonder dit te selecteren."
             }
         },
         "delete": "Verwijder",
@@ -319,8 +319,8 @@
             "private": "Privaat"
         },
         "none_found": "Geen overeenkomende data gevonden.",
-        "loading": "Aan het laden. Wacht een momentje aub.",
-        "safeGuard": "Ben je het zeker?"
+        "loading": "Aan het laden. Wacht even aub.",
+        "safeGuard": "Bent u het zeker?"
     },
     "primevue": {
         "accept": "Ja",
