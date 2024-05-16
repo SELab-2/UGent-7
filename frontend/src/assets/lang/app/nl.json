@@ -46,7 +46,7 @@
             "coming": "Aankomende deadlines",
             "deadline": "Deadline",
             "days": "Vandaag om {hour} | Morgen om {hour} | Over {count} dagen",
-            "ago": "{count} dagen geleden",
+            "ago": "1 dag geleden | {count} dagen geleden",
             "groupName": "Groepsnaam",
             "groupPopulation": "Grootte",
             "groupStatus": "Status",
@@ -138,7 +138,7 @@
                 "year": "Academiejaar",
                 "placeholder": "Zoek een vak op naam",
                 "title": "Zoek een vak",
-                "results": "{0} vakken gevonden voor ingestelde filters"
+                "results": "1 vak gevonden voor ingestelde filters | {count} vakken gevonden voor ingestelde filters"
             },
             "searchByLink": {
                 "placeholder": "Zoek een vak gebruik makende van een uitnodigingslink"
