@@ -113,3 +113,10 @@ class ExtraCheck(models.Model):
         blank=False,
         null=False
     )
+
+    # Whether the artifacts should made available to the student
+    show_artifact = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False
+    )

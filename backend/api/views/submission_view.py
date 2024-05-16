@@ -1,8 +1,9 @@
 from api.models.submission import (ExtraCheckResult, StructureCheckResult,
                                    Submission)
 from api.permissions.submission_permissions import (
-    ExtraCheckResultLogPermission, ExtraCheckResultPermission,
-    StructureCheckResultPermission, SubmissionPermission)
+    ExtraCheckResultArtifactPermission, ExtraCheckResultLogPermission,
+    ExtraCheckResultPermission, StructureCheckResultPermission,
+    SubmissionPermission)
 from api.serializers.submission_serializer import (
     ExtraCheckResultSerializer, StructureCheckResultSerializer,
     SubmissionSerializer)
@@ -42,11 +43,20 @@ class ExtraCheckResultViewSet(RetrieveModelMixin, GenericViewSet):
     serializer_class = ExtraCheckResultSerializer
     permission_classes = [ExtraCheckResultPermission]
 
-    @action(detail=True, permission_classes=[IsAdminUser | ExtraCheckResultLogPermission])
+    @action(detail=True, permission_classes=[IsAdminUser | ExtraCheckResultArtifactPermission])
     def log(self, request, **__):
         extra_check_result: ExtraCheckResult = self.get_object()
 
         if not extra_check_result.log_file:
             return Response({"message": _("extra_check_result.download.log")}, status=404)
 
-        return FileResponse(open(extra_check_result.log_file.path, "rb"), as_attachment=True)
+        return FileResponse(open(extra_check_result.log_file.path, "rb"), as_attachment=True, filename="log.txt")
+
+    @action(detail=True, permission_classes=[IsAdminUser | ExtraCheckResultLogPermission])
+    def artifact(self, request, **__):
+        extra_check_result: ExtraCheckResult = self.get_object()
+
+        if not extra_check_result.artifact:
+            return Response({"message": _("extra_check_result.download.artifact")}, status=404)
+
+        return FileResponse(open(extra_check_result.artifact.path, "rb"), as_attachment=True, filename="artifact.zip")
