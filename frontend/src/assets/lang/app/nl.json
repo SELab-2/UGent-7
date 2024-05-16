@@ -69,9 +69,19 @@
             "max_score": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
             "scoreVisibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
-            "dockerUpload": "Upload een Dockerfile",
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
-            "noStudents": "Geen studenten in deze groep"
+            "noStudents": "Geen studenten in deze groep",
+            "extraChecks": {
+                "title": "Automatische checks op een indiening",
+                "add": "Nieuwe check",
+                "name": "Naam",
+                "public": "Publiek",
+                "bashScript": "Bash script",
+                "dockerImage": "Docker image",
+                "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",
+                "memoryLimit": "Geheugenlimiet voor de uitvoering (in MB)",
+                "showLog": "Maak de extra logs van de docker container zichtbaar voor de studenten"
+            }
         },
         "submissions": {
             "title": "Inzendingen",
@@ -164,7 +174,8 @@
             "searchCourse": "Zoek een vak",
             "createCourse": "Maak een vak",
             "public": "Publiek",
-            "protected": "Besloten"
+            "protected": "Besloten",
+            "csv": "Download punten als een .csv bestand"
         },
         "card": {
             "open": "Details",
@@ -172,7 +183,8 @@
             "noSubmissions": "Dit project heeft geen indieningen",
             "submissions": "Indiening | Indieningen",
             "groups": "Groep | Groepen",
-            "testsSucceed": "Geslaagde testen",
+            "structureTestsSucceed": "Geslaagde structuur testen",
+            "extraTestsSucceed": "Geslaagde extra testen",
             "testsFail": "Gefaalde testen",
             "submit": "Indienen"
         },

@@ -24,6 +24,7 @@ def task_structure_check_start(structure_check_results: list[StructureCheckResul
 
     # Check each structure check
     for structure_check_result in structure_check_results:
+        # Only check in given path and not in subdirectories
         extensions = [
             ext for (name, ext)
             in name_ext.items()

@@ -14,8 +14,6 @@ class FileExtension(models.Model):
         unique=True
     )
 
-# TODO: Remove zip.* translations
-
 
 class StructureCheck(models.Model):
     """Model that represents a structure check for a project.
@@ -66,13 +64,6 @@ class ExtraCheck(models.Model):
         null=False
     )
 
-    # Name of the extra check
-    name = models.CharField(
-        max_length=255,
-        blank=False,
-        null=False
-    )
-
     # Link to the project
     project = models.ForeignKey(
         Project,
@@ -107,7 +98,6 @@ class ExtraCheck(models.Model):
     )
 
     # Maximum memory the container uses in MB
-    # TODO: Set max and min
     memory_limit = models.PositiveSmallIntegerField(
         default=128,
         blank=False,
@@ -116,6 +106,13 @@ class ExtraCheck(models.Model):
 
     # Whether the log files should made available to the student
     show_log = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False
+    )
+
+    # Whether the artifacts should made available to the student
+    show_artifact = models.BooleanField(
         default=True,
         blank=False,
         null=False

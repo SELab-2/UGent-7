@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 17:42+0200\n"
+"POT-Creation-Date: 2024-05-15 19:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,76 +27,76 @@ msgid "dockerimage.state.building"
 msgstr "Docker image is aan het bouwen."
 
 #: models/docker.py:10
-msgid "dockerimage.state.eady"
+msgid "dockerimage.state.ready"
 msgstr "Docker image is klaar."
 
 #: models/docker.py:11
 msgid "dockerimage.state.error"
 msgstr "Docker image is gefaald om te bouwen."
 
-#: models/submission.py:59
+#: models/submission.py:62
 msgid "submission.state.queued"
 msgstr "wachten"
 
-#: models/submission.py:60
+#: models/submission.py:63
 msgid "submission.state.running"
 msgstr "lopen"
 
-#: models/submission.py:61
+#: models/submission.py:64
 msgid "submission.state.success"
 msgstr "succes"
 
-#: models/submission.py:62
+#: models/submission.py:65
 msgid "submission.state.failed"
 msgstr "gefaald"
 
-#: models/submission.py:67
+#: models/submission.py:70
 msgid "submission.error.blockedextension"
 msgstr "De zip file bevat een niet toegelaten bestandstype."
 
-#: models/submission.py:68
+#: models/submission.py:71
 msgid "submission.error.obligatedextensionnotfound"
 msgstr ""
 "Er is geen enkel bestand met een bepaalde bestandstype die verplicht is in "
 "het ingediende zip-bestand."
 
-#: models/submission.py:69
+#: models/submission.py:72
 msgid "submission.error.filedirnotfound"
 msgstr "De ingediende zip file mankeerd een verplichtte map."
 
-#: models/submission.py:72
+#: models/submission.py:75
 msgid "submission.error.dockerimageerror"
 msgstr "Probeer later opnieuw."
 
-#: models/submission.py:73
+#: models/submission.py:76
 msgid "submission.error.timelimit"
 msgstr "Tijdslimit bereikt."
 
-#: models/submission.py:74
+#: models/submission.py:77
 msgid "submission.error.memorylimit"
 msgstr "Geheugenlimiet bereikt."
 
-#: models/submission.py:75
+#: models/submission.py:78
 msgid "submission.error.checkerror"
 msgstr "Een check faalde."
 
-#: models/submission.py:76
+#: models/submission.py:79
 msgid "submission.error.runtimeerror"
 msgstr "Crashed."
 
-#: models/submission.py:77
+#: models/submission.py:80
 msgid "submission.error.unknown"
 msgstr "Onbekende fout."
 
-#: models/submission.py:78
+#: models/submission.py:81
 msgid "submission.error.failedstructurecheck"
 msgstr "De ingediende zip file heeft niet de juiste structuur."
 
-#: serializers/checks_serializer.py:49 tests/test_project.py:494
+#: serializers/checks_serializer.py:49 tests/test_project.py:495
 msgid "project.error.structure_checks.already_existing"
 msgstr "De structuur check was al aanwezig."
 
-#: serializers/checks_serializer.py:65 tests/test_project.py:528
+#: serializers/checks_serializer.py:65 tests/test_project.py:529
 msgid "project.error.structure_checks.extension_blocked_and_obligated"
 msgstr "Een extensie kan niet geblokkeerd en vereist zijn tegelijkertijd."
 
@@ -112,72 +112,72 @@ msgstr "Het veld 'time_limit' moet tussen 10 en 1000 liggen."
 msgid "extra_check.error.memory_limit"
 msgstr "Het veld 'memory_limit' moet tussen 100 en 1024 liggen."
 
-#: serializers/course_serializer.py:119
-msgid "courses.error.invitation_link"
-msgstr "De uitnodigingslink is niet uniek, probeer het opnieuw."
-
-#: serializers/course_serializer.py:126 serializers/course_serializer.py:143
-#: serializers/course_serializer.py:162 serializers/course_serializer.py:181
-#: serializers/course_serializer.py:200
+#: serializers/course_serializer.py:136 serializers/course_serializer.py:151
+#: serializers/course_serializer.py:170 serializers/course_serializer.py:189
+#: serializers/course_serializer.py:208
 msgid "courses.error.context"
 msgstr "De opleiding is niet meegeleverd als context."
 
-#: serializers/course_serializer.py:149 tests/test_locale.py:28
+#: serializers/course_serializer.py:157 tests/test_locale.py:28
 #: tests/test_locale.py:38
 msgid "courses.error.students.already_present"
 msgstr "De student bevindt zich al in de opleiding."
 
-#: serializers/course_serializer.py:153 serializers/course_serializer.py:172
-#: serializers/course_serializer.py:191 serializers/course_serializer.py:210
+#: serializers/course_serializer.py:161 serializers/course_serializer.py:180
+#: serializers/course_serializer.py:199 serializers/course_serializer.py:218
 msgid "courses.error.past_course"
 msgstr "De opleiding die men probeert te manipuleren is van een vorig jaar."
 
-#: serializers/course_serializer.py:168
+#: serializers/course_serializer.py:176
 msgid "courses.error.students.not_present"
 msgstr "De student bevindt zich niet in de opleiding."
 
-#: serializers/course_serializer.py:187
+#: serializers/course_serializer.py:195
 msgid "courses.error.teachers.already_present"
 msgstr "De lesgever bevindt zich al in de opleiding."
 
-#: serializers/course_serializer.py:206
+#: serializers/course_serializer.py:214
 msgid "courses.error.teachers.not_present"
 msgstr "De lesgever bevindt zich niet in de opleiding."
 
-#: serializers/course_serializer.py:214
+#: serializers/course_serializer.py:222
 msgid "courses.error.teachers.last_teacher"
 msgstr "De opleiding moet minstens één lesgever hebben."
 
-#: serializers/docker_serializer.py:19
+#: serializers/docker_serializer.py:18
+msgid "docker.errors.no_staff"
+msgstr "Gebruiker is alleen toegelaten om zichzelf als eigenaar op te geven"
+
+#: serializers/docker_serializer.py:31
 msgid "docker.errors.custom"
 msgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"
 
-#: serializers/group_serializer.py:49
+#: serializers/group_serializer.py:56
 msgid "group.errors.score_exceeds_max"
 msgstr "De score van de groep is groter dan de maximum score."
 
-#: serializers/group_serializer.py:59 serializers/group_serializer.py:89
+#: serializers/group_serializer.py:66 serializers/group_serializer.py:96
 msgid "group.error.context"
 msgstr "De groep is niet meegegeven als context waar dat nodig is."
 
-#: serializers/group_serializer.py:67 serializers/group_serializer.py:101
+#: serializers/group_serializer.py:74 serializers/group_serializer.py:108
 msgid "group.errors.locked"
 msgstr "De groep is momenteel vergrendeld."
 
-#: serializers/group_serializer.py:71
+#: serializers/group_serializer.py:78
 msgid "group.errors.full"
 msgstr "De groep is al vol."
 
-#: serializers/group_serializer.py:75
+#: serializers/group_serializer.py:82
 msgid "group.errors.not_in_course"
 msgstr ""
 "De student bevindt zich niet in de opleiding waartoe het project hoort."
 
-#: serializers/group_serializer.py:79
+#: serializers/group_serializer.py:86
 msgid "group.errors.already_in_group"
 msgstr "De student bevindt zich al in de groep."
 
-#: serializers/group_serializer.py:97
+#: serializers/group_serializer.py:104
 msgid "group.errors.not_present"
 msgstr "De student bevindt zich niet in de groep."
 
@@ -189,31 +189,31 @@ msgstr "Error tijdens de zip te overlopen."
 msgid "project.errors.context"
 msgstr "Het project is niet meegegeven als context waar dat nodig is."
 
-#: serializers/project_serializer.py:85
+#: serializers/project_serializer.py:86
 msgid "project.errors.start_date_in_past"
 msgstr "De startdatum van het project ligt in het verleden."
 
-#: serializers/project_serializer.py:99
+#: serializers/project_serializer.py:100
 msgid "project.errors.deadline_before_start_date"
 msgstr "De uiterste inleverdatum voor het project ligt voor de startdatum."
 
-#: serializers/project_serializer.py:132
+#: serializers/project_serializer.py:142
 msgid "project.errors.zip_structure"
 msgstr "Error tijdens de zip te overlopen."
 
-#: serializers/submission_serializer.py:68 tests/test_submission.py:333
+#: serializers/submission_serializer.py:96 tests/test_submission.py:275
 msgid "project.error.submissions.past_project"
 msgstr "De uiterste inleverdatum voor het project is gepasseerd."
 
-#: serializers/submission_serializer.py:71 tests/test_submission.py:404
+#: serializers/submission_serializer.py:99 tests/test_submission.py:346
 msgid "project.error.submissions.non_visible_project"
 msgstr "Het project is niet zichtbaar."
 
-#: serializers/submission_serializer.py:74 tests/test_submission.py:434
+#: serializers/submission_serializer.py:102 tests/test_submission.py:376
 msgid "project.error.submissions.archived_project"
 msgstr "Het project is gearchiveerd."
 
-#: serializers/submission_serializer.py:77
+#: serializers/submission_serializer.py:105
 msgid "project.error.submissions.no_files"
 msgstr "De indiening is leeg"
 
@@ -229,27 +229,27 @@ msgstr "De lesgever is successvol toegevoegd."
 msgid "teachers.success.destroy"
 msgstr "De lesgever is succesvol verwijderd."
 
-#: views/course_view.py:154
+#: views/course_view.py:137
 msgid "courses.success.assistants.add"
 msgstr "De assistent is succesvol toegevoegd aan de opleiding."
 
-#: views/course_view.py:181
+#: views/course_view.py:164
 msgid "courses.success.assistants.remove"
 msgstr "De assistent is succesvol verwijderd uit de opleiding."
 
-#: views/course_view.py:243
+#: views/course_view.py:226
 msgid "courses.success.students.add"
 msgstr "De student is succesvol toegevoegd aan de opleiding."
 
-#: views/course_view.py:264
+#: views/course_view.py:247
 msgid "courses.success.students.remove"
 msgstr "De student is succesvol verwijderd uit de opleiding."
 
-#: views/course_view.py:309
+#: views/course_view.py:292
 msgid "courses.success.teachers.add"
 msgstr "De lesgever is succesvol toegevoegd aan de opleiding."
 
-#: views/course_view.py:333
+#: views/course_view.py:316
 msgid "courses.success.teachers.remove"
 msgstr "De lesgever is succesvol verwijderd uit de opleiding."
 
@@ -280,3 +280,17 @@ msgstr "De student is successvol toegevoegd."
 #: views/student_view.py:45
 msgid "students.success.destroy"
 msgstr "De student is successvol verwijderd."
+
+#: views/submission_view.py:29
+msgid "submission.download.zip"
+msgstr "Geen zip bestand beschikbaar."
+
+#: views/submission_view.py:50
+msgid "extra_check_result.download.log"
+msgstr "Geen log bestand beschikbaar."
+
+#: views/submission_view.py:60
+#, fuzzy
+#| msgid "extra_check_result.download.log"
+msgid "extra_check_result.download.artifact"
+msgstr "Geen artifact beschikbaar."

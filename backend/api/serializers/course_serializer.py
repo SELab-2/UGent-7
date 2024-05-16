@@ -130,13 +130,6 @@ class CourseCloneSerializer(serializers.Serializer):
 class SaveInvitationLinkSerializer(serializers.Serializer):
     link_duration = serializers.IntegerField(required=True)
 
-    def validate(self, attrs):
-        # Check if there is no course with the same invitation link.
-        if Course.objects.filter(invitation_link=attrs["invitation_link"]).exists():
-            raise ValidationError(gettext("courses.error.invitation_link"))
-
-        return attrs
-
     def create(self, validated_data):
         # Save the invitation link and the expiration date.
         if "course" not in self.context:

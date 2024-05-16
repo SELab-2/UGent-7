@@ -18,7 +18,7 @@ describe('student type', () => {
         expect(student.last_enrolled).toBe(studentData.last_enrolled);
         expect(student.create_time).toStrictEqual(studentData.create_time);
         expect(student.last_login).toStrictEqual(studentData.last_login);
-        expect(student.studentId).toBe(studentData.studentId);
+        expect(student.student_id).toBe(studentData.student_id);
         expect(student.roles).toStrictEqual(studentData.roles);
         expect(student.courses).toStrictEqual(studentData.courses);
         expect(student.groups).toStrictEqual(studentData.groups);
@@ -39,7 +39,7 @@ describe('student type', () => {
         expect(student.last_enrolled).toBe(studentData.last_enrolled);
         expect(student.create_time).toStrictEqual(studentData.create_time);
         expect(student.last_login).toStrictEqual(studentData.last_login);
-        expect(student.studentId).toBe(studentData.studentId);
+        expect(student.student_id).toBe(studentData.student_id);
         expect(student.roles).toStrictEqual(studentData.roles);
         expect(student.courses).toStrictEqual(studentData.courses);
         expect(student.groups).toStrictEqual(studentData.groups);

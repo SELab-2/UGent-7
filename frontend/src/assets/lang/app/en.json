@@ -69,11 +69,21 @@
             "max_score": "Maximum score that can be achieved",
             "visibility": "Make project visible to students",
             "scoreVisibility": "Make score, when uploaded, automatically visible to students",
-            "dockerUpload": "Upload a Dockerfile",
             "submissionStructure": "Structure of how a submission should be made",
             "noStudents": "No students in this group",
             "locked": "Closed",
-            "unlocked": "Open"
+            "unlocked": "Open",
+            "extraChecks": {
+                "title": "Automatic checks on a submission",
+                "add": "New check",
+                "name": "Name",
+                "public": "Public",
+                "bashScript": "Bash script",
+                "dockerImage": "Docker image",
+                "timeLimit": "Time limit for execution (in seconds)",
+                "memoryLimit": "Memory limit for execution (in MB)",
+                "showLog": "Making the extra logs of the docker container visible to the students"
+            }
         },
         "submissions": {
             "title": "Submissions",
@@ -167,7 +177,8 @@
             "searchCourse": "Search a course",
             "createCourse": "Create a new course",
             "public": "Public",
-            "protected": "Protected"
+            "protected": "Protected",
+            "csv": "Download grades as a .csv file"
         },
         "card": {
             "open": "Details",
@@ -175,7 +186,8 @@
             "noSubmissions": "This project does not have any submissions",
             "submissions": "Submission | Submissions",
             "groups": "Group | Groups",
-            "testsSucceed": "Succeeded tests",
+            "structureTestsSucceed": "Succeeded structure tests",
+            "extraTestsSucceed": "Succeeded extra tests",
             "testsFail": "Failed tests",
             "submit": "Submit"
         },

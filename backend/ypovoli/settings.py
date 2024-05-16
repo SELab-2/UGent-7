@@ -24,9 +24,21 @@ django_stubs_ext.monkeypatch()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = environ.get("DJANGO_ROOT_DIR", "")
-MEDIA_ROOT = os.path.normpath(os.path.join("data/production"))
+MEDIA_ROOT = os.path.normpath(os.path.join("data"))
 
+# TESTING
 TESTING_BASE_LINK = "http://testserver"
+TEST_USER_DATA = {
+    "id": "1234",
+    "username": "test",
+    "email": "test@test",
+    "first_name": "test",
+    "last_name": "test",
+}
+TEST_USER_ATTRIBUTES = {
+    **TEST_USER_DATA,
+    "ugentStudentID": "1234"
+}
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
@@ -34,8 +46,8 @@ SECRET_KEY = environ.get("DJANGO_SECRET_KEY", "lnZZ2xHc6HjU5D85GDE3Nnu4CJsBnm")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get("DJANGO_DEBUG", "False").lower() in ["true", "1", "t"]
 DOMAIN_NAME = environ.get("DJANGO_DOMAIN_NAME", "localhost")
-ALLOWED_HOSTS = [DOMAIN_NAME]
-CSRF_TRUSTED_ORIGINS = ["https://" + DOMAIN_NAME]
+ALLOWED_HOSTS = [DOMAIN_NAME, "nginx"]
+CSRF_TRUSTED_ORIGINS = ["https://" + DOMAIN_NAME, "https://nginx"]
 
 # Application definition
 INSTALLED_APPS = [

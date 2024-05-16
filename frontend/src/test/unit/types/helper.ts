@@ -25,7 +25,7 @@ export function createStudent(studentData: any): Student {
         studentData.last_enrolled,
         studentData.create_time,
         studentData.last_login,
-        studentData.studentId,
+        studentData.student_id,
         studentData.roles.slice(),
         studentData.courses.slice(),
         studentData.groups.slice(),
@@ -156,7 +156,8 @@ export function createSubmissionStatus(submissionStatusData: any): SubmissionSta
     return new SubmissionStatus(
         submissionStatusData.non_empty_groups,
         submissionStatusData.groups_submitted,
-        submissionStatusData.submissions_passed,
+        submissionStatusData.structure_checks_passed,
+        submissionStatusData.extra_checks_passed,
     );
 }
 

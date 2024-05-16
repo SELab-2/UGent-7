@@ -1,17 +1,18 @@
 import json
 import os
 
-from api.tests.helpers import (create_course, create_file_extension,
-                               create_project, create_structure_check)
+from api.logic.parse_zip_files import parse_zip
+from api.tests.helpers import create_course, create_project
 from authentication.models import User
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from rest_framework.test import APITestCase
 
 
 class FileTestsTests(APITestCase):
     def setUp(self):
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             User.get_dummy_admin()
         )
         # Set up a temporary directory for MEDIA_ROOT during tests
@@ -22,84 +23,73 @@ class FileTestsTests(APITestCase):
         # Restore the original MEDIA_ROOT after tests
         settings.MEDIA_ROOT = self.old_media_root
 
-    # def test_parsing(self):
-    #     course = create_course(name="test course", academic_startyear=2024)
-    #     project = create_project(
-    #         group_size=5,
-    #         max_score=10,
-    #         name="test",
-    #         description="descr",
-    #         visible=True,
-    #         archived=False,
-    #         days=100,
-    #         course=course,
-    #     )
-    #     parse_zip_file(project=project, dir_path="structures/zip_struct1.zip")
+    def test_parsing(self):
+        course = create_course(name="test course", academic_startyear=2024)
+        project = create_project(
+            group_size=5,
+            max_score=10,
+            name="test",
+            description="descr",
+            visible=True,
+            archived=False,
+            days=100,
+            course=course,
+        )
 
-    #     response = self.client.get(
-    #         reverse("project-detail", args=[str(project.id)]), follow=True
-    #     )
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(response.accepted_media_type, "application/json")
+        memory_file = SimpleUploadedFile("zip_struct1.zip", open(
+            f"data/{settings.MEDIA_ROOT}/structures/zip_struct1.zip", "rb").read(), content_type='application/zip')
 
-    #     content_json = json.loads(response.content.decode("utf-8"))
+        parse_zip(project=project, zip_file=memory_file)
 
-    #     response = self.client.get(
-    #         content_json["structure_checks"], follow=True
-    #     )
+        response = self.client.get(
+            reverse("project-structure-checks", args=[str(project.id)]), follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(response.accepted_media_type, "application/json")
+        content_json = json.loads(response.content.decode("utf-8"))
 
-    #     content_json = json.loads(response.content.decode("utf-8"))
+        self.assertEqual(len(content_json), 6)
 
-    #     self.assertEqual(len(content_json), 7)
+        expected_project_url = settings.TESTING_BASE_LINK + reverse(
+            "project-detail", args=[str(project.id)]
+        )
 
-    #     expected_project_url = settings.TESTING_BASE_LINK + reverse(
-    #         "project-detail", args=[str(project.id)]
-    #     )
+        content = content_json[0]
+        self.assertEqual(content["path"], "folder_struct1/submap1/")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 2)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
 
-    #     content = content_json[0]
-    #     self.assertEqual(content["path"], ".")
-    #     self.assertEqual(content["project"], expected_project_url)
-    #     self.assertEqual(len(content["obligated_extensions"]), 0)
-    #     self.assertEqual(len(content["blocked_extensions"]), 0)
+        content = content_json[1]
+        self.assertEqual(content["path"], "folder_struct1/submap1/templates/")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 1)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
 
-    #     content = content_json[1]
-    #     self.assertEqual(content["path"], "folder_struct1")
-    #     self.assertEqual(content["project"], expected_project_url)
-    #     self.assertEqual(len(content["obligated_extensions"]), 1)
-    #     self.assertEqual(len(content["blocked_extensions"]), 0)
+        content = content_json[2]
+        self.assertEqual(content["path"], "folder_struct1/submap2/")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 1)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
 
-    #     content = content_json[2]
-    #     self.assertEqual(content["path"], "folder_struct1/submap1")
-    #     self.assertEqual(content["project"], expected_project_url)
-    #     self.assertEqual(len(content["obligated_extensions"]), 2)
-    #     self.assertEqual(len(content["blocked_extensions"]), 0)
+        content = content_json[3]
+        self.assertEqual(content["path"], "folder_struct1/submap2/src/")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 3)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
 
-    #     content = content_json[3]
-    #     self.assertEqual(content["path"], "folder_struct1/submap1/templates")
-    #     self.assertEqual(content["project"], expected_project_url)
-    #     self.assertEqual(len(content["obligated_extensions"]), 1)
-    #     self.assertEqual(len(content["blocked_extensions"]), 0)
+        content = content_json[4]
+        self.assertEqual(content["path"], "folder_struct1/submap3/")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 2)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
 
-    #     content = content_json[4]
-    #     self.assertEqual(content["path"], "folder_struct1/submap2")
-    #     self.assertEqual(content["project"], expected_project_url)
-    #     self.assertEqual(len(content["obligated_extensions"]), 1)
-    #     self.assertEqual(len(content["blocked_extensions"]), 0)
-
-    #     content = content_json[5]
-    #     self.assertEqual(content["path"], "folder_struct1/submap2/src")
-    #     self.assertEqual(content["project"], expected_project_url)
-    #     self.assertEqual(len(content["obligated_extensions"]), 3)
-    #     self.assertEqual(len(content["blocked_extensions"]), 0)
-
-    #     content = content_json[6]
-    #     self.assertEqual(content["path"], "folder_struct1/submap3")
-    #     self.assertEqual(content["project"], expected_project_url)
-    #     self.assertEqual(len(content["obligated_extensions"]), 2)
-    #     self.assertEqual(len(content["blocked_extensions"]), 0)
+        content = content_json[5]
+        self.assertEqual(content["path"], "folder_struct1/")
+        self.assertEqual(content["project"], expected_project_url)
+        self.assertEqual(len(content["obligated_extensions"]), 1)
+        self.assertEqual(len(content["blocked_extensions"]), 0)
 
     # def test_checking(self):
     #     course = create_course(name="test course", academic_startyear=2024)
@@ -126,43 +116,43 @@ class FileTestsTests(APITestCase):
     #     fileExtensionTSX = create_file_extension(extension="tsx")
 
     #     create_structure_check(
-    #         path=".",
+    #         path="",
     #         project=project,
     #         obligated_extensions=[],
     #         blocked_extensions=[])
 
     #     create_structure_check(
-    #         path="folder_struct1",
+    #         path="folder_struct1/",
     #         project=project,
     #         obligated_extensions=[fileExtensionHS],
     #         blocked_extensions=[])
 
     #     create_structure_check(
-    #         path="folder_struct1/submap1",
+    #         path="folder_struct1/submap1/",
     #         project=project,
     #         obligated_extensions=[fileExtensionPDF, fileExtensionDOCX],
     #         blocked_extensions=[])
 
     #     create_structure_check(
-    #         path="folder_struct1/submap1/templates",
+    #         path="folder_struct1/submap1/templates/",
     #         project=project,
     #         obligated_extensions=[fileExtensionLATEX],
     #         blocked_extensions=[])
 
     #     create_structure_check(
-    #         path="folder_struct1/submap2",
+    #         path="folder_struct1/submap2/",
     #         project=project,
     #         obligated_extensions=[fileExtensionMD],
     #         blocked_extensions=[])
 
     #     create_structure_check(
-    #         path="folder_struct1/submap2/src",
+    #         path="folder_struct1/submap2/src/",
     #         project=project,
     #         obligated_extensions=[fileExtensionPY, fileExtensionHPP, fileExtensionCPP],
     #         blocked_extensions=[])
 
     #     create_structure_check(
-    #         path="folder_struct1/submap3",
+    #         path="folder_struct1/submap3/",
     #         project=project,
     #         obligated_extensions=[fileExtensionTS, fileExtensionTSX],
     #         blocked_extensions=[])

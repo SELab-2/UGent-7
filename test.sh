@@ -92,7 +92,7 @@ fi
 exit_code=0
 
 echo "-----------------"
-if [ $vitest_exit -ne 0 ] || [ $django_exit -ne 0 ]; then
+if [ $cypress_exit -ne 0 ] || [ $vitest_exit -ne 0 ] || [ $django_exit -ne 0 ]; then
     echo "Tests failed:"
     if [ $cypress_exit -ne 0 ]; then
         echo "  - Cypress"

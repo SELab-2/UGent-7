@@ -1,13 +1,14 @@
 import json
+
+from api.tests.helpers import create_course, create_faculty, create_teacher
+from authentication.models import User
 from django.urls import reverse
 from rest_framework.test import APITestCase
-from api.tests.helpers import create_teacher, create_course, create_faculty
-from authentication.models import User
 
 
 class TeacherModelTests(APITestCase):
     def setUp(self) -> None:
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             User.get_dummy_admin()
         )
 
@@ -19,7 +20,7 @@ class TeacherModelTests(APITestCase):
         response_root = self.client.get(reverse("teacher-list"), follow=True)
         self.assertEqual(response_root.status_code, 200)
         # Assert that the response is JSON
-        self.assertEqual(response_root.accepted_media_type, "application/json")
+        self.assertEqual(response_root.accepted_media_type, "application/json")  # type: ignore
         # Parse the JSON content from the response
         content_json = json.loads(response_root.content.decode("utf-8"))
         # Assert that the parsed JSON is an empty list
@@ -40,7 +41,7 @@ class TeacherModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -74,7 +75,7 @@ class TeacherModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -112,7 +113,7 @@ class TeacherModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -146,7 +147,7 @@ class TeacherModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -164,7 +165,7 @@ class TeacherModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -203,7 +204,7 @@ class TeacherModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -221,7 +222,7 @@ class TeacherModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
