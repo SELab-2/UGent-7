@@ -33,7 +33,7 @@ const items = computed(() => [
     },
     {
         icon: 'file',
-        label: t('admin.docker_images.title'),
+        label: t('admin.dockerImages.title'),
         route: 'admin-dockerImages',
     },
 ]);

@@ -63,10 +63,10 @@
             "edit": "Bewerk project",
             "name": "Projectnaam",
             "description": "Beschrijving",
-            "start_date": "Start project",
-            "group_size": "Aantal studenten per groep (1 voor individueel project)",
-            "number_of_groups": "Aantal groepen (optioneel, anders #studenten / grootte groep)",
-            "max_score": "Maximale te behalen score",
+            "startDate": "Start project",
+            "numberStudentsGroup": "Aantal studenten per groep (1 voor individueel project)",
+            "numberOfGroups": "Aantal groepen (optioneel, anders #studenten / grootte groep)",
+            "maxScore": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
             "scoreVisibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
@@ -129,7 +129,7 @@
                     "no_role": "Geen",
                     "placeholder": "Zoek een gebruiker op naam",
                     "title": "Zoek gebuikers om aan dit vak toe te voegen",
-                    "results": "{0} gebruikers gevonden voor ingestelde filters"
+                    "results": "1 gebruiker gevonden voor ingestelde filters | {count} gebruikers gevonden voor ingestelde filters"
                 }
             },
             "search": {
@@ -255,24 +255,8 @@
         "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak.",
         "shareCourse": "Door het activeren van de invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Activeer invitatielink\" klikt zal deze link actief worden."
     },
-    "protectedCourses": {
-        "screen1": {
-            "title": "Bemachtigen link",
-            "content": "Professoren kunnen kiezen om hun vakken niet publiek te maken. Vraag de prof om een invitatielink te delen om te kunnen toetreden tot het vak."
-        },
-        "screen2": {
-            "title": "Vak zoeken",
-            "content": "Gebruik de link om het vak te zoeken. Als je het vak niet kan vinden, kan je de prof vragen om een nieuwe link te delen."
-
-        },
-        "screen3": {
-            "title": "Inschrijven",
-            "content": "Schrijf je in voor het vak. Je kan nu een overzicht raadplegen van alle lopende projecten, deadlines, ..."
-        }
-    },
     "admin": {
         "title": "Beheerder",
-        "keyword": "Trefwoord",
         "id": "ID",
         "list": "Lijst",
         "add": "Voeg toe",
@@ -290,20 +274,10 @@
             "roles": "Functies"
         },
         "user": "Gebruiker",
-        "assistants": {
-            "title": "Assistenten"
-        },
         "assistant": "Assistent",
-        "students": {
-            "title": "Studenten"
-        },
         "student": "Student",
-        "teachers": {
-            "title": "Proffen"
-        },
         "teacher": "Prof",
-        "catalog": "Catalogus",
-        "docker_images": {
+        "dockerImages": {
             "title": "Docker Images",
             "name_input": "Naam van docker image",
             "name": "Naam",
@@ -311,7 +285,7 @@
             "public": "Publiek",
             "private": "Privaat"
         },
-        "none_found": "Geen overeenkomende data gevonden.",
+        "noneFound": "Geen overeenkomende data gevonden.",
         "loading": "Aan het laden. Wacht een momentje aub."
     },
     "primevue": {

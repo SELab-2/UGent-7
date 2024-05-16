@@ -38,8 +38,8 @@ const selected = ref<string>(t(selectOptions.value[0]));
 
 const columns = ref([
     { field: 'id', header: 'admin.id' },
-    { field: 'name', header: 'admin.docker_images.name' },
-    { field: 'owner', header: 'admin.docker_images.owner' },
+    { field: 'name', header: 'admin.dockerImages.name' },
+    { field: 'owner', header: 'admin.dockerImages.owner' },
 ]);
 // const publicOptions = ref<Array<{ value: any; label: string }>>([
 //     { value: true, label: 'public' },
@@ -67,7 +67,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
 <template>
     <AdminLayout>
         <Title>
-            <div class="gap-3 mb-3">{{ t('admin.docker_images.title') }}</div>
+            <div class="gap-3 mb-3">{{ t('admin.dockerImages.title') }}</div>
         </Title>
         <Body class="w-full">
             <SelectButton class="mb-3 gap-3 w-3" v-model="selected" :options="selectOptions.map(t)" />
@@ -111,7 +111,7 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                     <Column
                         key="public"
                         field="public"
-                        :header="t('admin.docker_images.public')"
+                        :header="t('admin.dockerImages.public')"
                         :style="{ maxWidth: '3rem' }"
                     >
                         <template #body="{ data }">
@@ -119,8 +119,8 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                                 class="mb-3 gap-3"
                                 :model-value="data.public"
                                 @click="() => toggleSafetyGuard(data)"
-                                :on-label="t('admin.docker_images.public')"
-                                :off-label="t('admin.docker_images.private')"
+                                :on-label="t('admin.dockerImages.public')"
+                                :off-label="t('admin.dockerImages.private')"
                             />
                         </template>
                     </Column>
@@ -130,11 +130,11 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                 <InputText
                     class="mb-3 gap-3"
                     v-model:model-value="addItem.name"
-                    :placeholder="t('admin.docker_images.name_input')"
+                    :placeholder="t('admin.dockerImages.name_input')"
                 />
                 <div v-if="addItem.name.length > 0">
                     <div class="flex align-items-center mb-3 gap-3">
-                        <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
+                        <label class="font-semibold w-12rem">{{ t('admin.dockerImages.public') }}</label>
                         <InputSwitch v-model:model-value="addItem.public" />
                     </div>
                     <FileUpload class="mb-3 gap-3" :custom-upload="true" @uploader="upload" :file-limit="1">

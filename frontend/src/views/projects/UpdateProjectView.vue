@@ -179,7 +179,7 @@ async function submitProject(): Promise<void> {
                     <div class="grid">
                         <!-- Start date of the project -->
                         <div class="field col">
-                            <label for="projectStartDate">{{ t('views.projects.start_date') }}</label>
+                            <label for="projectStartDate">{{ t('views.projects.startDate') }}</label>
                             <Calendar
                                 id="projectStartDate"
                                 class="w-full"
@@ -212,7 +212,7 @@ async function submitProject(): Promise<void> {
                         <!-- Group size for the project -->
                         <div class="field col">
                             <label for="groupSize">
-                                {{ t('views.projects.group_size') }}
+                                {{ t('views.projects.numberStudentsGroup') }}
                             </label>
                             <InputNumber id="groupSize" class="w-full" v-model="form.groupSize" :min="1" />
                             <ErrorMessage :field="v$.groupSize" />
@@ -220,7 +220,7 @@ async function submitProject(): Promise<void> {
 
                         <!-- Max score for the project -->
                         <div class="field col">
-                            <label for="maxScore">{{ t('views.projects.max_score') }}</label>
+                            <label for="maxScore">{{ t('views.projects.maxScore') }}</label>
                             <InputNumber id="maxScore" class="w-full" v-model="form.maxScore" :min="1" />
                             <ErrorMessage :field="v$.maxScore" />
                         </div>

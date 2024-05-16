@@ -101,7 +101,7 @@ defineExpose({ fetch });
             </template>
             <template #empty>
                 <slot name="empty">
-                    {{ t('admin.none_found') }}
+                    {{ t('admin.noneFound') }}
                 </slot>
             </template>
             <template #loading>

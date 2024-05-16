@@ -63,7 +63,7 @@ export class Project {
      * @returns The days left until the deadline of the project.
      */
     public getDaysLeft(): number {
-        return moment(this.deadline).diff(moment(), 'days');
+        return moment(this.deadline).startOf('day').diff(moment().startOf('day'), 'days');
     }
 
     /**
