@@ -35,9 +35,8 @@ const { createTeacher, deleteTeacher } = useTeacher();
 const { filter, onFilter } = useFilter(getUserFilters(query));
 
 /* Initialization */
-onMounted(async () => {
-    fillCreators();
-    fillDestroyers();
+onMounted(() => {
+    fillCreatorsDestroyers();
 });
 
 /* State */
@@ -61,24 +60,19 @@ const roleOptions = computed(() => {
     return roles.toSpliced(0, 1);
 });
 
+/* Functions */
 /**
- * FillCreators fills a dictionary that links a role to the function that creates an instance of that role in the backend
+ * FillCreatorsDestroyers fills 2 dictionaries: a dictionary that links a role to the function that creates an instance
+ * of the role in the backend AND a dictionary that links a role to the function that destroys an instance of that role
+ * in the backend.
  */
-const fillCreators = (): void => {
+const fillCreatorsDestroyers = (): void => {
     for (let i = 1; i < roles.length; i++) {
         const role: Role = roles[i];
         creators.value[role] = createFunctions.value[i - 1];
-    }
-};
-/**
- * FillDestroyers fills a dictionary that links a role to the function that destroys an instance of that role in the backend
- */
-const fillDestroyers = (): void => {
-    for (let i = 1; i < roles.length; i++) {
-        const role: Role = roles[i];
         destroyers.value[role] = destroyFunctions.value[i - 1];
     }
-};
+}
 /**
  * A function to that shows a popup to edit the User item
  * @param data This contains the attributes of the User item to be edited.
