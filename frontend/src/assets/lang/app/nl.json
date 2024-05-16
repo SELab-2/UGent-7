@@ -80,7 +80,7 @@
                 "dockerImage": "Docker image",
                 "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",
                 "memoryLimit": "Geheugenlimiet voor de uitvoering (in MB)",
-                "showLog": "Toon logbestand aan studenten"
+                "showLog": "Maak de extra logs van de docker container zichtbaar voor de studenten"
             }
         },
         "submissions": {
@@ -174,7 +174,8 @@
             "searchCourse": "Zoek een vak",
             "createCourse": "Maak een vak",
             "public": "Publiek",
-            "protected": "Besloten"
+            "protected": "Besloten",
+            "csv": "Download punten als een .csv bestand"
         },
         "card": {
             "open": "Details",

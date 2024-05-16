@@ -104,7 +104,7 @@ const saveItem = async (): Promise<void> => {
                 if (role === 'student') {
                     const data: Record<string, any> = {
                         ...editItem.value,
-                        studentId: editItem.value.id,
+                        student_id: editItem.value.id,
                     };
                     await func(data);
                 } else {

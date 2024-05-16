@@ -6,7 +6,7 @@
     academic_startyear: 2024
     excerpt: This course is an introduction to computer science.
     description: This course will teach you the basics of computer science by showing you the wonders of Golang.
-    faculty: "Wetenschappen"
+    faculty: Wetenschappen
     parent_course: null
     private_course: false
     invitation_link: null
@@ -18,7 +18,7 @@
     academic_startyear: 2024
     excerpt: This course is an introduction to biology.
     description: This course will teach you the basics of biology by showing you the wonders of the human body.
-    faculty: "Wetenschappen"
+    faculty: Wetenschappen
     parent_course: null
     private_course: false
     invitation_link: null
@@ -185,32 +185,32 @@
 
 # MARK: Students
 - model: api.student
-  pk: 0
+  pk: 6
   fields:
     is_active: true
-    student_id: 0
+    student_id: 6
     courses:
       - 0
       - 1
 - model: api.student
-  pk: 1
+  pk: 7
   fields:
     is_active: true
-    student_id: 1
+    student_id: 7
     courses:
       - 0
 - model: api.student
-  pk: 2
+  pk: 8
   fields:
     is_active: true
-    student_id: 2
+    student_id: 8
     courses:
       - 0
 - model: api.student
-  pk: 3
+  pk: 9
   fields:
     is_active: true
-    student_id: 3
+    student_id: 9
     courses:
       - 0
 
@@ -219,18 +219,18 @@
   pk: 0
   fields:
     project: 0
-    score:
+    score: 0
     students:
-      - 0
-      - 1
+      - 6
+      - 7
 - model: api.group
   pk: 1
   fields:
     project: 0
-    score:
+    score: 0
     students:
-      - 2
-      - 3
+      - 8
+      - 9
 - model: api.group
   pk: 2
   fields:
@@ -241,53 +241,53 @@
   pk: 3
   fields:
     project: 1
-    score:
+    score: 0
     students:
-      - 0
-      - 1
-      - 2
+      - 6
+      - 7
+      - 8
 - model: api.group
   pk: 4
   fields:
     project: 1
-    score:
+    score: 0
     students:
-      - 3
+      - 9
 - model: api.group
   pk: 5
   fields:
     project: 2
     score: 5
     students:
-      - 0
+      - 6
 - model: api.group
   pk: 6
   fields:
     project: 2
     score: 8
     students:
-      - 1
+      - 7
 - model: api.group
   pk: 7
   fields:
     project: 2
     score: 13
     students:
-      - 2
+      - 8
 - model: api.group
   pk: 8
   fields:
     project: 2
     score: 18
     students:
-      - 3
+      - 9
 - model: api.group
   pk: 9
   fields:
     project: 3
-    score:
+    score: 0
     students:
-      - 0
+      - 6
 
 # MARK: Submissions
 - model: api.submission
@@ -327,84 +327,108 @@
 - model: api.checkresult
   pk: 1
   fields:
-    polymorphic_ctype: 20
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
     submission: 1
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 2
   fields:
-    polymorphic_ctype: 19
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 1
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 3
   fields:
-    polymorphic_ctype: 19
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 1
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 4
   fields:
-    polymorphic_ctype: 20
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
     submission: 2
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 5
   fields:
-    polymorphic_ctype: 19
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 2
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 6
   fields:
-    polymorphic_ctype: 19
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 2
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 7
   fields:
-    polymorphic_ctype: 20
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
     submission: 3
     result: FAILED
     error_message: OBLIGATED_EXTENSION_NOT_FOUND
 - model: api.checkresult
   pk: 8
   fields:
-    polymorphic_ctype: 19
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 3
     result: FAILED
     error_message: FAILED_STRUCTURE_CHECK
 - model: api.checkresult
   pk: 9
   fields:
-    polymorphic_ctype: 19
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 3
     result: FAILED
     error_message: FAILED_STRUCTURE_CHECK
 - model: api.checkresult
   pk: 10
   fields:
-    polymorphic_ctype: 20
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
     submission: 4
     result: SUCCESS
     error_message: null
 - model: api.checkresult
   pk: 11
   fields:
-    polymorphic_ctype: 19
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 4
     result: FAILED
     error_message: CHECK_ERROR
 - model: api.checkresult
   pk: 12
   fields:
-    polymorphic_ctype: 19
+    polymorphic_ctype:
+      - api
+      - extracheckresult
     submission: 4
     result: SUCCESS
     error_message: null
@@ -468,3 +492,40 @@
   fields:
     extra_check: 1
     log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+
+# MARK: Teachers
+- model: api.teacher
+  pk: 1
+  fields:
+    is_active: true
+    courses:
+      - 0
+- model: api.teacher
+  pk: 2
+  fields:
+    is_active: true
+    courses:
+      - 0
+      - 1
+
+# MARK: Assistants
+- model: api.assistant
+  pk: 3
+  fields:
+    is_active: true
+    courses:
+      - 0
+      - 1
+- model: api.assistant
+  pk: 4
+  fields:
+    is_active: true
+    courses:
+      - 0
+      - 1
+- model: api.assistant
+  pk: 5
+  fields:
+    is_active: true
+    courses:
+      - 0

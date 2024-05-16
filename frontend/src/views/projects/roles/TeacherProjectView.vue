@@ -5,6 +5,7 @@ import { type Teacher } from '@/types/users/Teacher.ts';
 import { type Project } from '@/types/Project.ts';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
 import ProjectMeter from '@/components/projects/ProjectMeter.vue';
+import DownloadCSVButton from '@/components/projects/DownloadCSVButton.vue';
 
 /* Props */
 defineProps<{
@@ -35,6 +36,11 @@ defineProps<{
         </div>
         <div class="col-12 md:col-4">
             <ProjectMeter :project="project" />
+        </div>
+        <div class="col-12 md:col-4">
+            <template v-if="project !== null">
+                <DownloadCSVButton :project="project" />
+            </template>
         </div>
     </div>
 </template>

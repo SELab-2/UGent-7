@@ -7,6 +7,8 @@ from api.models.submission import (CheckResult, ExtraCheckResult,
                                    StructureCheckResult, Submission)
 from django.core.files import File
 from django.db.models import Max
+from django.http import HttpRequest
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -29,6 +31,17 @@ class ExtraCheckResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraCheckResult
         exclude = ["polymorphic_ctype"]
+
+    def to_representation(self, instance: ExtraCheckResult) -> dict | None:
+        request: HttpRequest | None = self.context.get('request')
+        if request is not None:
+            representation: dict = super().to_representation(instance)
+            representation["log_file"] = request.build_absolute_uri(
+                reverse("extra-check-result-detail", args=[str(instance.id)]) + "log/"
+            )
+            return representation
+
+        return None
 
 
 class CheckResultPolymorphicSerializer(PolymorphicSerializer):
@@ -56,6 +69,22 @@ class SubmissionSerializer(serializers.ModelSerializer):
                 "default": 0,
             }
         }
+
+    def to_representation(self, instance: Submission) -> dict | None:
+        request: HttpRequest | None = self.context.get('request')
+        if request is not None:
+            representation: dict = super().to_representation(instance)
+            representation['zip'] = request.build_absolute_uri(
+                reverse("submission-detail", args=[str(instance.id)]) + "zip/"
+            )
+            return representation
+
+        return None
+
+    def get_zip(self, obj):
+        return self.context["request"].build_absolute_uri(
+            reverse("submission-detail", args=[str(obj.id)]) + "zip/"
+        )
 
     def validate(self, attrs):
 

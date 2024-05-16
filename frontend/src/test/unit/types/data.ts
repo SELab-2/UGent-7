@@ -26,7 +26,7 @@ export const studentData = {
     courses: [],
     create_time: new Date(),
     last_login: null,
-    studentId: '1',
+    student_id: '1',
     groups: [],
 };
 

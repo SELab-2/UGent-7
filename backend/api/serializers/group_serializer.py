@@ -1,6 +1,8 @@
 from api.models.group import Group
 from api.models.student import Student
-from api.permissions.role_permissions import is_student
+from api.models.assistant import Assistant
+from api.models.teacher import Teacher
+from api.permissions.role_permissions import is_student, is_assistant, is_teacher
 from api.serializers.project_serializer import ProjectSerializer
 from api.serializers.student_serializer import StudentIDSerializer
 from django.utils.translation import gettext
@@ -30,12 +32,17 @@ class GroupSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
 
-        # If you are not a student, you can always see the score
-        if is_student(self.context["request"].user):
-            # Student can not see the score if they are not part of the group, or it is not visible yet
-            if not instance.students.filter(id=self.context["request"].user.student.id).exists() or\
-                    not instance.project.score_visible:
+        user = self.context["request"].user
+        course_id = instance.project.course.id
 
+        # If you are not a student, you can always see the score
+        if is_student(user):
+            student_in_course = user.student.courses.filter(id=course_id).exists()
+            # Student can not see the score if they are not part of the course associated with group and
+            # neither an assistant or a teacher,
+            # or it is not visible yet when they are part of the course associated with the group
+            if not student_in_course and not is_assistant(user) and not is_teacher(user) or \
+                    not instance.project.score_visible and student_in_course:
                 data.pop("score")
 
         return data
