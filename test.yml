@@ -60,7 +60,7 @@ services:
     container_name: celery
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: sh -c "./setup.sh && celery -A ypovoli worker -l DEBUG"
     volumes:
       - $BACKEND_DIR:/code
