@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 23:58+0200\n"
+"POT-Creation-Date: 2024-05-15 19:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,7 +144,11 @@ msgstr "De lesgever bevindt zich niet in de opleiding."
 msgid "courses.error.teachers.last_teacher"
 msgstr "De opleiding moet minstens één lesgever hebben."
 
-#: serializers/docker_serializer.py:19
+#: serializers/docker_serializer.py:18
+msgid "docker.errors.no_staff"
+msgstr "Gebruiker is alleen toegelaten om zichzelf als eigenaar op te geven"
+
+#: serializers/docker_serializer.py:31
 msgid "docker.errors.custom"
 msgstr "Gebruiker is niet toegelaten om publieke afbeeldingen te maken"
 
@@ -197,19 +201,19 @@ msgstr "De uiterste inleverdatum voor het project ligt voor de startdatum."
 msgid "project.errors.zip_structure"
 msgstr "Error tijdens de zip te overlopen."
 
-#: serializers/submission_serializer.py:99 tests/test_submission.py:275
+#: serializers/submission_serializer.py:96 tests/test_submission.py:275
 msgid "project.error.submissions.past_project"
 msgstr "De uiterste inleverdatum voor het project is gepasseerd."
 
-#: serializers/submission_serializer.py:102 tests/test_submission.py:346
+#: serializers/submission_serializer.py:99 tests/test_submission.py:346
 msgid "project.error.submissions.non_visible_project"
 msgstr "Het project is niet zichtbaar."
 
-#: serializers/submission_serializer.py:105 tests/test_submission.py:376
+#: serializers/submission_serializer.py:102 tests/test_submission.py:376
 msgid "project.error.submissions.archived_project"
 msgstr "Het project is gearchiveerd."
 
-#: serializers/submission_serializer.py:108
+#: serializers/submission_serializer.py:105
 msgid "project.error.submissions.no_files"
 msgstr "De indiening is leeg"
 
@@ -277,11 +281,11 @@ msgstr "De student is successvol toegevoegd."
 msgid "students.success.destroy"
 msgstr "De student is successvol verwijderd."
 
-#: views/submission_view.py:30
+#: views/submission_view.py:29
 msgid "submission.download.zip"
 msgstr "Geen zip bestand beschikbaar."
 
-#: views/submission_view.py:51
+#: views/submission_view.py:50
 msgid "extra_check_result.download.log"
 msgstr "Geen log bestand beschikbaar."
 

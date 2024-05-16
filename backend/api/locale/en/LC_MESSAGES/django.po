@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 23:58+0200\n"
+"POT-Creation-Date: 2024-05-15 19:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,7 +144,11 @@ msgstr "The teacher is not present in the course."
 msgid "courses.error.teachers.last_teacher"
 msgstr "The course must have at least one teacher."
 
-#: serializers/docker_serializer.py:19
+#: serializers/docker_serializer.py:18
+msgid "docker.errors.no_staff"
+msgstr "User is not allowed to assign othher owners than himself to the image."
+
+#: serializers/docker_serializer.py:31
 msgid "docker.errors.custom"
 msgstr "User is not allowed to create public images"
 
@@ -196,19 +200,19 @@ msgstr "The deadline of the project lies before the start date of the project."
 msgid "project.errors.zip_structure"
 msgstr "Error while parsing the provided zip."
 
-#: serializers/submission_serializer.py:99 tests/test_submission.py:275
+#: serializers/submission_serializer.py:96 tests/test_submission.py:275
 msgid "project.error.submissions.past_project"
 msgstr "The deadline of the project has already passed."
 
-#: serializers/submission_serializer.py:102 tests/test_submission.py:346
+#: serializers/submission_serializer.py:99 tests/test_submission.py:346
 msgid "project.error.submissions.non_visible_project"
 msgstr "The project is currently in a non-visible state."
 
-#: serializers/submission_serializer.py:105 tests/test_submission.py:376
+#: serializers/submission_serializer.py:102 tests/test_submission.py:376
 msgid "project.error.submissions.archived_project"
 msgstr "The project is archived."
 
-#: serializers/submission_serializer.py:108
+#: serializers/submission_serializer.py:105
 msgid "project.error.submissions.no_files"
 msgstr "The submission is empty."
 
@@ -276,11 +280,11 @@ msgstr "The student was successfully added."
 msgid "students.success.destroy"
 msgstr "The student was successfully destroyed."
 
-#: views/submission_view.py:30
+#: views/submission_view.py:29
 msgid "submission.download.zip"
 msgstr "No zip file available."
 
-#: views/submission_view.py:51
+#: views/submission_view.py:50
 msgid "extra_check_result.download.log"
 msgstr "No log file available."
 
