@@ -237,6 +237,10 @@
                         "success": "{0} has been successfully removed from the course.",
                         "error": "An error occurred while removing {0} from the course."
                     }
+                },
+                "create": {
+                    "success": "The course '{0}' has successfully been added.",
+                    "error": "An error occurred while creating the course '{0}'."
                 }
             },
             "login": {

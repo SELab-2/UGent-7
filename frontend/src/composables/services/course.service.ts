@@ -6,6 +6,8 @@ import { type Response } from '@/types/Response.ts';
 import { type CoursePaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 import { type User } from '@/types/users/User.ts';
+import { useMessagesStore } from '@/store/messages.store.ts';
+import { i18n } from "@/config/i18n.ts";
 
 interface CoursesState {
     pagination: Ref<CoursePaginatorResponse | null>;
@@ -74,21 +76,31 @@ export function useCourses(): CoursesState {
     }
 
     async function createCourse(courseData: Course): Promise<void> {
+        const { t } = i18n.global;
+        const { addSuccessMessage } = useMessagesStore();
+
         const endpoint = endpoints.courses.index;
-        await create<Course>(
-            endpoint,
-            {
-                id: courseData.id,
-                name: courseData.name,
-                description: courseData.description,
-                excerpt: courseData.excerpt,
-                academic_startyear: courseData.academic_startyear,
-                private_course: courseData.private_course,
-                faculty: courseData.faculty?.id,
-            },
-            course,
-            Course.fromJSON,
-        );
+        try {
+            await create<Course>(
+                endpoint,
+                {
+                    id: courseData.id,
+                    name: courseData.name,
+                    description: courseData.description,
+                    excerpt: courseData.excerpt,
+                    academic_startyear: courseData.academic_startyear,
+                    private_course: courseData.private_course,
+                    faculty: courseData.faculty?.id,
+                },
+                course,
+                Course.fromJSON,
+            );
+            addSuccessMessage(
+                t('toasts.messages.success'),
+                t('toasts.messages.courses.create.success', [course.value?.name]));
+        } catch {
+
+        }
     }
 
     async function updateCourse(courseData: Course): Promise<void> {
