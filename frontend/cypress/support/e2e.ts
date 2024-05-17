@@ -22,5 +22,11 @@ import './commands'
 before(() => {
     // log in a user of every type
     // non-staff: student (basic login); student + assistant + teacher
+    cy.request('POST', '/api/auth/test-user/student/')
+    cy.request('POST', '/api/auth/cas/logout/')
+    cy.request('POST', '/api/auth/test-user/multi/')
+    cy.request('POST', '/api/auth/cas/logout/')
     // staff user
+    cy.request('POST', '/api/auth/test-user/admin/')
+    cy.request('POST', '/api/auth/cas/logout/')
 })
