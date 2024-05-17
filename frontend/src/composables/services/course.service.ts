@@ -1,13 +1,13 @@
 import { Course } from '@/types/Course.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
+import { i18n } from "@/config/i18n.ts";
 import { get, getList, create, patch, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
 import { type Response } from '@/types/Response.ts';
 import { type CoursePaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 import { type User } from '@/types/users/User.ts';
 import { useMessagesStore } from '@/store/messages.store.ts';
-import { i18n } from "@/config/i18n.ts";
 
 interface CoursesState {
     pagination: Ref<CoursePaginatorResponse | null>;
