@@ -239,6 +239,16 @@
                         "success": "{0} werd succesvol verwijderd uit het vak.",
                         "error": "Er is een fout opgetreden tijdens het verwijderen van {0} uit het vak."
                     }
+                },
+                "create": {
+                    "success": "Het vak '{0}' werd succesvol aangemaakt.",
+                    "error": "Er is een fout opgetreden tijdens het aanmaken van het vak '{0}'."
+                }
+            },
+            "projects": {
+                "create": {
+                    "success": "Het project '{0}' werd succesvol aangemaakt.",
+                    "error": "Er is een fout opgetreden tijdens het aanmaken van het project '{0}'."
                 }
             },
             "login": {
