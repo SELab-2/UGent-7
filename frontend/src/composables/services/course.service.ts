@@ -1,7 +1,7 @@
 import { Course } from '@/types/Course.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { i18n } from "@/config/i18n.ts";
+import { i18n } from '@/config/i18n.ts';
 import { get, getList, create, patch, deleteId, getPaginatedList } from '@/composables/services/helpers.ts';
 import { type Response } from '@/types/Response.ts';
 import { type CoursePaginatorResponse } from '@/types/filter/Paginator.ts';
@@ -97,10 +97,9 @@ export function useCourses(): CoursesState {
             );
             addSuccessMessage(
                 t('toasts.messages.success'),
-                t('toasts.messages.courses.create.success', [course.value?.name]));
-        } catch {
-
-        }
+                t('toasts.messages.courses.create.success', [course.value?.name]),
+            );
+        } catch {}
     }
 
     async function updateCourse(courseData: Course): Promise<void> {

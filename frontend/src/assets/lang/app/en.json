@@ -239,14 +239,20 @@
                     }
                 },
                 "create": {
-                    "success": "The course '{0}' has successfully been created.",
-                    "error": "An error occurred while creating the course '{0}'."
+                    "success": "The course '{0}' has successfully been created",
+                    "error": "An error occurred while creating the course '{0}'"
                 }
             },
             "projects": {
                 "create": {
-                    "success": "The project '{0}' has successfully been created.",
-                    "error": "An error occurred while creating the project '{0}'."
+                    "success": "The project '{0}' has successfully been created",
+                    "error": "An error occurred while creating the project '{0}'"
+                }
+            },
+            "submissions": {
+                "create": {
+                    "success": "The submission has successfully been submitted",
+                    "error": "An error occurred while submitting the submission"
                 }
             },
             "login": {
