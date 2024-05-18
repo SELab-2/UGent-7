@@ -1,16 +1,17 @@
 import json
-from django.urls import reverse
-from django.conf import settings
-from rest_framework.test import APITestCase
+
 from api.models.student import Student
 from api.models.teacher import Teacher
-from api.tests.helpers import create_course, create_project, create_student, create_group
+from api.tests.helpers import (create_course, create_group, create_project,
+                               create_student)
 from authentication.models import User
+from django.urls import reverse
+from rest_framework.test import APITestCase
 
 
 class GroupModelTests(APITestCase):
     def setUp(self) -> None:
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             User.get_dummy_admin()
         )
 
@@ -33,7 +34,7 @@ class GroupModelTests(APITestCase):
             reverse("group-detail", args=[str(group.id)]), follow=True
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -59,7 +60,7 @@ class GroupModelTests(APITestCase):
             reverse("group-detail", args=[str(group.id)]), follow=True
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -98,7 +99,7 @@ class GroupModelTests(APITestCase):
             reverse("group-detail", args=[str(group.id)]), follow=True
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         content_json = json.loads(response.content.decode("utf-8"))
 
@@ -111,7 +112,7 @@ class GroupModelTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Assert that the response is JSON
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Parse the JSON content from the response
         content_json = json.loads(response.content.decode("utf-8"))
@@ -140,7 +141,7 @@ class GroupModelTestsAsTeacher(APITestCase):
             email="Test@gmail.com"
         )
 
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             self.user
         )
 
@@ -168,7 +169,7 @@ class GroupModelTestsAsTeacher(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Make sure the student is in the group now
         self.assertTrue(group.students.filter(id=student.id).exists())
@@ -197,7 +198,7 @@ class GroupModelTestsAsTeacher(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Make sure the student is not in the group anymore
         self.assertFalse(group.students.filter(id=student.id).exists())
@@ -222,7 +223,7 @@ class GroupModelTestsAsTeacher(APITestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.accepted_media_type, "application/json")
+        self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
 
         # Make sure the score of the group is updated
         group.refresh_from_db()
@@ -252,7 +253,7 @@ class GroupModelTestsAsStudent(APITestCase):
             email="Bobke.Peeters@gmail.com"
         )
 
-        self.client.force_authenticate(
+        self.client.force_authenticate(  # type: ignore
             self.user
         )
 

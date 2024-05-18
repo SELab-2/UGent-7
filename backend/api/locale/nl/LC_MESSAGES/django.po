@@ -148,6 +148,11 @@ msgstr "De lesgever bevindt zich niet in de opleiding."
 msgid "courses.error.teachers.last_teacher"
 msgstr "De opleiding moet minstens één lesgever hebben."
 
+#: serializers/docker_serializer.py:18
+msgid "docker.errors.no_staff"
+msgstr "Gebruiker is alleen toegelaten om zichzelf als eigenaar op te geven"
+
+#: serializers/docker_serializer.py:31
 #: serializers/course_serializer.py:116
 msgid "courses.error.invitation_link"
 msgstr "De uitnodigingslink is niet uniek, probeer het opnieuw."
@@ -287,3 +292,17 @@ msgstr "De student is successvol toegevoegd."
 #: views/student_view.py:45
 msgid "students.success.destroy"
 msgstr "De student is successvol verwijderd."
+
+#: views/submission_view.py:29
+msgid "submission.download.zip"
+msgstr "Geen zip bestand beschikbaar."
+
+#: views/submission_view.py:50
+msgid "extra_check_result.download.log"
+msgstr "Geen log bestand beschikbaar."
+
+#: views/submission_view.py:60
+#, fuzzy
+#| msgid "extra_check_result.download.log"
+msgid "extra_check_result.download.artifact"
+msgstr "Geen artifact beschikbaar."

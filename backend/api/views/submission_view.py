@@ -5,16 +5,57 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.mixins import RetrieveModelMixin
+from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from ..models.submission import Submission
 from ..serializers.feedback_serializer import FeedbackSerializer
 from ..serializers.submission_serializer import SubmissionSerializer
 
-
-# TODO: Permission to ask for logs
-class SubmissionViewSet(RetrieveModelMixin, viewsets.GenericViewSet):
+class SubmissionViewSet(RetrieveModelMixin, GenericViewSet):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
+    permission_classes = [SubmissionPermission]
+
+    @action(detail=True)
+    def zip(self, request, **__):
+        submission: Submission = self.get_object()
+
+        if not submission.zip:
+            return Response({"message": _("submission.download.zip")}, status=404)
+
+        return FileResponse(open(submission.zip.path, "rb"), as_attachment=True)
+
+
+class StructureCheckResultViewSet(RetrieveModelMixin, GenericViewSet):
+    queryset = StructureCheckResult.objects.all()
+    serializer_class = StructureCheckResultSerializer
+    permission_classes = [StructureCheckResultPermission]
+
+
+class ExtraCheckResultViewSet(RetrieveModelMixin, GenericViewSet):
+    queryset = ExtraCheckResult.objects.all()
+    serializer_class = ExtraCheckResultSerializer
+    permission_classes = [ExtraCheckResultPermission]
+
+    @action(detail=True, permission_classes=[IsAdminUser | ExtraCheckResultArtifactPermission])
+    def log(self, request, **__):
+        extra_check_result: ExtraCheckResult = self.get_object()
+
+        if not extra_check_result.log_file:
+            return Response({"message": _("extra_check_result.download.log")}, status=404)
+
+        return FileResponse(open(extra_check_result.log_file.path, "rb"), as_attachment=True, filename="log.txt")
+
+    @action(detail=True, permission_classes=[IsAdminUser | ExtraCheckResultLogPermission])
+    def artifact(self, request, **__):
+        extra_check_result: ExtraCheckResult = self.get_object()
+
+        if not extra_check_result.artifact:
+            return Response({"message": _("extra_check_result.download.artifact")}, status=404)
+
+        return FileResponse(open(extra_check_result.artifact.path, "rb"), as_attachment=True, filename="artifact.zip")
 
     @action(detail=True, methods=["get"])
     def feedback(self, request, **_) -> Response:
@@ -45,14 +86,3 @@ class SubmissionViewSet(RetrieveModelMixin, viewsets.GenericViewSet):
             })
 
         return Response(serializer.errors, status=400)
-
-    @action(detail=True, methods=["get"])
-    def download(self, request: Request, **_) -> FileResponse:
-        """Downloads the submission"""
-        submission = self.get_object()
-        file: File = submission.zip
-
-        response = FileResponse(file.file.open(), filename="submission_" + str(submission.pk) + ".zip")
-        response["Conent-Length"] = file.file.size
-        response['Content-Disposition'] = 'attachment; filename="%s"' % f'submission_{str(submission.pk)}.zip'
-        return response

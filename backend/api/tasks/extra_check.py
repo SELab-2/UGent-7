@@ -1,3 +1,5 @@
+import io
+import os
 import shutil
 import zipfile
 from time import sleep
@@ -11,6 +13,7 @@ from api.logic.get_file_path import (get_docker_image_tag,
 from api.models.docker import StateEnum as DockerStateEnum
 from api.models.submission import ErrorMessageEnum, ExtraCheckResult, StateEnum
 from celery import shared_task
+from django.core.files import File
 from django.core.files.base import ContentFile
 from docker.models.containers import Container
 from docker.types import LogConfig
@@ -48,12 +51,16 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
 
     submission_directory = "/".join(extra_check_result.submission.zip.path.split("/")
                                     [:-1]) + "/submission/"  # Directory where the files will be extracted
+    artifacts_directory = f"{submission_directory}/artifacts"  # Directory where the artifacts will be stored
     extra_check_name = extra_check_result.extra_check.file.name.split("/")[-1]  # Name of the extra check file
     submission_uuid = extra_check_result.submission.zip.path.split("/")[-2]  # Uuid of the submission
 
     # Unzip the files
     with zipfile.ZipFile(extra_check_result.submission.zip.path, 'r') as zip:
         zip.extractall(submission_directory)
+
+    # Create artifacts directory
+    os.makedirs(artifacts_directory, exist_ok=True)
 
     container: Container | None = None
 
@@ -64,7 +71,7 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
         # Create and run container
         container = cast(Container, client.containers.run(
             image=get_docker_image_tag(extra_check_result.extra_check.docker_image),
-            command=f"bash {extra_check_name}",
+            command=f"sh {extra_check_name}",
             detach=True,
             log_config=LogConfig(type=LogConfig.types.JSON, config={"max-size": "50kb"}),
             mem_limit=f"{extra_check_result.extra_check.memory_limit}m",
@@ -73,10 +80,13 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             stdout=True,
             stderr=True,
             volumes={
-                get_submission_full_dir_path(extra_check_result.submission, submission_uuid): {
+                f"{get_submission_full_dir_path(extra_check_result.submission)}/submission": {
                     "bind": "/submission", "mode": "rw"
                 },
-                get_extra_check_file_full_path(extra_check_result.extra_check, extra_check_name): {
+                f"{get_submission_full_dir_path(extra_check_result.submission)}/submission/artifacts": {
+                    "bind": "/submission/artifacts", "mode": "rw"
+                },
+                get_extra_check_file_full_path(extra_check_result.extra_check): {
                     "bind": f"/submission/{extra_check_name}", "mode": "ro"
                 }
             },
@@ -141,17 +151,32 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
         extra_check_result.error_message = ErrorMessageEnum.UNKNOWN
 
     # Cleanup and data saving
+    # Start by saving any logs
     finally:
-        logs: str = "Could not retrieve logs"
+        logs: str
         if container:
             try:
                 logs = container.logs(stream=False, timestamps=False).decode()
                 container.remove(v=False)
             except docker.errors.APIError:
-                pass
+                logs = "Could not retrieve logs"
+        else:
+            logs = "Container error"
 
         extra_check_result.log_file.save(submission_uuid, content=ContentFile(logs), save=False)
-        extra_check_result.save()
+
+    # Zip and save any possible artifacts
+    memory_zip = io.BytesIO()
+    if os.listdir(artifacts_directory):
+        with zipfile.ZipFile(memory_zip, 'w') as zip:
+            for root, _, files in os.walk(artifacts_directory):
+                for file in files:
+                    zip.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), artifacts_directory))
+
+    memory_zip.seek(0)
+    extra_check_result.artifact.save(submission_uuid, ContentFile(memory_zip.read()), False)
+
+    extra_check_result.save()
 
     # Remove directory
     try:

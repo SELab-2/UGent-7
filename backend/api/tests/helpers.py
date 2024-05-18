@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from api.models.assistant import Assistant
-from api.models.checks import FileExtension, StructureCheck
+from api.models.checks import ExtraCheck, FileExtension, StructureCheck
 from api.models.course import Course
+from api.models.docker import DockerImage
 from api.models.group import Group
 from api.models.project import Project
 from api.models.student import Student
@@ -15,7 +18,7 @@ def create_faculty(name: str | int) -> Faculty:
     return Faculty.objects.create(id=name, name=name)
 
 
-def create_user(id: str | int, first_name: str, last_name: str, email: str, faculty: list[Faculty] = None) -> User:
+def create_user(id: str | int, first_name: str, last_name: str, email: str, faculties: list[Faculty] | None = None) -> User:
     username = f"{first_name.lower()}{last_name.lower()}"
 
     user = User.objects.create(
@@ -26,14 +29,14 @@ def create_user(id: str | int, first_name: str, last_name: str, email: str, facu
         email=email
     )
 
-    if faculty is not None:
-        for faculty in faculty:
+    if faculties is not None:
+        for faculty in faculties:
             user.faculties.add(faculty)
 
     return user
 
 
-def create_admin(id: str | int, first_name: str, last_name: str, email: str, faculty: list[Faculty] = None):
+def create_admin(id: str | int, first_name: str, last_name: str, email: str, faculty: list[Faculty] | None = None):
     """Create an Admin with the given arguments."""
     admin = create_user(id, first_name, last_name, email, faculty)
     admin.make_admin()
@@ -47,8 +50,8 @@ def create_student(
         email: str,
         student_id: str = "",
         is_active: bool = True,
-        faculty: list[Faculty] = None,
-        courses: list[Course] = None
+        faculty: list[Faculty] | None = None,
+        courses: list[Course] | None = None
 ) -> Student:
     """Create a student with the given arguments."""
     username = f"{first_name.lower()}{last_name.lower()}"
@@ -143,6 +146,11 @@ def create_structure_check(path, project, obligated_extensions, blocked_extensio
     return check
 
 
+def create_extra_check(project, docker_image, file):
+    """Create an ExtraCheck with the given arguments."""
+    return ExtraCheck.objects.create(name="test extra check", project=project, docker_image=docker_image, file=file)
+
+
 def create_project(name, description, days, course, max_score=5, group_size=5, visible=True, archived=False):
     """Create a Project with the given arguments."""
     deadline = timezone.now() + timezone.timedelta(days=days)
@@ -159,7 +167,12 @@ def create_project(name, description, days, course, max_score=5, group_size=5, v
     )
 
 
-def create_course(name: str | int, academic_startyear: int, description: str = None, parent_course: Course = None) -> Course:
+def create_course(
+        name: str | int,
+        academic_startyear: int,
+        description: str | None = None,
+        parent_course: Course | None = None
+) -> Course:
     """Create a Course with the given arguments."""
     return Course.objects.create(
         name=name,
@@ -174,10 +187,25 @@ def create_group(project: Project, score: int = 0) -> Group:
     return Group.objects.create(project=project, score=score)
 
 
-def create_submission(submission_number: int, group: Group, structure_checks_passed: bool) -> Submission:
+def create_submission(group: Group, zip: str) -> Submission:
     """Create a Submission with the given arguments."""
 
     return Submission.objects.create(
-        submission_number=submission_number,
         group=group,
+        zip=zip,
+    )
+
+
+def create_docker_image(file: str, owner: User):
+    """Create a DockerImage with the given arguments."""
+    return DockerImage.objects.create(name="test docker image", owner=owner, file=file)
+
+
+def create_past_project(name, description, days, course, days_start_date):
+    """Create a Project with the given arguments."""
+    deadline = timezone.now() + timedelta(days=days)
+    start_date = timezone.now() + timedelta(days=days_start_date)
+
+    return Project.objects.create(
+        name=name, description=description, deadline=deadline, course=course, score_visible=True, start_date=start_date
     )

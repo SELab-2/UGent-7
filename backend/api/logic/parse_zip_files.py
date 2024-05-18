@@ -1,3 +1,4 @@
+import os
 import zipfile
 
 from api.models.checks import FileExtension, StructureCheck
@@ -13,7 +14,16 @@ def parse_zip(project: Project, zip_file: InMemoryUploadedFile) -> bool:
 
     with zipfile.ZipFile(zip_file, 'r') as zip:
         files = zip.namelist()
-        directories = [file.filename for file in zip.infolist() if file.is_dir()]
+        directories = [file for file in files if file.endswith('/')]
+
+    # Check if all directories start the same
+    common_prefix = os.path.commonprefix(directories)
+    if '/' in common_prefix:
+        prefixes = common_prefix.split('/')
+        if common_prefix[-1] != '/':
+            prefixes = prefixes[:-1]
+
+        directories += [prefix + '/' for prefix in prefixes]
 
     # Add for each directory a structure check
     for directory in directories:

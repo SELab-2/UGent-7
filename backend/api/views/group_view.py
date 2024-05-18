@@ -41,7 +41,6 @@ class GroupViewSet(CreateModelMixin,
         )
         return Response(serializer.data)
 
-    # TODO: I can access this endpoint unauthorized
     @action(detail=True, permission_classes=[IsAdminUser | GroupSubmissionPermission])
     def submissions(self, request, **_):
         """Returns a list of submissions for the given group"""

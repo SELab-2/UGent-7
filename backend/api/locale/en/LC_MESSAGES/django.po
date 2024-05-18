@@ -148,6 +148,11 @@ msgstr "The teacher is not present in the course."
 msgid "courses.error.teachers.last_teacher"
 msgstr "The course must have at least one teacher."
 
+#: serializers/docker_serializer.py:18
+msgid "docker.errors.no_staff"
+msgstr "User is not allowed to assign othher owners than himself to the image."
+
+#: serializers/docker_serializer.py:31
 #: serializers/course_serializer.py:116
 msgid "courses.error.invitation_link"
 msgstr "The invitation link is not unique, please try again."
@@ -286,3 +291,15 @@ msgstr "The student was successfully added."
 #: views/student_view.py:45
 msgid "students.success.destroy"
 msgstr "The student was successfully destroyed."
+
+#: views/submission_view.py:29
+msgid "submission.download.zip"
+msgstr "No zip file available."
+
+#: views/submission_view.py:50
+msgid "extra_check_result.download.log"
+msgstr "No log file available."
+
+#: views/submission_view.py:60
+msgid "extra_check_result.download.artifact"
+msgstr "No artifact available."

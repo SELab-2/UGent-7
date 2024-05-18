@@ -10,9 +10,9 @@ from api.permissions.role_permissions import IsTeacher, is_teacher
 from api.serializers.assistant_serializer import (AssistantIDSerializer,
                                                   AssistantSerializer)
 from api.serializers.course_serializer import (CourseCloneSerializer,
-                                               SaveInvitationLinkSerializer,
                                                CourseSerializer,
                                                CreateCourseSerializer,
+                                               SaveInvitationLinkSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
                                                TeacherJoinSerializer,
@@ -39,7 +39,6 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     permission_classes = [IsAdminUser | CoursePermission]
 
-    # TODO: Creating should return the info of the new object and not a message "created" (General TODO)
     def create(self, request: Request, *_):
         """Override the create method to add the teacher to the course"""
         serializer = CreateCourseSerializer(data=request.data, context={"request": request})

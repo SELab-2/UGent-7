@@ -5,7 +5,7 @@ import { type Teacher } from '@/types/users/Teacher.ts';
 import { type Project } from '@/types/Project.ts';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
 import ProjectMeter from '@/components/projects/ProjectMeter.vue';
-import StructureCheckTreeView from '@/components/structure_checks/StructureCheckTreeView.vue';
+import DownloadCSVButton from '@/components/projects/DownloadCSVButton.vue';
 
 /* Props */
 defineProps<{
@@ -37,7 +37,11 @@ defineProps<{
         <div class="col-12 md:col-4">
             <ProjectMeter :project="project" />
         </div>
-        <StructureCheckTreeView v-if="project" :projectId="`${project.id}`" :editable="false"> </StructureCheckTreeView>
+        <div class="col-12 md:col-4">
+            <template v-if="project !== null">
+                <DownloadCSVButton :project="project" />
+            </template>
+        </div>
     </div>
 </template>
 

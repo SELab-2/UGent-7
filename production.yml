@@ -34,7 +34,7 @@ x-common-keys-selab: &common-keys-selab
 services:
   nginx:
     <<: *common-keys-selab
-    image: nginx:latest
+    image: nginx:alpine-slim
     container_name: nginx_prod
     ports:
       - 80:80
@@ -62,7 +62,7 @@ services:
     container_name: backend_prod
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     command: sh -c "./setup.sh && gunicorn --config gunicorn_config.py ypovoli.wsgi:application"
     depends_on:
       - postgres
@@ -80,10 +80,11 @@ services:
     container_name: celery_prod
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     command: celery -A ypovoli worker -l ERROR
     volumes:
-      - ${BACKEND_DIR}:/code
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/overlay2:/var/lib/docker/overlay2
     depends_on:
       - backend
       - redis
@@ -96,3 +97,10 @@ services:
       dockerfile: Dockerfile.prod
     depends_on:
       - backend
+
+  docs:
+    <<: *common-keys-selab
+    container_name: docs_prod
+    build:
+      context: $DOCS_DIR
+      dockerfile: Dockerfile.prod

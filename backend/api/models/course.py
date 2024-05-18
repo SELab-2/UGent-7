@@ -8,6 +8,7 @@ from django.db import models
 
 if TYPE_CHECKING:
     from api.models.assistant import Assistant
+    from api.models.project import Project
     from api.models.student import Student
     from api.models.teacher import Teacher
     from django.db.models.manager import RelatedManager
@@ -95,5 +96,6 @@ class Course(models.Model):
 
     if TYPE_CHECKING:
         assistants: RelatedManager['Assistant']
+        projects: RelatedManager['Project']
         students: RelatedManager['Student']
         teachers: RelatedManager['Teacher']

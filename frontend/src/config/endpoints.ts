@@ -81,6 +81,9 @@ export const endpoints = {
     feedbacks: {
         retrieve: '/api/feedback/{id}/',
         bySubmission: '/api/submissions/{submissionId}/feedback/',
-    }
-
+    },
+    extraChecks: {
+        retrieve: '/api/extra-checks/{id}/',
+        byProject: '/api/projects/{projectId}/extra_checks/',
+    },
 };

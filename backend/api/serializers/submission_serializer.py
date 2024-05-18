@@ -1,14 +1,14 @@
 import io
 import zipfile
 
-from rest_framework.reverse import reverse
-
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import (CheckResult, ExtraCheckResult,
                                    StructureCheckResult, Submission)
 from django.core.files import File
 from django.db.models import Max
+from django.http import HttpRequest
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -32,6 +32,20 @@ class ExtraCheckResultSerializer(serializers.ModelSerializer):
         model = ExtraCheckResult
         exclude = ["polymorphic_ctype"]
 
+    def to_representation(self, instance: ExtraCheckResult) -> dict | None:
+        request: HttpRequest | None = self.context.get('request')
+        if request is not None:
+            representation: dict = super().to_representation(instance)
+            representation["log_file"] = request.build_absolute_uri(
+                reverse("extra-check-result-detail", args=[str(instance.id)]) + "log/"
+            )
+            representation["artifact"] = request.build_absolute_uri(
+                reverse("extra-check-result-detail", args=[str(instance.id)]) + "artifact/"
+            )
+            return representation
+
+        return None
+
 
 class CheckResultPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
@@ -48,7 +62,6 @@ class SubmissionSerializer(serializers.ModelSerializer):
     )
 
     results = CheckResultPolymorphicSerializer(many=True, read_only=True)
-    zip = serializers.SerializerMethodField()
 
     class Meta:
         model = Submission
@@ -60,12 +73,21 @@ class SubmissionSerializer(serializers.ModelSerializer):
             }
         }
 
-    def get_zip(self, obj):
-        if obj.zip:
-            request = self.context.get("request")
-            if request:
-                return request.build_absolute_uri(reverse('submission-download', args=[obj.pk]))
+    def to_representation(self, instance: Submission) -> dict | None:
+        request: HttpRequest | None = self.context.get('request')
+        if request is not None:
+            representation: dict = super().to_representation(instance)
+            representation['zip'] = request.build_absolute_uri(
+                reverse("submission-detail", args=[str(instance.id)]) + "zip/"
+            )
+            return representation
+
         return None
+
+    def get_zip(self, obj):
+        return self.context["request"].build_absolute_uri(
+            reverse("submission-detail", args=[str(obj.id)]) + "zip/"
+        )
 
     def validate(self, attrs):
 

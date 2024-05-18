@@ -35,7 +35,7 @@ services:
   nginx:
     <<: *common-keys-selab
     container_name: nginx
-    image: nginx:latest
+    image: nginx:alpine-slim
     ports:
       - 80:80
       - 443:443
@@ -52,7 +52,7 @@ services:
     container_name: backend
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: sh -c "./setup.sh; python manage.py runsslserver 0.0.0.0:8000"
     volumes:
       - ${BACKEND_DIR}:/code
@@ -63,7 +63,7 @@ services:
     container_name: celery
     build:
       context: $BACKEND_DIR
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: sh -c "./setup.sh && celery -A ypovoli worker -l DEBUG"
     volumes:
       - ${BACKEND_DIR}:/code
@@ -84,6 +84,16 @@ services:
       - ${FRONTEND_DIR}:/app
     depends_on:
       - backend
+
+  docs:
+    <<: *common-keys-selab
+    container_name: docs
+    build:
+      context: $DOCS_DIR
+      dockerfile: Dockerfile.dev
+    command: sh -c "npm install && npm run host"
+    volumes:
+      - ${DOCS_DIR}:/docs
 
   redis:
     <<: *common-keys-selab

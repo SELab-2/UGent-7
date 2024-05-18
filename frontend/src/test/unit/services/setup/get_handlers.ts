@@ -86,27 +86,10 @@ export const getHandlers = [
         const project = projects.find((x) => x.id === params.id);
         const groupIds = project !== null && project !== undefined ? project.groups : [];
         const submissionIds = project !== null && project !== undefined ? project.submissions : [];
-        const subGroupIds = Array.from(
-            new Set(submissions.filter((x) => submissionIds.includes(x.id)).map((x) => x.group)),
-        );
 
-        // Filter submissions for each subgroup and get the submission with the highest number
-        const subgroupSubmissions = subGroupIds.map((groupId) => {
-            const submissionsForGroup = submissions.filter((submission) => submission.group === groupId);
-            if (submissionsForGroup.length > 0) {
-                return submissionsForGroup.reduce((maxSubmission, currentSubmission) => {
-                    return currentSubmission.submission_number > maxSubmission.submission_number
-                        ? currentSubmission
-                        : maxSubmission;
-                });
-            } else {
-                return null;
-            }
-        });
         return HttpResponse.json({
             groups_submitted: new Set(submissions.filter((x) => submissionIds.includes(x.id)).map((x) => x.group)).size,
             non_empty_groups: groups.filter((x) => groupIds.includes(x.id) && x.students.length > 0).length,
-            submissions_passed: subgroupSubmissions.filter((x) => x?.structureChecks_passed).length,
         });
     }),
     http.get(baseUrl + endpoints.structureChecks.byProject.replace('{projectId}', ':id'), ({ params }) => {

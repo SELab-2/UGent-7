@@ -9,7 +9,9 @@ from api.views.feedback_view import FeedbackViewSet
 from api.views.group_view import GroupViewSet
 from api.views.project_view import ProjectViewSet
 from api.views.student_view import StudentViewSet
-from api.views.submission_view import SubmissionViewSet
+from api.views.submission_view import (ExtraCheckResultViewSet,
+                                       StructureCheckResultViewSet,
+                                       SubmissionViewSet)
 from api.views.teacher_view import TeacherViewSet
 from api.views.user_view import UserViewSet
 from django.urls import include, path
@@ -30,10 +32,11 @@ router.register(r"extra-checks", ExtraCheckViewSet, basename="extra-check")
 router.register(r"file-extensions", FileExtensionViewSet, basename="file-extension")
 router.register(r"faculties", FacultyViewSet, basename="faculty")
 router.register(r"docker-images", DockerImageViewSet, basename="docker-image")
+router.register(r"structure-check-results", StructureCheckResultViewSet, basename="structure-check-result")
+router.register(r"extra-check-results", ExtraCheckResultViewSet, basename="extra-check-result")
 router.register(r"feedback", FeedbackViewSet, basename="feedback")
 
 
 urlpatterns = [
-    path('submissions/<int:pk>/download/', SubmissionViewSet.as_view({'get': 'download'}), name='submission-download'),
     path("", include(router.urls)),
 ]
