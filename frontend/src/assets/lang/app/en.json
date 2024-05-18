@@ -209,6 +209,21 @@
             "student": "Student",
             "assistant": "Assistant",
             "teacher": "Teacher"
+        },
+        "article": {
+            "admin": "The admin",
+            "assistant": "The assistant",
+            "course": "The course",
+            "docker": "The docker image",
+            "extraCheck": "The extra check",
+            "faculty": "The faculty",
+            "group": "The group",
+            "project": "The project",
+            "structureCheck": "The structure check",
+            "student": "The student",
+            "submission": "The submission",
+            "teacher": "The teacher",
+            "user": "The user"
         }
     },
     "helpers": {
@@ -219,7 +234,7 @@
             "success": "Success",
             "error": "Error",
             "unknown": "An unknown error has occurred.",
-            "create": "The object has successfully been created",
+            "create": "{type} has successfully been created",
             "courses": {
                 "enrollment": {
                     "success": "You have been successfully enrolled for the course '{0}'.",

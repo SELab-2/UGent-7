@@ -211,6 +211,21 @@
             "student": "Student",
             "assistant": "Assistent",
             "teacher": "Professor"
+        },
+        "article": {
+            "admin": "De admin",
+            "assistant": "De assistent",
+            "course": "Het vak",
+            "docker": "De docker image",
+            "extraCheck": "De extra check",
+            "faculty": "De faculteit",
+            "group": "De groep",
+            "project": "Het project",
+            "structureCheck": "The structuurcheck",
+            "student": "De student",
+            "submission": "De indiening",
+            "teacher": "De professor",
+            "user": "De gebruiker"
         }
     },
     "helpers": {
@@ -221,7 +236,7 @@
             "success": "Succes",
             "error": "Fout",
             "unknown": "Er is een onbekende fout opgetreden.",
-            "create": "Het object werd succesvol aangemaakt",
+            "create": "{type} werd succesvol aangemaakt",
             "courses": {
                 "enrollment": {
                     "success": "Je bent succesvol ingeschreven voor het vak '{0}'.",
