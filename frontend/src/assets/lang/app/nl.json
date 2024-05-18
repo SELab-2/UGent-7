@@ -246,8 +246,8 @@
             "admin": {
                 "save": {
                     "error": {
-                        "title": "Ongeldige Opsla Operatie",
-                        "detail": "U probeert een item op te slaan zonder dit te selecteren."
+                        "title": "Ongeldige opsla operatie",
+                        "detail": "U probeert een item op te slaan zonder dit te selecteren"
                     }
                 }
             }
