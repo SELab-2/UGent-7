@@ -64,10 +64,11 @@ class GroupSubmissionPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
         user: User = request.user
         group_id = view.kwargs.get('pk')
-        group: Group | None = Group.objects.get(id=group_id) if group_id else None
 
-        if group is None:
+        if not group_id:
             return True
+
+        group: Group = Group.objects.get(id=group_id)
 
         # Teachers and assistants of that course can view all submissions
         if is_teacher(user):

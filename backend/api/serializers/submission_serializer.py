@@ -61,6 +61,10 @@ class SubmissionSerializer(serializers.ModelSerializer):
         many=False, read_only=True, view_name="group-detail"
     )
 
+    feedback = serializers.HyperlinkedIdentityField(
+        many=True, read_only=True, view_name="feedback-detail"
+    )
+
     results = CheckResultPolymorphicSerializer(many=True, read_only=True)
 
     class Meta:

@@ -12,6 +12,8 @@ class ProjectPermission(BasePermission):
     def has_permission(self, request: Request, view: ViewSet) -> bool:
         """Check if user has permission to view a general project endpoint."""
         user: User = request.user
+        if request.method in SAFE_METHODS:
+            return True
 
         # We only allow teachers and assistants to create new projects.
         return is_teacher(user) or is_assistant(user)
