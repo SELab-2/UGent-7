@@ -219,7 +219,7 @@
             "success": "Success",
             "error": "Error",
             "unknown": "An unknown error has occurred.",
-            "create": "The {type} has successfully been created",
+            "create": "The object has successfully been created",
             "courses": {
                 "enrollment": {
                     "success": "You have been successfully enrolled for the course '{0}'.",

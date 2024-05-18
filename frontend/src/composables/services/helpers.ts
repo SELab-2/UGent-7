@@ -55,8 +55,16 @@ export async function create<T>(
     }
 }
 
+/**
+ * Create an item and display toast message when successful stating the creation has been successful.
+ *
+ * @param endpoint
+ * @param data
+ * @param ref
+ * @param fromJson
+ * @param contentType
+ */
 export async function createToast<T>(
-    type: string,
     endpoint: string,
     data: any,
     ref: Ref<T | null>,
@@ -68,7 +76,7 @@ export async function createToast<T>(
 
     try {
         await create<T>(endpoint, data, ref, fromJson, contentType)
-        addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.create', { type: type }));
+        addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.create'));
     } catch (e) {
         throw e
     }
