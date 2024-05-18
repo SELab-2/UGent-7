@@ -18,7 +18,6 @@ const { project, getProjectByID } = useProject();
 onMounted(async () => {
     await getProjectByID(params.projectId as string);
 });
-
 </script>
 
 <template>
@@ -29,7 +28,7 @@ onMounted(async () => {
         </Title>
 
         <!-- Project form -->
-        <ProjectForm :course="project.course" :project="project" v-if="project !== null"/>
+        <ProjectForm :course="project.course" :project="project" v-if="project !== null" />
     </BaseLayout>
 </template>
 

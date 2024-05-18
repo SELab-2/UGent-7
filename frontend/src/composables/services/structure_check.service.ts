@@ -31,7 +31,7 @@ export function useStructureCheck(): StructureCheckState {
         await create<StructureCheck>(
             endpoint,
             {
-                name: structureCheckData.name,
+                path: structureCheckData.path,
             },
             structureCheck,
             StructureCheck.fromJSON,

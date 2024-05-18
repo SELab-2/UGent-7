@@ -42,11 +42,12 @@ const model = defineModel<string>();
         margin-bottom: 1rem !important;
     }
 
-    ul, ol {
+    ul,
+    ol {
         margin: 1rem 0;
 
         li {
-            margin-bottom: .5rem;
+            margin-bottom: 0.5rem;
         }
     }
 }

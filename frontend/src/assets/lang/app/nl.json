@@ -37,7 +37,7 @@
         },
         "calendar": {
             "title": "Kalender",
-            "noProjects": "Geen projecten op geselecteerde datum."
+            "noProjects": "Geen projecten op geselecteerde datum. \uD83E\uDD73"
         },
         "projects": {
             "all": "Alle projecten",
@@ -116,9 +116,11 @@
             "year": "Academiejaar",
             "enroll": "Inschrijven",
             "leave": "Uitschrijven",
-            "noProjects": "Geen projecten beschikbaar voor dit vak",
+            "noProjects": "Geen projecten beschikbaar voor dit vak \uD83D\uDE2D",
             "teachersAndAssistants": {
-                "title": "Lesgevers gelinkt aan dit vak",
+                "title": "Lesgevers",
+                "enroll": "Voeg toe als {0}",
+                "leave": "Verwijder uit vak",
                 "edit": "Bewerk gebruikers",
                 "search": {
                     "search": "Zoeken",
@@ -126,7 +128,7 @@
                     "noRole": "Geen",
                     "placeholder": "Zoek een gebruiker op naam",
                     "title": "Zoek gebuikers om aan dit vak toe te voegen",
-                    "results": "1 gebruiker gevonden voor ingestelde filters | {count} gebruikers gevonden voor ingestelde filters"
+                    "results": "\uD83D\uDD0E 1 gebruiker gevonden voor ingestelde filters | \uD83D\uDD0E {count} gebruikers gevonden voor ingestelde filters",
                 }
             },
             "search": {
@@ -135,7 +137,7 @@
                 "year": "Academiejaar",
                 "placeholder": "Zoek een vak op naam",
                 "title": "Zoek een vak",
-                "results": "1 vak gevonden voor ingestelde filters | {count} vakken gevonden voor ingestelde filters"
+                "results": "\uD83D\uDD0E 1 vak gevonden voor ingestelde filters | \uD83D\uDD0E {count} vakken gevonden voor ingestelde filters"
             },
             "share": {
                 "title": "Activeer invitatielink",
@@ -171,7 +173,7 @@
         "card": {
             "open": "Details",
             "newProject": "Nieuw project",
-            "noSubmissions": "Dit project heeft geen indieningen",
+            "noSubmissions": "Dit project heeft geen indieningen \uD83D\uDE2D",
             "submissions": "Indiening | Indieningen",
             "groups": "Groep | Groepen",
             "structureTestsSucceed": "Geslaagde structuur testen",
@@ -181,15 +183,16 @@
         },
         "list": {
             "noProjects": {
-                "student": "Geen lopende projecten gevonden voor alle ingeschreven vakken. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
-                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent. Maak een nieuw project voor een vak met onderstaande knop."
+                "student": "Geen lopende projecten gevonden voor alle ingeschreven vakken \uD83D\uDE2D. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
+                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent . \uD83D\uDE2D. Maak een nieuw project voor een vak met onderstaande knop."
             },
             "noCourses": {
-                "student": "Geen vakken gevonden. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
-                "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop.",
-                "search": "Geen vakken gevonden voor de gegeven zoekcriteria."
+                "student": "Geen vakken gevonden \uD83D\uDE2D. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
+                "teacher": "Geen vakken gevonden \uD83D\uDE2D. Maak een vak aan met onderstaande knop.",
+                "search": "Geen vakken gevonden voor de gegeven zoekcriteria \uD83D\uDE2D."
             },
-            "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
+            "noResults": "Geen resultaten \uD83D\uDE2D.",
+            "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen \uD83E\uDD73.",
             "selectCourse": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
         }
@@ -283,7 +286,7 @@
             "owner": "Eigenaar ID",
             "public": "Publiek"
         },
-        "noneFound": "Geen overeenkomende data gevonden.",
+        "noneFound": "Geen overeenkomende data gevonden \uD83D\uDE2D.",
         "loading": "Aan het laden. Wacht even aub.",
         "safeGuard": "Bent u het zeker?"
     },
@@ -333,9 +336,9 @@
           "vrij",
           "zat"
         ],
-        "emptyFilterMessage": "Geen resultaten gevonden",
-        "emptyMessage": "Geen resultaten gevonden",
-        "emptySearchMessage": "Geen resultaten gevonden",
+        "emptyFilterMessage": "Geen resultaten gevonden \uD83D\uDE2D",
+        "emptyMessage": "Geen resultaten gevonden \uD83D\uDE2D",
+        "emptySearchMessage": "Geen resultaten gevonden \uD83D\uDE2D",
         "emptySelectionMessage": "Geen optie geselecteerd",
         "emptyFileSelect": "Geen bestand geselecteerd",
         "endsWith": "Eindigt met",

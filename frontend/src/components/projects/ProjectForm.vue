@@ -14,13 +14,13 @@ import { useProject } from '@/composables/services/project.service.ts';
 import { computed, onMounted, ref } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
-import { Course } from '@/types/Course.ts';
+import { type Course } from '@/types/Course.ts';
 import ProjectStructureTree from '@/components/projects/ProjectStructureTree.vue';
 
 /* Props */
 const props = defineProps<{
     course: Course;
-    project?: Project|undefined;
+    project?: Project | undefined;
 }>();
 
 /* Composable injections */
@@ -40,7 +40,7 @@ const rules = computed(() => {
             required: helpers.withMessage(t('validations.required'), required),
             minDate: helpers.withMessage(t('validations.deadline'), (value: Date) => value > form.value.start_date),
         },
-        group_size: { required: helpers.withMessage(t('validations.required'), required) }
+        group_size: { required: helpers.withMessage(t('validations.required'), required) },
     };
 });
 
@@ -58,7 +58,7 @@ async function saveProject(): Promise<void> {
         // Update the course if it has been provided before.
         if (props.project !== undefined) {
             await updateProject(form.value);
-            await push({ name: 'course-project', params: { courseId: props .course.id, projectId: props.project.id } });
+            await push({ name: 'course-project', params: { courseId: props.course.id, projectId: props.project.id } });
         }
 
         // Create a course in the other case.
@@ -148,7 +148,14 @@ onMounted(async () => {
                     <!-- Max score for the project -->
                     <div class="field col">
                         <label for="maxScore">{{ t('views.projects.max_score') }}</label>
-                        <InputNumber input-id="maxScore" class="w-full" v-model="form.max_score" :min="1" :max="100" show-buttons />
+                        <InputNumber
+                            input-id="maxScore"
+                            class="w-full"
+                            v-model="form.max_score"
+                            :min="1"
+                            :max="100"
+                            show-buttons
+                        />
                     </div>
                 </div>
 
@@ -169,31 +176,25 @@ onMounted(async () => {
                 </div>
 
                 <!-- Submit button -->
-                <Button
-                    :label="t('views.projects.edit')"
-                    type="submit"
-                    icon="pi pi-check"
-                    iconPos="right"
-                    rounded
-                />
+                <Button :label="t('views.projects.edit')" type="submit" icon="pi pi-check" iconPos="right" rounded />
             </div>
 
             <div class="col-12 lg:col-6">
+                <!-- Define the submission structure checks -->
+                <div class="grid">
+                    <div class="field col">
+                        <label for="structure">{{ t('views.projects.structureChecks') }}</label>
+                        <ProjectStructureTree id="structure" v-model="form.structureChecks" />
+                    </div>
+                </div>
+
                 <!-- Upload field for docker script -->
                 <div class="field col">
                     <label for="dockerScript">
                         {{ t('views.projects.dockerUpload') }}
                     </label>
-                    <FileUpload
-                        input="dockerScript"
-                        mode="basic"
-                        accept=".sh"
-                        :multiple="false"
-                    />
+                    <FileUpload input="dockerScript" mode="basic" accept=".sh" :multiple="false" />
                 </div>
-
-                <!-- Upload field for a zip file that contains the submission structure -->
-                <ProjectStructureTree v-model="form.structureChecks"/>
             </div>
         </div>
     </form>

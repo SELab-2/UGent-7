@@ -109,9 +109,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                             </template>
                         </template>
                         <template v-else>
-                            <div class="col-12" v-for="index in cols" :key="index">
-                                <Skeleton height="8rem" />
-                            </div>
+                            <Skeleton height="8rem" />
                         </template>
                     </div>
                 </div>

@@ -20,10 +20,51 @@ export class StructureCheck {
     }
 
     /**
-     * Check whether the check exists.
+     * Get the obligated extension list of this structure check.
+     *
+     * @return string[] the obligated extensions.
      */
-    public exists(): boolean {
-        return !!this.id;
+    public getBlockedExtensionList(): string[] {
+        return this.blocked_extensions.map((extension) => extension.extension);
+    }
+
+    /**
+     * Get the blocked extension list of this structure check.
+     *
+     * @return string[] the blocked extensions.
+     */
+    public getObligatedExtensionList(): string[] {
+        return this.obligated_extensions.map((extension) => extension.extension);
+    }
+
+    /**
+     * Set the obligated extension list of this structure check.
+     *
+     * @param extensions
+     */
+    public setBlockedExtensionList(extensions: string[]): void {
+        this.blocked_extensions = extensions.map((extension) => new FileExtension(extension));
+    }
+
+    /**
+     * Set the blocked extension list of this structure check.
+     *
+     * @param extensions
+     */
+    public setObligatedExtensionList(extensions: string[]): void {
+        this.obligated_extensions = extensions.map((extension) => new FileExtension(extension));
+    }
+
+    /**
+     * Set the name of this structure check by updating the last folder in the path.
+     *
+     * @param name
+     */
+    public setLastFolderName(name: string): void {
+        console.log(name);
+        const path = this.path.split('/');
+        path[path.length - 1] = name;
+        this.path = path.join('/');
     }
 
     /**

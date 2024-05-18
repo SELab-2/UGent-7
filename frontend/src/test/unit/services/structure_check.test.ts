@@ -24,10 +24,7 @@ describe('structureCheck', (): void => {
 
         await getStructureCheckByID('1');
         expect(structureCheck.value).not.toBeNull();
-        expect(structureCheck.value?.name).toBe('.');
-        expect(structureCheck.value?.project).toBeNull();
-        expect(structureCheck.value?.name).toBe('.');
-        expect(structureCheck.value?.name).toBe('.');
+        expect(structureCheck.value?.path).toBe('.');
     });
 
     it('gets structureCheck data', async () => {
@@ -39,22 +36,22 @@ describe('structureCheck', (): void => {
         expect(structureChecks.value?.length).toBe(4);
         expect(structureChecks.value).not.toBeNull();
 
-        expect(structureChecks.value?.[0]?.name).toBe('.');
+        expect(structureChecks.value?.[0]?.path).toBe('.');
         expect(structureChecks.value?.[0]?.project).toBeNull();
         expect(structureChecks.value?.[0]?.obligated_extensions).toBeNull();
         expect(structureChecks.value?.[0]?.blocked_extensions).toBeNull();
 
-        expect(structureChecks.value?.[1]?.name).toBe('folder1');
+        expect(structureChecks.value?.[1]?.path).toBe('folder1');
         expect(structureChecks.value?.[1]?.project).toBeNull();
         expect(structureChecks.value?.[1]?.obligated_extensions).toBeNull();
         expect(structureChecks.value?.[1]?.blocked_extensions).toBeNull();
 
-        expect(structureChecks.value?.[2]?.name).toBe('folder3');
+        expect(structureChecks.value?.[2]?.path).toBe('folder3');
         expect(structureChecks.value?.[2]?.project).toBeNull();
         expect(structureChecks.value?.[2]?.obligated_extensions).toBeNull();
         expect(structureChecks.value?.[2]?.blocked_extensions).toBeNull();
 
-        expect(structureChecks.value?.[3]?.name).toBe('folder3/folder3-1');
+        expect(structureChecks.value?.[3]?.path).toBe('folder3/folder3-1');
         expect(structureChecks.value?.[3]?.project).toBeNull();
         expect(structureChecks.value?.[3]?.obligated_extensions).toBeNull();
         expect(structureChecks.value?.[3]?.blocked_extensions).toBeNull();
@@ -67,9 +64,6 @@ it('create structureCheck', async () => {
     const exampleStructureCheck = new StructureCheck(
         '', // id
         'structure_check_name', // name
-        [], // blocked extensions
-        [], // obligated extensions
-        null, // project
     );
 
     await getStructureCheckByProject('123456');
@@ -85,7 +79,7 @@ it('create structureCheck', async () => {
     expect(structureChecks.value?.length).toBe(prevLength + 1);
 
     // Only check for fields that are sent to the backend
-    expect(structureChecks.value?.[prevLength]?.name).toBe('structure_check_name');
+    expect(structureChecks.value?.[prevLength]?.path).toBe('structure_check_name');
 });
 
 it('delete structureCheck', async () => {

@@ -118,7 +118,9 @@
             "leave": "Leave",
             "noProjects": "No projects available for this course",
             "teachersAndAssistants": {
-                "title": "People linked to this course",
+                "title": "Teachers",
+                "enroll": "Add as {0}",
+                "leave": "Remove from course",
                 "edit": "Edit users",
                 "search": {
                     "search": "Search",

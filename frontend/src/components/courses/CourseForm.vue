@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useFaculty } from '@/composables/services/faculty.service.ts';
 import { useCourses } from '@/composables/services/course.service.ts';
 import { computed, onMounted, ref } from 'vue';
@@ -17,7 +17,7 @@ import InputSwitch from 'primevue/inputswitch';
 
 /* Props */
 const props = defineProps<{
-    course?: Course|undefined;
+    course?: Course | undefined;
 }>();
 
 /* Composable injections */
@@ -51,7 +51,7 @@ async function saveCourse(): Promise<void> {
         // Update the course if it has been provided before.
         if (props.course !== undefined) {
             await updateCourse(form.value);
-            await push({ name: 'course', params: { courseId: props.course.id as string } });
+            await push({ name: 'course', params: { courseId: props.course.id } });
         }
 
         // Create a course in the other case.

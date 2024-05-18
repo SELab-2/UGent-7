@@ -4,8 +4,8 @@ import Skeleton from 'primevue/skeleton';
 import { type Teacher } from '@/types/users/Teacher.ts';
 import { type Project } from '@/types/Project.ts';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
-import ProjectMeter from '@/components/projects/ProjectMeter.vue';
 import DownloadCSVButton from '@/components/projects/DownloadCSVButton.vue';
+import ProjectMeter from '@/components/submissions/ProjectMeter.vue';
 
 /* Props */
 defineProps<{
@@ -19,6 +19,7 @@ defineProps<{
         <Title class="mb-5">
             {{ project.name }}
         </Title>
+        {{ project.structureChecks }}
     </template>
     <template v-else>
         <Skeleton class="mb-4" height="3rem" width="30rem" />

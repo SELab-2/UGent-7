@@ -29,6 +29,7 @@ const { faculties, getFaculties } = useFaculty();
 const { pagination, searchCourses } = useCourses();
 const { onPaginate, resetPagination, page, first, pageSize } = usePaginator();
 const { filter, onFilter } = useFilter(getCourseFilters(query));
+const { courses, getCoursesByUser } = useCourses();
 
 /**
  * Fetch the courses based on the filter.
@@ -37,10 +38,22 @@ async function fetchCourses(): Promise<void> {
     await searchCourses(filter.value, page.value, pageSize.value);
 }
 
+/**
+ * Update the user's courses.
+ */
+async function fetchUserCourses(): Promise<void> {
+    if (user.value !== null) {
+        await getCoursesByUser(user.value);
+    }
+}
+
 /* Fetch the faculties */
 onMounted(async () => {
     // Fetch the faculties
     await getFaculties();
+
+    // Fetch the user's courses
+    await fetchUserCourses();
 
     /* Search courses on page change */
     onPaginate(fetchCourses);
@@ -113,7 +126,12 @@ onMounted(async () => {
                     {{ t('views.courses.search.results', pagination.count) }}
                 </p>
 
-                <CourseGeneralList class="mt-3" :courses="pagination?.results ?? null" :cols="3">
+                <CourseGeneralList
+                    class="mt-3"
+                    :courses="pagination?.results ?? null"
+                    :user-courses="courses"
+                    @update:courses="fetchUserCourses"
+                >
                     <template #empty>
                         <p>{{ t('components.list.noCourses.search') }}</p>
                     </template>

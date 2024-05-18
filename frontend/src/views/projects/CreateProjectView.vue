@@ -28,7 +28,7 @@ onMounted(async () => {
         </Title>
 
         <!-- Project form -->
-        <ProjectForm :course="course" v-if="course !== null"/>
+        <ProjectForm :course="course" v-if="course !== null" />
     </BaseLayout>
 </template>
 

@@ -2,47 +2,26 @@
 import CourseGeneralCard from '@/components/courses/CourseGeneralCard.vue';
 import Skeleton from 'primevue/skeleton';
 import Button from 'primevue/button';
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/store/authentication.store.ts';
-import { watch } from 'vue';
-import { useCourses } from '@/composables/services/course.service.ts';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 
 /* Props */
-interface Props {
-    cols?: number;
-    courses: Course[] | null;
-}
+withDefaults(
+    defineProps<{
+        cols?: number;
+        courses: Course[] | null;
+        userCourses: Course[] | null;
+    }>(),
+    {
+        cols: 3,
+    },
+);
 
-withDefaults(defineProps<Props>(), {
-    cols: 4,
-});
+/* Emits */
+const emit = defineEmits(['update:courses']);
 
 /* Composable injections */
 const { t } = useI18n();
-const { user } = storeToRefs(useAuthStore());
-const courseService = useCourses();
-
-/* State */
-const userCourses = courseService.courses;
-
-/**
- * Load the courses based on the user role.
- */
-async function loadCourses(): Promise<void> {
-    if (user.value !== null) {
-        if (user.value.isStudent()) {
-            await courseService.getCoursesByStudent(user.value.id);
-        } else if (user.value.isAssistant()) {
-            await courseService.getCourseByAssistant(user.value.id);
-        } else if (user.value.isTeacher()) {
-            await courseService.getCoursesByTeacher(user.value.id);
-        }
-    }
-}
-
-watch(user, loadCourses, { immediate: true });
 </script>
 
 <template>
@@ -54,7 +33,7 @@ watch(user, loadCourses, { immediate: true });
                         class="h-full"
                         :course="course"
                         :courses="userCourses ?? []"
-                        @update:courses="loadCourses"
+                        @update:courses="emit('update:courses')"
                     />
                 </div>
             </template>
