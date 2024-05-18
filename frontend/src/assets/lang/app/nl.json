@@ -242,6 +242,14 @@
             "login": {
                 "success": "Je bent succesvol ingelogd.",
                 "error": "Er is een fout opgetreden tijdens het inloggen."
+            },
+            "admin": {
+                "save": {
+                    "error": {
+                        "title": "Ongeldige Opsla Operatie",
+                        "detail": "U probeert een item op te slaan zonder dit te selecteren."
+                    }
+                }
             }
         }
     },
@@ -282,13 +290,7 @@
         },
         "edit": "Bewerken",
         "cancel": "Annuleer",
-        "save": {
-            "save": "Sla op",
-            "error": {
-                "title": "Ongeldige Opsla Operatie",
-                "detail": "U probeert een item op te slaan zonder dit te selecteren."
-            }
-        },
+        "save": "Sla op",
         "delete": "Verwijder",
         "users": {
             "title": "Gebruikers",

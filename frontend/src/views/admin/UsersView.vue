@@ -136,7 +136,7 @@ const saveItem = async (): Promise<void> => {
         // update locally
         await dataTable.value.fetch();
     } else {
-        addErrorMessage(t('admin.save.error.title'), t('admin.save.error.detail'));
+        addErrorMessage(t('toasts.admin.save.error.title'), t('toasts.admin.save.error.detail'));
     }
     // stop showing popup
     popupEdit.value = false;
@@ -228,7 +228,7 @@ const saveItem = async (): Promise<void> => {
         </div>
         <div class="flex justify-content-end gap-2">
             <Button type="button" :label="t('admin.cancel')" severity="secondary" @click="popupEdit = false"></Button>
-            <Button type="button" :label="t('admin.save.save')" @click="saveItem"></Button>
+            <Button type="button" :label="t('admin.save')" @click="saveItem"></Button>
         </div>
     </Dialog>
 </template>

@@ -245,6 +245,14 @@
             "login": {
                 "success": "You have successfully logged in.",
                 "error": "An error occurred while logging in."
+            },
+            "admin": {
+                "save": {
+                    "error": {
+                        "title": "Invalid save operation",
+                        "detail": "You are trying to save an item without selecting it"
+                    }
+                }
             }
         }
     },
@@ -286,13 +294,7 @@
         },
         "edit": "Edit",
         "cancel": "Cancel",
-        "save": {
-            "save": "Save",
-            "error": {
-                "title": "Invalid Save Operation",
-                "detail": "You are trying to save an item without selecting it."
-            }
-        },
+        "save": "Save",
         "delete": "Delete",
         "users": {
             "title": "Users",
