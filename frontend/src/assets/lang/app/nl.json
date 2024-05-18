@@ -251,6 +251,12 @@
                     "error": "Er is een fout opgetreden tijdens het aanmaken van het project '{0}'."
                 }
             },
+            "submissions": {
+                "create": {
+                    "success": "De indiening is succesvol ingediend",
+                    "error": "Er is een fout opgetreden tijdens het indienen van de indiening"
+                }
+            },
             "login": {
                 "success": "Je bent succesvol ingelogd.",
                 "error": "Er is een fout opgetreden tijdens het inloggen."
