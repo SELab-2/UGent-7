@@ -56,6 +56,8 @@ const nodes = computed<TreeNode[]>(() => {
  * @param check
  */
 function deleteStructureCheck(check: StructureCheck): void {
+    editingStructureCheck.value = null;
+
     if (structureChecks.value !== undefined) {
         const index = structureChecks.value.findIndex((c) => c === check);
         structureChecks.value.splice(index, 1);
