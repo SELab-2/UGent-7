@@ -1,11 +1,22 @@
 /// <reference types="vitest" />
 import vue from '@vitejs/plugin-vue';
+import istanbul from 'vite-plugin-istanbul';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [
+        vue(),
+        istanbul({
+            include: 'src/*',
+            exclude: '*/test/*',
+            extension: ['.ts', '.vue'],
+            requireEnv: true, // CYPRESS_COVERAGE needs to have a value
+            cypress: true, // CYPRESS_COVERAGE needs to be set to "true" for instrumenting to happen
+            checkProd: true // check whether the environment is a production environment to actually block instrumentation
+        })
+    ],
     resolve: {
         alias: {
             'font': resolve(__dirname, './src/assets/scss/theme/font'),

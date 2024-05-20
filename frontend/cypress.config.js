@@ -9,7 +9,7 @@ export default defineConfig({
 
             return config;
         },
-        baseUrl: 'https://localhost',
+        baseUrl: 'https://nginx',
         specPattern: 'src/test/e2e/**/*.cy.{js,jsx,ts,tsx}',
     },
 });
