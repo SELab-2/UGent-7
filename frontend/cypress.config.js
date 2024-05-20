@@ -1,14 +1,15 @@
 import { defineConfig } from 'cypress';
+import task from '@cypress/code-coverage/task';
 
 export default defineConfig({
     e2e: {
-        baseUrl: 'https://nginx',
-        specPattern: 'src/test/e2e/**/*.cy.{js,jsx,ts,tsx}',
         setupNodeEvents(on, config) {
-            require('@cypress/code-coverage/task')(on, config)
+            task(on, config);
             // include any other plugins code...
 
-            return config
+            return config;
         },
+        baseUrl: 'https://localhost',
+        specPattern: 'src/test/e2e/**/*.cy.{js,jsx,ts,tsx}',
     },
 });
