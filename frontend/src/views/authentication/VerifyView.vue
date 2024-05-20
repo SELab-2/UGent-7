@@ -27,7 +27,7 @@ onMounted(async () => {
 <template>
     <BaseLayout>
         <div class="w-8 mx-auto surface-100 p-4">
-            <Title>Inloggen</Title>
+            <Title>{{ t('views.login.title') }}</Title>
             <div class="flex align-items-center mt-3">
                 <span class="mr-2">{{ t('views.verify.redirect') }}</span>
                 <span class="pi pi-spin pi-spinner" />

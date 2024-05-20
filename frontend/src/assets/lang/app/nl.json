@@ -23,7 +23,7 @@
             "projects": "Lopende projecten"
         },
         "verify": {
-            "redirect": "Je wordt zo meteen doorverwezen"
+            "redirect": "Je wordt zo meteen doorverwezen..."
         },
         "login": {
             "title": "Inloggen",
@@ -32,7 +32,7 @@
             "button": "UGent login",
             "card": {
                 "title": "Ypovoli",
-                "subtitle": "Het officieel indieningsplatform van de Universiteit Gent."
+                "subtitle": "Het officiële indieningsplatform van de Universiteit Gent."
             }
         },
         "calendar": {
@@ -84,7 +84,7 @@
             }
         },
         "submissions": {
-            "title": "Inzendingen",
+            "title": "Indieningen",
             "submit": "Indienen",
             "course": "Vak",
             "chooseFile": "Kies bestand(en)",
@@ -112,7 +112,7 @@
             "description": "Beschrijving",
             "excerpt": "Korte beschrijving",
             "faculty": "Faculteit",
-            "private": "Gesloten vak (studenten kunnen enkel inschrijven via uitnodigingslink)",
+            "private": "Gesloten vak (studenten kunnen enkel inschrijven met een uitnodigingslink)",
             "year": "Academiejaar",
             "enroll": "Inschrijven",
             "leave": "Uitschrijven",
@@ -147,12 +147,12 @@
     "composables": {
         "helpers": {
             "errors": {
-                "notFound": "Niet Gevonden",
+                "notFound": "Niet gevonden",
                 "notFoundDetail": "Bron niet gevonden.",
                 "unauthorized": "Onbevoegd",
                 "unauthorizedDetail": "Je bent niet bevoegd om deze bron te bereiken.",
-                "server": "Server Fout",
-                "network": "Netwerk Fout",
+                "server": "Server fout",
+                "network": "Netwerk fout",
                 "networkDetail": "Kan de server niet bereiken.",
                 "request": "Fout verzoek",
                 "requestDetail": "Een fout vond plaats tijdens het maken van het verzoek."
@@ -182,7 +182,7 @@
         "list": {
             "noProjects": {
                 "student": "Geen lopende projecten gevonden voor alle ingeschreven vakken. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
-                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent."
+                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent. Maak een nieuw project voor een vak met onderstaande knop."
             },
             "noCourses": {
                 "student": "Geen vakken gevonden. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
@@ -236,8 +236,8 @@
             "admin": {
                 "save": {
                     "error": {
-                        "title": "Ongeldige opsla operatie",
-                        "detail": "U probeert een item op te slaan zonder dit te selecteren"
+                        "title": "Ongeldige opsla bewerking",
+                        "detail": "U probeert een item op te slaan zonder dit te selecteren."
                     }
                 }
             }

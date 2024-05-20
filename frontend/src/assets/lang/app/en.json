@@ -2,14 +2,14 @@
     "layout": {
         "header": {
             "logo": "Ghent University logo",
-            "login": "login",
+            "login": "Login",
             "view": "View as {0}",
             "user": "Logged in as {0}",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
-                "courses": "courses",
-                "projects": "projects"
+                "courses": "Courses",
+                "projects": "Projects"
             },
             "language": {
                 "nl": "Nederlands",
@@ -80,7 +80,7 @@
                 "dockerImage": "Docker image",
                 "timeLimit": "Time limit for execution (in seconds)",
                 "memoryLimit": "Memory limit for execution (in MB)",
-                "showLog": "Making the extra logs of the docker container visible to the students"
+                "showLog": "Make the extra logs of the docker container visible to the students"
             }
         },
         "submissions": {
@@ -148,13 +148,13 @@
         "helpers": {
             "errors": {
                 "notFound": "Not found",
-                "notFoundDetail": "Source not found",
-                "unauthorized": "unauthorized",
+                "notFoundDetail": "Source not found.",
+                "unauthorized": "Unauthorized",
                 "unauthorizedDetail": "You are not authorized to access this resource.",
-                "server": "Server Error",
-                "network": "Network Error",
+                "server": "Server error",
+                "network": "Network error",
                 "networkDetail": "Unable to reach the server.",
-                "request": "request error",
+                "request": "Request error",
                 "requestDetail": "An error occurred while creating the request."
             }
         }
@@ -237,7 +237,7 @@
                 "save": {
                     "error": {
                         "title": "Invalid save operation",
-                        "detail": "You are trying to save an item without selecting it"
+                        "detail": "You are trying to save an item without selecting it."
                     }
                 }
             }
