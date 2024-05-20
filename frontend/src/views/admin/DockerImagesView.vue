@@ -2,10 +2,13 @@
 import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import InputSwitch from 'primevue/inputswitch';
-import ToggleButton from 'primevue/togglebutton';
 import SelectButton from 'primevue/selectbutton';
-import Dialog from 'primevue/dialog';
+import ConfirmDialog from 'primevue/confirmdialog';
 import Button from 'primevue/button';
+import InputIcon from 'primevue/inputicon';
+import Column from 'primevue/column';
+import IconField from 'primevue/iconfield';
+import { useConfirm } from 'primevue/useconfirm';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import Body from '@/components/layout/Body.vue';
@@ -13,54 +16,138 @@ import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { DockerImage } from '@/types/DockerImage.ts';
 import { getDockerImageFilters } from '@/types/filter/Filter.ts';
-import InputIcon from 'primevue/inputicon';
-import Column from 'primevue/column';
-import IconField from 'primevue/iconfield';
 
 /* Injection */
 const { t } = useI18n();
 const { query } = useRoute();
-const { pagination, dockerImages, getDockerImages, searchDockerImages, patchDockerImage, createDockerImage } =
-    useDockerImages();
+const {
+    pagination,
+    dockerImages,
+    getDockerImages,
+    searchDockerImages,
+    patchDockerImage,
+    createDockerImage,
+    deleteDockerImage,
+    deleteDockerImages,
+} = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
+const confirm = useConfirm();
 
+/* State */
 const dataTable = ref();
 
 const editItem = ref<DockerImage>(DockerImage.blankDockerImage());
 const addItem = ref<DockerImage>(DockerImage.blankDockerImage());
 
 const selectOptions = ref(['admin.list', 'admin.add']);
-const selected = ref<string>(t(selectOptions.value[0]));
+const selectedOption = ref<string>(selectOptions.value[0]);
+
+const multiRemove = computed(() => {
+    return (selectedItems.value?.length === undefined || selectedItems.value?.length === 0) ?? false;
+});
+const selectedItems = ref<DockerImage[] | null>(null);
 
 const columns = ref([
     { field: 'id', header: 'admin.id' },
     { field: 'name', header: 'admin.docker_images.name' },
     { field: 'owner', header: 'admin.docker_images.owner' },
 ]);
-// const publicOptions = ref<Array<{ value: any; label: string }>>([
-//     { value: true, label: 'public' },
-//     { value: false, label: 'private' },
-// ]);
-const showSafetyGuard = ref<boolean>(false);
+const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
-const toggleSafetyGuard = (data: DockerImage): void => {
+const fileUpload = ref();
+
+/**
+ * A function to make the confirmation dialog pop up
+ */
+const activateSafetyGuard = (): void => {
+    confirm.require({
+        message: t('admin.safeGuard'),
+        rejectLabel: t('primevue.reject'),
+        acceptLabel: t('primevue.accept'),
+        accept: safetyGuardCleanup,
+    });
+};
+/**
+ * Hides safety guard, executes function that safety guard guards against and fetches data again
+ */
+const safetyGuardCleanup = (): void => {
+    safetyGuardFunction.value().then(() => {
+        dataTable.value.fetch();
+    });
+};
+/**
+ * Show safety guard for changing public status and set up values for when confirmed
+ * @param data Docker Image data of docker image whose public status needs to be changed.
+ */
+const toggleSafetyGuardEdit = (data: DockerImage): void => {
     editItem.value.public = !data.public;
     editItem.value.id = data.id;
-    showSafetyGuard.value = true;
+    safetyGuardFunction.value = changePublicStatus;
+    activateSafetyGuard();
 };
-const changePublicStatus = async (dockerData: DockerImage): Promise<void> => {
-    showSafetyGuard.value = false;
-    await patchDockerImage(dockerData);
-    await dataTable.value.fetch();
+/**
+ * Changes the public status in the backend of the docker image whose attributes are in editItem's value attribute
+ */
+const changePublicStatus = async (): Promise<void> => {
+    await patchDockerImage(editItem.value);
 };
+/**
+ * Show safety guard for removing a docker image from the backend and set up values for when confirmed
+ * @param data Docker Image data of docker image to be removed
+ */
+const toggleSafetyGuardRemove = (data: DockerImage): void => {
+    editItem.value = data;
+    safetyGuardFunction.value = removeItem;
+    activateSafetyGuard();
+};
+/**
+ * Removes the docker image in the backend whose attributes are in editItem's value attribute
+ */
+const removeItem = async (): Promise<void> => {
+    await deleteDockerImage(editItem.value.id);
+    // remove the item from the list of selectedItems
+    const index = selectedItems.value?.indexOf(editItem.value) ?? -1;
+    if (index !== -1) {
+        selectedItems.value?.splice(index, 1);
+    }
+};
+/**
+ * Show safety guard for removing multiple docker images at once in the backend
+ */
+const toggleSafetyGuardMultiRemove = (): void => {
+    safetyGuardFunction.value = removeItems;
+    activateSafetyGuard();
+};
+/**
+ * Removes the docker images in the backend described by the selectedItems variable
+ */
+const removeItems = async (): Promise<void> => {
+    const ids = selectedItems.value?.map((item) => item.id) ?? [];
+    await deleteDockerImages(ids);
+    selectedItems.value = [];
+};
+/**
+ * Handles an upload event containing docker image file and uploads this together with other attributes to backend
+ * @param event Event containing docker image file in files attributes
+ */
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
     const files: File[] = event.files as File[];
     await createDockerImage(addItem.value, files[0]);
     addItem.value.name = '';
+    selectedOption.value = selectOptions.value[0];
+};
+
+/**
+ * A function to be triggered when (an) item(s) are selected, and changes the multiRemove Button's disabled status
+ * accordingly.
+ * @param selected A list of all the selected docker images.
+ */
+const onSelect = (selected: any[] | null): void => {
+    selectedItems.value = selected;
 };
 </script>
 
@@ -70,8 +157,13 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
             <div class="gap-3 mb-3">{{ t('admin.docker_images.title') }}</div>
         </Title>
         <Body class="w-full">
-            <SelectButton class="mb-3 gap-3 w-3" v-model="selected" :options="selectOptions.map(t)" />
-            <div v-if="selected === t(selectOptions[0])">
+            <SelectButton
+                class="mb-3 gap-3 w-3"
+                v-model="selectedOption"
+                :options="selectOptions"
+                :option-label="(option: string) => t(option)"
+            />
+            <div v-if="selectedOption === selectOptions[0]">
                 <LazyDataTable
                     :pagination="pagination"
                     :entities="dockerImages"
@@ -80,16 +172,21 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                     :filter="filter"
                     :on-filter="onFilter"
                     ref="dataTable"
+                    select
+                    @select="onSelect"
                 >
                     <template #header>
-                        <div class="flex justify-content-end">
+                        <div class="mb-3 gap-3">
                             <IconField iconPosition="left">
                                 <InputIcon>
-                                    <i class="pi pi-search" />
+                                    <i class="pi pi-search flex justify-content-center" />
                                 </InputIcon>
                                 <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
                             </IconField>
                         </div>
+                        <Button class="w-1 mb-3 gap-3" :disabled="multiRemove" @click="toggleSafetyGuardMultiRemove">
+                            {{ t('admin.delete') }}
+                        </Button>
                     </template>
                     <Column
                         v-for="column in columns"
@@ -97,7 +194,8 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         :field="column.field"
                         :header="t(column.header)"
                         :show-filter-menu="false"
-                        :style="{ maxWidth: '3rem' }"
+                        :header-style="{ width: '25%' }"
+                        class="p-col"
                     >
                         <template #filter>
                             <IconField iconPosition="left" class="flex align-items-center">
@@ -112,16 +210,22 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                         key="public"
                         field="public"
                         :header="t('admin.docker_images.public')"
-                        :style="{ maxWidth: '3rem' }"
+                        :header-style="{ width: '10%' }"
+                        class="p-col"
                     >
                         <template #body="{ data }">
-                            <ToggleButton
-                                class="mb-3 gap-3"
+                            <InputSwitch
+                                class="mb-3 gap-3 justify-content-center"
                                 :model-value="data.public"
-                                @click="() => toggleSafetyGuard(data)"
-                                :on-label="t('admin.docker_images.public')"
-                                :off-label="t('admin.docker_images.private')"
+                                @click="() => toggleSafetyGuardEdit(data)"
                             />
+                        </template>
+                    </Column>
+                    <Column key="remove" :header-style="{ width: '11%' }" class="p-col">
+                        <template #body="{ data }">
+                            <Button @click="() => toggleSafetyGuardRemove(data)" class="justify-content-center">
+                                {{ t('admin.delete') }}
+                            </Button>
                         </template>
                     </Column>
                 </LazyDataTable>
@@ -132,27 +236,26 @@ const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
                     v-model:model-value="addItem.name"
                     :placeholder="t('admin.docker_images.name_input')"
                 />
-                <div v-if="addItem.name.length > 0">
-                    <div class="flex align-items-center mb-3 gap-3">
-                        <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
-                        <InputSwitch v-model:model-value="addItem.public" />
-                    </div>
-                    <FileUpload class="mb-3 gap-3" :custom-upload="true" @uploader="upload" :file-limit="1">
-                        <template #empty>
-                            <strong>No file selected.</strong>
-                        </template>
-                    </FileUpload>
+                <div class="flex align-items-center mb-3 gap-3">
+                    <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
+                    <InputSwitch v-model="addItem.public" />
                 </div>
+                <FileUpload
+                    class="mb-3 gap-3"
+                    ref="fileUpload"
+                    custom-upload
+                    @uploader="upload"
+                    :file-limit="1"
+                    :disabled="addItem.name.length === 0"
+                >
+                    <template #empty>
+                        <strong>{{ t('primevue.emptyFileSelect') }}</strong>
+                    </template>
+                </FileUpload>
             </div>
         </Body>
     </AdminLayout>
-    <Dialog v-model:visible="showSafetyGuard" :style="{ width: '15rem' }">
-        <h3>Are you sure?</h3>
-        <div class="flex justify-content-between">
-            <Button label="No" @click="showSafetyGuard = false" />
-            <Button label="Yes" @click="() => changePublicStatus(editItem)" />
-        </div>
-    </Dialog>
+    <ConfirmDialog :style="{ width: '15rem' }" />
 </template>
 
 <style scoped lang="scss"></style>

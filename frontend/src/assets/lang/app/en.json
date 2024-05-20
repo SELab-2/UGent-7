@@ -245,6 +245,14 @@
             "login": {
                 "success": "You have successfully logged in.",
                 "error": "An error occurred while logging in."
+            },
+            "admin": {
+                "save": {
+                    "error": {
+                        "title": "Invalid save operation",
+                        "detail": "You are trying to save an item without selecting it"
+                    }
+                }
             }
         }
     },
@@ -287,6 +295,7 @@
         "edit": "Edit",
         "cancel": "Cancel",
         "save": "Save",
+        "delete": "Delete",
         "users": {
             "title": "Users",
             "username": "Username",
@@ -316,7 +325,9 @@
             "private": "Private"
         },
         "none_found": "No matching data.",
-        "loading": "Loading data. Please wait."
+        "loading": "Loading data. Please wait.",
+        "safeGuard": "Are you sure?",
+        "no_file": "No file found."
     },
     "primevue": {
         "startsWith": "Starts with",
@@ -416,6 +427,7 @@
         "emptySelectionMessage": "No selected item",
         "emptySearchMessage": "No results found",
         "emptyMessage": "No available options",
+        "emptyFileSelect": "No file selected",
         "aria": {
           "trueLabel": "True",
           "falseLabel": "False",
