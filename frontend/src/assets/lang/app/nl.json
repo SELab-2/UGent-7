@@ -183,7 +183,8 @@
             "noSubmissions": "Dit project heeft geen indieningen",
             "submissions": "Indiening | Indieningen",
             "groups": "Groep | Groepen",
-            "testsSucceed": "Geslaagde testen",
+            "structureTestsSucceed": "Geslaagde structuur testen",
+            "extraTestsSucceed": "Geslaagde extra testen",
             "testsFail": "Gefaalde testen",
             "submit": "Indienen"
         },
@@ -241,6 +242,14 @@
             "login": {
                 "success": "Je bent succesvol ingelogd.",
                 "error": "Er is een fout opgetreden tijdens het inloggen."
+            },
+            "admin": {
+                "save": {
+                    "error": {
+                        "title": "Ongeldige opsla operatie",
+                        "detail": "U probeert een item op te slaan zonder dit te selecteren"
+                    }
+                }
             }
         }
     },
@@ -282,6 +291,7 @@
         "edit": "Bewerken",
         "cancel": "Annuleer",
         "save": "Sla op",
+        "delete": "Verwijder",
         "users": {
             "title": "Gebruikers",
             "username": "Gebruikersnaam",
@@ -311,7 +321,8 @@
             "private": "Privaat"
         },
         "none_found": "Geen overeenkomende data gevonden.",
-        "loading": "Aan het laden. Wacht een momentje aub."
+        "loading": "Aan het laden. Wacht even aub.",
+        "safeGuard": "Bent u het zeker?"
     },
     "primevue": {
         "accept": "Ja",
@@ -363,6 +374,7 @@
         "emptyMessage": "Geen resultaten gevonden",
         "emptySearchMessage": "Geen resultaten gevonden",
         "emptySelectionMessage": "Geen optie geselecteerd",
+        "emptyFileSelect": "Geen bestand geselecteerd",
         "endsWith": "Eindigt met",
         "equals": "Is gelijk aan",
         "fileSizeTypes": [

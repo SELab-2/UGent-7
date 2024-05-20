@@ -34,61 +34,61 @@ msgstr "Docker image is ready"
 msgid "dockerimage.state.error"
 msgstr "Docker image failed to build"
 
-#: models/submission.py:61
+#: models/submission.py:62
 msgid "submission.state.queued"
 msgstr "Queued"
 
-#: models/submission.py:62
+#: models/submission.py:63
 msgid "submission.state.running"
 msgstr "Running"
 
-#: models/submission.py:63
+#: models/submission.py:64
 msgid "submission.state.success"
 msgstr "Success"
 
-#: models/submission.py:64
+#: models/submission.py:65
 msgid "submission.state.failed"
 msgstr "Failed"
 
-#: models/submission.py:69
+#: models/submission.py:70
 msgid "submission.error.blockedextension"
 msgstr "The zip file contains a file with a non-allowed extension."
 
-#: models/submission.py:70
+#: models/submission.py:71
 msgid "submission.error.obligatedextensionnotfound"
 msgstr ""
 "The submitted zip file doesn't have any file with an obligated file "
 "extension."
 
-#: models/submission.py:71
+#: models/submission.py:72
 msgid "submission.error.filedirnotfound"
 msgstr "The submitted zip file lacks an obligated directory."
 
-#: models/submission.py:74
+#: models/submission.py:75
 msgid "submission.error.dockerimageerror"
 msgstr "try again later."
 
-#: models/submission.py:75
+#: models/submission.py:76
 msgid "submission.error.timelimit"
 msgstr "Timelimit exceeded."
 
-#: models/submission.py:76
+#: models/submission.py:77
 msgid "submission.error.memorylimit"
 msgstr "Memorylimit exceeded."
 
-#: models/submission.py:77
+#: models/submission.py:78
 msgid "submission.error.checkerror"
 msgstr "A check failed."
 
-#: models/submission.py:78
+#: models/submission.py:79
 msgid "submission.error.runtimeerror"
 msgstr "Crashed."
 
-#: models/submission.py:79
+#: models/submission.py:80
 msgid "submission.error.unknown"
 msgstr "Unkown error."
 
-#: models/submission.py:80
+#: models/submission.py:81
 msgid "submission.error.failedstructurecheck"
 msgstr "The zip file doesn't have the right structure."
 
@@ -287,3 +287,7 @@ msgstr "No zip file available."
 #: views/submission_view.py:50
 msgid "extra_check_result.download.log"
 msgstr "No log file available."
+
+#: views/submission_view.py:60
+msgid "extra_check_result.download.artifact"
+msgstr "No artifact available."

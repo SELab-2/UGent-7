@@ -1,8 +1,10 @@
+from api.models.group import Group
 from api.permissions.role_permissions import (is_assistant, is_student,
                                               is_teacher)
 from authentication.models import User
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 from rest_framework.request import Request
+from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 
 
@@ -58,6 +60,23 @@ class GroupStudentPermission(BasePermission):
 
 class GroupSubmissionPermission(BasePermission):
     """Permission class for submission related group endpoints"""
+
+    def has_permission(self, request: Request, view: APIView) -> bool:
+        user: User = request.user
+        group_id = view.kwargs.get('pk')
+        group: Group | None = Group.objects.get(id=group_id) if group_id else None
+
+        if group is None:
+            return True
+
+        # Teachers and assistants of that course can view all submissions
+        if is_teacher(user):
+            return group.project.course.teachers.filter(id=user.teacher.id).exists()
+
+        if is_assistant(user):
+            return group.project.course.assistants.filter(id=user.assistant.id).exists()
+
+        return is_student(user) and group.students.filter(id=user.student.id).exists()
 
     def had_object_permission(self, request: Request, view: ViewSet, group) -> bool:
         user: User = request.user

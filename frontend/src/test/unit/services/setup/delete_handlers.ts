@@ -29,4 +29,9 @@ export const deleteHandlers = [
         assistants.splice(index, 1);
         return HttpResponse.json(assistants);
     }),
+    http.delete(baseUrl + endpoints.structureChecks.retrieve.replace('{id}', ':id'), async ({ params }) => {
+        const index = structureChecks.findIndex((x) => x.id === params.id);
+        structureChecks.splice(index, 1);
+        return HttpResponse.json(structureChecks);
+    }),
 ];

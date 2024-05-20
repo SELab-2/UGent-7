@@ -802,10 +802,10 @@ class ProjectModelTestsAsTeacher(APITestCase):
         # Only two of the three created groups contain at least one student
         self.assertEqual(
             content_json["status"],
-            {"non_empty_groups": 2, "groups_submitted": 0, "submissions_passed": 0},
+            {"non_empty_groups": 2, "groups_submitted": 0, "extra_checks_passed": 0, "structure_checks_passed": 0},
         )
 
-    def test_submission_status_groups_submitted_and_passed_checks(self):
+    def test_submission_status_groups_submitted_and_not_passed_checks(self):
         """Retrieve the submission status for a project."""
         course = create_course(name="test course", academic_startyear=2024)
         project = create_project(
@@ -866,7 +866,7 @@ class ProjectModelTestsAsTeacher(APITestCase):
 
         self.assertEqual(
             content_json["status"],
-            {"non_empty_groups": 3, "groups_submitted": 2, "submissions_passed": 2},
+            {"non_empty_groups": 3, "groups_submitted": 2, "extra_checks_passed": 0, "structure_checks_passed": 0},
         )
 
     def test_retrieve_list_submissions(self):

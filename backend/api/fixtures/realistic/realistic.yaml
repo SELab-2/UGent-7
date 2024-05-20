@@ -172,6 +172,7 @@
     time_limit: 10
     memory_limit: 50
     show_log: false
+    show_artifact: false
 - model: api.extracheck
   pk: 1
   fields:
@@ -182,6 +183,7 @@
     time_limit: 30
     memory_limit: 128
     show_log: true
+    show_artifact: true
 
 # MARK: Students
 - model: api.student
@@ -457,41 +459,49 @@
   fields:
     extra_check: 0
     log_file: fixtures/realistic/projects/0/0/submissions/0/submission_1/logs/log_extra_check_0.txt
+    artifact: ""
 - model: api.extracheckresult
   pk: 3
   fields:
     extra_check: 1
     log_file: fixtures/realistic/projects/0/0/submissions/0/submission_1/logs/log_extra_check_1.txt
+    artifact: fixtures/realistic/projects/0/0/submissions/0/submission_1/artifacts/artifact_extra_check_1.zip
 - model: api.extracheckresult
   pk: 5
   fields:
     extra_check: 0
     log_file: fixtures/realistic/projects/0/0/submissions/0/submission_2/logs/log_extra_check_0.txt
+    artifact: ""
 - model: api.extracheckresult
   pk: 6
   fields:
     extra_check: 1
     log_file: fixtures/realistic/projects/0/0/submissions/0/submission_2/logs/log_extra_check_1.txt
+    artifact: fixtures/realistic/projects/0/0/submissions/0/submission_2/artifacts/artifact_extra_check_1.zip
 - model: api.extracheckresult
   pk: 8
   fields:
     extra_check: 0
     log_file: ""
+    artifact: ""
 - model: api.extracheckresult
   pk: 9
   fields:
     extra_check: 1
     log_file: ""
+    artifact: ""
 - model: api.extracheckresult
   pk: 11
   fields:
     extra_check: 0
     log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_0.txt
+    artifact: ""
 - model: api.extracheckresult
   pk: 12
   fields:
     extra_check: 1
     log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+    artifact: ""
 
 # MARK: Teachers
 - model: api.teacher

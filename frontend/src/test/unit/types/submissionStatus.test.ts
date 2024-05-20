@@ -11,7 +11,8 @@ describe('submissionStatus type', () => {
         expect(submissionStatus).toBeInstanceOf(SubmissionStatus);
         expect(submissionStatus.non_empty_groups).toBe(submissionStatusData.non_empty_groups);
         expect(submissionStatus.groups_submitted).toBe(submissionStatusData.groups_submitted);
-        expect(submissionStatus.submissions_passed).toBe(submissionStatusData.submissions_passed);
+        expect(submissionStatus.structure_checks_passed).toBe(submissionStatusData.structure_checks_passed);
+        expect(submissionStatus.extra_checks_passed).toBe(submissionStatusData.extra_checks_passed);
     });
 
     it('create a submissionStatus instance from JSON data', () => {
@@ -21,6 +22,7 @@ describe('submissionStatus type', () => {
         expect(submissionStatus).toBeInstanceOf(SubmissionStatus);
         expect(submissionStatus.non_empty_groups).toBe(submissionStatusData.non_empty_groups);
         expect(submissionStatus.groups_submitted).toBe(submissionStatusData.groups_submitted);
-        expect(submissionStatus.submissions_passed).toBe(submissionStatusData.submissions_passed);
+        expect(submissionStatus.structure_checks_passed).toBe(submissionStatusData.structure_checks_passed);
+        expect(submissionStatus.extra_checks_passed).toBe(submissionStatusData.extra_checks_passed);
     });
 });

@@ -57,3 +57,18 @@ class ExtraCheckResultLogPermission(ExtraCheckResultPermission):
             return obj.extra_check.show_log
 
         return True
+
+
+class ExtraCheckResultArtifactPermission(ExtraCheckResultPermission):
+    def has_object_permission(self, request: Request, view: APIView, obj: ExtraCheckResult) -> bool:
+        result = super().has_object_permission(request, view, obj)
+
+        if not result:
+            return False
+
+        user: User = cast(User, request.user)
+
+        if is_student(user):
+            return obj.extra_check.show_artifact
+
+        return True

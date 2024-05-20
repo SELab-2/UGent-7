@@ -39,6 +39,9 @@ class ExtraCheckResultSerializer(serializers.ModelSerializer):
             representation["log_file"] = request.build_absolute_uri(
                 reverse("extra-check-result-detail", args=[str(instance.id)]) + "log/"
             )
+            representation["artifact"] = request.build_absolute_uri(
+                reverse("extra-check-result-detail", args=[str(instance.id)]) + "artifact/"
+            )
             return representation
 
         return None

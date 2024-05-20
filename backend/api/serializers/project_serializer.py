@@ -1,7 +1,7 @@
 from api.logic.parse_zip_files import parse_zip
 from api.models.group import Group
 from api.models.project import Project
-from api.models.submission import Submission
+from api.models.submission import Submission, ExtraCheckResult, StructureCheckResult, StateEnum
 from api.serializers.course_serializer import CourseSerializer
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
@@ -14,28 +14,69 @@ from rest_framework.exceptions import ValidationError
 class SubmissionStatusSerializer(serializers.Serializer):
     non_empty_groups = serializers.IntegerField(read_only=True)
     groups_submitted = serializers.IntegerField(read_only=True)
-    submissions_passed = serializers.IntegerField(read_only=True)
+    structure_checks_passed = serializers.IntegerField(read_only=True)
+    extra_checks_passed = serializers.IntegerField(read_only=True)
 
     def to_representation(self, instance: Project):
         """Return the submission status of the project"""
         if not isinstance(instance, Project):
             raise ValidationError(gettext("project.errors.invalid_instance"))
 
-        non_empty_groups = instance.groups.filter(students__isnull=False).count()
-        groups_submitted = Submission.objects.filter(group__project=instance).count()
-        submissions_passed = Submission.objects.filter(group__project=instance, is_valid=True).count()
+        non_empty_groups = Group.objects.filter(project=instance, students__isnull=False).distinct().count()
+
+        groups_submitted_ids = Submission.objects.filter(group__project=instance).values_list('group__id', flat=True)
+        unique_groups = set(groups_submitted_ids)
+        groups_submitted = len(unique_groups)
+
+        #  The total amount of groups with at least one submission should never exceed the total number of non empty groups
+        # (the seeder does not account for this restriction)
+        if (groups_submitted > non_empty_groups):
+            non_empty_groups = groups_submitted
+
+        passed_structure_checks_submission_ids = StructureCheckResult.objects.filter(
+            submission__group__project=instance,
+            submission__is_valid=True,
+            result=StateEnum.SUCCESS
+        ).values_list('submission__id', flat=True)
+
+        passed_structure_checks_group_ids = Submission.objects.filter(
+            id__in=passed_structure_checks_submission_ids
+        ).values_list('group_id', flat=True)
+
+        unique_groups = set(passed_structure_checks_group_ids)
+        structure_checks_passed = len(unique_groups)
+
+        passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(
+            submission__group__project=instance,
+            submission__is_valid=True,
+            result=StateEnum.SUCCESS
+        ).values_list('submission__id', flat=True)
+
+        passed_extra_checks_group_ids = Submission.objects.filter(
+            id__in=passed_extra_checks_submission_ids
+        ).values_list('group_id', flat=True)
+
+        unique_groups = set(passed_extra_checks_group_ids)
+        extra_checks_passed = len(unique_groups)
+
+        # The total number of passed extra checks combined with the number of passed structure checks
+        # can never exceed the total number of submissions (the seeder does not account for this restriction)
+        if (structure_checks_passed + extra_checks_passed > groups_submitted):
+            extra_checks_passed = groups_submitted - structure_checks_passed
 
         return {
             "non_empty_groups": non_empty_groups,
             "groups_submitted": groups_submitted,
-            "submissions_passed": submissions_passed,
+            "structure_checks_passed": structure_checks_passed,
+            "extra_checks_passed": extra_checks_passed
         }
 
     class Meta:
         fields = [
             "non_empty_groups",
             "groups_submitted",
-            "submissions_passed",
+            "structure_checks_passed",
+            "extra_checks_passed"
         ]
 
 
