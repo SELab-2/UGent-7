@@ -32,6 +32,7 @@ export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (da
  * @param data
  * @param ref
  * @param fromJson
+ * @param contentType
  */
 export async function create<T>(
     endpoint: string,
@@ -190,37 +191,6 @@ export async function getPaginatedList<T>(
 }
 
 /**
- * Get a list of items from multiple endpoints and merge them into a single list.
- *
- * @param endpoints
- * @param ref
- * @param fromJson
- */
-export async function getListMerged<T>(
-    endpoints: string[],
-    ref: Ref<T[] | null>,
-    fromJson: (data: any) => T,
-): Promise<void> {
-    // Create an array to accumulate all response data
-    const allData: T[] = [];
-
-    for (const endpoint of endpoints) {
-        try {
-            const response = await client.get(endpoint);
-            const responseData: T[] = response.data.map((data: T) => fromJson(data));
-            allData.push(...responseData); // Merge into the allData array
-        } catch (error: any) {
-            processError(error);
-            console.error(error); // Log the error for debugging
-            ref.value = []; // Set the ref to an empty array
-            throw error; // Re-throw the error to the caller
-        }
-    }
-
-    ref.value = allData;
-}
-
-/**
  * Process an error and display a message to the user.
  *
  * @param error
@@ -237,7 +207,10 @@ export function processError(error: any): void {
         const status = error.response.status;
 
         if (status === 404) {
-            addErrorMessage(t('composables.helpers.errors.notFound'), t('composables.helpers.errors.notFoundDetail'));
+            addErrorMessage(
+                t('composables.helpers.errors.notFound'),
+                t('composables.helpers.errors.notFoundDetail')
+            );
         } else if (error.response.status === 401 || error.response.status === 403) {
             addErrorMessage(
                 t('composables.helpers.errors.unauthorized'),
@@ -253,14 +226,23 @@ export function processError(error: any): void {
                     message = response[key].join(', ');
                 }
 
-                addErrorMessage(t('composables.helpers.errors.server'), message);
+                addErrorMessage(
+                    t('composables.helpers.errors.server'),
+                    message
+                );
             }
         }
     } else if (error.request !== undefined && error.request !== null) {
         // The request was made but no response was received
-        addErrorMessage(t('composables.helpers.errors.network'), t('composables.helpers.errors.networkDetail'));
+        addErrorMessage(
+            t('composables.helpers.errors.network'),
+            t('composables.helpers.errors.networkDetail')
+        );
     } else {
         // Something happened in setting up the request that triggered an error
-        addErrorMessage(t('composables.helpers.errors.request'), t('composables.helpers.errors.requestDetail'));
+        addErrorMessage(
+            t('composables.helpers.errors.request'),
+            t('composables.helpers.errors.requestDetail')
+        );
     }
 }

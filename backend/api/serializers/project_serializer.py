@@ -8,6 +8,8 @@ from nh3 import clean
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from api.serializers.fields.expandable_hyperlinked_field import ExpandableHyperlinkedIdentityField
+
 
 class SubmissionStatusSerializer(serializers.Serializer):
     non_empty_groups = serializers.IntegerField(read_only=True)

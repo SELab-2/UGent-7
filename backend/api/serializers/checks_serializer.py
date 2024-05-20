@@ -12,22 +12,9 @@ class FileExtensionSerializer(serializers.ModelSerializer):
         fields = ["extension"]
 
 
-class FileExtensionHyperLinkedRelatedField(serializers.HyperlinkedRelatedField):
-    view_name = "file-extensions-detail"
-    queryset = FileExtension.objects.all()
-
-    def to_internal_value(self, data):
-        try:
-            return self.queryset.get(pk=data)
-        except FileExtension.DoesNotExist:
-            return self.fail("no_match")
-
-
-# TODO: Support partial updates
 class StructureCheckSerializer(serializers.ModelSerializer):
-    project = serializers.HyperlinkedRelatedField(
-        view_name="project-detail",
-        read_only=True
+    project = serializers.HyperlinkedIdentityField(
+        view_name="project-detail"
     )
 
     obligated_extensions = FileExtensionSerializer(
@@ -42,49 +29,34 @@ class StructureCheckSerializer(serializers.ModelSerializer):
         default=[]
     )
 
-    class Meta:
-        model = StructureCheck
-        fields = "__all__"
-
-
-# TODO: Simplify
-class StructureCheckAddSerializer(StructureCheckSerializer):
-
     def validate(self, attrs):
+        """Validate the structure check"""
         project: Project = self.context["project"]
-        if project.structure_checks.filter(path=attrs["path"]).count():
+
+        if project.structure_checks.filter(path=attrs["path"]).exists():
             raise ValidationError(_("project.error.structure_checks.already_existing"))
-
-        obl_ext = set()
-        for ext in self.context["obligated"]:
-            extension, result = FileExtension.objects.get_or_create(
-                extension=ext
-            )
-            obl_ext.add(extension)
-        attrs["obligated_extensions"] = obl_ext
-
-        block_ext = set()
-        for ext in self.context["blocked"]:
-            extension, result = FileExtension.objects.get_or_create(
-                extension=ext
-            )
-            if extension in obl_ext:
-                raise ValidationError(_("project.error.structure_checks.extension_blocked_and_obligated"))
-            block_ext.add(extension)
-        attrs["blocked_extensions"] = block_ext
 
         return attrs
 
+    def create(self, validated_data):
+        """Create a new structure check"""
+        blocked = validated_data.pop("blocked_extensions")
+        obligated = validated_data.pop("obligated_extensions")
+        check: StructureCheck = StructureCheck.objects.create(**validated_data)
 
-class DockerImagerHyperLinkedRelatedField(serializers.HyperlinkedRelatedField):
-    view_name = "docker-image-detail"
-    queryset = DockerImage.objects.all()
+        for ext in obligated:
+            check.obligated_extensions.create(**ext)
 
-    def to_internal_value(self, data):
-        try:
-            return self.queryset.get(pk=data)
-        except DockerImage.DoesNotExist:
-            return self.fail("no_match")
+        # Add blocked extensions
+
+        for ext in blocked:
+            check.blocked_extensions.create(**ext)
+
+        return check
+
+    class Meta:
+        model = StructureCheck
+        fields = "__all__"
 
 
 class ExtraCheckSerializer(serializers.ModelSerializer):
@@ -93,7 +65,10 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    docker_image = DockerImagerHyperLinkedRelatedField()
+    docker_image = serializers.HyperlinkedRelatedField(
+        view_name="docker-image-detail",
+        queryset=DockerImage.objects.all()
+    )
 
     class Meta:
         model = ExtraCheck

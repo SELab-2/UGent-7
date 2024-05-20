@@ -4,7 +4,6 @@ from api.models.submission import Submission
 from api.permissions.project_permissions import (ProjectGroupPermission,
                                                  ProjectPermission)
 from api.serializers.checks_serializer import (ExtraCheckSerializer,
-                                               StructureCheckAddSerializer,
                                                StructureCheckSerializer)
 from api.serializers.group_serializer import GroupSerializer
 from api.serializers.project_serializer import (ProjectSerializer,
@@ -86,7 +85,7 @@ class ProjectViewSet(RetrieveModelMixin,
             "message": gettext("project.success.groups.created"),
         })
 
-    @action(detail=True)
+    @action(detail=True, methods=['get'])
     def structure_checks(self, request, **_):
         """Returns the structure checks for the given project"""
         project = self.get_object()
@@ -96,22 +95,20 @@ class ProjectViewSet(RetrieveModelMixin,
         serializer = StructureCheckSerializer(
             checks, many=True, context={"request": request}
         )
+
         return Response(serializer.data)
 
     @structure_checks.mapping.post
-    @swagger_auto_schema(request_body=StructureCheckAddSerializer)
+    @swagger_auto_schema(request_body=StructureCheckSerializer)
     def _add_structure_check(self, request: Request, **_):
         """Add a structure_check to the project"""
-
         project: Project = self.get_object()
 
-        serializer = StructureCheckAddSerializer(
+        serializer = StructureCheckSerializer(
             data=request.data,
             context={
                 "project": project,
-                "request": request,
-                "obligated": request.data.getlist('obligated_extensions') if "obligated_extensions" in request.data else [],
-                "blocked": request.data.getlist('blocked_extensions') if "blocked_extensions" in request.data else []
+                "request": request
             }
         )
 
@@ -119,6 +116,29 @@ class ProjectViewSet(RetrieveModelMixin,
             serializer.save(project=project)
 
         return Response(serializer.data)
+
+    @structure_checks.mapping.put
+    @swagger_auto_schema(request_body=StructureCheckSerializer)
+    def _set_structure_checks(self, request: Request, **_) -> Response:
+        """Set the structure checks of the given project"""
+        project: Project = self.get_object()
+
+        # Delete all current structure checks of the project
+        project.structure_checks.all().delete()
+
+        # Create the new structure checks
+        serializer = StructureCheckSerializer(
+            data=request.data,
+            many=True,
+            context={
+                'project': project
+            }
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(project=project)
+
+        return Response(serializer.validated_data)
 
     @action(detail=True)
     def extra_checks(self, request, **_):
@@ -156,7 +176,7 @@ class ProjectViewSet(RetrieveModelMixin,
         })
 
     @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission])
-    def submission_status(self, request, **_):
+    def submission_status(self, _: Request):
         """Returns the current submission status for the given project
         This includes:
             - The total amount of groups that contain at least one student
