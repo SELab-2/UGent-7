@@ -17,7 +17,15 @@ const { submissions, getSubmissionByGroup } = useSubmission();
 
 /* Functions */
 const testSubmission = async (): Promise<void> => {
-    alert("submission is being tested");
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.addEventListener('change', (event) => {
+        const file = (event.target as HTMLInputElement).files[0];
+        if (file) {
+            alert(`Selected file: ${file.name}`);
+        }
+    });
+    fileInput.click();
 };
 
 </script>
