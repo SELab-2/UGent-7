@@ -27,6 +27,9 @@ export default defineConfig({
         }
     },
     test: {
-        setupFiles: "./src/test/unit/services/setup/setup.ts"
+        setupFiles: './src/test/unit/services/setup/setup.ts',
+        coverage: {
+            provider: 'istanbul'
+        }
     },
 });
