@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import Button from 'primevue/button';
 import { useI18n } from 'vue-i18n';
-import { ref, watch } from 'vue';
+import {computed, ref, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import { useFeedback } from '@/composables/services/feedback.service.ts';
 import { type Feedback } from '@/types/Feedback.ts';
@@ -46,6 +46,16 @@ function submitFeedback(): void {
     getFeedbackBySubmission(route.params.submissionId as string);
 }
 
+/* Computed Properties */
+const structureAndExtraFaults = computed(() => {
+    if (!submission.value) return [];
+
+    const structureFaults = submission.value.structureCheckFaults();
+    const extraFaults = submission.value.isStructureCheckPassed() ? submission.value.extraCheckFaults() : [];
+
+    return [...structureFaults, ...extraFaults];
+});
+
 /* Watchers */
 // A watch to update the feedbacks when a new feedback is added
 watch(
@@ -75,15 +85,21 @@ watch(
                 <!-- Submission status -->
                 <div>
                     <Title class="flex">Status</Title>
+                    <div v-if="submission" class="p-2">
+                        <p v-if="submission.isPassed()">{{ t('views.submissions.passed') }}</p>
+                        <div v-else>
+                            <span>{{ t('views.submissions.failed') }}</span>
+                            <ul class="m-1">
+                                <li v-for="fault in structureAndExtraFaults" :key="fault">{{ t(fault) }}</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <!-- Submission Downloadable zip -->
                 <div>
                     <Title class="flex">File(s)</Title>
                     <!-- TODO change this to zip -->
-                    {{ submission! }}
-                    <div v-if="submission">
-
-                    </div>
+                    <div v-if="submission"></div>
                 </div>
             </div>
             <!-- Feedback section -->

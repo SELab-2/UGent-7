@@ -91,6 +91,8 @@
             "course": "Course",
             "chooseFile": "Choose a file",
             "noSubmissions": "No submissions available",
+            "passed": "Passed",
+            "failed": "The submission is not passed.",
             "hoverText": {
               "allChecksFailed": "Structure and extra checks failed",
               "allChecksPassed": "All checks passed",
@@ -109,6 +111,18 @@
                 "dateAndAuthor": "On {0} wrote {1}:",
                 "edit": "Edit feedback",
                 "noFeedback": "No feedback given yet"
+            },
+            "error": {
+                "blockedExtension": "There is a blocked extension in your solution",
+                "obligatedExtensionNotFound": "Obligated extension not found in your solution",
+                "fileDirNotFound": "File directory not found in your solution",
+                "dockerImageError": "Error in Docker image",
+                "timeLimit": "Time limit exceeded",
+                "memoryLimit": "Memory limit exceeded",
+                "checkError": "Check error",
+                "runtimeError": "Runtime error",
+                "unknown": "Unknown error",
+                "failedStructureCheck": "Structure check failed"
             }
         },
         "courses": {

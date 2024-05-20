@@ -1,5 +1,6 @@
 import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
 import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+import { ErrorMessageEnum } from '@/types/submission/ErrorMessageEnum.ts';
 
 export class Submission {
     constructor(
@@ -42,6 +43,31 @@ export class Submission {
             (check: StructureCheckResult) => check.result === 'SUCCESS',
         );
         return structureChecksPassed.every((check: boolean) => check);
+    }
+
+    /**
+     * Geeft de juiste vertaling voor alle structure check fouten
+     */
+    public structureCheckFaults(): string[] {
+        return this.structureCheckResults.map((check: StructureCheckResult) =>
+            this.getErrorMessageEnumKey(check.error_message as string),
+        );
+    }
+
+    /**
+     * Geeft de juiste vertaling voor alle extra check fouten
+     */
+    public extraCheckFaults(): string[] {
+        return this.extraCheckResults.map((check: ExtraCheckResult) =>
+            this.getErrorMessageEnumKey(check.error_message as string),
+        );
+    }
+
+    private getErrorMessageEnumKey(key: string): string {
+        if (key != null) {
+            return ErrorMessageEnum[key as keyof typeof ErrorMessageEnum];
+        }
+        return '';
     }
 
     /**

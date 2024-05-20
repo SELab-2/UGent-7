@@ -89,6 +89,8 @@
             "course": "Vak",
             "chooseFile": "Kies bestand(en)",
             "noSubmissions": "Geen indieningen beschikbaar",
+            "passed": "Geslaagd",
+            "failed": "De indiening is mislukt",
             "hoverText": {
               "allChecksFailed": "Structuur en extra checks gefaald",
               "allChecksPassed": "Alle checks geslaagd",
@@ -107,6 +109,18 @@
               "dateAndAuthor": "Geschreven op {0} door {1}",
               "edit": "Bewerk feedback",
               "noFeedback": "Geen feedback beschikbaar"
+          },
+          "error":{
+              "blockedExtension": "Er zit een geblokkeerde extensie in je oplossing",
+              "obligatedExtensionNotFound": "Verplichte extensie niet gevonden in je oplossing",
+              "fileDirNotFound": "Bestandsdirectory niet gevonden in je oplossing",
+              "DockerImageError": "Fout in Docker-afbeelding",
+              "timeLimit": "Tijdslimiet overschreden",
+              "memoryLimit": "Geheugenlimiet overschreden",
+              "checkError": "Controlefout",
+              "runtimeError": "Runtime fout",
+              "unknown": "Onbekende fout",
+              "failedStructureCheck": "Structuurcontrole mislukt"
           }
 
         },
