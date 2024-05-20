@@ -1,11 +1,13 @@
+from api.models.assistant import Assistant
 from api.models.group import Group
 from api.models.student import Student
-from api.models.assistant import Assistant
 from api.models.teacher import Teacher
-from api.permissions.role_permissions import is_student, is_assistant, is_teacher
+from api.permissions.role_permissions import (is_assistant, is_student,
+                                              is_teacher)
 from api.serializers.project_serializer import ProjectSerializer
 from api.serializers.student_serializer import StudentIDSerializer
 from django.utils.translation import gettext
+from notifications.signals import NotificationType, notification_create
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -54,6 +56,15 @@ class GroupSerializer(serializers.ModelSerializer):
 
         if "score" in attrs and attrs["score"] > group.project.max_score:
             raise ValidationError(gettext("group.errors.score_exceeds_max"))
+
+        if "score" in attrs and (group.score is None or attrs["score"] != group.score):
+            # Score is updated -> send notification
+            notification_create.send(
+                sender=Group,
+                type=NotificationType.SCORE_UPDATED,
+                queryset=list(group.students.all()),
+                arguments={"score": attrs["score"]},
+            )
 
         return attrs
 

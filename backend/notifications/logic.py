@@ -22,7 +22,7 @@ def get_message_dict(notification: Notification) -> Dict[str, str]:
 
 # Call the function after 60 seconds and no more than once in that period
 def schedule_send_mails():
-    if not cache.get("notifications_send_mails"):
+    if not cache.get("notifications_send_mails", False):
         cache.set("notifications_send_mails", True)
         _send_mails.apply_async(countdown=60)
 
@@ -41,7 +41,7 @@ def _send_mail(mail: mail.EmailMessage, result: List[bool]):
 # TODO: Retry 3
 # https://docs.celeryq.dev/en/v5.3.6/getting-started/next-steps.html#next-steps
 # Send all unsent emails
-@shared_task(ignore_result=True)
+@shared_task()
 def _send_mails():
     # All notifications that need to be sent
     notifications = Notification.objects.filter(is_sent=False)
