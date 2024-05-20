@@ -15,7 +15,7 @@ const { addErrorMessage } = useMessagesStore();
 
 onMounted(async () => {
     // Try catch block to catch any errors that might occur during the login process
-    try{
+    try {
         await login(query.ticket as string);
     } catch (error) {
         addErrorMessage(t('toasts.messages.error'), t('toasts.messages.login.error'));
