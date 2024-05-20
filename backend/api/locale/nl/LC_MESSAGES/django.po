@@ -205,6 +205,7 @@ msgstr "De uiterste inleverdatum voor het project ligt voor de startdatum."
 msgid "project.errors.zip_structure"
 msgstr "Error tijdens de zip te overlopen."
 
+<<<<<<< HEAD
 #: serializers/submission_serializer.py:99 tests/test_submission.py:275
 msgid "project.error.submissions.past_project"
 msgstr "De uiterste inleverdatum voor het project is gepasseerd."
@@ -218,6 +219,25 @@ msgid "project.error.submissions.archived_project"
 msgstr "Het project is gearchiveerd."
 
 #: serializers/submission_serializer.py:108
+=======
+#: serializers/submission_serializer.py:98
+msgid "project.error.submissions.project_not_started"
+msgstr "Het project is nog niet begonnen."
+
+#: serializers/submission_serializer.py:102 tests/test_submission.py:275
+msgid "project.error.submissions.past_project"
+msgstr "De uiterste inleverdatum voor het project is gepasseerd."
+
+#: serializers/submission_serializer.py:105 tests/test_submission.py:346
+msgid "project.error.submissions.non_visible_project"
+msgstr "Het project is niet zichtbaar."
+
+#: serializers/submission_serializer.py:108 tests/test_submission.py:376
+msgid "project.error.submissions.archived_project"
+msgstr "Het project is gearchiveerd."
+
+#: serializers/submission_serializer.py:111
+>>>>>>> 9bf111cb (fix: no submissions before start)
 msgid "project.error.submissions.no_files"
 msgstr "De indiening is leeg"
 
