@@ -9,9 +9,7 @@
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
                 "courses": "courses",
-                "projects": "projects",
-                "settings": "preferences",
-                "help": "help"
+                "projects": "projects"
             },
             "language": {
                 "nl": "Nederlands",
@@ -110,7 +108,6 @@
             "clone": "Clone course",
             "cloneAssistants": "Clone assistants:",
             "cloneTeachers": "Clone teachers:",
-            "cloneCourse": "Clone teachers:",
             "name": "Course name",
             "description": "Description",
             "excerpt": "Short description",
@@ -122,14 +119,11 @@
             "noProjects": "No projects available for this course",
             "teachersAndAssistants": {
                 "title": "People linked to this course",
-                "enroll": "Add as {0}",
-                "leave": "Remove from course",
                 "edit": "Edit users",
                 "search": {
                     "search": "Search",
                     "faculty": "Faculty",
-                    "role": "Role",
-                    "no_role": "None",
+                    "noRole": "None",
                     "placeholder": "Search a user by name",
                     "title": "Find users to link to this course",
                     "results": "1 user found for set filters | {count} users found for set filters"
@@ -142,9 +136,6 @@
                 "placeholder": "Search a course by name",
                 "title": "Search a course",
                 "results": "1 course found for set filters | {count} courses found for set filters"
-            },
-            "searchByLink": {
-                "placeholder": "Find a course using the registration link"
             },
             "share": {
                 "title": "Activate invitation link",
@@ -161,7 +152,6 @@
                 "unauthorized": "unauthorized",
                 "unauthorizedDetail": "You are not authorized to access this resource.",
                 "server": "Server Error",
-                "serverDetail": "An error occurred on the server.",
                 "network": "Network Error",
                 "networkDetail": "Unable to reach the server.",
                 "request": "request error",
@@ -176,8 +166,6 @@
             "createProject": "Create a new project",
             "searchCourse": "Search a course",
             "createCourse": "Create a new course",
-            "public": "Public",
-            "protected": "Protected",
             "csv": "Download grades as a .csv file"
         },
         "card": {
@@ -201,7 +189,6 @@
                 "teacher": "No courses found. Create a new course with the button below.",
                 "search": "No courses found for the given search criteria."
             },
-            "noResults": "No results.",
             "noIncomingProjects": "No projects with a deadline within 7 days.",
             "selectCourse": "Select the course for which you want to create a project:",
             "showPastProjects": "Projects with passed deadline"
@@ -294,13 +281,11 @@
             "nameInput": "Name of docker image",
             "name": "Name",
             "owner": "Owner ID",
-            "public": "Public",
-            "private": "Private"
+            "public": "Public"
         },
-        "none_found": "No matching data.",
+        "noneFound": "No matching data.",
         "loading": "Loading data. Please wait.",
-        "safeGuard": "Are you sure?",
-        "no_file": "No file found."
+        "safeGuard": "Are you sure?"
     },
     "primevue": {
         "startsWith": "Starts with",

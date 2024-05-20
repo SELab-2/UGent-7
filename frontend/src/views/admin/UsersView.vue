@@ -136,7 +136,7 @@ const saveItem = async (): Promise<void> => {
         // update locally
         await dataTable.value.fetch();
     } else {
-        addErrorMessage(t('toasts.admin.save.error.title'), t('toasts.admin.save.error.detail'));
+        addErrorMessage(t('toasts.messages.admin.save.error.title'), t('toasts.messages.admin.save.error.detail'));
     }
     // stop showing popup
     popupEdit.value = false;

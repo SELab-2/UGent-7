@@ -9,9 +9,7 @@
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
                 "courses": "Vakken",
-                "projects": "Projecten",
-                "settings": "Voorkeuren",
-                "help": "Help"
+                "projects": "Projecten"
             },
             "language": {
                 "nl": "Nederlands",
@@ -71,6 +69,8 @@
             "scoreVisibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
             "noStudents": "Geen studenten in deze groep",
+            "locked": "Gesloten",
+            "unlocked": "Open",
             "extraChecks": {
                 "title": "Automatische checks op een indiening",
                 "add": "Nieuwe check",
@@ -119,14 +119,11 @@
             "noProjects": "Geen projecten beschikbaar voor dit vak",
             "teachersAndAssistants": {
                 "title": "Lesgevers gelinkt aan dit vak",
-                "enroll": "Voeg toe als {0}",
-                "leave": "Verwijder uit vak",
                 "edit": "Bewerk gebruikers",
                 "search": {
                     "search": "Zoeken",
                     "faculty": "Faculteit",
-                    "role": "Rol",
-                    "no_role": "Geen",
+                    "noRole": "Geen",
                     "placeholder": "Zoek een gebruiker op naam",
                     "title": "Zoek gebuikers om aan dit vak toe te voegen",
                     "results": "1 gebruiker gevonden voor ingestelde filters | {count} gebruikers gevonden voor ingestelde filters"
@@ -140,15 +137,12 @@
                 "title": "Zoek een vak",
                 "results": "1 vak gevonden voor ingestelde filters | {count} vakken gevonden voor ingestelde filters"
             },
-            "searchByLink": {
-                "placeholder": "Zoek een vak gebruik makende van een uitnodigingslink"
-            },
             "share": {
                 "title": "Activeer invitatielink",
                 "duration": "Geldigheidsduur van link (in dagen):",
                 "link": "Invitatielink:"
             }
-      }
+        }
     },
     "composables": {
         "helpers": {
@@ -158,7 +152,6 @@
                 "unauthorized": "Onbevoegd",
                 "unauthorizedDetail": "Je bent niet bevoegd om deze bron te bereiken.",
                 "server": "Server Fout",
-                "serverDetail": "Er vond een fout plaats op de server.",
                 "network": "Netwerk Fout",
                 "networkDetail": "Kan de server niet bereiken.",
                 "request": "Fout verzoek",
@@ -173,8 +166,6 @@
             "createProject": "Creëer nieuw project",
             "searchCourse": "Zoek een vak",
             "createCourse": "Maak een vak",
-            "public": "Publiek",
-            "protected": "Besloten",
             "csv": "Download punten als een .csv bestand"
         },
         "card": {
@@ -198,7 +189,6 @@
                 "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop.",
                 "search": "Geen vakken gevonden voor de gegeven zoekcriteria."
             },
-            "noResults": "Geen resultaten.",
             "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
             "selectCourse": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
@@ -291,10 +281,9 @@
             "nameInput": "Naam van docker image",
             "name": "Naam",
             "owner": "Eigenaar ID",
-            "public": "Publiek",
-            "private": "Privaat"
+            "public": "Publiek"
         },
-        "none_found": "Geen overeenkomende data gevonden.",
+        "noneFound": "Geen overeenkomende data gevonden.",
         "loading": "Aan het laden. Wacht even aub.",
         "safeGuard": "Bent u het zeker?"
     },
