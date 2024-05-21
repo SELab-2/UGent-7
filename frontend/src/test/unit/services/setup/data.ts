@@ -129,18 +129,18 @@ export const submissions = [
     },
 ];
 
-export const groups = [
+const groups = [
     {
         id: '0',
         score: 20,
-        project: '0',
+        project: {},
         students: ['1', '2', '3', '000201247011'],
         submissions: [submissions[0]]
     },
     {
         id: '1',
         score: 18,
-        project: '0',
+        project: {},
         students: ['1', '2', '3', '000201247011'],
         submissions: [submissions[1]]
     },
@@ -187,7 +187,32 @@ export const projects = [
         groups: [groups[0], groups[1]],
         submissions: [submissions[0], submissions[1]],
     },
+    {
+        id: '3',
+        name: 'project3',
+        description: 'project3 description',
+        visible: true,
+        archived: false,
+        locked_groups: false,
+        start_date: new Date('June 11, 2024 01:15:00'),
+        deadline: new Date('July 11, 2025 01:15:00'),
+        max_score: 150,
+        score_visible: false,
+        group_size: 12,
+        course: [],
+        status: [],
+        structure_file: new File(['byte1', 'byte2'], 'submission.zip', { type: 'application/zip' }),
+        structureChecks: null,
+        extra_checks: null,
+        groups: [],
+        submissions: [],
+    },
 ];
+
+groups[0].project = projects[2]
+groups[1].project = projects[2]
+
+export { groups }
 
 export const faculties = [
     { id: 'sciences', name: 'wetenschappen' },

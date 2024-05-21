@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, assertType, expectTypeOf } from 'vitest';
+import { describe, it, expect, assertType } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useCourses } from '@/composables/services/course.service';
 import { Project } from '@/types/Project';

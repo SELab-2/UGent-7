@@ -55,7 +55,7 @@ export const getHandlers = [
         return HttpResponse.json(courses.find((x) => x.id === params.id));
     }),
     http.get(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'), ({ params }) => {
-        return HttpResponse.json(groups.filter((x) => x.project === params.id));
+        return HttpResponse.json(groups.filter((x) => x.project.id === params.id));
     }),
     http.get(baseUrl + endpoints.submissions.byProject.replace('{projectId}', ':id'), ({ params }) => {
         const project = projects.find((x) => x.id === params.id);
