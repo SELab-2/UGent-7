@@ -45,15 +45,17 @@ describe('submissions', (): void => {
 
         await getSubmissionByProject('0');
         expect(submissions).not.toBeNull();
-        // expect(Array.isArray(submissions.value)).toBe(true);
-        // expect(submissions.value?.length).toBe(2);
+        expect(Array.isArray(submissions.value)).toBe(true);
+        expect(submissions.value?.length).toBe(2);
 
-        // expect(submissions.value?.[0]?.files).toEqual([]);
-        // expect(submissions.value?.[0]?.submission_number).toBe(1);
-        // expect(submissions.value?.[0]?.submission_time).toEqual(new Date('July 21, 2024 01:15:00'));
+        expect(submissions.value?.[0]?.id).toEqual('1');
+        expect(submissions.value?.[0]?.submission_number).toEqual(1);
+        expect(submissions.value?.[0]?.submission_time).toStrictEqual(new Date('July 21, 2024 01:15:00'));
+        expect(submissions.value?.[0]?.is_valid).toEqual(true);   
 
-        // expect(submissions.value?.[1]?.files).toEqual([]);
-        // expect(submissions.value?.[1]?.submission_number).toBe(2);
-        // expect(submissions.value?.[1]?.submission_time).toEqual(new Date('July 21, 2024 01:15:00'));
+        expect(submissions.value?.[1]?.id).toEqual('2');
+        expect(submissions.value?.[1]?.submission_number).toEqual(2);
+        expect(submissions.value?.[1]?.submission_time).toStrictEqual(new Date('July 21, 2024 01:15:00'));
+        expect(submissions.value?.[1]?.is_valid).toEqual(true);    
     });
 });

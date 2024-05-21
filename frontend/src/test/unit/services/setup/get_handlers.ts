@@ -60,18 +60,11 @@ export const getHandlers = [
     http.get(baseUrl + endpoints.submissions.byProject.replace('{projectId}', ':id'), ({ params }) => {
         const project = projects.find((x) => x.id === params.id);
         const submittedSubmissions = project !== null && project !== undefined ? project.submissions : [];
+
         // Convert to a ResponseSubmission object
-        const submission = submissions.filter((x) => submittedSubmissions.includes(x.id))
-        console.log("submission: " + JSON.stringify(submission))
-        const response_submission = {
-            id: submission?.id,
-            submission_number: submission?.submission_number,
-            submission_time: submission?.submission_time,
-            zip: submission?.zip,
-            results: [], // We can leave this empty since the conversion to a valid results array is not the purpose of these tests
-            is_valid: submission?.is_valid
-        }
-        return HttpResponse.json(response_submission);
+        const projectSubmissions = submissions.filter((x) => submittedSubmissions.map(y => y.id).includes(x.id))
+        const response_submissions = projectSubmissions.map(x => ({ id: x?.id, submission_number: x?.submission_number,submission_time: x?.submission_time,zip: x?.zip,results: [], is_valid: x?.is_valid }) )
+        return HttpResponse.json(response_submissions);
     }),
     http.get(baseUrl + endpoints.teachers.byCourse.replace('{courseId}', ':id'), ({ params }) => {
         const course = courses.find((x) => x.id === params.id);
