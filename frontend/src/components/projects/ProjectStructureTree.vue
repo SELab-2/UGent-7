@@ -111,7 +111,7 @@ function addStructureCheck(check: StructureCheck | null = null): void {
  * @param node
  */
 function selectStructureCheck(node: TreeNode): void {
-    if (node.check) {
+    if (node.check === true) {
         selectedStructureCheck.value = node.data;
     }
 }
@@ -195,7 +195,7 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                         <template v-if="node.check && editingStructureCheck === node.data">
                             <InputText
                                 :model-value="node.label"
-                                @keydown.enter="updateStructureCheckName($event.target as HTMLInputElement)"
+                                @change="updateStructureCheckName($event.target as HTMLInputElement)"
                             >
                             </InputText>
                         </template>

@@ -76,7 +76,6 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-
         if "time_limit" in data and not 10 <= data["time_limit"] <= 1000:
             raise serializers.ValidationError(_("extra_check.error.time_limit"))
 

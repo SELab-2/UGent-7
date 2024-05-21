@@ -98,7 +98,11 @@ async function onDockerImageUpload(event: any): Promise<void> {
     <!-- List with the extra checks -->
     <div class="flex flex-column gap-3 border-round border-1 border-400 p-3">
         <template v-if="extraChecks && extraChecks.length > 0">
-            <div class="flex align-items-center justify-content-between gap-2" v-for="(item, index) in extraChecks">
+            <div
+                class="flex align-items-center justify-content-between gap-2"
+                v-for="(item, index) in extraChecks"
+                :key="index"
+            >
                 <span>{{ item.name }}</span>
                 <Button
                     icon="pi pi-times"

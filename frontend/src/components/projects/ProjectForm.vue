@@ -9,7 +9,7 @@ import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
 import { Project } from '@/types/Project.ts';
 import { useI18n } from 'vue-i18n';
-import { computed, onMounted, ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { type Course } from '@/types/Course.ts';
@@ -46,17 +46,19 @@ const rules = computed(() => {
     };
 });
 
-const v$ = useVuelidate(rules, form);
+const v$ = useVuelidate(rules, form, {
+    $scope: 'form'
+});
 
 /**
  * Save the project form to the API backend.
  */
 async function saveProject(): Promise<void> {
     // Validate the form.
-    const result = await v$.value.$validate();
+    const validated = await v$.value.$validate();
 
     // Only submit the form if the validation was successful
-    if (result || true) {
+    if (validated) {
         emit('update:project', form.value, numberOfGroups.value);
     }
 }
@@ -74,7 +76,7 @@ function saveDockerImage(image: DockerImage, file: File): void {
 /**
  * Watch for changes in the project prop and update the form values.
  */
-watchEffect(async () => {
+watchEffect(() => {
     /* Set the form values with the existing project */
     const project = props.project;
 
