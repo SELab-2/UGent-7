@@ -19,4 +19,6 @@ import '../../../../cypress/support/commands.ts'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-cy.task('db:seed');
+import { seed } from '@/test/e2e/setup/seed.ts';
+
+seed().then(r => console.log(r));

@@ -68,7 +68,7 @@ class CASViewSet(ViewSet):
         raise AuthenticationFailed(token_serializer.errors)
 
 
-def create_user(self, request, data) -> User:
+def create_user(self, request, data) -> tuple[User, bool]:
     """General function to create a user, log them in and which returns an empty html page"""
     # log in user, or retrieve if they already exist
     user, created = User.objects.get_or_create(id=data["id"], defaults=data)
@@ -81,7 +81,7 @@ def create_user(self, request, data) -> User:
     login(request, user)
 
     # return Response with empty html page
-    return user
+    return user, created
 
 
 response = Response('<!DOCTYPE html><html></html>',
@@ -101,9 +101,10 @@ class TestUser(ViewSet):
 
     @action(detail=False, methods=['POST'], permission_classes=[IsDebug], url_path='multi')
     def login_multi(self, request, *__) -> Response:
-        user = create_user(self, request, settings.TEST_MULTI_DATA)
-        Assistant.create(user)
-        Teacher.create(user)
+        user, created = create_user(self, request, settings.TEST_MULTI_DATA)
+        if created:
+            Assistant.create(user)
+            Teacher.create(user)
         return response
 
     @action(detail=False, methods=['POST'], permission_classes=[IsDebug], url_path='admin')

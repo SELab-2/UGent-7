@@ -1,7 +1,7 @@
-import { AxiosInstance } from 'axios';
 import { faculty, course } from './data.ts';
+import { client } from '@/config/axios.ts';
 
-export const seed = async (client: AxiosInstance) => {
+export const seed = async () => {
     // log in as normal users to add 2 users to the database
     await client.post('/api/auth/test-user/student/');
     await client.post('/api/auth/cas/logout/');
