@@ -38,23 +38,23 @@ describe('structureCheck', (): void => {
 
         expect(structureChecks.value?.[0]?.path).toBe('.');
         expect(structureChecks.value?.[0]?.project).toBeNull();
-        expect(structureChecks.value?.[0]?.obligated_extensions).toBeNull();
-        expect(structureChecks.value?.[0]?.blocked_extensions).toBeNull();
+        expect(structureChecks.value?.[0]?.obligated_extensions).toEqual([]);
+        expect(structureChecks.value?.[0]?.blocked_extensions).toEqual([]);
 
         expect(structureChecks.value?.[1]?.path).toBe('folder1');
         expect(structureChecks.value?.[1]?.project).toBeNull();
-        expect(structureChecks.value?.[1]?.obligated_extensions).toBeNull();
-        expect(structureChecks.value?.[1]?.blocked_extensions).toBeNull();
+        expect(structureChecks.value?.[1]?.obligated_extensions).toEqual([]);
+        expect(structureChecks.value?.[1]?.blocked_extensions).toEqual([]);
 
         expect(structureChecks.value?.[2]?.path).toBe('folder3');
         expect(structureChecks.value?.[2]?.project).toBeNull();
-        expect(structureChecks.value?.[2]?.obligated_extensions).toBeNull();
-        expect(structureChecks.value?.[2]?.blocked_extensions).toBeNull();
+        expect(structureChecks.value?.[2]?.obligated_extensions).toEqual([]);
+        expect(structureChecks.value?.[2]?.blocked_extensions).toEqual([]);
 
         expect(structureChecks.value?.[3]?.path).toBe('folder3/folder3-1');
         expect(structureChecks.value?.[3]?.project).toBeNull();
-        expect(structureChecks.value?.[3]?.obligated_extensions).toBeNull();
-        expect(structureChecks.value?.[3]?.blocked_extensions).toBeNull();
+        expect(structureChecks.value?.[3]?.obligated_extensions).toEqual([]);
+        expect(structureChecks.value?.[3]?.blocked_extensions).toEqual([]);
     });
 });
 
