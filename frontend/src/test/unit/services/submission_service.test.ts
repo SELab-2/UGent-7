@@ -23,10 +23,10 @@ describe('submissions', (): void => {
     });
 
     it('gets submissions data by group', async () => {
-        // resetService();
+        resetService();
 
-        // await getSubmissionByGroup('1');
-        // console.log(JSON.stringify(submission.value))
+        await getSubmissionByGroup('1');
+        console.log(JSON.stringify(submissions.value))
         // expect(submissions).not.toBeNull();
         // expect(Array.isArray(submissions.value)).toBe(true);
         // expect(submissions.value?.length).toBe(2);

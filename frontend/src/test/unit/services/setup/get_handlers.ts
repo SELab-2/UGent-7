@@ -122,6 +122,7 @@ export const getHandlers = [
         );
     }),
     http.get(baseUrl + endpoints.submissions.byGroup.replace('{groupId}', ':id'), ({ params }) => {
+        console.log(submissions.filter((x) => x.group === params.id))
         return HttpResponse.json(submissions.filter((x) => x.group === params.id));
     }),
     http.get(baseUrl + endpoints.faculties.retrieve.replace('{id}', ':id'), ({ params }) => {
