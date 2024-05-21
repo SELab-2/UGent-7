@@ -24,32 +24,32 @@ export function useProject(): ProjectState {
     const project = ref<Project | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getProjectByID(id: string): Promise<void> {
+    async function getProjectByID(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
-        await get<Project>(endpoint, project, Project.fromJSON);
+        await get<Project>(endpoint, project, Project.fromJSON, selfprocessError);
     }
 
-    async function getProjectsByCourse(courseId: string): Promise<void> {
+    async function getProjectsByCourse(courseId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
-        await getList<Project>(endpoint, projects, Project.fromJSON);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfprocessError);
     }
 
-    async function getProjectsByStudent(studentId: string): Promise<void> {
+    async function getProjectsByStudent(studentId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byStudent.replace('{studentId}', studentId);
-        await getList<Project>(endpoint, projects, Project.fromJSON);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfprocessError);
     }
 
-    async function getProjectsByAssistant(assistantId: string): Promise<void> {
+    async function getProjectsByAssistant(assistantId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byAssistant.replace('{assistantId}', assistantId);
-        await getList<Project>(endpoint, projects, Project.fromJSON);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfprocessError);
     }
 
-    async function getProjectsByTeacher(teacherId: string): Promise<void> {
+    async function getProjectsByTeacher(teacherId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byTeacher.replace('{teacherId}', teacherId);
-        await getList<Project>(endpoint, projects, Project.fromJSON);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfprocessError);
     }
 
-    async function getProjectsByCourseAndDeadline(courseId: string, deadlineDate: Date): Promise<void> {
+    async function getProjectsByCourseAndDeadline(courseId: string, deadlineDate: Date, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
 
         await axios
@@ -63,7 +63,7 @@ export function useProject(): ProjectState {
                     return project.deadline.toDateString() === deadlineDate.toDateString();
                 });
             })
-            .catch((error) => {
+            .catch((error) => { // TODO tybo
                 if (axios.isAxiosError(error)) {
                     processError(error);
                     console.log(error.response?.data);
@@ -73,7 +73,7 @@ export function useProject(): ProjectState {
             });
     }
 
-    async function createProject(projectData: Project, courseId: string, numberOfGroups: number): Promise<void> {
+    async function createProject(projectData: Project, courseId: string, numberOfGroups: number, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
 
         // Initialize an empty object to hold the data to send
@@ -96,10 +96,10 @@ export function useProject(): ProjectState {
             requestData.number_groups = numberOfGroups;
         }
 
-        await create<Project>(endpoint, requestData, project, Project.fromJSON, 'multipart/form-data');
+        await create<Project>(endpoint, requestData, project, Project.fromJSON, 'multipart/form-data', selfprocessError);
     }
 
-    async function updateProject(projectData: Project): Promise<void> {
+    async function updateProject(projectData: Project, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', projectData.id);
         await patch(
             endpoint,
@@ -118,12 +118,13 @@ export function useProject(): ProjectState {
             },
             response,
             'multipart/form-data',
+            selfprocessError
         );
     }
 
-    async function deleteProject(id: string): Promise<void> {
+    async function deleteProject(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
-        await deleteId<Project>(endpoint, project, Project.fromJSON);
+        await deleteId<Project>(endpoint, project, Project.fromJSON, selfprocessError);
     }
 
     return {

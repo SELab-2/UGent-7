@@ -26,47 +26,47 @@ export function useStudents(): StudentsState {
     const student = ref<Student | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getStudentByID(id: string): Promise<void> {
+    async function getStudentByID(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.retrieve.replace('{id}', id);
-        await get<Student>(endpoint, student, Student.fromJSON);
+        await get<Student>(endpoint, student, Student.fromJSON, selfprocessError);
     }
 
-    async function getStudents(): Promise<void> {
+    async function getStudents(selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.index;
-        await getList<Student>(endpoint, students, Student.fromJSON);
+        await getList<Student>(endpoint, students, Student.fromJSON, selfprocessError);
     }
 
-    async function getStudentsByCourse(courseId: string): Promise<void> {
+    async function getStudentsByCourse(courseId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
-        await getList<Student>(endpoint, students, Student.fromJSON);
+        await getList<Student>(endpoint, students, Student.fromJSON, selfprocessError);
     }
 
-    async function getStudentsByGroup(groupId: string): Promise<void> {
+    async function getStudentsByGroup(groupId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
-        await getList<Student>(endpoint, students, Student.fromJSON);
+        await getList<Student>(endpoint, students, Student.fromJSON, selfprocessError);
     }
 
-    async function studentJoinCourse(courseId: string, studentId: string): Promise<void> {
+    async function studentJoinCourse(courseId: string, studentId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
-        await create<Response>(endpoint, { student: studentId }, response, Response.fromJSON);
+        await create<Response>(endpoint, { student: studentId }, response, Response.fromJSON, undefined, selfprocessError);
     }
 
-    async function studentLeaveCourse(courseId: string, studentId: string): Promise<void> {
+    async function studentLeaveCourse(courseId: string, studentId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
-        await deleteIdWithData<Response>(endpoint, { student: studentId }, response, Response.fromJSON);
+        await deleteIdWithData<Response>(endpoint, { student: studentId }, response, Response.fromJSON, selfprocessError);
     }
 
-    async function studentJoinGroup(groupId: string, studentId: string): Promise<void> {
+    async function studentJoinGroup(groupId: string, studentId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
-        await create<Response>(endpoint, { student: studentId }, response, Response.fromJSON);
+        await create<Response>(endpoint, { student: studentId }, response, Response.fromJSON, undefined, selfprocessError);
     }
 
-    async function studentLeaveGroup(groupId: string, studentId: string): Promise<void> {
+    async function studentLeaveGroup(groupId: string, studentId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
-        await deleteIdWithData<Response>(endpoint, { student: studentId }, response, Response.fromJSON);
+        await deleteIdWithData<Response>(endpoint, { student: studentId }, response, Response.fromJSON, selfprocessError);
     }
 
-    async function createStudent(studentData: Student): Promise<void> {
+    async function createStudent(studentData: Student, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.index;
 
         await create<Student>(
@@ -77,12 +77,14 @@ export function useStudents(): StudentsState {
             },
             student,
             Student.fromJSON,
+            undefined,
+            selfprocessError
         );
     }
 
-    async function deleteStudent(id: string): Promise<void> {
+    async function deleteStudent(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.retrieve.replace('{id}', id);
-        await deleteId<Student>(endpoint, student, Student.fromJSON);
+        await deleteId<Student>(endpoint, student, Student.fromJSON, selfprocessError);
     }
 
     return {

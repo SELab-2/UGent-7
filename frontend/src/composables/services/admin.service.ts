@@ -16,17 +16,17 @@ export function useAdmin(): AdminState {
     const admins = ref<User[] | null>(null);
     const admin = ref<User | null>(null);
 
-    async function getAdminByID(id: string): Promise<void> {
+    async function getAdminByID(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id);
-        await get<User>(endpoint, admin, User.fromJSON);
+        await get<User>(endpoint, admin, User.fromJSON, selfprocessError);
     }
 
-    async function getAdmins(): Promise<void> {
+    async function getAdmins(selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.index;
-        await getList<User>(endpoint, admins, User.fromJSON);
+        await getList<User>(endpoint, admins, User.fromJSON, selfprocessError);
     }
 
-    async function createAdmin(user: User): Promise<void> {
+    async function createAdmin(user: User, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.index;
         await create<User>(
             endpoint,
@@ -35,12 +35,14 @@ export function useAdmin(): AdminState {
             },
             admin,
             User.fromJSON,
+            undefined,
+            selfprocessError
         );
     }
 
-    async function deleteAdmin(id: string): Promise<void> {
+    async function deleteAdmin(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id);
-        await deleteId<User>(endpoint, admin, User.fromJSON);
+        await deleteId<User>(endpoint, admin, User.fromJSON, selfprocessError);
     }
 
     return {

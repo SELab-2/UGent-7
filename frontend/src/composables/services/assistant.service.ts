@@ -29,37 +29,37 @@ export function useAssistant(): AssistantState {
     const response = ref<Response | null>(null);
     const assistantPagination = ref<PaginatorResponse<Assistant> | null>(null);
 
-    async function getAssistantByID(id: string): Promise<void> {
+    async function getAssistantByID(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
-        await get<Assistant>(endpoint, assistant, Assistant.fromJSON);
+        await get<Assistant>(endpoint, assistant, Assistant.fromJSON, selfprocessError);
     }
 
-    async function getAssistantsByCourse(courseId: string): Promise<void> {
+    async function getAssistantsByCourse(courseId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON);
+        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON, selfprocessError);
     }
 
-    async function getAssistants(): Promise<void> {
+    async function getAssistants(selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.index;
-        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON);
+        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON, selfprocessError);
     }
 
-    async function searchAssistants(filters: Filter, page: number, pageSize: number): Promise<void> {
+    async function searchAssistants(filters: Filter, page: number, pageSize: number, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.search;
-        await getPaginatedList<Assistant>(endpoint, filters, page, pageSize, assistantPagination, Assistant.fromJSON);
+        await getPaginatedList<Assistant>(endpoint, filters, page, pageSize, assistantPagination, Assistant.fromJSON, selfprocessError);
     }
 
-    async function assistantJoinCourse(courseId: string, assistantId: string): Promise<void> {
+    async function assistantJoinCourse(courseId: string, assistantId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await create<Response>(endpoint, { assistant: assistantId }, response, Response.fromJSON);
+        await create<Response>(endpoint, { assistant: assistantId }, response, Response.fromJSON, undefined, selfprocessError);
     }
 
-    async function assistantLeaveCourse(courseId: string, assistantId: string): Promise<void> {
+    async function assistantLeaveCourse(courseId: string, assistantId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await deleteIdWithData<Response>(endpoint, { assistant: assistantId }, response, Response.fromJSON);
+        await deleteIdWithData<Response>(endpoint, { assistant: assistantId }, response, Response.fromJSON, selfprocessError);
     }
 
-    async function createAssistant(user: User): Promise<void> {
+    async function createAssistant(user: User, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.index;
         await create<Assistant>(
             endpoint,
@@ -68,12 +68,14 @@ export function useAssistant(): AssistantState {
             },
             assistant,
             Assistant.fromJSON,
+            undefined,
+            selfprocessError
         );
     }
 
-    async function deleteAssistant(id: string): Promise<void> {
+    async function deleteAssistant(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
-        await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON);
+        await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON, selfprocessError);
     }
 
     return {

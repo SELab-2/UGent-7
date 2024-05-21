@@ -17,12 +17,12 @@ export function useExtraCheck(): ExtraCheckState {
     const extraChecks = ref<ExtraCheck[] | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getExtraChecksByProject(projectId: string): Promise<void> {
+    async function getExtraChecksByProject(projectId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.extraChecks.byProject.replace('{projectId}', projectId);
-        await getList<ExtraCheck>(endpoint, extraChecks, ExtraCheck.fromJSON);
+        await getList<ExtraCheck>(endpoint, extraChecks, ExtraCheck.fromJSON, selfprocessError);
     }
 
-    async function addExtraCheck(extraCheckData: ExtraCheck, projectId: string): Promise<void> {
+    async function addExtraCheck(extraCheckData: ExtraCheck, projectId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.extraChecks.byProject.replace('{projectId}', projectId);
         await create<ExtraCheck>(
             endpoint,
@@ -37,12 +37,13 @@ export function useExtraCheck(): ExtraCheckState {
             extraCheck,
             ExtraCheck.fromJSON,
             'multipart/form-data',
+            selfprocessError
         );
     }
 
-    async function deleteExtraCheck(extraCheckId: string): Promise<void> {
+    async function deleteExtraCheck(extraCheckId: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.extraChecks.retrieve.replace('{id}', extraCheckId);
-        await deleteId(endpoint, response, Response.fromJSON);
+        await deleteId(endpoint, response, Response.fromJSON, selfprocessError);
     }
 
     return {

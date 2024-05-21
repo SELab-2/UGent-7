@@ -23,22 +23,22 @@ export function useUser(): userState {
     const user = ref<User | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getUserByID(id: string): Promise<void> {
+    async function getUserByID(id: string, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.retrieve.replace('{id}', id);
-        await get<User>(endpoint, user, User.fromJSON);
+        await get<User>(endpoint, user, User.fromJSON, selfprocessError);
     }
 
-    async function getUsers(): Promise<void> {
+    async function getUsers(selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.index;
-        await getList<User>(endpoint, users, User.fromJSON);
+        await getList<User>(endpoint, users, User.fromJSON, selfprocessError);
     }
 
-    async function searchUsers(filters: Filter, page: number, pageSize: number): Promise<void> {
+    async function searchUsers(filters: Filter, page: number, pageSize: number, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.search;
-        await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON);
+        await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON, selfprocessError);
     }
 
-    async function createUser(userData: User): Promise<void> {
+    async function createUser(userData: User, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.index;
         await create<User>(
             endpoint,
@@ -51,10 +51,12 @@ export function useUser(): userState {
             },
             user,
             User.fromJSON,
+            undefined,
+            selfprocessError
         );
     }
 
-    async function toggleAdmin(id: string, isStaff: boolean): Promise<void> {
+    async function toggleAdmin(id: string, isStaff: boolean, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.admin.replace('{id}', id);
         await patch(
             endpoint,
@@ -62,6 +64,8 @@ export function useUser(): userState {
                 is_staff: isStaff,
             },
             response,
+            undefined,
+            selfprocessError
         );
     }
 

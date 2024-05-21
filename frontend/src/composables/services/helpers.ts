@@ -14,14 +14,17 @@ import { type Filter } from '@/types/filter/Filter.ts';
  * @param ref
  * @param fromJson
  */
-export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
+export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T, selfprocessError: boolean = true): Promise<void> {
     try {
         const response = await client.get(endpoint);
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        processError(error);
-        console.error(error); // Log the error for debugging
-        throw error; // Re-throw the error to the caller
+        if(selfprocessError){
+            processError(error);
+            console.error(error); // Log the error for debugging
+        }else{
+            throw error; // Re-throw the error to the caller
+        }
     }
 }
 
@@ -39,6 +42,7 @@ export async function create<T>(
     ref: Ref<T | null>,
     fromJson: (data: any) => T,
     contentType: string = 'application/json',
+    selfprocessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.post(endpoint, data, {
@@ -48,9 +52,12 @@ export async function create<T>(
         });
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        processError(error);
-        console.error(error); // Log the error for debugging
-        throw error; // Re-throw the error to the caller
+        if(selfprocessError){
+            processError(error);
+            console.error(error); // Log the error for debugging
+        }else{
+            throw error; // Re-throw the error to the caller
+        }
     }
 }
 
@@ -67,6 +74,7 @@ export async function patch(
     data: any,
     ref: Ref<Response | null>,
     contentType: string = 'application/json',
+    selfprocessError: boolean = true,
 ): Promise<void> {
     try {
         const response: AxiosResponse<Response, any> = await client.patch(endpoint, data, {
@@ -76,9 +84,12 @@ export async function patch(
         });
         ref.value = Response.fromJSON(response.data);
     } catch (error: any) {
-        processError(error);
-        console.error(error);
-        throw error;
+        if(selfprocessError){
+            processError(error);
+            console.error(error); // Log the error for debugging
+        }else{
+            throw error; // Re-throw the error to the caller
+        }
     }
 }
 
@@ -89,14 +100,17 @@ export async function patch(
  * @param ref
  * @param fromJson
  */
-export async function deleteId<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
+export async function deleteId<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T, selfprocessError: boolean = true): Promise<void> {
     try {
         const response = await client.delete(endpoint);
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        processError(error);
-        console.error(error); // Log the error for debugging
-        throw error; // Re-throw the error to the caller
+        if(selfprocessError){
+            processError(error);
+            console.error(error); // Log the error for debugging
+        }else{
+            throw error; // Re-throw the error to the caller
+        }
     }
 }
 
@@ -113,14 +127,18 @@ export async function deleteIdWithData<T>(
     data: any,
     ref: Ref<T | null>,
     fromJson: (data: any) => T,
+    selfprocessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.delete(endpoint, { data });
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        processError(error);
-        console.error(error); // Log the error for debugging
-        throw error; // Re-throw the error to the caller
+        if(selfprocessError){
+            processError(error);
+            console.error(error); // Log the error for debugging
+        }else{
+            throw error; // Re-throw the error to the caller
+        }
     }
 }
 
@@ -131,15 +149,18 @@ export async function deleteIdWithData<T>(
  * @param ref
  * @param fromJson
  */
-export async function getList<T>(endpoint: string, ref: Ref<T[] | null>, fromJson: (data: any) => T): Promise<void> {
+export async function getList<T>(endpoint: string, ref: Ref<T[] | null>, fromJson: (data: any) => T, selfprocessError: boolean = true): Promise<void> {
     try {
         const response = await client.get(endpoint);
         ref.value = response.data.map((data: T) => fromJson(data));
     } catch (error: any) {
-        processError(error);
-        console.error(error); // Log the error for debugging
         ref.value = []; // Set the ref to an empty array
-        throw error; // Re-throw the error to the caller
+        if(selfprocessError){
+            processError(error);
+            console.error(error); // Log the error for debugging
+        }else{
+            throw error; // Re-throw the error to the caller
+        }
     }
 }
 
@@ -160,6 +181,7 @@ export async function getPaginatedList<T>(
     pageSize: number,
     pagination: Ref<PaginatorResponse<T> | null>,
     fromJson: (data: any) => T,
+    selfprocessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.get(endpoint, {
@@ -175,9 +197,6 @@ export async function getPaginatedList<T>(
             results: response.data.results.map((data: T) => fromJson(data)),
         };
     } catch (error: any) {
-        processError(error);
-        console.error(error); // Log the error for debugging
-
         pagination.value = {
             // Set the ref to an empty array
             ...error.data,
@@ -185,7 +204,12 @@ export async function getPaginatedList<T>(
             results: [],
         };
 
-        throw error; // Re-throw the error to the caller
+        if(selfprocessError){
+            processError(error);
+            console.error(error); // Log the error for debugging
+        }else{
+            throw error; // Re-throw the error to the caller
+        }
     }
 }
 
@@ -200,6 +224,7 @@ export async function getListMerged<T>(
     endpoints: string[],
     ref: Ref<T[] | null>,
     fromJson: (data: any) => T,
+    selfprocessError: boolean = true,
 ): Promise<void> {
     // Create an array to accumulate all response data
     const allData: T[] = [];
@@ -210,10 +235,13 @@ export async function getListMerged<T>(
             const responseData: T[] = response.data.map((data: T) => fromJson(data));
             allData.push(...responseData); // Merge into the allData array
         } catch (error: any) {
-            processError(error);
-            console.error(error); // Log the error for debugging
             ref.value = []; // Set the ref to an empty array
-            throw error; // Re-throw the error to the caller
+            if(selfprocessError){
+                processError(error);
+                console.error(error); // Log the error for debugging
+            }else{
+                throw error; // Re-throw the error to the caller
+            }
         }
     }
 
