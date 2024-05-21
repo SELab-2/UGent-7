@@ -40,8 +40,7 @@ class CourseSerializer(serializers.ModelSerializer):
     )
 
     faculty = FacultySerializer(
-        many=False,
-        required=False,
+        read_only=True,
     )
 
     faculty_id = serializers.PrimaryKeyRelatedField(
