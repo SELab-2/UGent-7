@@ -3,18 +3,7 @@
 import { HttpResponse, http } from 'msw';
 
 import { endpoints } from '@/config/endpoints.ts';
-import {
-    groups,
-    projects,
-    courses,
-    faculties,
-    students,
-    teachers,
-    assistants,
-    admins,
-    structureChecks,
-    submissions,
-} from './data';
+import { groups, projects, courses, faculties, students, assistants, admins, structureChecks } from './data';
 
 const baseUrl = 'http://localhost';
 

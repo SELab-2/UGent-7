@@ -1,7 +1,7 @@
-export type FacultyJSON = {
+export interface FacultyJSON {
     id: string;
     name: string;
-};
+}
 
 export class Faculty {
     constructor(

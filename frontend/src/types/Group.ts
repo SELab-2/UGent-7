@@ -1,9 +1,9 @@
-import { Project, ProjectJSON } from './Project.ts';
+import { Project, type ProjectJSON } from './Project.ts';
 import { type Student } from './users/Student.ts';
 import { type Submission } from './submission/Submission.ts';
-import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
-export type GroupJSON = {
+export interface GroupJSON {
     id: string;
     score: number;
     project: ProjectJSON;

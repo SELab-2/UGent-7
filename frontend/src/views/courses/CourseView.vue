@@ -58,7 +58,7 @@ onMounted(async () => {
             </div>
         </template>
         <template v-else>
-            <Loading height="100vh"/>
+            <Loading height="100vh" />
         </template>
     </BaseLayout>
 </template>

@@ -1,7 +1,7 @@
 import { type Course } from '../Course.ts';
 import { type Faculty } from '../Faculty.ts';
-import { type Role, User, UserJSON } from '@/types/users/User.ts';
-import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { type Role, User, type UserJSON } from '@/types/users/User.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
 export type TeacherJSON = {
     courses: HyperlinkedRelation;

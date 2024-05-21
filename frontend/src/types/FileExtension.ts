@@ -1,7 +1,7 @@
-export type FileExtensionJSON = {
+export interface FileExtensionJSON {
     id: string;
     extension: string;
-};
+}
 
 export class FileExtension {
     constructor(

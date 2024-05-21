@@ -1,11 +1,11 @@
 import { Submission } from '@/types/submission/Submission.ts';
 import { ExtraCheck } from '@/types/ExtraCheck.ts';
-import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
-export type ExtraCheckResultJSON = {
+export interface ExtraCheckResultJSON {
     id: string;
     result: string;
-    error_message: string|null;
+    error_message: string | null;
     submission: number;
     structure_check: number;
     resourcetype: string;
@@ -17,7 +17,7 @@ export class ExtraCheckResult {
     constructor(
         public id: string = '',
         public result: string = '',
-        public error_message: string|null = null,
+        public error_message: string | null = null,
         public resourcetype: string = '',
         public submission: Submission = new Submission(),
         public extra_check: ExtraCheck = new ExtraCheck(),

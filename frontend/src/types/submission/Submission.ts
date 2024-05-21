@@ -1,14 +1,15 @@
-import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
-import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
-import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { ExtraCheckResult, type ExtraCheckResultJSON } from '@/types/submission/ExtraCheckResult.ts';
+import { StructureCheckResult, type StructureCheckResultJSON } from '@/types/submission/StructureCheckResult.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
-export type SubmissionJSON = {
+export interface SubmissionJSON {
     id: string;
     submission_number: number;
     submission_time: string;
     is_valid: boolean;
     zip: HyperlinkedRelation;
     group: HyperlinkedRelation;
+    results: Array<ExtraCheckResultJSON | StructureCheckResultJSON>;
 }
 
 export class Submission {
@@ -19,7 +20,7 @@ export class Submission {
         public is_valid: boolean = false,
         public extraCheckResults: ExtraCheckResult[] = [],
         public structureCheckResults: StructureCheckResult[] = [],
-        public zip: File|null = null,
+        public zip: File | null = null,
     ) {}
 
     /**
@@ -60,11 +61,26 @@ export class Submission {
      * @param submission
      */
     static fromJSON(submission: SubmissionJSON): Submission {
+        const extraCheckResults = submission.results
+            .filter(
+                (result: ExtraCheckResultJSON | StructureCheckResultJSON) => result.resourcetype === 'ExtraCheckResult',
+            )
+            .map((result: any) => ExtraCheckResult.fromJSON(result as ExtraCheckResultJSON));
+
+        const structureCheckResults = submission.results
+            .filter(
+                (result: ExtraCheckResultJSON | StructureCheckResultJSON) =>
+                    result.resourcetype === 'StructureCheckResult',
+            )
+            .map((result: any) => StructureCheckResult.fromJSON(result as StructureCheckResultJSON));
+
         return new Submission(
             submission.id,
             submission.submission_number,
             new Date(submission.submission_time),
-            submission.is_valid
+            submission.is_valid,
+            extraCheckResults,
+            structureCheckResults,
         );
     }
 }

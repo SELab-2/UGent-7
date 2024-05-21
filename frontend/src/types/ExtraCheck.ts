@@ -1,7 +1,7 @@
 import { DockerImage } from './DockerImage';
-import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
-export type ExtraCheckJSON = {
+export interface ExtraCheckJSON {
     id: string;
     name: string;
     file: string;
@@ -21,7 +21,7 @@ export class ExtraCheck {
         public time_limit: number = 30,
         public memory_limit: number = 128,
         public show_log: boolean = true,
-        public docker_image: DockerImage = new DockerImage()
+        public docker_image: DockerImage = new DockerImage(),
     ) {}
 
     /**

@@ -16,7 +16,8 @@ import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
 import { useCourses } from '@/composables/services/course.service';
 import { useProject } from '@/composables/services/project.service.ts';
-import { computed, ref, watch, watchEffect } from 'vue';
+import { computed, ref } from 'vue';
+import { watchImmediate } from '@vueuse/core';
 
 /* Props */
 const props = defineProps<{
@@ -56,9 +57,12 @@ async function handleClone(): Promise<void> {
 /**
  * Watch for changes in the course ID and fetch the projects for the course.
  */
-watchEffect(async () => {
-    await getProjectsByCourse(props.course.id);
-});
+watchImmediate(
+    () => props.course.id,
+    async (courseId: string) => {
+        await getProjectsByCourse(courseId);
+    },
+);
 </script>
 
 <template>

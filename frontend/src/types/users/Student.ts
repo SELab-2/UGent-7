@@ -1,7 +1,7 @@
 import { type Course } from '../Course.ts';
 import { type Faculty } from '../Faculty.ts';
 import { type Group } from '../Group.ts';
-import { type Role, User, UserJSON } from '@/types/users/User.ts';
+import { type Role, User, type UserJSON } from '@/types/users/User.ts';
 
 export type StudentJSON = {
     student_id: string;

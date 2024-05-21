@@ -108,6 +108,7 @@
         "courses": {
             "create": "Creëer vak",
             "edit": "Bewerk vak",
+            "save": "Vak opslaan",
             "clone": "Kloon vak",
             "cloneAssistants": "Kloon assistenten:",
             "cloneTeachers": "Kloon lesgevers:",

@@ -3,7 +3,7 @@ import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
 import ProjectForm from '@/components/projects/ProjectForm.vue';
 import Loading from '@/components/Loading.vue';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useProject } from '@/composables/services/project.service';
@@ -15,6 +15,7 @@ import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { useExtraCheck } from '@/composables/services/extra_checks.service.ts';
 import { type DockerImage } from '@/types/DockerImage.ts';
 import { type ExtraCheck } from '@/types/ExtraCheck.ts';
+import { watchImmediate } from '@vueuse/core';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -29,7 +30,7 @@ const { extraChecks, setExtraChecks, deleteExtraCheck, getExtraChecksByProject }
 const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
 
 /* State */
-const isLoading = ref(true);
+const loading = ref(true);
 
 /**
  * Save the project.
@@ -92,51 +93,60 @@ async function saveDockerImage(dockerImage: DockerImage, file: File): Promise<vo
 }
 
 /* Load project data */
-onMounted(async () => {
-    try {
-        await getProjectByID(params.projectId as string);
-        await getDockerImages();
+watchImmediate(
+    () => params.projectId,
+    async () => {
+        loading.value = true;
 
-        if (project.value !== null) {
-            await getStructureCheckByProject(project.value.id);
+        try {
+            await getProjectByID(params.projectId.toString());
+            await getDockerImages();
 
-            if (structureChecks.value !== null) {
-                project.value.structure_checks = structureChecks.value;
+            if (project.value !== null) {
+                await getStructureCheckByProject(project.value.id);
+
+                if (structureChecks.value !== null) {
+                    project.value.structure_checks = structureChecks.value;
+                }
+
+                await getExtraChecksByProject(project.value.id);
+
+                if (extraChecks.value !== null) {
+                    project.value.extra_checks = extraChecks.value;
+                }
             }
-
-            await getExtraChecksByProject(project.value.id);
-
-            if (extraChecks.value !== null) {
-                project.value.extra_checks = extraChecks.value;
-            }
+        } catch (error: any) {
+            processError(error);
         }
 
-        isLoading.value = false;
-    } catch (error: any) {
-        processError(error);
-    }
-});
+        loading.value = false;
+    },
+);
 </script>
 
 <template>
     <BaseLayout>
-        <!-- Update project heading -->
-        <Title class="mb-6">
-            {{ t('views.projects.edit') }}
-        </Title>
+        <template v-if="!loading">
+            <div class="fadein">
+                <!-- Update project heading -->
+                <Title class="mb-6">
+                    {{ t('views.projects.edit') }}
+                </Title>
 
-        <!-- Project form -->
-        <template v-if="project !== null && dockerImages !== null && !isLoading">
-            <ProjectForm
-                :course="project.course"
-                :project="project"
-                :docker-images="dockerImages"
-                @create:docker-image="saveDockerImage"
-                @update:project="saveProject"
-            />
+                <!-- Project form -->
+                <template v-if="project !== null && dockerImages !== null">
+                    <ProjectForm
+                        :course="project.course"
+                        :project="project"
+                        :docker-images="dockerImages"
+                        @create:docker-image="saveDockerImage"
+                        @update:project="saveProject"
+                    />
+                </template>
+            </div>
         </template>
         <template v-else>
-            <Loading />
+            <Loading height="70vh" />
         </template>
     </BaseLayout>
 </template>

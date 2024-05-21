@@ -2,10 +2,10 @@ import { type Assistant } from './users/Assistant.ts';
 import { type Project } from './Project.ts';
 import { type Student } from './users/Student.ts';
 import { type Teacher } from './users/Teacher.ts';
-import { Faculty, FacultyJSON } from '@/types/Faculty.ts';
-import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { Faculty, type FacultyJSON } from '@/types/Faculty.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
-export type CourseJSON = {
+export interface CourseJSON {
     id: string;
     name: string;
     academic_startyear: number;
@@ -81,7 +81,7 @@ export class Course {
      * @param course
      */
     static fromJSON(course: CourseJSON): Course {
-        let parent: CourseJSON|Course|null = course.parent_course;
+        let parent: CourseJSON | Course | null = course.parent_course;
 
         if (parent !== null) {
             parent = Course.fromJSON(parent);

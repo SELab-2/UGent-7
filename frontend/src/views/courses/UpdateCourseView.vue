@@ -1,35 +1,64 @@
 <script setup lang="ts">
 import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import CourseForm from '@/components/courses/CourseForm.vue';
-import Skeleton from 'primevue/skeleton';
 import Title from '@/components/layout/Title.vue';
-import { onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import Loading from '@/components/Loading.vue';
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useCourses } from '@/composables/services/course.service';
+import { useFaculty } from '@/composables/services/faculty.service.ts';
+import { type Course } from '@/types/Course.ts';
+import { watchImmediate } from '@vueuse/core';
 
 /* Composable injections */
 const { t } = useI18n();
 const { params } = useRoute();
-const { course, getCourseByID } = useCourses();
+const { push } = useRouter();
+const { faculties, getFaculties } = useFaculty();
+const { course, getCourseByID, updateCourse } = useCourses();
+
+/* State */
+const loading = ref(true);
+
+/**
+ * Save the course.
+ *
+ * @param course
+ */
+async function saveCourse(course: Course): Promise<void> {
+    await updateCourse(course);
+    await push({ name: 'course', params: { courseId: course.id } });
+}
 
 /* Load course data */
-onMounted(async () => {
-    await getCourseByID(params.courseId as string);
-});
+watchImmediate(
+    () => params.courseId.toString(),
+    async (courseId: string): Promise<void> => {
+        loading.value = true;
+        await getCourseByID(courseId);
+        await getFaculties();
+        loading.value = false;
+    },
+);
 </script>
 
 <template>
     <BaseLayout>
-        <div class="grid fadein">
-            <div class="col-12 md:col-6">
-                <!-- Create course heading -->
-                <Title class="mb-6">{{ t('views.courses.edit') }}</Title>
-
-                <!-- Course form -->
-                <CourseForm :course="course" v-if="course !== null" />
-                <Skeleton height="100rem" v-else />
+        <!-- Create course heading -->
+        <Title class="mb-6">{{ t('views.courses.edit') }}</Title>
+        <template v-if="!loading">
+            <div class="grid fadein">
+                <div class="col-12 md:col-6">
+                    <!-- Course form -->
+                    <template v-if="course !== null && faculties !== null">
+                        <CourseForm :course="course" :faculties="faculties" @update:course="saveCourse" />
+                    </template>
+                </div>
             </div>
-        </div>
+        </template>
+        <template v-else>
+            <Loading height="70vh" />
+        </template>
     </BaseLayout>
 </template>

@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import { useFaculty } from '@/composables/services/faculty.service.ts';
-import { useCourses } from '@/composables/services/course.service.ts';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import Textarea from 'primevue/textarea';
@@ -14,17 +11,19 @@ import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import Button from 'primevue/button';
 import Editor from '@/components/forms/Editor.vue';
 import InputSwitch from 'primevue/inputswitch';
+import { type Faculty } from '@/types/Faculty.ts';
 
 /* Props */
 const props = defineProps<{
+    faculties: Faculty[];
     course?: Course | undefined;
 }>();
 
+/* Emits */
+const emit = defineEmits(['update:course']);
+
 /* Composable injections */
 const { t } = useI18n();
-const { push } = useRouter();
-const { faculties, getFaculties } = useFaculty();
-const { createCourse, updateCourse } = useCourses();
 
 /* State */
 const form = ref(new Course());
@@ -48,27 +47,30 @@ async function saveCourse(): Promise<void> {
 
     // Only submit the form if the validation was successful
     if (result) {
-        // Update the course if it has been provided before.
-        if (props.course !== undefined) {
-            await updateCourse(form.value);
-            await push({ name: 'course', params: { courseId: props.course.id } });
-        }
-
-        // Create a course in the other case.
-        if (props.course === undefined) {
-            await createCourse(form.value);
-            await push({ name: 'dashboard' });
-        }
+        emit('update:course', form.value);
     }
 }
 
-onMounted(async () => {
-    await getFaculties();
+/**
+ * Watch for changes in the course prop and update the form values.
+ */
+watchEffect(() => {
+    /* Set the form values with the existing project */
+    const course = props.course;
 
-    /* Set the form values with the existing course */
-    if (props.course !== undefined) {
-        // Convenient way of copying the course fields.
-        form.value = Course.fromJSON(props.course);
+    if (course !== undefined) {
+        form.value = new Course(
+            course.id,
+            course.name,
+            course.excerpt,
+            course.description,
+            course.academic_startyear,
+            course.private_course,
+            course.invitation_link,
+            course.invitation_link_expires,
+            course.parent_course,
+            course.faculty,
+        );
     }
 });
 </script>
@@ -120,13 +122,7 @@ onMounted(async () => {
         </div>
 
         <!-- Submit button -->
-        <Button
-            :label="course === undefined ? t('views.courses.create') : t('views.courses.edit')"
-            type="submit"
-            icon="pi pi-check"
-            iconPos="right"
-            rounded
-        />
+        <Button :label="t('views.courses.save')" type="submit" icon="pi pi-check" iconPos="right" rounded />
     </form>
 </template>
 

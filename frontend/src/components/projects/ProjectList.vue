@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import moment from 'moment';
-import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
 import ProjectDetailCard from '@/components/projects/ProjectDetailCard.vue';
 import ProjectDeadlineCard from '@/components/projects/ProjectDeadlineCard.vue';
@@ -110,7 +109,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                             </template>
                         </template>
                         <template v-else>
-                            <Loading height="50vh"/>
+                            <Loading height="50vh" />
                         </template>
                     </div>
                 </div>
@@ -130,7 +129,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                             </div>
                         </template>
                         <template v-else>
-                            <Loading height="50vh"/>
+                            <Loading height="50vh" />
                         </template>
                     </div>
                 </div>

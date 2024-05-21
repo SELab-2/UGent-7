@@ -100,8 +100,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     )
 
     extra_checks = serializers.HyperlinkedIdentityField(
-        view_name="project-extra-checks",
-        read_only=True
+        view_name="project-extra-checks"
     )
 
     groups = serializers.HyperlinkedIdentityField(

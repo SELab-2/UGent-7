@@ -1,13 +1,13 @@
 import moment from 'moment';
-import { Course, CourseJSON } from './Course.ts';
+import { Course, type CourseJSON } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';
 import { type StructureCheck } from './StructureCheck.ts';
 import { type Submission } from './submission/Submission.ts';
-import { SubmissionStatus, SubmissionStatusJSON } from '@/types/SubmisionStatus.ts';
-import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { SubmissionStatus, type SubmissionStatusJSON } from '@/types/SubmisionStatus.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
-export type ProjectJSON = {
+export interface ProjectJSON {
     id: string;
     name: string;
     description: string;
@@ -25,7 +25,7 @@ export type ProjectJSON = {
     extra_checks: HyperlinkedRelation;
     groups: HyperlinkedRelation;
     submissions: HyperlinkedRelation;
-};
+}
 
 export class Project {
     constructor(

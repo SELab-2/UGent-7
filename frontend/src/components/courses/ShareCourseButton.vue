@@ -8,7 +8,6 @@ import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
 import { ref, computed } from 'vue';
 import { useCourses } from '@/composables/services/course.service';
-import Editor from '@/components/forms/Editor.vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -87,7 +86,7 @@ const invitationLink = computed(() => {
                     <div class="field col">
                         <label for="link">{{ t('views.courses.share.link') }}</label>
                         <div class="flex">
-                            <InputText v-model="invitationLink" disabled/>
+                            <InputText v-model="invitationLink" disabled />
                             <Button @click="copyToClipboard()" icon="pi pi-copy" class="p-button-text no-outline" />
                         </div>
                     </div>

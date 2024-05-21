@@ -5,8 +5,9 @@ import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssist
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
-import { computed, watchEffect } from 'vue';
+import { computed } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
+import { watchImmediate } from '@vueuse/core';
 
 /* Props */
 const props = defineProps<{
@@ -23,9 +24,12 @@ const instructors = computed(() => {
 });
 
 /* Fetch projects when the course changes */
-watchEffect(async () => {
-    await getProjectsByCourse(props.course.id);
-});
+watchImmediate(
+    () => props.course.id,
+    async (courseId: string) => {
+        await getProjectsByCourse(courseId);
+    },
+);
 </script>
 
 <template>

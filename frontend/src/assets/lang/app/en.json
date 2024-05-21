@@ -107,6 +107,7 @@
         "courses": {
             "create": "Create course",
             "edit": "Edit course",
+            "save": "Save course",
             "clone": "Clone course",
             "cloneAssistants": "Clone assistants:",
             "cloneTeachers": "Clone teachers:",

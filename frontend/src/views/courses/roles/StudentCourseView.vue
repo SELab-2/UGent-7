@@ -12,7 +12,8 @@ import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useProject } from '@/composables/services/project.service.ts';
-import { computed, watch, watchEffect } from 'vue';
+import { computed } from 'vue';
+import { watchImmediate } from '@vueuse/core';
 
 /* Props */
 const props = defineProps<{
@@ -43,17 +44,19 @@ async function leaveCourse(): Promise<void> {
     confirm.require({
         message: t('confirmations.leaveCourse'),
         header: t('views.courses.leave'),
-        accept: async (): Promise<void> => {
-            if (user.value !== null) {
-                // Leave the course
-                await studentLeaveCourse(props.course.id, user.value.id);
+        accept: () => {
+            (async () => {
+                if (user.value !== null) {
+                    // Leave the course
+                    await studentLeaveCourse(props.course.id, user.value.id);
 
-                // Refresh the user so the course is removed from the user's courses
-                await refreshUser();
+                    // Refresh the user so the course is removed from the user's courses
+                    await refreshUser();
 
-                // Redirect to the dashboard
-                await push({ name: 'dashboard' });
-            }
+                    // Redirect to the dashboard
+                    await push({ name: 'dashboard' });
+                }
+            })();
         },
         reject: () => {},
     });
@@ -62,9 +65,12 @@ async function leaveCourse(): Promise<void> {
 /**
  * Watch for changes in the course ID and fetch the projects for the course.
  */
-watchEffect(async () => {
-    await getProjectsByCourse(props.course.id);
-});
+watchImmediate(
+    () => props.course.id,
+    async (courseId: string) => {
+        await getProjectsByCourse(courseId);
+    },
+);
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-export type DockerImageJSON = {
+export interface DockerImageJSON {
     id: string;
     name: string;
     file: string;

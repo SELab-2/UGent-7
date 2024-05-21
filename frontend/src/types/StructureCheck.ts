@@ -1,8 +1,8 @@
-import { FileExtension, FileExtensionJSON } from './FileExtension.ts';
+import { FileExtension, type FileExtensionJSON } from './FileExtension.ts';
 import { Project } from './Project.ts';
-import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
-export type StructureCheckJSON = {
+export interface StructureCheckJSON {
     id: string;
     path: string;
     project: HyperlinkedRelation;

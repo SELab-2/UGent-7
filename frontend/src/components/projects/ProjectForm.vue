@@ -5,7 +5,6 @@ import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import Button from 'primevue/button';
 import Editor from '@/components/forms/Editor.vue';
 import Calendar from 'primevue/calendar';
-import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
 import { Project } from '@/types/Project.ts';
 import { useI18n } from 'vue-i18n';
@@ -81,12 +80,22 @@ watchEffect(() => {
     const project = props.project;
 
     if (project !== undefined) {
-        form.value = Project.fromJSON(project);
-        form.value.structure_checks = [...(project.structure_checks ?? [])];
-        form.value.extra_checks = [...(project.extra_checks ?? [])];
-    } else {
-        form.value.structure_checks = [];
-        form.value.extra_checks = [];
+        form.value = new Project(
+            project.id,
+            project.name,
+            project.description,
+            project.visible,
+            project.archived,
+            project.locked_groups,
+            project.start_date,
+            project.deadline,
+            project.max_score,
+            project.score_visible,
+            project.group_size,
+        );
+
+        form.value.structure_checks = [...project.structure_checks];
+        form.value.extra_checks = [...project.extra_checks];
     }
 });
 </script>
@@ -191,41 +200,31 @@ watchEffect(() => {
 
             <div class="col-12 lg:col-6">
                 <!-- Define the submission structure checks -->
-                <template v-if="form.structure_checks !== null">
-                    <div class="grid">
-                        <div class="field col">
-                            <label for="structure">{{ t('views.projects.structureChecks') }}</label>
-                            <ProjectStructureTree id="structure" v-model="form.structure_checks" />
-                        </div>
+                <div class="grid">
+                    <div class="field col">
+                        <label for="structure">{{ t('views.projects.structureChecks') }}</label>
+                        <ProjectStructureTree id="structure" v-model="form.structure_checks" />
                     </div>
-                </template>
-                <template v-else>
-                    <Skeleton height="10rem" />
-                </template>
+                </div>
 
                 <!-- Upload field for docker script -->
-                <template v-if="form.extra_checks !== null">
-                    <div class="grid">
-                        <div class="field col">
-                            <label for="dockerScript" class="block">
-                                {{ t('views.projects.extraChecks.title') }}
-                            </label>
-                            <ExtraChecksUpload
-                                v-model="form.extra_checks"
-                                :docker-images="dockerImages"
-                                @create:docker-image="saveDockerImage"
-                            />
-                        </div>
+                <div class="grid">
+                    <div class="field col">
+                        <label for="dockerScript" class="block">
+                            {{ t('views.projects.extraChecks.title') }}
+                        </label>
+                        <ExtraChecksUpload
+                            v-model="form.extra_checks"
+                            :docker-images="dockerImages"
+                            @create:docker-image="saveDockerImage"
+                        />
                     </div>
-                </template>
-                <template v-else>
-                    <Skeleton height="10rem" />
-                </template>
+                </div>
             </div>
         </div>
 
         <!-- Submit button -->
-        <Button :label="t('views.projects.edit')" type="submit" icon="pi pi-check" iconPos="right" rounded />
+        <Button :label="t('views.projects.save')" type="submit" icon="pi pi-check" iconPos="right" rounded />
     </form>
 </template>
 

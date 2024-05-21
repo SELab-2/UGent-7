@@ -1,17 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { useStructureCheck } from '@/composables/services/structure_check.service.ts';
-import { StructureCheck } from '@/types/StructureCheck';
 
-const {
-    structureChecks,
-    structureCheck,
-    getStructureCheckByID,
-    getStructureCheckByProject,
-
-    createStructureCheck,
-    deleteStructureCheck,
-} = useStructureCheck();
+const { structureChecks, structureCheck, getStructureCheckByID } = useStructureCheck();
 
 function resetService(): void {
     structureCheck.value = null;

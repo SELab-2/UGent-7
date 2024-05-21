@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Title from '@/components/layout/Title.vue';
-import { onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useCourses } from '@/composables/services/course.service';
@@ -14,6 +14,8 @@ import { useMessagesStore } from '@/store/messages.store.ts';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { type DockerImage } from '@/types/DockerImage.ts';
 import { useExtraCheck } from '@/composables/services/extra_checks.service.ts';
+import Loading from '@/components/Loading.vue';
+import { watchImmediate } from '@vueuse/core';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -27,6 +29,9 @@ const { project, createProject } = useProject();
 const { setStructureChecks } = useStructureCheck();
 const { setExtraChecks } = useExtraCheck();
 const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
+
+/* State */
+const loading = ref(true);
 
 /**
  * Save the project.
@@ -71,14 +76,19 @@ async function saveDockerImage(dockerImage: DockerImage, file: File): Promise<vo
 }
 
 /* Load course data */
-onMounted(async () => {
-    try {
-        await getCourseByID(params.courseId as string);
-        await getDockerImages();
-    } catch (error: any) {
-        processError(error);
-    }
-});
+watchImmediate(
+    () => params.courseId.toString(),
+    async (courseId: string) => {
+        loading.value = true;
+        try {
+            await getCourseByID(courseId);
+            await getDockerImages();
+        } catch (error: any) {
+            processError(error);
+        }
+        loading.value = false;
+    },
+);
 </script>
 
 <template>
@@ -87,15 +97,21 @@ onMounted(async () => {
         <Title class="mb-6">
             {{ t('views.projects.create') }}
         </Title>
-
-        <!-- Project form -->
-        <template v-if="dockerImages !== null && course !== null">
-            <ProjectForm
-                :course="course"
-                :docker-images="dockerImages"
-                @update:project="(project, numberOfGroups) => saveProject(project, numberOfGroups)"
-                @create:docker-image="saveDockerImage"
-            />
+        <template v-if="!loading">
+            <div class="fadein">
+                <!-- Project form -->
+                <template v-if="dockerImages !== null && course !== null">
+                    <ProjectForm
+                        :course="course"
+                        :docker-images="dockerImages"
+                        @update:project="(project, numberOfGroups) => saveProject(project, numberOfGroups)"
+                        @create:docker-image="saveDockerImage"
+                    />
+                </template>
+            </div>
+        </template>
+        <template v-else>
+            <Loading height="70vh" />
         </template>
     </BaseLayout>
 </template>

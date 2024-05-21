@@ -3,7 +3,7 @@ import { type Faculty } from '../Faculty.ts';
 export const roles: string[] = ['user', 'student', 'assistant', 'teacher'];
 export type Role = (typeof roles)[number];
 
-export type UserJSON = {
+export interface UserJSON {
     id: string;
     first_name: string;
     last_name: string;
