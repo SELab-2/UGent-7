@@ -1,4 +1,3 @@
-import { SubmissionStatus } from "@/types/SubmisionStatus";
 
 export const groups = [
     {
@@ -127,21 +126,21 @@ export const submissionStatuses = [
 export const submissions = [
     {
         id: '1',
-        group: '1',
-        files: [],
-        extra_checks_results: [],
         submission_number: 1,
         submission_time: new Date('July 21, 2024 01:15:00'),
-        structureChecks_passed: true,
+        zip: new File(['1', '2'], 'submission.zip', { type: 'application/zip' }),
+        extraCheckResults: [],
+        structureCheckResults: [],
+        is_valid: true,
     },
     {
         id: '2',
-        group: '1',
-        files: [],
-        extra_checks_results: [],
         submission_number: 2,
         submission_time: new Date('July 21, 2024 01:15:00'),
-        structureChecks_passed: true,
+        zip: new File(['3', '4'], 'submission.zip', { type: 'application/zip' }),
+        extraCheckResults: [],
+        structureCheckResults: [],
+        is_valid: true,
     },
 ];
 

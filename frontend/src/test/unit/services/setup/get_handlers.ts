@@ -21,7 +21,17 @@ export const getHandlers = [
         return HttpResponse.json(groups.find((x) => x.id === params.id));
     }),
     http.get(baseUrl + endpoints.submissions.retrieve.replace('{id}', ':id'), ({ params }) => {
-        return HttpResponse.json(submissions.find((x) => x.id === params.id));
+        const submission = submissions.find((x) => x.id === params.id)
+        // Convert to a ResponseSubmission object
+        const response_submission = {
+            id: submission?.id,
+            submission_number: submission?.submission_number,
+            submission_time: submission?.submission_time,
+            zip: submission?.zip,
+            results: [], // We can leave this empty since the conversion to a valid results array is not the purpose of these tests
+            is_valid: submission?.is_valid
+        }
+        return HttpResponse.json(response_submission);
     }),
     http.get(baseUrl + endpoints.structureChecks.retrieve.replace('{id}', ':id'), ({ params }) => {
         return HttpResponse.json(structureChecks.find((x) => x.id === params.id));
@@ -50,7 +60,18 @@ export const getHandlers = [
     http.get(baseUrl + endpoints.submissions.byProject.replace('{projectId}', ':id'), ({ params }) => {
         const project = projects.find((x) => x.id === params.id);
         const submittedSubmissions = project !== null && project !== undefined ? project.submissions : [];
-        return HttpResponse.json(submissions.filter((x) => submittedSubmissions.includes(x.id)));
+        // Convert to a ResponseSubmission object
+        const submission = submissions.filter((x) => submittedSubmissions.includes(x.id))
+        console.log("submission: " + JSON.stringify(submission))
+        const response_submission = {
+            id: submission?.id,
+            submission_number: submission?.submission_number,
+            submission_time: submission?.submission_time,
+            zip: submission?.zip,
+            results: [], // We can leave this empty since the conversion to a valid results array is not the purpose of these tests
+            is_valid: submission?.is_valid
+        }
+        return HttpResponse.json(response_submission);
     }),
     http.get(baseUrl + endpoints.teachers.byCourse.replace('{courseId}', ':id'), ({ params }) => {
         const course = courses.find((x) => x.id === params.id);

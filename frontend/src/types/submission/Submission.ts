@@ -45,7 +45,7 @@ export class Submission {
     }
 
     /**
-     * Convert a submission object to a submission instance.
+     * Convert a ResponseSubmission object to a submission instance.
      *
      * @param submission
      */
