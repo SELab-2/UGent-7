@@ -1,5 +1,7 @@
+from api.models.assistant import Assistant
 from api.models.group import Group
 from api.models.student import Student
+from api.models.teacher import Teacher
 from api.permissions.role_permissions import (is_assistant, is_student,
                                               is_teacher)
 from api.serializers.project_serializer import ProjectSerializer
@@ -98,6 +100,10 @@ class StudentLeaveGroupSerializer(StudentIDSerializer):
         # Get the group and student
         group: Group = self.context["group"]
         student: Student = attrs["student"]
+
+        # Make sure the group size is not 1
+        if group.project.group_size == 1:
+            raise ValidationError(gettext("group.errors.size_one"))
 
         # Make sure the student was in the group
         if not group.students.filter(id=student.id).exists():
