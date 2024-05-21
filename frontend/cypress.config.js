@@ -2,22 +2,19 @@ import path from 'path';
 import { defineConfig } from 'cypress';
 import vitePreprocessor from 'cypress-vite';
 
-const preprocessor = vitePreprocessor('./vite.config.ts');
-
 export default defineConfig({
     e2e: {
         setupNodeEvents(on, config) {
             on('file:preprocessor',
                 vitePreprocessor('./vite.config.ts')
             );
-            on('before:run',
-                () => {
-                    preprocessor();
-                    import('@/test/e2e/setup/seed.ts').then(async (module) => {
-                        await module.seed();
-                    });
-                }
-            );
+            // on('before:run',
+            //     () => {
+            //         import('@/test/e2e/setup/seed.ts').then(async (module) => {
+            //             await module.seed();
+            //         });
+            //     }
+            // );
             // on('task', {
             //     async 'db:seed'(seed) {
             //         await seed();
