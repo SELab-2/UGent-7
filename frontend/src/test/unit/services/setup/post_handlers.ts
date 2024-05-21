@@ -59,6 +59,7 @@ export const postHandlers = [
         const requestBody = new TextDecoder().decode(buffer);
         const newGroup = JSON.parse(requestBody);
         groups.push(newGroup);
+        console.log(JSON.stringify(newGroup))
         return HttpResponse.json(groups);
     }),
     http.post(baseUrl + endpoints.projects.byCourse.replace('{courseId}', ':id'), async ({ request }) => {

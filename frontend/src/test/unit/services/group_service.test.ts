@@ -23,8 +23,6 @@ function resetService(): void {
     groups.value = null;
 }
 
-const { project, getProjectByID } = useProject();
-
 describe('group', (): void => {
     it('gets group data by id', async () => {
         resetService();
@@ -73,38 +71,4 @@ describe('group', (): void => {
         expect(groups.value?.[0].students).toBeNull;
         expect(groups.value?.[0].submissions).toBeNull();
     });
-
-    // it('create group', async () => {
-    //     resetService();
-
-    //     const projectId = '0';
-    //     await getProjectByID(projectId);
-    //     const exampleProject: Project | null = project.value;
-    //     expect(exampleProject).not.toBeNull();
-
-    //     const exampleGroup = new Group(
-    //         '', // id
-    //         10, // score
-    //         exampleProject, // project
-    //         [], // students
-    //         [], // submissions
-    //     );
-
-    //     await getGroupsByProject(projectId);
-
-    //     expect(groups).not.toBeNull();
-    //     expect(Array.isArray(groups.value)).toBe(true);
-    //     const prevLength = groups.value?.length ?? 0;
-
-    //     await createGroup(exampleGroup, projectId);
-    //     await getGroupsByProject(projectId);
-
-    //     expect(groups).not.toBeNull();
-    //     expect(Array.isArray(groups.value)).toBe(true);
-    //     expect(groups.value?.length).toBe(prevLength + 1);
-
-    //     // Only check for fields that are sent to the backend
-    //     expect(groups.value?.[prevLength]?.score).toBe(10);
-    //     expect(groups.value?.[prevLength]?.project).toBeNull();
-    // });
 });
