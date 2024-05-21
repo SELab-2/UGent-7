@@ -24,7 +24,7 @@ export async function get<T>(
         const response = await client.get(endpoint);
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if (selfprocessError){
+        if (selfprocessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -57,7 +57,7 @@ export async function create<T>(
         });
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if (selfprocessError){
+        if (selfprocessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -89,7 +89,7 @@ export async function patch(
         });
         ref.value = Response.fromJSON(response.data);
     } catch (error: any) {
-        if (selfprocessError){
+        if (selfprocessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -115,7 +115,7 @@ export async function deleteId<T>(
         const response = await client.delete(endpoint);
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if (selfprocessError){
+        if (selfprocessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -143,7 +143,7 @@ export async function deleteIdWithData<T>(
         const response = await client.delete(endpoint, { data });
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if (selfprocessError){
+        if (selfprocessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -170,7 +170,7 @@ export async function getList<T>(
         ref.value = response.data.map((data: T) => fromJson(data));
     } catch (error: any) {
         ref.value = []; // Set the ref to an empty array
-        if (selfprocessError){
+        if (selfprocessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -219,7 +219,7 @@ export async function getPaginatedList<T>(
             results: [],
         };
 
-        if (selfprocessError){
+        if (selfprocessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -251,7 +251,7 @@ export async function getListMerged<T>(
             allData.push(...responseData); // Merge into the allData array
         } catch (error: any) {
             ref.value = []; // Set the ref to an empty array
-            if(selfprocessError){
+            if (selfprocessError){
                 processError(error);
                 console.error(error); // Log the error for debugging
             } else {
