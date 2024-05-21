@@ -59,21 +59,20 @@ describe('group', (): void => {
         expect(groups.value?.[1].submissions).toBeNull();
     });
 
-    // it('gets groups data by student', async () => {
-    //     resetService();
+    it('gets groups data by student', async () => {
+        resetService();
 
-    //     await getGroupsByStudent('1');
-    //     expect(groups.value).not.toBeNull();
-    //     expect(Array.isArray(groups.value)).toBe(true);
-    //     expect(groups.value?.length).toBe(1);
+        await getGroupsByStudent('1');
+        expect(groups.value).not.toBeNull();
+        expect(Array.isArray(groups.value)).toBe(true);
+        expect(groups.value?.length).toBe(1);
 
-    //     expect(groups.value?.[0]).not.toBeNull();
-    //     expect(groups.value?.[0]?.score).toBe(20);
-    //     expect(groups.value?.[0]?.id).toBe('0');
-    //     expect(groups.value?.[0]?.project).toBeNull();
-    //     expect(groups.value?.[0]?.students).toBeNull();
-    //     expect(groups.value?.[0]?.submissions).toBeNull();
-    // });
+        expect(groups.value?.[0].id).toBe('0');
+        expect(groups.value?.[0].score).toBe(20);
+        assertType(groups.value?.[0].project as Project)
+        expect(groups.value?.[0].students).toBeNull;
+        expect(groups.value?.[0].submissions).toBeNull();
+    });
 
     // it('create group', async () => {
     //     resetService();
