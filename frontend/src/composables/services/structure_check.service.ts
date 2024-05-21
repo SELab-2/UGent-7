@@ -8,7 +8,11 @@ interface StructureCheckState {
     structureCheck: Ref<StructureCheck | null>;
     getStructureCheckByID: (id: string, selfprocessError?: boolean) => Promise<void>;
     getStructureCheckByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
-    createStructureCheck: (structureCheckData: StructureCheck, projectId: string, selfprocessError?: boolean) => Promise<void>;
+    createStructureCheck: (
+        structureCheckData: StructureCheck,
+        projectId: string,
+        selfprocessError?: boolean,
+    ) => Promise<void>;
     deleteStructureCheck: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
@@ -26,7 +30,11 @@ export function useStructureCheck(): StructureCheckState {
         await getList<StructureCheck>(endpoint, structureChecks, StructureCheck.fromJSON, selfprocessError);
     }
 
-    async function createStructureCheck(structureCheckData: StructureCheck, projectId: string, selfprocessError: boolean = true): Promise<void> {
+    async function createStructureCheck(
+        structureCheckData: StructureCheck,
+        projectId: string,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.structureChecks.byProject.replace('{projectId}', projectId);
         await create<StructureCheck>(
             endpoint,
@@ -36,7 +44,7 @@ export function useStructureCheck(): StructureCheckState {
             structureCheck,
             StructureCheck.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 

@@ -37,7 +37,7 @@ export function useUser(): userState {
         filters: Filter,
         page: number,
         pageSize: number,
-        selfprocessError: boolean = true
+        selfprocessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.users.search;
         await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON, selfprocessError);

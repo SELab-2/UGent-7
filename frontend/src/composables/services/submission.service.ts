@@ -32,14 +32,25 @@ export function useSubmission(): SubmissionState {
         await getList<Submission>(endpoint, submissions, Submission.fromJSON, selfprocessError);
     }
 
-    async function createSubmission(uploadedFiles: File[], groupId: string, selfprocessError: boolean = true): Promise<void> {
+    async function createSubmission(
+        uploadedFiles: File[],
+        groupId: string,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.submissions.byGroup.replace('{groupId}', groupId);
         // formData is necessary with multiform data (otherwise files value is changed to files[] by axios)
         const formData = new FormData();
         uploadedFiles.forEach((file: File) => {
             formData.append('files', file); // Gebruik 'files' in plaats van 'files[]'
         });
-        await create(endpoint, formData, submission, Submission.fromJSONCreate, 'multipart/form-data', selfprocessError);
+        await create(
+            endpoint,
+            formData,
+            submission,
+            Submission.fromJSONCreate,
+            'multipart/form-data',
+            selfprocessError,
+        );
     }
 
     async function deleteSubmission(id: string, selfprocessError: boolean = true): Promise<void> {

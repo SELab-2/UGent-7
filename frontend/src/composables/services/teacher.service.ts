@@ -49,7 +49,7 @@ export function useTeacher(): TeacherState {
         filters: Filter,
         page: number,
         pageSize: number,
-        selfprocessError: boolean = true
+        selfprocessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.teachers.search;
         await getPaginatedList<Teacher>(
@@ -59,14 +59,14 @@ export function useTeacher(): TeacherState {
             pageSize,
             teacherPagination,
             Teacher.fromJSON,
-            selfprocessError
+            selfprocessError,
         );
     }
 
     async function teacherJoinCourse(
         courseId: string,
         teacherId: string,
-        selfprocessError: boolean = true
+        selfprocessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
         await create<Response>(
@@ -75,14 +75,14 @@ export function useTeacher(): TeacherState {
             response,
             Response.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
     async function teacherLeaveCourse(
         courseId: string,
         teacherId: string,
-        selfprocessError: boolean = true
+        selfprocessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
         await deleteIdWithData<Response>(
