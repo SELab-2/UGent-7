@@ -80,28 +80,24 @@ export function useCourses(): CoursesState {
         const { addSuccessMessage } = useMessagesStore();
 
         const endpoint = endpoints.courses.index;
-        try {
-            await create<Course>(
-                endpoint,
-                {
-                    id: courseData.id,
-                    name: courseData.name,
-                    description: courseData.description,
-                    excerpt: courseData.excerpt,
-                    academic_startyear: courseData.academic_startyear,
-                    private_course: courseData.private_course,
-                    faculty: courseData.faculty?.id,
-                },
-                course,
-                Course.fromJSON,
-            );
-            addSuccessMessage(
-                t('toasts.messages.success'),
-                t('toasts.messages.courses.create.success', [course.value?.name]),
-            );
-        } catch (e) {
-            console.log(e);
-        }
+        await create<Course>(
+            endpoint,
+            {
+                id: courseData.id,
+                name: courseData.name,
+                description: courseData.description,
+                excerpt: courseData.excerpt,
+                academic_startyear: courseData.academic_startyear,
+                private_course: courseData.private_course,
+                faculty: courseData.faculty?.id,
+            },
+            course,
+            Course.fromJSON,
+        );
+        addSuccessMessage(
+            t('toasts.messages.success'),
+            t('toasts.messages.courses.create.success', [course.value?.name]),
+        );
     }
 
     async function updateCourse(courseData: Course): Promise<void> {

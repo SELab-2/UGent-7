@@ -100,15 +100,11 @@ export function useProject(): ProjectState {
             requestData.number_groups = numberOfGroups;
         }
 
-        try {
-            await create<Project>(endpoint, requestData, project, Project.fromJSON, 'multipart/form-data');
-            addSuccessMessage(
-                t('toasts.messages.success'),
-                t('toasts.messages.projects.create.success', [project.value?.name]),
-            );
-        } catch (e) {
-            console.log(e);
-        }
+        await create<Project>(endpoint, requestData, project, Project.fromJSON, 'multipart/form-data');
+        addSuccessMessage(
+            t('toasts.messages.success'),
+            t('toasts.messages.projects.create.success', [project.value?.name]),
+        );
     }
 
     async function updateProject(projectData: Project): Promise<void> {

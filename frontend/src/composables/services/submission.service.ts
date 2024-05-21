@@ -44,12 +44,9 @@ export function useSubmission(): SubmissionState {
         uploadedFiles.forEach((file: File) => {
             formData.append('files', file); // Gebruik 'files' in plaats van 'files[]'
         });
-        try {
-            await create(endpoint, formData, submission, Submission.fromJSONCreate, 'multipart/form-data');
-            addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.submissions.create.success'));
-        } catch (e) {
-            console.log(e);
-        }
+
+        await create(endpoint, formData, submission, Submission.fromJSONCreate, 'multipart/form-data');
+        addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.submissions.create.success'));
     }
 
     async function deleteSubmission(id: string): Promise<void> {
