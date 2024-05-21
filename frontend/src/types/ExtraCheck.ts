@@ -2,13 +2,13 @@ import { type DockerImage } from './DockerImage';
 
 export class ExtraCheck {
     constructor(
-        public id: string,
-        public name: string,
-        public docker_image: DockerImage | null,
-        public file: File | null,
-        public time_limit: number,
-        public memory_limit: number,
-        public show_log: boolean,
+        public id: string = '',
+        public name: string = '',
+        public docker_image: DockerImage | null = null,
+        public file: File | null = null,
+        public time_limit: number = 30,
+        public memory_limit: number = 128,
+        public show_log: boolean = true,
     ) {}
 
     /**

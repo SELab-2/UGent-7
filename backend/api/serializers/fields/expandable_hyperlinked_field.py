@@ -5,8 +5,9 @@ from rest_framework.request import Request
 from rest_framework.serializers import Serializer
 
 
-class ExpandableHyperlinkedIdentityField(serializers.BaseSerializer, serializers.HyperlinkedIdentityField):
+class ExpandableHyperlinkedIdentityField(serializers.HyperlinkedIdentityField):
     """A HyperlinkedIdentityField with nested serializer expanding"""
+
     def __init__(self, serializer: Type[Serializer], view_name: str = None, **kwargs):
         self.serializer = serializer
         super().__init__(view_name=view_name, **kwargs)
@@ -26,8 +27,8 @@ class ExpandableHyperlinkedIdentityField(serializers.BaseSerializer, serializers
                 instance = value
 
             return self.serializer(instance,
-                many=self._kwargs.pop('many'),
-                context=self.context
-            ).data
+                                   many=self._kwargs.pop('many'),
+                                   context=self.context
+                                   ).data
 
-        return super(serializers.HyperlinkedIdentityField, self).to_representation(value)
+        return super().to_representation(value)

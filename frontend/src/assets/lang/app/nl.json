@@ -59,6 +59,8 @@
             "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
             "save": "Project opslaan",
+            "edit": "Project bewerken",
+            "structureChecks": "Indieningsstructuur",
             "name": "Projectnaam",
             "description": "Beschrijving",
             "startDate": "Start project",
@@ -74,6 +76,7 @@
             "extraChecks": {
                 "title": "Automatische checks op een indiening",
                 "add": "Nieuwe check",
+                "empty": "Nog geen extra checks toegevoegd",
                 "name": "Naam",
                 "public": "Publiek",
                 "bashScript": "Bash script",

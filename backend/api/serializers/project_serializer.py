@@ -1,3 +1,6 @@
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
+from api.logic.parse_zip_files import parse_zip
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import Submission, ExtraCheckResult, StructureCheckResult, StateEnum
@@ -175,13 +178,13 @@ class ProjectSerializer(serializers.ModelSerializer):
                 Group.objects.create(project=project)
 
         # If a zip_structure is provided, parse it to create the structure checks
-        # zip_structure: InMemoryUploadedFile | None = self.context['request'].FILES.get('zip_structure')
-        #
-        # if zip_structure:
-        #     result = parse_zip(project, zip_structure)
-        #
-        #     if not result:
-        #         raise ValidationError(gettext("project.errors.zip_structure"))
+        zip_structure: InMemoryUploadedFile | None = self.context['request'].FILES.get('zip_structure')
+
+        if zip_structure:
+            result = parse_zip(project, zip_structure)
+
+            if not result:
+                raise ValidationError(gettext("project.errors.zip_structure"))
 
         return project
 

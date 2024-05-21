@@ -87,7 +87,7 @@ export function useProject(): ProjectState {
             deadline: projectData.deadline,
             max_score: projectData.max_score,
             score_visible: projectData.score_visible,
-            group_size: projectData.group_size
+            group_size: projectData.group_size,
         };
 
         // Check if the number of groups should be included, only if it is greater than 0

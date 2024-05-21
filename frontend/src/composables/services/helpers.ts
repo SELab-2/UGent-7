@@ -88,12 +88,18 @@ export async function patch(
  *
  * @param endpoint
  * @param data
+ * @param contentType
  */
 export async function put<T>(
     endpoint: string,
-    data: T,
+    data: T | string,
+    contentType: string = 'application/json',
 ): Promise<void> {
-    await client.put(endpoint, data);
+    await client.put(endpoint, data, {
+        headers: {
+            'Content-Type': contentType,
+        },
+    });
 }
 
 /**
@@ -220,10 +226,7 @@ export function processError(error: any): void {
         const status = error.response.status;
 
         if (status === 404) {
-            addErrorMessage(
-                t('composables.helpers.errors.notFound'),
-                t('composables.helpers.errors.notFoundDetail')
-            );
+            addErrorMessage(t('composables.helpers.errors.notFound'), t('composables.helpers.errors.notFoundDetail'));
         } else if (error.response.status === 401 || error.response.status === 403) {
             addErrorMessage(
                 t('composables.helpers.errors.unauthorized'),
@@ -239,23 +242,14 @@ export function processError(error: any): void {
                     message = response[key].join(', ');
                 }
 
-                addErrorMessage(
-                    t('composables.helpers.errors.server'),
-                    message
-                );
+                addErrorMessage(t('composables.helpers.errors.server'), message);
             }
         }
     } else if (error.request !== undefined && error.request !== null) {
         // The request was made but no response was received
-        addErrorMessage(
-            t('composables.helpers.errors.network'),
-            t('composables.helpers.errors.networkDetail')
-        );
+        addErrorMessage(t('composables.helpers.errors.network'), t('composables.helpers.errors.networkDetail'));
     } else {
         // Something happened in setting up the request that triggered an error
-        addErrorMessage(
-            t('composables.helpers.errors.request'),
-            t('composables.helpers.errors.requestDetail')
-        );
+        addErrorMessage(t('composables.helpers.errors.request'), t('composables.helpers.errors.requestDetail'));
     }
 }

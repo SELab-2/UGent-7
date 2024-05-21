@@ -60,14 +60,13 @@ class StructureCheckSerializer(serializers.ModelSerializer):
 
 
 class ExtraCheckSerializer(serializers.ModelSerializer):
-    project = serializers.HyperlinkedRelatedField(
+    project = serializers.HyperlinkedIdentityField(
         view_name="project-detail",
         read_only=True
     )
 
-    docker_image = serializers.HyperlinkedRelatedField(
-        view_name="docker-image-detail",
-        queryset=DockerImage.objects.all()
+    docker_image = serializers.HyperlinkedIdentityField(
+        view_name="docker-image-detail"
     )
 
     class Meta:
@@ -77,10 +76,6 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        # Only check if docker image is present when it is not a partial update
-        if not self.partial:
-            if "docker_image" not in data:
-                raise serializers.ValidationError(_("extra_check.error.docker_image"))
 
         if "time_limit" in data and not 10 <= data["time_limit"] <= 1000:
             raise serializers.ValidationError(_("extra_check.error.time_limit"))

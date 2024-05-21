@@ -8,52 +8,38 @@ import FileUpload from 'primevue/fileupload';
 import InputSwitch from 'primevue/inputswitch';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import DataView from 'primevue/dataview';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import { DockerImage } from '@/types/DockerImage';
 import { ExtraCheck } from '@/types/ExtraCheck';
 import { useI18n } from 'vue-i18n';
-import { ref, reactive, computed, onMounted, watch } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
-import { useDockerImages } from '@/composables/services/docker.service.ts';
-import { useExtraCheck } from '@/composables/services/extra_checks.service';
 
 /* Composable injections */
 const { t } = useI18n();
-const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
-const { extraChecks, getExtraChecksByProject, addExtraCheck, deleteExtraCheck } = useExtraCheck();
 
 /* Props */
-const props = defineProps<{ projectId: string; createChecksBackend: boolean }>();
+defineProps<{ dockerImages: DockerImage[] }>();
+const extraChecks = defineModel<ExtraCheck[]>();
+
+/* Emits */
+const emit = defineEmits(['create:docker-image']);
 
 /* State for the dialog to create an extra check */
 const displayExtraCheckCreation = ref(false);
 
-/* List with all the extra checks */
-const extraChecksList = ref<ExtraCheck[]>([]);
-
-/* List with the extra checks that are already in the backend */
-const extraChecksInBackendList = ref<ExtraCheck[]>([]);
-
 /* Form content */
-const form = reactive({
-    name: '',
-    dockerImage: null,
-    bashFile: null,
-    timeLimit: 30,
-    memoryLimit: 128,
-    showLog: true,
-});
+let form = reactive(new ExtraCheck());
 
 // Define validation rules for each form field
 const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
-        dockerImage: { required: helpers.withMessage(t('validations.required'), required) },
-        bashFile: { required: helpers.withMessage(t('validations.required'), required) },
-        timeLimit: { required: helpers.withMessage(t('validations.required'), required) },
-        memoryLimit: { required: helpers.withMessage(t('validations.required'), required) },
+        docker_image: { required: helpers.withMessage(t('validations.required'), required) },
+        file: { required: helpers.withMessage(t('validations.required'), required) },
+        time_limit: { required: helpers.withMessage(t('validations.required'), required) },
+        memory_limit: { required: helpers.withMessage(t('validations.required'), required) },
     };
 });
 
@@ -68,31 +54,15 @@ async function saveExtraCheck(): Promise<void> {
     const validated = await v$.value.$validate();
 
     // Save the extra checks component
-    if (validated) {
-        // Create the extra check
-        const extraCheck = new ExtraCheck(
-            '', // The ID is not needed
-            form.name,
-            form.dockerImage,
-            form.bashFile,
-            form.timeLimit,
-            form.memoryLimit,
-            form.showLog,
-        );
-
+    if (validated && extraChecks.value !== undefined) {
         // Add the extra check to the list with checks
-        extraChecksList.value.push(extraCheck);
+        extraChecks.value.push(form);
 
         // Close the dialog
         displayExtraCheckCreation.value = false;
 
         // Reset the form
-        form.name = '';
-        form.dockerImage = null;
-        form.bashFile = null;
-        form.timeLimit = 30;
-        form.memoryLimit = 128;
-        form.showLog = true;
+        form = new ExtraCheck();
 
         // Reset the validation
         v$.value.$reset();
@@ -100,10 +70,11 @@ async function saveExtraCheck(): Promise<void> {
 }
 
 /**
- * Function to upload the bash script
+ * Function to upload the bash script.
+ * @param event
  */
 function onBashScriptUpload(event: any): void {
-    form.bashFile = event.files[0];
+    form.file = event.files[0];
 }
 
 /**
@@ -119,86 +90,39 @@ async function onDockerImageUpload(event: any): Promise<void> {
         '', // Owner is not needed
     );
 
-    // Create the docker image in the backend
-    await createDockerImage(dockerImage, event.files[0] as File);
-
-    // Refresh the list of docker images
-    await getDockerImages();
+    emit('create:docker-image', dockerImage, event.files[0]);
 }
-
-/**
- * Watcher to create the checks in the backend when the signal is received
- */
-watch(
-    () => props.createChecksBackend,
-    async (value) => {
-        if (value) {
-            // Create the extra checks in the backend. If a check has already an id, this means that the check is already in the backend.
-            // If this is the case, the check should not be created again.
-            extraChecksList.value.forEach((extraCheck) => {
-                // Create the extra check in the backend, if the check has no id yet
-                if (extraCheck.id === '') {
-                    addExtraCheck(extraCheck, props.projectId);
-                }
-            });
-
-            // Delete all the extra checks that are in the backend list, but not in the extra checks list.
-            // This means that the user has removed the extra check from the list and it should be deleted from the backend.
-            extraChecksInBackendList.value.forEach((extraCheck) => {
-                if (!extraChecksList.value.includes(extraCheck)) {
-                    // Delete the extra check from the backend
-                    deleteExtraCheck(extraCheck.id);
-                }
-            });
-        }
-    },
-);
-
-/**
- * Load the docker images and extra checks when the component is mounted
- */
-onMounted(async () => {
-    await getDockerImages();
-
-    // If a project ID is provided, load the extra checks for this project
-    if (props.projectId !== '') {
-        // Load the extra checks for the project
-        await getExtraChecksByProject(props.projectId);
-
-        // Save the extra checks in the list
-        extraChecksList.value = extraChecks.value ?? [];
-
-        // Save the checks that are already in the backend in a separate list (to avoid duplicated / enable deletion)
-        extraChecksInBackendList.value = extraChecks.value?.slice() ?? [];
-    }
-});
 </script>
 
 <template>
     <!-- List with the extra checks -->
-    <DataView :value="extraChecksList" data-key="id" v-if="extraChecksList.length > 0">
-        <template #list="slotProps">
-            <div v-for="(item, index) in slotProps.items" :key="index">
-                <div class="flex align-items-center justify-content-between">
-                    <p style="max-width: 300px">{{ item.name }}</p>
-                    <Button
-                        icon="pi pi-times"
-                        class="p-button-danger p-button-sm"
-                        @click="extraChecksList.splice(index, 1)"
-                    />
-                </div>
+    <div class="flex flex-column gap-3 border-round border-1 border-400 p-3">
+        <template v-if="extraChecks && extraChecks.length > 0">
+            <div class="flex align-items-center justify-content-between gap-2" v-for="(item, index) in extraChecks">
+                <span>{{ item.name }}</span>
+                <Button
+                    icon="pi pi-times"
+                    class="p-button-danger p-button-sm"
+                    @click="extraChecks.splice(index, 1)"
+                    outlined
+                    rounded
+                />
             </div>
         </template>
-    </DataView>
+        <template v-else>
+            <span>{{ t('views.projects.extraChecks.empty') }}</span>
+        </template>
+    </div>
 
     <!-- Button to add a new extra check -->
     <Button
-        class="p-button-primary"
+        class="mt-3"
         @click="displayExtraCheckCreation = true"
         :icon="PrimeIcons.PLUS"
         :label="t('views.projects.extraChecks.add')"
         icon-pos="left"
     />
+
     <!-- Dialog with a form to create a new extra check -->
     <Dialog
         v-model:visible="displayExtraCheckCreation"
@@ -241,7 +165,7 @@ onMounted(async () => {
                                     :multiple="false"
                                     @select="onBashScriptUpload"
                                 />
-                                <ErrorMessage :field="v$.bashFile" />
+                                <ErrorMessage :field="v$.file" />
                             </div>
                         </div>
 
@@ -254,11 +178,11 @@ onMounted(async () => {
                                 <InputNumber
                                     id="timeLimit"
                                     class="w-full"
-                                    v-model="form.timeLimit"
+                                    v-model="form.time_limit"
                                     :min="10"
                                     :max="1000"
                                 />
-                                <ErrorMessage :field="v$.timeLimit" />
+                                <ErrorMessage :field="v$.time_limit" />
                             </div>
 
                             <div class="field col">
@@ -268,18 +192,18 @@ onMounted(async () => {
                                 <InputNumber
                                     id="numberOfGroups"
                                     class="w-full"
-                                    v-model="form.memoryLimit"
+                                    v-model="form.memory_limit"
                                     :min="50"
                                     :max="1024"
                                 />
-                                <ErrorMessage :field="v$.memoryLimit" />
+                                <ErrorMessage :field="v$.memory_limit" />
                             </div>
                         </div>
 
                         <!-- Visibility of the log files for students -->
                         <div class="grid">
                             <div class="field-checkbox col-12">
-                                <InputSwitch id="showLog" v-model="form.showLog" style="min-width: 50px" />
+                                <InputSwitch id="showLog" v-model="form.show_log" style="min-width: 50px" />
                                 <label for="showLog">{{ t('views.projects.extraChecks.showLog') }}</label>
                             </div>
                         </div>
@@ -294,7 +218,7 @@ onMounted(async () => {
                                 </label>
                                 <!-- Data table with the docker images -->
                                 <DataTable
-                                    v-model:selection="form.dockerImage"
+                                    v-model:selection="form.docker_image"
                                     :value="dockerImages"
                                     selectionMode="single"
                                     dataKey="id"
@@ -313,7 +237,7 @@ onMounted(async () => {
                                         </template>
                                     </Column>
                                 </DataTable>
-                                <ErrorMessage :field="v$.dockerImage" />
+                                <ErrorMessage :field="v$.docker_image" />
 
                                 <!-- Button to add a private docker image for this project -->
                                 <FileUpload

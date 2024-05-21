@@ -23,10 +23,7 @@ defineProps<{
                 {{ project.name }}
             </Title>
             <RouterLink :to="{ name: 'project-edit', params: { courseId: project.course.id, projectId: project.id } }">
-                <Button
-                    label="Bewerk project"
-                    :icon="PrimeIcons.PENCIL">
-                </Button>
+                <Button label="Bewerk project" :icon="PrimeIcons.PENCIL"> </Button>
             </RouterLink>
         </div>
     </template>

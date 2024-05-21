@@ -49,6 +49,8 @@ class FileTestsTests(APITestCase):
 
         content_json = json.loads(response.content.decode("utf-8"))
 
+        print(project, content_json)
+
         self.assertEqual(len(content_json), 6)
 
         expected_project_url = settings.TESTING_BASE_LINK + reverse(

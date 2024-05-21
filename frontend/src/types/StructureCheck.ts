@@ -1,11 +1,11 @@
 import { FileExtension } from './FileExtension.ts';
-import { Project } from './Project.ts';
+import { type Project } from './Project.ts';
 
 export class StructureCheck {
     constructor(
         public id: string = '',
         public path: string = '',
-        public obligated_extensions: FileExtension[] =  [],
+        public obligated_extensions: FileExtension[] = [],
         public blocked_extensions: FileExtension[] = [],
         public project: Project | null = null,
     ) {}
@@ -103,9 +103,6 @@ export class StructureCheck {
      * @param structureCheck
      */
     static fromJSON(structureCheck: StructureCheck): StructureCheck {
-        return new StructureCheck(
-            structureCheck.id,
-            structureCheck.path
-        );
+        return new StructureCheck(structureCheck.id, structureCheck.path);
     }
 }

@@ -57,6 +57,6 @@ export function useStructureCheck(): StructureCheckState {
 
         createStructureCheck,
         deleteStructureCheck,
-        setStructureChecks
+        setStructureChecks,
     };
 }

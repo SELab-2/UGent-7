@@ -12,8 +12,8 @@ def parse_zip(project: Project, zip_file: InMemoryUploadedFile) -> bool:
 
     zip_file.seek(0)
 
-    with zipfile.ZipFile(zip_file, 'r') as zip:
-        files = zip.namelist()
+    with zipfile.ZipFile(zip_file, 'r') as file:
+        files = file.namelist()
         directories = [file for file in files if file.endswith('/')]
 
     # Check if all directories start the same

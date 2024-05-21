@@ -71,8 +71,10 @@
             "noStudents": "No students in this group",
             "locked": "Closed",
             "unlocked": "Open",
+            "structureChecks": "Submission structure",
             "extraChecks": {
                 "title": "Automatic checks on a submission",
+                "empty": "No checks addeed",
                 "add": "New check",
                 "name": "Name",
                 "public": "Public",

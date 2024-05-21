@@ -23,7 +23,7 @@ const nodes = computed<TreeNode[]>(() => {
 
     if (structureChecks.value !== undefined) {
         for (const [i, check] of structureChecks.value.entries()) {
-            let hierarchy = check.getDirectoryHierarchy();
+            const hierarchy = check.getDirectoryHierarchy();
             let currentNodes = nodes;
 
             for (const [j, part] of hierarchy.entries()) {
@@ -71,11 +71,9 @@ function updateStructureCheckName(input: HTMLInputElement): void {
 
         if (input.value !== '') {
             // Update the children paths.
-            const children = structureChecks.value.filter(check =>
-                check.path.startsWith(oldPath)
-            );
+            const children = structureChecks.value.filter((check) => check.path.startsWith(oldPath));
 
-            for (let check of children) {
+            for (const check of children) {
                 check.path = check.path.replace(oldPath, editing.path);
             }
         }
@@ -87,7 +85,7 @@ function updateStructureCheckName(input: HTMLInputElement): void {
 /**
  * Add a new structure check to the list.
  */
-function addStructureCheck(check: StructureCheck|null = null): void {
+function addStructureCheck(check: StructureCheck | null = null): void {
     if (structureChecks.value === undefined) {
         return;
     }
@@ -128,12 +126,12 @@ function selectStructureCheck(node: TreeNode): void {
  */
 function newTreeNode(check: StructureCheck, key: string, label: string, leaf: boolean = false): TreeNode {
     const node: TreeNode = {
-        key: key,
-        label: label,
+        key,
+        label,
         data: check,
         icon: PrimeIcons.FOLDER,
         check: leaf,
-        children: []
+        children: [],
     };
 
     if (leaf) {
@@ -142,14 +140,14 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                 key: key + '-obligated',
                 icon: PrimeIcons.CHECK_CIRCLE,
                 data: check,
-                obligated: true
+                obligated: true,
             },
             {
                 key: key + '-blocked',
                 icon: PrimeIcons.TIMES_CIRCLE,
                 data: check,
-                blocked: true
-            }
+                blocked: true,
+            },
         ];
     }
 
@@ -224,9 +222,18 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
         </Tree>
 
         <div class="flex justify-content-end gap-3 mt-3">
-            <Button :icon="PrimeIcons.TIMES" v-if="selectedStructureCheck !== null" severity="contrast"
-                    :label="'Deselecteer ' + selectedStructureCheck.path" @click="selectedStructureCheck = null; editingStructureCheck = null;"
-                    outlined rounded />
+            <Button
+                :icon="PrimeIcons.TIMES"
+                v-if="selectedStructureCheck !== null"
+                severity="contrast"
+                :label="'Deselecteer ' + selectedStructureCheck.path"
+                @click="
+                    selectedStructureCheck = null;
+                    editingStructureCheck = null;
+                "
+                outlined
+                rounded
+            />
             <Button label="Nieuwe map" :icon="PrimeIcons.FOLDER" @click="addStructureCheck()" outlined rounded link />
         </div>
     </div>

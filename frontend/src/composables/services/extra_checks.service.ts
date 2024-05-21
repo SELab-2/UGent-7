@@ -9,6 +9,7 @@ interface ExtraCheckState {
     extraChecks: Ref<ExtraCheck[] | null>;
     getExtraChecksByProject: (projectId: string) => Promise<void>;
     addExtraCheck: (extraCheckData: ExtraCheck, projectId: string) => Promise<void>;
+    setExtraChecks: (extraChecks: ExtraCheck[], projectId: string) => Promise<void>;
     deleteExtraCheck: (extraCheckId: string) => Promise<void>;
 }
 
@@ -40,6 +41,14 @@ export function useExtraCheck(): ExtraCheckState {
         );
     }
 
+    async function setExtraChecks(extraChecks: ExtraCheck[], projectId: string): Promise<void> {
+        for (const extraCheck of extraChecks) {
+            if (extraCheck.id === '') {
+                await addExtraCheck(extraCheck, projectId);
+            }
+        }
+    }
+
     async function deleteExtraCheck(extraCheckId: string): Promise<void> {
         const endpoint = endpoints.extraChecks.retrieve.replace('{id}', extraCheckId);
         await deleteId(endpoint, response, Response.fromJSON);
@@ -51,6 +60,7 @@ export function useExtraCheck(): ExtraCheckState {
 
         getExtraChecksByProject,
         addExtraCheck,
+        setExtraChecks,
         deleteExtraCheck,
     };
 }

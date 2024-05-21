@@ -1,11 +1,11 @@
 export class DockerImage {
     public public: boolean;
     constructor(
-        public id: string,
-        public name: string,
-        public file: string, // in the form of a uri
-        public publicStatus: boolean,
-        public owner: string,
+        public id: string = '',
+        public name: string = '',
+        public file: string = '', // in the form of a uri
+        public publicStatus: boolean = false,
+        public owner: string = '',
     ) {
         this.public = publicStatus;
     }

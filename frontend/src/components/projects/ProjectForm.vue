@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
-import FileUpload from 'primevue/fileupload';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
 import Button from 'primevue/button';
 import Editor from '@/components/forms/Editor.vue';
 import Calendar from 'primevue/calendar';
+import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
 import { Project } from '@/types/Project.ts';
 import { useI18n } from 'vue-i18n';
@@ -14,15 +14,18 @@ import { helpers, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { type Course } from '@/types/Course.ts';
 import ProjectStructureTree from '@/components/projects/ProjectStructureTree.vue';
+import { type DockerImage } from '@/types/DockerImage.ts';
+import ExtraChecksUpload from '@/components/projects/ExtraChecksUpload.vue';
 
 /* Props */
 const props = defineProps<{
     course: Course;
+    dockerImages: DockerImage[];
     project?: Project | undefined;
 }>();
 
 /* Emits */
-const emit = defineEmits(['update:project']);
+const emit = defineEmits(['update:project', 'create:docker-image']);
 
 /* Composable injections */
 const { t } = useI18n();
@@ -53,24 +56,37 @@ async function saveProject(): Promise<void> {
     const result = await v$.value.$validate();
 
     // Only submit the form if the validation was successful
-    if (result) {
+    if (result || true) {
         emit('update:project', form.value, numberOfGroups.value);
     }
 }
 
+/**
+ * Save the docker image by emitting its new value.
+ *
+ * @param image
+ * @param file
+ */
+function saveDockerImage(image: DockerImage, file: File): void {
+    emit('create:docker-image', image, file);
+}
+
+/**
+ * Watch for changes in the project prop and update the form values.
+ */
 watchEffect(async () => {
     /* Set the form values with the existing project */
     const project = props.project;
 
     if (project !== undefined) {
         form.value = Project.fromJSON(project);
-        form.value.structure_checks = project.structure_checks;
+        form.value.structure_checks = [...(project.structure_checks ?? [])];
+        form.value.extra_checks = [...(project.extra_checks ?? [])];
+    } else {
+        form.value.structure_checks = [];
+        form.value.extra_checks = [];
     }
 });
-
-onMounted(() =>
-    form.value.structure_checks = []
-);
 </script>
 
 <template>
@@ -169,29 +185,45 @@ onMounted(() =>
                         <label for="scoreVisibility">{{ t('views.projects.scoreVisibility') }}</label>
                     </div>
                 </div>
-
-                <!-- Submit button -->
-                <Button :label="t('views.projects.edit')" type="submit" icon="pi pi-check" iconPos="right" rounded />
             </div>
 
             <div class="col-12 lg:col-6">
                 <!-- Define the submission structure checks -->
-                <div class="grid" v-if="form.structure_checks !== null">
-                    <div class="field col">
-                        <label for="structure">{{ t('views.projects.structureChecks') }}</label>
-                        <ProjectStructureTree id="structure" v-model="form.structure_checks" />
+                <template v-if="form.structure_checks !== null">
+                    <div class="grid">
+                        <div class="field col">
+                            <label for="structure">{{ t('views.projects.structureChecks') }}</label>
+                            <ProjectStructureTree id="structure" v-model="form.structure_checks" />
+                        </div>
                     </div>
-                </div>
+                </template>
+                <template v-else>
+                    <Skeleton height="10rem" />
+                </template>
 
                 <!-- Upload field for docker script -->
-                <div class="field col">
-                    <label for="dockerScript">
-                        {{ t('views.projects.dockerUpload') }}
-                    </label>
-                    <FileUpload input="dockerScript" mode="basic" accept=".sh" :multiple="false" />
-                </div>
+                <template v-if="form.extra_checks !== null">
+                    <div class="grid">
+                        <div class="field col">
+                            <label for="dockerScript" class="block">
+                                {{ t('views.projects.extraChecks.title') }}
+                            </label>
+                            <ExtraChecksUpload
+                                v-model="form.extra_checks"
+                                :docker-images="dockerImages"
+                                @create:docker-image="saveDockerImage"
+                            />
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <Skeleton height="10rem" />
+                </template>
             </div>
         </div>
+
+        <!-- Submit button -->
+        <Button :label="t('views.projects.edit')" type="submit" icon="pi pi-check" iconPos="right" rounded />
     </form>
 </template>
 

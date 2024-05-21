@@ -1,3 +1,7 @@
+import logging
+
+from rest_framework.parsers import MultiPartParser
+
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import Submission
@@ -19,6 +23,9 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+
+
+logger = logging.getLogger("ypovoli")
 
 
 # TODO: Error message when creating a project with wrongly formatted date looks a bit weird
@@ -160,6 +167,8 @@ class ProjectViewSet(RetrieveModelMixin,
 
         project: Project = self.get_object()
 
+        logger.info(request.POST.dict())
+
         serializer = ExtraCheckSerializer(
             data=request.data,
             context={
@@ -168,13 +177,36 @@ class ProjectViewSet(RetrieveModelMixin,
             }
         )
 
-        # TODO: Weird error message when invalid docker_image id
         if serializer.is_valid(raise_exception=True):
-            serializer.save(project=project)
+            serializer.save(project=project, docker_image_id=request.data.get('docker_image'))
 
         return Response({
             "message": gettext("project.success.extra_check.add")
         })
+
+    @extra_checks.mapping.put
+    @swagger_auto_schema(request_body=ExtraCheckSerializer)
+    def set_extra_checks(self, request: Request, **_):
+        """Set the extra checks of the given project"""
+        project: Project = self.get_object()
+
+        # Delete all current extra checks of the project
+        project.extra_checks.all().delete()
+
+        # Create the new extra checks
+        serializer = ExtraCheckSerializer(
+            data=request.data,
+            many=True,
+            context={
+                "project": project,
+                "request": request
+            }
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(project=project)
+
+        return Response(serializer.validated_data)
 
     @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission])
     def submission_status(self, _: Request):
