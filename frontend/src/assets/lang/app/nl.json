@@ -236,7 +236,7 @@
             "success": "Succes",
             "error": "Fout",
             "unknown": "Er is een onbekende fout opgetreden.",
-            "create": "{type} werd succesvol aangemaakt",
+            "create": "{type} werd succesvol aangemaakt.",
             "courses": {
                 "enrollment": {
                     "success": "Je bent succesvol ingeschreven voor het vak '{0}'.",
@@ -257,20 +257,20 @@
                     }
                 },
                 "create": {
-                    "success": "Het vak '{0}' werd succesvol aangemaakt",
-                    "error": "Er is een fout opgetreden tijdens het aanmaken van het vak '{0}'"
+                    "success": "Het vak '{0}' werd succesvol aangemaakt.",
+                    "error": "Er is een fout opgetreden tijdens het aanmaken van het vak '{0}'."
                 }
             },
             "projects": {
                 "create": {
-                    "success": "Het project '{0}' werd succesvol aangemaakt",
-                    "error": "Er is een fout opgetreden tijdens het aanmaken van het project '{0}'"
+                    "success": "Het project '{0}' werd succesvol aangemaakt.",
+                    "error": "Er is een fout opgetreden tijdens het aanmaken van het project '{0}'."
                 }
             },
             "submissions": {
                 "create": {
-                    "success": "De indiening is succesvol ingediend",
-                    "error": "Er is een fout opgetreden tijdens het indienen van de indiening"
+                    "success": "De indiening is succesvol ingediend.",
+                    "error": "Er is een fout opgetreden tijdens het indienen van de indiening."
                 }
             },
             "login": {
