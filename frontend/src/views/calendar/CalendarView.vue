@@ -5,7 +5,6 @@ import BaseLayout from '@/components/layout/base/BaseLayout.vue';
 import Calendar, { type CalendarDateSlotOptions } from 'primevue/calendar';
 import Title from '@/components/layout/Title.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
-import Skeleton from 'primevue/skeleton';
 import { useProject } from '@/composables/services/project.service';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -15,6 +14,7 @@ import { type Project } from '@/types/Project.ts';
 import { useRoute, useRouter } from 'vue-router';
 import { useCourses } from '@/composables/services/course.service.ts';
 import { type Course, getAcademicYear } from '@/types/Course.ts';
+import Loading from '@/components/Loading.vue';
 
 /* Composable injections */
 const { t, locale } = useI18n();
@@ -232,7 +232,7 @@ watch(selectedDate, (date) => {
                             </template>
                         </template>
                         <template v-else>
-                            <Skeleton height="7rem" />
+                            <Loading height="7rem"/>
                         </template>
                     </div>
 

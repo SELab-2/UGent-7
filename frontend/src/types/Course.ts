@@ -2,7 +2,25 @@ import { type Assistant } from './users/Assistant.ts';
 import { type Project } from './Project.ts';
 import { type Student } from './users/Student.ts';
 import { type Teacher } from './users/Teacher.ts';
-import { Faculty } from '@/types/Faculty.ts';
+import { Faculty, FacultyJSON } from '@/types/Faculty.ts';
+import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export type CourseJSON = {
+    id: string;
+    name: string;
+    academic_startyear: number;
+    excerpt: string;
+    description: string;
+    private_course: boolean;
+    invitation_link?: string;
+    invitation_link_expires?: string;
+    faculty: FacultyJSON;
+    parent_course: CourseJSON | null;
+    teachers: HyperlinkedRelation;
+    assistants: HyperlinkedRelation;
+    students: HyperlinkedRelation;
+    projects: HyperlinkedRelation;
+}
 
 export class Course {
     constructor(
@@ -62,7 +80,13 @@ export class Course {
      *
      * @param course
      */
-    static fromJSON(course: Course): Course {
+    static fromJSON(course: CourseJSON): Course {
+        let parent: CourseJSON|Course|null = course.parent_course;
+
+        if (parent !== null) {
+            parent = Course.fromJSON(parent);
+        }
+
         return new Course(
             course.id,
             course.name,
@@ -71,8 +95,8 @@ export class Course {
             course.academic_startyear,
             course.private_course,
             course.invitation_link,
-            course.invitation_link_expires,
-            course.parent_course,
+            new Date(course.invitation_link_expires ?? ''),
+            parent,
             course.faculty,
         );
     }

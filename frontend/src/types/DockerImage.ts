@@ -1,3 +1,11 @@
+export type DockerImageJSON = {
+    id: string;
+    name: string;
+    file: string;
+    public: boolean;
+    owner: string;
+}
+
 export class DockerImage {
     public public: boolean;
     constructor(
@@ -10,7 +18,7 @@ export class DockerImage {
         this.public = publicStatus;
     }
 
-    static fromJSON(dockerData: DockerImage): DockerImage {
+    static fromJSON(dockerData: DockerImageJSON): DockerImage {
         return new DockerImage(dockerData.id, dockerData.name, dockerData.file, dockerData.public, dockerData.owner);
     }
 

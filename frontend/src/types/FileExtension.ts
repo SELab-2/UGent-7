@@ -1,3 +1,8 @@
+export type FileExtensionJSON = {
+    id: string;
+    extension: string;
+};
+
 export class FileExtension {
     constructor(
         public id: string = '',
@@ -9,7 +14,7 @@ export class FileExtension {
      *
      * @param extension
      */
-    static fromJSON(extension: FileExtension): FileExtension {
+    static fromJSON(extension: FileExtensionJSON): FileExtension {
         return new FileExtension(extension.id, extension.extension);
     }
 }

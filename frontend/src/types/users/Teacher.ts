@@ -1,6 +1,11 @@
 import { type Course } from '../Course.ts';
 import { type Faculty } from '../Faculty.ts';
-import { type Role, User } from '@/types/users/User.ts';
+import { type Role, User, UserJSON } from '@/types/users/User.ts';
+import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export type TeacherJSON = {
+    courses: HyperlinkedRelation;
+} & UserJSON;
 
 export class Teacher extends User {
     constructor(
@@ -38,7 +43,7 @@ export class Teacher extends User {
      * @param teacher
      */
 
-    static fromJSON(teacher: Teacher): Teacher {
+    static fromJSON(teacher: TeacherJSON): Teacher {
         return new Teacher(
             teacher.id,
             teacher.username,
@@ -48,8 +53,8 @@ export class Teacher extends User {
             teacher.last_enrolled,
             teacher.is_staff,
             teacher.roles,
-            teacher.faculties,
-            teacher.courses,
+            [],
+            [],
             new Date(teacher.create_time),
             teacher.last_login !== null ? new Date(teacher.last_login) : null,
         );

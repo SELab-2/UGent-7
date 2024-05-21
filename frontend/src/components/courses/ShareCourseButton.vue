@@ -8,6 +8,7 @@ import { type Course } from '@/types/Course.ts';
 import { PrimeIcons } from 'primevue/api';
 import { ref, computed } from 'vue';
 import { useCourses } from '@/composables/services/course.service';
+import Editor from '@/components/forms/Editor.vue';
 
 /* Composable injections */
 const { t } = useI18n();
@@ -37,9 +38,7 @@ async function handleShare(): Promise<void> {
  * Copies the invitation link to the clipboard.
  */
 function copyToClipboard(): void {
-    if (props.course.invitation_link !== null) {
-        navigator.clipboard.writeText(invitationLink.value);
-    }
+    navigator.clipboard.writeText(invitationLink.value);
 }
 
 /**
@@ -58,7 +57,6 @@ const invitationLink = computed(() => {
             class="custom-button"
             style="height: 51px; width: 51px"
             @click="displayShareCourse = true"
-            v-if="props.course.private_course"
         />
         <Dialog
             v-model:visible="displayShareCourse"
@@ -78,17 +76,20 @@ const invitationLink = computed(() => {
                 </p>
 
                 <div class="grid">
-                    <div class="flex align-items-center col-12 gap-2">
+                    <!-- Link duration -->
+                    <div class="field col">
                         <label for="linkDuration">{{ t('views.courses.share.duration') }}</label>
                         <InputNumber v-model="linkDuration" :min="1" :max="28" />
                     </div>
                 </div>
 
                 <div class="grid">
-                    <div class="flex align-items-center col-12 gap-2">
+                    <div class="field col">
                         <label for="link">{{ t('views.courses.share.link') }}</label>
-                        <InputText v-model="invitationLink" disabled style="width: 50%" />
-                        <Button @click="copyToClipboard()" icon="pi pi-copy" class="p-button-text no-outline" />
+                        <div class="flex">
+                            <InputText v-model="invitationLink" disabled/>
+                            <Button @click="copyToClipboard()" icon="pi pi-copy" class="p-button-text no-outline" />
+                        </div>
                     </div>
                 </div>
 

@@ -1,15 +1,25 @@
 import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
 import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export type SubmissionJSON = {
+    id: string;
+    submission_number: number;
+    submission_time: string;
+    is_valid: boolean;
+    zip: HyperlinkedRelation;
+    group: HyperlinkedRelation;
+}
 
 export class Submission {
     constructor(
-        public id: string,
-        public submission_number: number,
-        public submission_time: Date,
-        public zip: File,
+        public id: string = '',
+        public submission_number: number = 0,
+        public submission_time: Date = new Date(),
+        public is_valid: boolean = false,
         public extraCheckResults: ExtraCheckResult[] = [],
         public structureCheckResults: StructureCheckResult[] = [],
-        public is_valid: boolean,
+        public zip: File|null = null,
     ) {}
 
     /**
@@ -49,37 +59,12 @@ export class Submission {
      *
      * @param submission
      */
-    static fromJSON(submission: ResponseSubmission): Submission {
-        const extraCheckResults = submission.results
-            .filter((result: any) => result.resourcetype === 'ExtraCheckResult')
-            .map((result: ExtraCheckResult) => ExtraCheckResult.fromJSON(result));
-
-        const structureCheckResult = submission.results
-            .filter((result: any) => result.resourcetype === 'StructureCheckResult')
-            .map((result: StructureCheckResult) => StructureCheckResult.fromJSON(result));
+    static fromJSON(submission: SubmissionJSON): Submission {
         return new Submission(
             submission.id,
             submission.submission_number,
             new Date(submission.submission_time),
-            submission.zip,
-            extraCheckResults,
-            structureCheckResult,
-            submission.is_valid,
+            submission.is_valid
         );
     }
-
-    static fromJSONCreate(respons: { message: string; submission: ResponseSubmission }): Submission {
-        return Submission.fromJSON(respons.submission);
-    }
-}
-
-class ResponseSubmission {
-    constructor(
-        public id: string,
-        public submission_number: number,
-        public submission_time: Date,
-        public zip: File,
-        public results: any[],
-        public is_valid: boolean,
-    ) {}
 }

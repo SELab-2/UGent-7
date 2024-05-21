@@ -12,7 +12,7 @@ import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useProject } from '@/composables/services/project.service.ts';
-import { computed, watch } from 'vue';
+import { computed, watch, watchEffect } from 'vue';
 
 /* Props */
 const props = defineProps<{
@@ -30,11 +30,7 @@ const { push } = useRouter();
 
 /* State */
 const instructors = computed(() => {
-    if (props.course.teachers !== null && props.course.assistants !== null) {
-        return props.course.teachers.concat(props.course.assistants);
-    }
-
-    return null;
+    return props.course.teachers.concat(props.course.assistants);
 });
 
 const visibleProjects = computed(() => projects.value?.filter((project) => project.visible) ?? null);
@@ -47,28 +43,28 @@ async function leaveCourse(): Promise<void> {
     confirm.require({
         message: t('confirmations.leaveCourse'),
         header: t('views.courses.leave'),
-        accept: (): void => {
+        accept: async (): Promise<void> => {
             if (user.value !== null) {
                 // Leave the course
-                studentLeaveCourse(props.course.id, user.value.id).then(() => {
-                    // Refresh the user so the course is removed from the user's courses
-                    refreshUser();
-                    // Redirect to the dashboard
-                    push({ name: 'dashboard' });
-                });
+                await studentLeaveCourse(props.course.id, user.value.id);
+
+                // Refresh the user so the course is removed from the user's courses
+                await refreshUser();
+
+                // Redirect to the dashboard
+                await push({ name: 'dashboard' });
             }
         },
         reject: () => {},
     });
 }
 
-watch(
-    () => props.course,
-    async () => {
-        await getProjectsByCourse(props.course.id);
-    },
-    { immediate: true },
-);
+/**
+ * Watch for changes in the course ID and fetch the projects for the course.
+ */
+watchEffect(async () => {
+    await getProjectsByCourse(props.course.id);
+});
 </script>
 
 <template>
@@ -77,13 +73,16 @@ watch(
         <!-- Course title -->
         <Title class="m-0">{{ props.course.name }}</Title>
     </div>
+
     <!-- Description -->
-    <div class="surface-300 px-4 py-3" v-html="props.course.description" />
+    <div v-html="props.course.description" />
+
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
     </div>
+
     <!-- Project list body -->
     <ProjectList :projects="visibleProjects">
         <template #empty>

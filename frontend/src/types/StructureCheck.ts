@@ -1,5 +1,14 @@
-import { FileExtension } from './FileExtension.ts';
+import { FileExtension, FileExtensionJSON } from './FileExtension.ts';
 import { Project } from './Project.ts';
+import { HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export type StructureCheckJSON = {
+    id: string;
+    path: string;
+    project: HyperlinkedRelation;
+    obligated_extensions: FileExtensionJSON[];
+    blocked_extensions: FileExtensionJSON[];
+}
 
 export class StructureCheck {
     constructor(
@@ -102,7 +111,7 @@ export class StructureCheck {
      *
      * @param structureCheck
      */
-    static fromJSON(structureCheck: StructureCheck): StructureCheck {
+    static fromJSON(structureCheck: StructureCheckJSON): StructureCheck {
         return new StructureCheck(
             structureCheck.id,
             structureCheck.path,

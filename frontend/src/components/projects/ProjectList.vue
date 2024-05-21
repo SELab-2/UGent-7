@@ -13,6 +13,7 @@ import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useStudents } from '@/composables/services/student.service';
 import { type Course } from '@/types/Course.ts';
+import Loading from '@/components/Loading.vue';
 
 /* Props */
 const props = withDefaults(
@@ -109,7 +110,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                             </template>
                         </template>
                         <template v-else>
-                            <Skeleton height="8rem" />
+                            <Loading height="50vh"/>
                         </template>
                     </div>
                 </div>
@@ -129,9 +130,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                             </div>
                         </template>
                         <template v-else>
-                            <div class="col-12" v-for="index in cols" :key="index">
-                                <Skeleton height="20rem" />
-                            </div>
+                            <Loading height="50vh"/>
                         </template>
                     </div>
                 </div>
