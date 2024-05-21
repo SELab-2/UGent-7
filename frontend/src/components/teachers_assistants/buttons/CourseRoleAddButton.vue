@@ -23,7 +23,7 @@ const selectedRole = ref<string | null>(null);
 
 /* Options */
 const options = [
-    { label: t('views.courses.teachersAndAssistants.search.no_role'), value: '' },
+    { label: t('views.courses.teachersAndAssistants.search.noRole'), value: '' },
     { label: t('types.roles.assistant'), value: 'assistant' },
     { label: t('types.roles.teacher'), value: 'teacher' },
 ];

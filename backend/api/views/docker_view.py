@@ -64,6 +64,12 @@ class DockerImageViewSet(RetrieveModelMixin, CreateModelMixin, UpdateModelMixin,
 
         return Response(serializer.data)
 
+    @action(detail=False, methods=['DELETE'], permission_classes=[IsAdminUser])
+    def delete(self, request: Request, **_) -> Response:
+        response = self.queryset.filter(id__in=request.data['ids']).delete()
+
+        return Response(response)
+
     # TODO: Maybe not necessary
     # https://www.django-rest-framework.org/api-guide/permissions/#overview-of-access-restriction-methods
     def list(self, request: Request) -> Response:
