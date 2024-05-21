@@ -1,25 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { useStudents } from '@/composables/services/student.service.ts';
 import { Student } from '@/types/users/Student';
 
-const {
-    students,
-    student,
-
-    getStudentByID,
-    getStudents,
-    getStudentsByCourse,
-    getStudentsByGroup,
-
-    createStudent,
-    deleteStudent,
-
-    studentJoinCourse,
-    studentLeaveCourse,
-    studentJoinGroup,
-    studentLeaveGroup,
-} = useStudents();
+const { students, student, getStudentByID, getStudents, getStudentsByCourse, createStudent } = useStudents();
 
 function resetService(): void {
     student.value = null;

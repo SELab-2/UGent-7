@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { useAssistant } from '@/composables/services/assistant.service.ts';
 import { Assistant } from '@/types/users/Assistant';
@@ -6,16 +5,11 @@ import { Assistant } from '@/types/users/Assistant';
 const {
     assistants,
     assistant,
-
     getAssistantByID,
     getAssistantsByCourse,
     getAssistants,
-
     createAssistant,
     deleteAssistant,
-
-    assistantJoinCourse,
-    assistantLeaveCourse,
 } = useAssistant();
 
 function resetService(): void {

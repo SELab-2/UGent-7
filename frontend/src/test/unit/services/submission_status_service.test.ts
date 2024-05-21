@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { useSubmissionStatus } from '@/composables/services/submission_status.service.ts';
 

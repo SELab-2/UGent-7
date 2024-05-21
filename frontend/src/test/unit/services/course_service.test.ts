@@ -1,25 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { Course } from '@/types/Course.ts';
 
 import { useCourses } from '@/composables/services/course.service.ts';
 
-const {
-    pagination,
-    courses,
-    course,
-
-    getCourseByID,
-    searchCourses,
-    getCourses,
-    getCoursesByStudent,
-    getCoursesByTeacher,
-    getCourseByAssistant,
-
-    createCourse,
-    cloneCourse,
-    deleteCourse,
-} = useCourses();
+const { courses, course, getCourseByID, getCourses, getCoursesByStudent, createCourse } = useCourses();
 
 function resetService(): void {
     course.value = null;

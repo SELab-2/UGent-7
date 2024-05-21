@@ -1,17 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import { useFaculty } from '@/composables/services/faculty.service.ts';
 import { Faculty } from '@/types/Faculty';
 
-const {
-    faculties,
-    faculty,
-    getFacultyByID,
-    getFaculties,
-
-    createFaculty,
-    deleteFaculty,
-} = useFaculty();
+const { faculties, faculty, getFacultyByID, getFaculties, createFaculty } = useFaculty();
 
 function resetService(): void {
     faculty.value = null;
