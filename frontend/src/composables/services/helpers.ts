@@ -14,15 +14,20 @@ import { type Filter } from '@/types/filter/Filter.ts';
  * @param ref
  * @param fromJson
  */
-export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T, selfprocessError: boolean = true): Promise<void> {
+export async function get<T>(
+    endpoint: string,
+    ref: Ref<T | null>,
+    fromJson: (data: any) => T,
+    selfprocessError: boolean = true,
+): Promise<void> {
     try {
         const response = await client.get(endpoint);
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if(selfprocessError){
+        if (selfprocessError){
             processError(error);
             console.error(error); // Log the error for debugging
-        }else{
+        } else {
             throw error; // Re-throw the error to the caller
         }
     }
@@ -52,10 +57,10 @@ export async function create<T>(
         });
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if(selfprocessError){
+        if (selfprocessError){
             processError(error);
             console.error(error); // Log the error for debugging
-        }else{
+        } else {
             throw error; // Re-throw the error to the caller
         }
     }
@@ -84,10 +89,10 @@ export async function patch(
         });
         ref.value = Response.fromJSON(response.data);
     } catch (error: any) {
-        if(selfprocessError){
+        if (selfprocessError){
             processError(error);
             console.error(error); // Log the error for debugging
-        }else{
+        } else {
             throw error; // Re-throw the error to the caller
         }
     }
@@ -100,15 +105,20 @@ export async function patch(
  * @param ref
  * @param fromJson
  */
-export async function deleteId<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T, selfprocessError: boolean = true): Promise<void> {
+export async function deleteId<T>(
+    endpoint: string,
+    ref: Ref<T | null>,
+    fromJson: (data: any) => T,
+    selfprocessError: boolean = true,
+): Promise<void> {
     try {
         const response = await client.delete(endpoint);
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if(selfprocessError){
+        if (selfprocessError){
             processError(error);
             console.error(error); // Log the error for debugging
-        }else{
+        } else {
             throw error; // Re-throw the error to the caller
         }
     }
@@ -133,10 +143,10 @@ export async function deleteIdWithData<T>(
         const response = await client.delete(endpoint, { data });
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if(selfprocessError){
+        if (selfprocessError){
             processError(error);
             console.error(error); // Log the error for debugging
-        }else{
+        } else {
             throw error; // Re-throw the error to the caller
         }
     }
@@ -149,16 +159,21 @@ export async function deleteIdWithData<T>(
  * @param ref
  * @param fromJson
  */
-export async function getList<T>(endpoint: string, ref: Ref<T[] | null>, fromJson: (data: any) => T, selfprocessError: boolean = true): Promise<void> {
+export async function getList<T>(
+    endpoint: string,
+    ref: Ref<T[] | null>,
+    fromJson: (data: any) => T,
+    selfprocessError: boolean = true,
+): Promise<void> {
     try {
         const response = await client.get(endpoint);
         ref.value = response.data.map((data: T) => fromJson(data));
     } catch (error: any) {
         ref.value = []; // Set the ref to an empty array
-        if(selfprocessError){
+        if (selfprocessError){
             processError(error);
             console.error(error); // Log the error for debugging
-        }else{
+        } else {
             throw error; // Re-throw the error to the caller
         }
     }
@@ -204,10 +219,10 @@ export async function getPaginatedList<T>(
             results: [],
         };
 
-        if(selfprocessError){
+        if (selfprocessError){
             processError(error);
             console.error(error); // Log the error for debugging
-        }else{
+        } else {
             throw error; // Re-throw the error to the caller
         }
     }
@@ -239,7 +254,7 @@ export async function getListMerged<T>(
             if(selfprocessError){
                 processError(error);
                 console.error(error); // Log the error for debugging
-            }else{
+            } else {
                 throw error; // Re-throw the error to the caller
             }
         }

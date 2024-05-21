@@ -1,7 +1,7 @@
 import { Project } from '@/types/Project';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { create, deleteId, get, getList, patch} from '@/composables/services/helpers.ts';
+import { create, deleteId, get, getList, patch } from '@/composables/services/helpers.ts';
 import { type Response } from '@/types/Response.ts';
 
 interface ProjectState {

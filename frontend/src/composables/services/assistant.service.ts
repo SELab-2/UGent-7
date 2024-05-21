@@ -48,7 +48,7 @@ export function useAssistant(): AssistantState {
         filters: Filter,
         page: number,
         pageSize: number,
-        selfprocessError: boolean = true
+        selfprocessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.assistants.search;
         await getPaginatedList<Assistant>(
@@ -58,14 +58,14 @@ export function useAssistant(): AssistantState {
             pageSize,
             assistantPagination,
             Assistant.fromJSON,
-            selfprocessError
+            selfprocessError,
         );
     }
 
     async function assistantJoinCourse(
         courseId: string,
         assistantId: string,
-        selfprocessError: boolean = true
+        selfprocessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
         await create<Response>(
@@ -74,14 +74,14 @@ export function useAssistant(): AssistantState {
             response,
             Response.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
     async function assistantLeaveCourse(
         courseId: string,
         assistantId: string,
-        selfprocessError: boolean = true
+        selfprocessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
         await deleteIdWithData<Response>(
@@ -89,7 +89,7 @@ export function useAssistant(): AssistantState {
             { assistant: assistantId },
             response,
             Response.fromJSON,
-            selfprocessError
+            selfprocessError,
         );
     }
 
@@ -103,7 +103,7 @@ export function useAssistant(): AssistantState {
             assistant,
             Assistant.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 

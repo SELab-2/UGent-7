@@ -43,7 +43,7 @@ export function useGroup(): GroupState {
             group,
             Group.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 

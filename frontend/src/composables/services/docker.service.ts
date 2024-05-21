@@ -35,9 +35,22 @@ export function useDockerImages(): DockerImagesState {
         await getList<DockerImage>(endpoint, dockerImages, DockerImage.fromJSON, selfprocessError);
     }
 
-    async function searchDockerImages(filters: Filter, page: number, pageSize: number, selfprocessError: boolean = true): Promise<void> {
+    async function searchDockerImages(
+        filters: Filter,
+        page: number,
+        pageSize: number,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.dockerImages.search;
-        await getPaginatedList<DockerImage>(endpoint, filters, page, pageSize, pagination, DockerImage.fromJSON, selfprocessError);
+        await getPaginatedList<DockerImage>(
+            endpoint,
+            filters,
+            page,
+            pageSize,
+            pagination,
+            DockerImage.fromJSON,
+            selfprocessError,
+        );
     }
 
     async function patchDockerImage(dockerData: DockerImage, selfprocessError: boolean = true): Promise<void> {
@@ -45,7 +58,11 @@ export function useDockerImages(): DockerImagesState {
         await patch(endpoint, { public: dockerData.public }, response, undefined, selfprocessError);
     }
 
-    async function createDockerImage(dockerData: DockerImage, file: File, selfprocessError: boolean = true): Promise<void> {
+    async function createDockerImage(
+        dockerData: DockerImage,
+        file: File,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.dockerImages.index;
         await create<Response>(
             endpoint,
@@ -57,7 +74,7 @@ export function useDockerImages(): DockerImagesState {
             response,
             Response.fromJSON,
             'multipart/form-data',
-            selfprocessError
+            selfprocessError,
         );
     }
 

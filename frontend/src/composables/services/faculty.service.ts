@@ -28,7 +28,14 @@ export function useFaculty(): FacultyState {
 
     async function createFaculty(facultyData: Faculty, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.faculties.index;
-        await create<Faculty>(endpoint, { id: facultyData.id, name: facultyData.name }, faculty, Faculty.fromJSON, undefined, selfprocessError);
+        await create<Faculty>(
+            endpoint,
+            { id: facultyData.id, name: facultyData.name },
+            faculty,
+            Faculty.fromJSON,
+            undefined,
+            selfprocessError,
+        );
     }
 
     async function deleteFaculty(id: string, selfprocessError: boolean = true): Promise<void> {

@@ -22,7 +22,11 @@ export function useExtraCheck(): ExtraCheckState {
         await getList<ExtraCheck>(endpoint, extraChecks, ExtraCheck.fromJSON, selfprocessError);
     }
 
-    async function addExtraCheck(extraCheckData: ExtraCheck, projectId: string, selfprocessError: boolean = true): Promise<void> {
+    async function addExtraCheck(
+        extraCheckData: ExtraCheck,
+        projectId: string,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.extraChecks.byProject.replace('{projectId}', projectId);
         await create<ExtraCheck>(
             endpoint,
@@ -37,7 +41,7 @@ export function useExtraCheck(): ExtraCheckState {
             extraCheck,
             ExtraCheck.fromJSON,
             'multipart/form-data',
-            selfprocessError
+            selfprocessError,
         );
     }
 

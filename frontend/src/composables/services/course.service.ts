@@ -18,7 +18,12 @@ interface CoursesState {
     getCourseByAssistant: (assistantId: string, selfprocessError?: boolean) => Promise<void>;
     createCourse: (courseData: Course, selfprocessError?: boolean) => Promise<void>;
     updateCourse: (courseData: Course, selfprocessError?: boolean) => Promise<void>;
-    cloneCourse: (courseId: string, cloneAssistants: boolean, cloneTeachers: boolean, selfprocessError?: boolean) => Promise<void>;
+    cloneCourse: (
+        courseId: string,
+        cloneAssistants: boolean,
+        cloneTeachers: boolean,
+        selfprocessError?: boolean,
+    ) => Promise<void>;
     activateInvitationLink: (courseId: string, linkDuration: number, selfprocessError?: boolean) => Promise<void>;
     deleteCourse: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
@@ -39,9 +44,22 @@ export function useCourses(): CoursesState {
         await getList<Course>(endpoint, courses, Course.fromJSON, selfprocessError);
     }
 
-    async function searchCourses(filters: Filter, page: number, pageSize: number, selfprocessError: boolean = true): Promise<void> {
+    async function searchCourses(
+        filters: Filter,
+        page: number,
+        pageSize: number,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.courses.search;
-        await getPaginatedList<Course>(endpoint, filters, page, pageSize, pagination, Course.fromJSON, selfprocessError);
+        await getPaginatedList<Course>(
+            endpoint,
+            filters,
+            page,
+            pageSize,
+            pagination,
+            Course.fromJSON,
+            selfprocessError,
+        );
     }
 
     async function getCoursesByStudent(studentId: string, selfprocessError: boolean = true): Promise<void> {
@@ -75,7 +93,7 @@ export function useCourses(): CoursesState {
             course,
             Course.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
@@ -94,11 +112,16 @@ export function useCourses(): CoursesState {
             },
             response,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
-    async function cloneCourse(courseId: string, cloneAssistants: boolean, cloneTeachers: boolean, selfprocessError: boolean = true): Promise<void> {
+    async function cloneCourse(
+        courseId: string,
+        cloneAssistants: boolean,
+        cloneTeachers: boolean,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.courses.clone.replace('{courseId}', courseId);
         await create<Course>(
             endpoint,
@@ -109,7 +132,7 @@ export function useCourses(): CoursesState {
             course,
             Course.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
@@ -118,7 +141,11 @@ export function useCourses(): CoursesState {
         await deleteId<Course>(endpoint, course, Course.fromJSON, selfprocessError);
     }
 
-    async function activateInvitationLink(courseId: string, linkDuration: number, selfprocessError: boolean = true): Promise<void> {
+    async function activateInvitationLink(
+        courseId: string,
+        linkDuration: number,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.courses.invitationLink.replace('{courseId}', courseId);
         await patch(
             endpoint,
@@ -127,7 +154,7 @@ export function useCourses(): CoursesState {
             },
             response,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
