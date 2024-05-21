@@ -81,15 +81,15 @@ const incomingProjects = computed<Project[] | null>(() => {
 
 <template>
     <div>
+        <!-- Show past projects switch -->
+        <div class="flex gap-3 align-items-center mb-5">
+            <InputSwitch input-id="show-past" v-model="showPast" />
+            <label for="show-past">
+                {{ t('components.list.showPastProjects') }}
+            </label>
+        </div>
         <!-- Project list -->
         <template v-if="sortedProjects === null || sortedProjects.length > 0">
-            <!-- Show past projects switch -->
-            <div class="flex gap-3 align-items-center mb-5">
-                <InputSwitch input-id="show-past" v-model="showPast" />
-                <label for="show-past">
-                    {{ t('components.list.showPastProjects') }}
-                </label>
-            </div>
             <div class="grid nested-grid">
                 <div class="col-12 md:col-5">
                     <h2 class="mt-0">

@@ -21,8 +21,10 @@ export const endpoints = {
     },
     dockerImages: {
         index: '/api/docker-images/',
+        retrieve: '/api/docker-images/{id}/',
         search: '/api/docker-images/search/',
         patch: '/api/docker-images/{id}/public/',
+        deleteMany: '/api/docker-images/delete/',
     },
     students: {
         index: '/api/students/',
