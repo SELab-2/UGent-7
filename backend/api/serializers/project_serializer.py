@@ -34,10 +34,8 @@ class SubmissionStatusSerializer(serializers.Serializer):
         if (groups_submitted > non_empty_groups):
             non_empty_groups = groups_submitted
 
-        extra_checks_count = ExtraCheck.objects.filter(
-            project=instance
-        ).count()
-
+        extra_checks_count = instance.extra_checks.count()
+        
         if extra_checks_count:
             passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(
                 submission__group__project=instance,
