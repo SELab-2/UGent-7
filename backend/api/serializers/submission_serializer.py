@@ -90,7 +90,6 @@ class SubmissionSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-
         group: Group = self.context["group"]
         project: Project = group.project
 

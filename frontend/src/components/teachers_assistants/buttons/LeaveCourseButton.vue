@@ -26,7 +26,6 @@ const courseValue = ref<Course>(props.course);
  */
 async function leaveCourse(): Promise<void> {
     try {
-        console.log(props.user.getRole());
         // Depending on the user's role, call the correct service
         if (props.user.getRole() === 'types.roles.assistant') {
             await assistantLeaveCourse(courseValue.value.id, props.user.id);

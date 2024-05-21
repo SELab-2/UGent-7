@@ -44,7 +44,6 @@ export function useSubmission(): SubmissionState {
     }
 
     async function createTestSubmission(uploadedFiles: File[], projectId: string): Promise<void> {
-        console.log("uploaded files: " + JSON.stringify(uploadedFiles))
         const endpoint = endpoints.submissions.byProject.replace('{projectId}', projectId);
         const formData = new FormData();
         uploadedFiles.forEach((file: File) => {

@@ -36,7 +36,6 @@ const onUpload = async (callback: () => void): Promise<void> => {
         await createTestSubmission(files.value as File[], props.project.id);
         if (submission.value != null) {
             submissions.value = [...(submissions.value ?? []), submission.value];
-            alert("make submission")
         }
         files.value = [];
         callback();

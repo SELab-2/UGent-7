@@ -41,7 +41,7 @@ export async function create<T>(
     contentType: string = 'application/json',
 ): Promise<void> {
     try {
-        console.log("DATA: " + JSON.stringify(data))
+        console.log(data)
         const response = await client.post(endpoint, data, {
             headers: {
                 'Content-Type': contentType,
@@ -50,7 +50,6 @@ export async function create<T>(
         ref.value = fromJson(response.data);
     } catch (error: any) {
         processError(error);
-        console.error(error); // Log the error for debugging
         throw error; // Re-throw the error to the caller
     }
 }
