@@ -13,7 +13,7 @@ interface TeacherState {
     teacher: Ref<Teacher | null>;
     response: Ref<Response | null>;
     teacherPagination: Ref<PaginatorResponse<Teacher> | null>;
-    getTeacherByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getTeacherByID: (id: string, init?:boolean, selfprocessError?: boolean) => Promise<void>;
     getTeachersByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
     getTeachers: (selfprocessError?: boolean) => Promise<void>;
     searchTeachers: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;

@@ -12,7 +12,7 @@ interface AssistantState {
     assistant: Ref<Assistant | null>;
     response: Ref<Response | null>;
     assistantPagination: Ref<PaginatorResponse<Assistant> | null>;
-    getAssistantByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getAssistantByID: (id: string, init?:boolean, selfprocessError?: boolean) => Promise<void>;
     getAssistantsByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
     getAssistants: (selfprocessError?: boolean) => Promise<void>;
     searchAssistants: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
