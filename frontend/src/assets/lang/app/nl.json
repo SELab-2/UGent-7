@@ -128,7 +128,7 @@
                     "noRole": "Geen",
                     "placeholder": "Zoek een gebruiker op naam",
                     "title": "Zoek gebuikers om aan dit vak toe te voegen",
-                    "results": "\uD83D\uDD0E 1 gebruiker gevonden voor ingestelde filters | \uD83D\uDD0E {count} gebruikers gevonden voor ingestelde filters",
+                    "results": "\uD83D\uDD0E 1 gebruiker gevonden voor ingestelde filters | \uD83D\uDD0E {count} gebruikers gevonden voor ingestelde filters"
                 }
             },
             "search": {
