@@ -70,6 +70,7 @@ const submitCourse = async (): Promise<void> => {
     // Only submit the form if the validation was successful
     if (result && course.value !== null) {
         // Pass the course data to the service
+        console.log(form.faculty);
         await updateCourse(
             new Course(
                 course.value.id,

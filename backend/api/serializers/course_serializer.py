@@ -40,7 +40,8 @@ class CourseSerializer(serializers.ModelSerializer):
     )
 
     faculty = FacultySerializer(
-        read_only=True
+        many=False,
+        required=False,
     )
 
     def validate(self, attrs: dict) -> dict:
@@ -59,6 +60,22 @@ class CourseSerializer(serializers.ModelSerializer):
                 data["invitation_link_expires"] = instance.invitation_link_expires
 
         return data
+
+    def create(self, validated_data):
+        # Create the course
+        return None
+        faculty_data = validated_data.pop('faculty')
+        course = super().create(validated_data)
+
+        # Link the faculty, if specified
+        course.faculty = faculty_data
+
+        # Compute the invitation link hash
+        course.invitation_link = hashlib.sha256(f'{course.id}{course.academic_startyear}'.encode()).hexdigest()
+        course.invitation_link_expires = timezone.now()
+        course.save()
+
+        return None
 
     class Meta:
         model = Course

@@ -11,4 +11,4 @@ class FacultySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Faculty
-        fields = "__all__"
+        fields = ["id", "name"]
