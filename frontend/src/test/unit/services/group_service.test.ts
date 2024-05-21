@@ -42,7 +42,21 @@ describe('group', (): void => {
         resetService();
 
         await getGroupsByProject('3');
-        console.log(groups)
+        expect(groups).not.toBeNull();
+        expect(Array.isArray(groups.value)).toBe(true);
+        expect(groups.value?.length).toBe(2);
+
+        expect(groups.value?.[0].id).toBe('0');
+        expect(groups.value?.[0].score).toBe(20);
+        assertType(groups.value?.[0].project as Project)
+        expect(groups.value?.[0].students).toBeNull;
+        expect(groups.value?.[0].submissions).toBeNull();
+
+        expect(groups.value?.[1].id).toBe('1');
+        expect(groups.value?.[1].score).toBe(18);
+        assertType(groups.value?.[1].project as Project)
+        expect(groups.value?.[1].students).toBeNull;
+        expect(groups.value?.[1].submissions).toBeNull();
     });
 
     // it('gets groups data by student', async () => {
