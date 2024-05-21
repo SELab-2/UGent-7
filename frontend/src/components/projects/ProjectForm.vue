@@ -9,9 +9,7 @@ import Calendar from 'primevue/calendar';
 import InputSwitch from 'primevue/inputswitch';
 import { Project } from '@/types/Project.ts';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import { useProject } from '@/composables/services/project.service.ts';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { type Course } from '@/types/Course.ts';
@@ -23,10 +21,11 @@ const props = defineProps<{
     project?: Project | undefined;
 }>();
 
+/* Emits */
+const emit = defineEmits(['update:project']);
+
 /* Composable injections */
 const { t } = useI18n();
-const { push } = useRouter();
-const { createProject, updateProject } = useProject();
 
 /* State */
 const form = ref(new Project());
@@ -55,27 +54,23 @@ async function saveProject(): Promise<void> {
 
     // Only submit the form if the validation was successful
     if (result) {
-        // Update the course if it has been provided before.
-        if (props.project !== undefined) {
-            await updateProject(form.value);
-            await push({ name: 'course-project', params: { courseId: props.course.id, projectId: props.project.id } });
-        }
-
-        // Create a course in the other case.
-        if (props.project === undefined) {
-            await createProject(form.value, props.course.id, numberOfGroups.value);
-            await push({ name: 'course', params: { courseId: props.course.id } });
-        }
+        emit('update:project', form.value, numberOfGroups.value);
     }
 }
 
-onMounted(async () => {
+watchEffect(async () => {
     /* Set the form values with the existing project */
-    if (props.project !== undefined) {
-        // Convenient way of copying the project fields.
-        form.value = Project.fromJSON(props.project);
+    const project = props.project;
+
+    if (project !== undefined) {
+        form.value = Project.fromJSON(project);
+        form.value.structure_checks = project.structure_checks;
     }
 });
+
+onMounted(() =>
+    form.value.structure_checks = []
+);
 </script>
 
 <template>
@@ -181,10 +176,10 @@ onMounted(async () => {
 
             <div class="col-12 lg:col-6">
                 <!-- Define the submission structure checks -->
-                <div class="grid">
+                <div class="grid" v-if="form.structure_checks !== null">
                     <div class="field col">
                         <label for="structure">{{ t('views.projects.structureChecks') }}</label>
-                        <ProjectStructureTree id="structure" v-model="form.structureChecks" />
+                        <ProjectStructureTree id="structure" v-model="form.structure_checks" />
                     </div>
                 </div>
 

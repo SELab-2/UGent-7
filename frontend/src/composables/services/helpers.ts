@@ -84,6 +84,19 @@ export async function patch(
 }
 
 /**
+ * Put data to the endpoint.
+ *
+ * @param endpoint
+ * @param data
+ */
+export async function put<T>(
+    endpoint: string,
+    data: T,
+): Promise<void> {
+    await client.put(endpoint, data);
+}
+
+/**
  * Delete an item given its ID.
  *
  * @param endpoint

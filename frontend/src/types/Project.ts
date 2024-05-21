@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Course } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';
-import { type StructureCheck } from './StructureCheck.ts';
+import { StructureCheck } from './StructureCheck.ts';
 import { type Submission } from './submission/Submission.ts';
 import { SubmissionStatus } from '@/types/SubmisionStatus.ts';
 
@@ -21,7 +21,7 @@ export class Project {
         public group_size: number = 1,
         public course: Course = new Course(),
         public status: SubmissionStatus = new SubmissionStatus(),
-        public structureChecks: StructureCheck[] = [],
+        public structure_checks: StructureCheck[] | null = null,
         public extra_checks: ExtraCheck[] | null = null,
         public groups: Group[] | null = null,
         public submissions: Submission[] | null = null,
@@ -119,7 +119,7 @@ export class Project {
             project.score_visible,
             project.group_size,
             Course.fromJSON(project.course),
-            SubmissionStatus.fromJSON(project.status),
+            SubmissionStatus.fromJSON(project.status)
         );
     }
 }

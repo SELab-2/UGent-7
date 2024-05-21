@@ -131,7 +131,8 @@ class ProjectViewSet(RetrieveModelMixin,
             data=request.data,
             many=True,
             context={
-                'project': project
+                'project': project,
+                'request': request
             }
         )
 

@@ -30,7 +30,7 @@ const nodes = computed<TreeNode[]>(() => {
                 let node = currentNodes.find((node) => node.label === part);
 
                 if (node === undefined) {
-                    node = newTreeNode(check, `${i}${j}`, part, i === hierarchy.length - 1);
+                    node = newTreeNode(check, `${i}${j}`, part, j === hierarchy.length - 1);
                     currentNodes.push(node);
                 }
 
@@ -63,20 +63,38 @@ function deleteStructureCheck(check: StructureCheck): void {
  * @param input
  */
 function updateStructureCheckName(input: HTMLInputElement): void {
-    if (editingStructureCheck.value !== null) {
-        if (input.value === '') {
-            deleteStructureCheck(editingStructureCheck.value);
-        } else {
-            editingStructureCheck.value.setLastFolderName(input.value);
+    if (editingStructureCheck.value !== null && structureChecks.value !== undefined) {
+        const editing = editingStructureCheck.value;
+        const oldPath = editing.path;
+
+        editing.setLastFolderName(input.value);
+
+        if (input.value !== '') {
+            // Update the children paths.
+            const children = structureChecks.value.filter(check =>
+                check.path.startsWith(oldPath)
+            );
+
+            for (let check of children) {
+                check.path = check.path.replace(oldPath, editing.path);
+            }
         }
+
+        editingStructureCheck.value = null;
     }
 }
 
 /**
  * Add a new structure check to the list.
  */
-function addStructureCheck(): void {
-    if (editingStructureCheck.value === null && structureChecks.value !== undefined) {
+function addStructureCheck(check: StructureCheck|null = null): void {
+    if (structureChecks.value === undefined) {
+        return;
+    }
+
+    if (check !== null) {
+        structureChecks.value.push(check);
+    } else if (editingStructureCheck.value === null) {
         let hierarchy: string[] = [];
 
         if (selectedStructureCheck.value !== null) {
@@ -86,6 +104,17 @@ function addStructureCheck(): void {
         hierarchy.push('new');
 
         structureChecks.value.push((editingStructureCheck.value = new StructureCheck('', hierarchy.join('/'))));
+    }
+}
+
+/**
+ * Select a tree node.
+ *
+ * @param node
+ */
+function selectStructureCheck(node: TreeNode): void {
+    if (node.check) {
+        selectedStructureCheck.value = node.data;
     }
 }
 
@@ -129,13 +158,14 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
 </script>
 
 <template>
+    <div>
         <Tree
             class="w-100"
             selection-mode="single"
             v-model:selection-keys="selectedKeys"
             v-model:expanded-keys="expandedKeys"
             :value="nodes"
-            @node-select="selectedStructureCheck = $event.data"
+            @node-select="selectStructureCheck"
         >
             <template #default="{ node }">
                 <template v-if="node.obligated">
@@ -167,24 +197,19 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                         <template v-if="node.check && editingStructureCheck === node.data">
                             <InputText
                                 :model-value="node.label"
-                                @change="updateStructureCheckName($event.target as HTMLInputElement)"
-                                @blur="editingStructureCheck = null"
-                                @keydown.enter="
-                                updateStructureCheckName($event.target as HTMLInputElement);
-                                editingStructureCheck = null;
-                            "
+                                @keydown.enter="updateStructureCheckName($event.target as HTMLInputElement)"
                             >
                             </InputText>
                         </template>
                         <template v-else-if="node.check">
-                        <span @click="editingStructureCheck = node.data">
-                            {{ node.label }}
-                        </span>
+                            <span @click="editingStructureCheck = node.data">
+                                {{ node.label }}
+                            </span>
                         </template>
                         <template v-else>
-                        <span>
-                            {{ node.label }}
-                        </span>
+                            <span>
+                                {{ node.label }}
+                            </span>
                         </template>
                         <span
                             v-if="structureChecks !== undefined"
@@ -192,15 +217,18 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                             class="text-red-900 mr-2"
                             @click="deleteStructureCheck(node.data)"
                         >
-                    </span>
+                        </span>
                     </div>
                 </template>
             </template>
         </Tree>
 
-    <div class="flex justify-content-end mt-3">
-        <Button label="Nieuwe map" :icon="PrimeIcons.FOLDER" @click="addStructureCheck"
-                :disabled="selectedStructureCheck === null && structureChecks?.length !== 0" outlined rounded link />
+        <div class="flex justify-content-end gap-3 mt-3">
+            <Button :icon="PrimeIcons.TIMES" v-if="selectedStructureCheck !== null" severity="contrast"
+                    :label="'Deselecteer ' + selectedStructureCheck.path" @click="selectedStructureCheck = null; editingStructureCheck = null;"
+                    outlined rounded />
+            <Button label="Nieuwe map" :icon="PrimeIcons.FOLDER" @click="addStructureCheck()" outlined rounded link />
+        </div>
     </div>
 </template>
 
