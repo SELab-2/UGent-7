@@ -1,3 +1,5 @@
+import { File } from "buffer";
+
 export const courses = [
     {
         id: '1',

@@ -1,3 +1,5 @@
+import { File } from "buffer";
+
 export const assistantData = {
     id: 'assistant1_id',
     username: 'assistant1',

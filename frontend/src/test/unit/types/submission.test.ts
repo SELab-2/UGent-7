@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { File } from "buffer";
 
 import { Submission } from '@/types/submission/Submission.ts';
 import { submissionData } from './data';
