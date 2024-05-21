@@ -64,8 +64,8 @@ function deleteStructureCheck(check: StructureCheck): void {
  */
 function updateStructureCheckName(input: HTMLInputElement): void {
     if (editingStructureCheck.value !== null && structureChecks.value !== undefined) {
-        const editing = editingStructureCheck.value;
-        const oldPath = editing.path;
+        const editing: StructureCheck = editingStructureCheck.value;
+        const oldPath: string = editing.path;
 
         editing.setLastFolderName(input.value);
 
@@ -196,6 +196,7 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                             <InputText
                                 :model-value="node.label"
                                 @change="updateStructureCheckName($event.target as HTMLInputElement)"
+                                @keydown.enter="updateStructureCheckName($event.target as HTMLInputElement)"
                             >
                             </InputText>
                         </template>

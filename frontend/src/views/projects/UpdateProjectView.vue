@@ -53,8 +53,9 @@ async function saveProject(newProject: Project): Promise<void> {
             await setExtraChecks(newProject.extra_checks ?? [], project.value.id);
 
             // Delete the deleted checks
-            const deletedChecks = (project.value.extra_checks ?? []).filter(
-                (check) => !(newProject.extra_checks ?? []).find((newCheck: ExtraCheck) => newCheck.id === check.id),
+            const deletedChecks = project.value.extra_checks.filter(
+                (check) =>
+                    newProject.extra_checks.find((newCheck: ExtraCheck) => newCheck.id === check.id) === undefined,
             );
 
             for (const check of deletedChecks) {

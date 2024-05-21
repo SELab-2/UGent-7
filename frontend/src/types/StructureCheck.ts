@@ -1,5 +1,5 @@
 import { FileExtension } from './FileExtension.ts';
-import { type Project } from './Project.ts';
+import { Project } from './Project.ts';
 
 export class StructureCheck {
     constructor(
@@ -7,7 +7,7 @@ export class StructureCheck {
         public path: string = '',
         public obligated_extensions: FileExtension[] = [],
         public blocked_extensions: FileExtension[] = [],
-        public project: Project | null = null,
+        public project: Project = new Project(),
     ) {}
 
     /**
@@ -51,7 +51,7 @@ export class StructureCheck {
      * @param extensions
      */
     public setBlockedExtensionList(extensions: string[]): void {
-        this.blocked_extensions = extensions.map((extension) => new FileExtension(extension));
+        this.blocked_extensions = extensions.map((extension) => new FileExtension('', extension));
     }
 
     /**
@@ -60,7 +60,7 @@ export class StructureCheck {
      * @param extensions
      */
     public setObligatedExtensionList(extensions: string[]): void {
-        this.obligated_extensions = extensions.map((extension) => new FileExtension(extension));
+        this.obligated_extensions = extensions.map((extension) => new FileExtension('', extension));
     }
 
     /**
@@ -103,6 +103,11 @@ export class StructureCheck {
      * @param structureCheck
      */
     static fromJSON(structureCheck: StructureCheck): StructureCheck {
-        return new StructureCheck(structureCheck.id, structureCheck.path);
+        return new StructureCheck(
+            structureCheck.id,
+            structureCheck.path,
+            structureCheck.obligated_extensions.map(FileExtension.fromJSON),
+            structureCheck.blocked_extensions.map(FileExtension.fromJSON),
+        );
     }
 }

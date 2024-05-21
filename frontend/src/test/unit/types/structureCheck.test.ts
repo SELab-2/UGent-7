@@ -5,7 +5,7 @@ import { describe, it } from 'vitest';
 // import { createStructureCheck } from './helper';
 
 describe('structureCheck type', () => {
-    it('aaaa')
+    it('aaaa');
     // it('create instance of structureCheck with correct properties', () => {
     //     const structureCheck = createStructureCheck(structureCheckData);
     //

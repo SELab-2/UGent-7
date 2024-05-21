@@ -47,7 +47,7 @@ const rules = computed(() => {
 });
 
 const v$ = useVuelidate(rules, form, {
-    $scope: 'form'
+    $scope: 'form',
 });
 
 /**
@@ -119,7 +119,7 @@ watchEffect(() => {
                 <div class="grid">
                     <!-- Start date of the project -->
                     <div class="field col">
-                        <label for="projectStartDate">{{ t('views.projects.start_date') }}</label>
+                        <label for="projectStartDate">{{ t('views.projects.startDate') }}</label>
                         <Calendar
                             id="projectStartDate"
                             class="w-full"
@@ -152,7 +152,7 @@ watchEffect(() => {
                     <!-- Group size for the project -->
                     <div class="field col">
                         <label for="groupSize">
-                            {{ t('views.projects.group_size') }}
+                            {{ t('views.projects.groupSize') }}
                         </label>
                         <InputNumber input-id="groupSize" class="w-full" v-model="form.group_size" :min="1" />
                         <ErrorMessage :field="v$.group_size" />
@@ -160,7 +160,7 @@ watchEffect(() => {
 
                     <!-- Max score for the project -->
                     <div class="field col">
-                        <label for="maxScore">{{ t('views.projects.max_score') }}</label>
+                        <label for="maxScore">{{ t('views.projects.maxScore') }}</label>
                         <InputNumber
                             input-id="maxScore"
                             class="w-full"

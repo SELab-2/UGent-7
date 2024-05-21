@@ -9,17 +9,17 @@ export class Course {
         public id: string = '',
         public name: string = '',
         public excerpt: string = '',
-        public description: string | null = '',
+        public description: string = '',
         public academic_startyear: number = getAcademicYear(),
         public private_course: boolean = false,
-        public invitation_link: string | null = null,
-        public invitation_link_expires: Date | null = null,
+        public invitation_link: string = '',
+        public invitation_link_expires: Date = new Date(),
         public parent_course: Course | null = null,
-        public faculty: Faculty | null = null,
-        public teachers: Teacher[] | null = null,
-        public assistants: Assistant[] | null = null,
-        public students: Student[] | null = null,
-        public projects: Project[] | null = null,
+        public faculty: Faculty = new Faculty(),
+        public teachers: Teacher[] = [],
+        public assistants: Assistant[] = [],
+        public students: Student[] = [],
+        public projects: Project[] = [],
     ) {}
 
     /**
@@ -63,9 +63,6 @@ export class Course {
      * @param course
      */
     static fromJSON(course: Course): Course {
-        const faculty =
-            course.faculty !== undefined && course.faculty !== null ? Faculty.fromJSON(course.faculty) : null;
-
         return new Course(
             course.id,
             course.name,
@@ -76,7 +73,7 @@ export class Course {
             course.invitation_link,
             course.invitation_link_expires,
             course.parent_course,
-            faculty,
+            course.faculty,
         );
     }
 }

@@ -3,7 +3,6 @@ import Message from 'primevue/message';
 
 /* Props */
 defineProps<{ field: any }>();
-
 </script>
 
 <template>

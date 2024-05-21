@@ -7,9 +7,14 @@ from rest_framework.exceptions import ValidationError
 
 
 class FileExtensionSerializer(serializers.ModelSerializer):
+    extension = serializers.CharField(
+        required=True,
+        max_length=10
+    )
+
     class Meta:
         model = FileExtension
-        fields = ["extension"]
+        fields = ["id", "extension"]
 
 
 class StructureCheckSerializer(serializers.ModelSerializer):
@@ -33,24 +38,41 @@ class StructureCheckSerializer(serializers.ModelSerializer):
         """Validate the structure check"""
         project: Project = self.context["project"]
 
+        # The structure check path should not exist already
         if project.structure_checks.filter(path=attrs["path"]).exists():
             raise ValidationError(_("project.error.structure_checks.already_existing"))
 
+        # The same extension should not be in both blocked and obligated
+        blocked = set([ext["extension"] for ext in attrs["blocked_extensions"]])
+        obligated = set([ext["extension"] for ext in attrs["obligated_extensions"]])
+
+        if blocked.intersection(obligated):
+            raise ValidationError(_("project.error.structure_checks.blocked_obligated"))
+
         return attrs
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> StructureCheck:
         """Create a new structure check"""
         blocked = validated_data.pop("blocked_extensions")
         obligated = validated_data.pop("obligated_extensions")
-        check: StructureCheck = StructureCheck.objects.create(**validated_data)
+
+        check: StructureCheck = StructureCheck.objects.create(
+            path=validated_data.pop("path"),
+            **validated_data
+        )
 
         for ext in obligated:
-            check.obligated_extensions.create(**ext)
+            ext, _ = FileExtension.objects.get_or_create(
+                extension=ext["extension"]
+            )
+            check.obligated_extensions.add(ext)
 
         # Add blocked extensions
-
         for ext in blocked:
-            check.blocked_extensions.create(**ext)
+            ext, _ = FileExtension.objects.get_or_create(
+                extension=ext["extension"]
+            )
+            check.blocked_extensions.add(ext)
 
         return check
 
