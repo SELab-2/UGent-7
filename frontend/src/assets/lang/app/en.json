@@ -71,7 +71,12 @@
             "noStudents": "No students in this group",
             "locked": "Closed",
             "unlocked": "Open",
-            "structureChecks": "Submission structure",
+            "structureChecks": {
+                "title": "Structure checks",
+                "placeholder": "Give a name to this folder",
+                "cancelSelection": "Deselect {0}",
+                "newFolder": "New folder"
+            },
             "extraChecks": {
                 "title": "Automatic checks on a submission",
                 "empty": "No checks addeed",

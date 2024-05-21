@@ -7,9 +7,13 @@ import { StructureCheck } from '@/types/StructureCheck.ts';
 import { computed, ref } from 'vue';
 import { type TreeNode } from 'primevue/treenode';
 import { PrimeIcons } from 'primevue/api';
+import { useI18n } from 'vue-i18n';
 
 /* Models */
 const structureChecks = defineModel<StructureCheck[]>();
+
+/* Composables injections */
+const { t } = useI18n();
 
 /* State */
 const selectedStructureCheck = ref<StructureCheck | null>(null);
@@ -99,7 +103,7 @@ function addStructureCheck(check: StructureCheck | null = null): void {
             hierarchy = selectedStructureCheck.value.getDirectoryHierarchy();
         }
 
-        hierarchy.push('new');
+        hierarchy.push(t('views.projects.structureChecks.placeholder'));
 
         structureChecks.value.push((editingStructureCheck.value = new StructureCheck('', hierarchy.join('/'))));
     }
@@ -171,7 +175,7 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                         class="w-full"
                         :model-value="node.data.getObligatedExtensionList()"
                         @update:model-value="node.data.setObligatedExtensionList($event)"
-                        v-tooltip="'Verplichte extensies'"
+                        v-tooltip="t('views.projects.structureChecks.obligatedExtensions')"
                     >
                         <template #chip="{ value }">
                             {{ value }}
@@ -183,7 +187,7 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                         class="w-full"
                         :model-value="node.data.getBlockedExtensionList()"
                         @update:model-value="node.data.setBlockedExtensionList($event)"
-                        v-tooltip="'Verboden extensies'"
+                        v-tooltip="t('views.projects.structureChecks.blockedExtensions')"
                     >
                         <template #chip="{ value }">
                             {{ value }}
@@ -227,7 +231,7 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                 :icon="PrimeIcons.TIMES"
                 v-if="selectedStructureCheck !== null"
                 severity="contrast"
-                :label="'Deselecteer ' + selectedStructureCheck.path"
+                :label="t('views.projects.structureChecks.cancelSelection', [selectedStructureCheck.path])"
                 @click="
                     selectedStructureCheck = null;
                     editingStructureCheck = null;
@@ -235,7 +239,13 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                 outlined
                 rounded
             />
-            <Button label="Nieuwe map" :icon="PrimeIcons.FOLDER" @click="addStructureCheck()" outlined rounded link />
+            <Button
+                :label="t('views.projects.structureChecks.newFolder')"
+                :icon="PrimeIcons.FOLDER"
+                @click="addStructureCheck()"
+                outlined
+                rounded
+            />
         </div>
     </div>
 </template>

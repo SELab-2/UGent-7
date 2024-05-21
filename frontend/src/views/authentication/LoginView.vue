@@ -53,7 +53,7 @@ const { t } = useI18n();
     </BaseLayout>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #wrapper {
     min-height: calc(100vh - (150px + 173px + 7rem)) !important;
 }

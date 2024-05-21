@@ -202,7 +202,7 @@ watchEffect(() => {
                 <!-- Define the submission structure checks -->
                 <div class="grid">
                     <div class="field col">
-                        <label for="structure">{{ t('views.projects.structureChecks') }}</label>
+                        <label for="structure">{{ t('views.projects.structureChecks.title') }}</label>
                         <ProjectStructureTree id="structure" v-model="form.structure_checks" />
                     </div>
                 </div>

@@ -20,6 +20,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+
 # TODO: Error message when creating a project with wrongly formatted date looks a bit weird
 class ProjectViewSet(RetrieveModelMixin,
                      UpdateModelMixin,

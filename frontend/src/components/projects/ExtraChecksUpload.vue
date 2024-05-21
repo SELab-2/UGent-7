@@ -125,6 +125,7 @@ async function onDockerImageUpload(event: any): Promise<void> {
         :icon="PrimeIcons.PLUS"
         :label="t('views.projects.extraChecks.add')"
         icon-pos="left"
+        rounded
     />
 
     <!-- Dialog with a form to create a new extra check -->

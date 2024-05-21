@@ -60,7 +60,6 @@
             "create": "Creëer nieuw project",
             "save": "Project opslaan",
             "edit": "Project bewerken",
-            "structureChecks": "Indieningsstructuur",
             "name": "Projectnaam",
             "description": "Beschrijving",
             "startDate": "Start project",
@@ -73,6 +72,12 @@
             "noStudents": "Geen studenten in deze groep",
             "locked": "Gesloten",
             "unlocked": "Open",
+            "structureChecks": {
+                "title": "Indieningsstructuur",
+                "placeholder": "Geef deze nieuwe map een naam",
+                "cancelSelection": "Deselecteer {0}",
+                "newFolder": "Nieuwe map"
+            },
             "extraChecks": {
                 "title": "Automatische checks op een indiening",
                 "add": "Nieuwe check",

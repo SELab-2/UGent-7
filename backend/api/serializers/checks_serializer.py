@@ -99,7 +99,7 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
         data = super().validate(attrs)
 
         # Check if the docker image is provided
-        if not "docker_image" in self.initial_data:
+        if "docker_image" not in self.initial_data:
             raise serializers.ValidationError(_("extra_check.error.docker_image"))
 
         # Check if the docker image exists
