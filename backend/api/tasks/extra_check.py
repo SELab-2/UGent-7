@@ -1,3 +1,5 @@
+import io
+import os
 import shutil
 import zipfile
 from time import sleep
@@ -14,6 +16,7 @@ from celery import shared_task
 from django.core.files.base import ContentFile
 from docker.models.containers import Container
 from docker.types import LogConfig
+from notifications.signals import NotificationType, notification_create
 from requests.exceptions import ConnectionError
 
 
@@ -33,11 +36,21 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
         extra_check_result.error_message = ErrorMessageEnum.DOCKER_IMAGE_ERROR
         extra_check_result.save()
 
+        notification_create.send(
+            sender=ExtraCheckResult,
+            type=NotificationType.EXTRA_CHECK_FAIL,
+            queryset=list(extra_check_result.submission.group.students.all()),
+            arguments={"name": extra_check_result.extra_check.name},
+        )
+
         return structure_check_result
 
     # Will probably never happen but doesn't hurt to check
     while extra_check_result.submission.running_checks:
         sleep(1)
+
+    # Notification type
+    notification_type = NotificationType.EXTRA_CHECK_SUCCESS
 
     # Lock
     extra_check_result.submission.running_checks = True
@@ -48,12 +61,16 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
 
     submission_directory = "/".join(extra_check_result.submission.zip.path.split("/")
                                     [:-1]) + "/submission/"  # Directory where the files will be extracted
+    artifacts_directory = f"{submission_directory}/artifacts"  # Directory where the artifacts will be stored
     extra_check_name = extra_check_result.extra_check.file.name.split("/")[-1]  # Name of the extra check file
     submission_uuid = extra_check_result.submission.zip.path.split("/")[-2]  # Uuid of the submission
 
     # Unzip the files
     with zipfile.ZipFile(extra_check_result.submission.zip.path, 'r') as zip:
         zip.extractall(submission_directory)
+
+    # Create artifacts directory
+    os.makedirs(artifacts_directory, exist_ok=True)
 
     container: Container | None = None
 
@@ -75,6 +92,9 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             volumes={
                 f"{get_submission_full_dir_path(extra_check_result.submission)}/submission": {
                     "bind": "/submission", "mode": "rw"
+                },
+                f"{get_submission_full_dir_path(extra_check_result.submission)}/submission/artifacts": {
+                    "bind": "/submission/artifacts", "mode": "rw"
                 },
                 get_extra_check_file_full_path(extra_check_result.extra_check): {
                     "bind": f"/submission/{extra_check_name}", "mode": "ro"
@@ -104,43 +124,52 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             case 1:
                 extra_check_result.result = StateEnum.FAILED
                 extra_check_result.error_message = ErrorMessageEnum.CHECK_ERROR
+                notification_type = NotificationType.EXTRA_CHECK_FAIL
 
             # Time limit
             case 2:
                 extra_check_result.result = StateEnum.FAILED
                 extra_check_result.error_message = ErrorMessageEnum.TIME_LIMIT
+                notification_type = NotificationType.EXTRA_CHECK_FAIL
 
             # Memory limit
             case 3:
                 extra_check_result.result = StateEnum.FAILED
                 extra_check_result.error_message = ErrorMessageEnum.MEMORY_LIMIT
+                notification_type = NotificationType.EXTRA_CHECK_FAIL
 
             # Catch all non zero exit codes
             case _:
                 extra_check_result.result = StateEnum.FAILED
                 extra_check_result.error_message = ErrorMessageEnum.RUNTIME_ERROR
+                notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Docker image error
     except (docker.errors.APIError, docker.errors.ImageNotFound):
         extra_check_result.result = StateEnum.FAILED
         extra_check_result.error_message = ErrorMessageEnum.DOCKER_IMAGE_ERROR
+        notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Runtime error
     except docker.errors.ContainerError:
         extra_check_result.result = StateEnum.FAILED
         extra_check_result.error_message = ErrorMessageEnum.RUNTIME_ERROR
+        notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Timeout error
     except ConnectionError:
         extra_check_result.result = StateEnum.FAILED
         extra_check_result.error_message = ErrorMessageEnum.TIME_LIMIT
+        notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Unknown error
     except Exception:
         extra_check_result.result = StateEnum.FAILED
         extra_check_result.error_message = ErrorMessageEnum.UNKNOWN
+        notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Cleanup and data saving
+    # Start by saving any logs
     finally:
         logs: str
         if container:
@@ -153,7 +182,27 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             logs = "Container error"
 
         extra_check_result.log_file.save(submission_uuid, content=ContentFile(logs), save=False)
-        extra_check_result.save()
+
+        # Send notification
+        notification_create.send(
+            sender=ExtraCheckResult,
+            type=notification_type,
+            queryset=list(extra_check_result.submission.group.students.all()),
+            arguments={"name": extra_check_result.extra_check.name},
+        )
+
+    # Zip and save any possible artifacts
+    memory_zip = io.BytesIO()
+    if os.listdir(artifacts_directory):
+        with zipfile.ZipFile(memory_zip, 'w') as zip:
+            for root, _, files in os.walk(artifacts_directory):
+                for file in files:
+                    zip.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), artifacts_directory))
+
+    memory_zip.seek(0)
+    extra_check_result.artifact.save(submission_uuid, ContentFile(memory_zip.read()), False)
+
+    extra_check_result.save()
 
     # Remove directory
     try:
