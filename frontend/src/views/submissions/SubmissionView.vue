@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import Button from 'primevue/button';
 import { useI18n } from 'vue-i18n';
-import {computed, ref, watch} from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFeedback } from '@/composables/services/feedback.service.ts';
 import { type Feedback } from '@/types/Feedback.ts';
@@ -14,6 +14,7 @@ import { User } from '@/types/users/User.ts';
 import moment from 'moment/moment';
 import { PrimeIcons } from 'primevue/api';
 import { useSubmission } from '@/composables/services/submission.service.ts';
+import { useProject } from '@/composables/services/project.service.ts';
 
 /* Composable injections */
 const route = useRoute();
@@ -21,6 +22,7 @@ const { t } = useI18n();
 const { user } = storeToRefs(useAuthStore());
 const { submission, getSubmissionByID } = useSubmission();
 const { feedbacks, getFeedbackBySubmission, createFeedback, updateFeedback } = useFeedback();
+const { project, getProjectByID } = useProject();
 
 /* Feedback content */
 const feedbackTextValue = ref<string>('');
@@ -48,12 +50,26 @@ function submitFeedback(): void {
 
 /* Computed Properties */
 const structureAndExtraFaults = computed(() => {
-    if (!submission.value) return [];
+    if (submission.value == null) return [];
 
     const structureFaults = submission.value.structureCheckFaults();
     const extraFaults = submission.value.isStructureCheckPassed() ? submission.value.extraCheckFaults() : [];
 
     return [...structureFaults, ...extraFaults];
+});
+
+const showLogs = computed(() => {
+    const extraChecks = submission.value?.extraCheckResults ?? [];
+
+    if (project.value != null) {
+        return extraChecks
+            .filter((check) => {
+                return project.value?.extra_checks?.find((extraCheck) => extraCheck.id === check.id)?.show_log;
+            })
+            .map((check) => check.log_file);
+    }
+
+    return [];
 });
 
 /* Watchers */
@@ -72,6 +88,7 @@ watch(
     (submissionId) => {
         getSubmissionByID(submissionId as string);
         getFeedbackBySubmission(submissionId as string);
+        getProjectByID(route.params.projectId as string);
     },
     { immediate: true },
 );
@@ -97,9 +114,9 @@ watch(
                 </div>
                 <!-- Submission Downloadable zip -->
                 <div>
-                    <Title class="flex">File(s)</Title>
-                    <!-- TODO change this to zip -->
-                    <div v-if="submission"></div>
+                    <Title v-if="showLogs.length > 0" class="flex">{{ t('views.submissions.file') }}</Title>
+                    <Title v-else class="flex"> {{ t('views.submissions.files') }} </Title>
+                    <div></div>
                 </div>
             </div>
             <!-- Feedback section -->

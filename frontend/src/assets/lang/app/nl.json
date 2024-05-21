@@ -87,6 +87,8 @@
             "title": "Inzendingen",
             "submit": "Indienen",
             "course": "Vak",
+            "file": "Bestand",
+            "files": "Bestanden",
             "chooseFile": "Kies bestand(en)",
             "noSubmissions": "Geen indieningen beschikbaar",
             "passed": "Geslaagd",

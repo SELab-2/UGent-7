@@ -89,6 +89,8 @@
             "title": "Submissions",
             "submit": "Submit",
             "course": "Course",
+            "file": "file",
+            "files": "files",
             "chooseFile": "Choose a file",
             "noSubmissions": "No submissions available",
             "passed": "Passed",
