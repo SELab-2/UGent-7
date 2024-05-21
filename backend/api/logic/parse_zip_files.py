@@ -12,12 +12,13 @@ def parse_zip(project: Project, zip_file: InMemoryUploadedFile) -> bool:
 
     zip_file.seek(0)
 
-    with zipfile.ZipFile(zip_file, 'r') as file:
-        files = file.namelist()
+    with zipfile.ZipFile(zip_file, 'r') as zip_file:
+        files = zip_file.namelist()
         directories = [file for file in files if file.endswith('/')]
 
     # Check if all directories start the same
     common_prefix = os.path.commonprefix(directories)
+
     if '/' in common_prefix:
         prefixes = common_prefix.split('/')
         if common_prefix[-1] != '/':
@@ -31,6 +32,7 @@ def parse_zip(project: Project, zip_file: InMemoryUploadedFile) -> bool:
 
     # Add potential top level files
     top_level_files = [file for file in files if '/' not in file]
+
     if top_level_files:
         create_check(project, '', files)
 

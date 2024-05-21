@@ -93,7 +93,11 @@ class ProjectViewSet(RetrieveModelMixin,
 
         # Serialize the check objects
         serializer = StructureCheckSerializer(
-            checks, many=True, context={"request": request}
+            checks,
+            many=True,
+            context={
+                "request": request
+            }
         )
 
         return Response(serializer.data)

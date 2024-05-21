@@ -18,20 +18,17 @@ class FileExtensionSerializer(serializers.ModelSerializer):
 
 
 class StructureCheckSerializer(serializers.ModelSerializer):
-    project = serializers.HyperlinkedIdentityField(
+    project = serializers.HyperlinkedRelatedField(
+        read_only=True,
         view_name="project-detail"
     )
 
     obligated_extensions = FileExtensionSerializer(
-        many=True,
-        required=False,
-        default=[]
+        many=True
     )
 
     blocked_extensions = FileExtensionSerializer(
-        many=True,
-        required=False,
-        default=[]
+        many=True
     )
 
     def validate(self, attrs):
@@ -47,7 +44,7 @@ class StructureCheckSerializer(serializers.ModelSerializer):
         obligated = set([ext["extension"] for ext in attrs["obligated_extensions"]])
 
         if blocked.intersection(obligated):
-            raise ValidationError(_("project.error.structure_checks.blocked_obligated"))
+            raise ValidationError(_("project.error.structure_checks.extension_blocked_and_obligated"))
 
         return attrs
 
@@ -82,11 +79,13 @@ class StructureCheckSerializer(serializers.ModelSerializer):
 
 
 class ExtraCheckSerializer(serializers.ModelSerializer):
-    project = serializers.HyperlinkedIdentityField(
+    project = serializers.HyperlinkedRelatedField(
+        read_only=True,
         view_name="project-detail"
     )
 
-    docker_image = serializers.HyperlinkedIdentityField(
+    docker_image = serializers.HyperlinkedRelatedField(
+        read_only=True,
         view_name="docker-image-detail"
     )
 
