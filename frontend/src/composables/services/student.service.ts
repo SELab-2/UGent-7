@@ -8,7 +8,7 @@ interface StudentsState {
     students: Ref<Student[] | null>;
     student: Ref<Student | null>;
     response: Ref<Response | null>;
-    getStudentByID: (id: string, init?:boolean, selfprocessError?: boolean) => Promise<void>;
+    getStudentByID: (id: string, init?: boolean, selfprocessError?: boolean) => Promise<void>;
     getStudents: (selfprocessError?: boolean) => Promise<void>;
     getStudentsByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
     getStudentsByGroup: (groupId: string, selfprocessError?: boolean) => Promise<void>;

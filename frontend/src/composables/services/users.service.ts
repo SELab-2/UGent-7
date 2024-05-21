@@ -33,7 +33,12 @@ export function useUser(): userState {
         await getList<User>(endpoint, users, User.fromJSON, selfprocessError);
     }
 
-    async function searchUsers(filters: Filter, page: number, pageSize: number, selfprocessError: boolean = true): Promise<void> {
+    async function searchUsers(
+        filters: Filter,
+        page: number,
+        pageSize: number,
+        selfprocessError: boolean = true
+    ): Promise<void> {
         const endpoint = endpoints.users.search;
         await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON, selfprocessError);
     }
@@ -52,7 +57,7 @@ export function useUser(): userState {
             user,
             User.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
@@ -65,7 +70,7 @@ export function useUser(): userState {
             },
             response,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
