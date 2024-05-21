@@ -41,6 +41,7 @@ export async function create<T>(
     contentType: string = 'application/json',
 ): Promise<void> {
     try {
+        console.log("DATA: " + JSON.stringify(data))
         const response = await client.post(endpoint, data, {
             headers: {
                 'Content-Type': contentType,

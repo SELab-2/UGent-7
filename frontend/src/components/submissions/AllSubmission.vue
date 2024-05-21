@@ -61,7 +61,7 @@ watch(
         tempSubmissions.value = [...newSubmissions, ...testSubmissions.value].reverse();
     },
     {
-        immediate: true, // Zal ook uitvoeren onMounted, dus je kan de logica uit onMounted verwijderen als je dit gebruikt
+        immediate: true, // Will also execute onMounted, so you can remove the logic from onMounted if you use this
     },
 );
 

@@ -6,11 +6,11 @@ import { useI18n } from 'vue-i18n';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 import { type Project } from '@/types/Project.ts';
 import FileUpload from 'primevue/fileupload';
+import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
+import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 
 /* State */
 const files = ref<File[]>([]);
-
-const group = {value: {id: "5"}}
 
 /* Props */
 const props = defineProps<{
@@ -19,7 +19,7 @@ const props = defineProps<{
 
 /* Composable injections */
 const { t } = useI18n();
-const { submission, submissions, createSubmission, getSubmissionByGroup } = useSubmission();
+const { submission, submissions, createTestSubmission } = useSubmission();
 
 /* Functions */
 const onFileSelect = (event: any): void => {
@@ -32,26 +32,15 @@ const removeFile = (removeFileCallback: (index: number) => void, index: number):
 };
 
 const onUpload = async (callback: () => void): Promise<void> => {
-    if (group.value !== null) {
-        await createSubmission(files.value as File[], group.value.id);
+    if (props.project !== null) {
+        await createTestSubmission(files.value as File[], props.project.id);
         if (submission.value != null) {
             submissions.value = [...(submissions.value ?? []), submission.value];
+            alert("make submission")
         }
         files.value = [];
         callback();
     }
-};
-
-const testSubmission = async (): Promise<void> => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.addEventListener('change', (event) => {
-        const file = (event.target as HTMLInputElement).files[0];
-        if (file) {
-            alert(`Selected file: ${file.name}`);
-        }
-    });
-    fileInput.click();
 };
 
 </script>

@@ -10,6 +10,7 @@ interface SubmissionState {
     getSubmissionByProject: (projectId: string) => Promise<void>;
     getSubmissionByGroup: (groupId: string) => Promise<void>;
     createSubmission: (submissionData: UnwrapRef<File[]>, groupId: string) => Promise<void>;
+    createTestSubmission: (submissionData: UnwrapRef<File[]>, projectid: string) => Promise<void>;
     deleteSubmission: (id: string) => Promise<void>;
 }
 
@@ -37,7 +38,17 @@ export function useSubmission(): SubmissionState {
         // formData is necessary with multiform data (otherwise files value is changed to files[] by axios)
         const formData = new FormData();
         uploadedFiles.forEach((file: File) => {
-            formData.append('files', file); // Gebruik 'files' in plaats van 'files[]'
+            formData.append('files', file); // Use 'files' instead of 'files[]'
+        });
+        await create(endpoint, formData, submission, Submission.fromJSONCreate, 'multipart/form-data');
+    }
+
+    async function createTestSubmission(uploadedFiles: File[], projectId: string): Promise<void> {
+        console.log("uploaded files: " + JSON.stringify(uploadedFiles))
+        const endpoint = endpoints.submissions.byProject.replace('{projectId}', projectId);
+        const formData = new FormData();
+        uploadedFiles.forEach((file: File) => {
+            formData.append('files', file); // Use 'files' instead of 'files[]'
         });
         await create(endpoint, formData, submission, Submission.fromJSONCreate, 'multipart/form-data');
     }
@@ -55,6 +66,7 @@ export function useSubmission(): SubmissionState {
         getSubmissionByGroup,
 
         createSubmission,
+        createTestSubmission,
         deleteSubmission,
     };
 }
