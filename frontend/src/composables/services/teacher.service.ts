@@ -13,14 +13,14 @@ interface TeacherState {
     teacher: Ref<Teacher | null>;
     response: Ref<Response | null>;
     teacherPagination: Ref<PaginatorResponse<Teacher> | null>;
-    getTeacherByID: (id: string, init?: boolean) => Promise<void>;
-    getTeachersByCourse: (courseId: string) => Promise<void>;
-    getTeachers: () => Promise<void>;
-    searchTeachers: (filters: Filter, page: number, pageSize: number) => Promise<void>;
-    teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>;
-    teacherLeaveCourse: (courseId: string, teacherId: string) => Promise<void>;
-    createTeacher: (teacherData: Teacher) => Promise<void>;
-    deleteTeacher: (id: string) => Promise<void>;
+    getTeacherByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getTeachersByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
+    getTeachers: (selfprocessError?: boolean) => Promise<void>;
+    searchTeachers: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
+    teacherJoinCourse: (courseId: string, teacherId: string, selfprocessError?: boolean) => Promise<void>;
+    teacherLeaveCourse: (courseId: string, teacherId: string, selfprocessError?: boolean) => Promise<void>;
+    createTeacher: (teacherData: Teacher, selfprocessError?: boolean) => Promise<void>;
+    deleteTeacher: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useTeacher(): TeacherState {

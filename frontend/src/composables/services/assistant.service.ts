@@ -12,14 +12,14 @@ interface AssistantState {
     assistant: Ref<Assistant | null>;
     response: Ref<Response | null>;
     assistantPagination: Ref<PaginatorResponse<Assistant> | null>;
-    getAssistantByID: (id: string, init?: boolean) => Promise<void>;
-    getAssistantsByCourse: (courseId: string) => Promise<void>;
-    getAssistants: () => Promise<void>;
-    searchAssistants: (filters: Filter, page: number, pageSize: number) => Promise<void>;
-    assistantJoinCourse: (courseId: string, assistantId: string) => Promise<void>;
-    assistantLeaveCourse: (courseId: string, assistantId: string) => Promise<void>;
-    createAssistant: (assistantData: Assistant) => Promise<void>;
-    deleteAssistant: (id: string) => Promise<void>;
+    getAssistantByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getAssistantsByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
+    getAssistants: (selfprocessError?: boolean) => Promise<void>;
+    searchAssistants: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
+    assistantJoinCourse: (courseId: string, assistantId: string, selfprocessError?: boolean) => Promise<void>;
+    assistantLeaveCourse: (courseId: string, assistantId: string, selfprocessError?: boolean) => Promise<void>;
+    createAssistant: (assistantData: Assistant, selfprocessError?: boolean) => Promise<void>;
+    deleteAssistant: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useAssistant(): AssistantState {

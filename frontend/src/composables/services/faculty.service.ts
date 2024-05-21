@@ -6,10 +6,10 @@ import { get, getList, create, deleteId } from '@/composables/services/helpers.t
 interface FacultyState {
     faculties: Ref<Faculty[] | null>;
     faculty: Ref<Faculty | null>;
-    getFacultyByID: (id: string) => Promise<void>;
-    getFaculties: () => Promise<void>;
-    createFaculty: (facultyData: Faculty) => Promise<void>;
-    deleteFaculty: (id: string) => Promise<void>;
+    getFacultyByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getFaculties: (selfprocessError?: boolean) => Promise<void>;
+    createFaculty: (facultyData: Faculty, selfprocessError?: boolean) => Promise<void>;
+    deleteFaculty: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useFaculty(): FacultyState {

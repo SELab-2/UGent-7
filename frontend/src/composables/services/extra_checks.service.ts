@@ -7,9 +7,9 @@ import { Response } from '@/types/Response';
 interface ExtraCheckState {
     extraCheck: Ref<ExtraCheck | null>;
     extraChecks: Ref<ExtraCheck[] | null>;
-    getExtraChecksByProject: (projectId: string) => Promise<void>;
-    addExtraCheck: (extraCheckData: ExtraCheck, projectId: string) => Promise<void>;
-    deleteExtraCheck: (extraCheckId: string) => Promise<void>;
+    getExtraChecksByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
+    addExtraCheck: (extraCheckData: ExtraCheck, projectId: string, selfprocessError?: boolean) => Promise<void>;
+    deleteExtraCheck: (extraCheckId: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useExtraCheck(): ExtraCheckState {

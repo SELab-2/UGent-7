@@ -6,10 +6,10 @@ import { User } from '@/types/users/User.ts';
 interface AdminState {
     admins: Ref<User[] | null>;
     admin: Ref<User | null>;
-    getAdminByID: (id: string) => Promise<void>;
-    getAdmins: () => Promise<void>;
-    createAdmin: (adminData: User) => Promise<void>;
-    deleteAdmin: (id: string) => Promise<void>;
+    getAdminByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getAdmins: (selfprocessError?: boolean) => Promise<void>;
+    createAdmin: (adminData: User, selfprocessError?: boolean) => Promise<void>;
+    deleteAdmin: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useAdmin(): AdminState {

@@ -5,7 +5,7 @@ import { SubmissionStatus } from '@/types/SubmisionStatus';
 
 interface SubmissionStatusState {
     submissionStatus: Ref<SubmissionStatus | null>;
-    getSubmissionStatusByProject: (projectId: string) => Promise<void>;
+    getSubmissionStatusByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useSubmissionStatus(): SubmissionStatusState {

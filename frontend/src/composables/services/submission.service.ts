@@ -6,11 +6,11 @@ import { get, getList, deleteId, create } from '@/composables/services/helpers.t
 interface SubmissionState {
     submissions: Ref<Submission[] | null>;
     submission: Ref<Submission | null>;
-    getSubmissionByID: (id: string) => Promise<void>;
-    getSubmissionByProject: (projectId: string) => Promise<void>;
-    getSubmissionByGroup: (groupId: string) => Promise<void>;
-    createSubmission: (submissionData: UnwrapRef<File[]>, groupId: string) => Promise<void>;
-    deleteSubmission: (id: string) => Promise<void>;
+    getSubmissionByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getSubmissionByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
+    getSubmissionByGroup: (groupId: string, selfprocessError?: boolean) => Promise<void>;
+    createSubmission: (submissionData: UnwrapRef<File[]>, groupId: string, selfprocessError?: boolean) => Promise<void>;
+    deleteSubmission: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useSubmission(): SubmissionState {

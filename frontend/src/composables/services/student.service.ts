@@ -8,16 +8,16 @@ interface StudentsState {
     students: Ref<Student[] | null>;
     student: Ref<Student | null>;
     response: Ref<Response | null>;
-    getStudentByID: (id: string, init?: boolean) => Promise<void>;
-    getStudents: () => Promise<void>;
-    getStudentsByCourse: (courseId: string) => Promise<void>;
-    getStudentsByGroup: (groupId: string) => Promise<void>;
-    createStudent: (studentData: Student) => Promise<void>;
-    deleteStudent: (id: string) => Promise<void>;
-    studentJoinCourse: (courseId: string, studentId: string) => Promise<void>;
-    studentLeaveCourse: (courseId: string, studentId: string) => Promise<void>;
-    studentJoinGroup: (groupId: string, studentId: string) => Promise<void>;
-    studentLeaveGroup: (groupId: string, studentId: string) => Promise<void>;
+    getStudentByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getStudents: (selfprocessError?: boolean) => Promise<void>;
+    getStudentsByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
+    getStudentsByGroup: (groupId: string, selfprocessError?: boolean) => Promise<void>;
+    createStudent: (studentData: Student, selfprocessError?: boolean) => Promise<void>;
+    deleteStudent: (id: string, selfprocessError?: boolean) => Promise<void>;
+    studentJoinCourse: (courseId: string, studentId: string, selfprocessError?: boolean) => Promise<void>;
+    studentLeaveCourse: (courseId: string, studentId: string, selfprocessError?: boolean) => Promise<void>;
+    studentJoinGroup: (groupId: string, studentId: string, selfprocessError?: boolean) => Promise<void>;
+    studentLeaveGroup: (groupId: string, studentId: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useStudents(): StudentsState {

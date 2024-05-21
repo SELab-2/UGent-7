@@ -8,15 +8,15 @@ import { type Response } from '@/types/Response.ts';
 interface ProjectState {
     projects: Ref<Project[] | null>;
     project: Ref<Project | null>;
-    getProjectByID: (id: string) => Promise<void>;
-    getProjectsByCourse: (courseId: string) => Promise<void>;
-    getProjectsByStudent: (studentId: string) => Promise<void>;
-    getProjectsByAssistant: (assistantId: string) => Promise<void>;
-    getProjectsByTeacher: (teacherId: string) => Promise<void>;
-    getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date) => Promise<void>;
-    createProject: (projectData: Project, courseId: string, numberOfGroups: number) => Promise<void>;
-    updateProject: (projectData: Project) => Promise<void>;
-    deleteProject: (id: string) => Promise<void>;
+    getProjectByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getProjectsByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
+    getProjectsByStudent: (studentId: string, selfprocessError?: boolean) => Promise<void>;
+    getProjectsByAssistant: (assistantId: string, selfprocessError?: boolean) => Promise<void>;
+    getProjectsByTeacher: (teacherId: string, selfprocessError?: boolean) => Promise<void>;
+    getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date, selfprocessError?: boolean) => Promise<void>;
+    createProject: (projectData: Project, courseId: string, numberOfGroups: number, selfprocessError?: boolean) => Promise<void>;
+    updateProject: (projectData: Project, selfprocessError?: boolean) => Promise<void>;
+    deleteProject: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useProject(): ProjectState {
@@ -63,12 +63,16 @@ export function useProject(): ProjectState {
                     return project.deadline.toDateString() === deadlineDate.toDateString();
                 });
             })
-            .catch((error) => { // TODO tybo
-                if (axios.isAxiosError(error)) {
-                    processError(error);
-                    console.log(error.response?.data);
-                } else {
-                    console.error('An unexpected error ocurred: ', error);
+            .catch((error) => {
+                if(selfprocessError){
+                    if (axios.isAxiosError(error)) {
+                        processError(error);
+                        console.log(error.response?.data);
+                    } else {
+                        console.error('An unexpected error ocurred: ', error);
+                    }
+                }else{
+                    throw error; // Re-throw the error to the caller
                 }
             });
     }

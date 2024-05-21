@@ -6,10 +6,10 @@ import { get, getList, create, deleteId } from '@/composables/services/helpers.t
 interface StructureCheckState {
     structureChecks: Ref<StructureCheck[] | null>;
     structureCheck: Ref<StructureCheck | null>;
-    getStructureCheckByID: (id: string) => Promise<void>;
-    getStructureCheckByProject: (projectId: string) => Promise<void>;
-    createStructureCheck: (structureCheckData: StructureCheck, projectId: string) => Promise<void>;
-    deleteStructureCheck: (id: string) => Promise<void>;
+    getStructureCheckByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getStructureCheckByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
+    createStructureCheck: (structureCheckData: StructureCheck, projectId: string, selfprocessError?: boolean) => Promise<void>;
+    deleteStructureCheck: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useStructureCheck(): StructureCheckState {

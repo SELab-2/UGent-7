@@ -6,11 +6,11 @@ import { get, getList, create, deleteId } from '@/composables/services/helpers.t
 interface GroupState {
     groups: Ref<Group[] | null>;
     group: Ref<Group | null>;
-    getGroupByID: (id: string) => Promise<void>;
-    getGroupsByProject: (projectId: string) => Promise<void>;
-    getGroupsByStudent: (studentId: string) => Promise<void>;
-    createGroup: (groupData: Group, projectId: string) => Promise<void>;
-    deleteGroup: (id: string) => Promise<void>;
+    getGroupByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getGroupsByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
+    getGroupsByStudent: (studentId: string, selfprocessError?: boolean) => Promise<void>;
+    createGroup: (groupData: Group, projectId: string, selfprocessError?: boolean) => Promise<void>;
+    deleteGroup: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useGroup(): GroupState {

@@ -10,11 +10,11 @@ interface userState {
     pagination: Ref<PaginatorResponse<User> | null>;
     users: Ref<User[] | null>;
     user: Ref<User | null>;
-    getUserByID: (id: string) => Promise<void>;
-    getUsers: () => Promise<void>;
-    searchUsers: (filters: Filter, page: number, pageSize: number) => Promise<void>;
-    createUser: (user_data: User) => Promise<void>;
-    toggleAdmin: (id: string, is_staff: boolean) => Promise<void>;
+    getUserByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getUsers: (selfprocessError?: boolean) => Promise<void>;
+    searchUsers: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
+    createUser: (user_data: User, selfprocessError?: boolean) => Promise<void>;
+    toggleAdmin: (id: string, is_staff: boolean, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useUser(): userState {

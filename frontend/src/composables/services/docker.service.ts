@@ -17,12 +17,12 @@ interface DockerImagesState {
     pagination: Ref<PaginatorResponse<DockerImage> | null>;
     dockerImages: Ref<DockerImage[] | null>;
     response: Ref<Response | null>;
-    getDockerImages: () => Promise<void>;
-    searchDockerImages: (filters: Filter, page: number, pageSize: number) => Promise<void>;
-    patchDockerImage: (dockerData: DockerImage) => Promise<void>;
-    createDockerImage: (dockerData: DockerImage, file: File) => Promise<void>;
-    deleteDockerImage: (id: string) => Promise<void>;
-    deleteDockerImages: (ids: string[]) => Promise<void>;
+    getDockerImages: (selfprocessError?: boolean) => Promise<void>;
+    searchDockerImages: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
+    patchDockerImage: (dockerData: DockerImage, selfprocessError?: boolean) => Promise<void>;
+    createDockerImage: (dockerData: DockerImage, file: File, selfprocessError?: boolean) => Promise<void>;
+    deleteDockerImage: (id: string, selfprocessError?: boolean) => Promise<void>;
+    deleteDockerImages: (ids: string[], selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useDockerImages(): DockerImagesState {

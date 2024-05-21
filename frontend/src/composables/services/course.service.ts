@@ -10,17 +10,17 @@ interface CoursesState {
     pagination: Ref<CoursePaginatorResponse | null>;
     courses: Ref<Course[] | null>;
     course: Ref<Course | null>;
-    getCourseByID: (id: string) => Promise<void>;
-    getCourses: () => Promise<void>;
-    searchCourses: (filters: Filter, page: number, pageSize: number) => Promise<void>;
-    getCoursesByStudent: (studentId: string) => Promise<void>;
-    getCoursesByTeacher: (teacherId: string) => Promise<void>;
-    getCourseByAssistant: (assistantId: string) => Promise<void>;
-    createCourse: (courseData: Course) => Promise<void>;
-    updateCourse: (courseData: Course) => Promise<void>;
-    cloneCourse: (courseId: string, cloneAssistants: boolean, cloneTeachers: boolean) => Promise<void>;
-    activateInvitationLink: (courseId: string, linkDuration: number) => Promise<void>;
-    deleteCourse: (id: string) => Promise<void>;
+    getCourseByID: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getCourses: (selfprocessError?: boolean) => Promise<void>;
+    searchCourses: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
+    getCoursesByStudent: (studentId: string, selfprocessError?: boolean) => Promise<void>;
+    getCoursesByTeacher: (teacherId: string, selfprocessError?: boolean) => Promise<void>;
+    getCourseByAssistant: (assistantId: string, selfprocessError?: boolean) => Promise<void>;
+    createCourse: (courseData: Course, selfprocessError?: boolean) => Promise<void>;
+    updateCourse: (courseData: Course, selfprocessError?: boolean) => Promise<void>;
+    cloneCourse: (courseId: string, cloneAssistants: boolean, cloneTeachers: boolean, selfprocessError?: boolean) => Promise<void>;
+    activateInvitationLink: (courseId: string, linkDuration: number, selfprocessError?: boolean) => Promise<void>;
+    deleteCourse: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
 export function useCourses(): CoursesState {
