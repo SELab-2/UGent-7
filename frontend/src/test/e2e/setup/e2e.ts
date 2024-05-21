@@ -21,4 +21,6 @@ import '../../../../cypress/support/commands.ts'
 
 import { seed } from '@/test/e2e/setup/seed.ts';
 
-seed().then(r => console.log(r));
+it('fills database', () => {
+    cy.task('db:seed', seed);
+})

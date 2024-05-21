@@ -2,7 +2,7 @@ import path from 'path';
 import { defineConfig } from 'cypress';
 import vitePreprocessor from 'cypress-vite';
 
-import { seed } from '@/test/e2e/setup/seed.ts';
+const preprocessor = vitePreprocessor('./vite.config.ts');
 
 export default defineConfig({
     e2e: {
@@ -11,15 +11,16 @@ export default defineConfig({
                 vitePreprocessor('./vite.config.ts')
             );
             on('before:run',
-                async (_) => {
-                    await seed();
+                () => {
+                    preprocessor();
+                    import('@/test/e2e/setup/seed.ts').then(async (module) => {
+                        await module.seed();
+                    });
                 }
             );
             // on('task', {
-            //     async 'db:seed'() {
-            //         // import { seed } from '@/test/e2e/setup/seed.ts';
-            //         // import { client } from '@/config/axios.ts';
-            //         await seed(client);
+            //     async 'db:seed'(seed) {
+            //         await seed();
             //     }
             // });
         },
