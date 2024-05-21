@@ -106,7 +106,9 @@ export function useProject(): ProjectState {
                 t('toasts.messages.success'),
                 t('toasts.messages.projects.create.success', [project.value?.name]),
             );
-        } catch {}
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async function updateProject(projectData: Project): Promise<void> {

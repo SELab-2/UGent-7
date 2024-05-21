@@ -47,7 +47,9 @@ export function useSubmission(): SubmissionState {
         try {
             await create(endpoint, formData, submission, Submission.fromJSONCreate, 'multipart/form-data');
             addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.submissions.create.success'));
-        } catch {}
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async function deleteSubmission(id: string): Promise<void> {

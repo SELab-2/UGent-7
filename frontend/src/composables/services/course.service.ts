@@ -99,7 +99,9 @@ export function useCourses(): CoursesState {
                 t('toasts.messages.success'),
                 t('toasts.messages.courses.create.success', [course.value?.name]),
             );
-        } catch {}
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async function updateCourse(courseData: Course): Promise<void> {
