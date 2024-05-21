@@ -63,8 +63,8 @@ export const getHandlers = [
 
         // Convert to a ResponseSubmission object
         const projectSubmissions = submissions.filter((x) => submittedSubmissions.map(y => y.id).includes(x.id))
-        const response_submissions = projectSubmissions.map(x => ({ id: x?.id, submission_number: x?.submission_number,submission_time: x?.submission_time,zip: x?.zip,results: [], is_valid: x?.is_valid }) )
-        return HttpResponse.json(response_submissions);
+        const responseSubmissions = projectSubmissions.map(x => ({ id: x?.id, submission_number: x?.submission_number,submission_time: x?.submission_time,zip: x?.zip,results: [], is_valid: x?.is_valid }) )
+        return HttpResponse.json(responseSubmissions);
     }),
     http.get(baseUrl + endpoints.teachers.byCourse.replace('{courseId}', ':id'), ({ params }) => {
         const course = courses.find((x) => x.id === params.id);
@@ -122,8 +122,12 @@ export const getHandlers = [
         );
     }),
     http.get(baseUrl + endpoints.submissions.byGroup.replace('{groupId}', ':id'), ({ params }) => {
-        console.log(submissions.filter((x) => x.group === params.id))
-        return HttpResponse.json(submissions.filter((x) => x.group === params.id));
+        const group = groups.find((x) => x.id = params.id)
+        const groupSubmissions = submissions.filter(x => group?.submissions.includes(x))
+        
+        // Convert to a ResponseSubmission object
+        const responseSubmissions = groupSubmissions.map(x => ({ id: x?.id, submission_number: x?.submission_number,submission_time: x?.submission_time,zip: x?.zip,results: [], is_valid: x?.is_valid }) )
+        return HttpResponse.json(responseSubmissions);
     }),
     http.get(baseUrl + endpoints.faculties.retrieve.replace('{id}', ':id'), ({ params }) => {
         return HttpResponse.json(faculties.find((x) => x.id === params.id));

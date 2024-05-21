@@ -1,19 +1,4 @@
 
-export const groups = [
-    {
-        id: '0',
-        score: 20,
-        project: '0',
-        students: ['1', '2', '3', '000201247011'],
-    },
-    {
-        id: '1',
-        score: 18,
-        project: '0',
-        students: ['1', '2', '3', '000201247011'],
-    },
-];
-
 export const courses = [
     {
         id: '1',
@@ -141,6 +126,23 @@ export const submissions = [
         extraCheckResults: [],
         structureCheckResults: [],
         is_valid: true,
+    },
+];
+
+export const groups = [
+    {
+        id: '0',
+        score: 20,
+        project: '0',
+        students: ['1', '2', '3', '000201247011'],
+        submissions: [submissions[0]]
+    },
+    {
+        id: '1',
+        score: 18,
+        project: '0',
+        students: ['1', '2', '3', '000201247011'],
+        submissions: [submissions[1]]
     },
 ];
 

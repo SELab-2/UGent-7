@@ -26,18 +26,14 @@ describe('submissions', (): void => {
         resetService();
 
         await getSubmissionByGroup('1');
-        console.log(JSON.stringify(submissions.value))
-        // expect(submissions).not.toBeNull();
-        // expect(Array.isArray(submissions.value)).toBe(true);
-        // expect(submissions.value?.length).toBe(2);
+        expect(submissions).not.toBeNull();
+        expect(Array.isArray(submissions.value)).toBe(true);
+        expect(submissions.value?.length).toBe(1);
 
-        // expect(submissions.value?.[0]?.files).toEqual([]);
-        // expect(submissions.value?.[0]?.submission_number).toBe(1);
-        // expect(submissions.value?.[0]?.submission_time).toEqual(new Date('July 21, 2024 01:15:00'));
-
-        // expect(submissions.value?.[1]?.files).toEqual([]);
-        // expect(submissions.value?.[1]?.submission_number).toBe(2);
-        // expect(submissions.value?.[1]?.submission_time).toEqual(new Date('July 21, 2024 01:15:00'));
+        expect(submissions.value?.[0]?.id).toEqual('1');
+        expect(submissions.value?.[0]?.submission_number).toEqual(1);
+        expect(submissions.value?.[0]?.submission_time).toStrictEqual(new Date('July 21, 2024 01:15:00'));
+        expect(submissions.value?.[0]?.is_valid).toEqual(true);
     });
 
     it('gets submissions data by project', async () => {
