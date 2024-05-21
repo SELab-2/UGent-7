@@ -36,7 +36,7 @@ export function useAdmin(): AdminState {
             admin,
             User.fromJSON,
             undefined,
-            selfprocessError
+            selfprocessError,
         );
     }
 
