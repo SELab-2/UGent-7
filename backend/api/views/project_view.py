@@ -1,8 +1,3 @@
-import logging
-
-from rest_framework.exceptions import ValidationError
-from rest_framework.parsers import MultiPartParser
-
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import Submission
@@ -24,10 +19,6 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
-
-logger = logging.getLogger("ypovoli")
-
 
 # TODO: Error message when creating a project with wrongly formatted date looks a bit weird
 class ProjectViewSet(RetrieveModelMixin,
@@ -168,8 +159,6 @@ class ProjectViewSet(RetrieveModelMixin,
 
         project: Project = self.get_object()
 
-        logger.info(request.POST.dict())
-
         serializer = ExtraCheckSerializer(
             data=request.data,
             context={
@@ -179,7 +168,7 @@ class ProjectViewSet(RetrieveModelMixin,
         )
 
         if serializer.is_valid(raise_exception=True):
-            serializer.save(project=project, docker_image_id=request.data.get('docker_image'))
+            serializer.save(project=project)
 
         return Response({
             "message": gettext("project.success.extra_check.add")

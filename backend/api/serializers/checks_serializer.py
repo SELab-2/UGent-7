@@ -3,7 +3,7 @@ from api.models.docker import DockerImage
 from api.models.project import Project
 from django.utils.translation import gettext as _
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotFound
 
 
 class FileExtensionSerializer(serializers.ModelSerializer):
@@ -83,8 +83,7 @@ class StructureCheckSerializer(serializers.ModelSerializer):
 
 class ExtraCheckSerializer(serializers.ModelSerializer):
     project = serializers.HyperlinkedIdentityField(
-        view_name="project-detail",
-        read_only=True
+        view_name="project-detail"
     )
 
     docker_image = serializers.HyperlinkedIdentityField(
@@ -95,9 +94,25 @@ class ExtraCheckSerializer(serializers.ModelSerializer):
         model = ExtraCheck
         fields = "__all__"
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict) -> dict:
+        """Validate the extra check"""
         data = super().validate(attrs)
 
+        # Check if the docker image is provided
+        if not "docker_image" in self.initial_data:
+            raise serializers.ValidationError(_("extra_check.error.docker_image"))
+
+        # Check if the docker image exists
+        image = DockerImage.objects.get(
+            id=self.initial_data["docker_image"]
+        )
+
+        if image is None:
+            raise NotFound(_("extra_check.error.docker_image"))
+
+        data["docker_image"] = image
+
+        # Check if the time limit and memory limit are in the correct range
         if "time_limit" in data and not 10 <= data["time_limit"] <= 1000:
             raise serializers.ValidationError(_("extra_check.error.time_limit"))
 
