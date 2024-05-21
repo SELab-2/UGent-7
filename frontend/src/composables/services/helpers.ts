@@ -251,7 +251,7 @@ export async function getListMerged<T>(
             allData.push(...responseData); // Merge into the allData array
         } catch (error: any) {
             ref.value = []; // Set the ref to an empty array
-            if (selfprocessError){
+            if (selfprocessError) {
                 processError(error);
                 console.error(error); // Log the error for debugging
             } else {
