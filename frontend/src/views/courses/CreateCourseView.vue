@@ -1,159 +1,60 @@
 <script setup lang="ts">
-import Dropdown from 'primevue/dropdown';
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
+import CourseForm from '@/components/courses/CourseForm.vue';
 import Title from '@/components/layout/Title.vue';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import Textarea from 'primevue/textarea';
-import InputSwitch from 'primevue/inputswitch';
-import ErrorMessage from '@/components/forms/ErrorMessage.vue';
-import Editor from '@/components/forms/Editor.vue';
-import { reactive, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import BaseLayout from '@/components/layout/base/BaseLayout.vue';
+import Loading from '@/components/Loading.vue';
 import { useI18n } from 'vue-i18n';
-import { Course, getAcademicYear } from '@/types/Course';
-import { useCourses } from '@/composables/services/course.service';
+import { onMounted, ref } from 'vue';
 import { useFaculty } from '@/composables/services/faculty.service.ts';
-import { required, helpers } from '@vuelidate/validators';
-import { useVuelidate } from '@vuelidate/core';
+import { type Course } from '@/types/Course.ts';
+import { useCourses } from '@/composables/services/course.service.ts';
+import { useRouter } from 'vue-router';
 
 /* Composable injections */
 const { t } = useI18n();
 const { push } = useRouter();
 const { faculties, getFaculties } = useFaculty();
-
-/* Service injection */
 const { createCourse } = useCourses();
 
-/* Fetch the faculties */
-onMounted(async () => {
-    await getFaculties();
-});
+/* State */
+const loading = ref(true);
 
-/* Form content */
-const form = reactive({
-    name: '',
-    description: '',
-    excerpt: '',
-    faculty: null,
-    private: false,
-});
-
-// Define validation rules for each form field
-const rules = computed(() => {
-    return {
-        name: { required: helpers.withMessage(t('validations.required'), required) },
-        faculty: { required: helpers.withMessage(t('validations.required'), required) },
-        excerpt: { required: helpers.withMessage(t('validations.required'), required) },
-    };
-});
-
-// useVuelidate function to perform form validation
-const v$ = useVuelidate(rules, form);
-
-async function submitCourse(): Promise<void> {
-    // Validate the form
-    const result = await v$.value.$validate();
-
-    // Only submit the form if the validation was successful
-    if (result) {
-        // Pass the course data to the service
-        await createCourse(
-            new Course(
-                '',
-                form.name,
-                form.excerpt,
-                form.description,
-                getAcademicYear(),
-                form.private,
-                null, // No invitation link
-                null, // No invitation link expiration
-                null, // No parent course
-                form.faculty,
-            ),
-        );
-
-        // Redirect to the dashboard overview
-        await push({ name: 'dashboard' });
-    }
+/**
+ * Save the course.
+ *
+ * @param course
+ */
+async function saveCourse(course: Course): Promise<void> {
+    await createCourse(course);
+    await push({ name: 'dashboard' });
 }
+
+/** Load the data */
+onMounted(async () => {
+    loading.value = true;
+    await getFaculties();
+    loading.value = false;
+});
 </script>
 
 <template>
     <BaseLayout>
-        <div class="grid fadein">
-            <div class="col-12 md:col-6">
-                <!-- Create course heading -->
-                <Title class="mb-6">{{ t('views.courses.create') }}</Title>
-
-                <!-- Course form -->
-                <form @submit.prevent="submitCourse">
-                    <!-- Course name -->
-                    <div class="mb-4">
-                        <label for="courseName">{{ t('views.courses.name') }}</label>
-                        <InputText id="courseName" v-model="form.name" />
-                        <ErrorMessage :field="v$.name" />
-                    </div>
-
-                    <!-- Course excerpt -->
-                    <div class="mb-4">
-                        <label for="courseExcerpt">{{ t('views.courses.excerpt') }}</label>
-                        <Textarea id="courseExcerpt" v-model="form.excerpt" autoResize rows="5" cols="30" />
-                        <ErrorMessage :field="v$.excerpt" />
-                    </div>
-
-                    <!-- Course description -->
-                    <div class="mb-4">
-                        <label for="courseDescription">{{ t('views.courses.description') }}</label>
-                        <Editor v-model="form.description" />
-                    </div>
-
-                    <!-- Course faculty -->
-                    <div class="mb-4">
-                        <label for="courseFaculty">{{ t('views.courses.faculty') }}</label>
-                        <Dropdown
-                            id="courseFaculty"
-                            v-model="form.faculty"
-                            :options="faculties"
-                            optionLabel="name"
-                            v-if="faculties"
-                        />
-                        <ErrorMessage :field="v$.faculty" />
-                    </div>
-
-                    <!-- Course visibility -->
-                    <div class="grid">
-                        <div class="flex align-items-center field-checkbox col-12">
-                            <InputSwitch id="private" v-model="form.private" />
-                            <label for="private">{{ t('views.courses.private') }}</label>
-                        </div>
-                    </div>
-
-                    <!-- Submit button -->
-                    <div class="flex justify-end">
-                        <Button
-                            :label="t('views.courses.create')"
-                            type="submit"
-                            icon="pi pi-check"
-                            iconPos="right"
-                            rounded
-                        />
-                    </div>
-                </form>
+        <!-- Create course heading -->
+        <Title class="mb-6">{{ t('views.courses.create') }}</Title>
+        <template v-if="!loading">
+            <div class="grid fadein">
+                <div class="col-12 md:col-6">
+                    <!-- Course form -->
+                    <template v-if="faculties !== null">
+                        <CourseForm :faculties="faculties" @update:course="saveCourse" />
+                    </template>
+                </div>
             </div>
-        </div>
+        </template>
+        <template v-else>
+            <Loading height="70vh" />
+        </template>
     </BaseLayout>
 </template>
 
-<style scoped>
-/* Flex column layout for label and input */
-.mb-4 {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Add margin between label and input */
-label {
-    margin-bottom: 0.5rem;
-}
-</style>
+<style scoped></style>

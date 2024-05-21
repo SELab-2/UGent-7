@@ -108,6 +108,6 @@ class Project(models.Model):
         self.save()
 
     if TYPE_CHECKING:
-        groups: RelatedManager['Group']
-        structure_checks: RelatedManager['StructureCheck']
-        extra_checks: RelatedManager['ExtraCheck']
+        groups: RelatedManager[Group]
+        structure_checks: RelatedManager[StructureCheck]
+        extra_checks: RelatedManager[ExtraCheck]

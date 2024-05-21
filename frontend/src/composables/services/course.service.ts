@@ -5,6 +5,7 @@ import { get, getList, create, patch, deleteId, getPaginatedList } from '@/compo
 import { type Response } from '@/types/Response.ts';
 import { type CoursePaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
+import { type User } from '@/types/users/User.ts';
 
 interface CoursesState {
     pagination: Ref<CoursePaginatorResponse | null>;
@@ -16,6 +17,7 @@ interface CoursesState {
     getCoursesByStudent: (studentId: string) => Promise<void>;
     getCoursesByTeacher: (teacherId: string) => Promise<void>;
     getCourseByAssistant: (assistantId: string) => Promise<void>;
+    getCoursesByUser: (user: User) => Promise<void>;
     createCourse: (courseData: Course) => Promise<void>;
     updateCourse: (courseData: Course) => Promise<void>;
     cloneCourse: (courseId: string, cloneAssistants: boolean, cloneTeachers: boolean) => Promise<void>;
@@ -59,6 +61,18 @@ export function useCourses(): CoursesState {
         await getList<Course>(endpoint, courses, Course.fromJSON);
     }
 
+    async function getCoursesByUser(user: User): Promise<void> {
+        if (user.isTeacher()) {
+            await getCoursesByTeacher(user.id);
+        } else if (user.isAssistant()) {
+            await getCourseByAssistant(user.id);
+        } else if (user.isStudent()) {
+            await getCoursesByStudent(user.id);
+        } else {
+            courses.value = [];
+        }
+    }
+
     async function createCourse(courseData: Course): Promise<void> {
         const endpoint = endpoints.courses.index;
         await create<Course>(
@@ -87,6 +101,7 @@ export function useCourses(): CoursesState {
                 id: courseData.id,
                 name: courseData.name,
                 description: courseData.description,
+                excerpt: courseData.excerpt,
                 faculty: courseData.faculty?.id,
                 private_course: courseData.private_course,
             },
@@ -134,6 +149,7 @@ export function useCourses(): CoursesState {
         getCoursesByStudent,
         getCoursesByTeacher,
         getCourseByAssistant,
+        getCoursesByUser,
 
         createCourse,
         updateCourse,

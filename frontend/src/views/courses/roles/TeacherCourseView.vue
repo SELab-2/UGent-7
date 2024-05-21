@@ -16,7 +16,8 @@ import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
 import { useCourses } from '@/composables/services/course.service';
 import { useProject } from '@/composables/services/project.service.ts';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
+import { watchImmediate } from '@vueuse/core';
 
 /* Props */
 const props = defineProps<{
@@ -31,11 +32,7 @@ const { projects, getProjectsByCourse } = useProject();
 
 /* State */
 const instructors = computed(() => {
-    if (props.course.teachers !== null && props.course.assistants !== null) {
-        return props.course.teachers.concat(props.course.assistants);
-    }
-
-    return null;
+    return props.course.teachers.concat(props.course.assistants);
 });
 
 /* State for the confirm dialog to clone a course */
@@ -57,12 +54,14 @@ async function handleClone(): Promise<void> {
     });
 }
 
-watch(
-    () => props.course,
-    async () => {
-        await getProjectsByCourse(props.course.id);
+/**
+ * Watch for changes in the course ID and fetch the projects for the course.
+ */
+watchImmediate(
+    () => props.course.id,
+    async (courseId: string) => {
+        await getProjectsByCourse(courseId);
     },
-    { immediate: true },
 );
 </script>
 
@@ -123,8 +122,9 @@ watch(
             <ShareCourseButton :course="props.course" v-if="props.course.private_course" />
         </ButtonGroup>
     </div>
+
     <!-- Description -->
-    <div class="surface-300 px-4 py-3" v-html="props.course.description" />
+    <div v-html="props.course.description" />
 
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
@@ -136,6 +136,7 @@ watch(
             <ProjectCreateButton :courses="[props.course]" />
         </div>
     </div>
+
     <!-- Project list body -->
     <ProjectList :projects="projects">
         <template #empty>

@@ -58,7 +58,7 @@
             "joinGroup": "Join group",
             "leaveGroup": "Leave group",
             "create": "Create new project",
-            "edit": "Edit project",
+            "edit": "Save project",
             "name": "Project name",
             "description": "Description",
             "startDate": "Start project",
@@ -71,8 +71,15 @@
             "noStudents": "No students in this group",
             "locked": "Closed",
             "unlocked": "Open",
+            "structureChecks": {
+                "title": "Structure checks",
+                "placeholder": "Give a name to this folder",
+                "cancelSelection": "Deselect {0}",
+                "newFolder": "New folder"
+            },
             "extraChecks": {
                 "title": "Automatic checks on a submission",
+                "empty": "No checks addeed",
                 "add": "New check",
                 "name": "Name",
                 "public": "Public",
@@ -105,6 +112,7 @@
         "courses": {
             "create": "Create course",
             "edit": "Edit course",
+            "save": "Save course",
             "clone": "Clone course",
             "cloneAssistants": "Clone assistants:",
             "cloneTeachers": "Clone teachers:",
@@ -118,7 +126,9 @@
             "leave": "Leave",
             "noProjects": "No projects available for this course",
             "teachersAndAssistants": {
-                "title": "People linked to this course",
+                "title": "Teachers",
+                "enroll": "Add as {0}",
+                "leave": "Remove from course",
                 "edit": "Edit users",
                 "search": {
                     "search": "Search",

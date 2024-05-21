@@ -3,19 +3,32 @@ import { type Faculty } from '../Faculty.ts';
 export const roles: string[] = ['user', 'student', 'assistant', 'teacher'];
 export type Role = (typeof roles)[number];
 
+export interface UserJSON {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    username: string;
+    is_staff: boolean;
+    last_enrolled: number;
+    create_time: string;
+    last_login: string | null;
+    roles: Role[];
+}
+
 export class User {
     constructor(
-        public id: string,
-        public username: string,
-        public email: string,
-        public first_name: string,
-        public last_name: string,
-        public last_enrolled: number,
-        public is_staff: boolean,
+        public id: string = '',
+        public username: string = '',
+        public email: string = '',
+        public first_name: string = '',
+        public last_name: string = '',
+        public last_enrolled: number = 0,
+        public is_staff: boolean = false,
         public roles: Role[] = [],
         public faculties: Faculty[] = [],
-        public create_time: Date,
-        public last_login: Date | null,
+        public create_time: Date = new Date(),
+        public last_login: Date | null = null,
     ) {}
 
     /**
@@ -94,7 +107,7 @@ export class User {
      *
      * @param user
      */
-    static fromJSON(user: User): User {
+    static fromJSON(user: UserJSON): User {
         return new User(
             user.id,
             user.username,
@@ -104,7 +117,7 @@ export class User {
             user.last_enrolled,
             user.is_staff,
             user.roles,
-            user.faculties,
+            [],
             new Date(user.create_time),
             user.last_login !== null ? new Date(user.last_login) : null,
         );

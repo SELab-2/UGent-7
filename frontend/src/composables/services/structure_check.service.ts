@@ -1,7 +1,7 @@
 import { StructureCheck } from '@/types/StructureCheck.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId } from '@/composables/services/helpers.ts';
+import { get, getList, create, deleteId, put } from '@/composables/services/helpers.ts';
 
 interface StructureCheckState {
     structureChecks: Ref<StructureCheck[] | null>;
@@ -9,6 +9,7 @@ interface StructureCheckState {
     getStructureCheckByID: (id: string) => Promise<void>;
     getStructureCheckByProject: (projectId: string) => Promise<void>;
     createStructureCheck: (structureCheckData: StructureCheck, projectId: string) => Promise<void>;
+    setStructureChecks: (structureChecks: StructureCheck[], projectId: string) => Promise<void>;
     deleteStructureCheck: (id: string) => Promise<void>;
 }
 
@@ -31,11 +32,16 @@ export function useStructureCheck(): StructureCheckState {
         await create<StructureCheck>(
             endpoint,
             {
-                name: structureCheckData.name,
+                path: structureCheckData.path,
             },
             structureCheck,
             StructureCheck.fromJSON,
         );
+    }
+
+    async function setStructureChecks(structureChecks: StructureCheck[], projectId: string): Promise<void> {
+        const endpoint = endpoints.structureChecks.byProject.replace('{projectId}', projectId);
+        await put(endpoint, structureChecks);
     }
 
     async function deleteStructureCheck(id: string): Promise<void> {
@@ -51,5 +57,6 @@ export function useStructureCheck(): StructureCheckState {
 
         createStructureCheck,
         deleteStructureCheck,
+        setStructureChecks,
     };
 }

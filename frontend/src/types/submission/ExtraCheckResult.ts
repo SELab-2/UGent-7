@@ -1,22 +1,33 @@
+import { Submission } from '@/types/submission/Submission.ts';
+import { ExtraCheck } from '@/types/ExtraCheck.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export interface ExtraCheckResultJSON {
+    id: string;
+    result: string;
+    error_message: string | null;
+    submission: number;
+    structure_check: number;
+    resourcetype: string;
+    log_file: HyperlinkedRelation;
+    artifact: HyperlinkedRelation;
+}
+
 export class ExtraCheckResult {
     constructor(
-        public id: string,
-        public result: string,
-        public error_message: any,
-        public log_file: File | null,
-        public submission: number,
-        public extra_check: number,
-        public resourcetype: string,
+        public id: string = '',
+        public result: string = '',
+        public error_message: string | null = null,
+        public resourcetype: string = '',
+        public submission: Submission = new Submission(),
+        public extra_check: ExtraCheck = new ExtraCheck(),
     ) {}
 
-    static fromJSON(extraCheckResult: ExtraCheckResult): ExtraCheckResult {
+    static fromJSON(extraCheckResult: ExtraCheckResultJSON): ExtraCheckResult {
         return new ExtraCheckResult(
             extraCheckResult.id,
             extraCheckResult.result,
             extraCheckResult.error_message,
-            extraCheckResult.log_file,
-            extraCheckResult.submission,
-            extraCheckResult.extra_check,
             extraCheckResult.resourcetype,
         );
     }

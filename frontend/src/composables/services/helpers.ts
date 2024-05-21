@@ -32,6 +32,7 @@ export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (da
  * @param data
  * @param ref
  * @param fromJson
+ * @param contentType
  */
 export async function create<T>(
     endpoint: string,
@@ -80,6 +81,25 @@ export async function patch(
         console.error(error);
         throw error;
     }
+}
+
+/**
+ * Put data to the endpoint.
+ *
+ * @param endpoint
+ * @param data
+ * @param contentType
+ */
+export async function put<T>(
+    endpoint: string,
+    data: T | string,
+    contentType: string = 'application/json',
+): Promise<void> {
+    await client.put(endpoint, data, {
+        headers: {
+            'Content-Type': contentType,
+        },
+    });
 }
 
 /**
@@ -187,37 +207,6 @@ export async function getPaginatedList<T>(
 
         throw error; // Re-throw the error to the caller
     }
-}
-
-/**
- * Get a list of items from multiple endpoints and merge them into a single list.
- *
- * @param endpoints
- * @param ref
- * @param fromJson
- */
-export async function getListMerged<T>(
-    endpoints: string[],
-    ref: Ref<T[] | null>,
-    fromJson: (data: any) => T,
-): Promise<void> {
-    // Create an array to accumulate all response data
-    const allData: T[] = [];
-
-    for (const endpoint of endpoints) {
-        try {
-            const response = await client.get(endpoint);
-            const responseData: T[] = response.data.map((data: T) => fromJson(data));
-            allData.push(...responseData); // Merge into the allData array
-        } catch (error: any) {
-            processError(error);
-            console.error(error); // Log the error for debugging
-            ref.value = []; // Set the ref to an empty array
-            throw error; // Re-throw the error to the caller
-        }
-    }
-
-    ref.value = allData;
 }
 
 /**
