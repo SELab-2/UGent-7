@@ -1,4 +1,3 @@
-
 export const courses = [
     {
         id: '1',
@@ -135,14 +134,14 @@ const groups = [
         score: 20,
         project: {},
         students: ['1', '2', '3', '000201247011'],
-        submissions: [submissions[0]]
+        submissions: [submissions[0]],
     },
     {
         id: '1',
         score: 18,
         project: {},
         students: ['1', '2', '3', '000201247011'],
-        submissions: [submissions[1]]
+        submissions: [submissions[1]],
     },
 ];
 
@@ -209,10 +208,10 @@ export const projects = [
     },
 ];
 
-groups[0].project = projects[2]
-groups[1].project = projects[2]
+groups[0].project = projects[2];
+groups[1].project = projects[2];
 
-export { groups }
+export { groups };
 
 export const faculties = [
     { id: 'sciences', name: 'wetenschappen' },

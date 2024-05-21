@@ -4,7 +4,6 @@ import { Submission } from '@/types/submission/Submission.ts';
 import { submissionData } from './data';
 import { createSubmission } from './helper';
 
-
 describe('submission type', () => {
     it('create instance of submission with correct properties', () => {
         const submission = createSubmission(submissionData);

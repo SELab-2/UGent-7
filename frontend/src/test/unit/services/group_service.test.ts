@@ -31,7 +31,7 @@ describe('group', (): void => {
         expect(group.value).not.toBeNull();
         expect(group.value?.id).toBe('0');
         expect(group.value?.score).toBe(20);
-        assertType(group.value?.project as Project);
+        assertType(group.value?.project!);
         expect(group.value?.students).toBeNull();
         expect(group.value?.submissions).toBeNull();
     });
@@ -46,13 +46,13 @@ describe('group', (): void => {
 
         expect(groups.value?.[0].id).toBe('0');
         expect(groups.value?.[0].score).toBe(20);
-        assertType(groups.value?.[0].project as Project)
+        assertType(groups.value?.[0].project!);
         expect(groups.value?.[0].students).toBeNull;
         expect(groups.value?.[0].submissions).toBeNull();
 
         expect(groups.value?.[1].id).toBe('1');
         expect(groups.value?.[1].score).toBe(18);
-        assertType(groups.value?.[1].project as Project)
+        assertType(groups.value?.[1].project!);
         expect(groups.value?.[1].students).toBeNull;
         expect(groups.value?.[1].submissions).toBeNull();
     });
@@ -67,7 +67,7 @@ describe('group', (): void => {
 
         expect(groups.value?.[0].id).toBe('0');
         expect(groups.value?.[0].score).toBe(20);
-        assertType(groups.value?.[0].project as Project)
+        assertType(groups.value?.[0].project!);
         expect(groups.value?.[0].students).toBeNull;
         expect(groups.value?.[0].submissions).toBeNull();
     });

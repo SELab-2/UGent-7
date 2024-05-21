@@ -47,11 +47,11 @@ describe('submissions', (): void => {
         expect(submissions.value?.[0]?.id).toEqual('1');
         expect(submissions.value?.[0]?.submission_number).toEqual(1);
         expect(submissions.value?.[0]?.submission_time).toStrictEqual(new Date('July 21, 2024 01:15:00'));
-        expect(submissions.value?.[0]?.is_valid).toEqual(true);   
+        expect(submissions.value?.[0]?.is_valid).toEqual(true);
 
         expect(submissions.value?.[1]?.id).toEqual('2');
         expect(submissions.value?.[1]?.submission_number).toEqual(2);
         expect(submissions.value?.[1]?.submission_time).toStrictEqual(new Date('July 21, 2024 01:15:00'));
-        expect(submissions.value?.[1]?.is_valid).toEqual(true);    
+        expect(submissions.value?.[1]?.is_valid).toEqual(true);
     });
 });
