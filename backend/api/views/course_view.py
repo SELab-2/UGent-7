@@ -11,7 +11,6 @@ from api.serializers.assistant_serializer import (AssistantIDSerializer,
                                                   AssistantSerializer)
 from api.serializers.course_serializer import (CourseCloneSerializer,
                                                CourseSerializer,
-                                               CreateCourseSerializer,
                                                SaveInvitationLinkSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
