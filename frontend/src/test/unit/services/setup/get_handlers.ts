@@ -23,7 +23,7 @@ export const getHandlers = [
     http.get(baseUrl + endpoints.submissions.retrieve.replace('{id}', ':id'), ({ params }) => {
         const submission = submissions.find((x) => x.id === params.id);
         // Convert to a ResponseSubmission object
-        const response_submission = {
+        const responseSubmission = {
             id: submission?.id,
             submission_number: submission?.submission_number,
             submission_time: submission?.submission_time,
@@ -31,7 +31,7 @@ export const getHandlers = [
             results: [], // We can leave this empty since the conversion to a valid results array is not the purpose of these tests
             is_valid: submission?.is_valid,
         };
-        return HttpResponse.json(response_submission);
+        return HttpResponse.json(responseSubmission);
     }),
     http.get(baseUrl + endpoints.structureChecks.retrieve.replace('{id}', ':id'), ({ params }) => {
         return HttpResponse.json(structureChecks.find((x) => x.id === params.id));

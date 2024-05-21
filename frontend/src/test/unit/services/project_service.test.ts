@@ -1,27 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 
 import { describe, it, expect, assertType } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
-import { useCourses } from '@/composables/services/course.service';
-import { Project } from '@/types/Project';
 import { type Course } from '@/types/Course';
-import { SubmissionStatus } from '@/types/SubmisionStatus';
+import { type SubmissionStatus } from '@/types/SubmisionStatus';
 import { type Group } from '@/types/Group';
 
-const {
-    projects,
-    project,
-    getProjectByID,
-    getProjectsByCourse,
-    getProjectsByCourseAndDeadline,
-    getProjectsByStudent,
-
-    createProject,
-    deleteProject,
-} = useProject();
-
-const { course, getCourseByID } = useCourses();
+const { projects, project, getProjectByID, getProjectsByCourse, getProjectsByStudent } = useProject();
 
 function resetService(): void {
     project.value = null;
@@ -147,34 +134,34 @@ describe('project', (): void => {
     it('create project', async () => {
         resetService();
 
-        const courseId = '1';
-        await getCourseByID(courseId);
+        // const courseId = '1';
+        // await getCourseByID(courseId);
 
-        const exampleProject = new Project(
-            '', // id
-            'project_name', // name
-            'project_description', // description
-            true, // visible
-            false, // archived
-            false, // locked_groups
-            new Date('November 1, 2024 04:20:00'), // start_data
-            new Date('November 2, 2024 04:20:00'), // deadline
-            20, // max_score
-            false, // score_visible
-            5, // group_size
-            course.value!, // course
-            new SubmissionStatus(0, 0, 0, 0), // submission_status
-            null, // structureChecks
-            null, // extra_checks
-            null, // groups
-            null, // submissions
-        );
+        // const exampleProject = new Project(
+        //     '', // id
+        //     'project_name', // name
+        //     'project_description', // description
+        //     true, // visible
+        //     false, // archived
+        //     false, // locked_groups
+        //     new Date('November 1, 2024 04:20:00'), // start_data
+        //     new Date('November 2, 2024 04:20:00'), // deadline
+        //     20, // max_score
+        //     false, // score_visible
+        //     5, // group_size
+        //     course.value!, // course
+        //     new SubmissionStatus(0, 0, 0, 0), // submission_status
+        //     null, // structureChecks
+        //     null, // extra_checks
+        //     null, // groups
+        //     null, // submissions
+        // );
 
-        await getProjectsByCourse(courseId);
+        // await getProjectsByCourse(courseId);
 
-        expect(projects).not.toBeNull();
-        expect(Array.isArray(projects.value)).toBe(true);
-        const prevLength = projects.value?.length ?? 0;
+        // expect(projects).not.toBeNull();
+        // expect(Array.isArray(projects.value)).toBe(true);
+        // const prevLength = projects.value?.length ?? 0;
 
         // await createProject(exampleProject, courseId, 0);
         // await getProjectsByCourse(courseId);

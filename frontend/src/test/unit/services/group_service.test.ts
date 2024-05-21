@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 
 import { describe, it, expect, assertType } from 'vitest';
 import { useGroup } from '@/composables/services/group.service.ts';
