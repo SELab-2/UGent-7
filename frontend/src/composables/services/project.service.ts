@@ -50,31 +50,11 @@ export function useProject(): ProjectState {
     }
 
     async function getProjectsByCourseAndDeadline(courseId: string, deadlineDate: Date, selfprocessError: boolean = true): Promise<void> {
-        const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
-
-        await axios
-            .get(endpoint)
-            .then((response) => {
-                const allProjects = response.data.map((projectData: Project) => Project.fromJSON(projectData));
-
-                // Filter projects based on the deadline date
-                // Update the projects ref with the filtered projects
-                projects.value = allProjects.filter((project: Project) => {
-                    return project.deadline.toDateString() === deadlineDate.toDateString();
-                });
-            })
-            .catch((error) => {
-                if(selfprocessError){
-                    if (axios.isAxiosError(error)) {
-                        processError(error);
-                        console.log(error.response?.data);
-                    } else {
-                        console.error('An unexpected error ocurred: ', error);
-                    }
-                }else{
-                    throw error; // Re-throw the error to the caller
-                }
-            });
+        await getProjectsByCourse(courseId, selfprocessError);
+        const allProjects = (projects.value || []).map((projectData: any) => Project.fromJSON(projectData));
+        projects.value = allProjects.filter((project: Project) => {
+            return project.deadline.toDateString() === deadlineDate.toDateString();
+        });
     }
 
     async function createProject(projectData: Project, courseId: string, numberOfGroups: number, selfprocessError: boolean = true): Promise<void> {
