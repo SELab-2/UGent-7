@@ -7,6 +7,7 @@ from api.permissions.role_permissions import (is_assistant, is_student,
 from api.serializers.project_serializer import ProjectSerializer
 from api.serializers.student_serializer import StudentIDSerializer
 from django.utils.translation import gettext
+from notifications.signals import NotificationType, notification_create
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 

@@ -1,5 +1,4 @@
 import re
-from typing import Dict, List
 
 from authentication.models import User
 from notifications.logic import get_message_dict
@@ -23,14 +22,14 @@ class NotificationSerializer(serializers.ModelSerializer):
     message = serializers.SerializerMethodField()
 
     # Check if the required arguments are present
-    def _get_missing_keys(self, string: str, arguments: Dict[str, str]) -> List[str]:
-        required_keys: List[str] = re.findall(r"%\((\w+)\)", string)
+    def _get_missing_keys(self, string: str, arguments: dict[str, str]) -> list[str]:
+        required_keys: list[str] = re.findall(r"%\((\w+)\)", string)
         missing_keys = [key for key in required_keys if key not in arguments]
 
         return missing_keys
 
-    def validate(self, data: Dict[str, str]) -> Dict[str, str]:
-        data: Dict[str, str] = super().validate(data)
+    def validate(self, data: dict[str, str | int | dict[str, str]]) -> dict[str, str]:
+        data: dict[str, str] = super().validate(data)
 
         # Validate the arguments
         if "arguments" not in data:
@@ -56,7 +55,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         return data
 
     # Get the message from the template and arguments
-    def get_message(self, obj: Notification) -> Dict[str, str]:
+    def get_message(self, obj: Notification) -> dict[str, str]:
         return get_message_dict(obj)
 
     class Meta:

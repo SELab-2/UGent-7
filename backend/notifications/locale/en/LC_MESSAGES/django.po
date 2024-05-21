@@ -30,3 +30,38 @@ msgid "Title: Score updated"
 msgstr "New score"
 msgid "Description: Score updated %(score)s"
 msgstr "Your score has been updated.\nNew score: %(score)s"
+# Docker Image Build Succes
+msgid "Title: Docker image build success"
+msgstr "Docker image successfully build"
+msgid "Description: Docker image build success %(name)s"
+msgstr "Your docker image, $(name)s, has successfully been build"
+# Docker Image Build Error
+msgid "Title: Docker image build error"
+msgstr "Docker image failed to build"
+msgid "Description: Docker image build error %(name)s"
+msgstr "Failed to build your docker image, %(name)s"
+# Extra Check Succes
+msgid "Title: Extra check success"
+msgstr "Passed an extra check"
+msgid "Description: Extra check success %(name)s"
+msgstr "Your submission passed the extra check, $(name)s"
+# Extra Check Error
+msgid "Title: Extra check error"
+msgstr "Failed an extra check"
+msgid "Description: Extra check error %(name)s"
+msgstr "Your submission failed to pass the extra check, %(name)s"
+# Structure Checks Succes
+msgid "Title: Structure checks success"
+msgstr "Passed all structure checks"
+msgid "Description: Structure checks success"
+msgstr "Your submission passed all structure checks"
+# Structure Checks Error
+msgid "Title: Structure checks error"
+msgstr "Failed a structure check"
+msgid "Description: Structure checks"
+msgstr "Your submission failed one or more structure checks"
+# Submission received
+msgid "Title: Submission received"
+msgstr "Received submission"
+msgid "Description: Submission received"
+msgstr "We have received your submission"
