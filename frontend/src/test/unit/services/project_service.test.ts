@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { describe, it, expect, assertType } from 'vitest';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useCourses } from '@/composables/services/course.service';
@@ -42,13 +44,12 @@ describe('project', (): void => {
         expect(project.value?.max_score).toBe(100);
         expect(project.value?.score_visible).toBe(true);
         expect(project.value?.group_size).toBe(5);
-        assertType(project.value?.course!);
-        assertType(project.value?.status!);
-        assertType(project.value?.structure_file!);
+        assertType<Course>(project.value?.course!);
+        assertType<SubmissionStatus>(project.value?.status!);
+        assertType<File>(project.value?.structure_file!);
         expect(project.value?.structureChecks).toBe(null);
         expect(project.value?.extra_checks).toBe(null);
-        assertType(Array.isArray(project.value?.groups));
-        assertType((project.value?.groups?.[0] ?? null)!);
+        assertType<Group[]>(project.value?.groups!);
         expect(project.value?.submissions).toBe(null);
     });
 
@@ -70,13 +71,12 @@ describe('project', (): void => {
         expect(projects.value?.[0]?.max_score).toBe(100);
         expect(projects.value?.[0]?.score_visible).toBe(true);
         expect(projects.value?.[0]?.group_size).toBe(5);
-        assertType(projects.value?.[0]?.course!);
-        assertType(projects.value?.[0]?.status!);
-        assertType(projects.value?.[0]?.structure_file!);
+        assertType<Course>(projects.value?.[0]?.course!);
+        assertType<SubmissionStatus>(projects.value?.[0]?.status!);
+        assertType<File>(projects.value?.[0]?.structure_file!);
         expect(projects.value?.[0]?.structureChecks).toBe(null);
         expect(projects.value?.[0]?.extra_checks).toBe(null);
-        assertType(Array.isArray(projects.value?.[0]?.groups));
-        assertType((projects.value?.[0]?.groups?.[0] ?? null)!);
+        assertType<Group[]>(projects.value?.[0]?.groups!);
         expect(projects.value?.[0]?.submissions).toBe(null);
 
         expect(projects.value?.[1]?.name).toBe('project1');
@@ -89,13 +89,12 @@ describe('project', (): void => {
         expect(projects.value?.[1]?.max_score).toBe(50);
         expect(projects.value?.[1]?.score_visible).toBe(false);
         expect(projects.value?.[1]?.group_size).toBe(8);
-        assertType(projects.value?.[1]?.course!);
-        assertType(projects.value?.[1]?.status!);
-        assertType(projects.value?.[1]?.structure_file!);
+        assertType<Course>(projects.value?.[1]?.course!);
+        assertType<SubmissionStatus>(projects.value?.[1]?.status!);
+        assertType<File>(projects.value?.[1]?.structure_file!);
         expect(projects.value?.[1]?.structureChecks).toBe(null);
         expect(projects.value?.[1]?.extra_checks).toBe(null);
-        assertType(Array.isArray(projects.value?.[1]?.groups));
-        assertType((projects.value?.[0]?.groups?.[1] ?? null)!);
+        assertType<Group[]>(projects.value?.[1]?.groups!);
         expect(projects.value?.[1]?.submissions).toBe(null);
     });
 
@@ -118,13 +117,12 @@ describe('project', (): void => {
         expect(projects.value?.[0]?.max_score).toBe(100);
         expect(projects.value?.[0]?.score_visible).toBe(true);
         expect(projects.value?.[0]?.group_size).toBe(5);
-        assertType(projects.value?.[0]?.course!);
-        assertType(projects.value?.[0]?.status!);
-        assertType(projects.value?.[0]?.structure_file!);
+        assertType<Course>(projects.value?.[0]?.course!);
+        assertType<SubmissionStatus>(projects.value?.[0]?.status!);
+        assertType<File>(projects.value?.[0]?.structure_file!);
         expect(projects.value?.[0]?.structureChecks).toBe(null);
         expect(projects.value?.[0]?.extra_checks).toBe(null);
-        assertType(Array.isArray(projects.value?.[0]?.groups));
-        assertType((projects.value?.[0]?.groups?.[0] ?? null)!);
+        assertType<Group[]>(projects.value?.[0]?.groups!);
         expect(projects.value?.[0]?.submissions).toBe(null);
 
         expect(projects.value?.[1]?.name).toBe('project1');
@@ -137,13 +135,12 @@ describe('project', (): void => {
         expect(projects.value?.[1]?.max_score).toBe(50);
         expect(projects.value?.[1]?.score_visible).toBe(false);
         expect(projects.value?.[1]?.group_size).toBe(8);
-        assertType(projects.value?.[1]?.course!);
-        assertType(projects.value?.[1]?.status!);
-        assertType(projects.value?.[1]?.structure_file!);
+        assertType<Course>(projects.value?.[1]?.course!);
+        assertType<SubmissionStatus>(projects.value?.[1]?.status!);
+        assertType<File>(projects.value?.[1]?.structure_file!);
         expect(projects.value?.[1]?.structureChecks).toBe(null);
         expect(projects.value?.[1]?.extra_checks).toBe(null);
-        assertType(Array.isArray(projects.value?.[1]?.groups));
-        assertType((projects.value?.[0]?.groups?.[1] ?? null)!);
+        assertType<Group[]>(projects.value?.[1]?.groups!);
         expect(projects.value?.[1]?.submissions).toBe(null);
     });
 
