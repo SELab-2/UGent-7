@@ -95,6 +95,8 @@
             "noSubmissions": "No submissions available",
             "passed": "Passed",
             "failed": "The submission is not passed.",
+            "downloadZip": "Download all files of this submission as a zip.",
+            "downloadLog": "Log of check {0}",
             "hoverText": {
               "allChecksFailed": "Structure and extra checks failed",
               "allChecksPassed": "All checks passed",

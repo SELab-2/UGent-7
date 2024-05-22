@@ -93,6 +93,8 @@
             "noSubmissions": "Geen indieningen beschikbaar",
             "passed": "Geslaagd",
             "failed": "De indiening is mislukt",
+            "downloadZip": "Download alle bestanden als zip.",
+            "downloadLog": "Log bestand van check {0}",
             "hoverText": {
               "allChecksFailed": "Structuur en extra checks gefaald",
               "allChecksPassed": "Alle checks geslaagd",

@@ -129,14 +129,14 @@ watch(
                         <ul>
                             <li v-if="submission.zip">
                                 <a :href="submission.zip" download>
-                                    {{ t('views.submissions.download_zip') }}
+                                    {{ t('views.submissions.downloadZip') }}
                                 </a>
                             </li>
                             <li v-else>
                                 {{ t('views.submissions.no_zip_available') }}
                             </li>
                             <li v-for="(item, index) in showLogsAndArtifacts" :key="index">
-                                <a :href="item" download> {{ t('views.submissions.download_log') }} {{ index + 1 }} </a>
+                                <a :href="item" download> {{ t('views.submissions.downloadLog', [index + 1]) }} </a>
                             </li>
                         </ul>
                     </div>
