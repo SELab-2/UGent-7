@@ -7,7 +7,7 @@ export class Submission {
         public id: string,
         public submission_number: number,
         public submission_time: Date,
-        public zip: File,
+        public zip: string,
         public extraCheckResults: ExtraCheckResult[] = [],
         public structureCheckResults: StructureCheckResult[] = [],
         public is_valid: boolean,
@@ -104,7 +104,7 @@ class ResponseSubmission {
         public id: string,
         public submission_number: number,
         public submission_time: Date,
-        public zip: File,
+        public zip: string,
         public results: any[],
         public is_valid: boolean,
     ) {}

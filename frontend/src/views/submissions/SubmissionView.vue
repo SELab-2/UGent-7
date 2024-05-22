@@ -58,18 +58,27 @@ const structureAndExtraFaults = computed(() => {
     return [...structureFaults, ...extraFaults];
 });
 
-const showLogs = computed(() => {
+const showLogsAndArtifacts = computed(() => {
     const extraChecks = submission.value?.extraCheckResults ?? [];
+    let results: string[] = [];
 
     if (project.value != null) {
-        return extraChecks
+        const visibleLogs = extraChecks
             .filter((check) => {
                 return project.value?.extra_checks?.find((extraCheck) => extraCheck.id === check.id)?.show_log;
             })
             .map((check) => check.log_file);
+
+        const visibleArtifacts = extraChecks
+            .filter((check) => {
+                return project.value?.extra_checks?.find((extraCheck) => extraCheck.id === check.id)?.show_log;
+            })
+            .map((check) => check.artifact);
+
+        results = [...visibleLogs, ...visibleArtifacts];
     }
 
-    return [];
+    return results;
 });
 
 /* Watchers */
@@ -98,11 +107,11 @@ watch(
     <BaseLayout>
         <div class="grid">
             <!-- Submission properties -->
-            <div class="col-6 md:col-4">
+            <div v-if="submission" class="col-6 md:col-4">
                 <!-- Submission status -->
                 <div>
                     <Title class="flex">Status</Title>
-                    <div v-if="submission" class="p-2">
+                    <div class="p-2">
                         <p v-if="submission.isPassed()">{{ t('views.submissions.passed') }}</p>
                         <div v-else>
                             <span>{{ t('views.submissions.failed') }}</span>
@@ -114,9 +123,23 @@ watch(
                 </div>
                 <!-- Submission Downloadable zip -->
                 <div>
-                    <Title v-if="showLogs.length > 0" class="flex">{{ t('views.submissions.file') }}</Title>
+                    <Title v-if="showLogsAndArtifacts.length > 0" class="flex">{{ t('views.submissions.file') }}</Title>
                     <Title v-else class="flex"> {{ t('views.submissions.files') }} </Title>
-                    <div></div>
+                    <div>
+                        <ul>
+                            <li v-if="submission.zip">
+                                <a :href="submission.zip" download>
+                                    {{ t('views.submissions.download_zip') }}
+                                </a>
+                            </li>
+                            <li v-else>
+                                {{ t('views.submissions.no_zip_available') }}
+                            </li>
+                            <li v-for="(item, index) in showLogsAndArtifacts" :key="index">
+                                <a :href="item" download> {{ t('views.submissions.download_log') }} {{ index + 1 }} </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <!-- Feedback section -->
