@@ -66,6 +66,10 @@ django_exit=0
 
 if [ "$frontend" = true ]; then
     echo "Running frontend tests..."
+    echo "Filling up database with test data"
+    docker exec backend sh -c "python manage.py flush --no-input; python manage.py migrate; python manage.py loaddata
+      notifications/fixtures/$data/*; python manage.py loaddata authentication/fixtures/$data/*; python manage.py
+      loaddata api/fixtures/$data/*;"
     echo "Running Cypress tests..."
     docker-compose -f test.yml up --exit-code-from cypress --abort-on-container-exit  cypress
     cypress_exit=$?
