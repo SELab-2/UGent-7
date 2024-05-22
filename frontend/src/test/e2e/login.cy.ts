@@ -17,7 +17,7 @@ describe('login', () => {
     });
     it('redirects to login page after logging out', () => {
         // intercept the retrieval of student info
-        cy.intercept('/api/students/*/').as('student')
+        cy.intercept('/api/students/*/').as('student');
         // log in as a test student
         cy.visit('/api/auth/test-user/student/');
         // visit dashboard
