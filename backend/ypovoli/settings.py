@@ -37,22 +37,25 @@ TEST_ADMIN_DATA = {
     "is_staff": True
 }
 TEST_STUDENT_DATA = {
-    "id": "1",
+    "id": "6",
     "username": "student",
     "email": "student@test",
     "first_name": "student",
     "last_name": "student",
 }
+TEST_PROFESSOR_DATA = {
+    "id": "1",
+    "username": "professor",
+    "email": "professor@test",
+    "first_name": "professor",
+    "last_name": "professor",
+}
 TEST_MULTI_DATA = {
-    "id": "2",
+    "id": "10",
     "username": "multi",
     "email": "multi@test",
     "first_name": "multi",
     "last_name": "multi",
-}
-TEST_STUDENT_ATTRIBUTES = {
-    **TEST_STUDENT_DATA,
-    "ugentStudentID": "1234"
 }
 
 # SECURITY WARNING: keep the secret key used in production secret!

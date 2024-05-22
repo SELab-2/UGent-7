@@ -75,7 +75,7 @@ def create_user(self, request, data) -> tuple[User, bool]:
 
     # if it has just been created, send the signal to user_created Signal(), to also activate it as a student
     if created:
-        user_created.send(sender=self, attributes={**data, **settings.TEST_STUDENT_ATTRIBUTES}, user=user)
+        user_created.send(sender=self, attributes={**data, "ugentStudentID": data.id}, user=user)
 
     # login the user
     login(request, user)
@@ -99,8 +99,16 @@ class TestUser(ViewSet):
         create_user(self, request, settings.TEST_STUDENT_DATA)
         return response
 
+    @action(detail=False, methods=['POST'], permission_classes=[IsDebug], url_path='professor')
+    def login_professor(self, request, *__) -> Response:
+        """This endpoint lets you log in as a professor"""
+        user, created = create_user(self, request, settings.TEST_PROFESSOR_DATA)
+        if created:
+            Teacher.create(user)
+
     @action(detail=False, methods=['POST'], permission_classes=[IsDebug], url_path='multi')
     def login_multi(self, request, *__) -> Response:
+        """This endpoint lets you log in as a user who's a student, an assistant and a professor at the same time"""
         user, created = create_user(self, request, settings.TEST_MULTI_DATA)
         if created:
             Assistant.create(user)
