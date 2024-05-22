@@ -12,8 +12,6 @@ describe('login', () => {
         cy.visit('/');
         // should not be redirected to login page
         cy.url().should('not.match', /^.*\/auth\/login$/);
-        // logout for cleaning up
-        cy.get('#logout').click();
     });
     it('redirects to login page after logging out', () => {
         // log in as a test student
