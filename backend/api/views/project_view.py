@@ -33,7 +33,7 @@ class ProjectViewSet(RetrieveModelMixin,
     serializer_class = ProjectSerializer
     permission_classes = [IsAdminUser | ProjectPermission]  # GroupPermission has exact the same logic as for a project
 
-    @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission | IsStudent], url_path='student-group')
+    @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission], url_path='student-group')
     def student_group(self, request: Request, **_) -> Response:
         """Returns the group of the student for the given project"""
 
