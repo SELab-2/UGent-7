@@ -16,16 +16,10 @@ describe('login', () => {
         cy.get('#logout').click();
     });
     it('redirects to login page after logging out', () => {
-        // intercept the retrieval of student info
-        cy.intercept('/api/students/*/').as('student');
         // log in as a test student
         cy.request('POST', '/api/auth/test-user/student/');
         // visit dashboard
         cy.visit('/');
-        // wait for requests for student info to end
-        cy.wait('@student');
-        cy.wait('@student');
-        cy.wait('@student');
         // logout
         cy.get('#logout').click();
         // should be on login page now
