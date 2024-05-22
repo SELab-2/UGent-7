@@ -23,7 +23,7 @@ describe('login', () => {
         // logout
         cy.get('#logout').click();
         // try to go to dashboard
-        cy.visit('/')
+        cy.visit('/');
         // should be on login page now
         cy.url().should('match', /^.*\/auth\/login$/);
     });
