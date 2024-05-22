@@ -303,7 +303,7 @@ export const structureChecks = [
         project: '123456',
         obligated_extensions: [],
         blocked_extensions: [],
-        name: '.',
+        path: '.',
     },
     {
         id: '2',
@@ -314,14 +314,14 @@ export const structureChecks = [
             },
         ],
         blocked_extensions: [],
-        name: 'folder1',
+        path: 'folder1',
     },
     {
         id: '3',
         project: '123456',
         obligated_extensions: [],
         blocked_extensions: [],
-        name: 'folder3',
+        path: 'folder3',
     },
     {
         id: '4',
@@ -332,7 +332,7 @@ export const structureChecks = [
             },
         ],
         blocked_extensions: [],
-        name: 'folder3/folder3-1',
+        path: 'folder3/folder3-1',
     },
 ];
 

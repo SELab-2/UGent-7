@@ -47,7 +47,7 @@ export function useSubmission(): SubmissionState {
             endpoint,
             formData,
             submission,
-            Submission.fromJSONCreate,
+            Submission.fromJSON,
             'multipart/form-data',
             selfprocessError,
         );

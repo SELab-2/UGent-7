@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Title from '@/components/layout/Title.vue';
 import Skeleton from 'primevue/skeleton';
+import Button from 'primevue/button';
 import { type Teacher } from '@/types/users/Teacher.ts';
 import { type Project } from '@/types/Project.ts';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
-import ProjectMeter from '@/components/projects/ProjectMeter.vue';
 import DownloadCSVButton from '@/components/projects/DownloadCSVButton.vue';
+import ProjectMeter from '@/components/submissions/ProjectMeter.vue';
+import { PrimeIcons } from 'primevue/api';
 
 /* Props */
 defineProps<{
@@ -16,9 +18,14 @@ defineProps<{
 
 <template>
     <template v-if="project !== null">
-        <Title class="mb-5">
-            {{ project.name }}
-        </Title>
+        <div class="flex align-items-center justify-content-between gap-3">
+            <Title class="mb-5">
+                {{ project.name }}
+            </Title>
+            <RouterLink :to="{ name: 'project-edit', params: { courseId: project.course.id, projectId: project.id } }">
+                <Button label="Bewerk project" :icon="PrimeIcons.PENCIL"> </Button>
+            </RouterLink>
+        </div>
     </template>
     <template v-else>
         <Skeleton class="mb-4" height="3rem" width="30rem" />

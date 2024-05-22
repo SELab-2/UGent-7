@@ -77,8 +77,8 @@ export const endpoints = {
         status: '/api/projects/{projectId}/submission_status/',
     },
     structureChecks: {
-        retrieve: '/api/structureChecks/{id}',
-        byProject: '/api/projects/{projectId}/structureChecks/',
+        retrieve: '/api/structure_checks/{id}',
+        byProject: '/api/projects/{projectId}/structure_checks/',
     },
     extraChecks: {
         retrieve: '/api/extra-checks/{id}/',

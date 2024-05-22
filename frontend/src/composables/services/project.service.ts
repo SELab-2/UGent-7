@@ -85,7 +85,6 @@ export function useProject(): ProjectState {
             max_score: projectData.max_score,
             score_visible: projectData.score_visible,
             group_size: projectData.group_size,
-            zip_structure: projectData.structure_file,
         };
 
         // Check if the number of groups should be included, only if it is greater than 0
@@ -118,7 +117,6 @@ export function useProject(): ProjectState {
                 max_score: projectData.max_score,
                 score_visible: projectData.score_visible,
                 group_size: projectData.group_size,
-                zip_structure: projectData.structure_file,
             },
             response,
             'multipart/form-data',

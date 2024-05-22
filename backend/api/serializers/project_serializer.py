@@ -1,14 +1,18 @@
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 from api.logic.parse_zip_files import parse_zip
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import Submission, ExtraCheckResult, StructureCheckResult, StateEnum
+from api.models.checks import ExtraCheck, StructureCheck
 from api.serializers.course_serializer import CourseSerializer
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
 from django.utils.translation import gettext
 from nh3 import clean
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
+from api.serializers.fields.expandable_hyperlinked_field import ExpandableHyperlinkedIdentityField
 
 
 class SubmissionStatusSerializer(serializers.Serializer):
@@ -30,8 +34,24 @@ class SubmissionStatusSerializer(serializers.Serializer):
 
         #  The total amount of groups with at least one submission should never exceed the total number of non empty groups
         # (the seeder does not account for this restriction)
-        if (groups_submitted > non_empty_groups):
+        if groups_submitted > non_empty_groups:
             non_empty_groups = groups_submitted
+
+        extra_checks_count = instance.extra_checks.count()
+
+        if extra_checks_count:
+            passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(
+                submission__group__project=instance,
+                submission__is_valid=True,
+                result=StateEnum.SUCCESS
+            ).values_list('submission__id', flat=True)
+
+            passed_extra_checks_group_ids = Submission.objects.filter(
+                id__in=passed_extra_checks_submission_ids
+            ).values_list('group_id', flat=True)
+
+            unique_groups = set(passed_extra_checks_group_ids)
+            extra_checks_passed = len(unique_groups)
 
         passed_structure_checks_submission_ids = StructureCheckResult.objects.filter(
             submission__group__project=instance,
@@ -46,22 +66,16 @@ class SubmissionStatusSerializer(serializers.Serializer):
         unique_groups = set(passed_structure_checks_group_ids)
         structure_checks_passed = len(unique_groups)
 
-        passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(
-            submission__group__project=instance,
-            submission__is_valid=True,
-            result=StateEnum.SUCCESS
-        ).values_list('submission__id', flat=True)
+        # If there are no extra checks, we can set extra_checks_passed equal to structure_checks_passed
+        if not extra_checks_count:
+            extra_checks_passed = structure_checks_passed
 
-        passed_extra_checks_group_ids = Submission.objects.filter(
-            id__in=passed_extra_checks_submission_ids
-        ).values_list('group_id', flat=True)
-
-        unique_groups = set(passed_extra_checks_group_ids)
-        extra_checks_passed = len(unique_groups)
+        # If the extra checks succeed, the structure checks also succeed
+        structure_checks_passed -= extra_checks_passed
 
         # The total number of passed extra checks combined with the number of passed structure checks
         # can never exceed the total number of submissions (the seeder does not account for this restriction)
-        if (structure_checks_passed + extra_checks_passed > groups_submitted):
+        if structure_checks_passed + extra_checks_passed > groups_submitted:
             extra_checks_passed = groups_submitted - structure_checks_passed
 
         return {
@@ -93,13 +107,11 @@ class ProjectSerializer(serializers.ModelSerializer):
     )
 
     structure_checks = serializers.HyperlinkedIdentityField(
-        view_name="project-structure-checks",
-        read_only=True
+        view_name="project-structure-checks"
     )
 
     extra_checks = serializers.HyperlinkedIdentityField(
-        view_name="project-extra-checks",
-        read_only=True
+        view_name="project-extra-checks"
     )
 
     groups = serializers.HyperlinkedIdentityField(
@@ -146,6 +158,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        """Create the project object and create groups for the project if specified"""
+
         # Pop the 'number_groups' field from validated_data
         number_groups = validated_data.pop('number_groups', None)
 
@@ -162,7 +176,6 @@ class ProjectSerializer(serializers.ModelSerializer):
                 group.students.add(student)
 
         elif number_groups:
-
             for _ in range(number_groups):
                 Group.objects.create(project=project)
 
@@ -172,10 +185,11 @@ class ProjectSerializer(serializers.ModelSerializer):
             group_size = project.group_size
 
             for _ in range(0, number_students, group_size):
-                group = Group.objects.create(project=project)
+                Group.objects.create(project=project)
 
         # If a zip_structure is provided, parse it to create the structure checks
         zip_structure: InMemoryUploadedFile | None = self.context['request'].FILES.get('zip_structure')
+
         if zip_structure:
             result = parse_zip(project, zip_structure)
 

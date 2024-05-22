@@ -5,17 +5,20 @@ import { get, getList, create, patch, deleteId, getPaginatedList } from '@/compo
 import { type Response } from '@/types/Response.ts';
 import { type CoursePaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
+import { type User } from '@/types/users/User.ts';
 
 interface CoursesState {
     pagination: Ref<CoursePaginatorResponse | null>;
     courses: Ref<Course[] | null>;
     course: Ref<Course | null>;
+
     getCourseByID: (id: string, selfprocessError?: boolean) => Promise<void>;
     getCourses: (selfprocessError?: boolean) => Promise<void>;
     searchCourses: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
     getCoursesByStudent: (studentId: string, selfprocessError?: boolean) => Promise<void>;
     getCoursesByTeacher: (teacherId: string, selfprocessError?: boolean) => Promise<void>;
     getCourseByAssistant: (assistantId: string, selfprocessError?: boolean) => Promise<void>;
+    getCoursesByUser: (user: User, selfprocessError?: boolean) => Promise<void>;
     createCourse: (courseData: Course, selfprocessError?: boolean) => Promise<void>;
     updateCourse: (courseData: Course, selfprocessError?: boolean) => Promise<void>;
     cloneCourse: (
@@ -77,6 +80,18 @@ export function useCourses(): CoursesState {
         await getList<Course>(endpoint, courses, Course.fromJSON, selfprocessError);
     }
 
+    async function getCoursesByUser(user: User, selfprocessError: boolean = true): Promise<void> {
+        if (user.isTeacher()) {
+            await getCoursesByTeacher(user.id, selfprocessError);
+        } else if (user.isAssistant()) {
+            await getCourseByAssistant(user.id, selfprocessError);
+        } else if (user.isStudent()) {
+            await getCoursesByStudent(user.id, selfprocessError);
+        } else {
+            courses.value = [];
+        }
+    }
+
     async function createCourse(courseData: Course, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.courses.index;
         await create<Course>(
@@ -107,6 +122,7 @@ export function useCourses(): CoursesState {
                 id: courseData.id,
                 name: courseData.name,
                 description: courseData.description,
+                excerpt: courseData.excerpt,
                 faculty: courseData.faculty?.id,
                 private_course: courseData.private_course,
             },
@@ -169,6 +185,7 @@ export function useCourses(): CoursesState {
         getCoursesByStudent,
         getCoursesByTeacher,
         getCourseByAssistant,
+        getCoursesByUser,
 
         createCourse,
         updateCourse,

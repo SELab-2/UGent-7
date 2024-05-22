@@ -1,11 +1,12 @@
 import { StructureCheck } from '@/types/StructureCheck.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId } from '@/composables/services/helpers.ts';
+import { get, getList, create, deleteId, put } from '@/composables/services/helpers.ts';
 
 interface StructureCheckState {
     structureChecks: Ref<StructureCheck[] | null>;
     structureCheck: Ref<StructureCheck | null>;
+  
     getStructureCheckByID: (id: string, selfprocessError?: boolean) => Promise<void>;
     getStructureCheckByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
     createStructureCheck: (
@@ -13,6 +14,7 @@ interface StructureCheckState {
         projectId: string,
         selfprocessError?: boolean,
     ) => Promise<void>;
+    setStructureChecks: (structureChecks: StructureCheck[], projectId: string, selfprocessError?: boolean) => Promise<void>;
     deleteStructureCheck: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
@@ -39,13 +41,18 @@ export function useStructureCheck(): StructureCheckState {
         await create<StructureCheck>(
             endpoint,
             {
-                name: structureCheckData.name,
+                path: structureCheckData.path,
             },
             structureCheck,
             StructureCheck.fromJSON,
             undefined,
             selfprocessError,
         );
+    }
+
+    async function setStructureChecks(structureChecks: StructureCheck[], projectId: string, selfprocessError: boolean = true): Promise<void> {
+        const endpoint = endpoints.structureChecks.byProject.replace('{projectId}', projectId);
+        await put(endpoint, structureChecks, undefined, selfprocessError);
     }
 
     async function deleteStructureCheck(id: string, selfprocessError: boolean = true): Promise<void> {
@@ -61,5 +68,6 @@ export function useStructureCheck(): StructureCheckState {
 
         createStructureCheck,
         deleteStructureCheck,
+        setStructureChecks,
     };
 }

@@ -1,31 +1,51 @@
 import moment from 'moment';
-import { Course } from './Course.ts';
+import { Course, type CourseJSON } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';
 import { type StructureCheck } from './StructureCheck.ts';
 import { type Submission } from './submission/Submission.ts';
-import { SubmissionStatus } from '@/types/SubmisionStatus.ts';
+import { SubmissionStatus, type SubmissionStatusJSON } from '@/types/SubmisionStatus.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export interface ProjectJSON {
+    id: string;
+    name: string;
+    description: string;
+    visible: boolean;
+    archived: boolean;
+    locked_groups: boolean;
+    start_date: string;
+    deadline: string;
+    max_score: number;
+    score_visible: boolean;
+    group_size: number;
+    course: CourseJSON;
+    status: SubmissionStatusJSON;
+    structure_checks: HyperlinkedRelation;
+    extra_checks: HyperlinkedRelation;
+    groups: HyperlinkedRelation;
+    submissions: HyperlinkedRelation;
+}
 
 export class Project {
     constructor(
-        public id: string,
-        public name: string,
-        public description: string,
-        public visible: boolean,
-        public archived: boolean,
-        public locked_groups: boolean,
-        public start_date: Date,
-        public deadline: Date,
-        public max_score: number,
-        public score_visible: boolean,
-        public group_size: number,
-        public course: Course,
-        public status: SubmissionStatus,
-        public structure_file: File | null = null,
-        public structureChecks: StructureCheck[] | null = null,
-        public extra_checks: ExtraCheck[] | null = null,
-        public groups: Group[] | null = null,
-        public submissions: Submission[] | null = null,
+        public id: string = '',
+        public name: string = '',
+        public description: string = '',
+        public visible: boolean = true,
+        public archived: boolean = false,
+        public locked_groups: boolean = false,
+        public start_date: Date = new Date(),
+        public deadline: Date = new Date(),
+        public max_score: number = 10,
+        public score_visible: boolean = true,
+        public group_size: number = 1,
+        public course: Course = new Course(),
+        public status: SubmissionStatus = new SubmissionStatus(),
+        public structure_checks: StructureCheck[] = [],
+        public extra_checks: ExtraCheck[] = [],
+        public groups: Group[] = [],
+        public submissions: Submission[] = [],
     ) {}
 
     /**
@@ -63,7 +83,7 @@ export class Project {
      * @returns The days left until the deadline of the project.
      */
     public getDaysLeft(): number {
-        return moment(this.deadline).diff(moment(), 'days');
+        return moment(this.deadline).startOf('day').diff(moment().startOf('day'), 'days');
     }
 
     /**
@@ -106,7 +126,7 @@ export class Project {
      *
      * @param project
      */
-    static fromJSON(project: Project): Project {
+    static fromJSON(project: ProjectJSON): Project {
         return new Project(
             project.id,
             project.name,

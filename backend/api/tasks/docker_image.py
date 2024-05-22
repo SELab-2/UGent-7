@@ -3,6 +3,7 @@ import docker.errors
 from api.logic.get_file_path import get_docker_image_tag
 from api.models.docker import DockerImage, StateEnum
 from celery import shared_task
+from notifications.signals import NotificationType, notification_create
 from ypovoli.settings import MEDIA_ROOT
 
 
@@ -12,6 +13,8 @@ def task_docker_image_build(docker_image: DockerImage):
     docker_image.state = StateEnum.BUILDING
     docker_image.save()
 
+    notification_type = NotificationType.DOCKER_IMAGE_BUILD_SUCCESS
+
     # Build the image
     try:
         client = docker.from_env()
@@ -20,10 +23,18 @@ def task_docker_image_build(docker_image: DockerImage):
         docker_image.state = StateEnum.READY
     except (docker.errors.APIError, docker.errors.BuildError, TypeError):
         docker_image.state = StateEnum.ERROR
-        # TODO: Sent notification
+        notification_type = NotificationType.DOCKER_IMAGE_BUILD_ERROR
+    finally:
+        # Update the state
+        docker_image.save()
 
-    # Update the state
-    docker_image.save()
+        # Send notification
+        notification_create.send(
+            sender=DockerImage,
+            type=notification_type,
+            queryset=[docker_image.owner],
+            arguments={"name": docker_image.name},
+        )
 
 
 @shared_task

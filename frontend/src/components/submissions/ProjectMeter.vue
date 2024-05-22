@@ -23,31 +23,31 @@ const meterItems = computed(() => {
 
     return [
         {
-            value: (extraChecksPassed / groups) * 100,
-            color: '#749b68',
-            label: t('components.card.extraTestsSucceed'),
-            icon: 'pi pi-check',
+            value: (submissionsFailed / groups) * 100,
+            color: '#F37142',
+            label: t('components.card.testsFail'),
+            icon: 'pi pi-times',
         },
         {
-            value: (structureChecksPassed / groups) * 100,
-            color: '#fa9746',
+            value: ((structureChecksPassed - extraChecksPassed) / groups) * 100,
+            color: '#FFB84F',
             label: t('components.card.structureTestsSucceed'),
             icon: 'pi pi-exclamation-circle',
         },
         {
-            value: (submissionsFailed / groups) * 100,
-            color: '#FF5445',
-            label: t('components.card.testsFail'),
-            icon: 'pi pi-times',
+            value: (extraChecksPassed / groups) * 100,
+            color: '#76DD78',
+            label: t('components.card.extraTestsSucceed'),
+            icon: 'pi pi-check',
         },
     ];
 });
 </script>
 
 <template>
-    <template v-if="project !== null && project.status !== null">
+    <template v-if="project !== null">
         <template v-if="project.status.groups_submitted > 0">
-            <MeterGroup :value="meterItems" labelOrientation="vertical">
+            <MeterGroup :value="meterItems" labelOrientation="horizontal">
                 <template #start>
                     <div class="flex justify-between mt-2 relative">
                         <span>

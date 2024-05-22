@@ -1,14 +1,23 @@
-import { Project } from './Project.ts';
+import { Project, type ProjectJSON } from './Project.ts';
 import { type Student } from './users/Student.ts';
 import { type Submission } from './submission/Submission.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export interface GroupJSON {
+    id: string;
+    score: number;
+    project: ProjectJSON;
+    students: HyperlinkedRelation;
+    submissions: HyperlinkedRelation;
+}
 
 export class Group {
     constructor(
-        public id: string,
+        public id: string = '',
         public score: number = -1,
-        public project: Project,
-        public students: Student[] | null = null,
-        public submissions: Submission[] | null = null,
+        public project: Project = new Project(),
+        public students: Student[] = [],
+        public submissions: Submission[] = [],
     ) {}
 
     /**
@@ -40,16 +49,7 @@ export class Group {
      *
      * @param group
      */
-    static fromJSON(group: Group): Group {
+    static fromJSON(group: GroupJSON): Group {
         return new Group(group.id, group.score, Project.fromJSON(group.project));
-    }
-
-    /**
-     * Convert a group object to a group instance.
-     *
-     * @param group
-     */
-    static fromJSONFullObject(group: Group): Group {
-        return new Group(group.id, group.score, group.project, group.students, group.submissions);
     }
 }

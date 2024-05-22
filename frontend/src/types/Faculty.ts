@@ -1,7 +1,12 @@
+export interface FacultyJSON {
+    id: string;
+    name: string;
+}
+
 export class Faculty {
     constructor(
-        public id: string,
-        public name: string,
+        public id: string = '',
+        public name: string = '',
     ) {}
 
     /**
@@ -9,7 +14,7 @@ export class Faculty {
      *
      * @param faculty
      */
-    static fromJSON(faculty: Faculty): Faculty {
+    static fromJSON(faculty: FacultyJSON): Faculty {
         return new Faculty(faculty.id, faculty.name);
     }
 }

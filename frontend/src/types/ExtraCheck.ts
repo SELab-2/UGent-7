@@ -1,14 +1,27 @@
-import { type DockerImage } from './DockerImage';
+import { DockerImage } from './DockerImage';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export interface ExtraCheckJSON {
+    id: string;
+    name: string;
+    file: string;
+    time_limit: number;
+    memory_limit: number;
+    show_log: boolean;
+    show_artifact: boolean;
+    project: HyperlinkedRelation;
+    docker_image: HyperlinkedRelation;
+}
 
 export class ExtraCheck {
     constructor(
-        public id: string,
-        public name: string,
-        public docker_image: DockerImage | null,
-        public file: File | null,
-        public time_limit: number,
-        public memory_limit: number,
-        public show_log: boolean,
+        public id: string = '',
+        public name: string = '',
+        public file: File | string = '',
+        public time_limit: number = 30,
+        public memory_limit: number = 128,
+        public show_log: boolean = true,
+        public docker_image: DockerImage = new DockerImage(),
     ) {}
 
     /**
@@ -16,11 +29,10 @@ export class ExtraCheck {
      *
      * @param extraCheck
      */
-    static fromJSON(extraCheck: ExtraCheck): ExtraCheck {
+    static fromJSON(extraCheck: ExtraCheckJSON): ExtraCheck {
         return new ExtraCheck(
             extraCheck.id,
             extraCheck.name,
-            extraCheck.docker_image,
             extraCheck.file,
             extraCheck.time_limit,
             extraCheck.memory_limit,

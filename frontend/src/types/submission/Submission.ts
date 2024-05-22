@@ -1,15 +1,26 @@
-import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
-import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+import { ExtraCheckResult, type ExtraCheckResultJSON } from '@/types/submission/ExtraCheckResult.ts';
+import { StructureCheckResult, type StructureCheckResultJSON } from '@/types/submission/StructureCheckResult.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export interface SubmissionJSON {
+    id: string;
+    submission_number: number;
+    submission_time: string;
+    is_valid: boolean;
+    zip: HyperlinkedRelation;
+    group: HyperlinkedRelation;
+    results: Array<ExtraCheckResultJSON | StructureCheckResultJSON>;
+}
 
 export class Submission {
     constructor(
-        public id: string,
-        public submission_number: number,
-        public submission_time: Date,
-        public zip: File,
+        public id: string = '',
+        public submission_number: number = 0,
+        public submission_time: Date = new Date(),
+        public is_valid: boolean = false,
         public extraCheckResults: ExtraCheckResult[] = [],
         public structureCheckResults: StructureCheckResult[] = [],
-        public is_valid: boolean,
+        public zip: File | null = null,
     ) {}
 
     /**
@@ -49,37 +60,27 @@ export class Submission {
      *
      * @param submission
      */
-    static fromJSON(submission: ResponseSubmission): Submission {
+    static fromJSON(submission: SubmissionJSON): Submission {
         const extraCheckResults = submission.results
-            .filter((result: any) => result.resourcetype === 'ExtraCheckResult')
-            .map((result: ExtraCheckResult) => ExtraCheckResult.fromJSON(result));
+            .filter(
+                (result: ExtraCheckResultJSON | StructureCheckResultJSON) => result.resourcetype === 'ExtraCheckResult',
+            )
+            .map((result: any) => ExtraCheckResult.fromJSON(result as ExtraCheckResultJSON));
 
-        const structureCheckResult = submission.results
-            .filter((result: any) => result.resourcetype === 'StructureCheckResult')
-            .map((result: StructureCheckResult) => StructureCheckResult.fromJSON(result));
+        const structureCheckResults = submission.results
+            .filter(
+                (result: ExtraCheckResultJSON | StructureCheckResultJSON) =>
+                    result.resourcetype === 'StructureCheckResult',
+            )
+            .map((result: any) => StructureCheckResult.fromJSON(result as StructureCheckResultJSON));
+
         return new Submission(
             submission.id,
             submission.submission_number,
             new Date(submission.submission_time),
-            submission.zip,
-            extraCheckResults,
-            structureCheckResult,
             submission.is_valid,
+            extraCheckResults,
+            structureCheckResults,
         );
     }
-
-    static fromJSONCreate(respons: { message: string; submission: ResponseSubmission }): Submission {
-        return Submission.fromJSON(respons.submission);
-    }
-}
-
-class ResponseSubmission {
-    constructor(
-        public id: string,
-        public submission_number: number,
-        public submission_time: Date,
-        public zip: File,
-        public results: any[],
-        public is_valid: boolean,
-    ) {}
 }

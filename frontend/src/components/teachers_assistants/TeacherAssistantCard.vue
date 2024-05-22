@@ -7,6 +7,7 @@ import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
+import { PrimeIcons } from 'primevue/api';
 
 /* Component props */
 const props = defineProps<{ userValue: User; course: Course; detail?: boolean }>();
@@ -20,7 +21,9 @@ const { user } = storeToRefs(useAuthStore());
     <Card class="course-card">
         <template #title>
             <div class="flex justify-content-between">
-                <h2 class="text-primary mt-2 mb-0 text-xl">{{ props.userValue.getFullName() }}</h2>
+                <h2 class="text-primary mt-2 mb-0 text-xl">
+                    <span :class="PrimeIcons.USER" class="mr-2" /> {{ props.userValue.getFullName() }}
+                </h2>
 
                 <!-- Display the delete button on a detail card, only if the user is not the last teacher of the course -->
                 <LeaveCourseButton

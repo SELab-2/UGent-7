@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ChooseGroupCard from '@/components/projects/ChooseGroupCard.vue';
-import JoinedGroupCard from '@/components/projects/JoinedGroupCard.vue';
-import SubmissionCard from '@/components/projects/SubmissionCard.vue';
+import ChooseGroupCard from '@/components/projects/groups/ChooseGroupCard.vue';
+import JoinedGroupCard from '@/components/projects/groups/JoinedGroupCard.vue';
+import SubmissionCard from '@/components/submissions/SubmissionCard.vue';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
 import Title from '@/components/layout/Title.vue';
 import Skeleton from 'primevue/skeleton';

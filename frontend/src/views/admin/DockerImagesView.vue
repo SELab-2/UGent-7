@@ -53,8 +53,8 @@ const selectedItems = ref<DockerImage[] | null>(null);
 
 const columns = ref([
     { field: 'id', header: 'admin.id' },
-    { field: 'name', header: 'admin.docker_images.name' },
-    { field: 'owner', header: 'admin.docker_images.owner' },
+    { field: 'name', header: 'admin.dockerImages.name' },
+    { field: 'owner', header: 'admin.dockerImages.owner' },
 ]);
 const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
@@ -154,7 +154,7 @@ const onSelect = (selected: any[] | null): void => {
 <template>
     <AdminLayout>
         <Title>
-            <div class="gap-3 mb-3">{{ t('admin.docker_images.title') }}</div>
+            <div class="gap-3 mb-3">{{ t('admin.dockerImages.title') }}</div>
         </Title>
         <Body class="w-full">
             <SelectButton
@@ -209,7 +209,7 @@ const onSelect = (selected: any[] | null): void => {
                     <Column
                         key="public"
                         field="public"
-                        :header="t('admin.docker_images.public')"
+                        :header="t('admin.dockerImages.public')"
                         :header-style="{ width: '10%' }"
                         class="p-col"
                     >
@@ -234,10 +234,10 @@ const onSelect = (selected: any[] | null): void => {
                 <InputText
                     class="mb-3 gap-3"
                     v-model:model-value="addItem.name"
-                    :placeholder="t('admin.docker_images.name_input')"
+                    :placeholder="t('admin.dockerImages.nameInput')"
                 />
                 <div class="flex align-items-center mb-3 gap-3">
-                    <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
+                    <label class="font-semibold w-12rem">{{ t('admin.dockerImages.public') }}</label>
                     <InputSwitch v-model="addItem.public" />
                 </div>
                 <FileUpload

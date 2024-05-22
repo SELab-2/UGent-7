@@ -1,134 +1,94 @@
 <script setup lang="ts">
-import Calendar from 'primevue/calendar';
 import BaseLayout from '@/components/layout/base/BaseLayout.vue';
-import FileUpload from 'primevue/fileupload';
 import Title from '@/components/layout/Title.vue';
-import ErrorMessage from '@/components/forms/ErrorMessage.vue';
-import InputText from 'primevue/inputtext';
-import Editor from '@/components/forms/Editor.vue';
-import Button from 'primevue/button';
-import InputNumber from 'primevue/inputnumber';
-import InputSwitch from 'primevue/inputswitch';
-import ExtraChecksUpload from '@/components/projects/ExtraChecksUpload.vue';
-import { SubmissionStatus } from '@/types/SubmisionStatus';
-import { reactive, computed, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { Project } from '@/types/Project';
-import { useProject } from '@/composables/services/project.service';
-import { required, helpers } from '@vuelidate/validators';
-import { useVuelidate } from '@vuelidate/core';
 import { useCourses } from '@/composables/services/course.service';
+import ProjectForm from '@/components/projects/ProjectForm.vue';
+import { type Project } from '@/types/Project.ts';
+import { useProject } from '@/composables/services/project.service.ts';
+import { processError } from '@/composables/services/helpers.ts';
+import { useStructureCheck } from '@/composables/services/structure_check.service.ts';
+import { useMessagesStore } from '@/store/messages.store.ts';
+import { useDockerImages } from '@/composables/services/docker.service.ts';
+import { type DockerImage } from '@/types/DockerImage.ts';
+import { useExtraCheck } from '@/composables/services/extra_checks.service.ts';
+import Loading from '@/components/Loading.vue';
+import { watchImmediate } from '@vueuse/core';
 
 /* Composable injections */
 const { t } = useI18n();
-const { push } = useRouter();
 const { params } = useRoute();
 
 /* Service injection */
-const { project, createProject } = useProject();
+const { push } = useRouter();
+const { addErrorMessage } = useMessagesStore();
 const { course, getCourseByID } = useCourses();
+const { project, createProject } = useProject();
+const { setStructureChecks } = useStructureCheck();
+const { setExtraChecks } = useExtraCheck();
+const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
 
 /* State */
-const createExtraChecksBackend = ref<boolean>(false);
-const projectId = ref<string>('');
-
-/* Form content */
-const form = reactive({
-    name: '',
-    description: '',
-    startDate: new Date(),
-    deadline: new Date(),
-    groupSize: 1,
-    numberOfGroups: null,
-    maxScore: 10,
-    visibility: true,
-    scoreVisibility: false,
-    submissionStructure: null,
-});
-
-// Define validation rules for each form field
-const rules = computed(() => {
-    return {
-        name: { required: helpers.withMessage(t('validations.required'), required) },
-        startDate: { required: helpers.withMessage(t('validations.required'), required) },
-        deadline: {
-            required: helpers.withMessage(t('validations.required'), required),
-            minDate: helpers.withMessage(t('validations.deadline'), (value: Date) => value > form.startDate),
-        },
-        groupSize: { required: helpers.withMessage(t('validations.required'), required) },
-        maxScore: { required: helpers.withMessage(t('validations.required'), required) },
-    };
-});
-
-// Function to handle the file upload of a zip file containing the submission structure
-const onZipStructureUpload = (event: any): void => {
-    form.submissionStructure = event.files[0];
-};
-
-// Vuelidate validation
-const v$ = useVuelidate(rules, form);
-
-// Validate the create project form
-const validateForm = (): boolean => {
-    v$.value.name.$touch();
-    v$.value.startDate.$touch();
-    v$.value.deadline.$touch();
-    v$.value.groupSize.$touch();
-    v$.value.maxScore.$touch();
-    return (
-        !v$.value.name.$invalid &&
-        !v$.value.startDate.$invalid &&
-        !v$.value.deadline.$invalid &&
-        !v$.value.groupSize.$invalid &&
-        !v$.value.maxScore.$invalid
-    );
-};
+const loading = ref(true);
 
 /**
- * Function to submit the project form.
+ * Save the project.
+ *
+ * @param newProject
+ * @param numberOfGroups
  */
-async function submitProject(): Promise<void> {
-    // Validate the form
-    const validated = validateForm();
+async function saveProject(newProject: Project, numberOfGroups: number): Promise<void> {
+    try {
+        if (course.value !== null) {
+            await createProject(newProject, course.value.id, numberOfGroups);
 
-    // Get the course object from the course ID
-    await getCourseByID(params.courseId as string);
+            if (project.value !== null) {
+                await setStructureChecks(newProject.structure_checks ?? [], project.value.id);
+                await setExtraChecks(newProject.extra_checks ?? [], project.value.id);
+                await push({
+                    name: 'course-project',
+                    params: { courseId: course.value.id, projectId: project.value.id },
+                });
+            }
 
-    // Only submit the form if the validation was successful
-    if (validated && course.value !== null) {
-        // Pass the project data to the service
-        await createProject(
-            new Project(
-                '', // ID not needed for creation, will be generated by the backend
-                form.name,
-                form.description,
-                form.visibility,
-                false, // Default not archived
-                false, // Default the groups are not locked
-                form.startDate,
-                form.deadline,
-                form.maxScore,
-                form.scoreVisibility,
-                form.groupSize,
-                course.value,
-                new SubmissionStatus(0, 0, 0), // Default submission status
-                form.submissionStructure,
-            ),
-            params.courseId as string,
-            form.numberOfGroups ?? 0,
-        );
-
-        // Make sure the extra checks are created in the backend
-        if (project.value !== null) {
-            projectId.value = project.value.id;
-            createExtraChecksBackend.value = true;
+            addErrorMessage(t('views.projects.create.error'), t('views.projects.create.error_description'));
         }
-
-        // Redirect to the dashboard overview
-        await push({ name: 'dashboard' });
+    } catch (error: any) {
+        processError(error);
     }
 }
+
+/**
+ * Save the docker image.
+ *
+ * @param dockerImage
+ * @param file
+ */
+async function saveDockerImage(dockerImage: DockerImage, file: File): Promise<void> {
+    try {
+        await createDockerImage(dockerImage, file);
+        await getDockerImages();
+    } catch (error: any) {
+        processError(error);
+    }
+}
+
+/* Load course data */
+watchImmediate(
+    () => params.courseId.toString(),
+    async (courseId: string) => {
+        loading.value = true;
+        try {
+            await getCourseByID(courseId);
+            await getDockerImages();
+        } catch (error: any) {
+            processError(error);
+        }
+        loading.value = false;
+    },
+);
 </script>
 
 <template>
@@ -137,150 +97,23 @@ async function submitProject(): Promise<void> {
         <Title class="mb-6">
             {{ t('views.projects.create') }}
         </Title>
-
-        <!-- Project form -->
-        <form @submit.prevent="submitProject">
-            <div class="grid">
-                <div class="col-12 lg:col-6">
-                    <div class="grid formgrid">
-                        <!-- Project name -->
-                        <div class="field col-12">
-                            <label for="projectName">
-                                {{ t('views.projects.name') }}
-                            </label>
-                            <InputText id="projectName" class="w-full" v-model="form.name" />
-                            <ErrorMessage :field="v$.name" />
-                        </div>
-                    </div>
-
-                    <div class="grid">
-                        <!-- Project description -->
-                        <div class="field col">
-                            <label for="projectDescription">
-                                {{ t('views.projects.description') }}
-                            </label>
-                            <Editor id="projectDescription" class="w-full" v-model="form.description" />
-                        </div>
-                    </div>
-
-                    <div class="grid">
-                        <!-- Start date of the project -->
-                        <div class="field col">
-                            <label for="projectStartDate">{{ t('views.projects.start_date') }}</label>
-                            <Calendar
-                                id="projectStartDate"
-                                class="w-full"
-                                v-model="form.startDate"
-                                dateFormat="dd-mm-yy"
-                                :min-date="new Date()"
-                                showIcon
-                            />
-                            <ErrorMessage :field="v$.startDate" />
-                        </div>
-
-                        <!-- Deadline of the project -->
-                        <div class="field col">
-                            <label for="projectDeadline">{{ t('views.projects.deadline') }}</label>
-                            <Calendar
-                                id="projectDeadline"
-                                class="w-full"
-                                v-model="form.deadline"
-                                dateFormat="dd-mm-yy"
-                                :min-date="form.startDate"
-                                showTime
-                                hourFormat="24"
-                                showIcon
-                            />
-                            <ErrorMessage :field="v$.deadline" />
-                        </div>
-                    </div>
-
-                    <div class="grid align-items-end">
-                        <!-- Group size for the project -->
-                        <div class="field col">
-                            <label for="groupSize">
-                                {{ t('views.projects.group_size') }}
-                            </label>
-                            <InputNumber id="groupSize" class="w-full" v-model="form.groupSize" :min="1" />
-                            <ErrorMessage :field="v$.groupSize" />
-                        </div>
-
-                        <div class="field col">
-                            <label for="numberOfGroups">
-                                {{ t('views.projects.number_of_groups') }}
-                            </label>
-                            <InputNumber id="numberOfGroups" class="w-full" v-model="form.numberOfGroups" :min="1" />
-                        </div>
-                    </div>
-
-                    <div class="grid">
-                        <!-- Max score for the project -->
-                        <div class="field col-6">
-                            <label for="maxScore">{{ t('views.projects.max_score') }}</label>
-                            <InputNumber id="maxScore" class="w-full" v-model="form.maxScore" :min="1" />
-                            <ErrorMessage :field="v$.maxScore" />
-                        </div>
-                    </div>
-
-                    <!-- Visibility of the project -->
-                    <div class="grid">
-                        <div class="flex align-items-center field-checkbox col-12">
-                            <InputSwitch id="visibility" v-model="form.visibility" />
-                            <label for="visibility">{{ t('views.projects.visibility') }}</label>
-                        </div>
-                    </div>
-
-                    <!-- Score visibility of the project -->
-                    <div class="grid">
-                        <div class="flex align-items-center field-checkbox col-12">
-                            <InputSwitch id="scoreVisibility" v-model="form.scoreVisibility" />
-                            <label for="scoreVisibility">{{ t('views.projects.scoreVisibility') }}</label>
-                        </div>
-                    </div>
-
-                    <!-- Submit button -->
-                    <Button
-                        :label="t('views.projects.create')"
-                        type="submit"
-                        icon="pi pi-check"
-                        iconPos="right"
-                        rounded
+        <template v-if="!loading">
+            <div class="fadein">
+                <!-- Project form -->
+                <template v-if="dockerImages !== null && course !== null">
+                    <ProjectForm
+                        :course="course"
+                        :docker-images="dockerImages"
+                        @update:project="(project, numberOfGroups) => saveProject(project, numberOfGroups)"
+                        @create:docker-image="saveDockerImage"
                     />
-                </div>
-
-                <div class="col-12 lg:col-6 checks">
-                    <!-- Extra checks upload -->
-                    <div class="field col-8">
-                        <label for="extraChecks" class="mr-4">{{ t('views.projects.extraChecks.title') }}</label>
-                        <ExtraChecksUpload
-                            id="extraChecks"
-                            :create-checks-backend="createExtraChecksBackend"
-                            :project-id="projectId"
-                        />
-                    </div>
-
-                    <!-- Upload field for a zip file that contains the submission structure -->
-                    <div class="field col">
-                        <label for="submissionStructure">
-                            {{ t('views.projects.submissionStructure') }}
-                        </label>
-                        <FileUpload
-                            id="submissionStructure"
-                            mode="basic"
-                            accept=".zip"
-                            :multiple="false"
-                            @select="onZipStructureUpload"
-                        />
-                    </div>
-                </div>
+                </template>
             </div>
-        </form>
+        </template>
+        <template v-else>
+            <Loading height="70vh" />
+        </template>
     </BaseLayout>
 </template>
 
-<style scoped>
-.checks .field.col > * {
-    display: block;
-}
-</style>
-@/types/Project
+<style scoped></style>

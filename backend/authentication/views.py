@@ -1,3 +1,5 @@
+from django.http import HttpResponseRedirect
+
 from authentication.cas.client import client
 from authentication.permissions import IsDebug
 from authentication.serializers import CASTokenObtainSerializer, UserSerializer
@@ -21,17 +23,17 @@ class CASViewSet(ViewSet):
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET'], permission_classes=[AllowAny])
-    def login(self, request: Request) -> Response:
+    def login(self, request: Request) -> HttpResponseRedirect:
         """Attempt to log in. Redirect to our single CAS endpoint."""
         should_echo = request.query_params.get('echo', False)
 
-        if should_echo == "1" and settings.DEBUG:
+        if should_echo == "1":
             client._service_url = settings.CAS_DEBUG_RESPONSE
 
         return redirect(client.get_login_url())
 
     @action(detail=False, methods=['POST'])
-    def logout(self, request: Request) -> Response:
+    def logout(self, request) -> Response:
         """Log out the current user."""
         logout(request)
 
