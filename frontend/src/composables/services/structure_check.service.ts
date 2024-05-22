@@ -17,7 +17,7 @@ interface StructureCheckState {
     setStructureChecks: (
         structureChecks: StructureCheck[],
         projectId: string,
-        selfprocessError?: boolean
+        selfprocessError?: boolean,
     ) => Promise<void>;
     deleteStructureCheck: (id: string, selfprocessError?: boolean) => Promise<void>;
 }

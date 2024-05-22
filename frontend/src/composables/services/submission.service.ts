@@ -43,9 +43,7 @@ export function useSubmission(): SubmissionState {
         uploadedFiles.forEach((file: File) => {
             formData.append('files', file); // Gebruik 'files' in plaats van 'files[]'
         });
-        await create(
-            endpoint, formData, submission, Submission.fromJSON, 'multipart/form-data', selfprocessError,
-        );
+        await create(endpoint, formData, submission, Submission.fromJSON, 'multipart/form-data', selfprocessError);
     }
 
     async function deleteSubmission(id: string, selfprocessError: boolean = true): Promise<void> {
