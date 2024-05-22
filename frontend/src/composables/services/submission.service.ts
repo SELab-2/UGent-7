@@ -44,12 +44,7 @@ export function useSubmission(): SubmissionState {
             formData.append('files', file); // Gebruik 'files' in plaats van 'files[]'
         });
         await create(
-            endpoint,
-            formData,
-            submission,
-            Submission.fromJSON,
-            'multipart/form-data',
-            selfprocessError,
+            endpoint, formData, submission, Submission.fromJSON, 'multipart/form-data', selfprocessError,
         );
     }
 

@@ -110,12 +110,22 @@ export async function put<T>(
     endpoint: string,
     data: T | string,
     contentType: string = 'application/json',
+    selfprocessError: boolean = true,
 ): Promise<void> {
-    await client.put(endpoint, data, {
-        headers: {
-            'Content-Type': contentType,
-        },
-    });
+    try {
+        await client.put(endpoint, data, {
+            headers: {
+                'Content-Type': contentType,
+            },
+        });
+    } catch (error: any) {
+        if (selfprocessError) {
+            processError(error);
+            console.error(error); // Log the error for debugging
+        } else {
+            throw error; // Re-throw the error to the caller
+        }
+    }
 }
 
 /**

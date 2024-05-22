@@ -46,7 +46,11 @@ export function useExtraCheck(): ExtraCheckState {
         );
     }
 
-    async function setExtraChecks(extraChecks: ExtraCheck[], projectId: string, selfprocessError: boolean = true): Promise<void> {
+    async function setExtraChecks(
+        extraChecks: ExtraCheck[],
+        projectId: string,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         for (const extraCheck of extraChecks) {
             if (extraCheck.id === '') {
                 await addExtraCheck(extraCheck, projectId, selfprocessError);

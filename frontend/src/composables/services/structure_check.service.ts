@@ -6,7 +6,7 @@ import { get, getList, create, deleteId, put } from '@/composables/services/help
 interface StructureCheckState {
     structureChecks: Ref<StructureCheck[] | null>;
     structureCheck: Ref<StructureCheck | null>;
-  
+
     getStructureCheckByID: (id: string, selfprocessError?: boolean) => Promise<void>;
     getStructureCheckByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
     createStructureCheck: (
@@ -14,7 +14,11 @@ interface StructureCheckState {
         projectId: string,
         selfprocessError?: boolean,
     ) => Promise<void>;
-    setStructureChecks: (structureChecks: StructureCheck[], projectId: string, selfprocessError?: boolean) => Promise<void>;
+    setStructureChecks: (
+        structureChecks: StructureCheck[],
+        projectId: string,
+        selfprocessError?: boolean
+    ) => Promise<void>;
     deleteStructureCheck: (id: string, selfprocessError?: boolean) => Promise<void>;
 }
 
@@ -50,7 +54,11 @@ export function useStructureCheck(): StructureCheckState {
         );
     }
 
-    async function setStructureChecks(structureChecks: StructureCheck[], projectId: string, selfprocessError: boolean = true): Promise<void> {
+    async function setStructureChecks(
+        structureChecks: StructureCheck[],
+        projectId: string,
+        selfprocessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.structureChecks.byProject.replace('{projectId}', projectId);
         await put(endpoint, structureChecks, undefined, selfprocessError);
     }
