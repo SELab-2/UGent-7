@@ -211,6 +211,21 @@
             "student": "Student",
             "assistant": "Assistent",
             "teacher": "Professor"
+        },
+        "article": {
+            "admin": "De admin",
+            "assistant": "De assistent",
+            "course": "Het vak",
+            "docker": "De docker image",
+            "extraCheck": "De extra check",
+            "faculty": "De faculteit",
+            "group": "De groep",
+            "project": "Het project",
+            "structureCheck": "The structuurcheck",
+            "student": "De student",
+            "submission": "De indiening",
+            "teacher": "De professor",
+            "user": "De gebruiker"
         }
     },
     "helpers": {
@@ -221,6 +236,7 @@
             "success": "Succes",
             "error": "Fout",
             "unknown": "Er is een onbekende fout opgetreden.",
+            "create": "{type} werd succesvol aangemaakt.",
             "courses": {
                 "enrollment": {
                     "success": "Je bent succesvol ingeschreven voor het vak '{0}'.",
@@ -239,6 +255,22 @@
                         "success": "{0} werd succesvol verwijderd uit het vak.",
                         "error": "Er is een fout opgetreden tijdens het verwijderen van {0} uit het vak."
                     }
+                },
+                "create": {
+                    "success": "Het vak '{0}' werd succesvol aangemaakt.",
+                    "error": "Er is een fout opgetreden tijdens het aanmaken van het vak '{0}'."
+                }
+            },
+            "projects": {
+                "create": {
+                    "success": "Het project '{0}' werd succesvol aangemaakt.",
+                    "error": "Er is een fout opgetreden tijdens het aanmaken van het project '{0}'."
+                }
+            },
+            "submissions": {
+                "create": {
+                    "success": "De indiening is succesvol ingediend.",
+                    "error": "Er is een fout opgetreden tijdens het indienen van de indiening."
                 }
             },
             "login": {

@@ -2,7 +2,7 @@ import { Student } from '@/types/users/Student.ts';
 import { Response } from '@/types/Response';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId, deleteIdWithData } from '@/composables/services/helpers.ts';
+import { get, getList, create, deleteId, deleteIdWithData, createToast } from '@/composables/services/helpers.ts';
 
 interface StudentsState {
     students: Ref<Student[] | null>;
@@ -69,7 +69,8 @@ export function useStudents(): StudentsState {
     async function createStudent(studentData: Student): Promise<void> {
         const endpoint = endpoints.students.index;
 
-        await create<Student>(
+        await createToast<Student>(
+            'student',
             endpoint,
             {
                 user: studentData.id,
