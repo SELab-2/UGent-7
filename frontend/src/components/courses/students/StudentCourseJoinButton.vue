@@ -66,6 +66,7 @@ async function leaveCourse(): Promise<void> {
 
 <template>
     <Button
+        id="courseEnroll"
         class="text-sm p-0"
         :label="t('views.courses.enroll')"
         icon-pos="right"

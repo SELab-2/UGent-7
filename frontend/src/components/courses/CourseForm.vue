@@ -122,7 +122,7 @@ watchEffect(() => {
         </div>
 
         <!-- Submit button -->
-        <Button :label="t('views.courses.save')" type="submit" icon="pi pi-check" iconPos="right" rounded />
+        <Button id="courseSave" :label="t('views.courses.save')" type="submit" icon="pi pi-check" iconPos="right" rounded />
     </form>
 </template>
 

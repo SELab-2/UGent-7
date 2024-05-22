@@ -105,6 +105,7 @@ class TestUser(ViewSet):
         user, created = create_user(self, request, settings.TEST_PROFESSOR_DATA)
         if created:
             Teacher.create(user)
+        return response
 
     @action(detail=False, methods=['POST'], permission_classes=[IsDebug], url_path='multi')
     def login_multi(self, request, *__) -> Response:

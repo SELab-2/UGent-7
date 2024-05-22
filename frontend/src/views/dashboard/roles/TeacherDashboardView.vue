@@ -59,7 +59,11 @@ watchImmediate(
                 <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
                 <!-- Create project button -->
-                <ProjectCreateButton :courses="filteredCourses" :label="t('components.button.createProject')" />
+                <ProjectCreateButton
+                    id="projectCreate"
+                    :courses="filteredCourses"
+                    :label="t('components.button.createProject')"
+                />
             </div>
             <!-- Project list body -->
             <ProjectList :projects="projects">
@@ -79,7 +83,7 @@ watchImmediate(
                             {{ t('components.list.noCourses.teacher') }}
                         </p>
 
-                        <ProjectCreateButton :courses="filteredCourses" :label="t('components.button.createProject')" />
+                        <ProjectCreateButton id="projectCreate" :courses="filteredCourses" :label="t('components.button.createProject')" />
                     </template>
                 </template>
             </ProjectList>
@@ -95,7 +99,7 @@ watchImmediate(
                     <YearSelector :years="allYears" v-model="selectedYear" />
 
                     <!-- Create course button -->
-                    <RouterLink :to="{ name: 'course-create' }">
+                    <RouterLink id="courseCreate" :to="{ name: 'course-create' }">
                         <Button
                             :icon="PrimeIcons.PLUS"
                             icon-pos="right"
@@ -109,7 +113,7 @@ watchImmediate(
             <CourseList :courses="filteredCourses">
                 <template #empty>
                     <p>{{ t('components.list.noCourses.teacher') }}</p>
-                    <RouterLink :to="{ name: 'course-create' }">
+                    <RouterLink id="courseCreate" :to="{ name: 'course-create' }">
                         <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
                     </RouterLink>
                 </template>

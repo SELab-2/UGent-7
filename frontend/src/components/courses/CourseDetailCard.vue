@@ -19,7 +19,7 @@ const { getImport } = useGlob(import.meta.glob('@/assets/img/faculties/*.png', {
 
 <template>
     <RouterLink :to="{ name: 'course', params: { courseId: course.id } }">
-        <Card class="border-round course-card max-w-30rem">
+        <Card id="course" class="border-round course-card max-w-30rem">
             <template #header>
                 <div class="flex align-items-center justify-content-center text-white relative p-3 text-center h-12rem">
                     <img
