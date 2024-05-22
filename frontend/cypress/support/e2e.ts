@@ -44,21 +44,14 @@ const logout = () => {
     });
 }
 
-before(() => {
-    cy.intercept('POST', '/api/auth/cas/logout/', (req) => {
-        console.log('intercepted');
-        req.headers['Referer'] = Cypress.config('baseUrl');
-
-        return req;
-    });
-
-    cy.request('POST', '/api/auth/test-user/student/');
-    logout();
-    cy.request('POST', '/api/auth/test-user/multi/');
-    logout();
-    cy.request('POST', '/api/auth/test-user/admin/');
-    logout();
-})
+// before(() => {
+//     cy.request('POST', '/api/auth/test-user/student/');
+//     logout();
+//     cy.request('POST', '/api/auth/test-user/multi/');
+//     logout();
+//     cy.request('POST', '/api/auth/test-user/admin/');
+//     logout();
+// })
 
 afterEach(() => {
     logout();
