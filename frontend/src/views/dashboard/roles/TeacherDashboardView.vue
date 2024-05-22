@@ -83,7 +83,11 @@ watchImmediate(
                             {{ t('components.list.noCourses.teacher') }}
                         </p>
 
-                        <ProjectCreateButton id="projectCreate" :courses="filteredCourses" :label="t('components.button.createProject')" />
+                        <ProjectCreateButton
+                            id="projectCreate"
+                            :courses="filteredCourses"
+                            :label="t('components.button.createProject')"
+                        />
                     </template>
                 </template>
             </ProjectList>
