@@ -1,12 +1,13 @@
-import { Project, type ProjectJSON } from './Project.ts';
+import { Project } from './Project.ts';
 import { type Student } from './users/Student.ts';
 import { type Submission } from './submission/Submission.ts';
 import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
 export interface GroupJSON {
     id: string;
-    score: number;
-    project: ProjectJSON;
+    score?: number;
+    occupation: number;
+    project: HyperlinkedRelation;
     students: HyperlinkedRelation;
     submissions: HyperlinkedRelation;
 }
@@ -14,7 +15,8 @@ export interface GroupJSON {
 export class Group {
     constructor(
         public id: string = '',
-        public score: number = -1,
+        public score?: number | null,
+        public occupation: number = 0,
         public project: Project = new Project(),
         public students: Student[] = [],
         public submissions: Submission[] = [],
@@ -41,7 +43,11 @@ export class Group {
      * @returns {number} The size of the group.
      */
     public getSize(): number {
-        return this.students?.length ?? 0;
+        if (this.students.length > 0) {
+            return this.students.length;
+        }
+
+        return Math.max(this.students.length, this.occupation);
     }
 
     /**
@@ -50,6 +56,6 @@ export class Group {
      * @param group
      */
     static fromJSON(group: GroupJSON): Group {
-        return new Group(group.id, group.score, Project.fromJSON(group.project));
+        return new Group(group.id, group.score, group.occupation);
     }
 }

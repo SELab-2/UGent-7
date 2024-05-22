@@ -102,9 +102,7 @@ export class Project {
      * @returns The number of the group.
      */
     public getGroupNumber(group: Group): number {
-        const groups = this.groups ?? [];
-
-        return groups.sort((a, b) => parseInt(a.id) - parseInt(b.id)).findIndex((g) => g.id === group.id) + 1;
+        return this.groups.sort((a, b) => parseInt(a.id) - parseInt(b.id)).findIndex((g) => g.id === group.id) + 1;
     }
 
     /**
@@ -114,10 +112,8 @@ export class Project {
      */
     public isLocked(): boolean {
         return (
-            !this.visible ||
-            this.archived ||
-            this.locked_groups ||
-            moment(this.start_date).isBefore(moment().startOf('day'))
+            !this.visible || this.archived || this.locked_groups
+            // moment(this.start_date).isBefore(moment().startOf('day'))
         );
     }
 

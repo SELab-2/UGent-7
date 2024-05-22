@@ -23,10 +23,10 @@ const meterItems = computed(() => {
 
     return [
         {
-            value: (submissionsFailed / groups) * 100,
-            color: '#F37142',
-            label: t('components.card.testsFail'),
-            icon: 'pi pi-times',
+            value: (extraChecksPassed / groups) * 100,
+            color: '#8fb682',
+            label: t('components.card.extraTestsSucceed'),
+            icon: 'pi pi-check',
         },
         {
             value: ((structureChecksPassed - extraChecksPassed) / groups) * 100,
@@ -35,10 +35,10 @@ const meterItems = computed(() => {
             icon: 'pi pi-exclamation-circle',
         },
         {
-            value: (extraChecksPassed / groups) * 100,
-            color: '#76DD78',
-            label: t('components.card.extraTestsSucceed'),
-            icon: 'pi pi-check',
+            value: (submissionsFailed / groups) * 100,
+            color: 'indianred',
+            label: t('components.card.testsFail'),
+            icon: 'pi pi-times',
         },
     ];
 });

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
-import Title from '@/components/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
 import Button from 'primevue/button';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/instructors/TeacherAssistantList.vue';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { useConfirm } from 'primevue/useconfirm';
 import { onMounted, computed } from 'vue';

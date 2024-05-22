@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
-import Title from '@/components/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';

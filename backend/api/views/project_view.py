@@ -1,8 +1,10 @@
 from api.models.group import Group
 from api.models.project import Project
+from api.models.student import Student
 from api.models.submission import Submission
 from api.permissions.project_permissions import (ProjectGroupPermission,
                                                  ProjectPermission)
+from api.permissions.role_permissions import is_student, IsStudent
 from api.serializers.checks_serializer import (ExtraCheckSerializer,
                                                StructureCheckSerializer)
 from api.serializers.group_serializer import GroupSerializer
@@ -30,6 +32,26 @@ class ProjectViewSet(RetrieveModelMixin,
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAdminUser | ProjectPermission]  # GroupPermission has exact the same logic as for a project
+
+    @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission | IsStudent], url_path='student-group')
+    def student_group(self, request: Request, **_) -> Response:
+        """Returns the group of the student for the given project"""
+
+        # Get the student object from the user
+        student = Student.objects.get(id=request.user.id)
+
+        # Get the group of the student for the project
+        group = student.groups.filter(project=self.get_object()).first()
+
+        if group is None:
+            return Response(None)
+
+        # Serialize the group object
+        serializer = GroupSerializer(
+            group, context={"request": request}
+        )
+
+        return Response(serializer.data)
 
     @action(detail=True, permission_classes=[IsAdminUser | ProjectGroupPermission])
     def groups(self, request, **_):

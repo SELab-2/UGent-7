@@ -15,6 +15,13 @@
                 "nl": "Nederlands",
                 "en": "English"
             }
+        },
+        "footer": {
+            "home": "Dashboard",
+            "about": "Help",
+            "privacy": "Cookies",
+            "contact": "Contacteer ons",
+            "rights": "Alle rechten voorbehouden"
         }
     },
     "views": {
@@ -42,15 +49,22 @@
         "projects": {
             "all": "Alle projecten",
             "coming": "Aankomende deadlines",
+            "backToCourse": "Terug naar het vak",
             "deadline": "Deadline",
             "days": "Vandaag om {hour} | Morgen om {hour} | Over {count} dagen",
             "ago": "1 dag geleden | {count} dagen geleden",
+            "chooseGroupMessage": "Kies een groep voor {0}",
+            "groupScore": "Groepsscore",
+            "noGroupScore": "Nog geen score",
+            "publishScores": "Publiceer scores",
             "groupName": "Groepsnaam",
+            "noGroupMembers": "Geen groepsleden",
             "groupPopulation": "Grootte",
             "groupStatus": "Status",
             "start": "Startdatum",
             "submissionStatus": "Indienstatus",
             "group": "Groep",
+            "groups": "Groepen",
             "groupSize": "Individueel | Groepen van {count} personen",
             "noGroups": "Geen groepen beschikbaar",
             "groupMembers": "Groepsleden",

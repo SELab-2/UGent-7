@@ -6,7 +6,7 @@ withDefaults(defineProps<{ height?: string }>(), {
     height: '4rem',
 });
 
-const show = useTimeout(250);
+const show = useTimeout(350);
 </script>
 
 <template>

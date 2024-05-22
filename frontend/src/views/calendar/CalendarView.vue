@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import moment from 'moment';
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
 import Calendar, { type CalendarDateSlotOptions } from 'primevue/calendar';
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { useProject } from '@/composables/services/project.service';
 import { computed, ref, watch } from 'vue';

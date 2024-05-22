@@ -1,4 +1,4 @@
-import { Project } from '@/types/Project';
+import { Project, type ProjectJSON } from '@/types/Project';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import axios from 'axios';
@@ -55,7 +55,7 @@ export function useProject(): ProjectState {
         await axios
             .get(endpoint)
             .then((response) => {
-                const allProjects = response.data.map((projectData: Project) => Project.fromJSON(projectData));
+                const allProjects = response.data.map((projectData: ProjectJSON) => Project.fromJSON(projectData));
 
                 // Filter projects based on the deadline date
                 // Update the projects ref with the filtered projects
