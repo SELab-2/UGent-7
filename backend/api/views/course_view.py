@@ -197,8 +197,8 @@ class CourseViewSet(viewsets.ModelViewSet):
             individual_projects = course.projects.filter(group_size=1)
 
             for project in individual_projects:
-                # Check if the start date of the project is in the future
-                if project.start_date > timezone.now():
+                # Check if the deadline of the project is in the future
+                if project.deadline > timezone.now():
                     group = Group.objects.create(
                         project=project
                     )
@@ -211,8 +211,8 @@ class CourseViewSet(viewsets.ModelViewSet):
             all_projects = course.projects.exclude(group_size=1)
 
             for project in all_projects:
-                # Check if the start date of the project is in the future
-                if project.start_date > timezone.now():
+                # Check if the deadline of the project is in the future
+                if project.deadline > timezone.now():
                     number_groups = project.groups.count()
 
                     if project.group_size * number_groups < course.students.count():

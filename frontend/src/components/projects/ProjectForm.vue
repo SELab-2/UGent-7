@@ -171,7 +171,7 @@ watchEffect(() => {
                     <!-- Group size for the project -->
                     <div class="field col">
                         <label for="groupSize">
-                            {{ t('views.projects.groupSize') }}
+                            {{ t('views.projects.numberStudentsGroup') }}
                         </label>
                         <InputNumber input-id="groupSize" class="w-full" v-model="form.group_size" :min="1" />
                         <ErrorMessage :field="v$.group_size" />
