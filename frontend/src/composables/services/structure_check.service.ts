@@ -1,7 +1,7 @@
 import { StructureCheck } from '@/types/StructureCheck.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId, put } from '@/composables/services/helpers.ts';
+import { get, getList, createToast, deleteId, put } from '@/composables/services/helpers.ts';
 
 interface StructureCheckState {
     structureChecks: Ref<StructureCheck[] | null>;
@@ -42,7 +42,8 @@ export function useStructureCheck(): StructureCheckState {
         selfprocessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.structureChecks.byProject.replace('{projectId}', projectId);
-        await create<StructureCheck>(
+        await createToast<StructureCheck>(
+            'structureCheck',
             endpoint,
             {
                 path: structureCheckData.path,

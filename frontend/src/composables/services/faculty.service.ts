@@ -1,7 +1,7 @@
 import { Faculty } from '@/types/Faculty.ts';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, create, deleteId } from '@/composables/services/helpers.ts';
+import { get, getList, deleteId, createToast } from '@/composables/services/helpers.ts';
 
 interface FacultyState {
     faculties: Ref<Faculty[] | null>;
@@ -28,7 +28,8 @@ export function useFaculty(): FacultyState {
 
     async function createFaculty(facultyData: Faculty, selfprocessError: boolean = true): Promise<void> {
         const endpoint = endpoints.faculties.index;
-        await create<Faculty>(
+        await createToast<Faculty>(
+            'faculty',
             endpoint,
             { id: facultyData.id, name: facultyData.name },
             faculty,

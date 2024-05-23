@@ -1,8 +1,11 @@
 import { Project } from '@/types/Project';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { create, deleteId, get, getList, patch } from '@/composables/services/helpers.ts';
+import { i18n } from '@/config/i18n.ts';
+import axios from 'axios';
+import { create, deleteId, get, getList, patch, processError } from '@/composables/services/helpers.ts';
 import { type Response } from '@/types/Response.ts';
+import { useMessagesStore } from '@/store/messages.store.ts';
 
 interface ProjectState {
     projects: Ref<Project[] | null>;
@@ -71,6 +74,9 @@ export function useProject(): ProjectState {
         numberOfGroups: number,
         selfprocessError: boolean = true,
     ): Promise<void> {
+        const { t } = i18n.global;
+        const { addSuccessMessage } = useMessagesStore();
+
         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
 
         // Initialize an empty object to hold the data to send
@@ -99,6 +105,9 @@ export function useProject(): ProjectState {
             Project.fromJSON,
             'multipart/form-data',
             selfprocessError,
+        addSuccessMessage(
+            t('toasts.messages.success'),
+            t('toasts.messages.projects.create.success', [project.value?.name]),
         );
     }
 
