@@ -11,7 +11,6 @@ from api.serializers.assistant_serializer import (AssistantIDSerializer,
                                                   AssistantSerializer)
 from api.serializers.course_serializer import (CourseCloneSerializer,
                                                CourseSerializer,
-                                               CreateCourseSerializer,
                                                SaveInvitationLinkSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
@@ -41,7 +40,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def create(self, request: Request, *_):
         """Override the create method to add the teacher to the course"""
-        serializer = CreateCourseSerializer(data=request.data, context={"request": request})
+        serializer = CourseSerializer(data=request.data, context={"request": request})
 
         if serializer.is_valid(raise_exception=True):
             course = serializer.save()
@@ -55,7 +54,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     def update(self, request: Request, *_, **__):
         """Override the update method to add the teacher to the course"""
         course = self.get_object()
-        serializer = CreateCourseSerializer(course, data=request.data, partial=True, context={"request": request})
+        serializer = CourseSerializer(course, data=request.data, partial=True, context={"request": request})
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -198,8 +197,8 @@ class CourseViewSet(viewsets.ModelViewSet):
             individual_projects = course.projects.filter(group_size=1)
 
             for project in individual_projects:
-                # Check if the start date of the project is in the future
-                if project.start_date > timezone.now():
+                # Check if the deadline of the project is in the future
+                if project.deadline > timezone.now():
                     group = Group.objects.create(
                         project=project
                     )
@@ -212,8 +211,8 @@ class CourseViewSet(viewsets.ModelViewSet):
             all_projects = course.projects.exclude(group_size=1)
 
             for project in all_projects:
-                # Check if the start date of the project is in the future
-                if project.start_date > timezone.now():
+                # Check if the deadline of the project is in the future
+                if project.deadline > timezone.now():
                     number_groups = project.groups.count()
 
                     if project.group_size * number_groups < course.students.count():
