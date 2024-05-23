@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Submission } from '@/types/submission/Submission.ts';
-import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
-import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+import { type Submission } from '@/types/submission/Submission.ts';
+import { type ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
+import { type StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 import { useI18n } from 'vue-i18n';
 import router from '@/router/router.ts';
-import { Group } from '@/types/Group.ts';
-import { Course } from '@/types/Course.ts';
 
 const { t } = useI18n();
 

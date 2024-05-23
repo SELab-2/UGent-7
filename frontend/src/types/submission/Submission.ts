@@ -56,11 +56,13 @@ export class Submission {
     }
 
     /**
-     * Geeft de juiste vertaling voor alle structure check fouten
+     * Get the error messages for the submission.
+     *
+     * @returns string[]
      */
     public structureCheckFaults(): string[] {
         return this.structureCheckResults.map((check: StructureCheckResult) =>
-            this.getErrorMessageEnumKey(check.error_message!),
+            this.getErrorMessageEnumKey(check.error_message),
         );
     }
 

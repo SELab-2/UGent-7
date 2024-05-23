@@ -1,5 +1,3 @@
-import { Submission } from '@/types/submission/Submission.ts';
-import { ExtraCheck } from '@/types/ExtraCheck.ts';
 import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
 export interface ExtraCheckResultJSON {
@@ -8,6 +6,7 @@ export interface ExtraCheckResultJSON {
     error_message: string | null;
     submission: number;
     structure_check: number;
+    extra_check: number;
     resourcetype: string;
     log_file: HyperlinkedRelation;
     artifact: HyperlinkedRelation;
