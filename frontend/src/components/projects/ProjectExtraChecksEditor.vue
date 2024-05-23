@@ -50,7 +50,7 @@ const rules = computed(() => {
 });
 
 // useVuelidate function to perform form validation
-const v$ = useVuelidate(rules, form);
+let v$ = useVuelidate(rules, form);
 
 /**
  * Function to save the extra check
@@ -68,10 +68,10 @@ async function saveExtraCheck(): Promise<void> {
         displayExtraCheckCreation.value = false;
 
         // Reset the form
-        form = new ExtraCheck();
+        form = reactive(new ExtraCheck());
 
         // Reset the validation
-        v$.value.$reset();
+        v$ = useVuelidate(rules, form);
     }
 }
 
@@ -102,7 +102,7 @@ async function onDockerImageUpload(event: any): Promise<void> {
 /**
  * Function to remove the docker image from the list of docker images
  */
- async function confirmDelete(dockerImage: DockerImage): Promise<void> {
+async function confirmDelete(dockerImage: DockerImage): Promise<void> {
     confirmDialogVisible.value = true;
     removeDockerImage(dockerImage);
 }
@@ -110,7 +110,7 @@ async function onDockerImageUpload(event: any): Promise<void> {
 /**
  * Function to remove the docker image from the list of docker images
  */
- async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
+async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
     // Show a confirmation dialog before removing the image, to prevent accidental clicks
     confirm.require({
         message: t('confirmations.deleteDockerImage'),
@@ -307,7 +307,7 @@ async function onDockerImageUpload(event: any): Promise<void> {
                                                 @click="confirmDelete(slotProps.data)"
                                                 outlined
                                                 rounded
-                                            />                                           
+                                            />
                                         </template>
                                     </Column>
                                 </DataTable>
