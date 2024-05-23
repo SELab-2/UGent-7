@@ -148,7 +148,7 @@
                 "dockerImageError": "Error in Docker image",
                 "timeLimit": "Time limit exceeded",
                 "memoryLimit": "Memory limit exceeded",
-                "checkError": "Extra tests on your submission dit not pass.",
+                "checkError": "Extra tests on your submission did not pass.",
                 "runtimeError": "Runtime error",
                 "unknown": "Unknown error",
                 "failedStructureCheck": "Structure check failed"
@@ -229,7 +229,7 @@
         "card": {
             "open": "Details",
             "newProject": "New project",
-            "noSubmissions": "This project does not have any submissions \uD83D\uDE2D",
+            "noSubmissions": "This project does not have any submissions",
             "submissions": "Group has made a submission | Groups have made a submission",
             "groups": "Participating group | Participating groups",
             "structureTestsFail": "Failed structure tests",

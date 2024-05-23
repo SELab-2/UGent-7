@@ -95,7 +95,6 @@ export class Submission {
      * @param submission
      */
     static fromJSON(submission: SubmissionJSON): Submission {
-        console.log(submission);
         const extraCheckResults = submission.results
             .filter(
                 (result: ExtraCheckResultJSON | StructureCheckResultJSON) => result.resourcetype === 'ExtraCheckResult',
