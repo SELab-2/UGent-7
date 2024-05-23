@@ -147,8 +147,11 @@ watchImmediate(
                         <template v-else>
                             <template v-if="submissions !== null && group !== null">
                                 <div class="fadein">
-                                    <SubmissionCard class="mb-3" :group="group" :submissions="submissions">
-                                    </SubmissionCard>
+                                    <SubmissionCard
+                                        class="mb-3"
+                                        :group="group"
+                                        :submissions="submissions"
+                                    ></SubmissionCard>
                                     <JoinedGroupCard
                                         v-if="project.group_size !== 1"
                                         :group="group"

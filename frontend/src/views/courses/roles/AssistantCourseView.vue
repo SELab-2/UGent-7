@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import { watchImmediate } from '@vueuse/core';
+import Loading from '@/components/Loading.vue';
 
 /* Props */
 const props = defineProps<{
@@ -54,15 +55,20 @@ watchImmediate(
     </div>
 
     <!-- Project list body -->
-    <ProjectList :projects="projects">
-        <template #empty>
-            <p>
-                {{ t('views.courses.noProjects') }}
-            </p>
+    <template v-if="projects !== null">
+        <ProjectList :projects="projects">
+            <template #empty>
+                <p>
+                    {{ t('views.courses.noProjects') }}
+                </p>
 
-            <ProjectCreateButton :courses="[course]" :label="t('components.button.createProject')" />
-        </template>
-    </ProjectList>
+                <ProjectCreateButton :courses="[course]" :label="t('components.button.createProject')" />
+            </template>
+        </ProjectList>
+    </template>
+    <template v-else>
+        <Loading />
+    </template>
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">

@@ -2,7 +2,6 @@
 import NotificationsScrollPanel from '@/components/notifications/NotificationsScrollPanel.vue';
 import Button from 'primevue/button';
 import OverlayPanel from 'primevue/overlaypanel';
-import Skeleton from 'primevue/skeleton';
 import Badge from 'primevue/badge';
 import { PrimeIcons } from 'primevue/api';
 import { storeToRefs } from 'pinia';
@@ -67,7 +66,7 @@ function toggleNotificationOverlay(event: Event): void {
         </template>
     </template>
     <template v-else>
-        <Skeleton width="100px" height="42px" />
+        <div style="width: 85px; height: 42px" />
     </template>
 </template>
 

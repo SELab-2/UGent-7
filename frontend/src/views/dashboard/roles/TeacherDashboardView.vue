@@ -33,7 +33,7 @@ const selectedYear = ref(getAcademicYear());
 const allYears = computed(() => getAcademicYears(...(courses.value?.map((course) => course.academic_startyear) ?? [])));
 
 const filteredCourses = computed(
-    () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? [],
+    () => courses.value?.filter((course) => course.academic_startyear === selectedYear.value) ?? null,
 );
 
 /* Watchers */
@@ -61,36 +61,44 @@ watchImmediate(
                 <!-- Create project button -->
                 <ProjectCreateButton
                     id="projectCreate"
+                    v-if="filteredCourses !== null"
                     :courses="filteredCourses"
                     :label="t('components.button.createProject')"
                 />
             </div>
+
             <!-- Project list body -->
-            <ProjectList :projects="projects">
-                <template #empty>
-                    <template v-if="filteredCourses.length === 0">
-                        <p>{{ t('components.list.noCourses.teacher') }}</p>
-                        <RouterLink :to="{ name: 'course-create' }">
-                            <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
-                        </RouterLink>
-                    </template>
-                    <template v-else>
-                        <p>
-                            {{ t('components.list.noProjects.teacher') }}
-                        </p>
+            <template v-if="projects !== null && filteredCourses !== null">
+                <ProjectList :projects="projects">
+                    <template #empty>
+                        <template v-if="filteredCourses.length === 0">
+                            <p>{{ t('components.list.noCourses.teacher') }}</p>
+                            <RouterLink :to="{ name: 'course-create' }">
+                                <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
+                            </RouterLink>
+                        </template>
+                        <template v-else>
+                            <p>
+                                {{ t('components.list.noProjects.teacher') }}
+                            </p>
 
-                        <p v-if="filteredCourses.length === 0">
-                            {{ t('components.list.noCourses.teacher') }}
-                        </p>
+                            <p v-if="filteredCourses.length === 0">
+                                {{ t('components.list.noCourses.teacher') }}
+                            </p>
 
-                        <ProjectCreateButton
-                            id="projectCreate"
-                            :courses="filteredCourses"
-                            :label="t('components.button.createProject')"
-                        />
+                            <ProjectCreateButton
+                                id="projectCreate"
+                                :courses="filteredCourses"
+                                :label="t('components.button.createProject')"
+                            />
+                        </template>
                     </template>
-                </template>
-            </ProjectList>
+                </ProjectList>
+            </template>
+            <template v-else>
+                <Loading />
+            </template>
+
             <!-- Course heading -->
             <div
                 class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center my-6"
@@ -113,15 +121,21 @@ watchImmediate(
                     </RouterLink>
                 </ButtonGroup>
             </div>
+
             <!-- Course list body -->
-            <CourseList :courses="filteredCourses">
-                <template #empty>
-                    <p>{{ t('components.list.noCourses.teacher') }}</p>
-                    <RouterLink id="courseCreate" :to="{ name: 'course-create' }">
-                        <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
-                    </RouterLink>
-                </template>
-            </CourseList>
+            <template v-if="filteredCourses !== null">
+                <CourseList :courses="filteredCourses">
+                    <template #empty>
+                        <p>{{ t('components.list.noCourses.teacher') }}</p>
+                        <RouterLink id="courseCreate" :to="{ name: 'course-create' }">
+                            <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
+                        </RouterLink>
+                    </template>
+                </CourseList>
+            </template>
+            <template v-else>
+                <Loading />
+            </template>
         </div>
     </template>
     <template v-else>

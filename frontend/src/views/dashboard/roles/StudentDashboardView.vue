@@ -56,8 +56,15 @@ watchImmediate(
                 <!-- Project list title -->
                 <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
             </div>
+
             <!-- Project list body -->
-            <ProjectList class="fadein" :projects="visibleProjects" />
+            <template v-if="visibleProjects !== null">
+                <ProjectList class="fadein" :projects="visibleProjects" />
+            </template>
+            <template v-else>
+                <Loading />
+            </template>
+
             <!-- Course heading -->
             <div
                 class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center my-6"
@@ -68,8 +75,14 @@ watchImmediate(
                 <!-- Academic year selector -->
                 <YearSelector :years="allYears" v-model="selectedYear" />
             </div>
+
             <!-- Course list body -->
-            <CourseList class="fadein" :courses="filteredCourses" />
+            <template v-if="filteredCourses !== null">
+                <CourseList class="fadein" :courses="filteredCourses" />
+            </template>
+            <template v-else>
+                <Loading />
+            </template>
         </div>
     </template>
     <template v-else>
