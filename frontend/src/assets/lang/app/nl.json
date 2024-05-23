@@ -231,6 +231,7 @@
             "structureTestsSucceed": "Geslaagde structuur testen",
             "extraTestsSucceed": "Geslaagde extra testen",
             "testsFail": "Gefaalde testen",
+            "successfulSubmission": "Geslaagde indieningen",
             "submit": "Indienen"
         },
         "list": {

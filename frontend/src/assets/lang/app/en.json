@@ -223,12 +223,13 @@
         "card": {
             "open": "Details",
             "newProject": "New project",
-            "noSubmissions": "This project does not have any submissions",
+            "noSubmissions": "This project does not have any submissions \uD83D\uDE2D",
             "submissions": "Submission | Submissions",
             "groups": "Group | Groups",
             "structureTestsSucceed": "Succeeded structure tests",
             "extraTestsSucceed": "Succeeded extra tests",
             "testsFail": "Failed tests",
+            "successfulSubmission": "Successful submissions",
             "submit": "Submit"
         },
         "list": {
