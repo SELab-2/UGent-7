@@ -11,7 +11,6 @@ from api.serializers.assistant_serializer import (AssistantIDSerializer,
                                                   AssistantSerializer)
 from api.serializers.course_serializer import (CourseCloneSerializer,
                                                CourseSerializer,
-                                               CreateCourseSerializer,
                                                SaveInvitationLinkSerializer,
                                                StudentJoinSerializer,
                                                StudentLeaveSerializer,
@@ -41,7 +40,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def create(self, request: Request, *_):
         """Override the create method to add the teacher to the course"""
-        serializer = CreateCourseSerializer(data=request.data, context={"request": request})
+        serializer = CourseSerializer(data=request.data, context={"request": request})
 
         if serializer.is_valid(raise_exception=True):
             course = serializer.save()
@@ -55,7 +54,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     def update(self, request: Request, *_, **__):
         """Override the update method to add the teacher to the course"""
         course = self.get_object()
-        serializer = CreateCourseSerializer(course, data=request.data, partial=True, context={"request": request})
+        serializer = CourseSerializer(course, data=request.data, partial=True, context={"request": request})
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()

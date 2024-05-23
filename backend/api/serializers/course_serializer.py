@@ -43,6 +43,12 @@ class CourseSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    faculty_id = serializers.PrimaryKeyRelatedField(
+        queryset=Faculty.objects.all(),
+        source="faculty",
+        write_only=True,
+    )
+
     def validate(self, attrs: dict) -> dict:
         """Extra custom validation for course serializer"""
         attrs = super().validate(attrs)
@@ -51,6 +57,17 @@ class CourseSerializer(serializers.ModelSerializer):
         attrs['description'] = clean(attrs['description'])
 
         return attrs
+
+    def create(self, validated_data):
+        # Create the course
+        course = super().create(validated_data)
+
+        # Compute the invitation link hash
+        course.invitation_link = hashlib.sha256(f'{course.id}{course.academic_startyear}'.encode()).hexdigest()
+        course.invitation_link_expires = timezone.now()
+        course.save()
+
+        return course
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -73,6 +90,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "excerpt",
             "description",
             "faculty",
+            "faculty_id",
             "parent_course",
             "private_course",
             "teachers",
@@ -80,44 +98,6 @@ class CourseSerializer(serializers.ModelSerializer):
             "students",
             "projects",
         ]
-
-
-class CreateCourseSerializer(CourseSerializer):
-    faculty = serializers.PrimaryKeyRelatedField(
-        queryset=Faculty.objects.all(),
-        required=False,
-        allow_null=True,
-    )
-
-    def create(self, validated_data):
-        faculty = validated_data.pop('faculty', None)
-
-        # Create the course
-        course = super().create(validated_data)
-
-        # Compute the invitation link hash
-        course.invitation_link = hashlib.sha256(f'{course.id}{course.academic_startyear}'.encode()).hexdigest()
-        course.invitation_link_expires = timezone.now()
-
-        # Link the faculty, if specified
-        if faculty is not None:
-            course.faculty = faculty
-            course.save()
-
-        return course
-
-    def update(self, instance, validated_data):
-        faculty = validated_data.pop('faculty', None)
-
-        # Update the course
-        course = super().update(instance, validated_data)
-
-        # Link the faculty, if specified
-        if faculty is not None:
-            course.faculty = faculty
-            course.save()
-
-        return course
 
 
 class CourseIDSerializer(serializers.Serializer):
