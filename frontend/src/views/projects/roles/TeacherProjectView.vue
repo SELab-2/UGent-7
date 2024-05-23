@@ -39,10 +39,13 @@ const { groups, getGroupsByProject, updateGroup } = useGroup();
  */
 async function updateGroupScore(group: Group, score: number): Promise<void> {
     try {
-        await updateGroup({
-            ...group,
-            score,
-        }, false);
+        await updateGroup(
+            {
+                ...group,
+                score,
+            },
+            false,
+        );
 
         group.score = score;
 
