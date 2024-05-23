@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import Tree from 'primevue/tree';
 import Chip from 'primevue/chip';
-import Divider from 'primevue/divider';
 import { useI18n } from 'vue-i18n';
-import { StructureCheck } from '@/types/StructureCheck.ts';
-import { Project } from "@/types/Project.ts";
+import { type StructureCheck } from '@/types/StructureCheck.ts';
+import { Project } from '@/types/Project.ts';
 
 const { t } = useI18n();
 
 const props = defineProps<{
-    structureChecks: StructureCheck[]
+    structureChecks: StructureCheck[];
 }>();
 
 console.log(props.structureChecks);
@@ -20,32 +19,24 @@ console.log(props.structureChecks);
         <label class="pb-2">
             {{ t('views.projects.structureChecks.title') }}
         </label>
-        <Tree
-            class="w-100"
-            selection-mode="single"
-            :value="Project.getNodes(structureChecks)"
-        >
+        <Tree class="w-100" selection-mode="single" :value="Project.getNodes(structureChecks)">
             <template #default="{ node }">
                 <template v-if="node.obligated">
-                    <div
-                        class="w-full"
-                        v-tooltip="t('views.projects.structureChecks.obligatedExtensions')"
-                    >
+                    <div class="w-full" v-tooltip="t('views.projects.structureChecks.obligatedExtensions')">
                         <Chip
                             class="m-1"
                             :label="extension"
+                            :key="extension"
                             v-for="extension in node.data.getObligatedExtensionList()"
                         />
                     </div>
                 </template>
                 <template v-else-if="node.blocked">
-                    <div
-                        class="w-full"
-                        v-tooltip="t('views.projects.structureChecks.blockedExtensions')"
-                    >
+                    <div class="w-full" v-tooltip="t('views.projects.structureChecks.blockedExtensions')">
                         <Chip
                             class="m-1"
                             :label="extension"
+                            :key="extension"
                             v-for="extension in node.data.getBlockedExtensionList()"
                         />
                     </div>

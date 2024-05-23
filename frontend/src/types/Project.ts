@@ -1,6 +1,6 @@
 import moment from 'moment';
-import { TreeNode } from "primevue/treenode";
-import { PrimeIcons } from "primevue/api";
+import { type TreeNode } from 'primevue/treenode';
+import { PrimeIcons } from 'primevue/api';
 import { Course, type CourseJSON } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';

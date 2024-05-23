@@ -7,7 +7,7 @@ import { ref } from 'vue';
 import { type TreeNode } from 'primevue/treenode';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
-import { Project } from "@/types/Project.ts";
+import { Project } from '@/types/Project.ts';
 import { StructureCheck } from '@/types/StructureCheck.ts';
 
 /* Models */
@@ -21,7 +21,6 @@ const selectedStructureCheck = ref<StructureCheck | null>(null);
 const editingStructureCheck = ref<StructureCheck | null>(null);
 const selectedKeys = ref<string[]>([]);
 const expandedKeys = ref<string[]>([]);
-
 
 /**
  * Delete a structure check from the list.
