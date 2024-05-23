@@ -43,11 +43,9 @@ console.log(props.structureChecks);
                 </template>
                 <template v-else>
                     <div class="flex align-items-center justify-content-between gap-3">
-                        <template>
-                            <span>
-                                {{ node.label }}
-                            </span>
-                        </template>
+                        <span>
+                            {{ node.label }}
+                        </span>
                     </div>
                 </template>
             </template>

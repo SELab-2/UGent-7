@@ -97,7 +97,9 @@
                 "title": "Indieningsstructuur",
                 "placeholder": "Geef deze nieuwe map een naam",
                 "cancelSelection": "Deselecteer {0}",
-                "newFolder": "Nieuwe map"
+                "newFolder": "Nieuwe map",
+                "obligatedExtensions": "Verplichte extensies",
+                "blockedExtensions": "Niet toegelaten extensies"
             },
             "extraChecks": {
                 "title": "Automatische checks op een indiening",

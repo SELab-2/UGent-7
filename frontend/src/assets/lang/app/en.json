@@ -80,7 +80,7 @@
             "leaveGroup": "Leave group",
             "create": "Create new project",
             "save": "Save project",
-            "edit": "Save project",
+            "edit": "Edit project",
             "name": "Project name",
             "description": "Description",
             "startDate": "Start project",
@@ -97,7 +97,9 @@
                 "title": "Structure checks",
                 "placeholder": "Give a name to this folder",
                 "cancelSelection": "Deselect {0}",
-                "newFolder": "New folder"
+                "newFolder": "New folder",
+                "obligatedExtensions": "Obligated extensions",
+                "blockedExtensions": "Blocked extensions"
             },
             "extraChecks": {
                 "title": "Automatic checks on a submission",
