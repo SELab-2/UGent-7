@@ -21,6 +21,7 @@ export class ExtraCheck {
         public time_limit: number = 30,
         public memory_limit: number = 128,
         public show_log: boolean = true,
+        public show_artifact: boolean = true,
         public docker_image: DockerImage = new DockerImage(),
     ) {}
 
@@ -37,6 +38,7 @@ export class ExtraCheck {
             extraCheck.time_limit,
             extraCheck.memory_limit,
             extraCheck.show_log,
+            extraCheck.show_artifact,
         );
     }
 }

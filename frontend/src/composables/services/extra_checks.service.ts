@@ -34,6 +34,7 @@ export function useExtraCheck(): ExtraCheckState {
                 time_limit: extraCheckData.time_limit,
                 memory_limit: extraCheckData.memory_limit,
                 show_log: extraCheckData.show_log,
+                show_artifact: extraCheckData.show_artifact,
             },
             extraCheck,
             ExtraCheck.fromJSON,

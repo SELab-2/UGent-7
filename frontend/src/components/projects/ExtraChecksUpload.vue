@@ -212,6 +212,14 @@ async function onDockerImageUpload(event: any): Promise<void> {
                                 <label for="showLog">{{ t('views.projects.extraChecks.showLog') }}</label>
                             </div>
                         </div>
+
+                        <!-- Visibility of the artifacts for students -->
+                        <div class="grid">
+                            <div class="field-checkbox col-12">
+                                <InputSwitch id="showArtifact" v-model="form.show_artifact" style="min-width: 50px" />
+                                <label for="showArtifact">{{ t('views.projects.extraChecks.showArtifact') }}</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-12 lg:col-6">
