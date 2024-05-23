@@ -136,8 +136,8 @@ const saveItem = async (): Promise<void> => {
             await toggleAdmin(editItem.value.id, editItem.value.is_staff);
             addSuccessMessage(
                 t('toasts.messages.success'),
-                t('toasts.messages.edit', { type: t('types.article.user') })
-            )
+                t('toasts.messages.edit', { type: t('types.article.user') }),
+            );
         } catch (e) {
             // TODO error message (failed to edit user)
         }

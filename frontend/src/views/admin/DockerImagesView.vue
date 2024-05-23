@@ -97,10 +97,7 @@ const toggleSafetyGuardEdit = (data: DockerImage): void => {
 const changePublicStatus = async (): Promise<void> => {
     try {
         await patchDockerImage(editItem.value);
-        addSuccessMessage(
-            t('toasts.messages.success'),
-            t('toasts.messages.edit', { type: t('types.article.docker') })
-        )
+        addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.edit', { type: t('types.article.docker') }));
     } catch (e) {
         // TODO error message (when editing public status of docker image)
     }
