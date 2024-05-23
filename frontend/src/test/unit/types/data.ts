@@ -81,12 +81,11 @@ export const facultyData = {
     name: 'faculty1_name',
 };
 
-export const groupData = {
-    id: 'group1_id',
-    score: 10,
-    project: null,
-    students: [],
-    submissions: [],
+export const submissionStatusData = {
+    non_empty_groups: 5,
+    groups_submitted: 4,
+    structure_checks_passed: 3,
+    extra_checks_passed: 1,
 };
 
 export const projectData = {
@@ -101,11 +100,20 @@ export const projectData = {
     max_score: 10,
     score_visible: true,
     group_size: 3,
-    structure_file: null,
+    structure_file: [],
     course: courseData,
+    status: submissionStatusData,
     structureChecks: [],
     extra_checks: [],
     groups: [],
+    submissions: [],
+};
+
+export const groupData = {
+    id: 'group1_id',
+    score: 10,
+    project: projectData,
+    students: [],
     submissions: [],
 };
 
@@ -121,18 +129,11 @@ export const structureCheckData = {
     project: null,
 };
 
-export const submissionStatusData = {
-    non_empty_groups: 5,
-    groups_submitted: 4,
-    structure_checks_passed: 3,
-    extra_checks_passed: 1,
-};
-
 export const submissionData = {
     id: 'submission1_id',
     submission_number: 1,
     submission_time: new Date('November 1, 2024 04:20:00'),
-    files: [],
+    zip: new File(['byte1', 'byte2', 'byte3'], 'submission.zip', { type: 'application/zip' }),
     extra_check_results: [],
     structure_check_results: [],
     is_valid: true,

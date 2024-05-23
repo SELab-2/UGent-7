@@ -1,17 +1,3 @@
-export const groups = [
-    {
-        id: '0',
-        score: 20,
-        project: '0',
-        students: ['1', '2', '3', '000201247011'],
-    },
-    {
-        id: '1',
-        score: 18,
-        project: '0',
-        students: ['1', '2', '3', '000201247011'],
-    },
-];
 
 export const courses = [
     {
@@ -107,40 +93,126 @@ export const courses = [
     },
 ];
 
+export const submissionStatuses = [
+    {
+        non_empty_groups: 5,
+        groups_submitted: 4,
+        structure_checks_passed: 3,
+        extra_checks_passed: 1,
+    },
+    {
+        non_empty_groups: 6,
+        groups_submitted: 5,
+        structure_checks_passed: 4,
+        extra_checks_passed: 2,
+    },
+];
+
+export const submissions = [
+    {
+        id: '1',
+        submission_number: 1,
+        submission_time: new Date('July 21, 2024 01:15:00'),
+        zip: new File(['1', '2'], 'submission.zip', { type: 'application/zip' }),
+        extraCheckResults: [],
+        structureCheckResults: [],
+        is_valid: true,
+    },
+    {
+        id: '2',
+        submission_number: 2,
+        submission_time: new Date('July 21, 2024 01:15:00'),
+        zip: new File(['3', '4'], 'submission.zip', { type: 'application/zip' }),
+        extraCheckResults: [],
+        structureCheckResults: [],
+        is_valid: true,
+    },
+];
+
+const groups = [
+    {
+        id: '0',
+        score: 20,
+        project: {},
+        students: ['1', '2', '3', '000201247011'],
+        submissions: [submissions[0]]
+    },
+    {
+        id: '1',
+        score: 18,
+        project: {},
+        students: ['1', '2', '3', '000201247011'],
+        submissions: [submissions[1]]
+    },
+];
+
 export const projects = [
     {
         id: '0',
-        course: courses[0],
-        name: 'sel2',
-        description: 'this is a test',
+        name: 'project0',
+        description: 'project0 description',
         visible: true,
         archived: false,
         locked_groups: false,
-        start_date: new Date('July 21, 2024 01:15:00'),
-        deadline: new Date('July 23, 2024 01:15:00'),
+        start_date: new Date('November 11, 2024 01:15:00'),
+        deadline: new Date('November 11, 2025 01:15:00'),
         max_score: 100,
         score_visible: true,
-        group_size: 8,
-        submissions: ['1', '2'],
-        groups: ['0', '1'],
+        group_size: 5,
+        course: courses[0],
+        status: submissionStatuses[0],
+        structure_file: new File(['byte1', 'byte2', 'byte3'], 'submission.zip', { type: 'application/zip' }),
+        structureChecks: null,
+        extra_checks: null,
+        groups: [groups[0], groups[1]],
+        submissions: [submissions[0], submissions[1]],
     },
     {
-        id: 1,
-        course: courses[0],
-        name: 'sel3',
-        description: 'make a project',
+        id: '1',
+        name: 'project1',
+        description: 'project1 description',
         visible: true,
         archived: false,
         locked_groups: false,
-        start_date: new Date('July 21, 2024 01:15:00'),
-        deadline: new Date('July 23, 2024 01:15:00'),
-        max_score: 20,
+        start_date: new Date('December 11, 2024 01:15:00'),
+        deadline: new Date('December 11, 2025 01:15:00'),
+        max_score: 50,
         score_visible: false,
-        group_size: 3,
+        group_size: 8,
+        course: courses[0],
+        status: submissionStatuses[1],
+        structure_file: new File(['byte1', 'byte2'], 'submission.zip', { type: 'application/zip' }),
+        structureChecks: null,
+        extra_checks: null,
+        groups: [groups[0], groups[1]],
+        submissions: [submissions[0], submissions[1]],
+    },
+    {
+        id: '3',
+        name: 'project3',
+        description: 'project3 description',
+        visible: true,
+        archived: false,
+        locked_groups: false,
+        start_date: new Date('June 11, 2024 01:15:00'),
+        deadline: new Date('July 11, 2025 01:15:00'),
+        max_score: 150,
+        score_visible: false,
+        group_size: 12,
+        course: [],
+        status: [],
+        structure_file: new File(['byte1', 'byte2'], 'submission.zip', { type: 'application/zip' }),
+        structureChecks: null,
+        extra_checks: null,
+        groups: [],
         submissions: [],
-        groups: ['0', '1'],
     },
 ];
+
+groups[0].project = projects[2]
+groups[1].project = projects[2]
+
+export { groups }
 
 export const faculties = [
     { id: 'sciences', name: 'wetenschappen' },
@@ -303,7 +375,7 @@ export const structureChecks = [
         project: '123456',
         obligated_extensions: [],
         blocked_extensions: [],
-        path: '.',
+        name: '.',
     },
     {
         id: '2',
@@ -314,14 +386,14 @@ export const structureChecks = [
             },
         ],
         blocked_extensions: [],
-        path: 'folder1',
+        name: 'folder1',
     },
     {
         id: '3',
         project: '123456',
         obligated_extensions: [],
         blocked_extensions: [],
-        path: 'folder3',
+        name: 'folder3',
     },
     {
         id: '4',
@@ -332,27 +404,6 @@ export const structureChecks = [
             },
         ],
         blocked_extensions: [],
-        path: 'folder3/folder3-1',
-    },
-];
-
-export const submissions = [
-    {
-        id: '1',
-        group: '1',
-        files: [],
-        extra_checks_results: [],
-        submission_number: 1,
-        submission_time: new Date('July 21, 2024 01:15:00'),
-        structureChecks_passed: true,
-    },
-    {
-        id: '2',
-        group: '1',
-        files: [],
-        extra_checks_results: [],
-        submission_number: 2,
-        submission_time: new Date('July 21, 2024 01:15:00'),
-        structureChecks_passed: true,
+        name: 'folder3/folder3-1',
     },
 ];

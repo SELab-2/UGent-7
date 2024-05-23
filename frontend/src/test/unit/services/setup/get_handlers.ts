@@ -21,7 +21,17 @@ export const getHandlers = [
         return HttpResponse.json(groups.find((x) => x.id === params.id));
     }),
     http.get(baseUrl + endpoints.submissions.retrieve.replace('{id}', ':id'), ({ params }) => {
-        return HttpResponse.json(submissions.find((x) => x.id === params.id));
+        const submission = submissions.find((x) => x.id === params.id)
+        // Convert to a ResponseSubmission object
+        const response_submission = {
+            id: submission?.id,
+            submission_number: submission?.submission_number,
+            submission_time: submission?.submission_time,
+            zip: submission?.zip,
+            results: [], // We can leave this empty since the conversion to a valid results array is not the purpose of these tests
+            is_valid: submission?.is_valid
+        }
+        return HttpResponse.json(response_submission);
     }),
     http.get(baseUrl + endpoints.structureChecks.retrieve.replace('{id}', ':id'), ({ params }) => {
         return HttpResponse.json(structureChecks.find((x) => x.id === params.id));
@@ -45,12 +55,16 @@ export const getHandlers = [
         return HttpResponse.json(courses.find((x) => x.id === params.id));
     }),
     http.get(baseUrl + endpoints.groups.byProject.replace('{projectId}', ':id'), ({ params }) => {
-        return HttpResponse.json(groups.filter((x) => x.project === params.id));
+        return HttpResponse.json(groups.filter((x) => x.project.id === params.id));
     }),
     http.get(baseUrl + endpoints.submissions.byProject.replace('{projectId}', ':id'), ({ params }) => {
         const project = projects.find((x) => x.id === params.id);
         const submittedSubmissions = project !== null && project !== undefined ? project.submissions : [];
-        return HttpResponse.json(submissions.filter((x) => submittedSubmissions.includes(x.id)));
+
+        // Convert to a ResponseSubmission object
+        const projectSubmissions = submissions.filter((x) => submittedSubmissions.map(y => y.id).includes(x.id))
+        const responseSubmissions = projectSubmissions.map(x => ({ id: x?.id, submission_number: x?.submission_number,submission_time: x?.submission_time,zip: x?.zip,results: [], is_valid: x?.is_valid }) )
+        return HttpResponse.json(responseSubmissions);
     }),
     http.get(baseUrl + endpoints.teachers.byCourse.replace('{courseId}', ':id'), ({ params }) => {
         const course = courses.find((x) => x.id === params.id);
@@ -84,8 +98,10 @@ export const getHandlers = [
     }),
     http.get(baseUrl + endpoints.submissions.status.replace('{projectId}', ':id'), ({ params }) => {
         const project = projects.find((x) => x.id === params.id);
-        const groupIds = project !== null && project !== undefined ? project.groups : [];
-        const submissionIds = project !== null && project !== undefined ? project.submissions : [];
+        const groups = project !== null && project !== undefined ? project.groups : [];
+        const groupIds = groups.map(group => group.id);
+        const submissions = project !== null && project !== undefined ? project.submissions : [];
+        const submissionIds = submissions.map(submission => submission.id);
 
         return HttpResponse.json({
             groups_submitted: new Set(submissions.filter((x) => submissionIds.includes(x.id)).map((x) => x.group)).size,
@@ -106,7 +122,12 @@ export const getHandlers = [
         );
     }),
     http.get(baseUrl + endpoints.submissions.byGroup.replace('{groupId}', ':id'), ({ params }) => {
-        return HttpResponse.json(submissions.filter((x) => x.group === params.id));
+        const group = groups.find((x) => x.id = params.id)
+        const groupSubmissions = submissions.filter(x => group?.submissions.includes(x))
+        
+        // Convert to a ResponseSubmission object
+        const responseSubmissions = groupSubmissions.map(x => ({ id: x?.id, submission_number: x?.submission_number,submission_time: x?.submission_time,zip: x?.zip,results: [], is_valid: x?.is_valid }) )
+        return HttpResponse.json(responseSubmissions);
     }),
     http.get(baseUrl + endpoints.faculties.retrieve.replace('{id}', ':id'), ({ params }) => {
         return HttpResponse.json(faculties.find((x) => x.id === params.id));
