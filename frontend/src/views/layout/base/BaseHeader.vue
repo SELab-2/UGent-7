@@ -11,6 +11,7 @@ import { computed, ref } from 'vue';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { endpoints } from '@/config/endpoints.ts';
+import NotificationsOverlay from '@/components/notifications/NotificationsOverlay.vue';
 
 /* Composables */
 const { user, isAuthenticated } = storeToRefs(useAuthStore());
@@ -18,6 +19,8 @@ const { t, locale } = useI18n();
 
 /* State */
 const showSidebar = ref(false);
+
+/* Computed */
 const logo = computed(() => {
     if (locale.value === 'nl') {
         return nl;
@@ -75,21 +78,27 @@ const items = computed(() => [
                         </template>
                         <!-- Language selector -->
                         <LanguageSelector />
+
                         <!-- Menu selector -->
                         <span @click="showSidebar = !showSidebar" class="md:hidden pi pi-bars cursor-pointer" />
                     </div>
                     <div>
-                        <!-- User information -->
                         <template v-if="user !== null">
-                            <RouterLink :to="{ name: 'logout' }" class="text-white" id="logout">
-                                <span class="hidden md:inline">
-                                    {{ t('layout.header.user', [user.getFullName()]) }}
-                                </span>
-                                <span class="inline md:hidden">
-                                    {{ user.getFullName() }}
-                                </span>
-                            </RouterLink>
+                            <div class="flex align-items-center gap-2">
+                                <!-- User information -->
+                                <RouterLink :to="{ name: 'logout' }" class="text-white" id="logout">
+                                    <span class="hidden md:inline">
+                                        {{ t('layout.header.user', [user.getFullName()]) }}
+                                    </span>
+                                    <span class="inline md:hidden">
+                                        {{ user.getFullName() }}
+                                    </span>
+                                </RouterLink>
+                                <!-- Notifications -->
+                                <NotificationsOverlay />
+                            </div>
                         </template>
+
                         <!-- Login button -->
                         <template v-else>
                             <a :href="endpoints.auth.login">

@@ -14,6 +14,12 @@
             "language": {
                 "nl": "Nederlands",
                 "en": "English"
+            },
+            "notifications": {
+                "new": "Nieuw",
+                "title": "Notificaties",
+                "markAsRead": "Markeer alles als gelezen",
+                "loadMore": "Laad meer notificaties"
             }
         },
         "footer": {
