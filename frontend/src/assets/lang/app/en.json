@@ -100,6 +100,7 @@
                 "public": "Public",
                 "bashScript": "Bash script",
                 "dockerImage": "Docker image",
+                "deleteDockerImage": "Delete docker image",
                 "timeLimit": "Time limit for execution (in seconds)",
                 "memoryLimit": "Memory limit for execution (in MB)",
                 "showLog": "Make the extra logs of the docker container visible to the students",
@@ -309,7 +310,8 @@
         "cloneCourse": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
         "joinCourse": "Are you sure you want to enroll in this course? This will give you access to all projects, assignments, ...",
         "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course.",
-        "shareCourse": "By activating the invitation link, you allow students in possession of this link to enroll in this course. Please copy the generated link, only when you click on \"Activate invitation link\" will this link become active."
+        "shareCourse": "By activating the invitation link, you allow students in possession of this link to enroll in this course. Please copy the generated link, only when you click on \"Activate invitation link\" will this link become active.",
+        "deleteDockerImage": "Are you sure you want to delete this docker image? This will also remove all the checks that use this image."
     },
     "admin": {
         "title": "Admin",

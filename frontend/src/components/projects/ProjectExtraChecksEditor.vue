@@ -9,6 +9,8 @@ import InputSwitch from 'primevue/inputswitch';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 import { DockerImage } from '@/types/DockerImage';
 import { ExtraCheck } from '@/types/ExtraCheck';
 import { useI18n } from 'vue-i18n';
@@ -18,6 +20,7 @@ import { useVuelidate } from '@vuelidate/core';
 
 /* Composable injections */
 const { t } = useI18n();
+const confirm = useConfirm();
 
 /* Props */
 defineProps<{ dockerImages: DockerImage[] }>();
@@ -31,6 +34,9 @@ const displayExtraCheckCreation = ref(false);
 
 /* Form content */
 let form = reactive(new ExtraCheck());
+
+// State to manage the visibility of the confirmation dialog and the selected docker image
+const confirmDialogVisible = ref(false);
 
 // Define validation rules for each form field
 const rules = computed(() => {
@@ -92,6 +98,34 @@ async function onDockerImageUpload(event: any): Promise<void> {
 
     emit('create:docker-image', dockerImage, event.files[0]);
 }
+
+/**
+ * Function to remove the docker image from the list of docker images
+ */
+ async function confirmDelete(dockerImage: DockerImage): Promise<void> {
+    confirmDialogVisible.value = true;
+    removeDockerImage(dockerImage);
+}
+
+/**
+ * Function to remove the docker image from the list of docker images
+ */
+ async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
+    // Show a confirmation dialog before removing the image, to prevent accidental clicks
+    confirm.require({
+        message: t('confirmations.deleteDockerImage'),
+        header: t('views.projects.extraChecks.deleteDockerImage'),
+        accept: () => {
+            (async () => {
+                emit('delete:docker-image', dockerImage);
+                confirmDialogVisible.value = false;
+            })();
+        },
+        reject: () => {
+            confirmDialogVisible.value = false;
+        },
+    });
+}
 </script>
 
 <template>
@@ -127,6 +161,20 @@ async function onDockerImageUpload(event: any): Promise<void> {
         icon-pos="left"
         rounded
     />
+
+    <!-- Dialog to confirm the deletion of a docker image (should be outside the DataTable, otherwise it is shown multiple times) -->
+    <ConfirmDialog v-model:visible="confirmDialogVisible">
+        <template #container="{ message, acceptCallback, rejectCallback }">
+            <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
+                <span class="font-bold text-2xl">{{ message.header }}</span>
+                <p class="mb-4">{{ message.message }}</p>
+                <div class="flex gap-2 justify-content-end">
+                    <Button outlined rounded @click="rejectCallback">{{ t('primevue.cancel') }}</Button>
+                    <Button @click="acceptCallback" rounded>{{ t('admin.delete') }}</Button>
+                </div>
+            </div>
+        </template>
+    </ConfirmDialog>
 
     <!-- Dialog with a form to create a new extra check -->
     <Dialog
@@ -239,7 +287,7 @@ async function onDockerImageUpload(event: any): Promise<void> {
                                     id="dockerImage"
                                     class="w-full mt-2 mb-2"
                                     scrollable
-                                    scrollHeight="300px"
+                                    scrollHeight="350px"
                                 >
                                     <Column field="name" :header="t('views.projects.extraChecks.name')"></Column>
                                     <Column field="public" :header="t('views.projects.extraChecks.public')">
@@ -256,10 +304,10 @@ async function onDockerImageUpload(event: any): Promise<void> {
                                                 v-if="!slotProps.data.public"
                                                 icon="pi pi-trash"
                                                 class="p-button-danger p-button-sm"
-                                                @click="emit('delete:docker-image', slotProps.data)"
+                                                @click="confirmDelete(slotProps.data)"
                                                 outlined
                                                 rounded
-                                            />
+                                            />                                           
                                         </template>
                                     </Column>
                                 </DataTable>

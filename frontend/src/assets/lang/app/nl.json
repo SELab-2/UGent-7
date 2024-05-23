@@ -100,6 +100,7 @@
                 "public": "Publiek",
                 "bashScript": "Bash script",
                 "dockerImage": "Docker image",
+                "deleteDockerImage": "Verwijder docker image",
                 "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",
                 "memoryLimit": "Geheugenlimiet voor de uitvoering (in MB)",
                 "showLog": "Maak de extra logs van de docker container zichtbaar voor de studenten",
@@ -309,7 +310,8 @@
         "cloneCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
         "joinCourse": "Ben je zeker dat je jezelf wil inschrijven voor dit vak? Dit zal je toegang geven tot alle projecten, opdrachten, ...",
         "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak.",
-        "shareCourse": "Door het activeren van de invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Activeer invitatielink\" klikt zal deze link actief worden."
+        "shareCourse": "Door het activeren van de invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Activeer invitatielink\" klikt zal deze link actief worden.",
+        "deleteDockerImage": "Ben je zeker dat je deze docker image wil verwijderen? Dit zal alle checks die deze image gebruiken ook verwijderen."
     },
     "admin": {
         "title": "Beheerder",
