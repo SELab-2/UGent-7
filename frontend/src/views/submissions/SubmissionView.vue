@@ -24,7 +24,7 @@ const { user } = storeToRefs(useAuthStore());
 const { submission, getSubmissionByID } = useSubmission();
 const { feedbacks, getFeedbackBySubmission, createFeedback, updateFeedback } = useFeedback();
 const { project, getProjectByID } = useProject();
-const { extraChecks, getExtraChecksByProject } = useExtraCheck()
+const { extraChecks, getExtraChecksByProject } = useExtraCheck();
 
 /* Feedback content */
 const feedbackTextValue = ref<string>('');

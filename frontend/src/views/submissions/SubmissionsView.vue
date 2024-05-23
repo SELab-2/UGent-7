@@ -35,12 +35,13 @@ onMounted(async () => {
 const onUpload = async (callback: () => void): Promise<void> => {
     if (group.value !== null) {
         try {
-            console.log(files.value);
             await createSubmission(files.value as File[], group.value.id);
             addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.submissions.create.success'));
+
             if (submission.value != null) {
                 submissions.value = [...(submissions.value ?? []), submission.value];
             }
+
             files.value = [];
             callback();
         } catch (e) {
@@ -134,10 +135,3 @@ function formatDate(deadline: Date): string {
         </div>
     </BaseLayout>
 </template>
-
-<style scoped lang="scss">
-@import '@/assets/scss/theme/theme.scss';
-h1 {
-    color: $primaryDarkColor;
-}
-</style>
