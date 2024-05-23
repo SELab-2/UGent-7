@@ -3,11 +3,12 @@ import Tree from 'primevue/tree';
 import Button from 'primevue/button';
 import Chips from 'primevue/chips';
 import InputText from 'primevue/inputtext';
-import { StructureCheck } from '@/types/StructureCheck.ts';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { type TreeNode } from 'primevue/treenode';
 import { PrimeIcons } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
+import { Project } from '@/types/Project.ts';
+import { StructureCheck } from '@/types/StructureCheck.ts';
 
 /* Models */
 const structureChecks = defineModel<StructureCheck[]>();
@@ -20,31 +21,6 @@ const selectedStructureCheck = ref<StructureCheck | null>(null);
 const editingStructureCheck = ref<StructureCheck | null>(null);
 const selectedKeys = ref<string[]>([]);
 const expandedKeys = ref<string[]>([]);
-
-/* Computed */
-const nodes = computed<TreeNode[]>(() => {
-    const nodes: TreeNode[] = [];
-
-    if (structureChecks.value !== undefined) {
-        for (const [i, check] of structureChecks.value.entries()) {
-            const hierarchy = check.getDirectoryHierarchy();
-            let currentNodes = nodes;
-
-            for (const [j, part] of hierarchy.entries()) {
-                let node = currentNodes.find((node) => node.label === part);
-
-                if (node === undefined) {
-                    node = newTreeNode(check, `${i}${j}`, part, j === hierarchy.length - 1);
-                    currentNodes.push(node);
-                }
-
-                currentNodes = node.children ?? [];
-            }
-        }
-    }
-
-    return nodes;
-});
 
 /**
  * Delete a structure check from the list.
@@ -119,44 +95,6 @@ function selectStructureCheck(node: TreeNode): void {
         selectedStructureCheck.value = node.data;
     }
 }
-
-/**
- * Construct a tree node from a structure check folder path.
- *
- * @param check
- * @param key
- * @param label
- * @param leaf
- */
-function newTreeNode(check: StructureCheck, key: string, label: string, leaf: boolean = false): TreeNode {
-    const node: TreeNode = {
-        key,
-        label,
-        data: check,
-        icon: PrimeIcons.FOLDER,
-        check: leaf,
-        children: [],
-    };
-
-    if (leaf) {
-        node.children = [
-            {
-                key: key + '-obligated',
-                icon: PrimeIcons.CHECK_CIRCLE,
-                data: check,
-                obligated: true,
-            },
-            {
-                key: key + '-blocked',
-                icon: PrimeIcons.TIMES_CIRCLE,
-                data: check,
-                blocked: true,
-            },
-        ];
-    }
-
-    return node;
-}
 </script>
 
 <template>
@@ -166,13 +104,14 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
             selection-mode="single"
             v-model:selection-keys="selectedKeys"
             v-model:expanded-keys="expandedKeys"
-            :value="nodes"
+            :value="Project.getNodes(structureChecks)"
             @node-select="selectStructureCheck"
         >
             <template #default="{ node }">
                 <template v-if="node.obligated">
                     <Chips
                         class="w-full"
+                        separator=","
                         :model-value="node.data.getObligatedExtensionList()"
                         @update:model-value="node.data.setObligatedExtensionList($event)"
                         v-tooltip="t('views.projects.structureChecks.obligatedExtensions')"
@@ -185,6 +124,7 @@ function newTreeNode(check: StructureCheck, key: string, label: string, leaf: bo
                 <template v-else-if="node.blocked">
                     <Chips
                         class="w-full"
+                        separator=","
                         :model-value="node.data.getBlockedExtensionList()"
                         @update:model-value="node.data.setBlockedExtensionList($event)"
                         v-tooltip="t('views.projects.structureChecks.blockedExtensions')"
