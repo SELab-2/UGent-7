@@ -41,7 +41,9 @@ class GroupModelTests(APITestCase):
         content_json = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(int(content_json["id"]), group.id)
-        self.assertEqual(content_json["project"], settings.TESTING_BASE_LINK + reverse("project-detail", args=[str(project.id)]))
+        self.assertEqual(content_json["project"],
+                         settings.TESTING_BASE_LINK + reverse("project-detail", args=[str(project.id)])
+                         )
         self.assertEqual(content_json["score"], group.score)
 
     def test_group_project(self):
