@@ -8,6 +8,8 @@ data/nginx/ssl/*
 data/postres*
 data/redis/*
 
+docs/.vitepress/cache/*
+
 backend/data/production/*
 backend/staticfiles/*
 

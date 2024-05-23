@@ -32,19 +32,19 @@ const meterItems = computed(() => {
     const submissionsFailedItem = {
         value: (submissionsFailed / groups) * 100,
         color: red,
-        label: t('components.card.testsFail'),
+        label: t('components.card.structureTestsFail'),
         icon: 'pi pi-times',
     };
     const structureChecksPassedItem = {
         value: (extraChecksFailed / groups) * 100,
         color: orange,
-        label: t('components.card.structureTestsSucceed'),
+        label: t('components.card.extraChecksFail'),
         icon: 'pi pi-exclamation-circle',
     };
     const extraChecksPassedItem = {
         value: (extraChecksPassed / groups) * 100,
         color: green,
-        label: t('components.card.extraTestsSucceed'),
+        label: t('components.card.testsSucceed'),
         icon: 'pi pi-check',
     };
 
@@ -54,6 +54,7 @@ const meterItems = computed(() => {
         }
         structureChecksPassedItem.color = green;
         structureChecksPassedItem.icon = 'pi pi-check';
+        structureChecksPassedItem.label = t('components.card.testsSucceed');
         return [submissionsFailedItem, structureChecksPassedItem];
     }
     return [
