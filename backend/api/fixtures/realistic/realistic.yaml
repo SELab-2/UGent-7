@@ -134,11 +134,18 @@
     project: 0
     obligated_extensions:
       - 0
-      - 3
     blocked_extensions:
       - 1
 - model: api.structurecheck
   pk: 1
+  fields:
+    path: "verslag/"
+    project: 0
+    obligated_extensions:
+      - 3
+    blocked_extensions: []
+- model: api.structurecheck
+  pk: 2
   fields:
     path: src/
     project: 1
@@ -147,7 +154,7 @@
     blocked_extensions:
       - 2
 - model: api.structurecheck
-  pk: 2
+  pk: 3
   fields:
     path: verslag/
     project: 1
@@ -155,7 +162,7 @@
       - 3
     blocked_extensions: []
 - model: api.structurecheck
-  pk: 3
+  pk: 4
   fields:
     path: ""
     project: 3
