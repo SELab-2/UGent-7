@@ -82,8 +82,7 @@ async function expandGroup(event: DataTableRowExpandEvent): Promise<void> {
                     <InputNumber
                         :model-value="data.score"
                         @change="updateGroupScore(data, $event.target.value)"
-                        @keydown.enter="updateGroupScore(data, $event.target.value)"
-                    />
+                    /> / {{ project.max_score }}
                 </template>
                 <template v-else>
                     <template v-if="data.score !== null && data.score !== undefined">

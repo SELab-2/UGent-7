@@ -108,6 +108,8 @@ export class User {
      * @param user
      */
     static fromJSON(user: UserJSON): User {
+        console.log(user);
+
         return new User(
             user.id,
             user.username,
