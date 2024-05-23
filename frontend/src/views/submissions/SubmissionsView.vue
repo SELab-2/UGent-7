@@ -37,20 +37,14 @@ const onUpload = async (callback: () => void): Promise<void> => {
         try {
             console.log(files.value);
             await createSubmission(files.value as File[], group.value.id);
-            addSuccessMessage(
-                t('toasts.messages.success'),
-                t('toasts.messages.submissions.create.success')
-            );
+            addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.submissions.create.success'));
             if (submission.value != null) {
                 submissions.value = [...(submissions.value ?? []), submission.value];
             }
             files.value = [];
             callback();
         } catch (e) {
-            addErrorMessage(
-                t('toasts.messages.error'),
-                t('toasts.messages.submissions.create.error')
-            );
+            addErrorMessage(t('toasts.messages.error'), t('toasts.messages.submissions.create.error'));
         }
     }
 };
