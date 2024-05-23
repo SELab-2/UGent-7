@@ -1,76 +1,24 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed } from 'vue';
 import { Submission } from '@/types/submission/Submission.ts';
 import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
 import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 import { useI18n } from 'vue-i18n';
-import router from "@/router/router.ts";
+import router from '@/router/router.ts';
+import { Group } from '@/types/Group.ts';
+import { Course } from '@/types/Course.ts';
 
 const { t } = useI18n();
-const tempSubmissions = ref<Submission[]>([]);
-
-const testSubmissions = ref<Submission[]>([
-    new Submission(
-        '4',
-        4,
-        new Date(),
-        [],
-        [new ExtraCheckResult('3', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '3',
-        3,
-        new Date(2024, 3, 14),
-        [],
-        [new ExtraCheckResult('3', 'FAILURE', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '2',
-        2,
-        new Date(2024, 3, 1),
-        [],
-        [new ExtraCheckResult('2', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('2', 'FAILURE', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '1',
-        1,
-        new Date(2024, 2, 12),
-        [],
-        [new ExtraCheckResult('1', 'FAILURE', null, null, 1, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('1', 'FAILURE', null, 1, 1, 'StructureCheckResult')],
-        true,
-    ),
-]);
 
 const props = defineProps<{
     submissions: Submission[];
 }>();
 
-onMounted(async () => {
-    tempSubmissions.value = [...testSubmissions.value.reverse(), ...(props.submissions ?? [])];
-});
-
-watch(
-    () => props.submissions,
-    (newSubmissions) => {
-        tempSubmissions.value = [...newSubmissions, ...testSubmissions.value].reverse();
-    },
-    {
-        immediate: true, // Zal ook uitvoeren onMounted, dus je kan de logica uit onMounted verwijderen als je dit gebruikt
-    },
-);
-
 /**
  * Returns the extra information for the submission
  */
 const submissionsExtra = computed(() => {
-    return tempSubmissions.value.map((submission) => {
+    return props.submissions.map((submission: Submission) => {
         const iconDetails = getExtraSubmissionInformation(submission);
         return {
             ...submission,
@@ -137,7 +85,7 @@ const timeSince = (submissionDate: Date): string => {
  * @param submissionId
  */
 const navigateToSubmission = (submissionId: string): void => {
-    router.push({ name: 'submission', params: { submissionId } });
+    router.push({ name: 'submission', params: { submissionId, groupId: '0', projectId: '0', courseId: '0' } });
 };
 </script>
 

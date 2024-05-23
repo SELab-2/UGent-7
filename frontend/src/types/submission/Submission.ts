@@ -60,7 +60,7 @@ export class Submission {
      */
     public structureCheckFaults(): string[] {
         return this.structureCheckResults.map((check: StructureCheckResult) =>
-            this.getErrorMessageEnumKey(check.error_message as string),
+            this.getErrorMessageEnumKey(check.error_message!),
         );
     }
 

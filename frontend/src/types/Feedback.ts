@@ -1,5 +1,5 @@
-import {User} from "@/types/users/User.ts";
-import {Submission} from "@/types/submission/Submission.ts";
+import { type User } from '@/types/users/User.ts';
+import { type Submission } from '@/types/submission/Submission.ts';
 
 export class Feedback {
     constructor(
@@ -7,15 +7,10 @@ export class Feedback {
         public message: string,
         public author: User,
         public creation_date: Date,
-        public submission: Submission
+        public submission: Submission,
     ) {}
+
     static fromJSON(data: any): Feedback {
-        return new Feedback(
-            data.id,
-            data.message,
-            data.author,
-            data.creation_date,
-            data.submission
-        );
+        return new Feedback(data.id, data.message, data.author, data.creation_date, data.submission);
     }
 }

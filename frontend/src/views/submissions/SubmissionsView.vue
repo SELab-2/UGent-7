@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
-import Title from '@/components/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
 import Button from 'primevue/button';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
@@ -32,7 +32,7 @@ onMounted(async () => {
 
 const onUpload = async (callback: () => void): Promise<void> => {
     if (group.value !== null) {
-        console.log(files.value)
+        console.log(files.value);
         await createSubmission(files.value as File[], group.value.id);
         if (submission.value != null) {
             submissions.value = [...(submissions.value ?? []), submission.value];

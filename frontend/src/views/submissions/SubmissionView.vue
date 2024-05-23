@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Title from '@/components/layout/Title.vue';
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
 import Textarea from 'primevue/textarea';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';

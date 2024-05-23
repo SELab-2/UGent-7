@@ -7,7 +7,7 @@ import InputText from 'primevue/inputtext';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { parseArgs } from 'util';
-import { StructureCheck } from '@/types/StructureCheck';
+import { type StructureCheck } from '@/types/StructureCheck';
 
 /* Props */
 const props = defineProps<{
@@ -17,26 +17,26 @@ const props = defineProps<{
 
 const { t } = useI18n();
 
-const { structureChecks, getStructureCheckByProject, createStructureCheck, deleteStructureCheck} = useStructureCheck();
+const { structureChecks, getStructureCheckByProject, createStructureCheck, deleteStructureCheck } = useStructureCheck();
 
 onMounted(() => {
     loadStructureChecks();
-})
+});
 
 interface TreeNode_struct {
-        label: string;
-        children?: TreeNode_struct[];
-        key: string;
-        sort: string;
-        parrent: TreeNode_struct|null;
-    }
+    label: string;
+    children?: TreeNode_struct[];
+    key: string;
+    sort: string;
+    parrent: TreeNode_struct | null;
+}
 
 // Define a method to compute the style for each node
 function getNodeStyle(node: TreeNode_struct) {
     // Check if the node meets a certain condition, e.g., has a specific label
-    if (node.sort === 'file') return {color: 'black'};
-    if (node.sort === 'obligated') return {color: 'green'};
-    if (node.sort === 'blocked') return {color: 'red'};
+    if (node.sort === 'file') return { color: 'black' };
+    if (node.sort === 'obligated') return { color: 'green' };
+    if (node.sort === 'blocked') return { color: 'red' };
     // If no condition is met, return an empty object
     return {};
 }
@@ -44,25 +44,23 @@ function getNodeStyle(node: TreeNode_struct) {
 // Define tree data as ref
 const nodes = ref<TreeNode_struct[]>([]);
 
-type StringToIntDict = {
-    [key: string]: number;
-};
+type StringToIntDict = Record<string, number>;
 
 // Function to load structure checks into nodes
 async function loadStructureChecks() {
-    await getStructureCheckByProject(props.projectId) //3001
+    await getStructureCheckByProject(props.projectId); // 3001
 
     // Initialize an empty array for the result
-    let result: TreeNode_struct[] = [];
+    const result: TreeNode_struct[] = [];
 
     // Initialize a level object with the result array
-    let level = { result };
+    const level = { result };
 
     // Iterate over each path
-    (structureChecks.value||[]).forEach(structureCheck => {
+    (structureChecks.value || []).forEach((structureCheck) => {
         let path = structureCheck.name;
-        let obligated = structureCheck.obligated_extensions;
-        let blocked = structureCheck.blocked_extensions;
+        const obligated = structureCheck.obligated_extensions;
+        const blocked = structureCheck.blocked_extensions;
 
         if (path === '.') {
             path = '';
@@ -71,7 +69,7 @@ async function loadStructureChecks() {
         }
 
         // Split the path into individual parts
-        let parrent: TreeNode_struct|null = null
+        let parrent: TreeNode_struct | null = null;
         path.split('/').reduce((r: any, name: string, i: number, a: string[]) => {
             // Check if the current part doesn't exist in the hierarchy
             if (!r[name]) {
@@ -83,33 +81,33 @@ async function loadStructureChecks() {
                     label: name,
                     children: r[name].result,
                     sort: 'file',
-                    parrent: parrent
+                    parrent,
                 };
-                parrent = newNode
+                parrent = newNode;
 
                 // Add the node to the parent's children array
                 r.result.push(newNode);
-                
+
                 if (i === a.length - 1) {
-                    if(obligated){
+                    if (obligated) {
                         // If it's the deepest path and there are obligated extensions, add them as children
                         obligated.forEach((ext: any, index: number) => {
                             r[name].result.push({
                                 key: `${path}_${name}_obligated_${index}`,
                                 label: ext.extension,
                                 sort: 'obligated',
-                                parrent: newNode
+                                parrent: newNode,
                             });
                         });
                     }
-                    if(blocked){
+                    if (blocked) {
                         // If it's the deepest path and there are blocked extensions, add them as children
                         blocked.forEach((ext: any, index: number) => {
                             r[name].result.push({
                                 key: `${path}_${name}_blocked_${index}`,
                                 label: ext.extension,
                                 sort: 'blocked',
-                                parrent: newNode
+                                parrent: newNode,
                             });
                         });
                     }
@@ -121,34 +119,30 @@ async function loadStructureChecks() {
     });
 
     // Assign the fetched data to the nodes
-    if (result[0]){
+    if (result[0]) {
         nodes.value = result[0].children || [];
     }
 }
 
-const editedNode = ref<TreeNode_struct|null>(null);
+const editedNode = ref<TreeNode_struct | null>(null);
 const editedNodeName = ref('');
-type DropdownOption = {
+interface DropdownOption {
     label: string;
     value: string;
-};
+}
 const obligatedOption: DropdownOption = {
     label: 'Obligated',
-    value: 'obligated'
+    value: 'obligated',
 };
 const blockedOption: DropdownOption = {
     label: 'Blocked',
-    value: 'blocked'
+    value: 'blocked',
 };
 const fileOption: DropdownOption = {
     label: 'File',
-    value: 'file'
+    value: 'file',
 };
-const nodeTypes: DropdownOption[] = [
-    fileOption,
-    obligatedOption,
-    blockedOption
-];
+const nodeTypes: DropdownOption[] = [fileOption, obligatedOption, blockedOption];
 const editedNodeType = ref<DropdownOption>(nodeTypes[0]);
 
 const onNodeSelect = (event: TreeNode_struct) => {
@@ -156,27 +150,28 @@ const onNodeSelect = (event: TreeNode_struct) => {
 };
 
 const editSelectedNode = () => {
-    if (editedNode.value && editedNode.value.sort != "empty"){
+    if (editedNode.value && editedNode.value.sort != 'empty') {
         editedNode.value.label = editedNodeName.value;
     }
 };
 
 let counter = 0;
-const addSelectedNode = () => { //TODO make also work to add in root and if there are no items already
-    if(editedNode.value && editedNode.value.children){
-        if (editedNode.value.sort != "empty"){
+const addSelectedNode = () => {
+    // TODO make also work to add in root and if there are no items already
+    if (editedNode.value?.children) {
+        if (editedNode.value.sort != 'empty') {
             counter += 1;
-            let node: TreeNode_struct = {
+            const node: TreeNode_struct = {
                 key: `${editedNode.value.label}_${counter}_obligated_${editedNodeName.value}`,
                 label: editedNodeName.value,
                 sort: editedNodeType.value.value,
                 children: [],
-                parrent: editedNode.value
-            }
+                parrent: editedNode.value,
+            };
             editedNode.value.children.push(node);
             // sort the nodes by type to make them cluster together
             editedNode.value.children.sort((a: TreeNode_struct, b: TreeNode_struct) => {
-                const order:StringToIntDict = { 'obligated': 0, 'blocked': 1, 'file': 2 };
+                const order: StringToIntDict = { obligated: 0, blocked: 1, file: 2 };
                 return order[a.sort] - order[b.sort];
             });
         }
@@ -184,20 +179,20 @@ const addSelectedNode = () => { //TODO make also work to add in root and if ther
 };
 
 const deleteSelectedNode = () => {
-    if(editedNode.value){
-        if (editedNode.value.sort != "empty"){
+    if (editedNode.value) {
+        if (editedNode.value.sort != 'empty') {
             // Find the index of the selected node in the parent's children array
-            if(editedNode.value.parrent && editedNode.value.parrent.children){
-                const index = editedNode.value.parrent.children.findIndex(child => child === editedNode.value);
+            if (editedNode.value.parrent?.children) {
+                const index = editedNode.value.parrent.children.findIndex((child) => child === editedNode.value);
 
                 // If the selected node is found in the parent's children array
                 if (index !== -1) {
                     // Remove the selected node from the parent's children array
                     editedNode.value.parrent.children.splice(index, 1);
                 }
-            }else{
-                console.log("root")
-                const index = nodes.value.findIndex(child => child === editedNode.value);
+            } else {
+                console.log('root');
+                const index = nodes.value.findIndex((child) => child === editedNode.value);
 
                 // If the selected node is found in the parent's children array
                 if (index !== -1) {
@@ -210,22 +205,30 @@ const deleteSelectedNode = () => {
 };
 
 async function saveSelectedNode() {
-    let checks = parseNodesToStructureChecks(nodes.value);
+    const checks = parseNodesToStructureChecks(nodes.value);
     console.log(checks);
     await getStructureCheckByProject(props.projectId);
     if (structureChecks.value) {
-        await Promise.all(structureChecks.value.map(check => deleteStructureCheck(check.id)));
+        await Promise.all(
+            structureChecks.value.map(async (check) => {
+                await deleteStructureCheck(check.id);
+            }),
+        );
     }
     console.log(structureChecks);
     // TODO pack into 1 call
-    await Promise.all(checks.map(check => createStructureCheck(check, props.projectId)));
-    
-    //TODO realy save them
+    await Promise.all(
+        checks.map(async (check) => {
+            await createStructureCheck(check, props.projectId);
+        }),
+    );
+
+    // TODO realy save them
 }
 
 function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
     const structureChecks: any[] = [];
-    let structure_parrent: StructureCheck|null = null;
+    let structure_parrent: StructureCheck | null = null;
 
     // Recursive function to traverse tree nodes and build structure checks
     function traverse(node: TreeNode_struct, parentPath: string = '') {
@@ -234,14 +237,15 @@ function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
 
         // Add obligated and blocked extensions if they exist
         if (node.sort === 'obligated') {
-            if(structure_parrent && structure_parrent.obligated_extensions){ //TODO check if works for root
+            if (structure_parrent && structure_parrent.obligated_extensions) {
+                // TODO check if works for root
                 structure_parrent.obligated_extensions.push({ extension: node.label });
             }
         } else if (node.sort === 'blocked') {
-            if(structure_parrent && structure_parrent.blocked_extensions){
+            if (structure_parrent && structure_parrent.blocked_extensions) {
                 structure_parrent.blocked_extensions.push({ extension: node.label });
             }
-        }else{
+        } else {
             // Create structure check object based on node properties
             const structureCheck: any = {
                 name: fullPath,
@@ -252,86 +256,88 @@ function parseNodesToStructureChecks(nodes: TreeNode_struct[]): any[] {
             structure_parrent = structureCheck;
             // Recursively traverse children
             if (node.children) {
-                node.children.forEach(child => traverse(child, fullPath));
+                node.children.forEach((child) => {
+                    traverse(child, fullPath);
+                });
             }
 
             // Add the structure check object to the array
             structureChecks.push(structureCheck);
-            }
         }
+    }
 
     // Start traversing from the root nodes
-    nodes.forEach(node => traverse(node));
+    nodes.forEach((node) => {
+        traverse(node);
+    });
 
     return structureChecks;
 }
 </script>
 
 <template>
-        <Tree v-if="nodes && nodes.length" :value="nodes" class="w-full md:w-30rem" @node-select="onNodeSelect" selectionMode="single">
-            <template #default="node">
-                <b :style="getNodeStyle(node.node)">{{ node.node.label }}</b>
-            </template>
-        </Tree>
-        <Button
-            v-if="$props.editable"
-            :label="t('structure_checks.reload')"
-            type="button"
-            icon="pi pi-refresh"
-            iconPos="right"
-            @click="loadStructureChecks"
-            rounded
-        />
+    <Tree
+        v-if="nodes && nodes.length"
+        :value="nodes"
+        class="w-full md:w-30rem"
+        @node-select="onNodeSelect"
+        selectionMode="single"
+    >
+        <template #default="node">
+            <b :style="getNodeStyle(node.node)">{{ node.node.label }}</b>
+        </template>
+    </Tree>
+    <Button
+        v-if="$props.editable"
+        :label="t('structure_checks.reload')"
+        type="button"
+        icon="pi pi-refresh"
+        iconPos="right"
+        @click="loadStructureChecks"
+        rounded
+    />
 
-        <InputText
-            v-if="$props.editable"
-            v-model="editedNodeName"
-            placeholder="Edit Node Name"
-        />
+    <InputText v-if="$props.editable" v-model="editedNodeName" placeholder="Edit Node Name" />
 
-        <Button
-            v-if="$props.editable"
-            :label="t('structure_checks.edit')"
-            type="button"
-            icon="pi pi-refresh"
-            iconPos="right"
-            @click="editSelectedNode"
-            rounded
-        />
+    <Button
+        v-if="$props.editable"
+        :label="t('structure_checks.edit')"
+        type="button"
+        icon="pi pi-refresh"
+        iconPos="right"
+        @click="editSelectedNode"
+        rounded
+    />
 
-        <Button
-            v-if="$props.editable"
-            :label="t('structure_checks.add')"
-            type="button"
-            icon="pi pi-refresh"
-            iconPos="right"
-            @click="addSelectedNode"
-            rounded
-        />
+    <Button
+        v-if="$props.editable"
+        :label="t('structure_checks.add')"
+        type="button"
+        icon="pi pi-refresh"
+        iconPos="right"
+        @click="addSelectedNode"
+        rounded
+    />
 
-        <Button
-            v-if="$props.editable"
-            :label="t('structure_checks.delete')"
-            type="button"
-            icon="pi pi-refresh"
-            iconPos="right"
-            @click="deleteSelectedNode"
-            rounded
-        />
+    <Button
+        v-if="$props.editable"
+        :label="t('structure_checks.delete')"
+        type="button"
+        icon="pi pi-refresh"
+        iconPos="right"
+        @click="deleteSelectedNode"
+        rounded
+    />
 
-        <Button
-            v-if="$props.editable"
-            :label="t('structure_checks.save')"
-            type="button"
-            icon="pi pi-refresh"
-            iconPos="right"
-            @click="saveSelectedNode"
-            rounded
-        />
+    <Button
+        v-if="$props.editable"
+        :label="t('structure_checks.save')"
+        type="button"
+        icon="pi pi-refresh"
+        iconPos="right"
+        @click="saveSelectedNode"
+        rounded
+    />
 
-        <Dropdown
-            v-if="$props.editable"
-            v-model="editedNodeType"
-            :options="nodeTypes"
-        />
+    <Dropdown v-if="$props.editable" v-model="editedNodeType" :options="nodeTypes" />
 </template>
