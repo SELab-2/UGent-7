@@ -13,6 +13,7 @@ import { type Filter } from '@/types/filter/Filter.ts';
  * @param endpoint
  * @param ref
  * @param fromJson
+ * @param selfProcessError
  */
 export async function get<T>(
     endpoint: string,
@@ -44,6 +45,7 @@ export async function get<T>(
  * @param ref
  * @param fromJson
  * @param contentType
+ * @param selfProcessError
  */
 export async function create<T>(
     endpoint: string,
@@ -77,6 +79,7 @@ export async function create<T>(
  * @param data
  * @param ref
  * @param contentType
+ * @param selfProcessError
  */
 export async function patch(
     endpoint: string,
@@ -108,6 +111,7 @@ export async function patch(
  * @param endpoint
  * @param data
  * @param contentType
+ * @param selfProcessError
  */
 export async function put<T>(
     endpoint: string,
@@ -137,6 +141,7 @@ export async function put<T>(
  * @param endpoint
  * @param ref
  * @param fromJson
+ * @param selfProcessError
  */
 export async function deleteId<T>(
     endpoint: string,
@@ -164,6 +169,7 @@ export async function deleteId<T>(
  * @param data
  * @param ref
  * @param fromJson
+ * @param selfProcessError
  */
 export async function deleteIdWithData<T>(
     endpoint: string,
@@ -191,6 +197,7 @@ export async function deleteIdWithData<T>(
  * @param endpoint
  * @param ref
  * @param fromJson
+ * @param selfProcessError
  */
 export async function getList<T>(
     endpoint: string,
@@ -221,6 +228,7 @@ export async function getList<T>(
  * @param pageSize
  * @param pagination
  * @param fromJson
+ * @param selfProcessError
  */
 export async function getPaginatedList<T>(
     endpoint: string,
