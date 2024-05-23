@@ -25,9 +25,9 @@ const meterItems = computed(() => {
 
     const extraChecksFailed = structureChecksPassed - extraChecksPassed;
 
-    const green = '#76DD78';
+    const green = '#749B68';
     const orange = '#FFB84F';
-    const red = '#F37142';
+    const red = '#FF5445';
 
     const submissionsFailedItem = {
         value: (submissionsFailed / groups) * 100,
