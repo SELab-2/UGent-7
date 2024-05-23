@@ -33,7 +33,7 @@
     visible: true
     archived: false
     locked_groups: false
-    start_date: 2024-12-12T00:00:00Z
+    start_date: 2023-12-12T00:00:00Z
     deadline: 2025-01-01T00:00:00Z
     max_score: 100
     score_visible: false
