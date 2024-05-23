@@ -199,7 +199,7 @@ const onSelect = (selected: any[] | null): void => {
                                 <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
                             </IconField>
                         </div>
-                        <Button class="w-1 mb-3 gap-3" :disabled="multiRemove" @click="toggleSafetyGuardMultiRemove">
+                        <Button class="w-auto mb-3 gap-3 justify-content-center" :disabled="multiRemove" @click="toggleSafetyGuardMultiRemove">
                             {{ t('admin.delete') }}
                         </Button>
                     </template>
@@ -238,7 +238,7 @@ const onSelect = (selected: any[] | null): void => {
                     </Column>
                     <Column key="remove" :header-style="{ width: '11%' }" class="p-col">
                         <template #body="{ data }">
-                            <Button @click="() => toggleSafetyGuardRemove(data)" class="justify-content-center">
+                            <Button @click="() => toggleSafetyGuardRemove(data)" class="justify-content-center w-auto">
                                 {{ t('admin.delete') }}
                             </Button>
                         </template>

@@ -209,9 +209,9 @@ const saveItem = async (): Promise<void> => {
                 </Column>
                 <Column :header-style="{ width: '12%' }" class="p-col">
                     <template #body="{ data }">
-                        <Button @click="() => showPopup(data)" class="justify-content-center">{{
-                            t('admin.edit')
-                        }}</Button>
+                        <Button @click="() => showPopup(data)" class="justify-content-center w-auto">
+                            {{ t('admin.edit') }}
+                        </Button>
                     </template>
                 </Column>
             </LazyDataTable>
