@@ -27,7 +27,7 @@ const logo: Record<string, string> = { nl, en };
 
                 <!-- Social Media Icons -->
                 <div class="flex align-items-center text-primary gap-3">
-                    <a class="text-md text-primary">
+                    <a class="text-md text-primary" href="https://discordapp.com/users/delany12/">
                         <i class="pi pi-discord"></i>
                     </a>
                     <a class="text-md text-primary" href="https://github.com/tyboro2002">
@@ -39,10 +39,10 @@ const logo: Record<string, string> = { nl, en };
                     <a class="text-md text-primary" href="https://www.facebook.com/profile.php?id=100015599597182">
                         <i class="pi pi-facebook"></i>
                     </a>
-                    <a class="text-md text-primary">
+                    <a class="text-md text-primary" href="https://x.com/Francis43798083">
                         <i class="pi pi-twitter"></i>
                     </a>
-                    <a class="text-md text-primary">
+                    <a class="text-md text-primary" href="https://www.instagram.com/bramm0508/">
                         <i class="pi pi-instagram"></i>
                     </a>
                     <a class="text-md text-primary" href="https://www.linkedin.com/in/vincent-vallaeys-855637309/">
