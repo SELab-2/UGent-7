@@ -36,7 +36,7 @@ def _user_creation(user: User, attributes: dict, **_):
     """Upon user creation, auto-populate additional properties"""
     student_id: str = cast(str, attributes.get("ugentStudentID"))
 
-    if student_id is None:
+    if student_id is not None:
         Student.create(user, student_id=student_id)
     else:
         # For now, we assume that everyone without a student ID is a teacher.
