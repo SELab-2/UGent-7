@@ -25,38 +25,45 @@ const meterItems = computed(() => {
 
     const extraChecksFailed = structureChecksPassed - extraChecksPassed;
 
-    const green = '#76DD78'
-    const orange = '#FFB84F'
-    const red = '#F37142'
+    const green = '#76DD78';
+    const orange = '#FFB84F';
+    const red = '#F37142';
 
     const submissionsFailedItem = {
-            value: (submissionsFailed / groups) * 100,
-            color: red,
-            label: t('components.card.testsFail'),
-            icon: 'pi pi-times',
-    }
+        value: (submissionsFailed / groups) * 100,
+        color: red,
+        label: t('components.card.testsFail'),
+        icon: 'pi pi-times',
+    };
     const structureChecksPassedItem = {
-            value: (extraChecksFailed / groups) * 100,
-            color: orange,
-            label: t('components.card.structureTestsSucceed'),
-            icon: 'pi pi-exclamation-circle',
-    }
+        value: (extraChecksFailed / groups) * 100,
+        color: orange,
+        label: t('components.card.structureTestsSucceed'),
+        icon: 'pi pi-exclamation-circle',
+    };
     const extraChecksPassedItem = {
-            value: (extraChecksPassed / groups) * 100,
-            color: green,
-            label: t('components.card.extraTestsSucceed'),
-            icon: 'pi pi-check',
-    }
+        value: (extraChecksPassed / groups) * 100,
+        color: green,
+        label: t('components.card.extraTestsSucceed'),
+        icon: 'pi pi-check',
+    };
 
     if (hasStructurechecks) {
         if (hasExtraChecks) {
-            return [submissionsFailedItem, structureChecksPassedItem, extraChecksPassedItem]
+            return [submissionsFailedItem, structureChecksPassedItem, extraChecksPassedItem];
         }
-        structureChecksPassedItem.color = green
-        structureChecksPassedItem.icon = 'pi pi-check'
-        return [submissionsFailedItem, structureChecksPassedItem]
+        structureChecksPassedItem.color = green;
+        structureChecksPassedItem.icon = 'pi pi-check';
+        return [submissionsFailedItem, structureChecksPassedItem];
     }
-    return [{ value: (groupsSubmitted / groups) * 100, color: green, label: t('components.card.successfulSubmission'), icon: 'pi pi-check' }]
+    return [
+        {
+            value: (groupsSubmitted / groups) * 100,
+            color: green,
+            label: t('components.card.successfulSubmission'),
+            icon: 'pi pi-check',
+        },
+    ];
 });
 </script>
 
