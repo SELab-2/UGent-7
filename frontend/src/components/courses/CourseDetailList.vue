@@ -46,7 +46,7 @@ const { t } = useI18n();
                     <span class="pi pi-exclamation-circle text-6xl text-primary" />
                     <slot name="empty">
                         <p>{{ t('components.list.noCourses.student') }}</p>
-                        <RouterLink :to="{ name: 'courses' }">
+                        <RouterLink id="courses" :to="{ name: 'courses' }">
                             <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
                         </RouterLink>
                     </slot>

@@ -107,7 +107,13 @@ const items = computed(() => [
             <!-- Navigation -->
             <div id="navigation" class="hidden md:flex w-full h-full">
                 <template v-if="isAuthenticated">
-                    <RouterLink :to="{ name: item.route }" v-for="item in items" :key="item.route" class="nav-item">
+                    <RouterLink
+                        :to="{ name: item.route }"
+                        v-for="item in items"
+                        :key="item.route"
+                        class="nav-item"
+                        :id="item.route"
+                    >
                         <div
                             class="flex align-items-center uppercase flex justify-content-center p-3 pl-0 cursor-pointer text-primary font-medium"
                         >
@@ -139,7 +145,7 @@ const items = computed(() => [
                     </div>
                     <div class="overflow-y-auto px-2">
                         <ul class="list-none p-0 m-0">
-                            <li v-for="item in items" :key="item.route">
+                            <li v-for="item in items" :key="item.route" :id="item.route">
                                 <RouterLink
                                     :to="{ name: item.route }"
                                     @click="closeCallback"

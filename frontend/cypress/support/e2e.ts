@@ -14,7 +14,45 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands.ts'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // log uncaught error
+  console.error('Uncaught exception:', err.message);
+
+  return !err.message.includes('401');
+});
+
+const logout = () => {
+    cy.getCookie('csrftoken').then((cookie) => {
+        cy.getCookie('sessionid').then((cookie2) => {
+            if (cookie && cookie2) {
+                cy.request({
+                    method: 'POST',
+                    url: '/api/auth/cas/logout/',
+                    headers: {
+                        'Referer': Cypress.config('baseUrl'),
+                        'X-CSRFToken': cookie.value,
+                    },
+                });
+            }
+        })
+
+    });
+}
+
+// before(() => {
+//     cy.request('POST', '/api/auth/test-user/student/');
+//     logout();
+//     cy.request('POST', '/api/auth/test-user/multi/');
+//     logout();
+//     cy.request('POST', '/api/auth/test-user/admin/');
+//     logout();
+// })
+
+afterEach(() => {
+    logout();
+})

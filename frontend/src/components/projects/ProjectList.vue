@@ -141,7 +141,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                 <div class="mt-3">
                     <slot name="empty">
                         <p>{{ t('components.list.noProjects.student') }}</p>
-                        <RouterLink :to="{ name: 'courses' }">
+                        <RouterLink id="courses" :to="{ name: 'courses' }">
                             <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
                         </RouterLink>
                     </slot>
