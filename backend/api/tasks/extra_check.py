@@ -13,10 +13,10 @@ from api.logic.get_file_path import (get_docker_image_tag,
 from api.models.docker import StateEnum as DockerStateEnum
 from api.models.submission import ErrorMessageEnum, ExtraCheckResult, StateEnum
 from celery import shared_task
-from django.core.files import File
 from django.core.files.base import ContentFile
 from docker.models.containers import Container
 from docker.types import LogConfig
+from notifications.signals import NotificationType, notification_create
 from requests.exceptions import ConnectionError
 
 
@@ -36,11 +36,21 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
         extra_check_result.error_message = ErrorMessageEnum.DOCKER_IMAGE_ERROR
         extra_check_result.save()
 
+        notification_create.send(
+            sender=ExtraCheckResult,
+            type=NotificationType.EXTRA_CHECK_FAIL,
+            queryset=list(extra_check_result.submission.group.students.all()),
+            arguments={"name": extra_check_result.extra_check.name},
+        )
+
         return structure_check_result
 
     # Will probably never happen but doesn't hurt to check
     while extra_check_result.submission.running_checks:
         sleep(1)
+
+    # Notification type
+    notification_type = NotificationType.EXTRA_CHECK_SUCCESS
 
     # Lock
     extra_check_result.submission.running_checks = True
@@ -114,41 +124,49 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             case 1:
                 extra_check_result.result = StateEnum.FAILED
                 extra_check_result.error_message = ErrorMessageEnum.CHECK_ERROR
+                notification_type = NotificationType.EXTRA_CHECK_FAIL
 
             # Time limit
             case 2:
                 extra_check_result.result = StateEnum.FAILED
                 extra_check_result.error_message = ErrorMessageEnum.TIME_LIMIT
+                notification_type = NotificationType.EXTRA_CHECK_FAIL
 
             # Memory limit
             case 3:
                 extra_check_result.result = StateEnum.FAILED
                 extra_check_result.error_message = ErrorMessageEnum.MEMORY_LIMIT
+                notification_type = NotificationType.EXTRA_CHECK_FAIL
 
             # Catch all non zero exit codes
             case _:
                 extra_check_result.result = StateEnum.FAILED
                 extra_check_result.error_message = ErrorMessageEnum.RUNTIME_ERROR
+                notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Docker image error
     except (docker.errors.APIError, docker.errors.ImageNotFound):
         extra_check_result.result = StateEnum.FAILED
         extra_check_result.error_message = ErrorMessageEnum.DOCKER_IMAGE_ERROR
+        notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Runtime error
     except docker.errors.ContainerError:
         extra_check_result.result = StateEnum.FAILED
         extra_check_result.error_message = ErrorMessageEnum.RUNTIME_ERROR
+        notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Timeout error
     except ConnectionError:
         extra_check_result.result = StateEnum.FAILED
         extra_check_result.error_message = ErrorMessageEnum.TIME_LIMIT
+        notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Unknown error
     except Exception:
         extra_check_result.result = StateEnum.FAILED
         extra_check_result.error_message = ErrorMessageEnum.UNKNOWN
+        notification_type = NotificationType.EXTRA_CHECK_FAIL
 
     # Cleanup and data saving
     # Start by saving any logs
@@ -164,6 +182,14 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
             logs = "Container error"
 
         extra_check_result.log_file.save(submission_uuid, content=ContentFile(logs), save=False)
+
+        # Send notification
+        notification_create.send(
+            sender=ExtraCheckResult,
+            type=notification_type,
+            queryset=list(extra_check_result.submission.group.students.all()),
+            arguments={"name": extra_check_result.extra_check.name},
+        )
 
     # Zip and save any possible artifacts
     memory_zip = io.BytesIO()

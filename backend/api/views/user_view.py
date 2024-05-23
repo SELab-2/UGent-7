@@ -57,7 +57,7 @@ class UserViewSet(ReadOnlyModelViewSet):
         role_filters = Q()
 
         for role in roles:
-            role_filters |= Q(**{f"{role}__isnull": False, f"{role}__is_active": True})
+            role_filters &= Q(**{f"{role}__isnull": False, f"{role}__is_active": True})
 
         queryset = queryset.filter(
             role_filters,

@@ -21,8 +21,10 @@ export const endpoints = {
     },
     dockerImages: {
         index: '/api/docker-images/',
+        retrieve: '/api/docker-images/{id}/',
         search: '/api/docker-images/search/',
         patch: '/api/docker-images/{id}/public/',
+        deleteMany: '/api/docker-images/delete/',
     },
     students: {
         index: '/api/students/',
@@ -60,6 +62,7 @@ export const endpoints = {
         retrieve: '/api/groups/{id}/',
         byProject: '/api/projects/{projectId}/groups/',
         byStudent: '/api/students/{studentId}/groups/',
+        byProjectStudent: '/api/projects/{projectId}/student-group/',
     },
     projects: {
         retrieve: '/api/projects/{id}/',
@@ -81,6 +84,7 @@ export const endpoints = {
     feedbacks: {
         retrieve: '/api/feedback/{id}/',
         bySubmission: '/api/submissions/{submissionId}/feedback/',
+        retrieve: '/api/structure_checks/{id}',
     },
     extraChecks: {
         retrieve: '/api/extra-checks/{id}/',

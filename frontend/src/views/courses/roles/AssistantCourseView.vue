@@ -1,37 +1,34 @@
 <script setup lang="ts">
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/instructors/TeacherAssistantList.vue';
+import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
-import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
+import { watchImmediate } from '@vueuse/core';
 
 /* Props */
 const props = defineProps<{
     course: Course;
 }>();
 
-/* State */
-const instructors = computed(() => {
-    if (props.course.teachers !== null && props.course.assistants !== null) {
-        return props.course.teachers.concat(props.course.assistants);
-    }
-
-    return null;
-});
-
 /* Composable injections */
 const { t } = useI18n();
 const { projects, getProjectsByCourse } = useProject();
 
-watch(
-    () => props.course,
-    async () => {
-        await getProjectsByCourse(props.course.id);
+/* State */
+const instructors = computed(() => {
+    return props.course.teachers.concat(props.course.assistants);
+});
+
+/* Fetch projects when the course changes */
+watchImmediate(
+    () => props.course.id,
+    async (courseId: string) => {
+        await getProjectsByCourse(courseId);
     },
-    { immediate: true },
 );
 </script>
 
@@ -41,8 +38,10 @@ watch(
         <!-- Course title -->
         <Title class="m-0">{{ props.course.name }}</Title>
     </div>
+
     <!-- Description -->
-    <div class="surface-300 px-4 py-3" v-html="props.course.description" />
+    <div v-html="props.course.description" />
+
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
@@ -53,6 +52,7 @@ watch(
             <ProjectCreateButton :courses="[props.course]" />
         </div>
     </div>
+
     <!-- Project list body -->
     <ProjectList :projects="projects">
         <template #empty>
@@ -63,6 +63,7 @@ watch(
             <ProjectCreateButton :courses="[course]" :label="t('components.button.createProject')" />
         </template>
     </ProjectList>
+
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">
         <Title class="m-0">{{ t('views.courses.teachersAndAssistants.title') }}</Title>

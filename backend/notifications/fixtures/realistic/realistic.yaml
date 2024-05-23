@@ -1,0 +1,45 @@
+- model: notifications.notificationtemplate
+  pk: 1
+  fields:
+    title_key: "Title: Score added"
+    description_key: "Description: Score added %(score)s"
+- model: notifications.notificationtemplate
+  pk: 2
+  fields:
+    title_key: "Title: Score updated"
+    description_key: "Description: Score updated %(score)s"
+- model: notifications.notificationtemplate
+  pk: 3
+  fields:
+    title_key: "Title: Docker image build success"
+    description_key: "Description: Docker image build success %(name)s"
+- model: notifications.notificationtemplate
+  pk: 4
+  fields:
+    title_key: "Title: Docker image build error"
+    description_key: "Description: Docker image build error %(name)s"
+- model: notifications.notificationtemplate
+  pk: 5
+  fields:
+    title_key: "Title: Extra check success"
+    description_key: "Description: Extra check success %(name)s"
+- model: notifications.notificationtemplate
+  pk: 6
+  fields:
+    title_key: "Title: Extra check error"
+    description_key: "Description: Extra check error %(name)s"
+- model: notifications.notificationtemplate
+  pk: 7
+  fields:
+    title_key: "Title: Structure checks success"
+    description_key: "Description: Structure checks success"
+- model: notifications.notificationtemplate
+  pk: 8
+  fields:
+    title_key: "Title: Structure checks error"
+    description_key: "Description: Structure checks"
+- model: notifications.notificationtemplate
+  pk: 9
+  fields:
+    title_key: "Title: Submission received"
+    description_key: "Description: Submission received"

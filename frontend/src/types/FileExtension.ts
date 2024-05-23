@@ -1,15 +1,20 @@
-export class File_extension {
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+export interface FileExtensionJSON {
+    id: string;
+    extension: string;
+}
+
+export class FileExtension {
     constructor(
-        public extension: string
+        public id: string = '',
+        public extension: string = '',
     ) {}
 
-        /**
-     * Convert a file extension object to a faculty instance.
+    /**
+     * Convert a file extension object to a file extension instance.
      *
-     * @param file_extension
+     * @param extension
      */
-        static fromJSON(file_extension: File_extension): File_extension {
-            return new File_extension(file_extension.extension);
-        }
+    static fromJSON(extension: FileExtensionJSON): FileExtension {
+        return new FileExtension(extension.id, extension.extension);
+    }
 }

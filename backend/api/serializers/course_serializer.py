@@ -45,7 +45,11 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs: dict) -> dict:
         """Extra custom validation for course serializer"""
+        attrs = super().validate(attrs)
+
+        # Clean the description
         attrs['description'] = clean(attrs['description'])
+
         return attrs
 
     def to_representation(self, instance):

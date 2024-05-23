@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
-import ProjectMeter from '@/components/projects/ProjectMeter.vue';
+import ProjectMeter from '@/components/submissions/ProjectMeter.vue';
 import Button from 'primevue/button';
 import { type Project } from '@/types/Project.ts';
 import { PrimeIcons } from 'primevue/api';

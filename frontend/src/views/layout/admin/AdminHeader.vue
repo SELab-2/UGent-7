@@ -33,7 +33,7 @@ const items = computed(() => [
     },
     {
         icon: 'file',
-        label: t('admin.docker_images.title'),
+        label: t('admin.dockerImages.title'),
         route: 'admin-dockerImages',
     },
 ]);
@@ -53,7 +53,7 @@ const items = computed(() => [
             <div id="header" class="w-full flex text-white p-4">
                 <!-- Title -->
                 <div class="hidden md:flex align-items-end">
-                    <h1 class="text-white m-0">Ypovoli</h1>
+                    <h1 class="text-white m-0">Admin</h1>
                 </div>
                 <!-- User information -->
                 <div class="text-right ml-auto text-sm flex flex-column align-items-end gap-3">

@@ -85,6 +85,9 @@ onMounted(async () => {
             </Accordion>
         </div>
         <div class="col-12 xl:col-9">
+            <p class="mt-3" v-if="pagination">
+                {{ t('views.courses.teachersAndAssistants.search.results', pagination.count) }}
+            </p>
             <TeacherAssistantList
                 :users="pagination?.results ?? null"
                 :cols="3"

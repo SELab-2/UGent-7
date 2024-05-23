@@ -3,18 +3,18 @@ import { User } from '@/types/users/User.ts';
 import { type Response } from '@/types/Response.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { endpoints } from '@/config/endpoints.ts';
-import { create, get, patch, getList, getPaginatedList } from '@/composables/services/helpers.ts';
+import { get, patch, getList, getPaginatedList, createToast } from '@/composables/services/helpers.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
 interface userState {
     pagination: Ref<PaginatorResponse<User> | null>;
     users: Ref<User[] | null>;
     user: Ref<User | null>;
-    getUserByID: (id: string) => Promise<void>;
-    getUsers: () => Promise<void>;
-    searchUsers: (filters: Filter, page: number, pageSize: number) => Promise<void>;
-    createUser: (user_data: User) => Promise<void>;
-    toggleAdmin: (id: string, is_staff: boolean) => Promise<void>;
+    getUserByID: (id: string, selfProcessError?: boolean) => Promise<void>;
+    getUsers: (selfProcessError?: boolean) => Promise<void>;
+    searchUsers: (filters: Filter, page: number, pageSize: number, selfProcessError?: boolean) => Promise<void>;
+    createUser: (user_data: User, selfProcessError?: boolean) => Promise<void>;
+    toggleAdmin: (id: string, is_staff: boolean, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useUser(): userState {
@@ -23,24 +23,30 @@ export function useUser(): userState {
     const user = ref<User | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getUserByID(id: string): Promise<void> {
+    async function getUserByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.retrieve.replace('{id}', id);
-        await get<User>(endpoint, user, User.fromJSON);
+        await get<User>(endpoint, user, User.fromJSON, selfProcessError);
     }
 
-    async function getUsers(): Promise<void> {
+    async function getUsers(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.index;
-        await getList<User>(endpoint, users, User.fromJSON);
+        await getList<User>(endpoint, users, User.fromJSON, selfProcessError);
     }
 
-    async function searchUsers(filters: Filter, page: number, pageSize: number): Promise<void> {
+    async function searchUsers(
+        filters: Filter,
+        page: number,
+        pageSize: number,
+        selfProcessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.users.search;
-        await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON);
+        await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON, selfProcessError);
     }
 
-    async function createUser(userData: User): Promise<void> {
+    async function createUser(userData: User, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.index;
-        await create<User>(
+        await createToast<User>(
+            'user',
             endpoint,
             {
                 username: userData.username,
@@ -51,10 +57,12 @@ export function useUser(): userState {
             },
             user,
             User.fromJSON,
+            undefined,
+            selfProcessError,
         );
     }
 
-    async function toggleAdmin(id: string, isStaff: boolean): Promise<void> {
+    async function toggleAdmin(id: string, isStaff: boolean, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.admin.replace('{id}', id);
         await patch(
             endpoint,
@@ -62,6 +70,8 @@ export function useUser(): userState {
                 is_staff: isStaff,
             },
             response,
+            undefined,
+            selfProcessError,
         );
     }
 

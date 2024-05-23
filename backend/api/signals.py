@@ -15,6 +15,7 @@ from authentication.models import User
 from authentication.signals import user_created
 from django.db.models.signals import post_delete, post_save, pre_delete
 from django.dispatch import Signal, receiver
+from notifications.signals import NotificationType, notification_create
 
 # MARK: Signals
 
@@ -118,6 +119,13 @@ def hook_submission(sender, instance: Submission, created: bool, **kwargs):
     if created and not kwargs.get('raw', False):
         run_all_checks.send(sender=Submission, submission=instance)
         pass
+
+    notification_create.send(
+        sender=Submission,
+        type=NotificationType.SUBMISSION_RECEIVED,
+        queryset=list(instance.group.students.all()),
+        arguments={}
+    )
 
 
 @receiver(post_save, sender=DockerImage)

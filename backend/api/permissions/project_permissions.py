@@ -1,3 +1,6 @@
+from api.models.assistant import Assistant
+from api.models.student import Student
+from api.models.teacher import Teacher
 from api.permissions.role_permissions import (is_assistant, is_student,
                                               is_teacher)
 from authentication.models import User
@@ -11,40 +14,46 @@ class ProjectPermission(BasePermission):
 
     def has_permission(self, request: Request, view: ViewSet) -> bool:
         """Check if user has permission to view a general project endpoint."""
-        user: User = request.user
-        if request.method in SAFE_METHODS:
-            return True
-
-        # We only allow teachers and assistants to create new projects.
-        return is_teacher(user) or is_assistant(user)
+        return is_teacher(request.user) or is_assistant(request.user) or request.method in SAFE_METHODS
 
     def has_object_permission(self, request: Request, view: ViewSet, project) -> bool:
         """Check if user has permission to view a detailed project endpoint"""
-        user: User = request.user
-        course = project.course
-        teacher_or_assistant = is_teacher(user) and user.teacher.courses.filter(id=course.id).exists() or \
-            is_assistant(user) and user.assistant.courses.filter(id=course.id).exists()
+        user = request.user
+
+        # Check if the user is a teacher that has the course linked to the project.
+        teacher = Teacher.objects.filter(id=user.id).first()
+        assistant = Assistant.objects.filter(id=user.id).first()
+        student = Student.objects.filter(id=user.id).first()
+
+        # Get the individual permission clauses.
+        teacher_permission = teacher is not None and teacher.courses.filter(id=project.course.id).exists()
+        assistant_permission = assistant is not None and assistant.courses.filter(id=project.course.id).exists()
+        student_permission = student is not None and student.courses.filter(id=project.course.id).exists()
 
         if request.method in SAFE_METHODS:
-            # Users that are linked to the course can view the project.
-            return teacher_or_assistant or (is_student(user) and user.student.courses.filter(id=course.id).exists())
+            return teacher_permission or assistant_permission or student_permission
 
-        # We only allow teachers and assistants to modify specified projects.
-        return teacher_or_assistant
+        return teacher_permission or assistant_permission
 
 
 class ProjectGroupPermission(BasePermission):
     """Permission class for project related group endpoints"""
+    def has_permission(self, request: Request, view: ViewSet) -> bool:
+        """Check if user has permission to view a general project group endpoint."""
+        return is_teacher(request.user) or is_assistant(request.user) or request.method in SAFE_METHODS
 
     def has_object_permission(self, request: Request, view: ViewSet, project) -> bool:
-        user: User = request.user
-        course = project.course
-        teacher_or_assistant = is_teacher(user) and user.teacher.courses.filter(id=course.id).exists() or \
-            is_assistant(user) and user.assistant.courses.filter(id=course.id).exists()
+        """Check if user has permission to view a detailed project group endpoint"""
+        user = request.user
 
-        if request.method in SAFE_METHODS:
-            # Users that are linked to the course can view the group.
-            return teacher_or_assistant or (is_student(user) and user.student.courses.filter(id=course.id).exists())
+        # Check if the user is a teacher that has the course linked to the project.
+        teacher = Teacher.objects.filter(id=user.id).first()
+        assistant = Assistant.objects.filter(id=user.id).first()
+        student = Student.objects.filter(id=user.id).first()
 
-        # We only allow teachers and assistants to create new groups.
-        return teacher_or_assistant
+        # Get the individual permission clauses.
+        teacher_permission = teacher is not None and teacher.courses.filter(id=project.course.id).exists()
+        assistant_permission = assistant is not None and assistant.courses.filter(id=project.course.id).exists()
+        student_permission = student is not None and student.courses.filter(id=project.course.id).exists()
+
+        return teacher_permission or assistant_permission or student_permission

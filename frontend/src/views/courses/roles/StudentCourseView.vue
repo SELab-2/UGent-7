@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import Button from 'primevue/button';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/instructors/TeacherAssistantList.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import ConfirmDialog from 'primevue/confirmdialog';
@@ -12,7 +12,8 @@ import { useAuthStore } from '@/store/authentication.store.ts';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useProject } from '@/composables/services/project.service.ts';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
+import { watchImmediate } from '@vueuse/core';
 
 /* Props */
 const props = defineProps<{
@@ -30,11 +31,7 @@ const { push } = useRouter();
 
 /* State */
 const instructors = computed(() => {
-    if (props.course.teachers !== null && props.course.assistants !== null) {
-        return props.course.teachers.concat(props.course.assistants);
-    }
-
-    return null;
+    return props.course.teachers.concat(props.course.assistants);
 });
 
 const visibleProjects = computed(() => projects.value?.filter((project) => project.visible) ?? null);
@@ -47,27 +44,32 @@ async function leaveCourse(): Promise<void> {
     confirm.require({
         message: t('confirmations.leaveCourse'),
         header: t('views.courses.leave'),
-        accept: (): void => {
-            if (user.value !== null) {
-                // Leave the course
-                studentLeaveCourse(props.course.id, user.value.id).then(() => {
+        accept: () => {
+            (async () => {
+                if (user.value !== null) {
+                    // Leave the course
+                    await studentLeaveCourse(props.course.id, user.value.id);
+
                     // Refresh the user so the course is removed from the user's courses
-                    refreshUser();
+                    await refreshUser();
+
                     // Redirect to the dashboard
-                    push({ name: 'dashboard' });
-                });
-            }
+                    await push({ name: 'dashboard' });
+                }
+            })();
         },
         reject: () => {},
     });
 }
 
-watch(
-    () => props.course,
-    async () => {
-        await getProjectsByCourse(props.course.id);
+/**
+ * Watch for changes in the course ID and fetch the projects for the course.
+ */
+watchImmediate(
+    () => props.course.id,
+    async (courseId: string) => {
+        await getProjectsByCourse(courseId);
     },
-    { immediate: true },
 );
 </script>
 
@@ -77,13 +79,16 @@ watch(
         <!-- Course title -->
         <Title class="m-0">{{ props.course.name }}</Title>
     </div>
+
     <!-- Description -->
-    <div class="surface-300 px-4 py-3" v-html="props.course.description" />
+    <div v-html="props.course.description" />
+
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
         <!-- Project list title -->
         <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
     </div>
+
     <!-- Project list body -->
     <ProjectList :projects="visibleProjects">
         <template #empty>
