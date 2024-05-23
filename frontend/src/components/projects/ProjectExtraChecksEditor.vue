@@ -35,7 +35,7 @@ const displayExtraCheckCreation = ref(false);
 /* Form content */
 let form = reactive(new ExtraCheck());
 
-// State to manage the visibility of the confirmation dialog and the selected docker image
+// State to manage the visibility of the confirmation dialog for the deletion of a docker image
 const confirmDialogVisible = ref(false);
 
 // Define validation rules for each form field
@@ -102,16 +102,9 @@ async function onDockerImageUpload(event: any): Promise<void> {
 /**
  * Function to remove the docker image from the list of docker images
  */
-async function confirmDelete(dockerImage: DockerImage): Promise<void> {
-    confirmDialogVisible.value = true;
-    removeDockerImage(dockerImage);
-}
-
-/**
- * Function to remove the docker image from the list of docker images
- */
 async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
     // Show a confirmation dialog before removing the image, to prevent accidental clicks
+    confirmDialogVisible.value = true;
     confirm.require({
         message: t('confirmations.deleteDockerImage'),
         header: t('views.projects.extraChecks.deleteDockerImage'),
@@ -304,7 +297,7 @@ async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
                                                 v-if="!slotProps.data.public"
                                                 icon="pi pi-trash"
                                                 class="p-button-danger p-button-sm"
-                                                @click="confirmDelete(slotProps.data)"
+                                                @click="removeDockerImage(slotProps.data)"
                                                 outlined
                                                 rounded
                                             />
