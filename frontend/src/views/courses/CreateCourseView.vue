@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CourseForm from '@/components/courses/CourseForm.vue';
-import Title from '@/components/layout/Title.vue';
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
 import Loading from '@/components/Loading.vue';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
@@ -9,9 +9,11 @@ import { useFaculty } from '@/composables/services/faculty.service.ts';
 import { type Course } from '@/types/Course.ts';
 import { useCourses } from '@/composables/services/course.service.ts';
 import { useRouter } from 'vue-router';
+import { useMessagesStore } from '@/store/messages.store.ts';
 
 /* Composable injections */
 const { t } = useI18n();
+const { addSuccessMessage } = useMessagesStore();
 const { push } = useRouter();
 const { faculties, getFaculties } = useFaculty();
 const { createCourse } = useCourses();
@@ -25,8 +27,13 @@ const loading = ref(true);
  * @param course
  */
 async function saveCourse(course: Course): Promise<void> {
-    await createCourse(course);
-    await push({ name: 'dashboard' });
+    try {
+        await createCourse(course);
+        addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.courses.create.success', [course.name]));
+        await push({ name: 'dashboard' });
+    } catch (error: any) {
+        // TODO error message
+    }
 }
 
 /** Load the data */

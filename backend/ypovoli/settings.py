@@ -28,16 +28,34 @@ MEDIA_ROOT = os.path.normpath(os.path.join("data"))
 
 # TESTING
 TESTING_BASE_LINK = "http://testserver"
-TEST_USER_DATA = {
-    "id": "1234",
-    "username": "test",
-    "email": "test@test",
-    "first_name": "test",
-    "last_name": "test",
+TEST_ADMIN_DATA = {
+    "id": "0",
+    "username": "admin",
+    "email": "admin@test",
+    "first_name": "admin",
+    "last_name": "admin",
+    "is_staff": True
 }
-TEST_USER_ATTRIBUTES = {
-    **TEST_USER_DATA,
-    "ugentStudentID": "1234"
+TEST_STUDENT_DATA = {
+    "id": "6",
+    "username": "student",
+    "email": "student@test",
+    "first_name": "student",
+    "last_name": "student",
+}
+TEST_PROFESSOR_DATA = {
+    "id": "1",
+    "username": "professor",
+    "email": "professor@test",
+    "first_name": "professor",
+    "last_name": "professor",
+}
+TEST_MULTI_DATA = {
+    "id": "10",
+    "username": "multi",
+    "email": "multi@test",
+    "first_name": "multi",
+    "last_name": "multi",
 }
 
 # SECURITY WARNING: keep the secret key used in production secret!

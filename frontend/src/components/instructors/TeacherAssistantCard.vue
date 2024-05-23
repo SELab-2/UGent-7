@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
-import CourseRoleAddButton from '@/components/teachers_assistants/buttons/CourseRoleAddButton.vue';
-import LeaveCourseButton from '@/components/teachers_assistants/buttons/LeaveCourseButton.vue';
+import CourseRoleAddButton from '@/components/instructors/buttons/CourseRoleAddButton.vue';
+import LeaveCourseButton from '@/components/instructors/buttons/LeaveCourseButton.vue';
 import { type User } from '@/types/users/User.ts';
 import { type Course } from '@/types/Course';
 import { useI18n } from 'vue-i18n';

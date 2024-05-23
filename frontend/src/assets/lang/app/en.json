@@ -15,6 +15,13 @@
                 "nl": "Nederlands",
                 "en": "English"
             }
+        },
+        "footer": {
+            "home": "Dashboard",
+            "about": "Help",
+            "privacy": "Cookies",
+            "contact": "Contact",
+            "rights": "All rights reserved"
         }
     },
     "views": {
@@ -41,11 +48,18 @@
         },
         "projects": {
             "all": "All projects",
+            "backToCourse": "Back to course",
             "coming": "Near deadlines",
             "deadline": "Deadline",
             "days": "Today at {hour} | Tomorrow at {hour} | In {count} days",
             "ago": "1 day ago | {count} days ago",
+            "chooseGroupMessage": "Choose a group before {0}",
+            "groupScore": "Group score",
+            "noGroupScore": "No group score",
+            "noGroupMembers": "No group members",
+            "publishScores": "Publish scores",
             "groupName": "Group name",
+            "groups": "Groups",
             "groupPopulation": "Size",
             "groupStatus": "Status",
             "start": "Start date",

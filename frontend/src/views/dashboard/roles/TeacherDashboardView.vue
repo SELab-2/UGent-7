@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ButtonGroup from 'primevue/buttongroup';
 import Button from 'primevue/button';
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
 import CourseList from '@/components/courses/CourseDetailList.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
@@ -59,7 +59,11 @@ watchImmediate(
                 <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 
                 <!-- Create project button -->
-                <ProjectCreateButton :courses="filteredCourses" :label="t('components.button.createProject')" />
+                <ProjectCreateButton
+                    id="projectCreate"
+                    :courses="filteredCourses"
+                    :label="t('components.button.createProject')"
+                />
             </div>
             <!-- Project list body -->
             <ProjectList :projects="projects">
@@ -79,7 +83,11 @@ watchImmediate(
                             {{ t('components.list.noCourses.teacher') }}
                         </p>
 
-                        <ProjectCreateButton :courses="filteredCourses" :label="t('components.button.createProject')" />
+                        <ProjectCreateButton
+                            id="projectCreate"
+                            :courses="filteredCourses"
+                            :label="t('components.button.createProject')"
+                        />
                     </template>
                 </template>
             </ProjectList>
@@ -95,7 +103,7 @@ watchImmediate(
                     <YearSelector :years="allYears" v-model="selectedYear" />
 
                     <!-- Create course button -->
-                    <RouterLink :to="{ name: 'course-create' }">
+                    <RouterLink id="courseCreate" :to="{ name: 'course-create' }">
                         <Button
                             :icon="PrimeIcons.PLUS"
                             icon-pos="right"
@@ -109,7 +117,7 @@ watchImmediate(
             <CourseList :courses="filteredCourses">
                 <template #empty>
                     <p>{{ t('components.list.noCourses.teacher') }}</p>
-                    <RouterLink :to="{ name: 'course-create' }">
+                    <RouterLink id="courseCreate" :to="{ name: 'course-create' }">
                         <Button :label="t('components.button.createCourse')" icon="pi pi-plus" />
                     </RouterLink>
                 </template>

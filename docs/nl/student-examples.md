@@ -93,9 +93,6 @@ Deze pagina beschrijft hoe u als student met Ypovoli interageert.
   - Scrol naar de sectie "Mijn vakken".
   - Druk hier op het vak van het gezochte project.
   - Onder de sectie "Lopende projecten" ziet u alle projecten voor dit specifieke vak.
-- Optie 4: 
-  - Druk in de navigatiebalk op "Projecten".
-  - U ziet een overzicht van al uw projecten.
 
 ::: info Project kaart uitleg
 <!-- TODO maybey ne fotoke en me numerkes aanduide -->
@@ -136,4 +133,4 @@ De kaart is als volgt ingedeeld:
 
 ## Status vorige indieningen bekijken
 - Ga naar indien pagina.
-- Staat daar bij. !!! TODO !!!
+- Staat daar bij.

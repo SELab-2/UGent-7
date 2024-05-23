@@ -12,9 +12,9 @@ import { computed, ref, watchEffect } from 'vue';
 import { helpers, required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { type Course } from '@/types/Course.ts';
-import ProjectStructureTree from '@/components/projects/ProjectStructureTree.vue';
+import ProjectStructureTree from '@/components/projects/ProjectStructureEditor.vue';
 import { type DockerImage } from '@/types/DockerImage.ts';
-import ExtraChecksUpload from '@/components/projects/ExtraChecksUpload.vue';
+import ExtraChecksUpload from '@/components/projects/ProjectExtraChecksEditor.vue';
 
 /* Props */
 const props = defineProps<{

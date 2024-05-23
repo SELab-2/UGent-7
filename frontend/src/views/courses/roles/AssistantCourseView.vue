@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/instructors/TeacherAssistantList.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
