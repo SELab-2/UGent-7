@@ -8,6 +8,8 @@ from authentication.models import User
 from django.urls import reverse
 from rest_framework.test import APITestCase
 
+from ypovoli import settings
+
 
 class GroupModelTests(APITestCase):
     def setUp(self) -> None:
@@ -39,7 +41,7 @@ class GroupModelTests(APITestCase):
         content_json = json.loads(response.content.decode("utf-8"))
 
         self.assertEqual(int(content_json["id"]), group.id)
-        self.assertEqual(content_json["project"]["id"], group.project.id)
+        self.assertEqual(content_json["project"], settings.TESTING_BASE_LINK + reverse("project-detail", args=[str(project.id)]))
         self.assertEqual(content_json["score"], group.score)
 
     def test_group_project(self):
@@ -70,11 +72,7 @@ class GroupModelTests(APITestCase):
         # Parse the JSON content from the response
         content_json = content_json["project"]
 
-        self.assertEqual(content_json["name"], project.name)
-        self.assertEqual(content_json["description"], project.description)
-        self.assertEqual(content_json["visible"], project.visible)
-        self.assertEqual(content_json["archived"], project.archived)
-        self.assertEqual(content_json["course"]["id"], course.id)
+        self.assertEqual(content_json, settings.TESTING_BASE_LINK + reverse("project-detail", args=[str(project.id)]))
 
     def test_group_students(self):
         """Able to retrieve students details of a group."""
