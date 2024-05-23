@@ -53,9 +53,10 @@ const meterItems = computed(() => {
             return [submissionsFailedItem, structureChecksPassedItem, extraChecksPassedItem]
         }
         structureChecksPassedItem.color = green
+        structureChecksPassedItem.icon = 'pi pi-check'
         return [submissionsFailedItem, structureChecksPassedItem]
     }
-    return [{ value: (groupsSubmitted / groups) * 100, color: green, label: t('components.card.testsFail'), icon: 'pi pi-times' }]
+    return [{ value: (groupsSubmitted / groups) * 100, color: green, label: t('components.card.successfulSubmission'), icon: 'pi pi-check' }]
 });
 </script>
 
