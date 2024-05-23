@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
-import Divider from 'primevue/divider';
 import FileUpload from 'primevue/fileupload';
 import { PrimeIcons } from 'primevue/api';
 import Loading from '@/components/Loading.vue';
@@ -92,7 +91,6 @@ onMounted(async () => {
                         <!-- Project info column -->
                         <!-- Submission structure -->
                         <div v-if="structureChecks">
-                            <Divider />
                             <ProjectStructure :structure-checks="structureChecks" />
                         </div>
                         <!-- Submission upload -->

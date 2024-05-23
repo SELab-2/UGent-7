@@ -16,9 +16,9 @@ console.log(props.structureChecks);
 
 <template>
     <div>
-        <label class="pb-2">
+        <div class="p-2">
             {{ t('views.projects.structureChecks.title') }}
-        </label>
+        </div>
         <Tree class="w-100" selection-mode="single" :value="Project.getNodes(structureChecks)">
             <template #default="{ node }">
                 <template v-if="node.obligated">
