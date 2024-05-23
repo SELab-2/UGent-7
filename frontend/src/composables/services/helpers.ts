@@ -71,31 +71,6 @@ export async function create<T>(
 }
 
 /**
- * Create an item and display toast message when successful stating the creation has been successful.
- *
- * @param type type of the object that gets created
- * @param endpoint
- * @param data
- * @param ref
- * @param fromJson
- * @param contentType
- */
-export async function createToast<T>(
-    type: string,
-    endpoint: string,
-    data: any,
-    ref: Ref<T | null>,
-    fromJson: (data: any) => T,
-    contentType: string = 'application/json',
-): Promise<void> {
-    const { t } = i18n.global;
-    const { addSuccessMessage } = useMessagesStore();
-
-    await create<T>(endpoint, data, ref, fromJson, contentType);
-    addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.create', { type: t('types.article.' + type) }));
-}
-
-/**
  * Patch an item given its ID.
  *
  * @param endpoint

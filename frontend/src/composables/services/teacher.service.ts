@@ -11,7 +11,6 @@ import {
     deleteId,
     deleteIdWithData,
     getPaginatedList,
-    createToast,
 } from '@/composables/services/helpers.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
@@ -104,8 +103,7 @@ export function useTeacher(): TeacherState {
 
     async function createTeacher(user: User, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.teachers.index;
-        await createToast<Teacher>(
-            'teacher',
+        await create<Teacher>(
             endpoint,
             {
                 user: user.id,

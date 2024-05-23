@@ -1,6 +1,6 @@
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, getList, deleteId, createToast } from '@/composables/services/helpers.ts';
+import { get, getList, deleteId, create } from '@/composables/services/helpers.ts';
 import { User } from '@/types/users/User.ts';
 
 interface AdminState {
@@ -28,8 +28,7 @@ export function useAdmin(): AdminState {
 
     async function createAdmin(user: User, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.index;
-        await createToast<User>(
-            'admin',
+        await create<User>(
             endpoint,
             {
                 id: user.id,
