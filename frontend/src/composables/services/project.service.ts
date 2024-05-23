@@ -1,4 +1,4 @@
-import { Project } from '@/types/Project';
+import { Project, ProjectJSON } from '@/types/Project';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { i18n } from '@/config/i18n.ts';
@@ -62,7 +62,7 @@ export function useProject(): ProjectState {
         selfprocessError: boolean = true,
     ): Promise<void> {
         await getProjectsByCourse(courseId, selfprocessError);
-        const allProjects = (projects.value ?? []).map((projectData: Project) => Project.fromJSON(projectData));
+        const allProjects = (projects.value ?? []).map((projectData: ProjectJSON) => Project.fromJSON(projectData));
         projects.value = allProjects.filter((project: Project) => {
             return project.deadline.toDateString() === deadlineDate.toDateString();
         });
@@ -105,6 +105,7 @@ export function useProject(): ProjectState {
             Project.fromJSON,
             'multipart/form-data',
             selfprocessError,
+        );
         addSuccessMessage(
             t('toasts.messages.success'),
             t('toasts.messages.projects.create.success', [project.value?.name]),
