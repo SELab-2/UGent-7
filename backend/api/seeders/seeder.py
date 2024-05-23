@@ -591,7 +591,9 @@ def seed_submission_results(faker):
                 ])
 
         cursor.executemany(
-            "INSERT INTO api_checkresult(id, result, error_message, polymorphic_ctype_id, submission_id) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO api_checkresult("
+            "id, result, error_message, polymorphic_ctype_id, submission_id"
+            ") VALUES (?, ?, ?, ?, ?)",
             results
         )
         cursor.executemany(

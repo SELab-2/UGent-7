@@ -88,5 +88,3 @@ class ExtraCheckResultViewSet(RetrieveModelMixin, GenericViewSet):
             return Response({"message": _("extra_check_result.download.artifact")}, status=404)
 
         return FileResponse(open(extra_check_result.artifact.path, "rb"), as_attachment=True, filename="artifact.zip")
-
-
