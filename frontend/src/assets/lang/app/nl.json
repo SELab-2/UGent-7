@@ -89,7 +89,7 @@
                 "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",
                 "memoryLimit": "Geheugenlimiet voor de uitvoering (in MB)",
                 "showLog": "Maak de extra logs van de docker container zichtbaar voor de studenten",
-                "showArtifacts": "Maak de artefacten van de docker container zichtbaar voor de studenten"
+                "showArtifact": "Maak de artefacten zichtbaar voor de studenten"
             }
         },
         "submissions": {

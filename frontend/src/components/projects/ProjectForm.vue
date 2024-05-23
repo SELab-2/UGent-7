@@ -24,7 +24,7 @@ const props = defineProps<{
 }>();
 
 /* Emits */
-const emit = defineEmits(['update:project', 'create:docker-image']);
+const emit = defineEmits(['update:project', 'create:docker-image', 'delete:docker-image']);
 
 /* Composable injections */
 const { t } = useI18n();
@@ -71,6 +71,16 @@ async function saveProject(): Promise<void> {
 function saveDockerImage(image: DockerImage, file: File): void {
     emit('create:docker-image', image, file);
 }
+
+/**
+ * Delete the docker image by emitting its new value.
+ *
+ * @param image
+ */
+function removeDockerImage(image: DockerImage): void {
+    emit('delete:docker-image', image);
+}
+
 
 /**
  * Watch for changes in the project prop and update the form values.
@@ -217,6 +227,7 @@ watchEffect(() => {
                             v-model="form.extra_checks"
                             :docker-images="dockerImages"
                             @create:docker-image="saveDockerImage"
+                            @delete:docker-image="removeDockerImage"
                         />
                     </div>
                 </div>

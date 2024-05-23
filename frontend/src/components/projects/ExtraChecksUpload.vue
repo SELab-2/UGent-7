@@ -24,7 +24,7 @@ defineProps<{ dockerImages: DockerImage[] }>();
 const extraChecks = defineModel<ExtraCheck[]>();
 
 /* Emits */
-const emit = defineEmits(['create:docker-image']);
+const emit = defineEmits(['create:docker-image', 'delete:docker-image']);
 
 /* State for the dialog to create an extra check */
 const displayExtraCheckCreation = ref(false);
@@ -247,6 +247,19 @@ async function onDockerImageUpload(event: any): Promise<void> {
                                             <!-- Use check and cross icons to indicate if the image is public or not -->
                                             <i v-if="slotProps.data.public" class="pi pi-check" />
                                             <i v-else class="pi pi-times" />
+                                        </template>
+                                    </Column>
+                                    <Column :style="{ width: '5rem' }">
+                                        <template #body="slotProps">
+                                            <!-- Show delete button only if the image is not public -->
+                                            <Button
+                                                v-if="!slotProps.data.public"
+                                                icon="pi pi-trash"
+                                                class="p-button-danger p-button-sm"
+                                                @click="emit('delete:docker-image', slotProps.data)"
+                                                outlined
+                                                rounded
+                                            />
                                         </template>
                                     </Column>
                                 </DataTable>

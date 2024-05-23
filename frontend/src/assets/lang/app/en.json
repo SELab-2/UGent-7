@@ -79,7 +79,7 @@
             },
             "extraChecks": {
                 "title": "Automatic checks on a submission",
-                "empty": "No checks addeed",
+                "empty": "No checks added",
                 "add": "New check",
                 "name": "Name",
                 "public": "Public",
@@ -88,7 +88,7 @@
                 "timeLimit": "Time limit for execution (in seconds)",
                 "memoryLimit": "Memory limit for execution (in MB)",
                 "showLog": "Make the extra logs of the docker container visible to the students",
-                "showArtifact": "Make the artifacts of the docker container visible to the students"
+                "showArtifact": "Make the artifacts visible to the students"
             }
         },
         "submissions": {

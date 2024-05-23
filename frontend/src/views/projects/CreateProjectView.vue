@@ -28,7 +28,7 @@ const { course, getCourseByID } = useCourses();
 const { project, createProject } = useProject();
 const { setStructureChecks } = useStructureCheck();
 const { setExtraChecks } = useExtraCheck();
-const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
+const { dockerImages, getDockerImages, createDockerImage, deleteDockerImage } = useDockerImages();
 
 /* State */
 const loading = ref(true);
@@ -75,6 +75,20 @@ async function saveDockerImage(dockerImage: DockerImage, file: File): Promise<vo
     }
 }
 
+/**
+ * Delete the docker image.
+ *
+ * @param dockerImage
+ */
+ async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
+    try {
+        await deleteDockerImage(dockerImage.id);
+        await getDockerImages();
+    } catch (error: any) {
+        processError(error);
+    }
+}
+
 /* Load course data */
 watchImmediate(
     () => params.courseId.toString(),
@@ -106,6 +120,7 @@ watchImmediate(
                         :docker-images="dockerImages"
                         @update:project="(project, numberOfGroups) => saveProject(project, numberOfGroups)"
                         @create:docker-image="saveDockerImage"
+                        @delete:docker-image="removeDockerImage"
                     />
                 </template>
             </div>

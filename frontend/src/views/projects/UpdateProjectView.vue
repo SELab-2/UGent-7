@@ -27,7 +27,7 @@ const { addErrorMessage } = useMessagesStore();
 const { project, updateProject, getProjectByID } = useProject();
 const { structureChecks, setStructureChecks, getStructureCheckByProject } = useStructureCheck();
 const { extraChecks, setExtraChecks, deleteExtraCheck, getExtraChecksByProject } = useExtraCheck();
-const { dockerImages, getDockerImages, createDockerImage } = useDockerImages();
+const { dockerImages, getDockerImages, createDockerImage, deleteDockerImage } = useDockerImages();
 
 /* State */
 const loading = ref(true);
@@ -92,6 +92,20 @@ async function saveDockerImage(dockerImage: DockerImage, file: File): Promise<vo
     }
 }
 
+/**
+ * Delete the docker image.
+ *
+ * @param dockerImage
+ */
+async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
+    try {
+        await deleteDockerImage(dockerImage.id);
+        await getDockerImages();
+    } catch (error: any) {
+        processError(error);
+    }
+}
+
 /* Load project data */
 watchImmediate(
     () => params.projectId,
@@ -140,6 +154,7 @@ watchImmediate(
                         :project="project"
                         :docker-images="dockerImages"
                         @create:docker-image="saveDockerImage"
+                        @delete:docker-image="removeDockerImage"
                         @update:project="saveProject"
                     />
                 </template>
