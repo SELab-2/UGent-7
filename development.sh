@@ -134,7 +134,6 @@ if [ "$data" != "" ]; then
   docker-compose -f development.yml up -d backend redis celery
 
   echo "Clearing, Migrating & Populating the database"
-  # We have nog fixtures for notification yet.
   docker-compose -f development.yml run backend sh -c "python manage.py flush --no-input; python manage.py migrate; python manage.py loaddata notifications/fixtures/$data/*; python manage.py loaddata authentication/fixtures/$data/*; python manage.py loaddata api/fixtures/$data/*;"
 
   echo "Stopping the services"
