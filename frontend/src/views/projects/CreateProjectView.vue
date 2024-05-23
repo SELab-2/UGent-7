@@ -23,7 +23,7 @@ const { params } = useRoute();
 
 /* Service injection */
 const { push } = useRouter();
-const { addErrorMessage } = useMessagesStore();
+const { addErrorMessage, addSuccessMessage } = useMessagesStore();
 const { course, getCourseByID } = useCourses();
 const { project, createProject } = useProject();
 const { setStructureChecks } = useStructureCheck();
@@ -47,6 +47,10 @@ async function saveProject(newProject: Project, numberOfGroups: number): Promise
             if (project.value !== null) {
                 await setStructureChecks(newProject.structure_checks ?? [], project.value.id);
                 await setExtraChecks(newProject.extra_checks ?? [], project.value.id);
+                addSuccessMessage(
+                    t('toasts.messages.success'),
+                    t('toasts.messages.projects.create.success', [project.value?.name]),
+                );
                 await push({
                     name: 'course-project',
                     params: { courseId: course.value.id, projectId: project.value.id },

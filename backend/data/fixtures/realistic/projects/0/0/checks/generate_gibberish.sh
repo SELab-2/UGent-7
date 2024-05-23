@@ -19,4 +19,4 @@ done
 
 # Generate an artifact
 
-wget https://golang.org/doc/gopher/modelsheet.jpg -P artifacts
+wget https://upload.wikimedia.org/wikipedia/commons/5/5e/Logo_UGent_NL_RGB_2400_kleur-op-wit.png -P artifacts

@@ -33,7 +33,7 @@
     visible: true
     archived: false
     locked_groups: false
-    start_date: 2024-12-12T00:00:00Z
+    start_date: 2023-12-12T00:00:00Z
     deadline: 2025-01-01T00:00:00Z
     max_score: 100
     score_visible: false
@@ -134,9 +134,18 @@
     project: 0
     obligated_extensions:
       - 0
-    blocked_extensions: []
+    blocked_extensions:
+      - 1
 - model: api.structurecheck
   pk: 1
+  fields:
+    path: "verslag/"
+    project: 0
+    obligated_extensions:
+      - 3
+    blocked_extensions: []
+- model: api.structurecheck
+  pk: 2
   fields:
     path: src/
     project: 1
@@ -145,7 +154,7 @@
     blocked_extensions:
       - 2
 - model: api.structurecheck
-  pk: 2
+  pk: 3
   fields:
     path: verslag/
     project: 1
@@ -153,7 +162,7 @@
       - 3
     blocked_extensions: []
 - model: api.structurecheck
-  pk: 3
+  pk: 4
   fields:
     path: ""
     project: 3

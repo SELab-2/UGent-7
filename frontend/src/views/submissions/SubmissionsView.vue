@@ -12,6 +12,7 @@ import { PrimeIcons } from 'primevue/api';
 import AllSubmission from '@/components/submissions/AllSubmission.vue';
 import { useGroup } from '@/composables/services/group.service.ts';
 import { useSubmission } from '@/composables/services/submission.service.ts';
+import { useMessagesStore } from '@/store/messages.store.ts';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -19,6 +20,7 @@ const { project, getProjectByID } = useProject();
 const { course, getCourseByID } = useCourses();
 const { group, getGroupByID } = useGroup();
 const { submission, submissions, createSubmission, getSubmissionByGroup } = useSubmission();
+const { addSuccessMessage, addErrorMessage } = useMessagesStore();
 
 /* State */
 const files = ref<File[]>([]);
@@ -32,13 +34,18 @@ onMounted(async () => {
 
 const onUpload = async (callback: () => void): Promise<void> => {
     if (group.value !== null) {
-        console.log(files.value);
-        await createSubmission(files.value as File[], group.value.id);
-        if (submission.value != null) {
-            submissions.value = [...(submissions.value ?? []), submission.value];
+        try {
+            console.log(files.value);
+            await createSubmission(files.value as File[], group.value.id);
+            addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.submissions.create.success'));
+            if (submission.value != null) {
+                submissions.value = [...(submissions.value ?? []), submission.value];
+            }
+            files.value = [];
+            callback();
+        } catch (e) {
+            addErrorMessage(t('toasts.messages.error'), t('toasts.messages.submissions.create.error'));
         }
-        files.value = [];
-        callback();
     }
 };
 

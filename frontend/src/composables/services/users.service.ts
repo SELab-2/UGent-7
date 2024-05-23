@@ -3,7 +3,7 @@ import { User } from '@/types/users/User.ts';
 import { type Response } from '@/types/Response.ts';
 import { type PaginatorResponse } from '@/types/filter/Paginator.ts';
 import { endpoints } from '@/config/endpoints.ts';
-import { get, patch, getList, getPaginatedList, createToast } from '@/composables/services/helpers.ts';
+import { get, patch, getList, getPaginatedList, create } from '@/composables/services/helpers.ts';
 import { type Filter } from '@/types/filter/Filter.ts';
 
 interface userState {
@@ -45,8 +45,7 @@ export function useUser(): userState {
 
     async function createUser(userData: User, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.index;
-        await createToast<User>(
-            'user',
+        await create<User>(
             endpoint,
             {
                 username: userData.username,

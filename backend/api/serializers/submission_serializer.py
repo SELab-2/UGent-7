@@ -98,6 +98,9 @@ class SubmissionSerializer(serializers.ModelSerializer):
         group: Group = self.context["group"]
         project: Project = group.project
 
+        if not project.has_started():
+            raise ValidationError(_("project.error.submissions.project_not_started"))
+
         # Check if the project's deadline is not passed.
         if project.deadline_passed():
             raise ValidationError(_("project.error.submissions.past_project"))

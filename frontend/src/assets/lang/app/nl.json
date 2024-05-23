@@ -281,6 +281,7 @@
             "error": "Fout",
             "unknown": "Er is een onbekende fout opgetreden.",
             "create": "{type} werd succesvol aangemaakt.",
+            "edit": "{type} werd succesvol bewerkt.",
             "courses": {
                 "enrollment": {
                     "success": "Je bent succesvol ingeschreven voor het vak '{0}'.",

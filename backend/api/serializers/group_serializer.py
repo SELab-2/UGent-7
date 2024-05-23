@@ -81,10 +81,6 @@ class StudentJoinGroupSerializer(StudentIDSerializer):
         group: Group = self.context["group"]
         student: Student = attrs["student"]
 
-        # Make sure a student can't join if groups are locked
-        if group.project.is_groups_locked():
-            raise ValidationError(gettext("group.errors.locked"))
-
         # Make sure the group is not already full
         if group.is_full():
             raise ValidationError(gettext("group.errors.full"))

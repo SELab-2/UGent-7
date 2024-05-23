@@ -15,6 +15,7 @@ import Body from '@/views/layout/Body.vue';
 import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
+import { useMessagesStore } from '@/store/messages.store.ts';
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -35,6 +36,7 @@ const {
     deleteDockerImages,
 } = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
+const { addSuccessMessage } = useMessagesStore();
 const confirm = useConfirm();
 
 /* State */
@@ -93,7 +95,12 @@ const toggleSafetyGuardEdit = (data: DockerImage): void => {
  * Changes the public status in the backend of the docker image whose attributes are in editItem's value attribute
  */
 const changePublicStatus = async (): Promise<void> => {
-    await patchDockerImage(editItem.value);
+    try {
+        await patchDockerImage(editItem.value);
+        addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.edit', { type: t('types.article.docker') }));
+    } catch (e) {
+        // TODO error message (when editing public status of docker image)
+    }
 };
 /**
  * Show safety guard for removing a docker image from the backend and set up values for when confirmed
@@ -135,10 +142,18 @@ const removeItems = async (): Promise<void> => {
  * @param event Event containing docker image file in files attributes
  */
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
-    const files: File[] = event.files as File[];
-    await createDockerImage(addItem.value, files[0]);
-    addItem.value.name = '';
-    selectedOption.value = selectOptions.value[0];
+    try {
+        const files: File[] = event.files as File[];
+        await createDockerImage(addItem.value, files[0]);
+        addSuccessMessage(
+            t('toasts.messages.success'),
+            t('toasts.messages.create', { type: t('types.article.docker') }),
+        );
+        addItem.value.name = '';
+        selectedOption.value = selectOptions.value[0];
+    } catch (e) {
+        // TODO error message
+    }
 };
 
 /**

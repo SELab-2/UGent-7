@@ -26,7 +26,7 @@ import { useRoute } from 'vue-router';
 
 /* Composable injections */
 const { t } = useI18n();
-const { addErrorMessage } = useMessagesStore();
+const { addErrorMessage, addSuccessMessage } = useMessagesStore();
 const { query } = useRoute();
 const { pagination, users, getUsers, searchUsers, toggleAdmin } = useUser();
 const { createStudent, deleteStudent } = useStudents();
@@ -105,34 +105,42 @@ const saveItem = async (): Promise<void> => {
         const index = value.results.findIndex((row: User) => row.id === editItem.value.id);
         const paginationItem = value.results[index];
 
-        for (let i = 1; i < roles.length; i++) {
-            const role = roles[i];
-            // determine whether a role is in our original item and whether it's in our update item
-            // knowing this, we know which roles to destroy in the backend and which to create
-            const paginationIncludes = paginationItem.roles.includes(role);
-            const editIncludes = editItem.value.roles.includes(role);
-            if (!paginationIncludes && editIncludes) {
-                // add role in backend
-                const func = creators.value[role];
+        try {
+            for (let i = 1; i < roles.length; i++) {
+                const role = roles[i];
+                // determine whether a role is in our original item and whether it's in our update item
+                // knowing this, we know which roles to destroy in the backend and which to create
+                const paginationIncludes = paginationItem.roles.includes(role);
+                const editIncludes = editItem.value.roles.includes(role);
+                if (!paginationIncludes && editIncludes) {
+                    // add role in backend
+                    const func = creators.value[role];
 
-                // if the role that needs to be created is a student, a studentId needs to be supplied as well
-                if (role === 'student') {
-                    const data: Record<string, any> = {
-                        ...editItem.value,
-                        student_id: editItem.value.id,
-                    };
-                    await func(data);
-                } else {
-                    await func(editItem.value);
+                    // if the role that needs to be created is a student, a studentId needs to be supplied as well
+                    if (role === 'student') {
+                        const data: Record<string, any> = {
+                            ...editItem.value,
+                            student_id: editItem.value.id,
+                        };
+                        await func(data);
+                    } else {
+                        await func(editItem.value);
+                    }
+                } else if (paginationIncludes && !editIncludes) {
+                    // remove role in backend
+                    const func = destroyers.value[role];
+                    await func(editItem.value.id);
                 }
-            } else if (paginationIncludes && !editIncludes) {
-                // remove role in backend
-                const func = destroyers.value[role];
-                await func(editItem.value.id);
             }
+            // update admin status
+            await toggleAdmin(editItem.value.id, editItem.value.is_staff);
+            addSuccessMessage(
+                t('toasts.messages.success'),
+                t('toasts.messages.edit', { type: t('types.article.user') }),
+            );
+        } catch (e) {
+            // TODO error message (failed to edit user)
         }
-        // update admin status
-        await toggleAdmin(editItem.value.id, editItem.value.is_staff);
         // update locally
         await dataTable.value.fetch();
     } else {

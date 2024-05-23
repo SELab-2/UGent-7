@@ -76,6 +76,11 @@ class Project(models.Model):
         now = timezone.now()
         return now > self.deadline
 
+    def has_started(self):
+        """Returns True if the project has started."""
+        now = timezone.now()
+        return now >= self.start_date
+
     def is_archived(self):
         """Returns True if a project is archived."""
         return self.archived
