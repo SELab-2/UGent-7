@@ -24,7 +24,7 @@ def parse_zip(project: Project, zip_file: InMemoryUploadedFile) -> bool:
         if common_prefix[-1] != '/':
             prefixes = prefixes[:-1]
 
-        directories += [prefix + '/' for prefix in prefixes]
+        directories += [prefix for prefix in prefixes]
 
     # Add for each directory a structure check
     for directory in directories:

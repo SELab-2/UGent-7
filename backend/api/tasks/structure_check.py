@@ -89,4 +89,4 @@ def _get_all_name_ext(path: str) -> dict[str, str]:
                 with zipfile.ZipFile(zip_data, 'r') as inner_zip:
                     file_list = inner_zip.namelist()
 
-    return {file: file.split('.')[-1] for file in file_list}
+    return {'/'.join(file.split('/')[:-1]): file.split('.')[-1] for file in file_list}
