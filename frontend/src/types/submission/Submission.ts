@@ -20,7 +20,7 @@ export class Submission {
         public is_valid: boolean = false,
         public extraCheckResults: ExtraCheckResult[] = [],
         public structureCheckResults: StructureCheckResult[] = [],
-        public zip: File | null = null,
+        public zip: HyperlinkedRelation = '',
     ) {}
 
     /**
@@ -108,6 +108,7 @@ export class Submission {
             submission.is_valid,
             extraCheckResults,
             structureCheckResults,
+            submission.zip,
         );
     }
 }

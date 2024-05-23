@@ -6,7 +6,7 @@ export interface ExtraCheckResultJSON {
     error_message: string | null;
     submission: number;
     structure_check: number;
-    extra_check: number;
+    extra_check: string;
     resourcetype: string;
     log_file: HyperlinkedRelation;
     artifact: HyperlinkedRelation;
@@ -20,7 +20,7 @@ export class ExtraCheckResult {
         public log_file: string = '',
         public artifact: string = '',
         public submission: number = 0,
-        public extra_check: number = 0,
+        public extra_check: string = '',
         public resourcetype: string = '',
     ) {}
 

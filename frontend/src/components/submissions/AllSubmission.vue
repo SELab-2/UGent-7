@@ -5,7 +5,9 @@ import { type ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
 import { type StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 import { useI18n } from 'vue-i18n';
 import router from '@/router/router.ts';
+import { useRoute } from 'vue-router';
 
+const { params } = useRoute();
 const { t } = useI18n();
 
 const props = defineProps<{
@@ -83,7 +85,10 @@ const timeSince = (submissionDate: Date): string => {
  * @param submissionId
  */
 const navigateToSubmission = (submissionId: string): void => {
-    router.push({ name: 'submission', params: { submissionId, groupId: '0', projectId: '0', courseId: '0' } });
+    router.push({
+        name: 'submission',
+        params: { submissionId, groupId: params.groupId, projectId: params.projectId, courseId: params.courseId },
+    });
 };
 </script>
 

@@ -115,10 +115,11 @@
             "files": "files",
             "chooseFile": "Choose a file",
             "noSubmissions": "No submissions available",
-            "passed": "Passed",
+            "passed": "All tests passed",
             "failed": "The submission is not passed.",
             "downloadZip": "Download all files of this submission as a zip.",
             "downloadLog": "Log of check {0}",
+            "backToSubmissions": "Back to submissions",
             "hoverText": {
               "allChecksFailed": "Structure and extra checks failed",
               "allChecksPassed": "All checks passed",
@@ -145,7 +146,7 @@
                 "dockerImageError": "Error in Docker image",
                 "timeLimit": "Time limit exceeded",
                 "memoryLimit": "Memory limit exceeded",
-                "checkError": "Check error",
+                "checkError": "Extra tests on your submission dit not pass.",
                 "runtimeError": "Runtime error",
                 "unknown": "Unknown error",
                 "failedStructureCheck": "Structure check failed"
