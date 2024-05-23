@@ -8,16 +8,16 @@ interface StudentsState {
     students: Ref<Student[] | null>;
     student: Ref<Student | null>;
     response: Ref<Response | null>;
-    getStudentByID: (id: string, init?: boolean, selfprocessError?: boolean) => Promise<void>;
-    getStudents: (selfprocessError?: boolean) => Promise<void>;
-    getStudentsByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
-    getStudentsByGroup: (groupId: string, selfprocessError?: boolean) => Promise<void>;
-    createStudent: (studentData: Student, selfprocessError?: boolean) => Promise<void>;
-    deleteStudent: (id: string, selfprocessError?: boolean) => Promise<void>;
-    studentJoinCourse: (courseId: string, studentId: string, selfprocessError?: boolean) => Promise<void>;
-    studentLeaveCourse: (courseId: string, studentId: string, selfprocessError?: boolean) => Promise<void>;
-    studentJoinGroup: (groupId: string, studentId: string, selfprocessError?: boolean) => Promise<void>;
-    studentLeaveGroup: (groupId: string, studentId: string, selfprocessError?: boolean) => Promise<void>;
+    getStudentByID: (id: string, init?: boolean, selfProcessError?: boolean) => Promise<void>;
+    getStudents: (selfProcessError?: boolean) => Promise<void>;
+    getStudentsByCourse: (courseId: string, selfProcessError?: boolean) => Promise<void>;
+    getStudentsByGroup: (groupId: string, selfProcessError?: boolean) => Promise<void>;
+    createStudent: (studentData: Student, selfProcessError?: boolean) => Promise<void>;
+    deleteStudent: (id: string, selfProcessError?: boolean) => Promise<void>;
+    studentJoinCourse: (courseId: string, studentId: string, selfProcessError?: boolean) => Promise<void>;
+    studentLeaveCourse: (courseId: string, studentId: string, selfProcessError?: boolean) => Promise<void>;
+    studentJoinGroup: (groupId: string, studentId: string, selfProcessError?: boolean) => Promise<void>;
+    studentLeaveGroup: (groupId: string, studentId: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useStudents(): StudentsState {
@@ -26,30 +26,30 @@ export function useStudents(): StudentsState {
     const student = ref<Student | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getStudentByID(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function getStudentByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.retrieve.replace('{id}', id);
-        await get<Student>(endpoint, student, Student.fromJSON, selfprocessError);
+        await get<Student>(endpoint, student, Student.fromJSON, selfProcessError);
     }
 
-    async function getStudents(selfprocessError: boolean = true): Promise<void> {
+    async function getStudents(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.index;
-        await getList<Student>(endpoint, students, Student.fromJSON, selfprocessError);
+        await getList<Student>(endpoint, students, Student.fromJSON, selfProcessError);
     }
 
-    async function getStudentsByCourse(courseId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getStudentsByCourse(courseId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
-        await getList<Student>(endpoint, students, Student.fromJSON, selfprocessError);
+        await getList<Student>(endpoint, students, Student.fromJSON, selfProcessError);
     }
 
-    async function getStudentsByGroup(groupId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getStudentsByGroup(groupId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
-        await getList<Student>(endpoint, students, Student.fromJSON, selfprocessError);
+        await getList<Student>(endpoint, students, Student.fromJSON, selfProcessError);
     }
 
     async function studentJoinCourse(
         courseId: string,
         studentId: string,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
         await create<Response>(
@@ -58,14 +58,14 @@ export function useStudents(): StudentsState {
             response,
             Response.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
     async function studentLeaveCourse(
         courseId: string,
         studentId: string,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.students.byCourse.replace('{courseId}', courseId);
         await deleteIdWithData<Response>(
@@ -73,14 +73,14 @@ export function useStudents(): StudentsState {
             { student: studentId },
             response,
             Response.fromJSON,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
     async function studentJoinGroup(
         groupId: string,
         studentId: string,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
         await create<Response>(
@@ -89,14 +89,14 @@ export function useStudents(): StudentsState {
             response,
             Response.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
     async function studentLeaveGroup(
         groupId: string,
         studentId: string,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.students.byGroup.replace('{groupId}', groupId);
         await deleteIdWithData<Response>(
@@ -104,11 +104,11 @@ export function useStudents(): StudentsState {
             { student: studentId },
             response,
             Response.fromJSON,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function createStudent(studentData: Student, selfprocessError: boolean = true): Promise<void> {
+    async function createStudent(studentData: Student, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.index;
 
         await createToast<Student>(
@@ -121,13 +121,13 @@ export function useStudents(): StudentsState {
             student,
             Student.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function deleteStudent(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function deleteStudent(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.students.retrieve.replace('{id}', id);
-        await deleteId<Student>(endpoint, student, Student.fromJSON, selfprocessError);
+        await deleteId<Student>(endpoint, student, Student.fromJSON, selfProcessError);
     }
 
     return {

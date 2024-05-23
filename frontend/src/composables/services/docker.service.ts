@@ -17,12 +17,12 @@ interface DockerImagesState {
     pagination: Ref<PaginatorResponse<DockerImage> | null>;
     dockerImages: Ref<DockerImage[] | null>;
     response: Ref<Response | null>;
-    getDockerImages: (selfprocessError?: boolean) => Promise<void>;
-    searchDockerImages: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
-    patchDockerImage: (dockerData: DockerImage, selfprocessError?: boolean) => Promise<void>;
-    createDockerImage: (dockerData: DockerImage, file: File, selfprocessError?: boolean) => Promise<void>;
-    deleteDockerImage: (id: string, selfprocessError?: boolean) => Promise<void>;
-    deleteDockerImages: (ids: string[], selfprocessError?: boolean) => Promise<void>;
+    getDockerImages: (selfProcessError?: boolean) => Promise<void>;
+    searchDockerImages: (filters: Filter, page: number, pageSize: number, selfProcessError?: boolean) => Promise<void>;
+    patchDockerImage: (dockerData: DockerImage, selfProcessError?: boolean) => Promise<void>;
+    createDockerImage: (dockerData: DockerImage, file: File, selfProcessError?: boolean) => Promise<void>;
+    deleteDockerImage: (id: string, selfProcessError?: boolean) => Promise<void>;
+    deleteDockerImages: (ids: string[], selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useDockerImages(): DockerImagesState {
@@ -30,16 +30,16 @@ export function useDockerImages(): DockerImagesState {
     const dockerImages = ref<DockerImage[] | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getDockerImages(selfprocessError: boolean = true): Promise<void> {
+    async function getDockerImages(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.dockerImages.index;
-        await getList<DockerImage>(endpoint, dockerImages, DockerImage.fromJSON, selfprocessError);
+        await getList<DockerImage>(endpoint, dockerImages, DockerImage.fromJSON, selfProcessError);
     }
 
     async function searchDockerImages(
         filters: Filter,
         page: number,
         pageSize: number,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.dockerImages.search;
         await getPaginatedList<DockerImage>(
@@ -49,19 +49,19 @@ export function useDockerImages(): DockerImagesState {
             pageSize,
             pagination,
             DockerImage.fromJSON,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function patchDockerImage(dockerData: DockerImage, selfprocessError: boolean = true): Promise<void> {
+    async function patchDockerImage(dockerData: DockerImage, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.dockerImages.patch.replace('{id}', dockerData.id);
-        await patch(endpoint, { public: dockerData.public }, response, undefined, selfprocessError);
+        await patch(endpoint, { public: dockerData.public }, response, undefined, selfProcessError);
     }
 
     async function createDockerImage(
         dockerData: DockerImage,
         file: File,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.dockerImages.index;
         await createToast<Response>(
@@ -75,19 +75,19 @@ export function useDockerImages(): DockerImagesState {
             response,
             Response.fromJSON,
             'multipart/form-data',
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function deleteDockerImage(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function deleteDockerImage(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.dockerImages.retrieve.replace('{id}', id);
-        await deleteId<Response>(endpoint, response, Response.fromJSON, selfprocessError);
+        await deleteId<Response>(endpoint, response, Response.fromJSON, selfProcessError);
     }
 
-    async function deleteDockerImages(ids: string[], selfprocessError: boolean = true): Promise<void> {
+    async function deleteDockerImages(ids: string[], selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.dockerImages.deleteMany;
         const data = { ids };
-        await deleteIdWithData<Response>(endpoint, data, response, Response.fromJSON, selfprocessError);
+        await deleteIdWithData<Response>(endpoint, data, response, Response.fromJSON, selfProcessError);
     }
 
     return {

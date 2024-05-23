@@ -18,13 +18,13 @@ export async function get<T>(
     endpoint: string,
     ref: Ref<T | null>,
     fromJson: (data: any) => T,
-    selfprocessError: boolean = true,
+    selfProcessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.get(endpoint);
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if (selfprocessError) {
+        if (selfProcessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -48,7 +48,7 @@ export async function create<T>(
     ref: Ref<T | null>,
     fromJson: (data: any) => T,
     contentType: string = 'application/json',
-    selfprocessError: boolean = true,
+    selfProcessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.post(endpoint, data, {
@@ -58,7 +58,7 @@ export async function create<T>(
         });
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if (selfprocessError) {
+        if (selfProcessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -105,7 +105,7 @@ export async function patch(
     data: any,
     ref: Ref<Response | null>,
     contentType: string = 'application/json',
-    selfprocessError: boolean = true,
+    selfProcessError: boolean = true,
 ): Promise<void> {
     try {
         const response: AxiosResponse<Response, any> = await client.patch(endpoint, data, {
@@ -115,7 +115,7 @@ export async function patch(
         });
         ref.value = Response.fromJSON(response.data);
     } catch (error: any) {
-        if (selfprocessError) {
+        if (selfProcessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -135,7 +135,7 @@ export async function put<T>(
     endpoint: string,
     data: T | string,
     contentType: string = 'application/json',
-    selfprocessError: boolean = true,
+    selfProcessError: boolean = true,
 ): Promise<void> {
     try {
         await client.put(endpoint, data, {
@@ -144,7 +144,7 @@ export async function put<T>(
             },
         });
     } catch (error: any) {
-        if (selfprocessError) {
+        if (selfProcessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -164,13 +164,13 @@ export async function deleteId<T>(
     endpoint: string,
     ref: Ref<T | null>,
     fromJson: (data: any) => T,
-    selfprocessError: boolean = true,
+    selfProcessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.delete(endpoint);
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if (selfprocessError) {
+        if (selfProcessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -192,13 +192,13 @@ export async function deleteIdWithData<T>(
     data: any,
     ref: Ref<T | null>,
     fromJson: (data: any) => T,
-    selfprocessError: boolean = true,
+    selfProcessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.delete(endpoint, { data });
         ref.value = fromJson(response.data);
     } catch (error: any) {
-        if (selfprocessError) {
+        if (selfProcessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -218,14 +218,14 @@ export async function getList<T>(
     endpoint: string,
     ref: Ref<T[] | null>,
     fromJson: (data: any) => T,
-    selfprocessError: boolean = true,
+    selfProcessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.get(endpoint);
         ref.value = response.data.map((data: T) => fromJson(data));
     } catch (error: any) {
         ref.value = []; // Set the ref to an empty array
-        if (selfprocessError) {
+        if (selfProcessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {
@@ -251,7 +251,7 @@ export async function getPaginatedList<T>(
     pageSize: number,
     pagination: Ref<PaginatorResponse<T> | null>,
     fromJson: (data: any) => T,
-    selfprocessError: boolean = true,
+    selfProcessError: boolean = true,
 ): Promise<void> {
     try {
         const response = await client.get(endpoint, {
@@ -274,7 +274,7 @@ export async function getPaginatedList<T>(
             results: [],
         };
 
-        if (selfprocessError) {
+        if (selfProcessError) {
             processError(error);
             console.error(error); // Log the error for debugging
         } else {

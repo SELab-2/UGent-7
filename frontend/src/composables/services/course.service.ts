@@ -14,23 +14,23 @@ interface CoursesState {
     courses: Ref<Course[] | null>;
     course: Ref<Course | null>;
 
-    getCourseByID: (id: string, selfprocessError?: boolean) => Promise<void>;
-    getCourses: (selfprocessError?: boolean) => Promise<void>;
-    searchCourses: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
-    getCoursesByStudent: (studentId: string, selfprocessError?: boolean) => Promise<void>;
-    getCoursesByTeacher: (teacherId: string, selfprocessError?: boolean) => Promise<void>;
-    getCourseByAssistant: (assistantId: string, selfprocessError?: boolean) => Promise<void>;
-    getCoursesByUser: (user: User, selfprocessError?: boolean) => Promise<void>;
-    createCourse: (courseData: Course, selfprocessError?: boolean) => Promise<void>;
-    updateCourse: (courseData: Course, selfprocessError?: boolean) => Promise<void>;
+    getCourseByID: (id: string, selfProcessError?: boolean) => Promise<void>;
+    getCourses: (selfProcessError?: boolean) => Promise<void>;
+    searchCourses: (filters: Filter, page: number, pageSize: number, selfProcessError?: boolean) => Promise<void>;
+    getCoursesByStudent: (studentId: string, selfProcessError?: boolean) => Promise<void>;
+    getCoursesByTeacher: (teacherId: string, selfProcessError?: boolean) => Promise<void>;
+    getCourseByAssistant: (assistantId: string, selfProcessError?: boolean) => Promise<void>;
+    getCoursesByUser: (user: User, selfProcessError?: boolean) => Promise<void>;
+    createCourse: (courseData: Course, selfProcessError?: boolean) => Promise<void>;
+    updateCourse: (courseData: Course, selfProcessError?: boolean) => Promise<void>;
     cloneCourse: (
         courseId: string,
         cloneAssistants: boolean,
         cloneTeachers: boolean,
-        selfprocessError?: boolean,
+        selfProcessError?: boolean,
     ) => Promise<void>;
-    activateInvitationLink: (courseId: string, linkDuration: number, selfprocessError?: boolean) => Promise<void>;
-    deleteCourse: (id: string, selfprocessError?: boolean) => Promise<void>;
+    activateInvitationLink: (courseId: string, linkDuration: number, selfProcessError?: boolean) => Promise<void>;
+    deleteCourse: (id: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useCourses(): CoursesState {
@@ -39,21 +39,21 @@ export function useCourses(): CoursesState {
     const course = ref<Course | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getCourseByID(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function getCourseByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.courses.retrieve.replace('{id}', id);
-        await get<Course>(endpoint, course, Course.fromJSON, selfprocessError);
+        await get<Course>(endpoint, course, Course.fromJSON, selfProcessError);
     }
 
-    async function getCourses(selfprocessError: boolean = true): Promise<void> {
+    async function getCourses(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.courses.index;
-        await getList<Course>(endpoint, courses, Course.fromJSON, selfprocessError);
+        await getList<Course>(endpoint, courses, Course.fromJSON, selfProcessError);
     }
 
     async function searchCourses(
         filters: Filter,
         page: number,
         pageSize: number,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.courses.search;
         await getPaginatedList<Course>(
@@ -63,38 +63,38 @@ export function useCourses(): CoursesState {
             pageSize,
             pagination,
             Course.fromJSON,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function getCoursesByStudent(studentId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getCoursesByStudent(studentId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.courses.byStudent.replace('{studentId}', studentId);
-        await getList<Course>(endpoint, courses, Course.fromJSON, selfprocessError);
+        await getList<Course>(endpoint, courses, Course.fromJSON, selfProcessError);
     }
 
-    async function getCoursesByTeacher(teacherId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getCoursesByTeacher(teacherId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.courses.byTeacher.replace('{teacherId}', teacherId);
-        await getList<Course>(endpoint, courses, Course.fromJSON, selfprocessError);
+        await getList<Course>(endpoint, courses, Course.fromJSON, selfProcessError);
     }
 
-    async function getCourseByAssistant(assistantId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getCourseByAssistant(assistantId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.courses.byAssistant.replace('{assistantId}', assistantId);
-        await getList<Course>(endpoint, courses, Course.fromJSON, selfprocessError);
+        await getList<Course>(endpoint, courses, Course.fromJSON, selfProcessError);
     }
 
-    async function getCoursesByUser(user: User, selfprocessError: boolean = true): Promise<void> {
+    async function getCoursesByUser(user: User, selfProcessError: boolean = true): Promise<void> {
         if (user.isTeacher()) {
-            await getCoursesByTeacher(user.id, selfprocessError);
+            await getCoursesByTeacher(user.id, selfProcessError);
         } else if (user.isAssistant()) {
-            await getCourseByAssistant(user.id, selfprocessError);
+            await getCourseByAssistant(user.id, selfProcessError);
         } else if (user.isStudent()) {
-            await getCoursesByStudent(user.id, selfprocessError);
+            await getCoursesByStudent(user.id, selfProcessError);
         } else {
             courses.value = [];
         }
     }
 
-    async function createCourse(courseData: Course, selfprocessError: boolean = true): Promise<void> {
+    async function createCourse(courseData: Course, selfProcessError: boolean = true): Promise<void> {
         const { t } = i18n.global;
         const { addSuccessMessage } = useMessagesStore();
         const endpoint = endpoints.courses.index;
@@ -112,7 +112,7 @@ export function useCourses(): CoursesState {
             course,
             Course.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
         addSuccessMessage(
             t('toasts.messages.success'),
@@ -120,7 +120,7 @@ export function useCourses(): CoursesState {
         );
     }
 
-    async function updateCourse(courseData: Course, selfprocessError: boolean = true): Promise<void> {
+    async function updateCourse(courseData: Course, selfProcessError: boolean = true): Promise<void> {
         // Endpoint to update is same as retrieve
         const endpoint = endpoints.courses.retrieve.replace('{id}', courseData.id);
 
@@ -136,7 +136,7 @@ export function useCourses(): CoursesState {
             },
             response,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
@@ -144,7 +144,7 @@ export function useCourses(): CoursesState {
         courseId: string,
         cloneAssistants: boolean,
         cloneTeachers: boolean,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.courses.clone.replace('{courseId}', courseId);
         await create<Course>(
@@ -156,19 +156,19 @@ export function useCourses(): CoursesState {
             course,
             Course.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function deleteCourse(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function deleteCourse(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.courses.retrieve.replace('{id}', id);
-        await deleteId<Course>(endpoint, course, Course.fromJSON, selfprocessError);
+        await deleteId<Course>(endpoint, course, Course.fromJSON, selfProcessError);
     }
 
     async function activateInvitationLink(
         courseId: string,
         linkDuration: number,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.courses.invitationLink.replace('{courseId}', courseId);
         await patch(
@@ -178,7 +178,7 @@ export function useCourses(): CoursesState {
             },
             response,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 

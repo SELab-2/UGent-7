@@ -10,20 +10,20 @@ import { useMessagesStore } from '@/store/messages.store.ts';
 interface ProjectState {
     projects: Ref<Project[] | null>;
     project: Ref<Project | null>;
-    getProjectByID: (id: string, selfprocessError?: boolean) => Promise<void>;
-    getProjectsByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
-    getProjectsByStudent: (studentId: string, selfprocessError?: boolean) => Promise<void>;
-    getProjectsByAssistant: (assistantId: string, selfprocessError?: boolean) => Promise<void>;
-    getProjectsByTeacher: (teacherId: string, selfprocessError?: boolean) => Promise<void>;
-    getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date, selfprocessError?: boolean) => Promise<void>;
+    getProjectByID: (id: string, selfProcessError?: boolean) => Promise<void>;
+    getProjectsByCourse: (courseId: string, selfProcessError?: boolean) => Promise<void>;
+    getProjectsByStudent: (studentId: string, selfProcessError?: boolean) => Promise<void>;
+    getProjectsByAssistant: (assistantId: string, selfProcessError?: boolean) => Promise<void>;
+    getProjectsByTeacher: (teacherId: string, selfProcessError?: boolean) => Promise<void>;
+    getProjectsByCourseAndDeadline: (courseId: string, deadlineDate: Date, selfProcessError?: boolean) => Promise<void>;
     createProject: (
         projectData: Project,
         courseId: string,
         numberOfGroups: number,
-        selfprocessError?: boolean,
+        selfProcessError?: boolean,
     ) => Promise<void>;
-    updateProject: (projectData: Project, selfprocessError?: boolean) => Promise<void>;
-    deleteProject: (id: string, selfprocessError?: boolean) => Promise<void>;
+    updateProject: (projectData: Project, selfProcessError?: boolean) => Promise<void>;
+    deleteProject: (id: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useProject(): ProjectState {
@@ -31,48 +31,50 @@ export function useProject(): ProjectState {
     const project = ref<Project | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getProjectByID(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function getProjectByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
-        await get<Project>(endpoint, project, Project.fromJSON, selfprocessError);
+        await get<Project>(endpoint, project, Project.fromJSON, selfProcessError);
     }
 
-    async function getProjectsByCourse(courseId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getProjectsByCourse(courseId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byCourse.replace('{courseId}', courseId);
-        await getList<Project>(endpoint, projects, Project.fromJSON, selfprocessError);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfProcessError);
     }
 
-    async function getProjectsByStudent(studentId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getProjectsByStudent(studentId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byStudent.replace('{studentId}', studentId);
-        await getList<Project>(endpoint, projects, Project.fromJSON, selfprocessError);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfProcessError);
     }
 
-    async function getProjectsByAssistant(assistantId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getProjectsByAssistant(assistantId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byAssistant.replace('{assistantId}', assistantId);
-        await getList<Project>(endpoint, projects, Project.fromJSON, selfprocessError);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfProcessError);
     }
 
-    async function getProjectsByTeacher(teacherId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getProjectsByTeacher(teacherId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byTeacher.replace('{teacherId}', teacherId);
-        await getList<Project>(endpoint, projects, Project.fromJSON, selfprocessError);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfProcessError);
     }
 
     async function getProjectsByCourseAndDeadline(
         courseId: string,
         deadlineDate: Date,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
-        await getProjectsByCourse(courseId, selfprocessError);
-        const allProjects = (projects.value ?? []).map((projectData: ProjectJSON) => Project.fromJSON(projectData));
-        projects.value = allProjects.filter((project: Project) => {
-            return project.deadline.toDateString() === deadlineDate.toDateString();
-        });
+        await getProjectsByCourse(courseId, selfProcessError);
+
+        if (projects.value !== null) {
+            projects.value = projects.value.filter((project: Project) => {
+                return project.deadline.toDateString() === deadlineDate.toDateString();
+            });
+        }
     }
 
     async function createProject(
         projectData: Project,
         courseId: string,
         numberOfGroups: number,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const { t } = i18n.global;
         const { addSuccessMessage } = useMessagesStore();
@@ -104,7 +106,7 @@ export function useProject(): ProjectState {
             project,
             Project.fromJSON,
             'multipart/form-data',
-            selfprocessError,
+            selfProcessError,
         );
         addSuccessMessage(
             t('toasts.messages.success'),
@@ -112,7 +114,7 @@ export function useProject(): ProjectState {
         );
     }
 
-    async function updateProject(projectData: Project, selfprocessError: boolean = true): Promise<void> {
+    async function updateProject(projectData: Project, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', projectData.id);
         await patch(
             endpoint,
@@ -130,13 +132,13 @@ export function useProject(): ProjectState {
             },
             response,
             'multipart/form-data',
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function deleteProject(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function deleteProject(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.retrieve.replace('{id}', id);
-        await deleteId<Project>(endpoint, project, Project.fromJSON, selfprocessError);
+        await deleteId<Project>(endpoint, project, Project.fromJSON, selfProcessError);
     }
 
     return {

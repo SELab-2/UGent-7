@@ -10,11 +10,11 @@ interface userState {
     pagination: Ref<PaginatorResponse<User> | null>;
     users: Ref<User[] | null>;
     user: Ref<User | null>;
-    getUserByID: (id: string, selfprocessError?: boolean) => Promise<void>;
-    getUsers: (selfprocessError?: boolean) => Promise<void>;
-    searchUsers: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
-    createUser: (user_data: User, selfprocessError?: boolean) => Promise<void>;
-    toggleAdmin: (id: string, is_staff: boolean, selfprocessError?: boolean) => Promise<void>;
+    getUserByID: (id: string, selfProcessError?: boolean) => Promise<void>;
+    getUsers: (selfProcessError?: boolean) => Promise<void>;
+    searchUsers: (filters: Filter, page: number, pageSize: number, selfProcessError?: boolean) => Promise<void>;
+    createUser: (user_data: User, selfProcessError?: boolean) => Promise<void>;
+    toggleAdmin: (id: string, is_staff: boolean, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useUser(): userState {
@@ -23,27 +23,27 @@ export function useUser(): userState {
     const user = ref<User | null>(null);
     const response = ref<Response | null>(null);
 
-    async function getUserByID(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function getUserByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.retrieve.replace('{id}', id);
-        await get<User>(endpoint, user, User.fromJSON, selfprocessError);
+        await get<User>(endpoint, user, User.fromJSON, selfProcessError);
     }
 
-    async function getUsers(selfprocessError: boolean = true): Promise<void> {
+    async function getUsers(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.index;
-        await getList<User>(endpoint, users, User.fromJSON, selfprocessError);
+        await getList<User>(endpoint, users, User.fromJSON, selfProcessError);
     }
 
     async function searchUsers(
         filters: Filter,
         page: number,
         pageSize: number,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.users.search;
-        await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON, selfprocessError);
+        await getPaginatedList<User>(endpoint, filters, page, pageSize, pagination, User.fromJSON, selfProcessError);
     }
 
-    async function createUser(userData: User, selfprocessError: boolean = true): Promise<void> {
+    async function createUser(userData: User, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.index;
         await createToast<User>(
             'user',
@@ -58,11 +58,11 @@ export function useUser(): userState {
             user,
             User.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function toggleAdmin(id: string, isStaff: boolean, selfprocessError: boolean = true): Promise<void> {
+    async function toggleAdmin(id: string, isStaff: boolean, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.users.admin.replace('{id}', id);
         await patch(
             endpoint,
@@ -71,7 +71,7 @@ export function useUser(): userState {
             },
             response,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 

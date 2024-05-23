@@ -7,39 +7,39 @@ interface StructureCheckState {
     structureChecks: Ref<StructureCheck[] | null>;
     structureCheck: Ref<StructureCheck | null>;
 
-    getStructureCheckByID: (id: string, selfprocessError?: boolean) => Promise<void>;
-    getStructureCheckByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
+    getStructureCheckByID: (id: string, selfProcessError?: boolean) => Promise<void>;
+    getStructureCheckByProject: (projectId: string, selfProcessError?: boolean) => Promise<void>;
     createStructureCheck: (
         structureCheckData: StructureCheck,
         projectId: string,
-        selfprocessError?: boolean,
+        selfProcessError?: boolean,
     ) => Promise<void>;
     setStructureChecks: (
         structureChecks: StructureCheck[],
         projectId: string,
-        selfprocessError?: boolean,
+        selfProcessError?: boolean,
     ) => Promise<void>;
-    deleteStructureCheck: (id: string, selfprocessError?: boolean) => Promise<void>;
+    deleteStructureCheck: (id: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useStructureCheck(): StructureCheckState {
     const structureChecks = ref<StructureCheck[] | null>(null);
     const structureCheck = ref<StructureCheck | null>(null);
 
-    async function getStructureCheckByID(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function getStructureCheckByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.structureChecks.retrieve.replace('{id}', id);
-        await get<StructureCheck>(endpoint, structureCheck, StructureCheck.fromJSON, selfprocessError);
+        await get<StructureCheck>(endpoint, structureCheck, StructureCheck.fromJSON, selfProcessError);
     }
 
-    async function getStructureCheckByProject(projectId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getStructureCheckByProject(projectId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.structureChecks.byProject.replace('{projectId}', projectId);
-        await getList<StructureCheck>(endpoint, structureChecks, StructureCheck.fromJSON, selfprocessError);
+        await getList<StructureCheck>(endpoint, structureChecks, StructureCheck.fromJSON, selfProcessError);
     }
 
     async function createStructureCheck(
         structureCheckData: StructureCheck,
         projectId: string,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.structureChecks.byProject.replace('{projectId}', projectId);
         await createToast<StructureCheck>(
@@ -51,22 +51,22 @@ export function useStructureCheck(): StructureCheckState {
             structureCheck,
             StructureCheck.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
     async function setStructureChecks(
         structureChecks: StructureCheck[],
         projectId: string,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.structureChecks.byProject.replace('{projectId}', projectId);
-        await put(endpoint, structureChecks, undefined, selfprocessError);
+        await put(endpoint, structureChecks, undefined, selfProcessError);
     }
 
-    async function deleteStructureCheck(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function deleteStructureCheck(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.structureChecks.retrieve.replace('{id}', id);
-        await deleteId<StructureCheck>(endpoint, structureCheck, StructureCheck.fromJSON, selfprocessError);
+        await deleteId<StructureCheck>(endpoint, structureCheck, StructureCheck.fromJSON, selfProcessError);
     }
 
     return {

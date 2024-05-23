@@ -6,33 +6,33 @@ import { get, getList, create, deleteId } from '@/composables/services/helpers.t
 interface GroupState {
     groups: Ref<Group[] | null>;
     group: Ref<Group | null>;
-    getGroupByID: (id: string, selfprocessError?: boolean) => Promise<void>;
-    getGroupsByProject: (projectId: string, selfprocessError?: boolean) => Promise<void>;
-    getGroupsByStudent: (studentId: string, selfprocessError?: boolean) => Promise<void>;
-    createGroup: (groupData: Group, projectId: string, selfprocessError?: boolean) => Promise<void>;
-    deleteGroup: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getGroupByID: (id: string, selfProcessError?: boolean) => Promise<void>;
+    getGroupsByProject: (projectId: string, selfProcessError?: boolean) => Promise<void>;
+    getGroupsByStudent: (studentId: string, selfProcessError?: boolean) => Promise<void>;
+    createGroup: (groupData: Group, projectId: string, selfProcessError?: boolean) => Promise<void>;
+    deleteGroup: (id: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useGroup(): GroupState {
     const groups = ref<Group[] | null>(null);
     const group = ref<Group | null>(null);
 
-    async function getGroupByID(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function getGroupByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.groups.retrieve.replace('{id}', id);
-        await get<Group>(endpoint, group, Group.fromJSON, selfprocessError);
+        await get<Group>(endpoint, group, Group.fromJSON, selfProcessError);
     }
 
-    async function getGroupsByProject(projectId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getGroupsByProject(projectId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.groups.byProject.replace('{projectId}', projectId);
-        await getList<Group>(endpoint, groups, Group.fromJSON, selfprocessError);
+        await getList<Group>(endpoint, groups, Group.fromJSON, selfProcessError);
     }
 
-    async function getGroupsByStudent(studentId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getGroupsByStudent(studentId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.groups.byStudent.replace('{studentId}', studentId);
-        await getList<Group>(endpoint, groups, Group.fromJSON, selfprocessError);
+        await getList<Group>(endpoint, groups, Group.fromJSON, selfProcessError);
     }
 
-    async function createGroup(groupData: Group, projectId: string, selfprocessError: boolean = true): Promise<void> {
+    async function createGroup(groupData: Group, projectId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.groups.byProject.replace('{projectId}', projectId);
         await create<Group>(
             endpoint,
@@ -43,13 +43,13 @@ export function useGroup(): GroupState {
             group,
             Group.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function deleteGroup(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function deleteGroup(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.groups.retrieve.replace('{id}', id);
-        await deleteId<Group>(endpoint, group, Group.fromJSON, selfprocessError);
+        await deleteId<Group>(endpoint, group, Group.fromJSON, selfProcessError);
     }
 
     return {

@@ -20,14 +20,14 @@ interface AssistantState {
     assistant: Ref<Assistant | null>;
     response: Ref<Response | null>;
     assistantPagination: Ref<PaginatorResponse<Assistant> | null>;
-    getAssistantByID: (id: string, init?: boolean, selfprocessError?: boolean) => Promise<void>;
-    getAssistantsByCourse: (courseId: string, selfprocessError?: boolean) => Promise<void>;
-    getAssistants: (selfprocessError?: boolean) => Promise<void>;
-    searchAssistants: (filters: Filter, page: number, pageSize: number, selfprocessError?: boolean) => Promise<void>;
-    assistantJoinCourse: (courseId: string, assistantId: string, selfprocessError?: boolean) => Promise<void>;
-    assistantLeaveCourse: (courseId: string, assistantId: string, selfprocessError?: boolean) => Promise<void>;
-    createAssistant: (assistantData: Assistant, selfprocessError?: boolean) => Promise<void>;
-    deleteAssistant: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getAssistantByID: (id: string, init?: boolean, selfProcessError?: boolean) => Promise<void>;
+    getAssistantsByCourse: (courseId: string, selfProcessError?: boolean) => Promise<void>;
+    getAssistants: (selfProcessError?: boolean) => Promise<void>;
+    searchAssistants: (filters: Filter, page: number, pageSize: number, selfProcessError?: boolean) => Promise<void>;
+    assistantJoinCourse: (courseId: string, assistantId: string, selfProcessError?: boolean) => Promise<void>;
+    assistantLeaveCourse: (courseId: string, assistantId: string, selfProcessError?: boolean) => Promise<void>;
+    createAssistant: (assistantData: Assistant, selfProcessError?: boolean) => Promise<void>;
+    deleteAssistant: (id: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useAssistant(): AssistantState {
@@ -37,26 +37,26 @@ export function useAssistant(): AssistantState {
     const response = ref<Response | null>(null);
     const assistantPagination = ref<PaginatorResponse<Assistant> | null>(null);
 
-    async function getAssistantByID(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function getAssistantByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
-        await get<Assistant>(endpoint, assistant, Assistant.fromJSON, selfprocessError);
+        await get<Assistant>(endpoint, assistant, Assistant.fromJSON, selfProcessError);
     }
 
-    async function getAssistantsByCourse(courseId: string, selfprocessError: boolean = true): Promise<void> {
+    async function getAssistantsByCourse(courseId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
-        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON, selfprocessError);
+        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON, selfProcessError);
     }
 
-    async function getAssistants(selfprocessError: boolean = true): Promise<void> {
+    async function getAssistants(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.index;
-        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON, selfprocessError);
+        await getList<Assistant>(endpoint, assistants, Assistant.fromJSON, selfProcessError);
     }
 
     async function searchAssistants(
         filters: Filter,
         page: number,
         pageSize: number,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.assistants.search;
         await getPaginatedList<Assistant>(
@@ -66,14 +66,14 @@ export function useAssistant(): AssistantState {
             pageSize,
             assistantPagination,
             Assistant.fromJSON,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
     async function assistantJoinCourse(
         courseId: string,
         assistantId: string,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
         await create<Response>(
@@ -82,14 +82,14 @@ export function useAssistant(): AssistantState {
             response,
             Response.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
     async function assistantLeaveCourse(
         courseId: string,
         assistantId: string,
-        selfprocessError: boolean = true,
+        selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.assistants.byCourse.replace('{courseId}', courseId);
         await deleteIdWithData<Response>(
@@ -97,11 +97,11 @@ export function useAssistant(): AssistantState {
             { assistant: assistantId },
             response,
             Response.fromJSON,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function createAssistant(user: User, selfprocessError: boolean = true): Promise<void> {
+    async function createAssistant(user: User, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.index;
         await createToast<Assistant>(
             'assistant',
@@ -112,13 +112,13 @@ export function useAssistant(): AssistantState {
             assistant,
             Assistant.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function deleteAssistant(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function deleteAssistant(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.assistants.retrieve.replace('{id}', id);
-        await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON, selfprocessError);
+        await deleteId<Assistant>(endpoint, assistant, Assistant.fromJSON, selfProcessError);
     }
 
     return {

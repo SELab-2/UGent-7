@@ -6,27 +6,27 @@ import { User } from '@/types/users/User.ts';
 interface AdminState {
     admins: Ref<User[] | null>;
     admin: Ref<User | null>;
-    getAdminByID: (id: string, selfprocessError?: boolean) => Promise<void>;
-    getAdmins: (selfprocessError?: boolean) => Promise<void>;
-    createAdmin: (adminData: User, selfprocessError?: boolean) => Promise<void>;
-    deleteAdmin: (id: string, selfprocessError?: boolean) => Promise<void>;
+    getAdminByID: (id: string, selfProcessError?: boolean) => Promise<void>;
+    getAdmins: (selfProcessError?: boolean) => Promise<void>;
+    createAdmin: (adminData: User, selfProcessError?: boolean) => Promise<void>;
+    deleteAdmin: (id: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useAdmin(): AdminState {
     const admins = ref<User[] | null>(null);
     const admin = ref<User | null>(null);
 
-    async function getAdminByID(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function getAdminByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id);
-        await get<User>(endpoint, admin, User.fromJSON, selfprocessError);
+        await get<User>(endpoint, admin, User.fromJSON, selfProcessError);
     }
 
-    async function getAdmins(selfprocessError: boolean = true): Promise<void> {
+    async function getAdmins(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.index;
-        await getList<User>(endpoint, admins, User.fromJSON, selfprocessError);
+        await getList<User>(endpoint, admins, User.fromJSON, selfProcessError);
     }
 
-    async function createAdmin(user: User, selfprocessError: boolean = true): Promise<void> {
+    async function createAdmin(user: User, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.index;
         await createToast<User>(
             'admin',
@@ -37,13 +37,13 @@ export function useAdmin(): AdminState {
             admin,
             User.fromJSON,
             undefined,
-            selfprocessError,
+            selfProcessError,
         );
     }
 
-    async function deleteAdmin(id: string, selfprocessError: boolean = true): Promise<void> {
+    async function deleteAdmin(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.admins.retrieve.replace('{id}', id);
-        await deleteId<User>(endpoint, admin, User.fromJSON, selfprocessError);
+        await deleteId<User>(endpoint, admin, User.fromJSON, selfProcessError);
     }
 
     return {
