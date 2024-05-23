@@ -112,6 +112,7 @@ function selectStructureCheck(node: TreeNode): void {
                 <template v-if="node.obligated">
                     <Chips
                         class="w-full"
+                        separator=","
                         :model-value="node.data.getObligatedExtensionList()"
                         @update:model-value="node.data.setObligatedExtensionList($event)"
                         v-tooltip="t('views.projects.structureChecks.obligatedExtensions')"
@@ -124,6 +125,7 @@ function selectStructureCheck(node: TreeNode): void {
                 <template v-else-if="node.blocked">
                     <Chips
                         class="w-full"
+                        separator=","
                         :model-value="node.data.getBlockedExtensionList()"
                         @update:model-value="node.data.setBlockedExtensionList($event)"
                         v-tooltip="t('views.projects.structureChecks.blockedExtensions')"

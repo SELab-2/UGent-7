@@ -3,6 +3,7 @@ import ChooseGroupCard from '@/components/projects/groups/GroupChooseCard.vue';
 import JoinedGroupCard from '@/components/projects/groups/GroupJoinedCard.vue';
 import SubmissionCard from '@/components/submissions/SubmissionCard.vue';
 import ProjectInfo from '@/components/projects/ProjectInfo.vue';
+import ProjectStructure from '@/components/projects/ProjectStructure.vue';
 import Title from '@/views/layout/Title.vue';
 import Loading from '@/components/Loading.vue';
 import { ref } from 'vue';
@@ -15,6 +16,7 @@ import { useSubmission } from '@/composables/services/submission.service.ts';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useRoute } from 'vue-router';
 import { type Project } from '@/types/Project.ts';
+import {useStructureCheck} from "@/composables/services/structure_check.service.ts";
 
 /* Props */
 defineProps<{
@@ -25,6 +27,7 @@ defineProps<{
 const { params } = useRoute();
 const { group, groups, getGroupByStudentProject, getGroupsByProject } = useGroup();
 const { students, getStudentsByGroup, studentJoinGroup, studentLeaveGroup } = useStudents();
+const { structureChecks, getStructureCheckByProject } = useStructureCheck();
 const { project, getProjectByID } = useProject();
 const { submissions, getSubmissionByGroup } = useSubmission();
 
@@ -90,6 +93,7 @@ async function getStudentData(project: Project): Promise<void> {
  */
 async function getProjectData(project: Project): Promise<void> {
     await getGroupsByProject(project.id);
+    await getStructureCheckByProject(project.id);
 
     if (groups.value !== null) {
         project.groups = groups.value;
@@ -124,6 +128,7 @@ watchImmediate(
                 <div class="col-12 md:col-8">
                     <ProjectInfo class="mb-3" :project="project" />
                     <div v-if="project" v-html="project.description" />
+                    <ProjectStructure v-if="structureChecks" :structure-checks="structureChecks"/>
                 </div>
                 <div class="col-12 md:col-4">
                     <template v-if="!loadingGroup">

@@ -10,8 +10,10 @@ import { useRoute } from 'vue-router';
 import FileUpload from 'primevue/fileupload';
 import { PrimeIcons } from 'primevue/api';
 import AllSubmission from '@/components/submissions/AllSubmission.vue';
+import ProjectStructure from '@/components/projects/ProjectStructure.vue';
 import { useGroup } from '@/composables/services/group.service.ts';
 import { useSubmission } from '@/composables/services/submission.service.ts';
+import { useStructureCheck } from '@/composables/services/structure_check.service.ts';
 import { useMessagesStore } from '@/store/messages.store.ts';
 
 const { t } = useI18n();
@@ -19,6 +21,7 @@ const route = useRoute();
 const { project, getProjectByID } = useProject();
 const { group, getGroupByID } = useGroup();
 const { submission, submissions, createSubmission, getSubmissionByGroup } = useSubmission();
+const { structureChecks, getStructureCheckByProject } = useStructureCheck();
 const { addSuccessMessage, addErrorMessage } = useMessagesStore();
 
 /* State */
@@ -72,6 +75,9 @@ onMounted(async () => {
     await getProjectByID(route.params.projectId as string);
     await getGroupByID(route.params.groupId as string);
     await getSubmissionByGroup(route.params.groupId as string);
+    if (project.value !== null) {
+        await getStructureCheckByProject(project.value.id);
+    }
 });
 </script>
 
@@ -83,6 +89,10 @@ onMounted(async () => {
                 <div class="col-12 md:col-6">
                     <div class="flex-column">
                         <!-- Project info column -->
+                        <!-- Submission structure -->
+                        <div v-if="structureChecks">
+                            <ProjectStructure :structure-checks="structureChecks"/>
+                        </div>
                         <!-- Submission upload -->
                         <div class="py-2">
                             <h2>{{ t('views.submissions.submit') }}</h2>
