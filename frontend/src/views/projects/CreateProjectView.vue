@@ -80,7 +80,7 @@ async function saveDockerImage(dockerImage: DockerImage, file: File): Promise<vo
  *
  * @param dockerImage
  */
- async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
+async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
     try {
         await deleteDockerImage(dockerImage.id);
         await getDockerImages();

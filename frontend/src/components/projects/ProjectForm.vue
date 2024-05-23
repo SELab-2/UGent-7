@@ -81,7 +81,6 @@ function removeDockerImage(image: DockerImage): void {
     emit('delete:docker-image', image);
 }
 
-
 /**
  * Watch for changes in the project prop and update the form values.
  */
