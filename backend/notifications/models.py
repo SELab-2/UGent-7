@@ -3,27 +3,53 @@ from django.db import models
 
 
 class NotificationTemplate(models.Model):
-    id = models.AutoField(auto_created=True, primary_key=True)
-    title_key = models.CharField(max_length=255)  # Key used to get translated title
+    """This model represents a template for a notification."""
+    id = models.AutoField(
+        auto_created=True,
+        primary_key=True
+    )
+    title_key = models.CharField(
+        max_length=255
+    )
     description_key = models.CharField(
         max_length=511
-    )  # Key used to get translated description
+    )
 
 
 class Notification(models.Model):
-    id = models.AutoField(auto_created=True, primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    template_id = models.ForeignKey(NotificationTemplate, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    arguments = models.JSONField(default=dict)  # Arguments to be used in the template
+    """This model represents a notification."""
+    id = models.AutoField(
+        auto_created=True,
+        primary_key=True
+    )
+
+    user = models.ForeignKey(
+        User,
+        related_name="notifications",
+        on_delete=models.CASCADE
+    )
+
+    template_id = models.ForeignKey(
+        NotificationTemplate,
+        on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+    # Arguments to be used in the template
+    arguments = models.JSONField(
+        default=dict
+    )
+    # Whether the notification has been read
     is_read = models.BooleanField(
         default=False
-    )  # Whether the notification has been read
+    )
+    # Whether the notification has been sent (email)
     is_sent = models.BooleanField(
         default=False
-    )  # Whether the notification has been sent (email)
+    )
 
-    # Mark the notification as read
     def sent(self):
+        """Mark the notification as sent"""
         self.is_sent = True
         self.save()

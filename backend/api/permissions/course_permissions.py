@@ -1,3 +1,8 @@
+from typing import cast
+
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
+
 from api.models.course import Course
 from api.permissions.role_permissions import (is_assistant, is_student,
                                               is_teacher)
@@ -12,7 +17,7 @@ class CoursePermission(BasePermission):
 
     def has_permission(self, request: Request, view: ViewSet) -> bool:
         """Check if user has permission to view a general course endpoint."""
-        user: User = request.user
+        user: AbstractBaseUser = request.user
 
         # Logged-in users can fetch course information.
         if request.method in SAFE_METHODS:
@@ -23,7 +28,7 @@ class CoursePermission(BasePermission):
 
     def has_object_permission(self, request: Request, view: ViewSet, course: Course) -> bool:
         """Check if user has permission to view a detailed course endpoint"""
-        user = request.user
+        user: User = cast(User, request.user)
 
         # Logged-in users can fetch course details.
         if request.method in SAFE_METHODS:
