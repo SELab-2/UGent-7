@@ -228,7 +228,7 @@
             "newProject": "New project",
             "noSubmissions": "This project does not have any submissions \uD83D\uDE2D",
             "submissions": "Group has made a submission | Groups have made a submission",
-            "groups": "Group | Groups",
+            "groups": "Participating group | Participating groups",
             "structureTestsFail": "Failed structure tests",
             "extraChecksFail": "Failed extra tests",
             "testsSucceed": "Succeeded tests",
