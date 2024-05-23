@@ -95,7 +95,15 @@ const toggleSafetyGuardEdit = (data: DockerImage): void => {
  * Changes the public status in the backend of the docker image whose attributes are in editItem's value attribute
  */
 const changePublicStatus = async (): Promise<void> => {
-    await patchDockerImage(editItem.value);
+    try {
+        await patchDockerImage(editItem.value);
+        addSuccessMessage(
+            t('toasts.messages.success'),
+            t('toasts.messages.edit', { type: t('types.article.docker') })
+        )
+    } catch (e) {
+        // TODO error message (when editing public status of docker image)
+    }
 };
 /**
  * Show safety guard for removing a docker image from the backend and set up values for when confirmed
