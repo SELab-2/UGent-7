@@ -1,4 +1,6 @@
 import moment from 'moment';
+import { TreeNode } from "primevue/treenode";
+import { PrimeIcons } from "primevue/api";
 import { Course, type CourseJSON } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';
@@ -115,6 +117,74 @@ export class Project {
             !this.visible || this.archived || this.locked_groups
             // moment(this.start_date).isBefore(moment().startOf('day'))
         );
+    }
+
+    /**
+     * Given a list of structureChecks (directory path), return a list of TreeNodes representing the tree hierarchy
+     * of the structure checks.
+     *
+     * @param structureChecks
+     */
+    public static getNodes(structureChecks: StructureCheck[] | undefined): TreeNode[] {
+        const nodes: TreeNode[] = [];
+
+        if (structureChecks !== undefined) {
+            for (const [i, check] of structureChecks.entries()) {
+                const hierarchy = check.getDirectoryHierarchy();
+                let currentNodes = nodes;
+
+                for (const [j, part] of hierarchy.entries()) {
+                    let node = currentNodes.find((node) => node.label === part);
+
+                    if (node === undefined) {
+                        node = Project.newTreeNode(check, `${i}${j}`, part, j === hierarchy.length - 1);
+                        currentNodes.push(node);
+                    }
+
+                    currentNodes = node.children ?? [];
+                }
+            }
+        }
+
+        return nodes;
+    }
+
+    /**
+     * Construct a tree node from a structure check folder path.
+     *
+     * @param check
+     * @param key
+     * @param label
+     * @param leaf
+     */
+    private static newTreeNode(check: StructureCheck, key: string, label: string, leaf: boolean = false): TreeNode {
+        const node: TreeNode = {
+            key,
+            label,
+            data: check,
+            icon: PrimeIcons.FOLDER,
+            check: leaf,
+            children: [],
+        };
+
+        if (leaf) {
+            node.children = [
+                {
+                    key: key + '-obligated',
+                    icon: PrimeIcons.CHECK_CIRCLE,
+                    data: check,
+                    obligated: true,
+                },
+                {
+                    key: key + '-blocked',
+                    icon: PrimeIcons.TIMES_CIRCLE,
+                    data: check,
+                    blocked: true,
+                },
+            ];
+        }
+
+        return node;
     }
 
     /**
