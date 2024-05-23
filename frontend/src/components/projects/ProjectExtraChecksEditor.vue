@@ -9,6 +9,8 @@ import InputSwitch from 'primevue/inputswitch';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ErrorMessage from '@/components/forms/ErrorMessage.vue';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
 import { DockerImage } from '@/types/DockerImage';
 import { ExtraCheck } from '@/types/ExtraCheck';
 import { useI18n } from 'vue-i18n';
@@ -18,13 +20,14 @@ import { useVuelidate } from '@vuelidate/core';
 
 /* Composable injections */
 const { t } = useI18n();
+const confirm = useConfirm();
 
 /* Props */
 defineProps<{ dockerImages: DockerImage[] }>();
 const extraChecks = defineModel<ExtraCheck[]>();
 
 /* Emits */
-const emit = defineEmits(['create:docker-image']);
+const emit = defineEmits(['create:docker-image', 'delete:docker-image']);
 
 /* State for the dialog to create an extra check */
 const displayExtraCheckCreation = ref(false);
@@ -32,11 +35,16 @@ const displayExtraCheckCreation = ref(false);
 /* Form content */
 let form = reactive(new ExtraCheck());
 
+// State to manage the visibility of the confirmation dialog for the deletion of a docker image
+const confirmDialogVisible = ref(false);
+
 // Define validation rules for each form field
 const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
-        docker_image: { required: helpers.withMessage(t('validations.required'), required) },
+        docker_image: {
+            required: helpers.withMessage(t('validations.required'), (value: DockerImage) => value.id !== ''),
+        },
         file: { required: helpers.withMessage(t('validations.required'), required) },
         time_limit: { required: helpers.withMessage(t('validations.required'), required) },
         memory_limit: { required: helpers.withMessage(t('validations.required'), required) },
@@ -44,7 +52,7 @@ const rules = computed(() => {
 });
 
 // useVuelidate function to perform form validation
-const v$ = useVuelidate(rules, form);
+let v$ = useVuelidate(rules, form);
 
 /**
  * Function to save the extra check
@@ -62,10 +70,10 @@ async function saveExtraCheck(): Promise<void> {
         displayExtraCheckCreation.value = false;
 
         // Reset the form
-        form = new ExtraCheck();
+        form = reactive(new ExtraCheck());
 
         // Reset the validation
-        v$.value.$reset();
+        v$ = useVuelidate(rules, form);
     }
 }
 
@@ -91,6 +99,27 @@ async function onDockerImageUpload(event: any): Promise<void> {
     );
 
     emit('create:docker-image', dockerImage, event.files[0]);
+}
+
+/**
+ * Function to remove the docker image from the list of docker images
+ */
+async function removeDockerImage(dockerImage: DockerImage): Promise<void> {
+    // Show a confirmation dialog before removing the image, to prevent accidental clicks
+    confirmDialogVisible.value = true;
+    confirm.require({
+        message: t('confirmations.deleteDockerImage'),
+        header: t('views.projects.extraChecks.deleteDockerImage'),
+        accept: () => {
+            (async () => {
+                emit('delete:docker-image', dockerImage);
+                confirmDialogVisible.value = false;
+            })();
+        },
+        reject: () => {
+            confirmDialogVisible.value = false;
+        },
+    });
 }
 </script>
 
@@ -127,6 +156,20 @@ async function onDockerImageUpload(event: any): Promise<void> {
         icon-pos="left"
         rounded
     />
+
+    <!-- Dialog to confirm the deletion of a docker image (should be outside the DataTable, otherwise it is shown multiple times) -->
+    <ConfirmDialog v-model:visible="confirmDialogVisible">
+        <template #container="{ message, acceptCallback, rejectCallback }">
+            <div class="flex flex-column p-5 surface-overlay border-round" style="max-width: 600px">
+                <span class="font-bold text-2xl">{{ message.header }}</span>
+                <p class="mb-4">{{ message.message }}</p>
+                <div class="flex gap-2 justify-content-end">
+                    <Button outlined rounded @click="rejectCallback">{{ t('primevue.cancel') }}</Button>
+                    <Button @click="acceptCallback" rounded>{{ t('admin.delete') }}</Button>
+                </div>
+            </div>
+        </template>
+    </ConfirmDialog>
 
     <!-- Dialog with a form to create a new extra check -->
     <Dialog
@@ -212,6 +255,14 @@ async function onDockerImageUpload(event: any): Promise<void> {
                                 <label for="showLog">{{ t('views.projects.extraChecks.showLog') }}</label>
                             </div>
                         </div>
+
+                        <!-- Visibility of the artifacts for students -->
+                        <div class="grid">
+                            <div class="field-checkbox col-12">
+                                <InputSwitch id="showArtifact" v-model="form.show_artifact" style="min-width: 50px" />
+                                <label for="showArtifact">{{ t('views.projects.extraChecks.showArtifact') }}</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-12 lg:col-6">
@@ -231,7 +282,7 @@ async function onDockerImageUpload(event: any): Promise<void> {
                                     id="dockerImage"
                                     class="w-full mt-2 mb-2"
                                     scrollable
-                                    scrollHeight="300px"
+                                    scrollHeight="350px"
                                 >
                                     <Column field="name" :header="t('views.projects.extraChecks.name')"></Column>
                                     <Column field="public" :header="t('views.projects.extraChecks.public')">
@@ -239,6 +290,19 @@ async function onDockerImageUpload(event: any): Promise<void> {
                                             <!-- Use check and cross icons to indicate if the image is public or not -->
                                             <i v-if="slotProps.data.public" class="pi pi-check" />
                                             <i v-else class="pi pi-times" />
+                                        </template>
+                                    </Column>
+                                    <Column :style="{ width: '5rem' }">
+                                        <template #body="slotProps">
+                                            <!-- Show delete button only if the image is not public -->
+                                            <Button
+                                                v-if="!slotProps.data.public"
+                                                icon="pi pi-trash"
+                                                class="p-button-danger p-button-sm"
+                                                @click="removeDockerImage(slotProps.data)"
+                                                outlined
+                                                rounded
+                                            />
                                         </template>
                                     </Column>
                                 </DataTable>
