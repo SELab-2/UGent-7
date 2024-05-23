@@ -51,6 +51,7 @@ function toggleNotificationOverlay(event: Event): void {
                 <div class="flex align-items-center gap-2 mt-4">
                     <Button
                         :label="t('layout.header.notifications.loadMore')"
+                        :disabled="notificationCount === 0"
                         @click="notificationCount += notificationCount"
                         link
                     />
