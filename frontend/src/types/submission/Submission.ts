@@ -20,7 +20,7 @@ export class Submission {
         public is_valid: boolean = false,
         public extraCheckResults: ExtraCheckResult[] = [],
         public structureCheckResults: StructureCheckResult[] = [],
-        public zip: File | null = null,
+        public zip: HyperlinkedRelation = '',
     ) {}
 
     /**
@@ -67,7 +67,9 @@ export class Submission {
     }
 
     /**
-     * Geeft de juiste vertaling voor alle extra check fouten
+     * Get the error messages for the submission.
+     *
+     * @returns string[]
      */
     public extraCheckFaults(): string[] {
         return this.extraCheckResults.map((check: ExtraCheckResult) =>
@@ -75,6 +77,11 @@ export class Submission {
         );
     }
 
+    /**
+     * Get the error message from the error message enum.
+     *
+     * @param key
+     */
     private getErrorMessageEnumKey(key: string): string {
         if (key != null) {
             return ErrorMessageEnum[key as keyof typeof ErrorMessageEnum];
@@ -108,6 +115,7 @@ export class Submission {
             submission.is_valid,
             extraCheckResults,
             structureCheckResults,
+            submission.zip,
         );
     }
 }

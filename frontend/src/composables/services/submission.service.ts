@@ -38,11 +38,13 @@ export function useSubmission(): SubmissionState {
         selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.submissions.byGroup.replace('{groupId}', groupId);
+
         // formData is necessary with multiform data (otherwise files value is changed to files[] by axios)
         const formData = new FormData();
         uploadedFiles.forEach((file: File) => {
-            formData.append('files', file); // Gebruik 'files' in plaats van 'files[]'
+            formData.append('files', file);
         });
+
         await create(endpoint, formData, submission, Submission.fromJSON, 'multipart/form-data', selfProcessError);
     }
 

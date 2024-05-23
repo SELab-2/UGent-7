@@ -15,6 +15,7 @@ import moment from 'moment/moment';
 import { PrimeIcons } from 'primevue/api';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 import { useProject } from '@/composables/services/project.service.ts';
+import { useExtraCheck } from '@/composables/services/extra_checks.service.ts';
 
 /* Composable injections */
 const route = useRoute();
@@ -23,6 +24,7 @@ const { user } = storeToRefs(useAuthStore());
 const { submission, getSubmissionByID } = useSubmission();
 const { feedbacks, getFeedbackBySubmission, createFeedback, updateFeedback } = useFeedback();
 const { project, getProjectByID } = useProject();
+const { extraChecks, getExtraChecksByProject } = useExtraCheck();
 
 /* Feedback content */
 const feedbackTextValue = ref<string>('');
@@ -55,23 +57,23 @@ const structureAndExtraFaults = computed(() => {
     const structureFaults = submission.value.structureCheckFaults();
     const extraFaults = submission.value.isStructureCheckPassed() ? submission.value.extraCheckFaults() : [];
 
-    return [...structureFaults, ...extraFaults];
+    // Filter out empty faults
+    return [...structureFaults, ...extraFaults].filter((fault) => fault);
 });
 
 const showLogsAndArtifacts = computed(() => {
-    const extraChecks = submission.value?.extraCheckResults ?? [];
+    const extraChecksResults = submission.value?.extraCheckResults ?? [];
     let results: string[] = [];
-
-    if (project.value != null) {
-        const visibleLogs = extraChecks
+    if (project.value != null && extraChecks.value != null) {
+        const visibleLogs = extraChecksResults
             .filter((check) => {
-                return project.value?.extra_checks?.find((extraCheck) => extraCheck.id === check.id)?.show_log;
+                return extraChecks.value?.find((extraCheck) => extraCheck.id === check.extra_check)?.show_log;
             })
             .map((check) => check.log_file);
 
-        const visibleArtifacts = extraChecks
+        const visibleArtifacts = extraChecksResults
             .filter((check) => {
-                return project.value?.extra_checks?.find((extraCheck) => extraCheck.id === check.id)?.show_log;
+                return extraChecks.value?.find((extraCheck) => extraCheck.id === check.extra_check)?.show_artifact;
             })
             .map((check) => check.artifact);
 
@@ -98,6 +100,7 @@ watch(
         getSubmissionByID(submissionId as string);
         getFeedbackBySubmission(submissionId as string);
         getProjectByID(route.params.projectId as string);
+        getExtraChecksByProject(route.params.projectId as string);
     },
     { immediate: true },
 );
@@ -105,13 +108,21 @@ watch(
 
 <template>
     <BaseLayout>
+        <RouterLink :to="{ name: 'submissions' }">
+            <Button
+                class="mb-4 p-0 text-sm text-black-alpha-70"
+                :icon="PrimeIcons.ARROW_LEFT"
+                :label="t('views.submissions.backToSubmissions')"
+                link
+            />
+        </RouterLink>
         <div class="grid">
             <!-- Submission properties -->
             <div v-if="submission" class="col-6 md:col-4">
                 <!-- Submission status -->
                 <div>
                     <Title class="flex">Status</Title>
-                    <div class="p-2">
+                    <div class="pl-2 mt-4">
                         <p v-if="submission.isPassed()">{{ t('views.submissions.passed') }}</p>
                         <div v-else>
                             <span>{{ t('views.submissions.failed') }}</span>
