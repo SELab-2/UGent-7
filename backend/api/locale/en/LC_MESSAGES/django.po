@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-15 19:49+0200\n"
+"POT-Creation-Date: 2024-05-20 12:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,6 +149,14 @@ msgid "docker.errors.no_staff"
 msgstr "User is not allowed to assign othher owners than himself to the image."
 
 #: serializers/docker_serializer.py:31
+#: serializers/course_serializer.py:116
+msgid "courses.error.invitation_link"
+msgstr "The invitation link is not unique, please try again."
+
+msgid "feedback.error.no_teacher"
+msgstr "The user is no teacher."
+
+#: serializers/docker_serializer.py:19
 msgid "docker.errors.custom"
 msgstr "User is not allowed to create public images"
 
@@ -180,39 +188,43 @@ msgstr "The student is already in the group."
 msgid "group.errors.not_present"
 msgstr "The student is currently not in the group."
 
-#: serializers/project_serializer.py:22
+#: serializers/project_serializer.py:23
 msgid "project.errors.invalid_instance"
 msgstr "Error while parsing the provided zip."
 
-#: serializers/project_serializer.py:81
+#: serializers/project_serializer.py:122
 msgid "project.errors.context"
 msgstr "The project is not supplied in the context."
 
-#: serializers/project_serializer.py:86
+#: serializers/project_serializer.py:127
 msgid "project.errors.start_date_in_past"
 msgstr "The start date of the project lies in the past."
 
-#: serializers/project_serializer.py:100
+#: serializers/project_serializer.py:141
 msgid "project.errors.deadline_before_start_date"
 msgstr "The deadline of the project lies before the start date of the project."
 
-#: serializers/project_serializer.py:142
+#: serializers/project_serializer.py:183
 msgid "project.errors.zip_structure"
 msgstr "Error while parsing the provided zip."
 
-#: serializers/submission_serializer.py:96 tests/test_submission.py:275
+#: serializers/submission_serializer.py:98
+msgid "project.error.submissions.project_not_started"
+msgstr "The project hasn't started yet."
+
+#: serializers/submission_serializer.py:102 tests/test_submission.py:275
 msgid "project.error.submissions.past_project"
 msgstr "The deadline of the project has already passed."
 
-#: serializers/submission_serializer.py:99 tests/test_submission.py:346
+#: serializers/submission_serializer.py:105 tests/test_submission.py:346
 msgid "project.error.submissions.non_visible_project"
 msgstr "The project is currently in a non-visible state."
 
-#: serializers/submission_serializer.py:102 tests/test_submission.py:376
+#: serializers/submission_serializer.py:108 tests/test_submission.py:376
 msgid "project.error.submissions.archived_project"
 msgstr "The project is archived."
 
-#: serializers/submission_serializer.py:105
+#: serializers/submission_serializer.py:111
 msgid "project.error.submissions.no_files"
 msgstr "The submission is empty."
 
@@ -228,39 +240,39 @@ msgstr "The teacher was successfully added."
 msgid "teachers.success.destroy"
 msgstr "The teacher was successfully destroyed."
 
-#: views/course_view.py:137
+#: views/course_view.py:136
 msgid "courses.success.assistants.add"
 msgstr "The assistant was successfully added to the course."
 
-#: views/course_view.py:164
+#: views/course_view.py:163
 msgid "courses.success.assistants.remove"
 msgstr "The assistant was successfully removed from the course."
 
-#: views/course_view.py:226
+#: views/course_view.py:225
 msgid "courses.success.students.add"
 msgstr "The student was successfully added to the course."
 
-#: views/course_view.py:247
+#: views/course_view.py:246
 msgid "courses.success.students.remove"
 msgstr "The student was successfully removed from the course."
 
-#: views/course_view.py:292
+#: views/course_view.py:291
 msgid "courses.success.teachers.add"
 msgstr "The teacher was successfully added to the course."
 
-#: views/course_view.py:316
+#: views/course_view.py:315
 msgid "courses.success.teachers.remove"
 msgstr "The teacher was successfully removed from the course."
 
-#: views/group_view.py:74
+#: views/group_view.py:73
 msgid "group.success.students.add"
 msgstr "The student was successfully added to the group."
 
-#: views/group_view.py:94
+#: views/group_view.py:93
 msgid "group.success.students.remove"
 msgstr "The student was successfully removed from the group."
 
-#: views/group_view.py:113
+#: views/group_view.py:112
 msgid "group.success.submissions.add"
 msgstr "The submission was successfully added to the group."
 
@@ -288,6 +300,6 @@ msgstr "No zip file available."
 msgid "extra_check_result.download.log"
 msgstr "No log file available."
 
-#: views/submission_view.py:60
+#: views/submission_view.py:59
 msgid "extra_check_result.download.artifact"
 msgstr "No artifact available."

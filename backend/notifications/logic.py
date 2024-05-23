@@ -11,8 +11,8 @@ from notifications.models import Notification
 from ypovoli.settings import EMAIL_CUSTOM
 
 
-# Returns a dictionary with the title and description of the notification
 def get_message_dict(notification: Notification) -> Dict[str, str]:
+    """Get the message from the template and arguments."""
     return {
         "title": _(notification.template_id.title_key),
         "description": _(notification.template_id.description_key)
@@ -20,17 +20,17 @@ def get_message_dict(notification: Notification) -> Dict[str, str]:
     }
 
 
-# Call the function after 60 seconds and no more than once in that period
 def schedule_send_mails():
-    if not cache.get("notifications_send_mails"):
+    """Schedule the sending of emails."""
+    if not cache.get("notifications_send_mails", False):
         cache.set("notifications_send_mails", True)
         _send_mails.apply_async(countdown=60)
 
 
-# Try to send one email and set the result
-def _send_mail(mail: mail.EmailMessage, result: List[bool]):
+def _send_mail(message: mail.EmailMessage, result: List[bool]):
+    """Try to send one email and set the result."""
     try:
-        mail.send(fail_silently=False)
+        message.send(fail_silently=False)
         result[0] = True
     except SMTPException:
         result[0] = False
@@ -40,11 +40,13 @@ def _send_mail(mail: mail.EmailMessage, result: List[bool]):
 # TODO: Move to tasks module
 # TODO: Retry 3
 # https://docs.celeryq.dev/en/v5.3.6/getting-started/next-steps.html#next-steps
-# Send all unsent emails
-@shared_task(ignore_result=True)
+@shared_task()
 def _send_mails():
+    """Send all unsent emails."""
+
     # All notifications that need to be sent
     notifications = Notification.objects.filter(is_sent=False)
+
     # Dictionary with the number of errors for each email
     errors: DefaultDict[str, int] = cache.get(
         "notifications_send_mails_errors", defaultdict(int)
@@ -105,5 +107,6 @@ def _send_mails():
     # Restart the process if there are any notifications left that were not sent
     unsent_notifications = Notification.objects.filter(is_sent=False)
     cache.set("notifications_send_mails", False)
+
     if unsent_notifications.count() > 0:
         schedule_send_mails()

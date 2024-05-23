@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import moment from 'moment';
-import Skeleton from 'primevue/skeleton';
 import InputSwitch from 'primevue/inputswitch';
 import ProjectDetailCard from '@/components/projects/ProjectDetailCard.vue';
 import ProjectDeadlineCard from '@/components/projects/ProjectDeadlineCard.vue';
@@ -13,6 +12,7 @@ import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
 import { useStudents } from '@/composables/services/student.service';
 import { type Course } from '@/types/Course.ts';
+import Loading from '@/components/Loading.vue';
 
 /* Props */
 const props = withDefaults(
@@ -81,15 +81,15 @@ const incomingProjects = computed<Project[] | null>(() => {
 
 <template>
     <div>
+        <!-- Show past projects switch -->
+        <div class="flex gap-3 align-items-center mb-5">
+            <InputSwitch input-id="show-past" v-model="showPast" />
+            <label for="show-past">
+                {{ t('components.list.showPastProjects') }}
+            </label>
+        </div>
         <!-- Project list -->
         <template v-if="sortedProjects === null || sortedProjects.length > 0">
-            <!-- Show past projects switch -->
-            <div class="flex gap-3 align-items-center mb-5">
-                <InputSwitch input-id="show-past" v-model="showPast" />
-                <label for="show-past">
-                    {{ t('components.list.showPastProjects') }}
-                </label>
-            </div>
             <div class="grid nested-grid">
                 <div class="col-12 md:col-5">
                     <h2 class="mt-0">
@@ -109,9 +109,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                             </template>
                         </template>
                         <template v-else>
-                            <div class="col-12" v-for="index in cols" :key="index">
-                                <Skeleton height="8rem" />
-                            </div>
+                            <Loading height="50vh" />
                         </template>
                     </div>
                 </div>
@@ -131,9 +129,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                             </div>
                         </template>
                         <template v-else>
-                            <div class="col-12" v-for="index in cols" :key="index">
-                                <Skeleton height="20rem" />
-                            </div>
+                            <Loading height="50vh" />
                         </template>
                     </div>
                 </div>
@@ -145,7 +141,7 @@ const incomingProjects = computed<Project[] | null>(() => {
                 <div class="mt-3">
                     <slot name="empty">
                         <p>{{ t('components.list.noProjects.student') }}</p>
-                        <RouterLink :to="{ name: 'courses' }">
+                        <RouterLink id="courses" :to="{ name: 'courses' }">
                             <Button :label="t('components.button.searchCourse')" icon="pi pi-search" />
                         </RouterLink>
                     </slot>

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import moment from 'moment';
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
 import Calendar, { type CalendarDateSlotOptions } from 'primevue/calendar';
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
-import Skeleton from 'primevue/skeleton';
 import { useProject } from '@/composables/services/project.service';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -15,19 +14,22 @@ import { type Project } from '@/types/Project.ts';
 import { useRoute, useRouter } from 'vue-router';
 import { useCourses } from '@/composables/services/course.service.ts';
 import { type Course, getAcademicYear } from '@/types/Course.ts';
+import Loading from '@/components/Loading.vue';
+import { watchImmediate } from '@vueuse/core';
 
 /* Composable injections */
 const { t, locale } = useI18n();
 const { query } = useRoute();
 const { push } = useRouter();
 
-/* Component state */
-const selectedDate = ref<Date>(getQueryDate());
-
 /* Service injection */
 const { user } = storeToRefs(useAuthStore());
 const { courses, getCoursesByTeacher, getCourseByAssistant } = useCourses();
 const { projects, getProjectsByTeacher, getProjectsByAssistant, getProjectsByStudent } = useProject();
+
+/* Component state */
+const loading = ref(true);
+const selectedDate = ref<Date>(getQueryDate());
 
 /* Formatted date */
 const formattedDate = computed(() => {
@@ -147,14 +149,13 @@ function countDeadlines(date: CalendarDateSlotOptions): number {
 }
 
 /* Watch the user and load the projects */
-watch(
-    user,
-    async () => {
-        await loadProjects();
-    },
-    { immediate: true },
-);
+watchImmediate(user, async () => {
+    loading.value = true;
+    await loadProjects();
+    loading.value = false;
+});
 
+/* Watch the selected date and update the query parameters */
 watch(selectedDate, (date) => {
     push({ query: { date: moment(date).format('YYYY-MM-DD') } });
 });
@@ -164,96 +165,101 @@ watch(selectedDate, (date) => {
     <BaseLayout>
         <!-- Calendar heading -->
         <Title class="mb-6">{{ t('views.calendar.title') }}</Title>
-        <!-- Calendar body -->
-        <div class="grid">
-            <div class="col-12 md:col-6">
-                <div>
-                    <!-- Calendar itself -->
-                    <Calendar class="w-full" v-model="selectedDate" inline>
-                        <template #date="{ date }">
-                            <div class="relative">
-                                <div class="deadline-indicator" v-if="hasDeadline(date)">
-                                    {{ countDeadlines(date) }}
+        <template v-if="!loading">
+            <!-- Calendar body -->
+            <div class="grid fadein">
+                <div class="col-12 md:col-6">
+                    <div>
+                        <!-- Calendar itself -->
+                        <Calendar class="w-full" v-model="selectedDate" :select-other-months="true" inline>
+                            <template #date="{ date }">
+                                <div class="relative">
+                                    <div class="deadline-indicator" v-if="hasDeadline(date)">
+                                        {{ countDeadlines(date) }}
+                                    </div>
+                                    <span>{{ date.day }}</span>
                                 </div>
-                                <span>{{ date.day }}</span>
-                            </div>
-                        </template>
-                    </Calendar>
+                            </template>
+                        </Calendar>
+                    </div>
                 </div>
-            </div>
-            <div class="col-12 md:col-6">
-                <div class="surface-100 p-4 md:p-6">
-                    <!-- Selected date on the calendar -->
-                    <Title class="mb-6 font-extrabold">
-                        {{ formattedDate }}
-                    </Title>
+                <div class="col-12 md:col-6">
+                    <div class="surface-100 p-4 md:p-6">
+                        <!-- Selected date on the calendar -->
+                        <Title class="mb-6 font-extrabold">
+                            {{ formattedDate }}
+                        </Title>
 
-                    <!-- Listing projects with given deadline -->
-                    <div class="flex flex-column gap-4">
-                        <template v-if="projectsWithDeadline !== null">
-                            <template v-if="projectsWithDeadline.length > 0">
-                                <!-- Project cards -->
-                                <div
-                                    class="flex flex-column xl:flex-row border-round-md"
-                                    v-for="project in projectsWithDeadline"
-                                    :key="project.id"
-                                >
-                                    <!-- Icon -->
+                        <!-- Listing projects with given deadline -->
+                        <div class="flex flex-column gap-4">
+                            <template v-if="projectsWithDeadline !== null">
+                                <template v-if="projectsWithDeadline.length > 0">
+                                    <!-- Project cards -->
                                     <div
-                                        class="bg-primary flex justify-content-center align-items-center p-4 xl:w-7rem xl:h-7rem"
+                                        class="flex flex-column xl:flex-row border-round-md"
+                                        v-for="project in projectsWithDeadline"
+                                        :key="project.id"
                                     >
-                                        <span class="pi pi-book text-6xl" />
-                                    </div>
-                                    <!-- Details -->
-                                    <div
-                                        class="flex flex-column gap-3 justify-content-center bg-white text-black-alpha-80 p-3 w-full"
-                                    >
-                                        <RouterLink
-                                            :to="{
-                                                name: 'course-project',
-                                                params: {
-                                                    courseId: project.course?.id,
-                                                    projectId: project.id,
-                                                },
-                                            }"
+                                        <!-- Icon -->
+                                        <div
+                                            class="bg-primary flex justify-content-center align-items-center p-4 xl:w-7rem xl:h-7rem"
                                         >
-                                            <h3 class="flex gap-3 align-items-center text-primary m-0 text-xl">
-                                                {{ project.name }} <span class="pi pi-arrow-right text-xl" />
-                                            </h3>
-                                        </RouterLink>
-                                        <p class="font-bold m-0">
-                                            {{ project.course?.name }}
-                                        </p>
+                                            <span class="pi pi-book text-6xl" />
+                                        </div>
+                                        <!-- Details -->
+                                        <div
+                                            class="flex flex-column gap-3 justify-content-center bg-white text-black-alpha-80 p-3 w-full"
+                                        >
+                                            <RouterLink
+                                                :to="{
+                                                    name: 'course-project',
+                                                    params: {
+                                                        courseId: project.course?.id,
+                                                        projectId: project.id,
+                                                    },
+                                                }"
+                                            >
+                                                <h3 class="flex gap-3 align-items-center text-primary m-0 text-xl">
+                                                    {{ project.name }} <span class="pi pi-arrow-right text-xl" />
+                                                </h3>
+                                            </RouterLink>
+                                            <p class="font-bold m-0">
+                                                {{ project.course?.name }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </template>
+                                <template v-else>
+                                    <p class="m-0">{{ t('views.calendar.noProjects') }}</p>
+                                </template>
                             </template>
                             <template v-else>
-                                <p class="m-0">{{ t('views.calendar.noProjects') }}</p>
+                                <Loading height="7rem" />
                             </template>
-                        </template>
-                        <template v-else>
-                            <Skeleton height="7rem" />
+                        </div>
+
+                        <template
+                            v-if="
+                                currentCourses !== null &&
+                                (user?.isTeacher() || user?.isAssistant()) &&
+                                currentCourses.length > 0
+                            "
+                        >
+                            <!-- Add project button -->
+                            <ProjectCreateButton
+                                class="mt-5"
+                                :label="t('components.button.createProject')"
+                                severity="secondary"
+                                :courses="currentCourses"
+                            />
                         </template>
                     </div>
-
-                    <template
-                        v-if="
-                            currentCourses !== null &&
-                            (user?.isTeacher() || user?.isAssistant()) &&
-                            currentCourses.length > 0
-                        "
-                    >
-                        <!-- Add project button -->
-                        <ProjectCreateButton
-                            class="mt-5"
-                            :label="t('components.button.createProject')"
-                            severity="secondary"
-                            :courses="currentCourses"
-                        />
-                    </template>
                 </div>
             </div>
-        </div>
+        </template>
+        <template v-else>
+            <Loading height="45vh" />
+        </template>
     </BaseLayout>
 </template>
 

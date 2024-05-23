@@ -33,7 +33,7 @@
     visible: true
     archived: false
     locked_groups: false
-    start_date: 2024-12-12T00:00:00Z
+    start_date: 2023-12-12T00:00:00Z
     deadline: 2025-01-01T00:00:00Z
     max_score: 100
     score_visible: false
@@ -42,8 +42,8 @@
 - model: api.project
   pk: 1
   fields:
-    name: Lean Java
-    description: This project will teach you the basics of Object Oriented Programming by using Java.
+    name: Learn Java
+    description: This project will teach you the basics of Object Oriented Programming using Java.
     visible: true
     archived: false
     locked_groups: false
@@ -56,8 +56,8 @@
 - model: api.project
   pk: 2
   fields:
-    name: Lean Javascript
-    description: This project will show you would you should avoid javascript at all cost.
+    name: Learn JavaScript
+    description: This project will show you should avoid JavaScript at all cost.
     visible: true
     archived: false
     locked_groups: true
@@ -134,9 +134,18 @@
     project: 0
     obligated_extensions:
       - 0
-    blocked_extensions: []
+    blocked_extensions:
+      - 1
 - model: api.structurecheck
   pk: 1
+  fields:
+    path: "verslag/"
+    project: 0
+    obligated_extensions:
+      - 3
+    blocked_extensions: []
+- model: api.structurecheck
+  pk: 2
   fields:
     path: src/
     project: 1
@@ -145,7 +154,7 @@
     blocked_extensions:
       - 2
 - model: api.structurecheck
-  pk: 2
+  pk: 3
   fields:
     path: verslag/
     project: 1
@@ -153,7 +162,7 @@
       - 3
     blocked_extensions: []
 - model: api.structurecheck
-  pk: 3
+  pk: 4
   fields:
     path: ""
     project: 3
@@ -324,6 +333,54 @@
     submission_time: 2024-05-11 12:08:21.147551+00:00
     is_valid: true
     zip: fixtures/realistic/projects/0/0/submissions/1/submission_2/submission.zip
+- model: api.submission
+  pk: 5
+  fields:
+    group: 1
+    submission_number: 5
+    submission_time: 2024-05-12 12:08:21.147551+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/1/submission_2/submission.zip
+- model: api.submission
+  pk: 6
+  fields:
+    group: 1
+    submission_number: 6
+    submission_time: 2024-05-13 12:08:21.147551+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/1/submission_2/submission.zip
+- model: api.submission
+  pk: 7
+  fields:
+    group: 1
+    submission_number: 7
+    submission_time: 2024-05-14 12:08:21.147551+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/1/submission_2/submission.zip
+- model: api.submission
+  pk: 8
+  fields:
+    group: 1
+    submission_number: 8
+    submission_time: 2024-05-15 12:08:21.147551+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/1/submission_2/submission.zip
+- model: api.submission
+  pk: 9
+  fields:
+    group: 1
+    submission_number: 9
+    submission_time: 2024-05-16 12:08:21.147551+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/1/submission_2/submission.zip
+- model: api.submission
+  pk: 10
+  fields:
+    group: 1
+    submission_number: 10
+    submission_time: 2024-05-17 12:08:21.147551+00:00
+    is_valid: true
+    zip: fixtures/realistic/projects/0/0/submissions/1/submission_2/submission.zip
 
 # MARK: Check Result
 - model: api.checkresult
@@ -434,6 +491,168 @@
     submission: 4
     result: SUCCESS
     error_message: null
+- model: api.checkresult
+  pk: 13
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 5
+    result: FAILED
+    error_message: BLOCKED_EXTENSION
+- model: api.checkresult
+  pk: 14
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 5
+    result: FAILED
+    error_message: FAILED_STRUCTURE_CHECK
+- model: api.checkresult
+  pk: 15
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 5
+    result: FAILED
+    error_message: FAILED_STRUCTURE_CHECK
+- model: api.checkresult
+  pk: 16
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 6
+    result: FAILED
+    error_message: OBLIGATED_EXTENSION_NOT_FOUND
+- model: api.checkresult
+  pk: 17
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 6
+    result: FAILED
+    error_message: FAILED_STRUCTURE_CHECK
+- model: api.checkresult
+  pk: 18
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 6
+    result: FAILED
+    error_message: FAILED_STRUCTURE_CHECK
+- model: api.checkresult
+  pk: 19
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 7
+    result: FAILED
+    error_message: FILE_DIR_NOT_FOUND
+- model: api.checkresult
+  pk: 20
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 7
+    result: FAILED
+    error_message: FAILED_STRUCTURE_CHECK
+- model: api.checkresult
+  pk: 21
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 7
+    result: FAILED
+    error_message: FAILED_STRUCTURE_CHECK
+- model: api.checkresult
+  pk: 22
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 8
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 23
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 8
+    result: FAILED
+    error_message: DOCKER_IMAGE_ERROR
+- model: api.checkresult
+  pk: 24
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 8
+    result: FAILED
+    error_message: TIME_LIMIT
+- model: api.checkresult
+  pk: 25
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 9
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 26
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 9
+    result: FAILED
+    error_message: MEMORY_LIMIT
+- model: api.checkresult
+  pk: 27
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 9
+    result: FAILED
+    error_message: CHECK_ERROR
+- model: api.checkresult
+  pk: 28
+  fields:
+    polymorphic_ctype:
+      - api
+      - structurecheckresult
+    submission: 10
+    result: SUCCESS
+    error_message: null
+- model: api.checkresult
+  pk: 29
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 10
+    result: FAILED
+    error_message: RUNTIME_ERROR
+- model: api.checkresult
+  pk: 30
+  fields:
+    polymorphic_ctype:
+      - api
+      - extracheckresult
+    submission: 10
+    result: FAILED
+    error_message: UNKNOWN
 
 # MARK: Strucure Check results
 - model: api.structurecheckresult
@@ -450,6 +669,30 @@
     structure_check: 0
 - model: api.structurecheckresult
   pk: 10
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 13
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 16
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 19
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 22
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 25
+  fields:
+    structure_check: 0
+- model: api.structurecheckresult
+  pk: 28
   fields:
     structure_check: 0
 
@@ -498,6 +741,78 @@
     artifact: ""
 - model: api.extracheckresult
   pk: 12
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 14
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_0.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 15
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 17
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_0.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 18
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 20
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_0.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 21
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 23
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_0.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 24
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 26
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_0.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 27
+  fields:
+    extra_check: 1
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 29
+  fields:
+    extra_check: 0
+    log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_0.txt
+    artifact: ""
+- model: api.extracheckresult
+  pk: 30
   fields:
     extra_check: 1
     log_file: fixtures/realistic/projects/0/0/submissions/1/submission_2/logs/log_extra_check_1.txt

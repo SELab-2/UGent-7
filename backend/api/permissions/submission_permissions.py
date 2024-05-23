@@ -12,12 +12,15 @@ from rest_framework.views import APIView
 
 class SubmissionPermission(BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
-        if request.method not in SAFE_METHODS:
+        submission_id = view.kwargs.get("pk")
+
+        if request.method not in SAFE_METHODS or submission_id is None:
             return False
 
         user: User = cast(User, request.user)
-
-        return user.is_staff or is_teacher(user) or is_assistant(user)
+        # check if user is in group of submission
+        group = Submission.objects.get(id=submission_id).group
+        return user.is_staff or is_teacher(user) or is_assistant(user) or group.students.filter(id=user.id).exists()
 
     def has_object_permission(self, request: Request, view: APIView, obj: Submission) -> bool:
         if request.method not in SAFE_METHODS:

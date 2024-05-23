@@ -76,6 +76,11 @@ class Project(models.Model):
         now = timezone.now()
         return now > self.deadline
 
+    def has_started(self):
+        """Returns True if the project has started."""
+        now = timezone.now()
+        return now >= self.start_date
+
     def is_archived(self):
         """Returns True if a project is archived."""
         return self.archived
@@ -108,6 +113,6 @@ class Project(models.Model):
         self.save()
 
     if TYPE_CHECKING:
-        groups: RelatedManager['Group']
-        structure_checks: RelatedManager['StructureCheck']
-        extra_checks: RelatedManager['ExtraCheck']
+        groups: RelatedManager[Group]
+        structure_checks: RelatedManager[StructureCheck]
+        extra_checks: RelatedManager[ExtraCheck]

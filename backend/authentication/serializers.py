@@ -1,5 +1,7 @@
 from typing import Tuple
 
+from rest_framework.relations import HyperlinkedIdentityField
+
 from authentication.cas.client import client
 from authentication.models import User
 from authentication.signals import user_created, user_login
@@ -35,7 +37,7 @@ class CASTokenObtainSerializer(Serializer):
 
         # Update the user's last login.
         if api_settings.UPDATE_LAST_LOGIN:
-            update_last_login(self, user)
+            update_last_login(CASTokenObtainSerializer, user)
 
         # Login and send authentication signals.
         if "request" in self.context:
@@ -95,11 +97,13 @@ class UserSerializer(ModelSerializer):
     This serializer validates the user fields for creation and updating.
     """
     faculties = HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="faculty-detail"
+        view_name="faculty-detail",
+        many=True,
+        read_only=True
     )
 
-    notifications = HyperlinkedRelatedField(
-        view_name="notification-detail",
+    notifications = HyperlinkedIdentityField(
+        view_name="user-notifications",
         read_only=True,
     )
 

@@ -2,7 +2,6 @@
 // TODO: after pinia setup is done
 
 import DashboardView from '@/views/dashboard/DashboardView.vue';
-import HelpDashboard from '@/views/help/HelpDashboard.vue';
 import CourseView from '@/views/courses/CourseView.vue';
 import CreateCourseView from '@/views/courses/CreateCourseView.vue';
 import UpdateCourseView from '@/views/courses/UpdateCourseView.vue';
@@ -19,9 +18,9 @@ import CreateProjectView from '@/views/projects/CreateProjectView.vue';
 import UpdateProjectView from '@/views/projects/UpdateProjectView.vue';
 import SearchCourseView from '@/views/courses/SearchCourseView.vue';
 import SubmissionView from '@/views/submissions/SubmissionView.vue';
-import AdminView from '@/views/admin/AdminView.vue';
 import UsersView from '@/views/admin/UsersView.vue';
 import ProjectsView from '@/views/projects/ProjectsView.vue';
+import SubmissionsView from '@/views/submissions/SubmissionsView.vue';
 import DockerImagesView from '@/views/admin/DockerImagesView.vue';
 import JoinCourseView from '@/views/courses/JoinCourseView.vue';
 
@@ -79,9 +78,24 @@ const routes: RouteRecordRaw[] = [
                                                 children: [
                                                     { path: '', component: Dummy, name: 'project-group' },
                                                     {
-                                                        path: 'submission',
-                                                        component: SubmissionView,
-                                                        name: 'submission',
+                                                        path: 'submissions',
+                                                        children: [
+                                                            {
+                                                                path: '',
+                                                                component: SubmissionsView,
+                                                                name: 'submissions',
+                                                            },
+                                                            {
+                                                                path: ':submissionId',
+                                                                children: [
+                                                                    {
+                                                                        path: '',
+                                                                        component: SubmissionView,
+                                                                        name: 'submission',
+                                                                    },
+                                                                ],
+                                                            },
+                                                        ],
                                                     },
                                                 ],
                                             },
@@ -156,53 +170,9 @@ const routes: RouteRecordRaw[] = [
         path: '/admin/',
         beforeEnter: AdminGuard,
         children: [
-            { path: '', component: AdminView, name: 'admin' },
+            { path: '', redirect: { name: 'admin-users' } },
             { path: 'users', component: UsersView, name: 'admin-users' },
             { path: 'docker-images', component: DockerImagesView, name: 'admin-dockerImages' },
-        ],
-    },
-
-    // help
-    {
-        path: '/help',
-        children: [
-            {
-                path: '',
-                component: HelpDashboard,
-                name: 'help-dashboard',
-            },
-            {
-                path: 'student',
-                component: Dummy,
-                name: 'help-student',
-                children: [
-                    {
-                        path: 'login-out',
-                        component: Dummy,
-                        name: 'help-student-login_out',
-                    },
-                    {
-                        path: 'change-lang',
-                        component: Dummy,
-                        name: 'help-student-change_lang',
-                    },
-                ],
-            },
-            {
-                path: 'teacher',
-                component: Dummy,
-                name: 'help-teacher',
-            },
-            {
-                path: 'assistant',
-                component: Dummy,
-                name: 'help-assistant',
-            },
-            {
-                path: 'admin',
-                component: Dummy,
-                name: 'help-admin',
-            },
         ],
     },
 

@@ -1,75 +1,24 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { Submission } from '@/types/submission/Submission.ts';
-import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
-import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+import { computed } from 'vue';
+import { type Submission } from '@/types/submission/Submission.ts';
+import { type ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
+import { type StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 import { useI18n } from 'vue-i18n';
+import router from '@/router/router.ts';
+import { useRoute } from 'vue-router';
 
+const { params } = useRoute();
 const { t } = useI18n();
-const tempSubmissions = ref<Submission[]>([]);
-
-const testSubmissions = ref<Submission[]>([
-    new Submission(
-        '4',
-        4,
-        new Date(),
-        [],
-        [new ExtraCheckResult('3', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '3',
-        3,
-        new Date(2024, 3, 14),
-        [],
-        [new ExtraCheckResult('3', 'FAILURE', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '2',
-        2,
-        new Date(2024, 3, 1),
-        [],
-        [new ExtraCheckResult('2', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('2', 'FAILURE', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '1',
-        1,
-        new Date(2024, 2, 12),
-        [],
-        [new ExtraCheckResult('1', 'FAILURE', null, null, 1, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('1', 'FAILURE', null, 1, 1, 'StructureCheckResult')],
-        true,
-    ),
-]);
 
 const props = defineProps<{
     submissions: Submission[];
 }>();
 
-onMounted(async () => {
-    tempSubmissions.value = [...(props.submissions ?? []), ...testSubmissions.value].reverse();
-});
-
-watch(
-    () => props.submissions,
-    (newSubmissions) => {
-        tempSubmissions.value = [...newSubmissions, ...testSubmissions.value].reverse();
-    },
-    {
-        immediate: true, // Zal ook uitvoeren onMounted, dus je kan de logica uit onMounted verwijderen als je dit gebruikt
-    },
-);
-
 /**
  * Returns the extra information for the submission
  */
 const submissionsExtra = computed(() => {
-    return tempSubmissions.value.map((submission) => {
+    return props.submissions.map((submission: Submission) => {
         const iconDetails = getExtraSubmissionInformation(submission);
         return {
             ...submission,
@@ -111,6 +60,10 @@ const getExtraSubmissionInformation = (
     }
 };
 
+/**
+ * Returns the time parsed since the submission
+ * @param submissionDate
+ */
 const timeSince = (submissionDate: Date): string => {
     const today = new Date();
     const diffTime = new Date(today.getTime() - submissionDate.getTime());
@@ -126,6 +79,17 @@ const timeSince = (submissionDate: Date): string => {
         return t('views.submissions.timeSince.monthAgo');
     }
 };
+
+/**
+ * Navigates to the submission with the given id
+ * @param submissionId
+ */
+const navigateToSubmission = (submissionId: string): void => {
+    router.push({
+        name: 'submission',
+        params: { submissionId, groupId: params.groupId, projectId: params.projectId, courseId: params.courseId },
+    });
+};
 </script>
 
 <template>
@@ -135,6 +99,7 @@ const timeSince = (submissionDate: Date): string => {
             :key="submission.id"
             class="flex submission align-content-center align-items-center"
             v-tooltip="submission.hoverText"
+            @click="navigateToSubmission(submission.id)"
         >
             <p
                 :class="'font-semibold m-2 p-1 pi pi-' + submission.iconName"
@@ -150,6 +115,7 @@ const timeSince = (submissionDate: Date): string => {
 @import '@/assets/scss/theme/theme.scss';
 .submission {
     border-bottom: 1.5px solid var(--primary-color);
+    cursor: pointer;
 }
 .submission:last-child {
     border-bottom: none;

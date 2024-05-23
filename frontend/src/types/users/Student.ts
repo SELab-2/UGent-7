@@ -1,7 +1,11 @@
 import { type Course } from '../Course.ts';
 import { type Faculty } from '../Faculty.ts';
 import { type Group } from '../Group.ts';
-import { type Role, User } from '@/types/users/User.ts';
+import { type Role, User, type UserJSON } from '@/types/users/User.ts';
+
+export type StudentJSON = {
+    student_id: string;
+} & UserJSON;
 
 export class Student extends User {
     constructor(
@@ -40,7 +44,7 @@ export class Student extends User {
      *
      * @param student
      */
-    static fromJSON(student: Student): Student {
+    static fromJSON(student: StudentJSON): Student {
         return new Student(
             student.id,
             student.username,

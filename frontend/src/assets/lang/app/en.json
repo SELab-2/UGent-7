@@ -2,21 +2,33 @@
     "layout": {
         "header": {
             "logo": "Ghent University logo",
-            "login": "login",
+            "login": "Login",
             "view": "View as {0}",
             "user": "Logged in as {0}",
             "navigation": {
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
-                "courses": "courses",
-                "projects": "projects",
-                "settings": "preferences",
-                "help": "help"
+                "courses": "Courses",
+                "projects": "Projects"
             },
             "language": {
                 "nl": "Nederlands",
                 "en": "English"
+            },
+            "notifications": {
+                "new": "New",
+                "title": "Notifications",
+                "markAsRead": "Mark as read",
+                "loadMore": "Load more",
+                "noNotifications": "No notifications available"
             }
+        },
+        "footer": {
+            "home": "Dashboard",
+            "about": "Help",
+            "privacy": "Cookies",
+            "contact": "Contact",
+            "rights": "All rights reserved"
         }
     },
     "views": {
@@ -43,16 +55,23 @@
         },
         "projects": {
             "all": "All projects",
+            "backToCourse": "Back to course",
             "coming": "Near deadlines",
             "deadline": "Deadline",
             "days": "Today at {hour} | Tomorrow at {hour} | In {count} days",
-            "ago": "{count} days ago",
+            "ago": "1 day ago | {count} days ago",
+            "chooseGroupMessage": "Choose a group before {0}",
+            "groupScore": "Group score",
+            "noGroupScore": "No group score",
+            "noGroupMembers": "No group members",
+            "publishScores": "Publish scores",
             "groupName": "Group name",
             "groupPopulation": "Size",
             "groupStatus": "Status",
             "start": "Start date",
             "submissionStatus": "Submission status",
             "group": "Group",
+            "groups": "Groups",
             "groupSize": "Individual | Groups of {count} people",
             "noGroups": "No groups available",
             "groupMembers": "Group members",
@@ -60,37 +79,56 @@
             "joinGroup": "Join group",
             "leaveGroup": "Leave group",
             "create": "Create new project",
-            "edit": "Edit project",
+            "save": "Save project",
+            "edit": "Save project",
             "name": "Project name",
             "description": "Description",
-            "start_date": "Start project",
-            "group_size": "Number of students in a group (1 for an individual project)",
-            "number_of_groups": "Number of groups (optional, otherwise #students / group size)",
-            "max_score": "Maximum score that can be achieved",
+            "startDate": "Start project",
+            "numberStudentsGroup": "Number of students in a group (1 for an individual project)",
+            "numberOfGroups": "Number of groups (optional, otherwise #students / group size)",
+            "maxScore": "Maximum score that can be achieved",
             "visibility": "Make project visible to students",
             "scoreVisibility": "Make score, when uploaded, automatically visible to students",
             "submissionStructure": "Structure of how a submission should be made",
             "noStudents": "No students in this group",
             "locked": "Closed",
             "unlocked": "Open",
+            "structureChecks": {
+                "title": "Structure checks",
+                "placeholder": "Give a name to this folder",
+                "cancelSelection": "Deselect {0}",
+                "newFolder": "New folder"
+            },
             "extraChecks": {
                 "title": "Automatic checks on a submission",
+                "empty": "No checks added",
                 "add": "New check",
                 "name": "Name",
                 "public": "Public",
                 "bashScript": "Bash script",
                 "dockerImage": "Docker image",
+                "deleteDockerImage": "Delete docker image",
                 "timeLimit": "Time limit for execution (in seconds)",
                 "memoryLimit": "Memory limit for execution (in MB)",
-                "showLog": "Making the extra logs of the docker container visible to the students"
+                "showLog": "Make the extra logs of the docker container visible to the students",
+                "showArtifact": "Make the artifacts visible to the students"
             }
         },
         "submissions": {
             "title": "Submissions",
             "submit": "Submit",
             "course": "Course",
+            "allSubmissions": "Alle indieningen",
+            "file": "file",
+            "files": "files",
             "chooseFile": "Choose a file",
             "noSubmissions": "No submissions available",
+            "noFiles": "No files selected.",
+            "passed": "All tests passed",
+            "failed": "The submission is not passed.",
+            "downloadZip": "Download all files of this submission as a zip.",
+            "downloadLog": "Log of check {0}",
+            "backToSubmissions": "Back to submissions",
             "hoverText": {
               "allChecksFailed": "Structure and extra checks failed",
               "allChecksPassed": "All checks passed",
@@ -102,15 +140,34 @@
               "daysAgo": "day(s) ago",
               "weekAgo": "More than a week ago",
               "monthAgo": "More than a month ago"
+            },
+            "feedback": {
+                "writeFeedback": "Write your feedback here",
+                "addFeedback": "Add feedback",
+                "dateAndAuthor": "On {0} wrote {1}:",
+                "edit": "Edit feedback",
+                "noFeedback": "No feedback given yet"
+            },
+            "error": {
+                "blockedExtension": "There is a blocked extension in your solution",
+                "obligatedExtensionNotFound": "Obligated extension not found in your solution",
+                "fileDirNotFound": "File directory not found in your solution",
+                "dockerImageError": "Error in Docker image",
+                "timeLimit": "Time limit exceeded",
+                "memoryLimit": "Memory limit exceeded",
+                "checkError": "Extra tests on your submission did not pass.",
+                "runtimeError": "Runtime error",
+                "unknown": "Unknown error",
+                "failedStructureCheck": "Structure check failed"
             }
         },
         "courses": {
             "create": "Create course",
             "edit": "Edit course",
+            "save": "Save course",
             "clone": "Clone course",
             "cloneAssistants": "Clone assistants:",
             "cloneTeachers": "Clone teachers:",
-            "cloneCourse": "Clone teachers:",
             "name": "Course name",
             "description": "Description",
             "excerpt": "Short description",
@@ -121,18 +178,17 @@
             "leave": "Leave",
             "noProjects": "No projects available for this course",
             "teachersAndAssistants": {
-                "title": "People linked to this course",
+                "title": "Teachers",
                 "enroll": "Add as {0}",
                 "leave": "Remove from course",
                 "edit": "Edit users",
                 "search": {
                     "search": "Search",
                     "faculty": "Faculty",
-                    "role": "Role",
-                    "no_role": "None",
+                    "noRole": "None",
                     "placeholder": "Search a user by name",
                     "title": "Find users to link to this course",
-                    "results": "{0} users found for set filters"
+                    "results": "1 user found for set filters | {count} users found for set filters"
                 }
             },
             "search": {
@@ -141,10 +197,7 @@
                 "year": "Academic year",
                 "placeholder": "Search a course by name",
                 "title": "Search a course",
-                "results": "{0} courses found for set filters"
-            },
-            "searchByLink": {
-                "placeholder": "Find a course using the registration link"
+                "results": "1 course found for set filters | {count} courses found for set filters"
             },
             "share": {
                 "title": "Activate invitation link",
@@ -157,15 +210,17 @@
         "helpers": {
             "errors": {
                 "notFound": "Not found",
-                "notFoundDetail": "Source not found",
-                "unauthorized": "unauthorized",
+                "notFoundDetail": "Source not found.",
+                "unauthorized": "Unauthorized",
                 "unauthorizedDetail": "You are not authorized to access this resource.",
-                "server": "Server Error",
-                "serverDetail": "An error occurred on the server.",
-                "network": "Network Error",
+                "server": "Server error",
+                "network": "Network error",
                 "networkDetail": "Unable to reach the server.",
-                "request": "request error",
+                "request": "Request error",
                 "requestDetail": "An error occurred while creating the request."
+            },
+            "success": {
+                "creation": "A {0} is correctly created."
             }
         }
     },
@@ -176,19 +231,18 @@
             "createProject": "Create a new project",
             "searchCourse": "Search a course",
             "createCourse": "Create a new course",
-            "public": "Public",
-            "protected": "Protected",
             "csv": "Download grades as a .csv file"
         },
         "card": {
             "open": "Details",
             "newProject": "New project",
             "noSubmissions": "This project does not have any submissions",
-            "submissions": "Submission | Submissions",
-            "groups": "Group | Groups",
-            "structureTestsSucceed": "Succeeded structure tests",
-            "extraTestsSucceed": "Succeeded extra tests",
-            "testsFail": "Failed tests",
+            "submissions": "Group has made a submission | Groups have made a submission",
+            "groups": "Participating group | Participating groups",
+            "structureTestsFail": "Failed structure tests",
+            "extraChecksFail": "Failed extra tests",
+            "testsSucceed": "Succeeded tests",
+            "successfulSubmission": "Successful submissions",
             "submit": "Submit"
         },
         "list": {
@@ -201,7 +255,6 @@
                 "teacher": "No courses found. Create a new course with the button below.",
                 "search": "No courses found for the given search criteria."
             },
-            "noResults": "No results.",
             "noIncomingProjects": "No projects with a deadline within 7 days.",
             "selectCourse": "Select the course for which you want to create a project:",
             "showPastProjects": "Projects with passed deadline"
@@ -212,6 +265,21 @@
             "student": "Student",
             "assistant": "Assistant",
             "teacher": "Teacher"
+        },
+        "article": {
+            "admin": "The admin",
+            "assistant": "The assistant",
+            "course": "The course",
+            "docker": "The docker image",
+            "extraCheck": "The extra check",
+            "faculty": "The faculty",
+            "group": "The group",
+            "project": "The project",
+            "structureCheck": "The structure check",
+            "student": "The student",
+            "submission": "The submission",
+            "teacher": "The teacher",
+            "user": "The user"
         }
     },
     "helpers": {
@@ -222,6 +290,8 @@
             "success": "Success",
             "error": "Error",
             "unknown": "An unknown error has occurred.",
+            "create": "{type} has successfully been created.",
+            "edit": "{type} has successfully been edited.",
             "courses": {
                 "enrollment": {
                     "success": "You have been successfully enrolled for the course '{0}'.",
@@ -240,11 +310,35 @@
                         "success": "{0} has been successfully removed from the course.",
                         "error": "An error occurred while removing {0} from the course."
                     }
+                },
+                "create": {
+                    "success": "The course '{0}' has successfully been created.",
+                    "error": "An error occurred while creating the course '{0}'."
+                }
+            },
+            "projects": {
+                "create": {
+                    "success": "The project '{0}' has successfully been created.",
+                    "error": "An error occurred while creating the project '{0}'."
+                }
+            },
+            "submissions": {
+                "create": {
+                    "success": "The submission has successfully been submitted.",
+                    "error": "An error occurred while submitting the submission."
                 }
             },
             "login": {
                 "success": "You have successfully logged in.",
                 "error": "An error occurred while logging in."
+            },
+            "admin": {
+                "save": {
+                    "error": {
+                        "title": "Invalid save operation",
+                        "detail": "You are trying to save an item without selecting it."
+                    }
+                }
             }
         }
     },
@@ -256,27 +350,11 @@
         "cloneCourse": "Are you sure you want to clone this coure? This will create the same course for the next academic year.",
         "joinCourse": "Are you sure you want to enroll in this course? This will give you access to all projects, assignments, ...",
         "leaveCourse": "Are you sure you want to leave this course? You will no longer have access to this course.",
-        "shareCourse": "By activating the invitation link, you allow students in possession of this link to enroll in this course. Please copy the generated link, only when you click on \"Activate invitation link\" will this link become active."
-    },
-    "protectedCourses": {
-        "screen1": {
-            "title": "Obtain invitation link",
-            "content": "Teachers can choose to make their courses private. This means you have to ask the teacher for an invitation link, to be able to join the course."
-        },
-        "screen2": {
-            "title": "Search course",
-            "content": "Use the invitation link to search a course. If you can't find the course, ask the teacher to share a new link."
-
-        },
-        "screen3": {
-            "title": "Enroll",
-            "content": "Enroll in the course. Now you can see all the current projects, deadlines, ..."
-
-        }
+        "shareCourse": "By activating the invitation link, you allow students in possession of this link to enroll in this course. Please copy the generated link, only when you click on \"Activate invitation link\" will this link become active.",
+        "deleteDockerImage": "Are you sure you want to delete this docker image? This will also remove all the checks that use this image."
     },
     "admin": {
         "title": "Admin",
-        "keyword": "Keyword",
         "id": "ID",
         "list": "List",
         "add": "Add",
@@ -287,6 +365,7 @@
         "edit": "Edit",
         "cancel": "Cancel",
         "save": "Save",
+        "delete": "Delete",
         "users": {
             "title": "Users",
             "username": "Username",
@@ -294,29 +373,19 @@
             "roles": "Roles"
         },
         "user": "User",
-        "assistants": {
-            "title": "Assistants"
-        },
         "assistant": "Assistant",
-        "students": {
-            "title": "Students"
-        },
         "student": "Student",
-        "teachers": {
-            "title": "Teachers"
-        },
         "teacher": "Teacher",
-        "catalog": "Catalog",
-        "docker_images": {
+        "dockerImages": {
             "title": "Docker Images",
-            "name_input": "Name of docker image",
+            "nameInput": "Name of docker image",
             "name": "Name",
             "owner": "Owner ID",
-            "public": "Public",
-            "private": "Private"
+            "public": "Public"
         },
-        "none_found": "No matching data.",
-        "loading": "Loading data. Please wait."
+        "noneFound": "No matching data.",
+        "loading": "Loading data. Please wait.",
+        "safeGuard": "Are you sure?"
     },
     "primevue": {
         "startsWith": "Starts with",
@@ -416,6 +485,7 @@
         "emptySelectionMessage": "No selected item",
         "emptySearchMessage": "No results found",
         "emptyMessage": "No available options",
+        "emptyFileSelect": "No file selected",
         "aria": {
           "trueLabel": "True",
           "falseLabel": "False",

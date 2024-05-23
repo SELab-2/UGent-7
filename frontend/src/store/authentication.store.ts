@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { defineStore } from 'pinia';
-import { type Role, User } from '@/types/users/User.ts';
+import { type Role, User, type UserJSON } from '@/types/users/User.ts';
 import { endpoints } from '@/config/endpoints.ts';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { client } from '@/config/axios.ts';
@@ -76,7 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
         // Get the user information (using a cookie).
         if (user.value === null) {
             const response = await axios.get(endpoints.auth.whoami);
-            user.value = User.fromJSON(response.data as User);
+            user.value = User.fromJSON(response.data as UserJSON);
         }
 
         if (view.value === null || !user.value.hasRoles(view.value)) {

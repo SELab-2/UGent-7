@@ -20,7 +20,7 @@ To further navigate to the admin pannel you can add "/admin".
 
 - Click on your name in the navigation bar.
 
-![logout button](../assets/en/logout-button.png)
+![logout button](../assets/ ../assets/en/logout-button.png)
 
 ## Change Language
 

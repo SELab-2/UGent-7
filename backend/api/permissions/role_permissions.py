@@ -1,3 +1,4 @@
+from django.contrib.auth.base_user import AbstractBaseUser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.viewsets import ViewSet
@@ -7,17 +8,17 @@ from api.models.assistant import Assistant
 from api.models.teacher import Teacher
 
 
-def is_student(user: User) -> bool:
+def is_student(user: AbstractBaseUser) -> bool:
     """Check whether the user is a student"""
     return Student.objects.filter(id=user.id, is_active=True).exists()
 
 
-def is_assistant(user: User) -> bool:
+def is_assistant(user: AbstractBaseUser) -> bool:
     """Check whether the user is an assistant"""
     return Assistant.objects.filter(id=user.id, is_active=True).exists()
 
 
-def is_teacher(user: User) -> bool:
+def is_teacher(user: AbstractBaseUser) -> bool:
     """Check whether the user is a teacher"""
     return Teacher.objects.filter(id=user.id, is_active=True).exists()
 

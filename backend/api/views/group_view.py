@@ -9,9 +9,10 @@ from api.serializers.student_serializer import StudentSerializer
 from api.serializers.submission_serializer import SubmissionSerializer
 from django.utils.translation import gettext
 from drf_yasg.utils import swagger_auto_schema
+from notifications.signals import NotificationType, notification_create
 from rest_framework.decorators import action
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   RetrieveModelMixin, UpdateModelMixin)
+                                   RetrieveModelMixin, UpdateModelMixin, ListModelMixin)
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -22,11 +23,28 @@ class GroupViewSet(CreateModelMixin,
                    RetrieveModelMixin,
                    UpdateModelMixin,
                    DestroyModelMixin,
+                   ListModelMixin,
                    GenericViewSet):
 
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsAdminUser | GroupPermission]
+
+    def update(self, request, *args, **kwargs):
+        old_group = self.get_object()
+        response = super().update(request, *args, **kwargs)
+        if response.status_code == 200:
+            new_group = self.get_object()
+            if "score" in request.data and old_group.score != new_group.score:
+                # Partial updates end up in the update function as well
+                notification_create.send(
+                    sender=Group,
+                    type=NotificationType.SCORE_UPDATED,
+                    queryset=list(new_group.students.all()),
+                    arguments={"score": str(new_group.score)},
+                )
+
+        return response
 
     @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | GroupStudentPermission])
     def students(self, request, **_):
@@ -50,6 +68,23 @@ class GroupViewSet(CreateModelMixin,
         serializer = SubmissionSerializer(
             submissions, many=True, context={"request": request}
         )
+        return Response(serializer.data)
+
+    @submissions.mapping.post
+    @submissions.mapping.put
+    @swagger_auto_schema(request_body=SubmissionSerializer)
+    def _add_submission(self, request: Request, **_):
+        """Add a submission to the group"""
+        group: Group = self.get_object()
+
+        # Add submission to course
+        serializer = SubmissionSerializer(
+            data=request.data, context={"group": group, "request": request}
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(group=group)
+
         return Response(serializer.data)
 
     @students.mapping.post
@@ -91,24 +126,4 @@ class GroupViewSet(CreateModelMixin,
 
         return Response({
             "message": gettext("group.success.students.remove"),
-        })
-
-    @submissions.mapping.post
-    @submissions.mapping.put
-    @swagger_auto_schema(request_body=SubmissionSerializer)
-    def _add_submission(self, request: Request, **_):
-        """Add a submission to the group"""
-        group: Group = self.get_object()
-
-        # Add submission to course
-        serializer = SubmissionSerializer(
-            data=request.data, context={"group": group, "request": request}
-        )
-
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(group=group)
-
-        return Response({
-            "message": gettext("group.success.submissions.add"),
-            "submission": serializer.data
         })

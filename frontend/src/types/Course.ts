@@ -2,24 +2,42 @@ import { type Assistant } from './users/Assistant.ts';
 import { type Project } from './Project.ts';
 import { type Student } from './users/Student.ts';
 import { type Teacher } from './users/Teacher.ts';
-import { Faculty } from '@/types/Faculty.ts';
+import { Faculty, type FacultyJSON } from '@/types/Faculty.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export interface CourseJSON {
+    id: string;
+    name: string;
+    academic_startyear: number;
+    excerpt: string;
+    description: string;
+    private_course: boolean;
+    invitation_link?: string;
+    invitation_link_expires?: string;
+    faculty: FacultyJSON;
+    parent_course: CourseJSON | null;
+    teachers: HyperlinkedRelation;
+    assistants: HyperlinkedRelation;
+    students: HyperlinkedRelation;
+    projects: HyperlinkedRelation;
+}
 
 export class Course {
     constructor(
-        public id: string,
-        public name: string,
-        public excerpt: string,
-        public description: string | null,
-        public academic_startyear: number,
+        public id: string = '',
+        public name: string = '',
+        public excerpt: string = '',
+        public description: string = '',
+        public academic_startyear: number = getAcademicYear(),
         public private_course: boolean = false,
-        public invitation_link: string | null = null,
-        public invitation_link_expires: Date | null = null,
+        public invitation_link: string = '',
+        public invitation_link_expires: Date = new Date(),
         public parent_course: Course | null = null,
-        public faculty: Faculty | null = null,
-        public teachers: Teacher[] | null = null,
-        public assistants: Assistant[] | null = null,
-        public students: Student[] | null = null,
-        public projects: Project[] | null = null,
+        public faculty: Faculty = new Faculty(),
+        public teachers: Teacher[] = [],
+        public assistants: Assistant[] = [],
+        public students: Student[] = [],
+        public projects: Project[] = [],
     ) {}
 
     /**
@@ -40,29 +58,6 @@ export class Course {
     }
 
     /**
-     * Convert a course object to a course instance.
-     *
-     * @param course
-     */
-    static fromJSON(course: Course): Course {
-        const faculty =
-            course.faculty !== undefined && course.faculty !== null ? Faculty.fromJSON(course.faculty) : null;
-
-        return new Course(
-            course.id,
-            course.name,
-            course.excerpt,
-            course.description,
-            course.academic_startyear,
-            course.private_course,
-            course.invitation_link,
-            course.invitation_link_expires,
-            course.parent_course,
-            faculty,
-        );
-    }
-
-    /**
      * Check if the course has a given teacher.
      * @param teacher
      */
@@ -78,6 +73,32 @@ export class Course {
     public hasAssistant(assistant: Assistant): boolean {
         const assistants = this.assistants ?? [];
         return assistants.some((a) => a.id === assistant.id);
+    }
+
+    /**
+     * Convert a course object to a course instance.
+     *
+     * @param course
+     */
+    static fromJSON(course: CourseJSON): Course {
+        let parent: CourseJSON | Course | null = course.parent_course;
+
+        if (parent !== null) {
+            parent = Course.fromJSON(parent);
+        }
+
+        return new Course(
+            course.id,
+            course.name,
+            course.excerpt,
+            course.description,
+            course.academic_startyear,
+            course.private_course,
+            course.invitation_link,
+            new Date(course.invitation_link_expires ?? ''),
+            parent,
+            course.faculty,
+        );
     }
 }
 

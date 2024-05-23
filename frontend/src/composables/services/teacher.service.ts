@@ -13,14 +13,14 @@ interface TeacherState {
     teacher: Ref<Teacher | null>;
     response: Ref<Response | null>;
     teacherPagination: Ref<PaginatorResponse<Teacher> | null>;
-    getTeacherByID: (id: string, init?: boolean) => Promise<void>;
-    getTeachersByCourse: (courseId: string) => Promise<void>;
-    getTeachers: () => Promise<void>;
-    searchTeachers: (filters: Filter, page: number, pageSize: number) => Promise<void>;
-    teacherJoinCourse: (courseId: string, teacherId: string) => Promise<void>;
-    teacherLeaveCourse: (courseId: string, teacherId: string) => Promise<void>;
-    createTeacher: (teacherData: Teacher) => Promise<void>;
-    deleteTeacher: (id: string) => Promise<void>;
+    getTeacherByID: (id: string, init?: boolean, selfProcessError?: boolean) => Promise<void>;
+    getTeachersByCourse: (courseId: string, selfProcessError?: boolean) => Promise<void>;
+    getTeachers: (selfProcessError?: boolean) => Promise<void>;
+    searchTeachers: (filters: Filter, page: number, pageSize: number, selfProcessError?: boolean) => Promise<void>;
+    teacherJoinCourse: (courseId: string, teacherId: string, selfProcessError?: boolean) => Promise<void>;
+    teacherLeaveCourse: (courseId: string, teacherId: string, selfProcessError?: boolean) => Promise<void>;
+    createTeacher: (teacherData: Teacher, selfProcessError?: boolean) => Promise<void>;
+    deleteTeacher: (id: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useTeacher(): TeacherState {
@@ -30,37 +30,71 @@ export function useTeacher(): TeacherState {
     const response = ref<Response | null>(null);
     const teacherPagination = ref<PaginatorResponse<Teacher> | null>(null);
 
-    async function getTeacherByID(id: string): Promise<void> {
+    async function getTeacherByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.teachers.retrieve.replace('{id}', id);
-        await get<Teacher>(endpoint, teacher, Teacher.fromJSON);
+        await get<Teacher>(endpoint, teacher, Teacher.fromJSON, selfProcessError);
     }
 
-    async function getTeachersByCourse(courseId: string): Promise<void> {
+    async function getTeachersByCourse(courseId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
-        await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
+        await getList<Teacher>(endpoint, teachers, Teacher.fromJSON, selfProcessError);
     }
 
-    async function getTeachers(): Promise<void> {
+    async function getTeachers(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.teachers.index;
-        await getList<Teacher>(endpoint, teachers, Teacher.fromJSON);
+        await getList<Teacher>(endpoint, teachers, Teacher.fromJSON, selfProcessError);
     }
 
-    async function searchTeachers(filters: Filter, page: number, pageSize: number): Promise<void> {
+    async function searchTeachers(
+        filters: Filter,
+        page: number,
+        pageSize: number,
+        selfProcessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.teachers.search;
-        await getPaginatedList<Teacher>(endpoint, filters, page, pageSize, teacherPagination, Teacher.fromJSON);
+        await getPaginatedList<Teacher>(
+            endpoint,
+            filters,
+            page,
+            pageSize,
+            teacherPagination,
+            Teacher.fromJSON,
+            selfProcessError,
+        );
     }
 
-    async function teacherJoinCourse(courseId: string, teacherId: string): Promise<void> {
+    async function teacherJoinCourse(
+        courseId: string,
+        teacherId: string,
+        selfProcessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
-        await create<Response>(endpoint, { teacher: teacherId }, response, Response.fromJSON);
+        await create<Response>(
+            endpoint,
+            { teacher: teacherId },
+            response,
+            Response.fromJSON,
+            undefined,
+            selfProcessError,
+        );
     }
 
-    async function teacherLeaveCourse(courseId: string, teacherId: string): Promise<void> {
+    async function teacherLeaveCourse(
+        courseId: string,
+        teacherId: string,
+        selfProcessError: boolean = true,
+    ): Promise<void> {
         const endpoint = endpoints.teachers.byCourse.replace('{courseId}', courseId);
-        await deleteIdWithData<Response>(endpoint, { teacher: teacherId }, response, Response.fromJSON);
+        await deleteIdWithData<Response>(
+            endpoint,
+            { teacher: teacherId },
+            response,
+            Response.fromJSON,
+            selfProcessError,
+        );
     }
 
-    async function createTeacher(user: User): Promise<void> {
+    async function createTeacher(user: User, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.teachers.index;
         await create<Teacher>(
             endpoint,
@@ -69,12 +103,14 @@ export function useTeacher(): TeacherState {
             },
             teacher,
             Teacher.fromJSON,
+            undefined,
+            selfProcessError,
         );
     }
 
-    async function deleteTeacher(id: string): Promise<void> {
+    async function deleteTeacher(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.teachers.retrieve.replace('{id}', id);
-        await deleteId<Teacher>(endpoint, teacher, Teacher.fromJSON);
+        await deleteId<Teacher>(endpoint, teacher, Teacher.fromJSON, selfProcessError);
     }
 
     return {
