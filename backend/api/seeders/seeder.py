@@ -3,8 +3,12 @@ from random import choice, randint, sample
 from time import time
 from typing import Literal
 
+from api.models.submission import StructureCheckResult
+from api.models.submission import ExtraCheckResult
+
 from django.db import connection
 from django.utils import timezone
+from django.contrib.contenttypes.models import ContentType
 
 generated_usernames = set()
 
@@ -268,7 +272,7 @@ def seed_projects(
         visible_prob=80,
         archived_prob=10,
         score_visible_prob=30,
-        locked_groups_prob=30,
+        locked_groups_prob=0,
         min_max_score=1,
         max_max_score=100,
         min_group_size=1,
@@ -435,7 +439,7 @@ def seed_structure_checks(faker, count: int = 1_500):
         while len(blocked_extensions) < count * 2:
             project = faker.pyint(min_value=0, max_value=count - 1)
             extension = choice(extensions)[0]
-            if [project, extension] not in blocked_extensions:
+            if ([project, extension] not in blocked_extensions) and ([project, extension] not in obligated_extensions):
                 blocked_extensions.append([project, extension])
 
         cursor.executemany(
@@ -536,6 +540,17 @@ def seed_submission_results(faker):
         results = []
         structure_results = []
         extra_results = []
+        # Get the content type for the StructureCheckResult model
+        structure_content_type = ContentType.objects.get_for_model(StructureCheckResult)
+
+        # Get the ID of the content type
+        structure_content_type_id = structure_content_type.id
+
+        # Get the content type for the ExtraCheckResult model
+        extra_content_type = ContentType.objects.get_for_model(ExtraCheckResult)
+
+        # Get the ID of the content type
+        extra_content_type_id = extra_content_type.id
 
         for submission in submissions:
             project = next(filter(lambda group: group[0] == submission[1], groups))[1]
@@ -549,6 +564,7 @@ def seed_submission_results(faker):
                     id,
                     result,
                     choice(error_structure) if result == "FAILED" else None,
+                    structure_content_type_id,
                     submission[0],
                 ])
 
@@ -564,6 +580,7 @@ def seed_submission_results(faker):
                     id,
                     result,
                     choice(error_extra) if result == "FAILED" else None,
+                    extra_content_type_id,
                     submission[0],
                 ])
 
@@ -574,7 +591,9 @@ def seed_submission_results(faker):
                 ])
 
         cursor.executemany(
-            "INSERT INTO api_checkresult(id, result, error_message, submission_id) VALUES (?, ?, ?, ?)",
+            "INSERT INTO api_checkresult("
+            "id, result, error_message, polymorphic_ctype_id, submission_id"
+            ") VALUES (?, ?, ?, ?, ?)",
             results
         )
         cursor.executemany(
