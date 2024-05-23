@@ -120,12 +120,12 @@ def hook_submission(sender, instance: Submission, created: bool, **kwargs):
         run_all_checks.send(sender=Submission, submission=instance)
         pass
 
-    notification_create.send(
-        sender=Submission,
-        type=NotificationType.SUBMISSION_RECEIVED,
-        queryset=list(instance.group.students.all()),
-        arguments={}
-    )
+        notification_create.send(
+            sender=Submission,
+            type=NotificationType.SUBMISSION_RECEIVED,
+            queryset=list(instance.group.students.all()),
+            arguments={}
+        )
 
 
 @receiver(post_save, sender=DockerImage)
