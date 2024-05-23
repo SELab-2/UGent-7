@@ -228,7 +228,7 @@
             "noSubmissions": "Dit project heeft geen indieningen \uD83D\uDE2D",
             "submissions": "Groep heeft al ingediend | Groepen hebben al ingediend",
             "groups": "Groep | Groepen",
-            "structureTestsFail": "Gefaalde structuur testen",
+            "structureTestsFail": "Gefaalde structuurtesten",
             "extraChecksFail": "Gefaalde extra testen",
             "testsSucceed": "Geslaagde testen",
             "successfulSubmission": "Geslaagde indieningen",
