@@ -134,7 +134,9 @@
     project: 0
     obligated_extensions:
       - 0
-    blocked_extensions: []
+      - 3
+    blocked_extensions:
+      - 1
 - model: api.structurecheck
   pk: 1
   fields:
