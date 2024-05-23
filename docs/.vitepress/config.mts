@@ -24,16 +24,6 @@ export default defineConfig({
             // { text: 'Examples', link: '/markdown-examples' }
         ],
 
-        sidebar: [
-            {
-                text: "Algemeen",
-                items: [
-                    // { text: 'Markdown Examples', link: '/markdown-examples' },
-                    // { text: 'Runtime API Examples', link: '/api-examples' }
-                ],
-            },
-        ],
-
         socialLinks: [
             { icon: "github", link: "https://github.com/SELab-2/UGent-7" },
         ],

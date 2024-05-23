@@ -6,27 +6,27 @@ import { get, getList, deleteId, createToast } from '@/composables/services/help
 interface FacultyState {
     faculties: Ref<Faculty[] | null>;
     faculty: Ref<Faculty | null>;
-    getFacultyByID: (id: string) => Promise<void>;
-    getFaculties: () => Promise<void>;
-    createFaculty: (facultyData: Faculty) => Promise<void>;
-    deleteFaculty: (id: string) => Promise<void>;
+    getFacultyByID: (id: string, selfProcessError?: boolean) => Promise<void>;
+    getFaculties: (selfProcessError?: boolean) => Promise<void>;
+    createFaculty: (facultyData: Faculty, selfProcessError?: boolean) => Promise<void>;
+    deleteFaculty: (id: string, selfProcessError?: boolean) => Promise<void>;
 }
 
 export function useFaculty(): FacultyState {
     const faculties = ref<Faculty[] | null>(null);
     const faculty = ref<Faculty | null>(null);
 
-    async function getFacultyByID(id: string): Promise<void> {
+    async function getFacultyByID(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.faculties.retrieve.replace('{id}', id);
-        await get<Faculty>(endpoint, faculty, Faculty.fromJSON);
+        await get<Faculty>(endpoint, faculty, Faculty.fromJSON, selfProcessError);
     }
 
-    async function getFaculties(): Promise<void> {
+    async function getFaculties(selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.faculties.index;
-        await getList<Faculty>(endpoint, faculties, Faculty.fromJSON);
+        await getList<Faculty>(endpoint, faculties, Faculty.fromJSON, selfProcessError);
     }
 
-    async function createFaculty(facultyData: Faculty): Promise<void> {
+    async function createFaculty(facultyData: Faculty, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.faculties.index;
         await createToast<Faculty>(
             'faculty',
@@ -34,12 +34,14 @@ export function useFaculty(): FacultyState {
             { id: facultyData.id, name: facultyData.name },
             faculty,
             Faculty.fromJSON,
+            undefined,
+            selfProcessError,
         );
     }
 
-    async function deleteFaculty(id: string): Promise<void> {
+    async function deleteFaculty(id: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.faculties.retrieve.replace('{id}', id);
-        await deleteId<Faculty>(endpoint, faculty, Faculty.fromJSON);
+        await deleteId<Faculty>(endpoint, faculty, Faculty.fromJSON, selfProcessError);
     }
 
     return {
