@@ -42,7 +42,9 @@ const confirmDialogVisible = ref(false);
 const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
-        docker_image: { required: helpers.withMessage(t('validations.required'), required) },
+        docker_image: {
+            required: helpers.withMessage(t('validations.required'), (value: DockerImage) => value.id !== ''),
+        },
         file: { required: helpers.withMessage(t('validations.required'), required) },
         time_limit: { required: helpers.withMessage(t('validations.required'), required) },
         memory_limit: { required: helpers.withMessage(t('validations.required'), required) },
