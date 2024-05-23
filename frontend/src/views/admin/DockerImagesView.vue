@@ -199,7 +199,11 @@ const onSelect = (selected: any[] | null): void => {
                                 <InputText v-model="filter['search']" :placeholder="t('admin.search.general')" />
                             </IconField>
                         </div>
-                        <Button class="w-auto mb-3 gap-3 justify-content-center" :disabled="multiRemove" @click="toggleSafetyGuardMultiRemove">
+                        <Button
+                            class="w-auto mb-3 gap-3 justify-content-center"
+                            :disabled="multiRemove"
+                            @click="toggleSafetyGuardMultiRemove"
+                        >
                             {{ t('admin.delete') }}
                         </Button>
                     </template>
