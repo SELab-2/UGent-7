@@ -36,7 +36,7 @@ const files = ref<File[]>([]);
 const onUpload = async (callback: () => void): Promise<void> => {
     if (group.value !== null) {
         try {
-            await createSubmission(files.value as File[], group.value.id);
+            await createSubmission(files.value as File[], group.value.id, false);
             addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.submissions.create.success'));
 
             if (submission.value != null) {
