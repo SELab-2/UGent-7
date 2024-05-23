@@ -278,6 +278,7 @@
             "error": "Error",
             "unknown": "An unknown error has occurred.",
             "create": "{type} has successfully been created.",
+            "edit": "{type} has successfully been edited.",
             "courses": {
                 "enrollment": {
                     "success": "You have been successfully enrolled for the course '{0}'.",

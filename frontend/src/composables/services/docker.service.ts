@@ -4,7 +4,7 @@ import { endpoints } from '@/config/endpoints.ts';
 import { type Ref, ref } from 'vue';
 import { type Filter } from '@/types/filter/Filter.ts';
 import {
-    createToast,
+    create,
     getList,
     getPaginatedList,
     patch,
@@ -64,8 +64,7 @@ export function useDockerImages(): DockerImagesState {
         selfProcessError: boolean = true,
     ): Promise<void> {
         const endpoint = endpoints.dockerImages.index;
-        await createToast<Response>(
-            'docker',
+        await create<Response>(
             endpoint,
             {
                 file,
