@@ -7,6 +7,7 @@ from api.models.docker import StateEnum as DockerStateEnum
 from api.models.student import Student
 from api.models.submission import (ExtraCheckResult, StateEnum,
                                    StructureCheckResult, Submission)
+from api.models.teacher import Teacher
 from api.tasks.docker_image import (task_docker_image_build,
                                     task_docker_image_remove)
 from api.tasks.extra_check import task_extra_check_start
@@ -35,8 +36,11 @@ def _user_creation(user: User, attributes: dict, **_):
     """Upon user creation, auto-populate additional properties"""
     student_id: str = cast(str, attributes.get("ugentStudentID"))
 
-    if student_id is not None:
+    if student_id is None:
         Student.create(user, student_id=student_id)
+    else:
+        # For now, we assume that everyone without a student ID is a teacher.
+        Teacher.create(user)
 
 
 @receiver(run_docker_image_build)

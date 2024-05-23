@@ -17,6 +17,7 @@ import { useRoute } from 'vue-router';
 import { useMessagesStore } from '@/store/messages.store.ts';
 import { type Group } from '@/types/Group.ts';
 import { type Assistant } from '@/types/users/Assistant.ts';
+import { processError } from '@/composables/services/helpers.ts';
 
 /* Props */
 defineProps<{
@@ -37,11 +38,18 @@ const { groups, getGroupsByProject, updateGroup } = useGroup();
  * @param score The new score.
  */
 async function updateGroupScore(group: Group, score: number): Promise<void> {
-    await updateGroup({
-        ...group,
-        score,
-    });
-    group.score = score;
+    try {
+        await updateGroup({
+            ...group,
+            score,
+        }, false);
+
+        group.score = score;
+
+        addSuccessMessage('Gelukt', 'De groepsscore is bijgewerkt.');
+    } catch (error) {
+        processError(error);
+    }
 }
 
 /**
