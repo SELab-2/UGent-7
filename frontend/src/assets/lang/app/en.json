@@ -240,7 +240,7 @@
             "newProject": "New project",
             "noSubmissions": "This project does not have any submissions",
             "submissions": "Group has made a submission | Groups have made a submission",
-            "groups": "Participating group | Participating groups",
+            "groups": "Group | Groups",
             "structureTestsFail": "Failed structure tests",
             "extraChecksFail": "Failed extra tests",
             "testsSucceed": "Succeeded tests",
