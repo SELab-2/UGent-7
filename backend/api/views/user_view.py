@@ -79,22 +79,28 @@ class UserViewSet(ReadOnlyModelViewSet):
     @action(detail=True, methods=["get"], permission_classes=[NotificationPermission])
     def notifications(self, request: Request, pk: str):
         """Returns a list of notifications for the given user"""
-        notifications = Notification.objects.filter(user=pk)
+        count = min(
+            int(request.query_params.get("count", 10)), 30
+        )
+
+        # Get the notifications for the user
+        notifications = Notification.objects.filter(user=pk, is_read=False).order_by("-created_at")
+
+        if notifications.count() < count:
+            notifications = list(notifications) + list(
+                Notification.objects.filter(user=pk, is_read=True).order_by("-created_at")[:count - notifications.count()]
+            )
+
+        # Serialize the notifications
         serializer = NotificationSerializer(
             notifications, many=True, context={"request": request}
         )
 
         return Response(serializer.data)
 
-    @action(
-        detail=True,
-        methods=["post"],
-        permission_classes=[NotificationPermission],
-        url_path="notifications/read",
-    )
-    def read(self, _: Request, pk: str):
+    @notifications.mapping.patch
+    def _read_notifications(self, _: Request, pk: str):
         """Marks all notifications as read for the given user"""
         notifications = Notification.objects.filter(user=pk)
         notifications.update(is_read=True)
-
         return Response(status=HTTP_200_OK)
