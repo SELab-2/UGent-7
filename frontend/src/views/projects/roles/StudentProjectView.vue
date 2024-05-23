@@ -17,6 +17,7 @@ import { useProject } from '@/composables/services/project.service.ts';
 import { useRoute } from 'vue-router';
 import { type Project } from '@/types/Project.ts';
 import {useStructureCheck} from "@/composables/services/structure_check.service.ts";
+import Divider from "primevue/divider";
 
 /* Props */
 defineProps<{
@@ -128,6 +129,7 @@ watchImmediate(
                 <div class="col-12 md:col-8">
                     <ProjectInfo class="mb-3" :project="project" />
                     <div v-if="project" v-html="project.description" />
+                    <Divider />
                     <ProjectStructure v-if="structureChecks" :structure-checks="structureChecks"/>
                 </div>
                 <div class="col-12 md:col-4">

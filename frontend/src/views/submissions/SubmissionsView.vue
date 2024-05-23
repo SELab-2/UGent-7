@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import BaseLayout from '@/views/layout/base/BaseLayout.vue';
-import Title from '@/views/layout/Title.vue';
 import Button from 'primevue/button';
+import Divider from "primevue/divider";
+import FileUpload from 'primevue/fileupload';
+import { PrimeIcons } from 'primevue/api';
 import Loading from '@/components/Loading.vue';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
 import { useProject } from '@/composables/services/project.service.ts';
 import { useRoute } from 'vue-router';
-import FileUpload from 'primevue/fileupload';
-import { PrimeIcons } from 'primevue/api';
 import AllSubmission from '@/components/submissions/AllSubmission.vue';
 import ProjectStructure from '@/components/projects/ProjectStructure.vue';
 import { useGroup } from '@/composables/services/group.service.ts';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 import { useStructureCheck } from '@/composables/services/structure_check.service.ts';
 import { useMessagesStore } from '@/store/messages.store.ts';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -91,6 +92,7 @@ onMounted(async () => {
                         <!-- Project info column -->
                         <!-- Submission structure -->
                         <div v-if="structureChecks">
+                            <Divider />
                             <ProjectStructure :structure-checks="structureChecks"/>
                         </div>
                         <!-- Submission upload -->

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Tree from 'primevue/tree';
 import Chip from 'primevue/chip';
+import Divider from 'primevue/divider';
 import { useI18n } from 'vue-i18n';
 import { StructureCheck } from '@/types/StructureCheck.ts';
 import { Project } from "@/types/Project.ts";
@@ -16,9 +17,9 @@ console.log(props.structureChecks);
 
 <template>
     <div>
-        <h3 class="pb-2">
+        <label class="pb-2">
             {{ t('views.projects.structureChecks.title') }}
-        </h3>
+        </label>
         <Tree
             class="w-100"
             selection-mode="single"
