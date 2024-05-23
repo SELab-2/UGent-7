@@ -171,7 +171,7 @@ watch(selectedDate, (date) => {
                 <div class="col-12 md:col-6">
                     <div>
                         <!-- Calendar itself -->
-                        <Calendar class="w-full" v-model="selectedDate" inline>
+                        <Calendar class="w-full" v-model="selectedDate" :select-other-months="true" inline>
                             <template #date="{ date }">
                                 <div class="relative">
                                     <div class="deadline-indicator" v-if="hasDeadline(date)">
