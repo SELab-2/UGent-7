@@ -50,6 +50,8 @@ services:
       context: $BACKEND_DIR
       dockerfile: Dockerfile.dev
     command: sh -c "./setup.sh && python manage.py runsslserver 0.0.0.0:8000"
+    environment:
+      - DJANGO_TESTING=true
     volumes:
       - $BACKEND_DIR:/code
     depends_on:

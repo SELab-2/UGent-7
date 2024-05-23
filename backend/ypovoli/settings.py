@@ -27,6 +27,7 @@ ROOT_DIR = environ.get("DJANGO_ROOT_DIR", "")
 MEDIA_ROOT = os.path.normpath(os.path.join("data"))
 
 # TESTING
+TESTING = environ.get("DJANGO_TESTING", "False").lower() in ["true", "1", "t"]
 TESTING_BASE_LINK = "http://testserver"
 TEST_ADMIN_DATA = {
     "id": "0",

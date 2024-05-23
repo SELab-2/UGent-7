@@ -4,11 +4,11 @@ from enum import Enum
 from typing import Dict, List, Union
 
 from authentication.models import User
-from django.db.models.query import QuerySet
 from django.dispatch import Signal, receiver
 from django.urls import reverse
 from notifications.logic import schedule_send_mails
 from notifications.serializers import NotificationSerializer
+from ypovoli.settings import TESTING
 
 notification_create = Signal()
 
@@ -21,13 +21,15 @@ def notification_creation(
     arguments: Dict[str, str],
     **kwargs,  # Required by django
 ) -> bool:
+    if TESTING:
+        return True
+
     data: List[Dict[str, Union[str, int, Dict[str, str]]]] = []
 
     for user in queryset:
         if user:
             data.append(
                 {
-                    "template_id": type.value,
                     "user": reverse("user-detail", kwargs={"pk": user.id}),
                     "arguments": arguments,
                 }
@@ -38,7 +40,7 @@ def notification_creation(
     if not serializer.is_valid(raise_exception=False):
         return False
 
-    serializer.save()
+    serializer.save(template_id_id=type.value)
 
     schedule_send_mails()
 

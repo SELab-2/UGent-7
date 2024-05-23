@@ -89,4 +89,7 @@ export const endpoints = {
         retrieve: '/api/extra-checks/{id}/',
         byProject: '/api/projects/{projectId}/extra_checks/',
     },
+    notifications: {
+        byUser: '/api/users/{userId}/notifications/',
+    },
 };
