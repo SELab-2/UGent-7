@@ -32,11 +32,11 @@ function isInGroup(): boolean {
     <Card class="border-round project-card">
         <template #header>
             <h2 class="text-primary m-0 text-xl flex align-items-center gap-2">
-                <span class="pi pi-book text-xl mr-2" /> {{ course.name }}
+                <span class="pi pi-book text-xl mr-2" /> {{ project.name }}
             </h2>
         </template>
         <template #subtitle>
-            {{ project.name }}
+            {{ course.name }}
         </template>
         <template #content>
             <div class="mb-2">

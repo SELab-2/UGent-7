@@ -1,6 +1,7 @@
 import { ExtraCheckResult, type ExtraCheckResultJSON } from '@/types/submission/ExtraCheckResult.ts';
 import { StructureCheckResult, type StructureCheckResultJSON } from '@/types/submission/StructureCheckResult.ts';
 import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
+import { ErrorMessageEnum } from '@/types/submission/ErrorMessageEnum.ts';
 
 export interface SubmissionJSON {
     id: string;
@@ -11,7 +12,6 @@ export interface SubmissionJSON {
     group: HyperlinkedRelation;
     results: Array<ExtraCheckResultJSON | StructureCheckResultJSON>;
 }
-
 export class Submission {
     constructor(
         public id: string = '',
@@ -53,6 +53,33 @@ export class Submission {
             (check: StructureCheckResult) => check.result === 'SUCCESS',
         );
         return structureChecksPassed.every((check: boolean) => check);
+    }
+
+    /**
+     * Get the error messages for the submission.
+     *
+     * @returns string[]
+     */
+    public structureCheckFaults(): string[] {
+        return this.structureCheckResults.map((check: StructureCheckResult) =>
+            this.getErrorMessageEnumKey(check.error_message),
+        );
+    }
+
+    /**
+     * Geeft de juiste vertaling voor alle extra check fouten
+     */
+    public extraCheckFaults(): string[] {
+        return this.extraCheckResults.map((check: ExtraCheckResult) =>
+            this.getErrorMessageEnumKey(check.error_message as string),
+        );
+    }
+
+    private getErrorMessageEnumKey(key: string): string {
+        if (key != null) {
+            return ErrorMessageEnum[key as keyof typeof ErrorMessageEnum];
+        }
+        return '';
     }
 
     /**

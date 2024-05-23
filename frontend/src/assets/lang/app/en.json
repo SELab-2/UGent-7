@@ -111,8 +111,14 @@
             "title": "Submissions",
             "submit": "Submit",
             "course": "Course",
+            "file": "file",
+            "files": "files",
             "chooseFile": "Choose a file",
             "noSubmissions": "No submissions available",
+            "passed": "Passed",
+            "failed": "The submission is not passed.",
+            "downloadZip": "Download all files of this submission as a zip.",
+            "downloadLog": "Log of check {0}",
             "hoverText": {
               "allChecksFailed": "Structure and extra checks failed",
               "allChecksPassed": "All checks passed",
@@ -124,6 +130,25 @@
               "daysAgo": "day(s) ago",
               "weekAgo": "More than a week ago",
               "monthAgo": "More than a month ago"
+            },
+            "feedback": {
+                "writeFeedback": "Write your feedback here",
+                "addFeedback": "Add feedback",
+                "dateAndAuthor": "On {0} wrote {1}:",
+                "edit": "Edit feedback",
+                "noFeedback": "No feedback given yet"
+            },
+            "error": {
+                "blockedExtension": "There is a blocked extension in your solution",
+                "obligatedExtensionNotFound": "Obligated extension not found in your solution",
+                "fileDirNotFound": "File directory not found in your solution",
+                "dockerImageError": "Error in Docker image",
+                "timeLimit": "Time limit exceeded",
+                "memoryLimit": "Memory limit exceeded",
+                "checkError": "Check error",
+                "runtimeError": "Runtime error",
+                "unknown": "Unknown error",
+                "failedStructureCheck": "Structure check failed"
             }
         },
         "courses": {
@@ -183,6 +208,9 @@
                 "networkDetail": "Unable to reach the server.",
                 "request": "Request error",
                 "requestDetail": "An error occurred while creating the request."
+            },
+            "success": {
+                "creation": "A {0} is correctly created."
             }
         }
     },
@@ -198,12 +226,13 @@
         "card": {
             "open": "Details",
             "newProject": "New project",
-            "noSubmissions": "This project does not have any submissions",
+            "noSubmissions": "This project does not have any submissions \uD83D\uDE2D",
             "submissions": "Submission | Submissions",
             "groups": "Group | Groups",
             "structureTestsSucceed": "Succeeded structure tests",
             "extraTestsSucceed": "Succeeded extra tests",
             "testsFail": "Failed tests",
+            "successfulSubmission": "Successful submissions",
             "submit": "Submit"
         },
         "list": {

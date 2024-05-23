@@ -47,6 +47,8 @@ export function useStructureCheck(): StructureCheckState {
             endpoint,
             {
                 path: structureCheckData.path,
+                obligated_extensions: structureCheckData.obligated_extensions?.map((ext) => ext.extension),
+                blocked_extensions: structureCheckData.blocked_extensions?.map((ext) => ext.extension),
             },
             structureCheck,
             StructureCheck.fromJSON,

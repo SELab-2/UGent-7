@@ -17,28 +17,51 @@ const { t } = useI18n();
 const meterItems = computed(() => {
     const groups = props.project !== null ? props.project.status.non_empty_groups : 0;
     const groupsSubmitted = props.project !== null ? props.project.status.groups_submitted : 0;
-    const structureChecksPassed = props.project !== null ? props.project.status.structure_checks_passed : 0;
+    const hasStructurechecks = props.project !== null ? props.project.status.has_structure_checks : false;
+    const hasExtraChecks = props.project !== null ? props.project.status.has_extra_checks : false;
     const extraChecksPassed = props.project !== null ? props.project.status.extra_checks_passed : 0;
+    const structureChecksPassed = props.project !== null ? props.project.status.structure_checks_passed : 0;
     const submissionsFailed = groupsSubmitted - structureChecksPassed;
 
+    const extraChecksFailed = structureChecksPassed - extraChecksPassed;
+
+    const green = '#76DD78';
+    const orange = '#FFB84F';
+    const red = '#F37142';
+
+    const submissionsFailedItem = {
+        value: (submissionsFailed / groups) * 100,
+        color: red,
+        label: t('components.card.testsFail'),
+        icon: 'pi pi-times',
+    };
+    const structureChecksPassedItem = {
+        value: (extraChecksFailed / groups) * 100,
+        color: orange,
+        label: t('components.card.structureTestsSucceed'),
+        icon: 'pi pi-exclamation-circle',
+    };
+    const extraChecksPassedItem = {
+        value: (extraChecksPassed / groups) * 100,
+        color: green,
+        label: t('components.card.extraTestsSucceed'),
+        icon: 'pi pi-check',
+    };
+
+    if (hasStructurechecks) {
+        if (hasExtraChecks) {
+            return [submissionsFailedItem, structureChecksPassedItem, extraChecksPassedItem];
+        }
+        structureChecksPassedItem.color = green;
+        structureChecksPassedItem.icon = 'pi pi-check';
+        return [submissionsFailedItem, structureChecksPassedItem];
+    }
     return [
         {
-            value: (extraChecksPassed / groups) * 100,
-            color: '#8fb682',
-            label: t('components.card.extraTestsSucceed'),
+            value: (groupsSubmitted / groups) * 100,
+            color: green,
+            label: t('components.card.successfulSubmission'),
             icon: 'pi pi-check',
-        },
-        {
-            value: ((structureChecksPassed - extraChecksPassed) / groups) * 100,
-            color: '#FFB84F',
-            label: t('components.card.structureTestsSucceed'),
-            icon: 'pi pi-exclamation-circle',
-        },
-        {
-            value: (submissionsFailed / groups) * 100,
-            color: 'indianred',
-            label: t('components.card.testsFail'),
-            icon: 'pi pi-times',
         },
     ];
 });

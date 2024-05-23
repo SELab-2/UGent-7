@@ -5,7 +5,7 @@ import { Submission } from '@/types/submission/Submission.ts';
 export interface StructureCheckResultJSON {
     id: string;
     result: string;
-    error_message: string | null;
+    error_message: string;
     submission: number;
     structure_check: number;
     resourcetype: string;
@@ -17,7 +17,7 @@ export class StructureCheckResult {
     constructor(
         public id: string = '',
         public result: string = '',
-        public error_message: string | null = null,
+        public error_message: string = '',
         public resourcetype: string = '',
         public submission: Submission = new Submission(),
         public structure_check: StructureCheck = new StructureCheck(),

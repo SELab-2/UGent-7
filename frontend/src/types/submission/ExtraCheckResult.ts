@@ -1,5 +1,3 @@
-import { Submission } from '@/types/submission/Submission.ts';
-import { ExtraCheck } from '@/types/ExtraCheck.ts';
 import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
 
 export interface ExtraCheckResultJSON {
@@ -8,6 +6,7 @@ export interface ExtraCheckResultJSON {
     error_message: string | null;
     submission: number;
     structure_check: number;
+    extra_check: number;
     resourcetype: string;
     log_file: HyperlinkedRelation;
     artifact: HyperlinkedRelation;
@@ -17,10 +16,12 @@ export class ExtraCheckResult {
     constructor(
         public id: string = '',
         public result: string = '',
-        public error_message: string | null = null,
+        public error_message: any | null = null,
+        public log_file: string = '',
+        public artifact: string = '',
+        public submission: number = 0,
+        public extra_check: number = 0,
         public resourcetype: string = '',
-        public submission: Submission = new Submission(),
-        public extra_check: ExtraCheck = new ExtraCheck(),
     ) {}
 
     static fromJSON(extraCheckResult: ExtraCheckResultJSON): ExtraCheckResult {
@@ -28,6 +29,10 @@ export class ExtraCheckResult {
             extraCheckResult.id,
             extraCheckResult.result,
             extraCheckResult.error_message,
+            extraCheckResult.log_file,
+            extraCheckResult.artifact,
+            extraCheckResult.submission,
+            extraCheckResult.extra_check,
             extraCheckResult.resourcetype,
         );
     }

@@ -12,7 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 from notifications.signals import NotificationType, notification_create
 from rest_framework.decorators import action
 from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   RetrieveModelMixin, UpdateModelMixin)
+                                   RetrieveModelMixin, UpdateModelMixin, ListModelMixin)
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -23,6 +23,7 @@ class GroupViewSet(CreateModelMixin,
                    RetrieveModelMixin,
                    UpdateModelMixin,
                    DestroyModelMixin,
+                   ListModelMixin,
                    GenericViewSet):
 
     queryset = Group.objects.all()
