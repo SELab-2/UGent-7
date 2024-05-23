@@ -85,10 +85,7 @@ class GroupViewSet(CreateModelMixin,
         if serializer.is_valid(raise_exception=True):
             serializer.save(group=group)
 
-        return Response({
-            "message": gettext("group.success.submissions.add"),
-            "submission": serializer.data
-        })
+        return Response(serializer.data)
 
     @students.mapping.post
     @students.mapping.put
