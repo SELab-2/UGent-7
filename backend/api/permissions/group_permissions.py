@@ -72,7 +72,6 @@ class GroupSubmissionPermission(BasePermission):
         # Get the individual permission clauses.
         return request.method in SAFE_METHODS or is_teacher(user) or is_assistant(user)
 
-
     def had_object_permission(self, request: Request, view: ViewSet, group: Group) -> bool:
         """Check if user has permission to view a detailed group submission endpoint"""
         user = request.user
