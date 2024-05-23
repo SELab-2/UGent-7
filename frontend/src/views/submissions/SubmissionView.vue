@@ -15,7 +15,6 @@ import moment from 'moment/moment';
 import { PrimeIcons } from 'primevue/api';
 import { useSubmission } from '@/composables/services/submission.service.ts';
 import { useProject } from '@/composables/services/project.service.ts';
-import { useMessagesStore } from '@/store/messages.store.ts';
 
 /* Composable injections */
 const route = useRoute();
@@ -24,10 +23,6 @@ const { user } = storeToRefs(useAuthStore());
 const { submission, getSubmissionByID } = useSubmission();
 const { feedbacks, getFeedbackBySubmission, createFeedback, updateFeedback } = useFeedback();
 const { project, getProjectByID } = useProject();
-const { course, getCourseByID } = useCourses();
-const { group, getGroupByID } = useGroup();
-const { submission, submissions, createSubmission, getSubmissionByGroup } = useSubmission();
-const { addSuccessMessage } = useMessagesStore();
 
 /* Feedback content */
 const feedbackTextValue = ref<string>('');
