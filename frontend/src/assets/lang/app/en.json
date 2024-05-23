@@ -19,7 +19,8 @@
                 "new": "New",
                 "title": "Notifications",
                 "markAsRead": "Mark as read",
-                "loadMore": "Load more"
+                "loadMore": "Load more",
+                "noNotifications": "No notifications available"
             }
         },
         "footer": {

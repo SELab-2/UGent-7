@@ -31,7 +31,7 @@ const form = ref(new Course());
 const rules = computed(() => {
     return {
         name: { required: helpers.withMessage(t('validations.required'), required) },
-        faculty: { required: helpers.withMessage(t('validations.required'), required) },
+        faculty: { required: helpers.withMessage(t('validations.required'), (faculty: Faculty) => faculty.id !== '') },
         excerpt: { required: helpers.withMessage(t('validations.required'), required) },
     };
 });

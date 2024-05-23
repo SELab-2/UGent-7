@@ -70,6 +70,26 @@ class GroupViewSet(CreateModelMixin,
         )
         return Response(serializer.data)
 
+    @submissions.mapping.post
+    @submissions.mapping.put
+    @swagger_auto_schema(request_body=SubmissionSerializer)
+    def _add_submission(self, request: Request, **_):
+        """Add a submission to the group"""
+        group: Group = self.get_object()
+
+        # Add submission to course
+        serializer = SubmissionSerializer(
+            data=request.data, context={"group": group, "request": request}
+        )
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(group=group)
+
+        return Response({
+            "message": gettext("group.success.submissions.add"),
+            "submission": serializer.data
+        })
+
     @students.mapping.post
     @students.mapping.put
     @swagger_auto_schema(request_body=StudentJoinGroupSerializer)
@@ -109,24 +129,4 @@ class GroupViewSet(CreateModelMixin,
 
         return Response({
             "message": gettext("group.success.students.remove"),
-        })
-
-    @submissions.mapping.post
-    @submissions.mapping.put
-    @swagger_auto_schema(request_body=SubmissionSerializer)
-    def _add_submission(self, request: Request, **_):
-        """Add a submission to the group"""
-        group: Group = self.get_object()
-
-        # Add submission to course
-        serializer = SubmissionSerializer(
-            data=request.data, context={"group": group, "request": request}
-        )
-
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(group=group)
-
-        return Response({
-            "message": gettext("group.success.submissions.add"),
-            "submission": serializer.data
         })

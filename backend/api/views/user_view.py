@@ -84,7 +84,12 @@ class UserViewSet(ReadOnlyModelViewSet):
         )
 
         # Get the notifications for the user
-        notifications = Notification.objects.filter(user=pk).order_by("-created_at")[:count]
+        notifications = Notification.objects.filter(user=pk, is_read=False).order_by("-created_at")
+
+        if 0 < notifications.count() < count:
+            notifications = list(notifications) + list(
+                Notification.objects.filter(user=pk, is_read=True).order_by("-created_at")[:count - notifications.count()]
+            )
 
         # Serialize the notifications
         serializer = NotificationSerializer(

@@ -19,7 +19,8 @@
                 "new": "Nieuw",
                 "title": "Notificaties",
                 "markAsRead": "Markeer alles als gelezen",
-                "loadMore": "Laad meer notificaties"
+                "loadMore": "Laad meer notificaties",
+                "noNotifications": "Geen notificaties"
             }
         },
         "footer": {

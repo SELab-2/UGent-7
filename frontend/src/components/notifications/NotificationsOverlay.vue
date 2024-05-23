@@ -47,23 +47,21 @@ function toggleNotificationOverlay(event: Event): void {
                     <h3>{{ t('layout.header.notifications.title') }}</h3>
                     <Badge :value="notifications.length.toString()" />
                 </div>
-                <template v-if="notifications.length > 0">
-                    <NotificationsScrollPanel :notifications="notifications" />
-                    <div class="flex align-items-center gap-2 mt-4">
-                        <Button
-                            :label="t('layout.header.notifications.loadMore')"
-                            @click="notificationCount += notificationCount"
-                            link
-                        />
-                        <Button
-                            class="ml-auto"
-                            :label="t('layout.header.notifications.markAsRead')"
-                            :disabled="!hasUnreadNotifications"
-                            @click="markNotificationsAsRead"
-                            outlined
-                        />
-                    </div>
-                </template>
+                <NotificationsScrollPanel :notifications="notifications" />
+                <div class="flex align-items-center gap-2 mt-4">
+                    <Button
+                        :label="t('layout.header.notifications.loadMore')"
+                        @click="notificationCount += notificationCount"
+                        link
+                    />
+                    <Button
+                        class="ml-auto"
+                        :label="t('layout.header.notifications.markAsRead')"
+                        :disabled="!hasUnreadNotifications"
+                        @click="markNotificationsAsRead"
+                        outlined
+                    />
+                </div>
             </OverlayPanel>
         </template>
     </template>
