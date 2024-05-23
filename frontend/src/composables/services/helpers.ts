@@ -198,15 +198,20 @@ export async function deleteIdWithData<T>(
  * @param ref
  * @param fromJson
  * @param selfProcessError
+ * @param params
  */
 export async function getList<T>(
     endpoint: string,
     ref: Ref<T[] | null>,
     fromJson: (data: any) => T,
     selfProcessError: boolean = true,
+    params: object = {},
 ): Promise<void> {
     try {
-        const response = await client.get(endpoint);
+        const response = await client.get(endpoint, {
+            params,
+        });
+
         ref.value = response.data.map((data: T) => fromJson(data));
     } catch (error: any) {
         ref.value = []; // Set the ref to an empty array

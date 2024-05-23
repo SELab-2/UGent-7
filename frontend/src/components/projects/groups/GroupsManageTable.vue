@@ -2,7 +2,7 @@
 import DataTable, { type DataTableRowExpandEvent } from 'primevue/datatable';
 import Column from 'primevue/column';
 import AllSubmission from '@/components/submissions/AllSubmission.vue';
-import InputNumber from 'primevue/inputnumber';
+import InputNumber, { type InputNumberBlurEvent } from 'primevue/inputnumber';
 import { type Project } from '@/types/Project.ts';
 import { useStudents } from '@/composables/services/student.service.ts';
 import { ref } from 'vue';
@@ -35,7 +35,7 @@ const editingGroup = ref<Group | null>();
  * @param group The group to update.
  * @param score The new score.
  */
-function updateGroupScore(group: Group, score: number): void {
+function updateGroupScore(group: Group, score: number | string): void {
     emit('update:group-score', group, score);
     editingGroup.value = null;
 }
@@ -81,9 +81,10 @@ async function expandGroup(event: DataTableRowExpandEvent): Promise<void> {
                 <template v-if="editingGroup === data">
                     <InputNumber
                         :model-value="data.score"
-                        @change="updateGroupScore(data, $event.target.value)"
-                        @keydown.enter="updateGroupScore(data, $event.target.value)"
+                        @blur="(event: InputNumberBlurEvent) => updateGroupScore(data, event.value)"
                     />
+                    /
+                    {{ project.max_score }}
                 </template>
                 <template v-else>
                     <template v-if="data.score !== null && data.score !== undefined">
