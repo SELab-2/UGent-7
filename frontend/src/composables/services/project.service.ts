@@ -1,4 +1,4 @@
-import { Project, type ProjectJSON } from '@/types/Project';
+import { Project } from '@/types/Project';
 import { type Ref, ref } from 'vue';
 import { endpoints } from '@/config/endpoints.ts';
 import { i18n } from '@/config/i18n.ts';
@@ -52,7 +52,7 @@ export function useProject(): ProjectState {
 
     async function getProjectsByTeacher(teacherId: string, selfProcessError: boolean = true): Promise<void> {
         const endpoint = endpoints.projects.byTeacher.replace('{teacherId}', teacherId);
-        await getList<Project>(endpoint, projects, Project.fromJSON);
+        await getList<Project>(endpoint, projects, Project.fromJSON, selfProcessError);
     }
 
     async function getProjectsByCourseAndDeadline(

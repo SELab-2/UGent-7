@@ -65,7 +65,7 @@ export function useGroup(): GroupState {
                     score: groupData.score,
                 },
                 response,
-                selfProcessError
+                selfProcessError,
             );
         }
     }
