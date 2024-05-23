@@ -66,11 +66,21 @@ class GroupSubmissionPermission(BasePermission):
     """Permission class for submission related group endpoints"""
 
     def has_permission(self, request: Request, view: APIView) -> bool:
-        """Check if user has permission to view a general group submission endpoint."""
-        user = request.user
+        user: User = request.user
+        group_id = view.kwargs.get('pk')
+        group: Group | None = Group.objects.get(id=group_id) if group_id else None
 
-        # Get the individual permission clauses.
-        return request.method in SAFE_METHODS or is_teacher(user) or is_assistant(user)
+        if group is None:
+            return True
+
+        # Teachers and assistants of that course can view all submissions
+        if is_teacher(user):
+            return group.project.course.teachers.filter(id=user.teacher.id).exists()
+
+        if is_assistant(user):
+            return group.project.course.assistants.filter(id=user.assistant.id).exists()
+
+        return is_student(user) and group.students.filter(id=user.student.id).exists()
 
     def had_object_permission(self, request: Request, view: ViewSet, group: Group) -> bool:
         """Check if user has permission to view a detailed group submission endpoint"""
@@ -88,3 +98,4 @@ class GroupSubmissionPermission(BasePermission):
         student_permission = student is not None and student.groups.filter(id=group.id).exists()
 
         return teacher_permission or assistant_permission or student_permission
+
