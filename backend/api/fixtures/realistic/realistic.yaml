@@ -42,8 +42,8 @@
 - model: api.project
   pk: 1
   fields:
-    name: Lean Java
-    description: This project will teach you the basics of Object Oriented Programming by using Java.
+    name: Learn Java
+    description: This project will teach you the basics of Object Oriented Programming using Java.
     visible: true
     archived: false
     locked_groups: false
@@ -56,8 +56,8 @@
 - model: api.project
   pk: 2
   fields:
-    name: Lean Javascript
-    description: This project will show you would you should avoid javascript at all cost.
+    name: Learn JavaScript
+    description: This project will show you should avoid JavaScript at all cost.
     visible: true
     archived: false
     locked_groups: true
