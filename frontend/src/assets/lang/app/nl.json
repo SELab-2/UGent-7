@@ -97,9 +97,7 @@
                 "title": "Indieningsstructuur",
                 "placeholder": "Geef deze nieuwe map een naam",
                 "cancelSelection": "Deselecteer {0}",
-                "newFolder": "Nieuwe map",
-                "obligatedExtensions": "Verplichte extensies",
-                "blockedExtensions": "Niet toegelaten extensies"
+                "newFolder": "Nieuwe map"
             },
             "extraChecks": {
                 "title": "Automatische checks op een indiening",
@@ -241,7 +239,7 @@
             "newProject": "Nieuw project",
             "noSubmissions": "Dit project heeft geen indieningen",
             "submissions": "Groep heeft al ingediend | Groepen hebben al ingediend",
-            "groups": "Groep | Groepen",
+            "groups": "Deelnemende groep | Deelnemende groepen",
             "structureTestsFail": "Gefaalde structuurtesten",
             "extraChecksFail": "Gefaalde extra testen",
             "testsSucceed": "Geslaagde testen",
