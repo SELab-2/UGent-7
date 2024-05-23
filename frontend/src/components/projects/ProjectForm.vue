@@ -157,7 +157,7 @@ watchEffect(() => {
                             class="w-full"
                             v-model="form.deadline"
                             dateFormat="dd-mm-yy"
-                            :min-date="form.deadline"
+                            :min-date="form.start_date"
                             showTime
                             hourFormat="24"
                             showIcon
