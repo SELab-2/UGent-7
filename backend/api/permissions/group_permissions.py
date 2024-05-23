@@ -1,4 +1,8 @@
+from api.models.assistant import Assistant
 from api.models.group import Group
+from api.models.project import Project
+from api.models.student import Student
+from api.models.teacher import Teacher
 from api.permissions.role_permissions import (is_assistant, is_student,
                                               is_teacher)
 from authentication.models import User
@@ -62,34 +66,25 @@ class GroupSubmissionPermission(BasePermission):
     """Permission class for submission related group endpoints"""
 
     def has_permission(self, request: Request, view: APIView) -> bool:
-        user: User = request.user
-        group_id = view.kwargs.get('pk')
-        group: Group | None = Group.objects.get(id=group_id) if group_id else None
+        """Check if user has permission to view a general group submission endpoint."""
+        user = request.user
 
-        if group is None:
-            return True
+        # Get the individual permission clauses.
+        return request.method in SAFE_METHODS or is_teacher(user) or is_assistant(user)
 
-        # Teachers and assistants of that course can view all submissions
-        if is_teacher(user):
-            return group.project.course.teachers.filter(id=user.teacher.id).exists()
-
-        if is_assistant(user):
-            return group.project.course.assistants.filter(id=user.assistant.id).exists()
-
-        return is_student(user) and group.students.filter(id=user.student.id).exists()
-
-    def had_object_permission(self, request: Request, view: ViewSet, group) -> bool:
-        user: User = request.user
+    def had_object_permission(self, request: Request, view: ViewSet, group: Group) -> bool:
+        """Check if user has permission to view a detailed group submission endpoint"""
+        user = request.user
         course = group.project.course
-        teacher_or_assitant = is_teacher(user) and user.teacher.courses.filter(
-            id=course.id).exists() or is_assistant(user) and user.assistant.courses.filter(id=course.id).exists()
 
-        if request.method in SAFE_METHODS:
-            # Users related to the group can view the submissions of the group
-            return teacher_or_assitant or (is_student(user) and user.student.groups.filter(id=group.id).exists())
+        # Check if the user is a teacher that has the course linked to the project.
+        teacher = Teacher.objects.filter(id=user.id).first()
+        assistant = Assistant.objects.filter(id=user.id).first()
+        student = Student.objects.filter(id=user.id).first()
 
-        # Student can only add submissions to their own group
-        if is_student(user) and request.data.get("student") == user.id and view.action == "create":  # type: ignore
-            return user.student.courses.filter(id=course.id).exists()
+        # Get the individual permission clauses.
+        teacher_permission = teacher is not None and teacher.courses.filter(id=course.id).exists()
+        assistant_permission = assistant is not None and assistant.courses.filter(id=course.id).exists()
+        student_permission = student is not None and student.groups.filter(id=group.id).exists()
 
-        return teacher_or_assitant
+        return teacher_permission or assistant_permission or student_permission

@@ -17,7 +17,10 @@ import { type Filter } from '@/types/filter/Filter.ts';
 export async function get<T>(endpoint: string, ref: Ref<T | null>, fromJson: (data: any) => T): Promise<void> {
     try {
         const response = await client.get(endpoint);
-        ref.value = fromJson(response.data);
+
+        if (response.data !== '' && response.data !== null) {
+            ref.value = fromJson(response.data);
+        }
     } catch (error: any) {
         processError(error);
         console.error(error); // Log the error for debugging

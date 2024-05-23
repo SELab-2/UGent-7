@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useStudents } from '@/composables/services/student.service.ts';
 import { useI18n } from 'vue-i18n';
 import { type Group } from '@/types/Group.ts';
 import { storeToRefs } from 'pinia';
@@ -13,26 +12,24 @@ const props = defineProps<{
 }>();
 
 /* Emits */
-const emit = defineEmits(['group-left']);
+const emit = defineEmits(['leave:group']);
 
 /* Composable injections */
 const { student } = storeToRefs(useAuthStore());
-const { studentLeaveGroup } = useStudents();
 const { t } = useI18n();
 
 /**
  * Leaves the selected group.
  */
-async function leaveSelectedGroup(): Promise<void> {
+async function leaveGroup(): Promise<void> {
     if (student.value !== null) {
-        await studentLeaveGroup(props.group.id, student.value.id);
-        emit('group-left', null);
+        emit('leave:group', props.group, student.value);
     }
 }
 </script>
 
 <template>
-    <div class="p-4 surface-50">
+    <div class="border-round p-4 surface-100 border-1 border-300">
         <h2 class="mt-0">
             {{ t('views.projects.groupMembers') }}
         </h2>
@@ -42,7 +39,7 @@ async function leaveSelectedGroup(): Promise<void> {
             </div>
         </div>
         <Button
-            @click="leaveSelectedGroup"
+            @click="leaveGroup"
             :icon="PrimeIcons.ARROW_RIGHT"
             :label="t('views.projects.leaveGroup')"
             icon-pos="right"

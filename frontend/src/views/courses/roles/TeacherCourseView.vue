@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/instructors/TeacherAssistantList.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
-import TeacherAssistantUpdateButton from '@/components/teachers_assistants/TeacherAssistantUpdateButton.vue';
+import TeacherAssistantUpdateButton from '@/components/instructors/TeacherAssistantUpdateButton.vue';
 import ShareCourseButton from '@/components/courses/ShareCourseButton.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';

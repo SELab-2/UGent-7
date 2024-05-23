@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CourseForm from '@/components/courses/CourseForm.vue';
-import Title from '@/components/layout/Title.vue';
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
 import Loading from '@/components/Loading.vue';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
