@@ -1,6 +1,5 @@
-from django.utils.translation import gettext as _
-
 from authentication.models import User
+from django.utils.translation import gettext as _
 from notifications.models import Notification, NotificationTemplate
 from rest_framework import serializers
 
@@ -20,6 +19,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     title = serializers.SerializerMethodField()
     content = serializers.SerializerMethodField()
+    arguments = serializers.JSONField(write_only=True)
 
     def get_content(self, notification: Notification) -> str:
         """Get the content from the template and arguments."""
@@ -39,4 +39,5 @@ class NotificationSerializer(serializers.ModelSerializer):
             "created_at",
             "is_read",
             "is_sent",
+            "arguments"
         ]

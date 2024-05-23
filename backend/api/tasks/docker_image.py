@@ -21,7 +21,7 @@ def task_docker_image_build(docker_image: DockerImage):
         client.images.build(path=MEDIA_ROOT, dockerfile=docker_image.file.path,
                             tag=get_docker_image_tag(docker_image), rm=True, quiet=True, forcerm=True)
         docker_image.state = StateEnum.READY
-    except (docker.errors.APIError, docker.errors.BuildError, TypeError):
+    except Exception:
         docker_image.state = StateEnum.ERROR
         notification_type = NotificationType.DOCKER_IMAGE_BUILD_ERROR
     finally:
