@@ -37,12 +37,11 @@ const { groups, getGroupsByProject, updateGroup } = useGroup();
  * @param score The new score.
  */
 async function updateGroupScore(group: Group, score: number): Promise<void> {
-    group.score = score;
-
     await updateGroup({
         ...group,
         score,
     });
+    group.score = score;
 }
 
 /**

@@ -51,9 +51,9 @@ async function saveProject(newProject: Project, numberOfGroups: number): Promise
                     name: 'course-project',
                     params: { courseId: course.value.id, projectId: project.value.id },
                 });
+            } else {
+                addErrorMessage(t('views.projects.create.error'), t('views.projects.create.error_description'));
             }
-
-            addErrorMessage(t('views.projects.create.error'), t('views.projects.create.error_description'));
         }
     } catch (error: any) {
         processError(error);
