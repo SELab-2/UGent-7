@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import YearSelector from '@/components/YearSelector.vue';
 import CourseList from '@/components/courses/CourseDetailList.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';

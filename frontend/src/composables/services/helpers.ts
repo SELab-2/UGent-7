@@ -22,7 +22,10 @@ export async function get<T>(
 ): Promise<void> {
     try {
         const response = await client.get(endpoint);
-        ref.value = fromJson(response.data);
+
+        if (response.data !== '' && response.data !== null) {
+            ref.value = fromJson(response.data);
+        }
     } catch (error: any) {
         if (selfProcessError) {
             processError(error);

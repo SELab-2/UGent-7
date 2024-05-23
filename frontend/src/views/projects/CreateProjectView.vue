@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
-import Title from '@/components/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -51,9 +51,9 @@ async function saveProject(newProject: Project, numberOfGroups: number): Promise
                     name: 'course-project',
                     params: { courseId: course.value.id, projectId: project.value.id },
                 });
+            } else {
+                addErrorMessage(t('views.projects.create.error'), t('views.projects.create.error_description'));
             }
-
-            addErrorMessage(t('views.projects.create.error'), t('views.projects.create.error_description'));
         }
     } catch (error: any) {
         processError(error);

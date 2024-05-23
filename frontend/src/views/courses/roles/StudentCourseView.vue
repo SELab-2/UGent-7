@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import Button from 'primevue/button';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/instructors/TeacherAssistantList.vue';
 import { type Course } from '@/types/Course.ts';
 import { useI18n } from 'vue-i18n';
 import ConfirmDialog from 'primevue/confirmdialog';

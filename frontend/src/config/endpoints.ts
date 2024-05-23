@@ -62,6 +62,7 @@ export const endpoints = {
         retrieve: '/api/groups/{id}/',
         byProject: '/api/projects/{projectId}/groups/',
         byStudent: '/api/students/{studentId}/groups/',
+        byProjectStudent: '/api/projects/{projectId}/student-group/',
     },
     projects: {
         retrieve: '/api/projects/{id}/',
