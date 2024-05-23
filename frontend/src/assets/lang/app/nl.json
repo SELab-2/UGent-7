@@ -48,17 +48,17 @@
         },
         "projects": {
             "all": "Alle projecten",
-            "coming": "Aankomende deadlines",
             "backToCourse": "Terug naar het vak",
+            "coming": "Aankomende deadlines",
             "deadline": "Deadline",
             "days": "Vandaag om {hour} | Morgen om {hour} | Over {count} dagen",
             "ago": "1 dag geleden | {count} dagen geleden",
             "chooseGroupMessage": "Kies een groep voor {0}",
             "groupScore": "Groepsscore",
             "noGroupScore": "Nog geen score",
+            "noGroupMembers": "Geen groepsleden",
             "publishScores": "Publiceer scores",
             "groupName": "Groepsnaam",
-            "noGroupMembers": "Geen groepsleden",
             "groupPopulation": "Grootte",
             "groupStatus": "Status",
             "start": "Startdatum",
@@ -94,8 +94,8 @@
             },
             "extraChecks": {
                 "title": "Automatische checks op een indiening",
-                "add": "Nieuwe check",
                 "empty": "Nog geen extra checks toegevoegd",
+                "add": "Nieuwe check",
                 "name": "Naam",
                 "public": "Publiek",
                 "bashScript": "Bash script",
@@ -215,7 +215,6 @@
                 "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop.",
                 "search": "Geen vakken gevonden voor de gegeven zoekcriteria."
             },
-            "noResults": "Geen resultaten.",
             "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
             "selectCourse": "Selecteer het vak waarvoor je een project wil maken:",
             "showPastProjects": "Projecten met verstreken deadline"
