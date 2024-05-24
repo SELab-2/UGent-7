@@ -139,7 +139,7 @@
 - model: api.structurecheck
   pk: 1
   fields:
-    path: "verslag/"
+    path: "verslag"
     project: 0
     obligated_extensions:
       - 3
@@ -147,7 +147,7 @@
 - model: api.structurecheck
   pk: 2
   fields:
-    path: src/
+    path: src
     project: 1
     obligated_extensions:
       - 1
@@ -156,7 +156,7 @@
 - model: api.structurecheck
   pk: 3
   fields:
-    path: verslag/
+    path: verslag
     project: 1
     obligated_extensions:
       - 3
