@@ -13,7 +13,7 @@ import { useMessagesStore } from '@/store/messages.store.ts';
 
 /* Composable injections */
 const { t } = useI18n();
-const { addSuccessMessage } = useMessagesStore();
+const { addSuccessMessage, addErrorMessage } = useMessagesStore();
 const { push } = useRouter();
 const { faculties, getFaculties } = useFaculty();
 const { createCourse } = useCourses();
@@ -28,11 +28,11 @@ const loading = ref(true);
  */
 async function saveCourse(course: Course): Promise<void> {
     try {
-        await createCourse(course);
+        await createCourse(course, false);
         addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.courses.create.success', [course.name]));
         await push({ name: 'dashboard' });
     } catch (error: any) {
-        // TODO error message
+        addErrorMessage(t('toasts.messages.error'), t('toasts.messages.courses.create.error', [course.name]));
     }
 }
 

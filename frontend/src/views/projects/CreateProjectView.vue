@@ -42,11 +42,11 @@ const loading = ref(true);
 async function saveProject(newProject: Project, numberOfGroups: number): Promise<void> {
     try {
         if (course.value !== null) {
-            await createProject(newProject, course.value.id, numberOfGroups);
+            await createProject(newProject, course.value.id, numberOfGroups, false);
 
             if (project.value !== null) {
-                await setStructureChecks(newProject.structure_checks ?? [], project.value.id);
-                await setExtraChecks(newProject.extra_checks ?? [], project.value.id);
+                await setStructureChecks(newProject.structure_checks ?? [], project.value.id, false);
+                await setExtraChecks(newProject.extra_checks ?? [], project.value.id, false);
                 addSuccessMessage(
                     t('toasts.messages.success'),
                     t('toasts.messages.projects.create.success', [project.value?.name]),
@@ -60,7 +60,7 @@ async function saveProject(newProject: Project, numberOfGroups: number): Promise
             }
         }
     } catch (error: any) {
-        processError(error);
+        addErrorMessage(t('toasts.messages.error'), t('toasts.messages.projects.create.error', [project.value?.name]));
     }
 }
 
