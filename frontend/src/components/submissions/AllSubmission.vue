@@ -126,6 +126,7 @@ const navigateToSubmission = (submissionId: string): void => {
     .status {
         &.passed {
             background-color: var(--bg-primary);
+            color: var(--primary-color-text);
         }
 
         &.failed-structure {
