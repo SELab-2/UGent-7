@@ -36,18 +36,22 @@ function editFeedback(feedback: Feedback): void {
 }
 
 /**
- * Submit feedback depending if the feedback is being edited or created
+ * Submit feedback depending on if the feedback is being edited or created
  */
-function submitFeedback(): void {
-    if (editedFeedback.value === null) {
-        createFeedback(feedbackTextValue.value, route.params.submissionId as string);
-        feedbackTextValue.value = '';
-    } else {
-        updateFeedback(feedbackTextValue.value, editedFeedback.value.id);
-        feedbackTextValue.value = '';
-        editedFeedback.value = null;
+async function submitFeedback(): Promise<void> {
+    try {
+        if (editedFeedback.value === null) {
+            await createFeedback(feedbackTextValue.value, route.params.submissionId as string);
+            feedbackTextValue.value = '';
+        } else {
+            await updateFeedback(feedbackTextValue.value, editedFeedback.value.id);
+            feedbackTextValue.value = '';
+            editedFeedback.value = null;
+        }
+        await getFeedbackBySubmission(route.params.submissionId as string);
+    } catch (e) {
+        console.error(e);
     }
-    getFeedbackBySubmission(route.params.submissionId as string);
 }
 
 /* Computed Properties */
@@ -154,7 +158,7 @@ watch(
                 </div>
             </div>
             <!-- Feedback section -->
-            <div class="col-8 md:col-7">
+            <div class="col-12 md:col-7">
                 <!-- Written Feedback overview -->
                 <div class="feedback-section mb-3">
                     <Title class="flex mb-3">Feedback</Title>
@@ -184,7 +188,7 @@ watch(
                             <p class="feedback-message">{{ feedback.message }}</p>
                         </div>
                     </div>
-                    <p v-else class="pt-2 pl-2">{{ t('views.submissions.feedback.noFeedback') }}</p>
+                    <p v-else class="pt-2">{{ t('views.submissions.feedback.noFeedback') }}</p>
                 </div>
                 <!-- Write feedback -->
                 <div v-if="user?.isTeacher()">
@@ -192,7 +196,7 @@ watch(
                         <Textarea
                             id="feedback"
                             v-model="feedbackTextValue"
-                            class="w-full"
+                            class="w-full h-10rem"
                             :placeholder="t('views.submissions.feedback.writeFeedback')"
                         />
                         <Button
@@ -208,28 +212,4 @@ watch(
     </BaseLayout>
 </template>
 
-<style scoped lang="scss">
-.p-inputtextarea {
-    width: 100%;
-    height: 8rem;
-}
-.feedback-section {
-    border-bottom: 4px solid var(--primary-color);
-}
-.feedback-header {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-.feedback-header-wrap {
-    border-bottom: 1px solid lightgray;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.feedback-message {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    width: 100%;
-}
-</style>
+<style scoped lang="scss"></style>

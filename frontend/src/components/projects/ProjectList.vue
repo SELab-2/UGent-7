@@ -66,17 +66,17 @@ const incomingProjects = computed<Project[]>(() => {
 
 <template>
     <div>
-        <!-- Show past projects switch -->
-        <div class="p-4 surface-100 inline-block mb-5">
-            <div class="flex gap-3 align-items-center">
-                <Checkbox input-id="show-past" v-model="showPast" binary />
-                <label for="show-past">
-                    {{ t('components.list.showPastProjects') }}
-                </label>
-            </div>
-        </div>
         <!-- Project list -->
         <template v-if="sortedProjects.length > 0">
+            <!-- Show past projects switch -->
+            <div class="p-4 surface-100 inline-block mb-5">
+                <div class="flex gap-3 align-items-center">
+                    <Checkbox input-id="show-past" v-model="showPast" binary />
+                    <label for="show-past">
+                        {{ t('components.list.showPastProjects') }}
+                    </label>
+                </div>
+            </div>
             <div class="grid nested-grid">
                 <div class="col-12 md:col-5">
                     <h2 class="mt-0">

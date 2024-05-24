@@ -124,11 +124,6 @@ const navigateToSubmission = (submissionId: string): void => {
     }
 
     .status {
-        &.passed {
-            background-color: var(--bg-primary);
-            color: var(--primary-color-text);
-        }
-
         &.failed-structure {
             background-color: indianred;
             color: white;
@@ -136,6 +131,11 @@ const navigateToSubmission = (submissionId: string): void => {
 
         &.failed-extra:not(.failed-structure) {
             background-color: var(--secondary-color);
+        }
+
+        &.passed {
+            background-color: var(--primary-color);
+            color: var(--primary-color-text);
         }
     }
 }
