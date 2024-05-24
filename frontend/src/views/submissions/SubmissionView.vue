@@ -116,7 +116,7 @@ watchImmediate(
         <template v-if="submission !== null">
             <div class="fadein grid">
                 <!-- Submission properties -->
-                <div class="col-12 md:col-4">
+                <div class="col-6 md:col-4">
                     <!-- Submission status -->
                     <div class="mb-5">
                         <Title class="flex">Status</Title>
@@ -159,7 +159,7 @@ watchImmediate(
                     </template>
                 </div>
                 <!-- Feedback section -->
-                <div class="col-12 md:col-8">
+                <div class="col-12 md:col-7">
                     <!-- Written Feedback overview -->
                     <div class="feedback-section mb-3">
                         <Title class="flex mb-3">Feedback</Title>
