@@ -37,6 +37,14 @@ class SubmissionPermission(BasePermission):
         return obj.group.students.filter(id=user.id).exists()
 
 
+class SubmissionFeedbackPermission(SubmissionPermission):
+    def has_permission(self, request: Request, view: APIView) -> bool:
+        return True
+
+    def has_object_permission(self, request: Request, view: APIView, obj: Submission) -> bool:
+        return True
+
+
 class StructureCheckResultPermission(SubmissionPermission):
     def has_object_permission(self, request: Request, view: APIView, obj: StructureCheckResult) -> bool:
         return super().has_object_permission(request, view, obj.submission)

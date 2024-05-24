@@ -85,13 +85,23 @@ onMounted(async () => {
 <template>
     <BaseLayout>
         <Title> {{ t(`views.submissions.title`) }}: {{ project ? project.name : 'Loading' }} </Title>
-        <template v-if="group !== null && submissions != null && structureChecks !== null">
+        <template v-if="group !== null && submissions != null">
             <div class="grid fadein">
                 <div class="col-12 md:col-6">
                     <div class="flex-column">
                         <!-- Project info column -->
                         <!-- Submission structure -->
-                        <ProjectStructure :structure-checks="structureChecks" />
+                        <template v-if="structureChecks !== null">
+                            <template v-if="structureChecks.length > 0">
+                                <ProjectStructure :structure-checks="structureChecks" />
+                            </template>
+                            <template v-else>
+                                {{ t('views.projects.structureChecks.noChecks') }}
+                            </template>
+                        </template>
+                        <template v-else>
+                            <Loading />
+                        </template>
 
                         <!-- Submission upload -->
                         <div class="py-2">
@@ -145,13 +155,9 @@ onMounted(async () => {
                     </div>
                 </div>
                 <!-- Overview of all given submissions -->
-                <div class="col-12 md:col-5 col-offset-1">
+                <div class="col-12 md:col-6">
                     <h2>{{ t('views.submissions.allSubmissions') }}</h2>
-                    <AllSubmission
-                        v-if="group && submissions"
-                        :group="group"
-                        :submissions="submissions"
-                    ></AllSubmission>
+                    <AllSubmission :group="group" :submissions="submissions"></AllSubmission>
                 </div>
             </div>
         </template>

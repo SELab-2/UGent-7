@@ -4,6 +4,7 @@ import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Message from 'primevue/message';
+import moment from 'moment';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { type Group } from '@/types/Group.ts';
@@ -57,9 +58,16 @@ async function joinSelectedGroup(): Promise<void> {
         <h2 class="mt-0">
             {{ t('views.projects.chooseGroup') }}
         </h2>
-        <Message severity="warn" class="my-4 text-sm" :closable="false">
-            {{ t('views.projects.chooseGroupMessage', [project.getFormattedStartDate()]) }}
-        </Message>
+        <template v-if="!moment(project.start_date).isBefore()">
+            <Message severity="warn" class="my-4 text-sm" :closable="false">
+                {{ t('views.projects.chooseGroupMessage', [project.getFormattedStartDate()]) }}
+            </Message>
+        </template>
+        <template v-else>
+            <Message severity="warn" class="my-4 text-sm" :closable="false">
+                {{ t('views.projects.alreadyStarted', [project.getFormattedStartDate()]) }}
+            </Message>
+        </template>
         <template v-if="groups.length > 0 && !project.isLocked()">
             <DataTable
                 :value="groups"

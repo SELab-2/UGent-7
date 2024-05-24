@@ -49,7 +49,7 @@ watchImmediate(
     <template v-if="!loading">
         <div class="fadein">
             <!-- Project heading -->
-            <div class="flex justify-content-between align-items-center mb-6">
+            <div class="flex justify-content-between align-items-center mb-5">
                 <!-- Project list title -->
                 <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
 

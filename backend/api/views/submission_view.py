@@ -8,7 +8,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from api.models.submission import Submission, StructureCheckResult, ExtraCheckResult
 from api.permissions.submission_permissions import SubmissionPermission, StructureCheckResultPermission, \
-    ExtraCheckResultPermission, ExtraCheckResultArtifactPermission, ExtraCheckResultLogPermission
+    ExtraCheckResultPermission, ExtraCheckResultArtifactPermission, ExtraCheckResultLogPermission, \
+    SubmissionFeedbackPermission
 from api.serializers.feedback_serializer import FeedbackSerializer
 from api.serializers.submission_serializer import (
     ExtraCheckResultSerializer, StructureCheckResultSerializer,
@@ -29,7 +30,7 @@ class SubmissionViewSet(RetrieveModelMixin, GenericViewSet):
 
         return FileResponse(open(submission.zip.path, "rb"), as_attachment=True)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["get"], permission_classes=[IsAdminUser | SubmissionFeedbackPermission])
     def feedback(self, request, **_) -> Response:
         """Returns all the feedback for the given submission"""
         submission = self.get_object()

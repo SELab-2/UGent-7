@@ -143,7 +143,7 @@ watchImmediate(
         <template v-if="!loading">
             <div class="fadein">
                 <!-- Update project heading -->
-                <Title class="mb-6">
+                <Title class="mb-5">
                     {{ t('views.projects.edit') }}
                 </Title>
 

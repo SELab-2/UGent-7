@@ -31,6 +31,22 @@ export class Submission {
     }
 
     /**
+     * Check if the submission is failed.
+     * @returns boolean
+     */
+    public isFailed(): boolean {
+        return !this.isPassed();
+    }
+
+    /**
+     * Check if the submission is failed.
+     * @returns boolean
+     */
+    public isNonePassed(): boolean {
+        return !this.isExtraCheckPassed() && !this.isStructureCheckPassed();
+    }
+
+    /**
      * Check if some of the checks is passed.
      */
     public isSomePassed(): boolean {
