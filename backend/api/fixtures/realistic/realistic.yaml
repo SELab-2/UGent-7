@@ -3,7 +3,7 @@
   pk: 0
   fields:
     name: Introduction to Computer Science
-    academic_startyear: 2024
+    academic_startyear: 2023
     excerpt: This course is an introduction to computer science.
     description: This course will teach you the basics of computer science by showing you the wonders of Golang.
     faculty: Wetenschappen
@@ -15,7 +15,7 @@
   pk: 1
   fields:
     name: The frog and its anatomy
-    academic_startyear: 2024
+    academic_startyear: 2023
     excerpt: This course is an introduction to biology.
     description: This course will teach you the basics of biology by showing you the wonders of the human body.
     faculty: Wetenschappen
@@ -29,12 +29,13 @@
   pk: 0
   fields:
     name: Learn Python
-    description: This project will teach you the basics of Python.
+    description: '<h1>Python Opdracht: Recursieve Functie</h1><p>In deze opdracht ga je een <strong>recursieve functie</strong> implementeren in Python. Recursie is een programmeertechniek waarbij een functie zichzelf aanroept. Dit kan nuttig zijn voor het oplossen van problemen die kunnen worden opgesplitst in kleinere, gelijkaardige problemen.</p><h2>Opdrachtbeschrijving</h2><p>Schrijf een Python-functie genaamd <code>recursieve_som</code> die de som berekent van alle positieve gehele getallen tot en met een gegeven nummer <code>n</code> inclusief. De functie moet recursief zijn en voldoet aan de volgende specificaties:</p><ul><li><strong>Input:</strong> Een enkel positief geheel getal <code>n</code>.</li><li><strong>Output:</strong> De som van alle positieve gehele getallen tot en met <code>n</code>.</li></ul><h2>Voorbeeld</h2><div class="example"><p>Als de invoer <code>n = 5</code> is, dan moet de uitvoer zijn:</p><code>recursieve_som(5)</code><br><strong>Uitvoer:</strong> 15<br><em>Verklaring:</em> 1 + 2 + 3 + 4 + 5 = 15</div><h2>Stappenplan</h2><ol><li>Controleer of <code>n</code> gelijk is aan 1. Zo ja, retourneer 1.</li><li>Zo nee, retourneer de som van <code>n</code> en de recursieve aanroep van <code>recursieve_som(n-1)</code>.</li></ol><h2>Code Sjabloon</h2><pre><code>def recursieve_som(n): if n == 1: return 1 else: return n + recursieve_som(n-1) # Voorbeeld aanroep resultaat = recursieve_som(5) print(resultaat)  # Uitvoer: 15 </code></pre><h2>Extra Uitdaging</h2><p>Pas de functie aan zodat deze een foutmelding geeft wanneer de invoer geen positief geheel getal is. Gebruik hiervoor de <code>raise</code>-instructie om een uitzondering te genereren.</p><div class="example"><p><strong>Voorbeeld:</strong></p><pre><code>def recursieve_som(n): if not isinstance(n, int) or n &lt;= 0: raise ValueError("Invoer moet een positief geheel getal zijn") if n == 1: return 1 else: return n + recursieve_som(n-1) </code></pre></div><h2>Indienen</h2><p>Zorg ervoor dat je je code indient via het platform onder het juiste project en in de juiste groep. Voeg ook een kort verslag toe waarin je de werking van je functie uitlegt en eventuele uitdagingen die je bent tegengekomen tijdens het programmeren.</p>
+'
     visible: true
     archived: false
     locked_groups: false
     start_date: 2023-12-12T00:00:00Z
-    deadline: 2025-01-01T00:00:00Z
+    deadline: 2024-5-26T00:00:00Z
     max_score: 100
     score_visible: false
     group_size: 3
@@ -48,7 +49,7 @@
     archived: false
     locked_groups: false
     start_date: 2023-01-01T00:00:00Z
-    deadline: 2025-01-01T00:00:00Z
+    deadline: 2024-05-30T00:00:00Z
     max_score: 20
     score_visible: true
     group_size: 3
