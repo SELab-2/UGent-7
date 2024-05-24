@@ -132,6 +132,7 @@
             "failed": "De indiening is mislukt.",
             "downloadZip": "Download alle bestanden als zip.",
             "downloadLog": "Log bestand van check {0}",
+            "downloadArtifact": "Artefact van check {0}",
             "backToSubmissions": "Terug naar indieningen",
             "hoverText": {
               "allChecksFailed": "Structuur en extra checks gefaald",

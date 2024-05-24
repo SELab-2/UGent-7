@@ -144,13 +144,13 @@ watchImmediate(
                                 :title="t('views.submissions.downloadLog', [index + 1])"
                                 :href="log"
                                 :key="index"
-                                v-for="[index, log] in logs"
+                                v-for="(log, index) in logs"
                             />
                             <DownloadCard
                                 :title="t('views.submissions.downloadArtifact', [index + 1])"
                                 :href="artifact"
                                 :key="index"
-                                v-for="[index, artifact] in artifacts"
+                                v-for="(artifact, index) in artifacts"
                             />
                         </div>
                     </template>

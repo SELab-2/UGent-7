@@ -132,6 +132,7 @@
             "failed": "The submission is not passed.",
             "downloadZip": "Download all files of this submission as a zip.",
             "downloadLog": "Log of check {0}",
+            "downloadArtifact": "Artifact of check {0}",
             "backToSubmissions": "Back to submissions",
             "hoverText": {
               "allChecksFailed": "Structure and extra checks failed",
