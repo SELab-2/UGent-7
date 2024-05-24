@@ -89,7 +89,7 @@ const navigateToSubmission = (submissionId: string): void => {
         <div
             v-for="submission in sortedSubmissions"
             :key="submission.id"
-            class="px-3 py-2 surface-100 gap-2 flex submission justify-content-between align-items-center"
+            class="px-3 py-2 surface-100 gap-2 mb-3 flex submission justify-content-between align-items-center"
             @click="navigateToSubmission(submission.id)"
         >
             <div class="flex align-items-center gap-2">
@@ -133,7 +133,7 @@ const navigateToSubmission = (submissionId: string): void => {
             color: white;
         }
 
-        &.failed-extra {
+        &.failed-extra:not(.failed-structure) {
             background-color: var(--secondary-color);
         }
     }
