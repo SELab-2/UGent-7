@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import moment from 'moment';
-import InputSwitch from 'primevue/inputswitch';
+import Checkbox from 'primevue/checkbox';
 import ProjectDetailCard from '@/components/projects/ProjectDetailCard.vue';
 import ProjectDeadlineCard from '@/components/projects/ProjectDeadlineCard.vue';
 import Button from 'primevue/button';
@@ -28,7 +28,7 @@ const { student, getStudentByID } = useStudents();
 function getUserGroups(): Group[] {
     if (user.value !== null && user.value?.isStudent()) {
         // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-        return student.value !== null && student.value.groups !== null ? student.value?.groups : [];
+        return student.value !== null ? student.value?.groups : [];
     }
     return [];
 }
@@ -67,11 +67,13 @@ const incomingProjects = computed<Project[]>(() => {
 <template>
     <div>
         <!-- Show past projects switch -->
-        <div class="flex gap-3 align-items-center mb-5">
-            <InputSwitch input-id="show-past" v-model="showPast" />
-            <label for="show-past">
-                {{ t('components.list.showPastProjects') }}
-            </label>
+        <div class="p-4 surface-100 inline-block mb-5">
+            <div class="flex gap-3 align-items-center">
+                <Checkbox input-id="show-past" v-model="showPast" binary />
+                <label for="show-past">
+                    {{ t('components.list.showPastProjects') }}
+                </label>
+            </div>
         </div>
         <!-- Project list -->
         <template v-if="sortedProjects.length > 0">

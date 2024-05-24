@@ -39,7 +39,7 @@ watch(
 <template>
     <BaseLayout>
         <!-- Project list title -->
-        <Title class="mb-6">{{ t('views.dashboard.projects') }}</Title>
+        <Title class="mb-5">{{ t('views.dashboard.projects') }}</Title>
         <ProjectList :projects="projects" />
     </BaseLayout>
 </template>

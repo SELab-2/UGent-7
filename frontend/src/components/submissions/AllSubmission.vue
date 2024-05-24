@@ -6,6 +6,7 @@ import { type StructureCheckResult } from '@/types/submission/StructureCheckResu
 import { useI18n } from 'vue-i18n';
 import router from '@/router/router.ts';
 import { useRoute } from 'vue-router';
+import { PrimeIcons } from 'primevue/api';
 
 const { params } = useRoute();
 const { t } = useI18n();
@@ -15,50 +16,37 @@ const props = defineProps<{
 }>();
 
 /**
- * Returns the extra information for the submission
- */
-const submissionsExtra = computed(() => {
-    return props.submissions.map((submission: Submission) => {
-        const iconDetails = getExtraSubmissionInformation(submission);
-        return {
-            ...submission,
-            iconName: iconDetails.iconName,
-            color: iconDetails.color,
-            hoverText: iconDetails.hoverText,
-        };
-    });
-});
-
-/**
- * Returns the icon name, color and hover text for the submission
+ * Returns the description for the submission
  * @param submission
  */
-const getExtraSubmissionInformation = (
-    submission: Submission,
-): { iconName: string; color: string; hoverText: string } => {
-    if (
-        !(
-            submission.extraCheckResults.map((check: ExtraCheckResult) => check.result === 'SUCCESS').every(Boolean) ||
-            submission.structureCheckResults
-                .map((check: StructureCheckResult) => check.result === 'SUCCESS')
-                .every(Boolean)
-        )
-    ) {
-        return { iconName: 'times', color: 'red', hoverText: t('views.submissions.hoverText.allChecksFailed') };
-    } else if (
-        !submission.extraCheckResults.map((check: ExtraCheckResult) => check.result === 'SUCCESS').every(Boolean)
-    ) {
-        return { iconName: 'cloud', color: 'lightblue', hoverText: t('views.submissions.hoverText.extraChecksFailed') };
-    } else if (
-        !submission.structureCheckResults
-            .map((check: StructureCheckResult) => check.result === 'SUCCESS')
-            .every(Boolean)
-    ) {
-        return { iconName: 'bolt', color: 'yellow', hoverText: t('views.submissions.hoverText.structureChecksFailed') };
-    } else {
-        return { iconName: 'check', color: 'lightgreen', hoverText: t('views.submissions.hoverText.allChecksPassed') };
+function getSubmissionDescription(submission: Submission): string {
+    if (submission.isPassed()) {
+        return t('views.submissions.hoverText.allChecksPassed');
+    } else if (!submission.isStructureCheckPassed()) {
+        return t('views.submissions.hoverText.structureChecksFailed');
+    } else if (!submission.isExtraCheckPassed()) {
+        return t('views.submissions.hoverText.extraChecksFailed');
     }
-};
+
+    return t('views.submissions.hoverText.allChecksFailed');
+}
+
+/**
+ * Returns the icon for the submission.
+ *
+ * @param submission
+ */
+function getSubmissionIcon(submission: Submission): string {
+    if (submission.isPassed()) {
+        return PrimeIcons.CHECK;
+    } else if (!submission.isStructureCheckPassed()) {
+        return PrimeIcons.SITEMAP;
+    } else if (!submission.isExtraCheckPassed()) {
+        return PrimeIcons.BOLT;
+    }
+
+    return PrimeIcons.TIMES;
+}
 
 /**
  * Returns the time parsed since the submission
@@ -85,7 +73,7 @@ const timeSince = (submissionDate: Date): string => {
  * @param submissionId
  */
 const navigateToSubmission = (submissionId: string): void => {
-    router.push({
+    void router.push({
         name: 'submission',
         params: { submissionId, groupId: params.groupId, projectId: params.projectId, courseId: params.courseId },
     });
@@ -93,31 +81,35 @@ const navigateToSubmission = (submissionId: string): void => {
 </script>
 
 <template>
-    <div>
+    <template v-if="submissions.length > 0">
         <div
-            v-for="submission in submissionsExtra?.reverse()"
+            v-for="submission in submissions"
             :key="submission.id"
-            class="flex submission align-content-center align-items-center"
-            v-tooltip="submission.hoverText"
+            class="px-3 py-2 surface-100 gap-2 flex submission justify-content-between align-items-center"
             @click="navigateToSubmission(submission.id)"
         >
-            <p
-                :class="'font-semibold m-2 p-1 pi pi-' + submission.iconName"
-                :style="{ color: submission.color, fontSize: '1.25rem' }"
-            ></p>
-            <label class="font-semibold m-2 p-1">#{{ submission.submission_number }} </label>
-            <p>{{ timeSince(submission.submission_time) }}</p>
+            <div class="flex align-items-center gap-2">
+                <label class="font-semibold m-2 p-1">#{{ submission.submission_number }}</label>
+                <div class="border-circle p-2 w-2rem h-2rem surface-100">
+                    <i :class="getSubmissionIcon(submission)" class="text-lg"></i>
+                </div>
+                <p>{{ timeSince(submission.submission_time) }}</p>
+            </div>
+            <p>{{ getSubmissionDescription(submission) }}</p>
         </div>
-    </div>
+    </template>
+    <template v-else>
+        {{ t('views.submissions.noSubmissions') }}
+    </template>
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/scss/theme/theme.scss';
 .submission {
-    border-bottom: 1.5px solid var(--primary-color);
+    transition: all 0.3s ease;
     cursor: pointer;
-}
-.submission:last-child {
-    border-bottom: none;
+
+    &:hover {
+        background-color: var(--surface-300) !important;
+    }
 }
 </style>

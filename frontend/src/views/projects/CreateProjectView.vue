@@ -112,7 +112,7 @@ watchImmediate(
 <template>
     <BaseLayout>
         <!-- Create project heading -->
-        <Title class="mb-6">
+        <Title class="mb-5">
             {{ t('views.projects.create') }}
         </Title>
         <template v-if="!loading">

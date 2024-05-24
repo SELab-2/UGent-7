@@ -164,7 +164,7 @@ watch(selectedDate, (date) => {
 <template>
     <BaseLayout>
         <!-- Calendar heading -->
-        <Title class="mb-6">{{ t('views.calendar.title') }}</Title>
+        <Title>{{ t('views.calendar.title') }}</Title>
         <template v-if="!loading">
             <!-- Calendar body -->
             <div class="grid fadein">
@@ -186,7 +186,7 @@ watch(selectedDate, (date) => {
                 <div class="col-12 md:col-6">
                     <div class="surface-100 p-4 md:p-6">
                         <!-- Selected date on the calendar -->
-                        <Title class="mb-6 font-extrabold">
+                        <Title class="font-extrabold">
                             {{ formattedDate }}
                         </Title>
 

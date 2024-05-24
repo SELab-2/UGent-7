@@ -51,7 +51,7 @@ watchImmediate(
         <div class="fadein">
             <!-- Project heading -->
             <div
-                class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-6"
+                class="flex gap-5 flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-5"
             >
                 <!-- Project list title -->
                 <Title class="m-0">{{ t('views.dashboard.projects') }}</Title>
@@ -67,7 +67,7 @@ watchImmediate(
 
             <!-- Course heading -->
             <div
-                class="flex gap-6 flex-column md:flex-row justify-content-between align-items-start md:align-items-center my-6"
+                class="flex gap-5 flex-column md:flex-row justify-content-between align-items-start md:align-items-center my-6"
             >
                 <!-- Course list title -->
                 <Title class="m-0">{{ t('views.dashboard.courses') }}</Title>

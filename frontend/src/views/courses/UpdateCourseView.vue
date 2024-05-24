@@ -46,7 +46,7 @@ watchImmediate(
 <template>
     <BaseLayout>
         <!-- Create course heading -->
-        <Title class="mb-6">{{ t('views.courses.edit') }}</Title>
+        <Title>{{ t('views.courses.edit') }}</Title>
         <template v-if="!loading">
             <div class="grid fadein">
                 <div class="col-12 md:col-6">
