@@ -7,12 +7,14 @@ import { useI18n } from 'vue-i18n';
 import router from '@/router/router.ts';
 import { useRoute } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
+import {Group} from "@/types/Group.ts";
 
 const { params } = useRoute();
 const { t } = useI18n();
 
 const props = defineProps<{
     submissions: Submission[];
+    group: Group | null;
 }>();
 
 /**
@@ -73,9 +75,10 @@ const timeSince = (submissionDate: Date): string => {
  * @param submissionId
  */
 const navigateToSubmission = (submissionId: string): void => {
+    const tmpGroupId = props.group?.id ?? params.groupId;
     void router.push({
         name: 'submission',
-        params: { submissionId, groupId: params.groupId, projectId: params.projectId, courseId: params.courseId },
+        params: { submissionId, groupId: tmpGroupId, projectId: params.projectId, courseId: params.courseId },
     });
 };
 </script>

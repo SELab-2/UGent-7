@@ -119,7 +119,7 @@ async function expandGroup(event: DataTableRowExpandEvent): Promise<void> {
                 </div>
                 <div class="col">
                     <h3>{{ t('views.projects.submissionStatus') }}</h3>
-                    <AllSubmission :submissions="data.submissions" />
+                    <AllSubmission :submissions="data.submissions" :group="data"/>
                 </div>
             </div>
         </template>
