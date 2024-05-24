@@ -7,6 +7,7 @@ from api.models.docker import StateEnum as DockerStateEnum
 from api.models.student import Student
 from api.models.submission import (ExtraCheckResult, StateEnum,
                                    StructureCheckResult, Submission)
+from api.models.teacher import Teacher
 from api.tasks.docker_image import (task_docker_image_build,
                                     task_docker_image_remove)
 from api.tasks.extra_check import task_extra_check_start
@@ -15,6 +16,7 @@ from authentication.models import User
 from authentication.signals import user_created
 from django.db.models.signals import post_delete, post_save, pre_delete
 from django.dispatch import Signal, receiver
+from notifications.signals import NotificationType, notification_create
 
 # MARK: Signals
 
@@ -36,6 +38,9 @@ def _user_creation(user: User, attributes: dict, **_):
 
     if student_id is not None:
         Student.create(user, student_id=student_id)
+    else:
+        # For now, we assume that everyone without a student ID is a teacher.
+        Teacher.create(user)
 
 
 @receiver(run_docker_image_build)
@@ -118,6 +123,13 @@ def hook_submission(sender, instance: Submission, created: bool, **kwargs):
     if created and not kwargs.get('raw', False):
         run_all_checks.send(sender=Submission, submission=instance)
         pass
+
+        notification_create.send(
+            sender=Submission,
+            type=NotificationType.SUBMISSION_RECEIVED,
+            queryset=list(instance.group.students.all()),
+            arguments={}
+        )
 
 
 @receiver(post_save, sender=DockerImage)

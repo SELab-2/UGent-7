@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
 import ProjectList from '@/components/projects/ProjectList.vue';
-import TeacherAssistantList from '@/components/teachers_assistants/TeacherAssistantList.vue';
+import TeacherAssistantList from '@/components/instructors/TeacherAssistantList.vue';
 import ProjectCreateButton from '@/components/projects/ProjectCreateButton.vue';
-import TeacherAssistantUpdateButton from '@/components/teachers_assistants/TeacherAssistantUpdateButton.vue';
+import TeacherAssistantUpdateButton from '@/components/instructors/TeacherAssistantUpdateButton.vue';
 import ShareCourseButton from '@/components/courses/ShareCourseButton.vue';
 import Button from 'primevue/button';
 import ButtonGroup from 'primevue/buttongroup';
@@ -16,7 +16,9 @@ import { RouterLink } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
 import { useCourses } from '@/composables/services/course.service';
 import { useProject } from '@/composables/services/project.service.ts';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
+import { watchImmediate } from '@vueuse/core';
+import Loading from '@/components/Loading.vue';
 
 /* Props */
 const props = defineProps<{
@@ -31,11 +33,7 @@ const { projects, getProjectsByCourse } = useProject();
 
 /* State */
 const instructors = computed(() => {
-    if (props.course.teachers !== null && props.course.assistants !== null) {
-        return props.course.teachers.concat(props.course.assistants);
-    }
-
-    return null;
+    return props.course.teachers.concat(props.course.assistants);
 });
 
 /* State for the confirm dialog to clone a course */
@@ -57,18 +55,20 @@ async function handleClone(): Promise<void> {
     });
 }
 
-watch(
-    () => props.course,
-    async () => {
-        await getProjectsByCourse(props.course.id);
+/**
+ * Watch for changes in the course ID and fetch the projects for the course.
+ */
+watchImmediate(
+    () => props.course.id,
+    async (courseId: string) => {
+        await getProjectsByCourse(courseId);
     },
-    { immediate: true },
 );
 </script>
 
 <template>
     <!-- Course heading -->
-    <div class="flex justify-content-between align-items-center mb-6">
+    <div class="flex justify-content-between align-items-center mb-5">
         <!-- Course title -->
         <Title class="m-0">{{ props.course.name }}</Title>
 
@@ -123,8 +123,9 @@ watch(
             <ShareCourseButton :course="props.course" v-if="props.course.private_course" />
         </ButtonGroup>
     </div>
+
     <!-- Description -->
-    <div class="surface-300 px-4 py-3" v-html="props.course.description" />
+    <div v-html="props.course.description" />
 
     <!-- Project heading -->
     <div class="flex justify-content-between align-items-center my-6">
@@ -136,16 +137,22 @@ watch(
             <ProjectCreateButton :courses="[props.course]" />
         </div>
     </div>
-    <!-- Project list body -->
-    <ProjectList :projects="projects">
-        <template #empty>
-            <p>
-                {{ t('views.courses.noProjects') }}
-            </p>
 
-            <ProjectCreateButton :courses="[course]" :label="t('components.button.createProject')" />
-        </template>
-    </ProjectList>
+    <!-- Project list body -->
+    <template v-if="projects !== null">
+        <ProjectList :projects="projects">
+            <template #empty>
+                <p>
+                    {{ t('views.courses.noProjects') }}
+                </p>
+
+                <ProjectCreateButton :courses="[course]" :label="t('components.button.createProject')" />
+            </template>
+        </ProjectList>
+    </template>
+    <template v-else>
+        <Loading />
+    </template>
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">

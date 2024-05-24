@@ -9,14 +9,26 @@
                 "dashboard": "Dashboard",
                 "calendar": "Kalender",
                 "courses": "Vakken",
-                "projects": "Projecten",
-                "settings": "Voorkeuren",
-                "help": "Help"
+                "projects": "Projecten"
             },
             "language": {
                 "nl": "Nederlands",
                 "en": "English"
+            },
+            "notifications": {
+                "new": "Nieuw",
+                "title": "Notificaties",
+                "markAsRead": "Markeer alles als gelezen",
+                "loadMore": "Laad meer notificaties",
+                "noNotifications": "Geen notificaties"
             }
+        },
+        "footer": {
+            "home": "Dashboard",
+            "about": "Help",
+            "privacy": "Cookies",
+            "contact": "Contacteer ons",
+            "rights": "Alle rechten voorbehouden"
         }
     },
     "views": {
@@ -25,7 +37,7 @@
             "projects": "Lopende projecten"
         },
         "verify": {
-            "redirect": "Je wordt zo meteen doorverwezen"
+            "redirect": "Je wordt zo meteen doorverwezen..."
         },
         "login": {
             "title": "Inloggen",
@@ -34,7 +46,7 @@
             "button": "UGent login",
             "card": {
                 "title": "Ypovoli",
-                "subtitle": "Het officieel indieningsplatform van de Universiteit Gent."
+                "subtitle": "Het officiële indieningsplatform van de Universiteit Gent."
             }
         },
         "calendar": {
@@ -43,52 +55,84 @@
         },
         "projects": {
             "all": "Alle projecten",
+            "backToCourse": "Terug naar het vak",
             "coming": "Aankomende deadlines",
             "deadline": "Deadline",
             "days": "Vandaag om {hour} | Morgen om {hour} | Over {count} dagen",
-            "ago": "{count} dagen geleden",
+            "ago": "1 dag geleden | {count} dagen geleden",
+            "chooseGroupMessage": "Kies een groep voor {0}",
+            "groupScore": "Groepsscore",
+            "noGroupScore": "Nog geen score",
+            "noGroupMembers": "Geen groepsleden",
+            "publishScores": "Publiceer scores",
             "groupName": "Groepsnaam",
             "groupPopulation": "Grootte",
+            "alreadyStarted": "Project is al gestart",
             "groupStatus": "Status",
             "start": "Startdatum",
             "submissionStatus": "Indienstatus",
             "group": "Groep",
+            "groups": "Groepen",
             "groupSize": "Individueel | Groepen van {count} personen",
-            "noGroups": "Geen groepen beschikbaar",
+            "noGroups": "Geen groepen beschikbaar.",
             "groupMembers": "Groepsleden",
             "chooseGroup": "Kies een groep",
             "joinGroup": "Kies groep",
             "leaveGroup": "Verlaat groep",
             "create": "Creëer nieuw project",
-            "edit": "Bewerk project",
+            "save": "Project opslaan",
+            "edit": "Project bewerken",
             "name": "Projectnaam",
             "description": "Beschrijving",
-            "start_date": "Start project",
-            "group_size": "Aantal studenten per groep (1 voor individueel project)",
-            "number_of_groups": "Aantal groepen (optioneel, anders #studenten / grootte groep)",
-            "max_score": "Maximale te behalen score",
+            "startDate": "Start project",
+            "numberStudentsGroup": "Aantal studenten per groep (1 voor individueel project)",
+            "numberOfGroups": "Aantal groepen (optioneel, anders #studenten / grootte groep)",
+            "maxScore": "Maximale te behalen score",
             "visibility": "Project zichtbaar maken voor studenten",
             "scoreVisibility": "Maak score, wanneer ingevuld, automatisch zichtbaar voor studenten",
             "submissionStructure": "Structuur van hoe de indiening moet gebeuren",
             "noStudents": "Geen studenten in deze groep",
+            "locked": "Gesloten",
+            "unlocked": "Open",
+            "structureChecks": {
+                "title": "Indieningsstructuur",
+                "placeholder": "Geef deze nieuwe map een naam",
+                "cancelSelection": "Deselecteer {0}",
+                "obligatedExtensions": "Verplichte extensies",
+                "blockedExtensions": "Niet toegelaten extensies",
+                "newFolder": "Nieuwe map",
+                "noChecks": "Je indiening moet niet voldoen aan een specifieke structuur."
+            },
             "extraChecks": {
                 "title": "Automatische checks op een indiening",
+                "empty": "Nog geen extra checks toegevoegd",
                 "add": "Nieuwe check",
                 "name": "Naam",
                 "public": "Publiek",
                 "bashScript": "Bash script",
                 "dockerImage": "Docker image",
+                "deleteDockerImage": "Verwijder docker image",
                 "timeLimit": "Tijdslimiet voor de uitvoering (in seconden)",
                 "memoryLimit": "Geheugenlimiet voor de uitvoering (in MB)",
-                "showLog": "Maak de extra logs van de docker container zichtbaar voor de studenten"
+                "showLog": "Maak de extra logs van de docker container zichtbaar voor de studenten",
+                "showArtifact": "Maak de artefacten zichtbaar voor de studenten"
             }
         },
         "submissions": {
-            "title": "Inzendingen",
+            "title": "Indieningen",
+            "allSubmissions": "Alle indieningen",
             "submit": "Indienen",
             "course": "Vak",
+            "file": "Bestand",
+            "files": "Bestanden",
             "chooseFile": "Kies bestand(en)",
-            "noSubmissions": "Geen indieningen beschikbaar",
+            "noSubmissions": "Geen indieningen beschikbaar.",
+            "noFiles": "Geen bestanden geselecteerd.",
+            "passed": "Alle testen zijn geslaagd.",
+            "failed": "De indiening is mislukt.",
+            "downloadZip": "Download alle bestanden als zip.",
+            "downloadLog": "Log bestand van check {0}",
+            "backToSubmissions": "Terug naar indieningen",
             "hoverText": {
               "allChecksFailed": "Structuur en extra checks gefaald",
               "allChecksPassed": "Alle checks geslaagd",
@@ -100,11 +144,32 @@
               "daysAgo": "dag(en) geleden",
               "weekAgo": "Meer dan een week geleden",
               "monthAgo": "Meer dan een maand geleden"
-            }
+            },
+          "feedback": {
+              "addFeedback": "Feedback toevoegen",
+              "writeFeedback": "Schrijf hier je feedback",
+              "dateAndAuthor": "Geschreven op {0} door {1}",
+              "edit": "Bewerk feedback",
+              "noFeedback": "Geen feedback beschikbaar"
+          },
+          "error":{
+              "blockedExtension": "Er zit een geblokkeerde extensie in je oplossing",
+              "obligatedExtensionNotFound": "Verplichte extensie niet gevonden in je oplossing",
+              "fileDirNotFound": "Bestandsdirectory niet gevonden in je oplossing",
+              "DockerImageError": "Fout in Docker-afbeelding",
+              "timeLimit": "Tijdslimiet overschreden",
+              "memoryLimit": "Geheugenlimiet overschreden",
+              "checkError": "Extra checks in je indiening zijn niet geslaagd.",
+              "runtimeError": "Runtime fout",
+              "unknown": "Onbekende fout",
+              "failedStructureCheck": "Structuurcontrole mislukt"
+          }
+
         },
         "courses": {
             "create": "Creëer vak",
             "edit": "Bewerk vak",
+            "save": "Vak opslaan",
             "clone": "Kloon vak",
             "cloneAssistants": "Kloon assistenten:",
             "cloneTeachers": "Kloon lesgevers:",
@@ -112,24 +177,23 @@
             "description": "Beschrijving",
             "excerpt": "Korte beschrijving",
             "faculty": "Faculteit",
-            "private": "Gesloten vak (studenten kunnen enkel inschrijven via uitnodigingslink)",
+            "private": "Gesloten vak (studenten kunnen enkel inschrijven met een uitnodigingslink)",
             "year": "Academiejaar",
             "enroll": "Inschrijven",
             "leave": "Uitschrijven",
             "noProjects": "Geen projecten beschikbaar voor dit vak",
             "teachersAndAssistants": {
-                "title": "Lesgevers gelinkt aan dit vak",
+                "title": "Lesgevers",
                 "enroll": "Voeg toe als {0}",
                 "leave": "Verwijder uit vak",
                 "edit": "Bewerk gebruikers",
                 "search": {
                     "search": "Zoeken",
                     "faculty": "Faculteit",
-                    "role": "Rol",
-                    "no_role": "Geen",
+                    "noRole": "Geen",
                     "placeholder": "Zoek een gebruiker op naam",
                     "title": "Zoek gebuikers om aan dit vak toe te voegen",
-                    "results": "{0} gebruikers gevonden voor ingestelde filters"
+                    "results": "1 gebruiker gevonden voor ingestelde filters | {count} gebruikers gevonden voor ingestelde filters"
                 }
             },
             "search": {
@@ -138,32 +202,31 @@
                 "year": "Academiejaar",
                 "placeholder": "Zoek een vak op naam",
                 "title": "Zoek een vak",
-                "results": "{0} vakken gevonden voor ingestelde filters"
-            },
-            "searchByLink": {
-                "placeholder": "Zoek een vak gebruik makende van een uitnodigingslink"
+                "results": "1 vak gevonden voor ingestelde filters | {count} vakken gevonden voor ingestelde filters"
             },
             "share": {
                 "title": "Activeer invitatielink",
                 "duration": "Geldigheidsduur van link (in dagen):",
                 "link": "Invitatielink:"
             }
-      }
+        }
     },
     "composables": {
         "helpers": {
             "errors": {
-                "notFound": "Niet Gevonden",
+                "notFound": "Niet gevonden",
                 "notFoundDetail": "Bron niet gevonden.",
                 "unauthorized": "Onbevoegd",
                 "unauthorizedDetail": "Je bent niet bevoegd om deze bron te bereiken.",
-                "server": "Server Fout",
-                "serverDetail": "Er vond een fout plaats op de server.",
-                "network": "Netwerk Fout",
+                "server": "Server fout",
+                "network": "Netwerk fout",
                 "networkDetail": "Kan de server niet bereiken.",
                 "request": "Fout verzoek",
                 "requestDetail": "Een fout vond plaats tijdens het maken van het verzoek."
-            }
+            },
+            "success": {
+                "creation": "Een {0} is correct aangemaakt."
+          }
         }
     },
     "components": {
@@ -173,35 +236,33 @@
             "createProject": "Creëer nieuw project",
             "searchCourse": "Zoek een vak",
             "createCourse": "Maak een vak",
-            "public": "Publiek",
-            "protected": "Besloten",
             "csv": "Download punten als een .csv bestand"
         },
         "card": {
             "open": "Details",
             "newProject": "Nieuw project",
             "noSubmissions": "Dit project heeft geen indieningen",
-            "submissions": "Indiening | Indieningen",
+            "submissions": "Groep heeft al ingediend | Groepen hebben al ingediend",
             "groups": "Groep | Groepen",
-            "structureTestsSucceed": "Geslaagde structuur testen",
-            "extraTestsSucceed": "Geslaagde extra testen",
-            "testsFail": "Gefaalde testen",
+            "structureTestsFail": "Gefaalde structuurtesten",
+            "extraChecksFail": "Gefaalde extra testen",
+            "testsSucceed": "Geslaagde testen",
+            "successfulSubmission": "Geslaagde indieningen",
             "submit": "Indienen"
         },
         "list": {
             "noProjects": {
                 "student": "Geen lopende projecten gevonden voor alle ingeschreven vakken. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
-                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent."
+                "teacher": "Geen lopende projecten gevonden voor de vakken waarvoor je lesgever bent. Maak een nieuw project voor een vak met onderstaande knop."
             },
             "noCourses": {
                 "student": "Geen vakken gevonden. Schrijf in op een openbaar vak met de zoekfunctie, of gebruik een uitnodiginslink van een lesgever.",
                 "teacher": "Geen vakken gevonden. Maak een vak aan met onderstaande knop.",
                 "search": "Geen vakken gevonden voor de gegeven zoekcriteria."
             },
-            "noResults": "Geen resultaten.",
             "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
             "selectCourse": "Selecteer het vak waarvoor je een project wil maken:",
-            "showPastProjects": "Projecten met verstreken deadline"
+            "showPastProjects": "Toon projecten met verstreken deadline"
         }
     },
     "types": {
@@ -209,6 +270,21 @@
             "student": "Student",
             "assistant": "Assistent",
             "teacher": "Professor"
+        },
+        "article": {
+            "admin": "De admin",
+            "assistant": "De assistent",
+            "course": "Het vak",
+            "docker": "De docker image",
+            "extraCheck": "De extra check",
+            "faculty": "De faculteit",
+            "group": "De groep",
+            "project": "Het project",
+            "structureCheck": "The structuurcheck",
+            "student": "De student",
+            "submission": "De indiening",
+            "teacher": "De professor",
+            "user": "De gebruiker"
         }
     },
     "helpers": {
@@ -219,6 +295,8 @@
             "success": "Succes",
             "error": "Fout",
             "unknown": "Er is een onbekende fout opgetreden.",
+            "create": "{type} werd succesvol aangemaakt.",
+            "edit": "{type} werd succesvol bewerkt.",
             "courses": {
                 "enrollment": {
                     "success": "Je bent succesvol ingeschreven voor het vak '{0}'.",
@@ -237,6 +315,22 @@
                         "success": "{0} werd succesvol verwijderd uit het vak.",
                         "error": "Er is een fout opgetreden tijdens het verwijderen van {0} uit het vak."
                     }
+                },
+                "create": {
+                    "success": "Het vak '{0}' werd succesvol aangemaakt.",
+                    "error": "Er is een fout opgetreden tijdens het aanmaken van het vak '{0}'."
+                }
+            },
+            "projects": {
+                "create": {
+                    "success": "Het project '{0}' werd succesvol aangemaakt.",
+                    "error": "Er is een fout opgetreden tijdens het aanmaken van het project '{0}'."
+                }
+            },
+            "submissions": {
+                "create": {
+                    "success": "De indiening is succesvol ingediend.",
+                    "error": "Er is een fout opgetreden tijdens het indienen van de indiening."
                 }
             },
             "login": {
@@ -246,8 +340,8 @@
             "admin": {
                 "save": {
                     "error": {
-                        "title": "Ongeldige opsla operatie",
-                        "detail": "U probeert een item op te slaan zonder dit te selecteren"
+                        "title": "Ongeldige opsla bewerking",
+                        "detail": "U probeert een item op te slaan zonder dit te selecteren."
                     }
                 }
             }
@@ -261,26 +355,11 @@
         "cloneCourse": "Ben je zeker dat je dit vak wil klonen? Dit zal hetzelfde vak aanmaken voor het volgende academiejaar.",
         "joinCourse": "Ben je zeker dat je jezelf wil inschrijven voor dit vak? Dit zal je toegang geven tot alle projecten, opdrachten, ...",
         "leaveCourse": "Ben je zeker dat je dit vak wil verlaten? Je zal geen toegang meer hebben tot dit vak.",
-        "shareCourse": "Door het activeren van de invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Activeer invitatielink\" klikt zal deze link actief worden."
-    },
-    "protectedCourses": {
-        "screen1": {
-            "title": "Bemachtigen link",
-            "content": "Professoren kunnen kiezen om hun vakken niet publiek te maken. Vraag de prof om een invitatielink te delen om te kunnen toetreden tot het vak."
-        },
-        "screen2": {
-            "title": "Vak zoeken",
-            "content": "Gebruik de link om het vak te zoeken. Als je het vak niet kan vinden, kan je de prof vragen om een nieuwe link te delen."
-
-        },
-        "screen3": {
-            "title": "Inschrijven",
-            "content": "Schrijf je in voor het vak. Je kan nu een overzicht raadplegen van alle lopende projecten, deadlines, ..."
-        }
+        "shareCourse": "Door het activeren van de invitatielink staat u studenten in bezit van deze link toe zich in te schrijven voor dit vak. Gelieve de gegenereerde link te kopiëren, pas wanneer u op \"Activeer invitatielink\" klikt zal deze link actief worden.",
+        "deleteDockerImage": "Ben je zeker dat je deze docker image wil verwijderen? Dit zal alle checks die deze image gebruiken ook verwijderen."
     },
     "admin": {
         "title": "Beheerder",
-        "keyword": "Trefwoord",
         "id": "ID",
         "list": "Lijst",
         "add": "Voeg toe",
@@ -299,28 +378,17 @@
             "roles": "Functies"
         },
         "user": "Gebruiker",
-        "assistants": {
-            "title": "Assistenten"
-        },
         "assistant": "Assistent",
-        "students": {
-            "title": "Studenten"
-        },
         "student": "Student",
-        "teachers": {
-            "title": "Proffen"
-        },
         "teacher": "Prof",
-        "catalog": "Catalogus",
-        "docker_images": {
+        "dockerImages": {
             "title": "Docker Images",
-            "name_input": "Naam van docker image",
+            "nameInput": "Naam van docker image",
             "name": "Naam",
             "owner": "Eigenaar ID",
-            "public": "Publiek",
-            "private": "Privaat"
+            "public": "Publiek"
         },
-        "none_found": "Geen overeenkomende data gevonden.",
+        "noneFound": "Geen overeenkomende data gevonden.",
         "loading": "Aan het laden. Wacht even aub.",
         "safeGuard": "Bent u het zeker?"
     },
@@ -370,9 +438,9 @@
           "vrij",
           "zat"
         ],
-        "emptyFilterMessage": "Geen resultaten gevonden",
-        "emptyMessage": "Geen resultaten gevonden",
-        "emptySearchMessage": "Geen resultaten gevonden",
+        "emptyFilterMessage": "Geen resultaten gevonden \uD83D\uDE2D",
+        "emptyMessage": "Geen resultaten gevonden \uD83D\uDE2D",
+        "emptySearchMessage": "Geen resultaten gevonden \uD83D\uDE2D",
         "emptySelectionMessage": "Geen optie geselecteerd",
         "emptyFileSelect": "Geen bestand geselecteerd",
         "endsWith": "Eindigt met",

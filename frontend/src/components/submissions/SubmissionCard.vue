@@ -1,0 +1,66 @@
+<script setup lang="ts">
+import Button from 'primevue/button';
+import { PrimeIcons } from 'primevue/api';
+import { useI18n } from 'vue-i18n';
+import { type Group } from '@/types/Group.ts';
+import { type Submission } from '@/types/submission/Submission.ts';
+
+/* Composable injections */
+const { t } = useI18n();
+
+/* Component props */
+const props = defineProps<{
+    group: Group;
+    submissions: Submission[];
+}>();
+
+/**
+ * Returns the icon name, color and hover text for the submission
+ * @param submission
+ */
+const parseSubmissionStatus = (submission: Submission): string => {
+    if (!submission.isSomePassed()) {
+        return t('views.submissions.hoverText.allChecksFailed');
+    } else if (!submission.isExtraCheckPassed()) {
+        return t('views.submissions.hoverText.extraChecksFailed');
+    } else if (!submission.isStructureCheckPassed()) {
+        return t('views.submissions.hoverText.structureChecksFailed');
+    } else {
+        return t('views.submissions.hoverText.allChecksPassed');
+    }
+};
+</script>
+
+<template>
+    <div class="border-round surface-300 p-4 border-1 border-300">
+        <h2 class="mt-0">
+            {{ t('views.projects.submissionStatus') }}
+        </h2>
+        <div class="my-4">
+            <div class="mb-3">
+                <i :class="['pi', PrimeIcons.CALENDAR_PLUS, 'icon-color']" class="mr-2"></i>
+                {{ t('views.projects.deadline') }}: {{ group.project.getFormattedDeadline() }}<br />
+            </div>
+            <div>
+                <i :class="['pi', PrimeIcons.INFO_CIRCLE, 'icon-color']" class="mr-2"></i>
+                {{ t('views.projects.submissionStatus') }}:
+                <template v-if="submissions.length > 0">
+                    {{ parseSubmissionStatus(submissions.at(-1)!) }}
+                </template>
+                <template v-else>
+                    {{ t('views.submissions.noSubmissions') }}
+                </template>
+            </div>
+        </div>
+        <RouterLink
+            :to="{
+                name: 'submissions',
+                params: { groupId: props.group.id },
+            }"
+        >
+            <Button :icon="PrimeIcons.ARROW_RIGHT" :label="t('components.submission')" icon-pos="right" outlined />
+        </RouterLink>
+    </div>
+</template>
+
+<style scoped lang="scss"></style>

@@ -62,6 +62,7 @@ export const endpoints = {
         retrieve: '/api/groups/{id}/',
         byProject: '/api/projects/{projectId}/groups/',
         byStudent: '/api/students/{studentId}/groups/',
+        byProjectStudent: '/api/projects/{projectId}/student-group/',
     },
     projects: {
         retrieve: '/api/projects/{id}/',
@@ -77,11 +78,18 @@ export const endpoints = {
         status: '/api/projects/{projectId}/submission_status/',
     },
     structureChecks: {
-        retrieve: '/api/structureChecks/{id}',
-        byProject: '/api/projects/{projectId}/structureChecks/',
+        retrieve: '/api/structure-checks/{id}',
+        byProject: '/api/projects/{projectId}/structure_checks/',
+    },
+    feedbacks: {
+        retrieve: '/api/feedback/{id}/',
+        bySubmission: '/api/submissions/{submissionId}/feedback/',
     },
     extraChecks: {
         retrieve: '/api/extra-checks/{id}/',
         byProject: '/api/projects/{projectId}/extra_checks/',
+    },
+    notifications: {
+        byUser: '/api/users/{userId}/notifications/',
     },
 };

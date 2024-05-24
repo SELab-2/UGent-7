@@ -63,7 +63,7 @@ const parseSubmissionStatus = (submission: Submission): string => {
             </div>
             <RouterLink
                 :to="{
-                    name: 'submission',
+                    name: 'submissions',
                     params: { groupId: props.group.id },
                 }"
             >

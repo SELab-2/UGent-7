@@ -11,7 +11,6 @@ body {
     overflow-x: hidden;
     overflow-y: scroll;
     line-height: 1.6rem;
-    min-height: 100vh;
 
     h1, h2, h3, h4, h5, h6 {
         color: $primaryColor;
@@ -27,9 +26,16 @@ body {
 
     a {
         text-decoration: none;
+        color: inherit;
     }
 
     .p-toast{
         max-width: calc(100vw - 40px);
+    }
+
+    .field {
+        .p-component:not(.p-inputswitch, .p-button) {
+            width: 100%;
+        }
     }
 }

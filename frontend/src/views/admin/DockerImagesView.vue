@@ -9,12 +9,13 @@ import InputIcon from 'primevue/inputicon';
 import Column from 'primevue/column';
 import IconField from 'primevue/iconfield';
 import { useConfirm } from 'primevue/useconfirm';
-import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
-import Title from '@/components/layout/Title.vue';
-import Body from '@/components/layout/Body.vue';
+import AdminLayout from '@/views/layout/admin/AdminLayout.vue';
+import Title from '@/views/layout/Title.vue';
+import Body from '@/views/layout/Body.vue';
 import LazyDataTable from '@/components/admin/LazyDataTable.vue';
 import { useDockerImages } from '@/composables/services/docker.service.ts';
 import { useFilter } from '@/composables/filters/filter.ts';
+import { useMessagesStore } from '@/store/messages.store.ts';
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -35,6 +36,7 @@ const {
     deleteDockerImages,
 } = useDockerImages();
 const { filter, onFilter } = useFilter(getDockerImageFilters(query));
+const { addSuccessMessage } = useMessagesStore();
 const confirm = useConfirm();
 
 /* State */
@@ -53,8 +55,8 @@ const selectedItems = ref<DockerImage[] | null>(null);
 
 const columns = ref([
     { field: 'id', header: 'admin.id' },
-    { field: 'name', header: 'admin.docker_images.name' },
-    { field: 'owner', header: 'admin.docker_images.owner' },
+    { field: 'name', header: 'admin.dockerImages.name' },
+    { field: 'owner', header: 'admin.dockerImages.owner' },
 ]);
 const safetyGuardFunction = ref<() => Promise<void>>(async () => {});
 
@@ -93,7 +95,12 @@ const toggleSafetyGuardEdit = (data: DockerImage): void => {
  * Changes the public status in the backend of the docker image whose attributes are in editItem's value attribute
  */
 const changePublicStatus = async (): Promise<void> => {
-    await patchDockerImage(editItem.value);
+    try {
+        await patchDockerImage(editItem.value);
+        addSuccessMessage(t('toasts.messages.success'), t('toasts.messages.edit', { type: t('types.article.docker') }));
+    } catch (e) {
+        // TODO error message (when editing public status of docker image)
+    }
 };
 /**
  * Show safety guard for removing a docker image from the backend and set up values for when confirmed
@@ -135,10 +142,18 @@ const removeItems = async (): Promise<void> => {
  * @param event Event containing docker image file in files attributes
  */
 const upload = async (event: FileUploadUploaderEvent): Promise<void> => {
-    const files: File[] = event.files as File[];
-    await createDockerImage(addItem.value, files[0]);
-    addItem.value.name = '';
-    selectedOption.value = selectOptions.value[0];
+    try {
+        const files: File[] = event.files as File[];
+        await createDockerImage(addItem.value, files[0]);
+        addSuccessMessage(
+            t('toasts.messages.success'),
+            t('toasts.messages.create', { type: t('types.article.docker') }),
+        );
+        addItem.value.name = '';
+        selectedOption.value = selectOptions.value[0];
+    } catch (e) {
+        // TODO error message
+    }
 };
 
 /**
@@ -154,7 +169,7 @@ const onSelect = (selected: any[] | null): void => {
 <template>
     <AdminLayout>
         <Title>
-            <div class="gap-3 mb-3">{{ t('admin.docker_images.title') }}</div>
+            <div class="gap-3 mb-3">{{ t('admin.dockerImages.title') }}</div>
         </Title>
         <Body class="w-full">
             <SelectButton
@@ -209,7 +224,7 @@ const onSelect = (selected: any[] | null): void => {
                     <Column
                         key="public"
                         field="public"
-                        :header="t('admin.docker_images.public')"
+                        :header="t('admin.dockerImages.public')"
                         :header-style="{ width: '10%' }"
                         class="p-col"
                     >
@@ -234,10 +249,10 @@ const onSelect = (selected: any[] | null): void => {
                 <InputText
                     class="mb-3 gap-3"
                     v-model:model-value="addItem.name"
-                    :placeholder="t('admin.docker_images.name_input')"
+                    :placeholder="t('admin.dockerImages.nameInput')"
                 />
                 <div class="flex align-items-center mb-3 gap-3">
-                    <label class="font-semibold w-12rem">{{ t('admin.docker_images.public') }}</label>
+                    <label class="font-semibold w-12rem">{{ t('admin.dockerImages.public') }}</label>
                     <InputSwitch v-model="addItem.public" />
                 </div>
                 <FileUpload

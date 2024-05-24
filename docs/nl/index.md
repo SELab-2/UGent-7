@@ -4,8 +4,7 @@ layout: home
 
 hero:
   name: "Ypovoli"
-  text: "TODO"
-  tagline: TODO
+  text: Help page
   actions:
     - theme: brand
       text: Student
@@ -19,13 +18,5 @@ hero:
     - theme: brand
       text: Admin
       link: /nl/admin-examples
-
-features:
-  - title: Feature A
-    details: lorem nederlands
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
 

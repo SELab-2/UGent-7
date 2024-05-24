@@ -1,129 +1,227 @@
 <script setup lang="ts">
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
-import Title from '@/components/layout/Title.vue';
+import Title from '@/views/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
+import Textarea from 'primevue/textarea';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/store/authentication.store.ts';
 import Button from 'primevue/button';
 import { useI18n } from 'vue-i18n';
-import { onMounted, ref } from 'vue';
-import { useProject } from '@/composables/services/project.service.ts';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useCourses } from '@/composables/services/course.service.ts';
-import FileUpload from 'primevue/fileupload';
+import { useFeedback } from '@/composables/services/feedback.service.ts';
+import { type Feedback } from '@/types/Feedback.ts';
+import moment from 'moment/moment';
 import { PrimeIcons } from 'primevue/api';
-import AllSubmission from '@/components/submissions/AllSubmission.vue';
-import { useGroup } from '@/composables/services/group.service.ts';
 import { useSubmission } from '@/composables/services/submission.service.ts';
+import DownloadCard from '@/components/submissions/DownloadCard.vue';
+import { watchImmediate } from '@vueuse/core';
+import Loading from '@/components/Loading.vue';
 
-const { t } = useI18n();
+/* Composable injections */
 const route = useRoute();
-const { project, getProjectByID } = useProject();
-const { course, getCourseByID } = useCourses();
-const { group, getGroupByID } = useGroup();
-const { submission, submissions, createSubmission, getSubmissionByGroup } = useSubmission();
+const { t } = useI18n();
+const { user } = storeToRefs(useAuthStore());
+const { submission, getSubmissionByID } = useSubmission();
+const { feedbacks, getFeedbackBySubmission, createFeedback, updateFeedback } = useFeedback();
 
-/* State */
-const files = ref<File[]>([]);
+/* Feedback content */
+const feedbackTextValue = ref<string>('');
+const editedFeedback = ref<Feedback | null>(null);
 
-onMounted(async () => {
-    await getProjectByID(route.params.projectId as string);
-    await getCourseByID(route.params.courseId as string);
-    await getGroupByID(route.params.groupId as string);
-    await getSubmissionByGroup(route.params.groupId as string);
+function editFeedback(feedback: Feedback): void {
+    feedbackTextValue.value = feedback.message;
+    editedFeedback.value = feedback;
+}
+
+/**
+ * Submit feedback depending on if the feedback is being edited or created
+ */
+async function submitFeedback(): Promise<void> {
+    try {
+        if (editedFeedback.value === null) {
+            await createFeedback(feedbackTextValue.value, route.params.submissionId as string);
+            feedbackTextValue.value = '';
+        } else {
+            await updateFeedback(feedbackTextValue.value, editedFeedback.value.id);
+            feedbackTextValue.value = '';
+            editedFeedback.value = null;
+        }
+        await getFeedbackBySubmission(route.params.submissionId as string);
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+/* Computed Properties */
+const structureAndExtraFaults = computed(() => {
+    if (submission.value == null) return [];
+
+    const structureFaults = submission.value.structureCheckFaults();
+    const extraFaults = submission.value.isStructureCheckPassed() ? submission.value.extraCheckFaults() : [];
+
+    // Filter out empty faults
+    return [...structureFaults, ...extraFaults].filter((fault) => fault);
 });
 
-const onUpload = async (callback: () => void): Promise<void> => {
-    if (group.value !== null) {
-        await createSubmission(files.value as File[], group.value.id);
-        if (submission.value != null) {
-            submissions.value = [...(submissions.value ?? []), submission.value];
-        }
-        files.value = [];
-        callback();
+const artifacts = computed<string[] | null>(() => {
+    if (submission.value != null) {
+        return submission.value.extraCheckResults
+            .filter((extraCheck) => extraCheck.artifact)
+            .map((extraCheck) => extraCheck.artifact);
     }
-};
 
-const onFileSelect = (event: any): void => {
-    files.value = [...files.value, ...event.files];
-};
+    return null;
+});
 
-const removeFile = (removeFileCallback: (index: number) => void, index: number): void => {
-    removeFileCallback(index);
-    files.value.splice(index, 1);
-};
+const logs = computed<string[] | null>(() => {
+    if (submission.value != null) {
+        return submission.value.extraCheckResults
+            .filter((extraCheck) => extraCheck.log_file)
+            .map((extraCheck) => extraCheck.log_file);
+    }
 
-function formatDate(deadline: Date): string {
-    // changes deadline format to dd/mm.yyyy
-    return `${deadline.getDate()}/${deadline.getMonth() + 1}/${deadline.getFullYear()}`;
-}
+    return null;
+});
+
+/* Watchers */
+// A watch to update the feedbacks when a new feedback is added
+watch(
+    feedbacks,
+    (newFeedbacks) => {
+        feedbacks.value = newFeedbacks;
+    },
+    { deep: true, immediate: true },
+);
+
+// A watch on submissionId url parameter to get the feedbacks
+watchImmediate(
+    () => route.params.submissionId,
+    (submissionId) => {
+        getSubmissionByID(submissionId.toString());
+        getFeedbackBySubmission(submissionId.toString());
+    },
+);
 </script>
 
 <template>
     <BaseLayout>
-        <div class="grid">
-            <div class="col-8 md:col-6">
-                <div class="flex-column">
-                    <Title> {{ t(`views.submissions.title`) }}: {{ project ? project.name : 'Loading' }} </Title>
-                    <p v-if="course">{{ t(`views.submissions.course`) }}: {{ course.name }}</p>
-                    <p v-if="project?.deadline">Deadline: {{ project ? formatDate(project.deadline) : 'Loading' }}</p>
-                    <div class="py-2">
-                        <h1 class="pb-2">
-                            {{ t(`views.submissions.submit`) }}
-                        </h1>
-                        <FileUpload
-                            class="justify-between"
-                            :show-cancel-button="false"
-                            :multiple="true"
-                            :chooseLabel="t(`views.submissions.chooseFile`)"
-                            @select="onFileSelect"
-                        >
-                            <template #header="{ chooseCallback, clearCallback, files }">
-                                <div class="flex justify-content-between align-items-center flex-1 gap-2">
-                                    <Button
-                                        @click="chooseCallback()"
-                                        :icon="PrimeIcons.PLUS"
-                                        :label="t(`views.submissions.chooseFile`)"
-                                    ></Button>
-                                    <Button
-                                        @click="onUpload(clearCallback)"
-                                        :label="`Upload`"
-                                        :icon="PrimeIcons.UPLOAD"
-                                        :disabled="!files || files.length === 0"
-                                    ></Button>
-                                </div>
-                            </template>
-                            <template #content="{ files, removeFileCallback }">
-                                <div v-if="files.length > 0" class="flex-column">
-                                    <div
-                                        v-for="(file, index) of files"
-                                        :key="file.name + file.type + file.size"
-                                        class="m-0 p-0 flex sm:p-2 justify-content-between align-items-center"
-                                    >
-                                        <span class="font-semibold">{{ file.name }}</span>
+        <RouterLink :to="{ name: 'submissions' }">
+            <Button
+                class="mb-4 p-0 text-sm text-black-alpha-70"
+                :icon="PrimeIcons.ARROW_LEFT"
+                :label="t('views.submissions.backToSubmissions')"
+                link
+            />
+        </RouterLink>
+        <template v-if="submission !== null">
+            <div class="fadein grid">
+                <!-- Submission properties -->
+                <div class="col-6 md:col-4">
+                    <!-- Submission status -->
+                    <div class="mb-5">
+                        <Title class="flex">Status</Title>
+                        <div class="mt-4">
+                            <p v-if="submission.isPassed()">{{ t('views.submissions.passed') }}</p>
+                            <div v-else>
+                                <span>{{ t('views.submissions.failed') }}</span>
+                                <ul>
+                                    <li v-for="fault in structureAndExtraFaults" :key="fault">
+                                        {{ t(fault) }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Submission Downloadable zip -->
+                    <template v-if="logs !== null && artifacts !== null">
+                        <Title v-if="logs.length > 0 || artifacts.length > 0" class="flex">{{
+                            t('views.submissions.file')
+                        }}</Title>
+                        <Title v-else class="flex"> {{ t('views.submissions.files') }} </Title>
+                        <div class="flex flex-column gap-3">
+                            <DownloadCard :title="t('views.submissions.downloadZip')" :href="submission.zip" />
+                            <DownloadCard
+                                :title="t('views.submissions.downloadLog', [index + 1])"
+                                :href="log"
+                                :key="index"
+                                v-for="[index, log] in logs"
+                            />
+                            <DownloadCard
+                                :title="t('views.submissions.downloadArtifact', [index + 1])"
+                                :href="artifact"
+                                :key="index"
+                                v-for="[index, artifact] in artifacts"
+                            />
+                        </div>
+                    </template>
+                    <template v-else>
+                        <Loading />
+                    </template>
+                </div>
+                <!-- Feedback section -->
+                <div class="col-12 md:col-7">
+                    <!-- Written Feedback overview -->
+                    <div class="feedback-section mb-3">
+                        <Title class="flex mb-3">Feedback</Title>
+                        <!-- Single Feedback component -->
+                        <template v-if="feedbacks !== null">
+                            <template v-if="feedbacks.length > 0">
+                                <div v-for="feedback in feedbacks" :key="feedback.id">
+                                    <div class="flex justify-content-between">
+                                        <!-- Single feedback header -->
+                                        <p class="mt-1">
+                                            {{
+                                                t('views.submissions.feedback.dateAndAuthor', [
+                                                    moment(feedback.creation_date).format('DD MMMM YYYY'),
+                                                    feedback.author.getFullName(),
+                                                ])
+                                            }}
+                                        </p>
+                                        <!-- Edit feedback button -->
                                         <Button
-                                            class="w-2rem h-2rem"
-                                            icon="pi pi-times"
-                                            @click="removeFile(removeFileCallback, index)"
-                                            outlined
-                                            rounded
-                                            severity="danger"
+                                            v-tooltip.top="t('views.submissions.feedback.edit')"
+                                            v-if="user?.isTeacher() && feedback.author.id === user?.id"
+                                            :icon="PrimeIcons.PENCIL"
+                                            icon-pos="right"
+                                            style="height: 35px; width: 35px"
+                                            @click="editFeedback(feedback)"
                                         />
                                     </div>
+                                    <p class="mb-5 surface-100 p-3">
+                                        {{ feedback.message }}
+                                    </p>
                                 </div>
                             </template>
-                        </FileUpload>
+                            <template v-else>{{ t('views.submissions.feedback.noFeedback') }}</template>
+                        </template>
+                        <template v-else>
+                            <Loading />
+                        </template>
+                    </div>
+                    <!-- Write feedback -->
+                    <div v-if="user?.isTeacher()">
+                        <form @submit.prevent="submitFeedback">
+                            <Textarea
+                                id="feedback"
+                                v-model="feedbackTextValue"
+                                class="w-full h-10rem"
+                                :placeholder="t('views.submissions.feedback.writeFeedback')"
+                            />
+                            <Button
+                                class="mt-2"
+                                :label="t('views.submissions.feedback.addFeedback')"
+                                type="submit"
+                                iconPos="right"
+                            />
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="col-5 col-offset-1">
-                <AllSubmission v-if="group && submissions" :group="group" :submissions="submissions"></AllSubmission>
-            </div>
-        </div>
+        </template>
+        <template v-else>
+            <Loading height="60vh" />
+        </template>
     </BaseLayout>
 </template>
 
-<style scoped lang="scss">
-@import '@/assets/scss/theme/theme.scss';
-
-h1 {
-    color: $primaryDarkColor;
-}
-</style>
+<style scoped lang="scss"></style>

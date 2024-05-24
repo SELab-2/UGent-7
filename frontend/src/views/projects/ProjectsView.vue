@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ProjectList from '@/components/projects/ProjectList.vue';
-import BaseLayout from '@/components/layout/base/BaseLayout.vue';
-import Title from '@/components/layout/Title.vue';
+import BaseLayout from '@/views/layout/base/BaseLayout.vue';
+import Title from '@/views/layout/Title.vue';
 import { watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/authentication.store.ts';
@@ -39,7 +39,7 @@ watch(
 <template>
     <BaseLayout>
         <!-- Project list title -->
-        <Title class="mb-6">{{ t('views.dashboard.projects') }}</Title>
+        <Title class="mb-5">{{ t('views.dashboard.projects') }}</Title>
         <ProjectList :projects="projects" />
     </BaseLayout>
 </template>

@@ -24,8 +24,8 @@ const { t } = useI18n();
             },
         }"
     >
-        <div class="p-5 surface-300 border-round">
-            <div class="flex align-items-center gap-5">
+        <div class="px-3 py-4 md:p-5 surface-300 border-round">
+            <div class="flex align-items-center gap-3 md:gap-5">
                 <i class="pi pi-clock text-6xl text-primary" />
                 <div class="w-full">
                     <h3 class="m-0">{{ project.name }}</h3>

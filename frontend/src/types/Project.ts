@@ -1,31 +1,53 @@
 import moment from 'moment';
-import { Course } from './Course.ts';
+import { type TreeNode } from 'primevue/treenode';
+import { PrimeIcons } from 'primevue/api';
+import { Course, type CourseJSON } from './Course.ts';
 import { type ExtraCheck } from './ExtraCheck.ts';
 import { type Group } from './Group.ts';
 import { type StructureCheck } from './StructureCheck.ts';
 import { type Submission } from './submission/Submission.ts';
-import { SubmissionStatus } from '@/types/SubmisionStatus.ts';
+import { SubmissionStatus, type SubmissionStatusJSON } from '@/types/SubmisionStatus.ts';
+import { type HyperlinkedRelation } from '@/types/ApiResponse.ts';
+
+export interface ProjectJSON {
+    id: string;
+    name: string;
+    description: string;
+    visible: boolean;
+    archived: boolean;
+    locked_groups: boolean;
+    start_date: string;
+    deadline: string;
+    max_score: number;
+    score_visible: boolean;
+    group_size: number;
+    course: CourseJSON;
+    status: SubmissionStatusJSON;
+    structure_checks: HyperlinkedRelation;
+    extra_checks: HyperlinkedRelation;
+    groups: HyperlinkedRelation;
+    submissions: HyperlinkedRelation;
+}
 
 export class Project {
     constructor(
-        public id: string,
-        public name: string,
-        public description: string,
-        public visible: boolean,
-        public archived: boolean,
-        public locked_groups: boolean,
-        public start_date: Date,
-        public deadline: Date,
-        public max_score: number,
-        public score_visible: boolean,
-        public group_size: number,
-        public course: Course,
-        public status: SubmissionStatus,
-        public structure_file: File | null = null,
-        public structureChecks: StructureCheck[] | null = null,
-        public extra_checks: ExtraCheck[] | null = null,
-        public groups: Group[] | null = null,
-        public submissions: Submission[] | null = null,
+        public id: string = '',
+        public name: string = '',
+        public description: string = '',
+        public visible: boolean = true,
+        public archived: boolean = false,
+        public locked_groups: boolean = false,
+        public start_date: Date = new Date(),
+        public deadline: Date = new Date(),
+        public max_score: number = 10,
+        public score_visible: boolean = true,
+        public group_size: number = 1,
+        public course: Course = new Course(),
+        public status: SubmissionStatus = new SubmissionStatus(),
+        public structure_checks: StructureCheck[] = [],
+        public extra_checks: ExtraCheck[] = [],
+        public groups: Group[] = [],
+        public submissions: Submission[] = [],
     ) {}
 
     /**
@@ -63,7 +85,7 @@ export class Project {
      * @returns The days left until the deadline of the project.
      */
     public getDaysLeft(): number {
-        return moment(this.deadline).diff(moment(), 'days');
+        return moment(this.deadline).startOf('day').diff(moment().startOf('day'), 'days');
     }
 
     /**
@@ -82,9 +104,7 @@ export class Project {
      * @returns The number of the group.
      */
     public getGroupNumber(group: Group): number {
-        const groups = this.groups ?? [];
-
-        return groups.sort((a, b) => parseInt(a.id) - parseInt(b.id)).findIndex((g) => g.id === group.id) + 1;
+        return this.groups.sort((a, b) => parseInt(a.id) - parseInt(b.id)).findIndex((g) => g.id === group.id) + 1;
     }
 
     /**
@@ -94,11 +114,77 @@ export class Project {
      */
     public isLocked(): boolean {
         return (
-            !this.visible ||
-            this.archived ||
-            this.locked_groups ||
-            moment(this.start_date).isBefore(moment().startOf('day'))
+            !this.visible || this.archived || this.locked_groups
+            // moment(this.start_date).isBefore(moment().startOf('day'))
         );
+    }
+
+    /**
+     * Given a list of structureChecks (directory path), return a list of TreeNodes representing the tree hierarchy
+     * of the structure checks.
+     *
+     * @param structureChecks
+     */
+    public static getNodes(structureChecks: StructureCheck[] | undefined): TreeNode[] {
+        const nodes: TreeNode[] = [];
+
+        if (structureChecks !== undefined) {
+            for (const [i, check] of structureChecks.entries()) {
+                const hierarchy = check.getDirectoryHierarchy();
+                let currentNodes = nodes;
+
+                for (const [j, part] of hierarchy.entries()) {
+                    let node = currentNodes.find((node) => node.label === part);
+
+                    if (node === undefined) {
+                        node = Project.newTreeNode(check, `${i}${j}`, part, j === hierarchy.length - 1);
+                        currentNodes.push(node);
+                    }
+
+                    currentNodes = node.children ?? [];
+                }
+            }
+        }
+
+        return nodes;
+    }
+
+    /**
+     * Construct a tree node from a structure check folder path.
+     *
+     * @param check
+     * @param key
+     * @param label
+     * @param leaf
+     */
+    private static newTreeNode(check: StructureCheck, key: string, label: string, leaf: boolean = false): TreeNode {
+        const node: TreeNode = {
+            key,
+            label,
+            data: check,
+            icon: PrimeIcons.FOLDER,
+            check: leaf,
+            children: [],
+        };
+
+        if (leaf) {
+            node.children = [
+                {
+                    key: key + '-obligated',
+                    icon: PrimeIcons.CHECK_CIRCLE,
+                    data: check,
+                    obligated: true,
+                },
+                {
+                    key: key + '-blocked',
+                    icon: PrimeIcons.TIMES_CIRCLE,
+                    data: check,
+                    blocked: true,
+                },
+            ];
+        }
+
+        return node;
     }
 
     /**
@@ -106,7 +192,7 @@ export class Project {
      *
      * @param project
      */
-    static fromJSON(project: Project): Project {
+    static fromJSON(project: ProjectJSON): Project {
         return new Project(
             project.id,
             project.name,

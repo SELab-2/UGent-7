@@ -1,116 +1,60 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { Submission } from '@/types/submission/Submission.ts';
-import { ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
-import { StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
+import { type Submission } from '@/types/submission/Submission.ts';
 import { useI18n } from 'vue-i18n';
+import router from '@/router/router.ts';
+import { useRoute } from 'vue-router';
+import { PrimeIcons } from 'primevue/api';
+import { type Group } from '@/types/Group.ts';
+import { computed } from 'vue';
 
+const { params } = useRoute();
 const { t } = useI18n();
-const tempSubmissions = ref<Submission[]>([]);
-
-const testSubmissions = ref<Submission[]>([
-    new Submission(
-        '4',
-        4,
-        new Date(),
-        [],
-        [new ExtraCheckResult('3', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '3',
-        3,
-        new Date(2024, 3, 14),
-        [],
-        [new ExtraCheckResult('3', 'FAILURE', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('3', 'SUCCESS', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '2',
-        2,
-        new Date(2024, 3, 1),
-        [],
-        [new ExtraCheckResult('2', 'SUCCESS', null, null, 2, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('2', 'FAILURE', null, 2, 1, 'StructureCheckResult')],
-        true,
-    ),
-    new Submission(
-        '1',
-        1,
-        new Date(2024, 2, 12),
-        [],
-        [new ExtraCheckResult('1', 'FAILURE', null, null, 1, 1, 'ExtraCheckResult')],
-        [new StructureCheckResult('1', 'FAILURE', null, 1, 1, 'StructureCheckResult')],
-        true,
-    ),
-]);
 
 const props = defineProps<{
     submissions: Submission[];
+    group: Group | null;
 }>();
 
-onMounted(async () => {
-    tempSubmissions.value = [...(props.submissions ?? []), ...testSubmissions.value].reverse();
-});
-
-watch(
-    () => props.submissions,
-    (newSubmissions) => {
-        tempSubmissions.value = [...newSubmissions, ...testSubmissions.value].reverse();
-    },
-    {
-        immediate: true, // Zal ook uitvoeren onMounted, dus je kan de logica uit onMounted verwijderen als je dit gebruikt
-    },
-);
+/* The sorted submissions */
+const sortedSubmissions = computed(() => [...props.submissions].sort((a, b) => parseInt(b.id) - parseInt(a.id)));
 
 /**
- * Returns the extra information for the submission
- */
-const submissionsExtra = computed(() => {
-    return tempSubmissions.value.map((submission) => {
-        const iconDetails = getExtraSubmissionInformation(submission);
-        return {
-            ...submission,
-            iconName: iconDetails.iconName,
-            color: iconDetails.color,
-            hoverText: iconDetails.hoverText,
-        };
-    });
-});
-
-/**
- * Returns the icon name, color and hover text for the submission
+ * Returns the description for the submission
  * @param submission
  */
-const getExtraSubmissionInformation = (
-    submission: Submission,
-): { iconName: string; color: string; hoverText: string } => {
-    if (
-        !(
-            submission.extraCheckResults.map((check: ExtraCheckResult) => check.result === 'SUCCESS').every(Boolean) ||
-            submission.structureCheckResults
-                .map((check: StructureCheckResult) => check.result === 'SUCCESS')
-                .every(Boolean)
-        )
-    ) {
-        return { iconName: 'times', color: 'red', hoverText: t('views.submissions.hoverText.allChecksFailed') };
-    } else if (
-        !submission.extraCheckResults.map((check: ExtraCheckResult) => check.result === 'SUCCESS').every(Boolean)
-    ) {
-        return { iconName: 'cloud', color: 'lightblue', hoverText: t('views.submissions.hoverText.extraChecksFailed') };
-    } else if (
-        !submission.structureCheckResults
-            .map((check: StructureCheckResult) => check.result === 'SUCCESS')
-            .every(Boolean)
-    ) {
-        return { iconName: 'bolt', color: 'yellow', hoverText: t('views.submissions.hoverText.structureChecksFailed') };
-    } else {
-        return { iconName: 'check', color: 'lightgreen', hoverText: t('views.submissions.hoverText.allChecksPassed') };
+function getSubmissionDescription(submission: Submission): string {
+    if (submission.isPassed()) {
+        return t('views.submissions.hoverText.allChecksPassed');
+    } else if (!submission.isStructureCheckPassed()) {
+        return t('views.submissions.hoverText.structureChecksFailed');
+    } else if (!submission.isExtraCheckPassed()) {
+        return t('views.submissions.hoverText.extraChecksFailed');
     }
-};
 
+    return t('views.submissions.hoverText.allChecksFailed');
+}
+
+/**
+ * Returns the icon for the submission.
+ *
+ * @param submission
+ */
+function getSubmissionIcon(submission: Submission): string {
+    if (submission.isPassed()) {
+        return PrimeIcons.CHECK;
+    } else if (!submission.isStructureCheckPassed()) {
+        return PrimeIcons.SITEMAP;
+    } else if (!submission.isExtraCheckPassed()) {
+        return PrimeIcons.BOLT;
+    }
+
+    return PrimeIcons.TIMES;
+}
+
+/**
+ * Returns the time parsed since the submission
+ * @param submissionDate
+ */
 const timeSince = (submissionDate: Date): string => {
     const today = new Date();
     const diffTime = new Date(today.getTime() - submissionDate.getTime());
@@ -126,32 +70,73 @@ const timeSince = (submissionDate: Date): string => {
         return t('views.submissions.timeSince.monthAgo');
     }
 };
+
+/**
+ * Navigates to the submission with the given id
+ * @param submissionId
+ */
+const navigateToSubmission = (submissionId: string): void => {
+    const tmpGroupId = props.group?.id ?? params.groupId;
+    void router.push({
+        name: 'submission',
+        params: { submissionId, groupId: tmpGroupId, projectId: params.projectId, courseId: params.courseId },
+    });
+};
 </script>
 
 <template>
-    <div>
+    <template v-if="sortedSubmissions.length > 0">
         <div
-            v-for="submission in submissionsExtra?.reverse()"
+            v-for="submission in sortedSubmissions"
             :key="submission.id"
-            class="flex submission align-content-center align-items-center"
-            v-tooltip="submission.hoverText"
+            class="px-3 py-2 surface-100 gap-2 mb-3 flex submission justify-content-between align-items-center"
+            @click="navigateToSubmission(submission.id)"
         >
-            <p
-                :class="'font-semibold m-2 p-1 pi pi-' + submission.iconName"
-                :style="{ color: submission.color, fontSize: '1.25rem' }"
-            ></p>
-            <label class="font-semibold m-2 p-1">#{{ submission.submission_number }} </label>
-            <p>{{ timeSince(submission.submission_time) }}</p>
+            <div class="flex align-items-center gap-2">
+                <label class="font-semibold m-2 p-1">#{{ submission.submission_number }}</label>
+                <div
+                    class="status border-circle p-2 w-2rem h-2rem flex align-items-center justify-content-center"
+                    :class="{
+                        ['passed']: submission.isPassed(),
+                        ['failed-extra']: !submission.isExtraCheckPassed(),
+                        ['failed-structure']: !submission.isStructureCheckPassed(),
+                    }"
+                >
+                    <i :class="getSubmissionIcon(submission)" class="text-lg text-xs"></i>
+                </div>
+                <p>{{ timeSince(submission.submission_time) }}</p>
+            </div>
+            <p>{{ getSubmissionDescription(submission) }}</p>
         </div>
-    </div>
+    </template>
+    <template v-else>
+        {{ t('views.submissions.noSubmissions') }}
+    </template>
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/scss/theme/theme.scss';
 .submission {
-    border-bottom: 1.5px solid var(--primary-color);
-}
-.submission:last-child {
-    border-bottom: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--surface-300) !important;
+    }
+
+    .status {
+        &.failed-structure {
+            background-color: indianred;
+            color: white;
+        }
+
+        &.failed-extra:not(.failed-structure) {
+            background-color: var(--secondary-color);
+        }
+
+        &.passed {
+            background-color: var(--primary-color);
+            color: var(--primary-color-text);
+        }
+    }
 }
 </style>

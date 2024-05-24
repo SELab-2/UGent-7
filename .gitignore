@@ -8,6 +8,8 @@ data/nginx/ssl/*
 data/postres*
 data/redis/*
 
+docs/.vitepress/cache/*
+
 backend/data/production/*
 backend/staticfiles/*
 
@@ -20,6 +22,3 @@ frontend/cypress/videos/*
 !data/nginx/nginx.dev.conf
 !data/nginx/nginx.test.conf
 !data/nginx/nginx.prod.conf
-
-docs/.vitepress/dist
-docs/.vitepress/cache

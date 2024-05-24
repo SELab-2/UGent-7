@@ -2,6 +2,7 @@ from api.logic.parse_zip_files import parse_zip
 from api.models.group import Group
 from api.models.project import Project
 from api.models.submission import Submission, ExtraCheckResult, StructureCheckResult, StateEnum
+from api.models.checks import ExtraCheck, StructureCheck
 from api.serializers.course_serializer import CourseSerializer
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
@@ -24,6 +25,7 @@ class SubmissionStatusSerializer(serializers.Serializer):
 
         non_empty_groups = Group.objects.filter(project=instance, students__isnull=False).distinct().count()
 
+        # groups_submitted
         groups_submitted_ids = Submission.objects.filter(group__project=instance).values_list('group__id', flat=True)
         unique_groups = set(groups_submitted_ids)
         groups_submitted = len(unique_groups)
@@ -33,48 +35,63 @@ class SubmissionStatusSerializer(serializers.Serializer):
         if (groups_submitted > non_empty_groups):
             non_empty_groups = groups_submitted
 
-        passed_structure_checks_submission_ids = StructureCheckResult.objects.filter(
-            submission__group__project=instance,
-            submission__is_valid=True,
-            result=StateEnum.SUCCESS
-        ).values_list('submission__id', flat=True)
+        # has_structure_checks
+        has_structure_checks = instance.structure_checks.count() != 0
 
-        passed_structure_checks_group_ids = Submission.objects.filter(
-            id__in=passed_structure_checks_submission_ids
-        ).values_list('group_id', flat=True)
+        # has_extra checks
+        has_extra_checks = instance.extra_checks.count() != 0
 
-        unique_groups = set(passed_structure_checks_group_ids)
-        structure_checks_passed = len(unique_groups)
+        # extra_checks_passed: only calculate if the project actually contains extra checks
+        extra_checks_passed = 0
+        if has_extra_checks:
+            passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(
+                submission__group__project=instance,
+                submission__is_valid=True,
+                result=StateEnum.SUCCESS
+            ).values_list('submission__id', flat=True)
 
-        passed_extra_checks_submission_ids = ExtraCheckResult.objects.filter(
-            submission__group__project=instance,
-            submission__is_valid=True,
-            result=StateEnum.SUCCESS
-        ).values_list('submission__id', flat=True)
+            passed_extra_checks_group_ids = Submission.objects.filter(
+                id__in=passed_extra_checks_submission_ids
+            ).values_list('group_id', flat=True)
 
-        passed_extra_checks_group_ids = Submission.objects.filter(
-            id__in=passed_extra_checks_submission_ids
-        ).values_list('group_id', flat=True)
+            unique_groups = set(passed_extra_checks_group_ids)
+            extra_checks_passed = len(unique_groups)
 
-        unique_groups = set(passed_extra_checks_group_ids)
-        extra_checks_passed = len(unique_groups)
+        # structure_checks_passed: only calculate if the project actually contains structure checks
+        structure_checks_passed = 0
+        if has_structure_checks:
+            passed_structure_checks_submission_ids = StructureCheckResult.objects.filter(
+                submission__group__project=instance,
+                submission__is_valid=True,
+                result=StateEnum.SUCCESS
+            ).values_list('submission__id', flat=True)
 
-        # The total number of passed extra checks combined with the number of passed structure checks
-        # can never exceed the total number of submissions (the seeder does not account for this restriction)
-        if (structure_checks_passed + extra_checks_passed > groups_submitted):
-            extra_checks_passed = groups_submitted - structure_checks_passed
+            passed_structure_checks_group_ids = Submission.objects.filter(
+                id__in=passed_structure_checks_submission_ids
+            ).values_list('group_id', flat=True)
+
+            unique_groups = set(passed_structure_checks_group_ids)
+            structure_checks_passed = len(unique_groups)
+
+        # We can assume that if the extra checks pass, the struture checks pass as well
+        if (structure_checks_passed < extra_checks_passed):
+            structure_checks_passed = extra_checks_passed
 
         return {
             "non_empty_groups": non_empty_groups,
             "groups_submitted": groups_submitted,
+            "has_structure_checks": has_structure_checks,
+            "has_extra_checks": has_extra_checks,
             "structure_checks_passed": structure_checks_passed,
-            "extra_checks_passed": extra_checks_passed
+            "extra_checks_passed": extra_checks_passed,
         }
 
     class Meta:
         fields = [
             "non_empty_groups",
             "groups_submitted",
+            "has_structure_checks",
+            "has_extra_checks",
             "structure_checks_passed",
             "extra_checks_passed"
         ]

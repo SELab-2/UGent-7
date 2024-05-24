@@ -5,6 +5,7 @@ from api.models.docker import DockerImage
 from api.models.project import Project
 from api.models.student import Student
 from api.models.teacher import Teacher
+from api.serializers.checks_serializer import FileExtensionSerializer
 from api.tests.helpers import (create_admin, create_course,
                                create_file_extension, create_group,
                                create_project, create_structure_check,
@@ -417,22 +418,30 @@ class ProjectModelTests(APITestCase):
             course=course,
         )
 
+        obligated_extensions = FileExtensionSerializer(
+            [file_extension1, file_extension4], many=True
+        )
+
+        blocked_extensions = FileExtensionSerializer(
+            [file_extension2, file_extension3], many=True
+        )
+
         response = self.client.post(
             reverse("project-structure-checks", args=[str(project.id)]),
-            {
+            json.dumps({
                 "path": ".",
-                "obligated_extensions": [file_extension1.extension, file_extension4.extension],
-                "blocked_extensions": [file_extension2.extension, file_extension3.extension]},
+                "obligated_extensions": obligated_extensions.data,
+                "blocked_extensions": blocked_extensions.data}),
             follow=True,
+            content_type="application/json"
         )
 
         project.refresh_from_db()
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.accepted_media_type, "application/json")  # type: ignore
         # self.assertEqual(json.loads(response.content), {'message': gettext('project.success.structure_check.add')})
 
-        upd: StructureCheck = project.structure_checks.all()[0]
+        upd: StructureCheck = project.structure_checks.first()
         retrieved_obligated_extensions = upd.obligated_extensions.all()
         retrieved_blocked_file_extensions = upd.blocked_extensions.all()
 
@@ -472,7 +481,6 @@ class ProjectModelTests(APITestCase):
             days=7,
             course=course,
         )
-
         create_structure_check(
             path=".",
             project=project,
@@ -480,13 +488,22 @@ class ProjectModelTests(APITestCase):
             blocked_extensions=[file_extension2, file_extension3],
         )
 
+        obligated_extensions = FileExtensionSerializer(
+            [file_extension1, file_extension4], many=True
+        )
+
+        blocked_extensions = FileExtensionSerializer(
+            [file_extension2, file_extension3], many=True
+        )
+
         response = self.client.post(
             reverse("project-structure-checks", args=[str(project.id)]),
-            {
+            json.dumps({
                 "path": ".",
-                "obligated_extensions": [file_extension1.extension, file_extension4.extension],
-                "blocked_extensions": [file_extension2.extension, file_extension3.extension]},
+                "obligated_extensions": obligated_extensions.data,
+                "blocked_extensions": blocked_extensions.data}),
             follow=True,
+            content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -513,14 +530,22 @@ class ProjectModelTests(APITestCase):
             course=course,
         )
 
+        obligated_extensions = FileExtensionSerializer(
+            [file_extension1, file_extension4], many=True
+        )
+
+        blocked_extensions = FileExtensionSerializer(
+            [file_extension1, file_extension2, file_extension3], many=True
+        )
+
         response = self.client.post(
             reverse("project-structure-checks", args=[str(project.id)]),
-            {
+            json.dumps({
                 "path": ".",
-                "obligated_extensions": [file_extension1.extension, file_extension4.extension],
-                "blocked_extensions": [file_extension1.extension, file_extension2.extension,
-                                       file_extension3.extension]},
+                "obligated_extensions": obligated_extensions.data,
+                "blocked_extensions": blocked_extensions.data}),
             follow=True,
+            content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
@@ -802,7 +827,14 @@ class ProjectModelTestsAsTeacher(APITestCase):
         # Only two of the three created groups contain at least one student
         self.assertEqual(
             content_json["status"],
-            {"non_empty_groups": 2, "groups_submitted": 0, "extra_checks_passed": 0, "structure_checks_passed": 0},
+            {
+                "non_empty_groups": 2,
+                "groups_submitted": 0,
+                'has_extra_checks': False,
+                'has_structure_checks': False,
+                "extra_checks_passed": 0,
+                "structure_checks_passed": 0
+            },
         )
 
     def test_submission_status_groups_submitted_and_not_passed_checks(self):
@@ -866,7 +898,14 @@ class ProjectModelTestsAsTeacher(APITestCase):
 
         self.assertEqual(
             content_json["status"],
-            {"non_empty_groups": 3, "groups_submitted": 2, "extra_checks_passed": 0, "structure_checks_passed": 0},
+            {
+                "non_empty_groups": 3,
+                "groups_submitted": 2,
+                'has_extra_checks': False,
+                'has_structure_checks': False,
+                "extra_checks_passed": 0,
+                "structure_checks_passed": 0
+            },
         )
 
     def test_retrieve_list_submissions(self):

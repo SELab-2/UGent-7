@@ -93,9 +93,6 @@ This page describes how to interact with Ypovoli as a student.
   - Scroll to the "My Courses" section.
   - Click on the course of the desired project.
   - Under the "Current Projects" section, you will see all projects for this specific course.
-- Option 4:
-  - Click on "Projects" in the navigation bar.
-  - You will see an overview of all your projects.
 
 ::: info Project card explanation
 ![project card](../assets/en/project-card.png)
@@ -135,4 +132,4 @@ This page describes how to interact with Ypovoli as a student.
 
 ## View Previous Submissions Status
 - Go to the submission page.
-- It says there. !!! TODO !!!
+- It says there.

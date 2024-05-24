@@ -61,6 +61,10 @@ class SubmissionSerializer(serializers.ModelSerializer):
         many=False, read_only=True, view_name="group-detail"
     )
 
+    feedback = serializers.HyperlinkedIdentityField(
+        many=True, read_only=True, view_name="feedback-detail"
+    )
+
     results = CheckResultPolymorphicSerializer(many=True, read_only=True)
 
     class Meta:
@@ -93,6 +97,9 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
         group: Group = self.context["group"]
         project: Project = group.project
+
+        if not project.has_started():
+            raise ValidationError(_("project.error.submissions.project_not_started"))
 
         # Check if the project's deadline is not passed.
         if project.deadline_passed():

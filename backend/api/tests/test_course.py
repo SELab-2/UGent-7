@@ -783,7 +783,7 @@ class CourseModelTestsAsTeacher(APITestCase):
                 "academic_startyear": 2022,
                 "excerpt": "Excerpt",
                 "description": "An introductory course on computer science.",
-                "faculty": faculty.id,
+                "faculty_id": faculty.id,
             },
             follow=True,
         )
