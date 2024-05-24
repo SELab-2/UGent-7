@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { type Submission } from '@/types/submission/Submission.ts';
-import { type ExtraCheckResult } from '@/types/submission/ExtraCheckResult.ts';
-import { type StructureCheckResult } from '@/types/submission/StructureCheckResult.ts';
 import { useI18n } from 'vue-i18n';
 import router from '@/router/router.ts';
 import { useRoute } from 'vue-router';
 import { PrimeIcons } from 'primevue/api';
-import {Group} from "@/types/Group.ts";
+import { type Group } from '@/types/Group.ts';
+import { computed } from 'vue';
 
 const { params } = useRoute();
 const { t } = useI18n();
@@ -16,6 +14,9 @@ const props = defineProps<{
     submissions: Submission[];
     group: Group | null;
 }>();
+
+/* The sorted submissions */
+const sortedSubmissions = computed(() => [...props.submissions].sort((a, b) => parseInt(b.id) - parseInt(a.id)));
 
 /**
  * Returns the description for the submission
@@ -84,17 +85,24 @@ const navigateToSubmission = (submissionId: string): void => {
 </script>
 
 <template>
-    <template v-if="submissions.length > 0">
+    <template v-if="sortedSubmissions.length > 0">
         <div
-            v-for="submission in submissions"
+            v-for="submission in sortedSubmissions"
             :key="submission.id"
             class="px-3 py-2 surface-100 gap-2 flex submission justify-content-between align-items-center"
             @click="navigateToSubmission(submission.id)"
         >
             <div class="flex align-items-center gap-2">
                 <label class="font-semibold m-2 p-1">#{{ submission.submission_number }}</label>
-                <div class="border-circle p-2 w-2rem h-2rem surface-100">
-                    <i :class="getSubmissionIcon(submission)" class="text-lg"></i>
+                <div
+                    class="status border-circle p-2 w-2rem h-2rem flex align-items-center justify-content-center"
+                    :class="{
+                        ['passed']: submission.isPassed(),
+                        ['failed-extra']: !submission.isExtraCheckPassed(),
+                        ['failed-structure']: !submission.isStructureCheckPassed(),
+                    }"
+                >
+                    <i :class="getSubmissionIcon(submission)" class="text-lg text-xs"></i>
                 </div>
                 <p>{{ timeSince(submission.submission_time) }}</p>
             </div>
@@ -113,6 +121,21 @@ const navigateToSubmission = (submissionId: string): void => {
 
     &:hover {
         background-color: var(--surface-300) !important;
+    }
+
+    .status {
+        &.passed {
+            background-color: var(--bg-primary);
+        }
+
+        &.failed-structure {
+            background-color: indianred;
+            color: white;
+        }
+
+        &.failed-extra {
+            background-color: var(--secondary-color);
+        }
     }
 }
 </style>
