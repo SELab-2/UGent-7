@@ -14,6 +14,7 @@ import { useRouter } from 'vue-router';
 import { useProject } from '@/composables/services/project.service.ts';
 import { computed } from 'vue';
 import { watchImmediate } from '@vueuse/core';
+import Loading from '@/components/Loading.vue';
 
 /* Props */
 const props = defineProps<{
@@ -90,13 +91,18 @@ watchImmediate(
     </div>
 
     <!-- Project list body -->
-    <ProjectList :projects="visibleProjects">
-        <template #empty>
-            <p>
-                {{ t('views.courses.noProjects') }}
-            </p>
-        </template>
-    </ProjectList>
+    <template v-if="visibleProjects !== null">
+        <ProjectList :projects="visibleProjects">
+            <template #empty>
+                <p>
+                    {{ t('views.courses.noProjects') }}
+                </p>
+            </template>
+        </ProjectList>
+    </template>
+    <template v-else>
+        <Loading />
+    </template>
 
     <!-- Heading for teachers and assistants -->
     <div class="flex justify-content-between align-items-center my-6">

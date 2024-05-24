@@ -75,6 +75,7 @@ onMounted(async () => {
     await getProjectByID(route.params.projectId as string);
     await getGroupByID(route.params.groupId as string);
     await getSubmissionByGroup(route.params.groupId as string);
+
     if (project.value !== null) {
         await getStructureCheckByProject(project.value.id);
     }
@@ -84,15 +85,14 @@ onMounted(async () => {
 <template>
     <BaseLayout>
         <Title> {{ t(`views.submissions.title`) }}: {{ project ? project.name : 'Loading' }} </Title>
-        <template v-if="group !== null && submissions != null">
+        <template v-if="group !== null && submissions != null && structureChecks !== null">
             <div class="grid fadein">
                 <div class="col-12 md:col-6">
                     <div class="flex-column">
                         <!-- Project info column -->
                         <!-- Submission structure -->
-                        <div v-if="structureChecks">
-                            <ProjectStructure :structure-checks="structureChecks" />
-                        </div>
+                        <ProjectStructure :structure-checks="structureChecks" />
+
                         <!-- Submission upload -->
                         <div class="py-2">
                             <h2>{{ t('views.submissions.submit') }}</h2>
