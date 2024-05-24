@@ -6,7 +6,7 @@ from api.permissions.role_permissions import is_teacher
 from api.serializers.feedback_serializer import FeedbackSerializer
 
 
-class FeedbackViewSet(viewsets.ModelViewSet):
+class FeedbackViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
     permission_classes = [IsAdminOrTeacherForPatch]
