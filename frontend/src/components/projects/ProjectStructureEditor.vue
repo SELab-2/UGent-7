@@ -114,6 +114,7 @@ function selectStructureCheck(node: TreeNode): void {
                         separator=","
                         :model-value="node.data.getObligatedExtensionList()"
                         @update:model-value="node.data.setObligatedExtensionList($event)"
+                        @keydown.enter="(event: KeyboardEvent) => event.preventDefault()"
                         v-tooltip="t('views.projects.structureChecks.obligatedExtensions')"
                     >
                         <template #chip="{ value }">
@@ -127,6 +128,7 @@ function selectStructureCheck(node: TreeNode): void {
                         separator=","
                         :model-value="node.data.getBlockedExtensionList()"
                         @update:model-value="node.data.setBlockedExtensionList($event)"
+                        @keydown.enter="(event: KeyboardEvent) => event.preventDefault()"
                         v-tooltip="t('views.projects.structureChecks.blockedExtensions')"
                     >
                         <template #chip="{ value }">
