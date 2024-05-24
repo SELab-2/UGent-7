@@ -41,8 +41,14 @@ class SubmissionFeedbackPermission(SubmissionPermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
         return True
 
-    def has_object_permission(self, request: Request, view: APIView, obj: Submission) -> bool:
-        return True
+    def has_object_permission(self, request: Request, view: APIView, submission: Submission) -> bool:
+        if is_student(request.user) and submission.group.students.contains(request.user):
+            return True
+
+        if is_teacher(request.user) or is_assistant(request.user):
+            return True
+
+        return False
 
 
 class StructureCheckResultPermission(SubmissionPermission):
