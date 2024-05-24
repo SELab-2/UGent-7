@@ -10,12 +10,12 @@ import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFeedback } from '@/composables/services/feedback.service.ts';
 import { type Feedback } from '@/types/Feedback.ts';
-import { User } from '@/types/users/User.ts';
 import moment from 'moment/moment';
 import { PrimeIcons } from 'primevue/api';
 import { useSubmission } from '@/composables/services/submission.service.ts';
-import { useProject } from '@/composables/services/project.service.ts';
-import { useExtraCheck } from '@/composables/services/extra_checks.service.ts';
+import DownloadCard from '@/components/submissions/DownloadCard.vue';
+import { watchImmediate } from '@vueuse/core';
+import Loading from '@/components/Loading.vue';
 
 /* Composable injections */
 const route = useRoute();
@@ -23,8 +23,6 @@ const { t } = useI18n();
 const { user } = storeToRefs(useAuthStore());
 const { submission, getSubmissionByID } = useSubmission();
 const { feedbacks, getFeedbackBySubmission, createFeedback, updateFeedback } = useFeedback();
-const { project, getProjectByID } = useProject();
-const { extraChecks, getExtraChecksByProject } = useExtraCheck();
 
 /* Feedback content */
 const feedbackTextValue = ref<string>('');
@@ -65,26 +63,24 @@ const structureAndExtraFaults = computed(() => {
     return [...structureFaults, ...extraFaults].filter((fault) => fault);
 });
 
-const showLogsAndArtifacts = computed(() => {
-    const extraChecksResults = submission.value?.extraCheckResults ?? [];
-    let results: string[] = [];
-    if (project.value != null && extraChecks.value != null) {
-        const visibleLogs = extraChecksResults
-            .filter((check) => {
-                return extraChecks.value?.find((extraCheck) => extraCheck.id === check.extra_check)?.show_log;
-            })
-            .map((check) => check.log_file);
-
-        const visibleArtifacts = extraChecksResults
-            .filter((check) => {
-                return extraChecks.value?.find((extraCheck) => extraCheck.id === check.extra_check)?.show_artifact;
-            })
-            .map((check) => check.artifact);
-
-        results = [...visibleLogs, ...visibleArtifacts];
+const artifacts = computed<string[] | null>(() => {
+    if (submission.value != null) {
+        return submission.value.extraCheckResults
+            .filter((extraCheck) => extraCheck.artifact)
+            .map((extraCheck) => extraCheck.artifact);
     }
 
-    return results;
+    return null;
+});
+
+const logs = computed<string[] | null>(() => {
+    if (submission.value != null) {
+        return submission.value.extraCheckResults
+            .filter((extraCheck) => extraCheck.log_file)
+            .map((extraCheck) => extraCheck.log_file);
+    }
+
+    return null;
 });
 
 /* Watchers */
@@ -98,15 +94,12 @@ watch(
 );
 
 // A watch on submissionId url parameter to get the feedbacks
-watch(
+watchImmediate(
     () => route.params.submissionId,
     (submissionId) => {
-        getSubmissionByID(submissionId as string);
-        getFeedbackBySubmission(submissionId as string);
-        getProjectByID(route.params.projectId as string);
-        getExtraChecksByProject(route.params.projectId as string);
+        getSubmissionByID(submissionId.toString());
+        getFeedbackBySubmission(submissionId.toString());
     },
-    { immediate: true },
 );
 </script>
 
@@ -120,95 +113,114 @@ watch(
                 link
             />
         </RouterLink>
-        <div class="grid">
-            <!-- Submission properties -->
-            <div v-if="submission" class="col-6 md:col-4">
-                <!-- Submission status -->
-                <div>
-                    <Title class="flex">Status</Title>
-                    <div class="pl-2 mt-4">
-                        <p v-if="submission.isPassed()">{{ t('views.submissions.passed') }}</p>
-                        <div v-else>
-                            <span>{{ t('views.submissions.failed') }}</span>
-                            <ul class="m-1">
-                                <li v-for="fault in structureAndExtraFaults" :key="fault">{{ t(fault) }}</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- Submission Downloadable zip -->
-                <div>
-                    <Title v-if="showLogsAndArtifacts.length > 0" class="flex">{{ t('views.submissions.file') }}</Title>
-                    <Title v-else class="flex"> {{ t('views.submissions.files') }} </Title>
-                    <div>
-                        <ul>
-                            <li v-if="submission.zip">
-                                <a :href="submission.zip" download>
-                                    {{ t('views.submissions.downloadZip') }}
-                                </a>
-                            </li>
-                            <li v-else>
-                                {{ t('views.submissions.no_zip_available') }}
-                            </li>
-                            <li v-for="(item, index) in showLogsAndArtifacts" :key="index">
-                                <a :href="item" download> {{ t('views.submissions.downloadLog', [index + 1]) }} </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- Feedback section -->
-            <div class="col-12 md:col-7">
-                <!-- Written Feedback overview -->
-                <div class="feedback-section mb-3">
-                    <Title class="flex mb-3">Feedback</Title>
-                    <!-- Single Feedback component -->
-                    <div v-if="feedbacks !== null && feedbacks.length > 0">
-                        <div v-for="feedback in feedbacks" :key="feedback.id">
-                            <div class="feedback-header-wrap">
-                                <!-- Single feedback header -->
-                                <p class="feedback-header mt-1">
-                                    {{
-                                        t('views.submissions.feedback.dateAndAuthor', [
-                                            moment(feedback.creation_date).format('DD MMMM YYYY'),
-                                            User.fromJSON(feedback.author).getFullName(),
-                                        ])
-                                    }}
-                                </p>
-                                <!-- Edit feedback button -->
-                                <Button
-                                    v-tooltip.top="t('views.submissions.feedback.edit')"
-                                    v-if="user?.isTeacher() && feedback.author.id === user?.id"
-                                    :icon="PrimeIcons.PENCIL"
-                                    icon-pos="right"
-                                    style="height: 35px; width: 35px"
-                                    @click="editFeedback(feedback)"
-                                />
+        <template v-if="submission !== null">
+            <div class="fadein grid">
+                <!-- Submission properties -->
+                <div class="col-6 md:col-4">
+                    <!-- Submission status -->
+                    <div class="mb-5">
+                        <Title class="flex">Status</Title>
+                        <div class="mt-4">
+                            <p v-if="submission.isPassed()">{{ t('views.submissions.passed') }}</p>
+                            <div v-else>
+                                <span>{{ t('views.submissions.failed') }}</span>
+                                <ul>
+                                    <li v-for="fault in structureAndExtraFaults" :key="fault">
+                                        {{ t(fault) }}
+                                    </li>
+                                </ul>
                             </div>
-                            <p class="feedback-message">{{ feedback.message }}</p>
                         </div>
                     </div>
-                    <p v-else class="pt-2">{{ t('views.submissions.feedback.noFeedback') }}</p>
+                    <!-- Submission Downloadable zip -->
+                    <template v-if="logs !== null && artifacts !== null">
+                        <Title v-if="logs.length > 0 || artifacts.length > 0" class="flex">{{
+                            t('views.submissions.file')
+                        }}</Title>
+                        <Title v-else class="flex"> {{ t('views.submissions.files') }} </Title>
+                        <div class="flex flex-column gap-3">
+                            <DownloadCard :title="t('views.submissions.downloadZip')" :href="submission.zip" />
+                            <DownloadCard
+                                :title="t('views.submissions.downloadLog', [index + 1])"
+                                :href="log"
+                                :key="index"
+                                v-for="[index, log] in logs"
+                            />
+                            <DownloadCard
+                                :title="t('views.submissions.downloadArtifact', [index + 1])"
+                                :href="artifact"
+                                :key="index"
+                                v-for="[index, artifact] in artifacts"
+                            />
+                        </div>
+                    </template>
+                    <template v-else>
+                        <Loading />
+                    </template>
                 </div>
-                <!-- Write feedback -->
-                <div v-if="user?.isTeacher()">
-                    <form @submit.prevent="submitFeedback">
-                        <Textarea
-                            id="feedback"
-                            v-model="feedbackTextValue"
-                            class="w-full h-10rem"
-                            :placeholder="t('views.submissions.feedback.writeFeedback')"
-                        />
-                        <Button
-                            class="mt-2"
-                            :label="t('views.submissions.feedback.addFeedback')"
-                            type="submit"
-                            iconPos="right"
-                        />
-                    </form>
+                <!-- Feedback section -->
+                <div class="col-12 md:col-7">
+                    <!-- Written Feedback overview -->
+                    <div class="feedback-section mb-3">
+                        <Title class="flex mb-3">Feedback</Title>
+                        <!-- Single Feedback component -->
+                        <template v-if="feedbacks !== null">
+                            <template v-if="feedbacks.length > 0">
+                                <div v-for="feedback in feedbacks" :key="feedback.id">
+                                    <div class="flex justify-content-between">
+                                        <!-- Single feedback header -->
+                                        <p class="mt-1">
+                                            {{
+                                                t('views.submissions.feedback.dateAndAuthor', [
+                                                    moment(feedback.creation_date).format('DD MMMM YYYY'),
+                                                    feedback.author.getFullName(),
+                                                ])
+                                            }}
+                                        </p>
+                                        <!-- Edit feedback button -->
+                                        <Button
+                                            v-tooltip.top="t('views.submissions.feedback.edit')"
+                                            v-if="user?.isTeacher() && feedback.author.id === user?.id"
+                                            :icon="PrimeIcons.PENCIL"
+                                            icon-pos="right"
+                                            style="height: 35px; width: 35px"
+                                            @click="editFeedback(feedback)"
+                                        />
+                                    </div>
+                                    <p class="mb-5 surface-100 p-3">
+                                        {{ feedback.message }}
+                                    </p>
+                                </div>
+                            </template>
+                            <template v-else>{{ t('views.submissions.feedback.noFeedback') }}</template>
+                        </template>
+                        <template v-else>
+                            <Loading />
+                        </template>
+                    </div>
+                    <!-- Write feedback -->
+                    <div v-if="user?.isTeacher()">
+                        <form @submit.prevent="submitFeedback">
+                            <Textarea
+                                id="feedback"
+                                v-model="feedbackTextValue"
+                                class="w-full h-10rem"
+                                :placeholder="t('views.submissions.feedback.writeFeedback')"
+                            />
+                            <Button
+                                class="mt-2"
+                                :label="t('views.submissions.feedback.addFeedback')"
+                                type="submit"
+                                iconPos="right"
+                            />
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
+        <template v-else>
+            <Loading height="60vh" />
+        </template>
     </BaseLayout>
 </template>
 
