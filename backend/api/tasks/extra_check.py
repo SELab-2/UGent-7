@@ -193,7 +193,7 @@ def task_extra_check_start(structure_check_result: bool, extra_check_result: Ext
 
     # Zip and save any possible artifacts
     memory_zip = io.BytesIO()
-    if os.listdir(artifacts_directory):
+    if os.path.exists(artifacts_directory):
         with zipfile.ZipFile(memory_zip, 'w') as zip:
             for root, _, files in os.walk(artifacts_directory):
                 for file in files:
