@@ -171,7 +171,7 @@ const onSelect = (selected: any[] | null): void => {
         <Title>
             <div class="gap-3 mb-3">{{ t('admin.dockerImages.title') }}</div>
         </Title>
-        <Body class="w-full">
+        <Body>
             <SelectButton
                 class="mb-3 gap-3 w-3"
                 v-model="selectedOption"

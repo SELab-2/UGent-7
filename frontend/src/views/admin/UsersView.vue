@@ -156,7 +156,7 @@ const saveItem = async (): Promise<void> => {
         <Title>
             {{ t('admin.users.title') }}
         </Title>
-        <Body class="w-full">
+        <Body>
             <LazyDataTable
                 :pagination="pagination"
                 :entities="users"
