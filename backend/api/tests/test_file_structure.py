@@ -56,37 +56,37 @@ class FileTestsTests(APITestCase):
         )
 
         content = content_json[0]
-        self.assertEqual(content["path"], "folder_struct1/submap1/")
+        self.assertEqual(content["path"], "folder_struct1/submap1")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 2)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[1]
-        self.assertEqual(content["path"], "folder_struct1/submap1/templates/")
+        self.assertEqual(content["path"], "folder_struct1/submap1/templates")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 1)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[2]
-        self.assertEqual(content["path"], "folder_struct1/submap2/")
+        self.assertEqual(content["path"], "folder_struct1/submap2")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 1)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[3]
-        self.assertEqual(content["path"], "folder_struct1/submap2/src/")
+        self.assertEqual(content["path"], "folder_struct1/submap2/src")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 3)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[4]
-        self.assertEqual(content["path"], "folder_struct1/submap3/")
+        self.assertEqual(content["path"], "folder_struct1/submap3")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 2)
         self.assertEqual(len(content["blocked_extensions"]), 0)
 
         content = content_json[5]
-        self.assertEqual(content["path"], "folder_struct1/")
+        self.assertEqual(content["path"], "folder_struct1")
         self.assertEqual(content["project"], expected_project_url)
         self.assertEqual(len(content["obligated_extensions"]), 1)
         self.assertEqual(len(content["blocked_extensions"]), 0)
