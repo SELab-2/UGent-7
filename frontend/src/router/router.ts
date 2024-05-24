@@ -181,6 +181,16 @@ const routes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
+    async scrollBehavior() {
+        return await new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    top: 0,
+                    behavior: 'smooth',
+                });
+            }, 350);
+        });
+    },
     history: createWebHistory(),
     linkActiveClass: 'active',
     routes,
