@@ -91,6 +91,7 @@
             "scoreVisibility": "Make score, when uploaded, automatically visible to students",
             "submissionStructure": "Structure of how a submission should be made",
             "noStudents": "No students in this group",
+            "alreadyStarted": "The project has already started",
             "locked": "Closed",
             "unlocked": "Open",
             "structureChecks": {
@@ -98,6 +99,7 @@
                 "placeholder": "Give a name to this folder",
                 "cancelSelection": "Deselect {0}",
                 "newFolder": "New folder",
+                "noChecks": "Your submission does not have to comply with a specific structure.",
                 "obligatedExtensions": "Obligated extensions",
                 "blockedExtensions": "Blocked extensions"
             },

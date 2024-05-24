@@ -6,6 +6,7 @@ import ProjectInfo from '@/components/projects/ProjectInfo.vue';
 import ProjectStructure from '@/components/projects/ProjectStructure.vue';
 import Title from '@/views/layout/Title.vue';
 import Loading from '@/components/Loading.vue';
+import Divider from 'primevue/divider';
 import { ref } from 'vue';
 import { useGroup } from '@/composables/services/group.service.ts';
 import { type Group } from '@/types/Group.ts';
@@ -17,7 +18,7 @@ import { useProject } from '@/composables/services/project.service.ts';
 import { useRoute } from 'vue-router';
 import { type Project } from '@/types/Project.ts';
 import { useStructureCheck } from '@/composables/services/structure_check.service.ts';
-import Divider from 'primevue/divider';
+import { useI18n } from 'vue-i18n';
 
 /* Props */
 defineProps<{
@@ -25,6 +26,7 @@ defineProps<{
 }>();
 
 /* Composable injections */
+const { t } = useI18n();
 const { params } = useRoute();
 const { group, groups, getGroupByStudentProject, getGroupsByProject } = useGroup();
 const { students, getStudentsByGroup, studentJoinGroup, studentLeaveGroup } = useStudents();
@@ -130,7 +132,17 @@ watchImmediate(
                     <ProjectInfo class="mb-3" :project="project" />
                     <div v-if="project" v-html="project.description" />
                     <Divider />
-                    <ProjectStructure v-if="structureChecks" :structure-checks="structureChecks" />
+                    <template v-if="structureChecks !== null">
+                        <template v-if="structureChecks.length > 0">
+                            <ProjectStructure :structure-checks="structureChecks" />
+                        </template>
+                        <template v-else>
+                            {{ t('views.projects.structureChecks.noChecks') }}
+                        </template>
+                    </template>
+                    <template v-else>
+                        <Loading />
+                    </template>
                 </div>
                 <div class="col-12 md:col-4">
                     <template v-if="!loadingGroup">

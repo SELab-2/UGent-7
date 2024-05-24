@@ -16,17 +16,16 @@ withDefaults(defineProps<{ color?: 'primary' | 'contrast' }>(), {
     color: var(--primary-color);
     position: relative;
     display: inline-block;
-    line-height: 2.8rem;
 
-    &::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: -14px;
-        display: block;
-        width: 100%;
-        border-top: 4px solid var(--primary-color);
-    }
+    //&::after {
+    //    content: '';
+    //    position: absolute;
+    //    left: 0;
+    //    bottom: -14px;
+    //    display: block;
+    //    width: 100%;
+    //    border-top: 4px solid var(--primary-color);
+    //}
 
     &.contrast {
         color: var(--primary-color-text);

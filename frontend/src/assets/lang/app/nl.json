@@ -67,13 +67,14 @@
             "publishScores": "Publiceer scores",
             "groupName": "Groepsnaam",
             "groupPopulation": "Grootte",
+            "alreadyStarted": "Project is al gestart",
             "groupStatus": "Status",
             "start": "Startdatum",
             "submissionStatus": "Indienstatus",
             "group": "Groep",
             "groups": "Groepen",
             "groupSize": "Individueel | Groepen van {count} personen",
-            "noGroups": "Geen groepen beschikbaar",
+            "noGroups": "Geen groepen beschikbaar.",
             "groupMembers": "Groepsleden",
             "chooseGroup": "Kies een groep",
             "joinGroup": "Kies groep",
@@ -99,7 +100,8 @@
                 "cancelSelection": "Deselecteer {0}",
                 "obligatedExtensions": "Verplichte extensies",
                 "blockedExtensions": "Niet toegelaten extensies",
-                "newFolder": "Nieuwe map"
+                "newFolder": "Nieuwe map",
+                "noChecks": "Je indiening moet niet voldoen aan een specifieke structuur."
             },
             "extraChecks": {
                 "title": "Automatische checks op een indiening",
@@ -260,7 +262,7 @@
             },
             "noIncomingProjects": "Geen projecten met een deadline binnen de 7 dagen.",
             "selectCourse": "Selecteer het vak waarvoor je een project wil maken:",
-            "showPastProjects": "Projecten met verstreken deadline"
+            "showPastProjects": "Toon projecten met verstreken deadline"
         }
     },
     "types": {

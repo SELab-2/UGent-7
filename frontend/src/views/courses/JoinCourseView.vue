@@ -96,7 +96,7 @@ onMounted(async () => {
     <BaseLayout>
         <div v-if="course">
             <!-- Course heading -->
-            <div class="flex justify-content-between align-items-center mb-6">
+            <div class="flex justify-content-between align-items-center">
                 <!-- Course title -->
                 <Title class="m-0">{{ course?.name }}</Title>
 
