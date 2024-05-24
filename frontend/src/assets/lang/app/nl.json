@@ -241,7 +241,7 @@
             "newProject": "Nieuw project",
             "noSubmissions": "Dit project heeft geen indieningen",
             "submissions": "Groep heeft al ingediend | Groepen hebben al ingediend",
-            "groups": "Deelnemende groep | Deelnemende groepen",
+            "groups": "Groep | Groepen",
             "structureTestsFail": "Gefaalde structuurtesten",
             "extraChecksFail": "Gefaalde extra testen",
             "testsSucceed": "Geslaagde testen",
