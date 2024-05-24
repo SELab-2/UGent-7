@@ -4,7 +4,8 @@ layout: home
 
 hero:
   name: "Ypovoli"
-  text: Help page
+  text: Help pagina
+  tagline: Leren door in te dienen
   actions:
     - theme: brand
       text: Student
