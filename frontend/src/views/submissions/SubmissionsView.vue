@@ -157,10 +157,7 @@ onMounted(async () => {
                 <!-- Overview of all given submissions -->
                 <div class="col-12 md:col-6">
                     <h2>{{ t('views.submissions.allSubmissions') }}</h2>
-                    <AllSubmission
-                        :group="group"
-                        :submissions="submissions"
-                    ></AllSubmission>
+                    <AllSubmission :group="group" :submissions="submissions"></AllSubmission>
                 </div>
             </div>
         </template>
