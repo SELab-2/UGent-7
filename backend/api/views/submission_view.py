@@ -52,11 +52,8 @@ class SubmissionViewSet(RetrieveModelMixin, GenericViewSet):
         serializer = FeedbackSerializer(data=request.data, context=context)
 
         if serializer.is_valid():
-            serializer.save(submission=submission)
-            return Response({
-                "message": "Success",
-                "feedback": serializer.data
-            })
+            serializer.save(submission=submission, author=request.user)
+            return Response(serializer.data)
 
         return Response(serializer.errors, status=400)
 
